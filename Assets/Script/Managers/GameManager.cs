@@ -1,0 +1,21 @@
+﻿using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+public class GameManager : MonoBehaviour
+{
+    public static GameManager Instance;
+
+    public void Awake()
+    {
+        Instance = this;
+    }
+
+    public void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.F1))
+        {
+            ConsoleContainer.Instance.ToggleConsole();
+        }
+    }
+}
