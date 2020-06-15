@@ -6,11 +6,25 @@ public class GameManager : MonoBehaviour
 {
     public static GameManager Instance;
 
+    public Platform CurrentPlatform;
+    public IPlatformConfiguration Configuration;
+
     public void Awake()
     {
         Instance = this;
 
         InitialiseLoggers();
+
+        if (Application.isMobilePlatform)
+        {
+            CurrentPlatform = Platform.Android;
+            Configuration = new AndroidConfiguration();
+        }
+        else
+        {
+            CurrentPlatform = Platform.PC;
+            Configuration = new PCConfiguration();
+        }
     }
 
     public void Update()
