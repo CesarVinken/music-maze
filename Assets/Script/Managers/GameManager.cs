@@ -25,6 +25,8 @@ public class GameManager : MonoBehaviour
             CurrentPlatform = Platform.PC;
             Configuration = new PCConfiguration();
         }
+
+        gameObject.AddComponent<MazeLevelManager>();
     }
 
     public void Update()
@@ -42,7 +44,7 @@ public class GameManager : MonoBehaviour
         Logger.Locomotion.enableLogs = false;
         Logger.Building.enableLogs = true;
         Logger.Pathfinding.enableLogs = false;
-        Logger.Initialisation.enableLogs = false;
+        Logger.Initialisation.enableLogs = true;
         Logger.Character.enableLogs = false;
         Logger.UI.enableLogs = false;
     }
