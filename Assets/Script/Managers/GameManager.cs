@@ -9,9 +9,13 @@ public class GameManager : MonoBehaviour
     public Platform CurrentPlatform;
     public IPlatformConfiguration Configuration;
 
+    public GameObject GridGO;
+
     public void Awake()
     {
         Instance = this;
+
+        Guard.CheckIsNull(GridGO, "Could not find GridGO prefab");
 
         InitialiseLoggers();
 
