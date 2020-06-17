@@ -201,6 +201,7 @@ public class Console : MonoBehaviour
     public void RegisterCommands()
     {
         Commands.Add(ConsoleCommand.AddCommand("add", 1, new AddCommand()));
+        Commands.Add(ConsoleCommand.AddCommand("close", new CloseConsoleCommand()));
         Commands.Add(ConsoleCommand.AddCommand("help", 0, 1, new HelpCommand()));
     }
 }
