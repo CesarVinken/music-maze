@@ -10,11 +10,19 @@ public class MazeLevelManager : MonoBehaviour
     {
         Instance = this;
 
-        Level = LoadLevel();
+        LoadLevel();
     }
 
-    public MazeLevel LoadLevel()
+    public void LoadLevel(MazeName mazeName = MazeName.Blank6x6)
     {
-        return MazeLevel.Create();
+        Level = MazeLevel.Create(mazeName);
+    }
+
+    public void UnloadLevel()
+    {
+        Destroy(TilesContainer.Instance.gameObject);
+        TilesContainer.Instance = null;
+
+        Level.Tiles.Clear();
     }
 }

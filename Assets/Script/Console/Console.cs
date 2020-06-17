@@ -191,7 +191,7 @@ public class Console : MonoBehaviour
         if(Command == null)
         {
             Logger.Warning("Could not find a command with the name {0}", commandName);
-            PrintToReportText("Could not find a command with the name " + commandName);
+            PrintToReportText("Could not find a command with the name <color=" + ConsoleConfiguration.HighlightColour + ">" + commandName + "</color>");
             return;
         }
 
@@ -203,5 +203,6 @@ public class Console : MonoBehaviour
         Commands.Add(ConsoleCommand.AddCommand("add", 1, new AddCommand()));
         Commands.Add(ConsoleCommand.AddCommand("close", new CloseConsoleCommand()));
         Commands.Add(ConsoleCommand.AddCommand("help", 0, 1, new HelpCommand()));
+        Commands.Add(ConsoleCommand.AddCommand("load", 1, 2, new LoadCommand()));
     }
 }

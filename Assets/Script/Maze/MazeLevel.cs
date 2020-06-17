@@ -32,9 +32,10 @@ public class MazeLevel
 
     public static MazeLevel Create(MazeName mazeName = MazeName.Blank6x6)
     {
-        Logger.Log(Logger.Initialisation, "Set up new Maze Level");
+        Logger.Log(Logger.Initialisation, "Set up new Maze Level '<color=" + ConsoleConfiguration.HighlightColour + ">" + mazeName + "</color>'");
         return new MazeLevel(mazeName);
     }
+
 }
 
 public enum MazeName
