@@ -11,11 +11,17 @@ public class GameManager : MonoBehaviour
 
     public GameObject GridGO;
 
+    public GameObject MazeLevelManagerPrefab;
+    public GameObject CharacterManagerPrefab;
+
     public void Awake()
     {
         Instance = this;
 
         Guard.CheckIsNull(GridGO, "Could not find GridGO prefab");
+
+        Guard.CheckIsNull(MazeLevelManagerPrefab, "Could not find MazeLevelManagerPrefab");
+        Guard.CheckIsNull(CharacterManagerPrefab, "Could not find CharacterManagerPrefab");
 
         InitialiseLoggers();
 
@@ -30,7 +36,11 @@ public class GameManager : MonoBehaviour
             Configuration = new PCConfiguration();
         }
 
-        gameObject.AddComponent<MazeLevelManager>();
+        Instantiate(MazeLevelManagerPrefab, transform);
+        Instantiate(CharacterManagerPrefab, transform);
+
+        MazeLevelManager.Instance.LoadLevel();
+        CharacterManager.Instance.SpawnCharacters();
     }
 
     public void Update()

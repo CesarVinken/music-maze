@@ -5,6 +5,8 @@ public class MazeLevel
 {
     public List<Tile> Tiles = new List<Tile>();
 
+    public List<CharacterStartLocation> CharacterStartLocations = new List<CharacterStartLocation>();
+
     private MazeName _mazeName;
 
     public MazeLevel(MazeName mazeName)
@@ -28,6 +30,14 @@ public class MazeLevel
 
         TilesContainer.SetInstance(mazeContainer.GetComponent<TilesContainer>());
         Tiles = TilesContainer.Instance.Tiles;
+
+        // TODO set character start location through editor and load in to level
+        CharacterStartLocation startLocation = new CharacterStartLocation(
+            new GridLocation(1, 1),
+            new Character()
+            );
+
+        CharacterStartLocations.Add(startLocation);
     }
 
     public static MazeLevel Create(MazeName mazeName = MazeName.Blank6x6)
@@ -38,7 +48,14 @@ public class MazeLevel
 
 }
 
-public enum MazeName
+public struct CharacterStartLocation
 {
-    Blank6x6
+    public GridLocation GridLocation;
+    public Character Character;
+
+    public CharacterStartLocation(GridLocation gridLocation, Character character)
+    {
+        GridLocation = gridLocation;
+        Character = character;
+    }
 }

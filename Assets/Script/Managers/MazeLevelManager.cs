@@ -9,8 +9,6 @@ public class MazeLevelManager : MonoBehaviour
     public void Awake()
     {
         Instance = this;
-
-        LoadLevel();
     }
 
     public void LoadLevel(MazeName mazeName = MazeName.Blank6x6)
