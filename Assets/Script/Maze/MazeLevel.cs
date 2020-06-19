@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class MazeLevel
@@ -34,10 +35,24 @@ public class MazeLevel
         // TODO set character start location through editor and load in to level
         CharacterStartLocation startLocation = new CharacterStartLocation(
             new GridLocation(1, 1),
-            new Character()
+            new Character(CharacterType.Bard)
             );
 
         CharacterStartLocations.Add(startLocation);
+
+        int locationsForPlayers = CharacterStartLocations.Where(location => location.Character.IsPlayable).ToArray().Count();
+        if (locationsForPlayers == 0)
+        {
+            Logger.Warning(Logger.Initialisation, "The level {0} does not have any player starting positions set up while it needs 2.", _mazeName);
+        }
+        else if (locationsForPlayers == 1)
+        {
+            Logger.Warning(Logger.Initialisation, "The level {0} has only 1 player starting position set up while it needs 2.", _mazeName);
+        }
+        else if (locationsForPlayers > 2)
+        {
+            Logger.Warning(Logger.Initialisation, "The level {0} has {1} player starting positions set up. There should be 2 positions.", _mazeName, locationsForPlayers);
+        }
     }
 
     public static MazeLevel Create(MazeName mazeName = MazeName.Blank6x6)
@@ -45,7 +60,6 @@ public class MazeLevel
         Logger.Log(Logger.Initialisation, "Set up new Maze Level '<color=" + ConsoleConfiguration.HighlightColour + ">" + mazeName + "</color>'");
         return new MazeLevel(mazeName);
     }
-
 }
 
 public struct CharacterStartLocation
