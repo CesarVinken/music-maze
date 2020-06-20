@@ -1,5 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 
 public class GameManager : MonoBehaviour
@@ -10,6 +9,7 @@ public class GameManager : MonoBehaviour
     public IPlatformConfiguration Configuration;
 
     public GameObject GridGO;
+    public GameObject AstarGO;
 
     public GameObject MazeLevelManagerPrefab;
     public GameObject CharacterManagerPrefab;
@@ -19,6 +19,7 @@ public class GameManager : MonoBehaviour
         Instance = this;
 
         Guard.CheckIsNull(GridGO, "Could not find GridGO prefab");
+        Guard.CheckIsNull(AstarGO, "AstarGO");
 
         Guard.CheckIsNull(MazeLevelManagerPrefab, "Could not find MazeLevelManagerPrefab");
         Guard.CheckIsNull(CharacterManagerPrefab, "Could not find CharacterManagerPrefab");

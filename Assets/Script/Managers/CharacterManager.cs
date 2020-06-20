@@ -5,13 +5,15 @@ public class CharacterManager : MonoBehaviour
 {
     public static CharacterManager Instance;
 
-    public GameObject CharacterPrefab;
+    public GameObject EnemyCharacterPrefab;
+    public GameObject PlayerCharacterPrefab;
 
     public void Awake()
     {
         Instance = this;
 
-        Guard.CheckIsNull(CharacterPrefab, "Could not find CharacterPrefab");
+        Guard.CheckIsNull(EnemyCharacterPrefab, "Could not find EnemyCharacterPrefab");
+        Guard.CheckIsNull(PlayerCharacterPrefab, "Could not find PlayerCharacterPrefab");
     }
 
     public void SpawnCharacters()
@@ -27,10 +29,22 @@ public class CharacterManager : MonoBehaviour
 
     public void SpawnCharacter(Character character, GridLocation gridLocation)
     {
-        // TODO: later load correct prefab based on what character
-        GameObject characterGO = Instantiate(CharacterPrefab, transform);
-
+        GameObject characterGO = GetCharacterPrefab(character);
         // place on grid
         characterGO.transform.position = GridLocation.GridToVector(gridLocation);
+    }
+
+    public GameObject GetCharacterPrefab(Character character)
+    {
+        switch (character.CharacterType)
+        {
+            case CharacterType.Bard:
+                return Instantiate(PlayerCharacterPrefab, transform);
+            case CharacterType.Dragon:
+                return Instantiate(EnemyCharacterPrefab, transform);
+            default:
+                Logger.Error(Logger.Initialisation, "Cannot find prefab for character type {0}", character.CharacterType);
+                return null;
+        }
     }
 }

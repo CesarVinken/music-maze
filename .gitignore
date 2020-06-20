@@ -20,7 +20,7 @@ Assets/Scenes/
 Assets/Scenes.meta
 Assets/Tilemaps/
 Assets/Tilemaps.meta
-Assets/Scripts/Actor/Pathfinding/AstarPathfindingProject
+Assets/Scripts/Character/Pathfinding/AstarPathfindingProject
 
 # Asset meta data should only be ignored when the corresponding asset is also ignored
 !/[Aa]ssets/**/*.meta

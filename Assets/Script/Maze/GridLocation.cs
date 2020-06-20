@@ -2,20 +2,27 @@
 
 public struct GridLocation
 {
-    public float X;
-    public float Y;
+    public int X;
+    public int Y;
 
-    public GridLocation(float x, float y)
+    private static float _xAxisMultiplier = 1f;
+    private static float _yAxisMultiplier = 1f;
+
+    public GridLocation(int gridX, int gridY) // x and y are not necessarily equal to grid coordinates!
     {
-        X = x;
-        Y = y;
+        X = gridX;
+        Y = gridY;
     }
 
     public static Vector2 GridToVector(GridLocation gridLocation)
     {
-        float xAxisMultiplier = 1f;
-        float yAxisMultiplier = 1f;
+        Logger.Log("Target grid location: {0}, {1}", gridLocation.X, gridLocation.Y);
 
-        return new Vector2(gridLocation.X * xAxisMultiplier, gridLocation.Y * yAxisMultiplier);
+        return new Vector2(gridLocation.X * _xAxisMultiplier, gridLocation.Y * _yAxisMultiplier);
+    }
+
+    public static GridLocation VectorToGrid(Vector2 vectorLocation)
+    {
+        return new GridLocation((int)(vectorLocation.x / 1f), (int)(vectorLocation.y / 1f));
     }
 }
