@@ -35,7 +35,7 @@ public class MazeLevel
         // TODO set character start location through editor and load in to level
         CharacterStartLocation startLocation = new CharacterStartLocation(
             new GridLocation(1, 1),
-            new Character(CharacterType.Bard)
+            new CharacterBlueprint(CharacterType.Bard)
             );
 
         CharacterStartLocations.Add(startLocation);
@@ -65,9 +65,9 @@ public class MazeLevel
 public struct CharacterStartLocation
 {
     public GridLocation GridLocation;
-    public Character Character;
+    public CharacterBlueprint Character;
 
-    public CharacterStartLocation(GridLocation gridLocation, Character character)
+    public CharacterStartLocation(GridLocation gridLocation, CharacterBlueprint character)
     {
         GridLocation = gridLocation;
         Character = character;

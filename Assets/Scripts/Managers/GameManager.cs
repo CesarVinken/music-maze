@@ -7,6 +7,7 @@ public class GameManager : MonoBehaviour
 
     public Platform CurrentPlatform;
     public IPlatformConfiguration Configuration;
+    public KeyboardConfiguration KeyboardConfiguration;
 
     public GameObject GridGO;
     public GameObject AstarGO;
@@ -37,6 +38,8 @@ public class GameManager : MonoBehaviour
             Configuration = new PCConfiguration();
         }
 
+        KeyboardConfiguration = new KeyboardConfiguration();
+
         Instantiate(MazeLevelManagerPrefab, transform);
         Instantiate(CharacterManagerPrefab, transform);
 
@@ -46,7 +49,7 @@ public class GameManager : MonoBehaviour
 
     public void Update()
     {
-        if (Input.GetKeyDown(KeyCode.F1))
+        if (Input.GetKeyDown(KeyboardConfiguration.Console))
         {
             ConsoleContainer.Instance.ToggleConsole();
         }

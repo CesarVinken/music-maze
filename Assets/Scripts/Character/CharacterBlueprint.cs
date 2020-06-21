@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 
-public class Character
+public class CharacterBlueprint
 {
     public CharacterType CharacterType;
     public bool IsPlayable 
@@ -13,7 +13,7 @@ public class Character
         }
     }
 
-    public Character(CharacterType characterType)
+    public CharacterBlueprint(CharacterType characterType)
     {
         CharacterType = characterType;
     }

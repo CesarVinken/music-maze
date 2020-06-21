@@ -6,7 +6,7 @@ using UnityEngine;
 public class CharacterLocomotion : MonoBehaviour
 {
     public ObjectDirection CharacterDirection = ObjectDirection.Down;
-    public Character Character;
+    public CharacterBlueprint Character;
     public CharacterAnimationHandler AnimationHandler;
     public float BaseSpeed = 8f;
     public float Speed;
