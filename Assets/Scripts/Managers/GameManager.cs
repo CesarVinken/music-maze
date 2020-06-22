@@ -43,7 +43,7 @@ public class GameManager : MonoBehaviour
         Instantiate(MazeLevelManagerPrefab, transform);
         Instantiate(CharacterManagerPrefab, transform);
 
-        MazeLevelManager.Instance.LoadLevel();
+        MazeLevelManager.Instance.LoadLevel(MazeName.PathfindingTest);
         CharacterManager.Instance.SpawnCharacters();
     }
 

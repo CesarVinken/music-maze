@@ -1,6 +1,7 @@
 ﻿
 public enum MazeName
 {
-    Blank6x6
+    Blank6x6,
+    PathfindingTest
 }
 
