@@ -83,6 +83,9 @@ public class CharacterLocomotion : MonoBehaviour
                 AnimationHandler.SetVertical(-1f);
 
                 targetGridLocation = new GridLocation(currentGridLocation.X, currentGridLocation.Y - 1);
+
+                if (!ValidateTarget(targetGridLocation)) return;
+
                 SetLocomotionTarget(GridLocation.GridToVector(targetGridLocation));
                 break;
             case ObjectDirection.Left:
@@ -90,19 +93,27 @@ public class CharacterLocomotion : MonoBehaviour
                 AnimationHandler.SetVertical(0);
 
                 targetGridLocation = new GridLocation(currentGridLocation.X - 1, currentGridLocation.Y);
+                if (!ValidateTarget(targetGridLocation)) return;
+
                 SetLocomotionTarget(GridLocation.GridToVector(targetGridLocation));
                 break;
             case ObjectDirection.Right:
                 AnimationHandler.SetHorizontal(1f);
                 AnimationHandler.SetVertical(0);
                 targetGridLocation = new GridLocation(currentGridLocation.X + 1, currentGridLocation.Y);
+                if (!ValidateTarget(targetGridLocation)) return;
+
                 SetLocomotionTarget(GridLocation.GridToVector(targetGridLocation));
                 break;
             case ObjectDirection.Up:
                 AnimationHandler.SetHorizontal(0);
                 AnimationHandler.SetVertical(1f);
-
+                Logger.Log("currently {0}, {1}", currentGridLocation.X, currentGridLocation.Y);
                 targetGridLocation = new GridLocation(currentGridLocation.X, currentGridLocation.Y + 1);
+                Logger.Log("future {0}, {1}", targetGridLocation.X, targetGridLocation.Y);
+
+                if (!ValidateTarget(targetGridLocation)) return;
+
                 SetLocomotionTarget(GridLocation.GridToVector(targetGridLocation));
                 break;
             default:
@@ -114,17 +125,26 @@ public class CharacterLocomotion : MonoBehaviour
             AnimationHandler.SetLocomotion(true);
     }
 
-    public void SetLocomotionTarget(Vector3 newTarget)
+    private bool ValidateTarget(GridLocation targetGridLocation)
     {
-        // check if target is available
-        GridLocation targetGridLocation = GridLocation.VectorToGrid(newTarget);
-        Logger.Log("targetGridLocation:::: {0},{1}", targetGridLocation.X, targetGridLocation.Y);
-        if(MazeLevelManager.Instance.Level.UnwalkableTiles.FirstOrDefault(tile => tile.GridLocation.X == targetGridLocation.X && tile.GridLocation.Y == targetGridLocation.Y))
+        if (MazeLevelManager.Instance.Level.UnwalkableTiles.FirstOrDefault(tile => tile.GridLocation.X == targetGridLocation.X && tile.GridLocation.Y == targetGridLocation.Y))
         {
-            Logger.Warning("target is unwalkable");
-            return;
+            Logger.Log(Logger.Locomotion, "target is unwalkable");
+            return false;
         }
 
+        // TODO this check is maybe not very efficient
+        if (!MazeLevelManager.Instance.Level.Tiles.FirstOrDefault(tile => tile.GridLocation.X == targetGridLocation.X && tile.GridLocation.Y == targetGridLocation.Y))
+        {
+            Logger.Log("target is not a tile");
+            return false;
+        }
+
+        return true;
+    }
+
+    public void SetLocomotionTarget(Vector3 newTarget)
+    {
         IsOnTile = false;
 
         if (TargetObject == null)
@@ -139,7 +159,6 @@ public class CharacterLocomotion : MonoBehaviour
         TargetObject.transform.position = new Vector3(newTarget.x + offsetToTileMiddle, newTarget.y + offsetToTileMiddle);
 
         DestinationSetter.target = TargetObject.transform;
-
     }
 
     public void ReachLocomotionTarget()
