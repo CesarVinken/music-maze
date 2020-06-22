@@ -5,6 +5,7 @@ using UnityEngine;
 public class MazeLevel
 {
     public List<Tile> Tiles = new List<Tile>();
+    public List<Tile> UnwalkableTiles = new List<Tile>();
 
     public List<CharacterStartLocation> CharacterStartLocations = new List<CharacterStartLocation>();
 
@@ -20,8 +21,7 @@ public class MazeLevel
             TilesContainer.Instance = null;
         }
 
-        //TODO mazeName should not be hardcoded but generic
-        GameObject mazeContainer = GameObject.Instantiate(Resources.Load<GameObject>("Prefabs/Level/Blank6x6"));
+        GameObject mazeContainer = GameObject.Instantiate(Resources.Load<GameObject>("Prefabs/Level/" + _mazeName));
 
         if (mazeContainer == null)
             Logger.Error("Could not find prefab for level {0}", mazeName);
@@ -31,10 +31,10 @@ public class MazeLevel
 
         TilesContainer.SetInstance(mazeContainer.GetComponent<TilesContainer>());
         Tiles = TilesContainer.Instance.Tiles;
-
+     
         // TODO set character start location through editor and load in to level
         CharacterStartLocation startLocation = new CharacterStartLocation(
-            new GridLocation(1, 1),
+            new GridLocation(0, 0),
             new CharacterBlueprint(CharacterType.Bard)
             );
 
@@ -59,6 +59,12 @@ public class MazeLevel
     {
         Logger.Log(Logger.Initialisation, "Set up new Maze Level '<color=" + ConsoleConfiguration.HighlightColour + ">" + mazeName + "</color>'");
         return new MazeLevel(mazeName);
+    }
+
+    public void AddUnwalkableTile(Tile tile)
+    {
+        Logger.Log("{0},{1} is an unwalkable tile", tile.transform.position.x, tile.transform.position.y);
+        UnwalkableTiles.Add(tile);
     }
 }
 

@@ -32,8 +32,10 @@ public class CharacterManager : MonoBehaviour
     public void SpawnCharacter(CharacterBlueprint character, GridLocation gridLocation)
     {
         GameObject characterGO = GetCharacterPrefab(character);
+        Vector3 gridVectorLocation = GridLocation.GridToVector(gridLocation);
+
         // place on grid
-        characterGO.transform.position = GridLocation.GridToVector(gridLocation);
+        characterGO.transform.position = new Vector3(gridVectorLocation.x + GridLocation.OffsetToTileMiddle, gridVectorLocation.y + GridLocation.OffsetToTileMiddle);
 
         if(character.IsPlayable)
         {

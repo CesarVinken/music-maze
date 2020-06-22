@@ -17,7 +17,7 @@ public class PlayerLocomotion : CharacterLocomotion
     {
         base.Update();
 
-        if (Console.Instance && Console.Instance.ConsoleState == ConsoleState.Large)
+        if (Console.Instance && Console.Instance.ConsoleState != ConsoleState.Closed)
             return;
 
         if(GameManager.Instance.CurrentPlatform == Platform.PC)

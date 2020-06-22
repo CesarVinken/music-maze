@@ -1,5 +1,6 @@
 ﻿using Pathfinding;
 using System;
+using System.Linq;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -115,6 +116,15 @@ public class CharacterLocomotion : MonoBehaviour
 
     public void SetLocomotionTarget(Vector3 newTarget)
     {
+        // check if target is available
+        GridLocation targetGridLocation = GridLocation.VectorToGrid(newTarget);
+        Logger.Log("targetGridLocation:::: {0},{1}", targetGridLocation.X, targetGridLocation.Y);
+        if(MazeLevelManager.Instance.Level.UnwalkableTiles.FirstOrDefault(tile => tile.GridLocation.X == targetGridLocation.X && tile.GridLocation.Y == targetGridLocation.Y))
+        {
+            Logger.Warning("target is unwalkable");
+            return;
+        }
+
         IsOnTile = false;
 
         if (TargetObject == null)
@@ -125,7 +135,8 @@ public class CharacterLocomotion : MonoBehaviour
             TargetObject = targetGO;
         }
 
-        TargetObject.transform.position = newTarget;
+        float offsetToTileMiddle = GridLocation.OffsetToTileMiddle;
+        TargetObject.transform.position = new Vector3(newTarget.x + offsetToTileMiddle, newTarget.y + offsetToTileMiddle);
 
         DestinationSetter.target = TargetObject.transform;
 
@@ -134,7 +145,8 @@ public class CharacterLocomotion : MonoBehaviour
     public void ReachLocomotionTarget()
     {
         IsOnTile = true;
-        transform.position = new Vector3((float)Math.Round(transform.position.x), (float)Math.Round(transform.position.y), 0);
+        Vector3 roundedVectorPosition = new Vector3((float)Math.Round(transform.position.x - GridLocation.OffsetToTileMiddle), (float)Math.Round(transform.position.y - GridLocation.OffsetToTileMiddle));
+        transform.position = new Vector3(roundedVectorPosition.x + GridLocation.OffsetToTileMiddle, roundedVectorPosition.y + GridLocation.OffsetToTileMiddle, 0);
 
         AnimationHandler.SetLocomotion(false);
     }
