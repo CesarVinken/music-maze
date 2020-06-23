@@ -7,7 +7,8 @@ using UnityEngine;
 public class CharacterLocomotion : MonoBehaviour
 {
     public ObjectDirection CharacterDirection = ObjectDirection.Down;
-    public CharacterBlueprint Character;
+    public CharacterBlueprint CharacterBlueprint;
+    public Character CharacterGO;
     public CharacterAnimationHandler AnimationHandler;
     public float BaseSpeed = 8f;
     public float Speed;
@@ -29,7 +30,10 @@ public class CharacterLocomotion : MonoBehaviour
     public void Awake()
     {
         if (AnimationHandler == null)
-            Logger.Error(Logger.Initialisation, "Could not find AnimationHandler component on character");
+            Logger.Error(Logger.Initialisation, "Could not find AnimationHandler component on CharacterLocomotion");
+
+        if (CharacterGO == null)
+            Logger.Error(Logger.Initialisation, "Could not find CharacterGO component on CharacterLocomotion");
 
         if (DestinationSetter == null)
             Logger.Error(Logger.Initialisation, "Could not find AIDestinationSetter component on CharacterLocomotion");
@@ -100,6 +104,7 @@ public class CharacterLocomotion : MonoBehaviour
             case ObjectDirection.Right:
                 AnimationHandler.SetHorizontal(1f);
                 AnimationHandler.SetVertical(0);
+
                 targetGridLocation = new GridLocation(currentGridLocation.X + 1, currentGridLocation.Y);
                 if (!ValidateTarget(targetGridLocation)) return;
 
@@ -108,9 +113,8 @@ public class CharacterLocomotion : MonoBehaviour
             case ObjectDirection.Up:
                 AnimationHandler.SetHorizontal(0);
                 AnimationHandler.SetVertical(1f);
-                Logger.Log("currently {0}, {1}", currentGridLocation.X, currentGridLocation.Y);
+
                 targetGridLocation = new GridLocation(currentGridLocation.X, currentGridLocation.Y + 1);
-                Logger.Log("future {0}, {1}", targetGridLocation.X, targetGridLocation.Y);
 
                 if (!ValidateTarget(targetGridLocation)) return;
 

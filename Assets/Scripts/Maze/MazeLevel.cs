@@ -31,14 +31,22 @@ public class MazeLevel
 
         TilesContainer.SetInstance(mazeContainer.GetComponent<TilesContainer>());
         Tiles = TilesContainer.Instance.Tiles;
-     
+
         // TODO set character start location through editor and load in to level
-        CharacterStartLocation startLocation = new CharacterStartLocation(
+        CharacterStartLocation playerStartLocation = new CharacterStartLocation(
             new GridLocation(0, 0),
             new CharacterBlueprint(CharacterType.Bard)
             );
 
-        CharacterStartLocations.Add(startLocation);
+        CharacterStartLocations.Add(playerStartLocation);
+
+        CharacterStartLocation enemyStartLocation = new CharacterStartLocation(
+            new GridLocation(0, 4),
+            new CharacterBlueprint(CharacterType.Dragon)
+            );
+
+        CharacterStartLocations.Add(enemyStartLocation);
+
 
         int locationsForPlayers = CharacterStartLocations.Where(location => location.Character.IsPlayable).ToArray().Count();
         if (locationsForPlayers == 0)

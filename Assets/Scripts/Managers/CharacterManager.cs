@@ -35,11 +35,12 @@ public class CharacterManager : MonoBehaviour
         Vector3 gridVectorLocation = GridLocation.GridToVector(gridLocation);
 
         // place on grid
-        characterGO.transform.position = new Vector3(gridVectorLocation.x + GridLocation.OffsetToTileMiddle, gridVectorLocation.y + GridLocation.OffsetToTileMiddle);
+        PutCharacterOnGrid(characterGO, gridVectorLocation);
 
         if(character.IsPlayable)
         {
             PlayerCharacter playerCharacter = characterGO.GetComponent<PlayerCharacter>();
+            playerCharacter.SetStartingPosition(gridLocation);
             Players.Add(playerCharacter);
 
             if(GameManager.Instance.CurrentPlatform == Platform.PC)
@@ -60,6 +61,18 @@ public class CharacterManager : MonoBehaviour
                 }
             }
         }
+        else
+        {
+            EnemyCharacter enemyCharacter = characterGO.GetComponent<EnemyCharacter>();
+            enemyCharacter.SetStartingPosition(gridLocation);
+        }
+    }
+
+    public void PutCharacterOnGrid(GameObject characterGO, Vector3 gridVectorLocation)
+    {
+        Logger.Log("it was {0},{1}", characterGO.transform.position.x, characterGO.transform.position.y);
+        characterGO.transform.position = new Vector3(gridVectorLocation.x + GridLocation.OffsetToTileMiddle, gridVectorLocation.y + GridLocation.OffsetToTileMiddle);
+        Logger.Log("{0} will be now {1},{2}", characterGO.name, characterGO.transform.position.x, characterGO.transform.position.y);
     }
 
     public GameObject GetCharacterPrefab(CharacterBlueprint character)
