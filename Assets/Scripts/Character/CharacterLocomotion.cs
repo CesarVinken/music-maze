@@ -13,6 +13,8 @@ public class CharacterLocomotion : MonoBehaviour
     public float BaseSpeed = 8f;
     public float Speed;
     public bool IsOnTile = true; // If a character is not on a tile, it means the character is in locomotion.
+    public bool IsFrozen = false;
+
     public AIDestinationSetter DestinationSetter;
     public CharacterPath CharacterPath;
     public Vector2 Target

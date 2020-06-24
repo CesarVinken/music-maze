@@ -11,7 +11,7 @@ public class PlayerCharacter : Character
         EnemyCharacter enemy = collision.gameObject.GetComponent<EnemyCharacter>();
         if (enemy != null)
         {
-            Logger.Log("Collider enter player!");
+            Logger.Warning("Collider enter player!");
             enemy.CatchPlayer(this);
         }
     }

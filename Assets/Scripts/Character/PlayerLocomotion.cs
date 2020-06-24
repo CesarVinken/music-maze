@@ -15,6 +15,7 @@ public class PlayerLocomotion : CharacterLocomotion
     }
     public void Update()
     {
+        if (IsFrozen) return;
         base.Update();
 
         if (Console.Instance && Console.Instance.ConsoleState != ConsoleState.Closed)

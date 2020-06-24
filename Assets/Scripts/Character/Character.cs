@@ -20,8 +20,8 @@ public class Character : MonoBehaviour
 
     public void ResetCharacterPosition()
     {
-        CharacterManager.Instance.PutCharacterOnGrid(gameObject, GridLocation.GridToVector(StartingPosition));
         CharacterLocomotion.SetLocomotionTarget(GridLocation.GridToVector(StartingPosition));
+        CharacterManager.Instance.PutCharacterOnGrid(gameObject, GridLocation.GridToVector(StartingPosition));
         CharacterLocomotion.ReachLocomotionTarget();
     }
 }
