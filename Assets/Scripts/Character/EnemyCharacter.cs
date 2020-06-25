@@ -1,26 +1,54 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class EnemyCharacter : Character
 {
-    public CharacterType CharacterType;
+    private bool _hasTarget = false;
+
+    public void Update()
+    {
+        if (IsFrozen) return;
+        //base.Update();
+
+        if (!_hasTarget)
+        {
+            SetRandomTarget();
+        }
+        else
+        {
+            MoveCharacter();
+        }
+    }
+
+    public void SetRandomTarget()
+    {
+        Logger.Log("Set new target for enemy");
+        SetLocomotionTarget(GridLocation.GridToVector(GetRandomTileTarget().GridLocation));
+        _hasTarget = true;
+    }
+
+    public override void ReachLocomotionTarget()
+    {
+        Logger.Log("enemy reached target");
+        //IsOnTile = true;
+        Vector3 roundedVectorPosition = new Vector3((float)Math.Round(transform.position.x - GridLocation.OffsetToTileMiddle), (float)Math.Round(transform.position.y - GridLocation.OffsetToTileMiddle));
+        transform.position = new Vector3(roundedVectorPosition.x + GridLocation.OffsetToTileMiddle, roundedVectorPosition.y + GridLocation.OffsetToTileMiddle, 0);
+
+        AnimationHandler.SetLocomotion(false);
+        _hasTarget = false;
+        //if (!CharacterGO.CharacterBlueprint.IsPlayable)
+        //{
+        //    IEnumerator coroutine = FreezeCharacter(CharacterGO, 1f);
+        //    StartCoroutine(coroutine);
+        //}
+    }
 
     public void CatchPlayer(PlayerCharacter playerCharacter)
     {
         float freezeTime = 2.0f;
-        IEnumerator coroutine = FreezePlayer(playerCharacter, freezeTime);
+        IEnumerator coroutine = playerCharacter.FreezeCharacter(playerCharacter, freezeTime);
         StartCoroutine(coroutine);
-    }
-
-    private IEnumerator FreezePlayer(PlayerCharacter playerCharacter, float freezeTime)
-    {
-        playerCharacter.CharacterLocomotion.IsFrozen = true;
-
-        playerCharacter.ResetCharacterPosition();
-        yield return new WaitForSeconds(freezeTime);
-
-        playerCharacter.CharacterLocomotion.IsFrozen = false;
-
     }
 }

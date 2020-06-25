@@ -40,6 +40,7 @@ public class CharacterManager : MonoBehaviour
         if(character.IsPlayable)
         {
             PlayerCharacter playerCharacter = characterGO.GetComponent<PlayerCharacter>();
+            playerCharacter.CharacterBlueprint = character;
             playerCharacter.SetStartingPosition(gridLocation);
             Players.Add(playerCharacter);
 
@@ -65,6 +66,7 @@ public class CharacterManager : MonoBehaviour
         {
             EnemyCharacter enemyCharacter = characterGO.GetComponent<EnemyCharacter>();
             enemyCharacter.SetStartingPosition(gridLocation);
+            enemyCharacter.CharacterBlueprint = character;
         }
     }
 

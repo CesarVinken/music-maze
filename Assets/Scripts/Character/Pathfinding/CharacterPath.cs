@@ -2,16 +2,16 @@
 
 public class CharacterPath : AILerp
 {
-    public CharacterLocomotion CharacterLocomotion;
+    public Character Character;
 
     public new void Awake()
     {
         base.Awake();
-        CharacterLocomotion = gameObject.GetComponentInParent<CharacterLocomotion>();
+        Character = gameObject.GetComponentInParent<Character>();
     }
 
     public override void OnTargetReached()
     {
-        CharacterLocomotion.ReachLocomotionTarget();
+        Character.ReachLocomotionTarget();
     }
 }

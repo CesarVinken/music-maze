@@ -35,4 +35,30 @@ public class CharacterAnimationHandler : MonoBehaviour
     {
         InLocomotion = value;
     }
+
+    public void SetDirection(ObjectDirection direction)
+    {
+        switch (direction)
+        {
+            case ObjectDirection.Down:
+                SetHorizontal(0);
+                SetVertical(-1f);
+                break;
+            case ObjectDirection.Left:
+                SetHorizontal(-1f);
+                SetVertical(0);
+                break;
+            case ObjectDirection.Right:
+                SetHorizontal(1f);
+                SetVertical(0);
+                break;
+            case ObjectDirection.Up:
+                SetHorizontal(0);
+                SetVertical(1f);
+                break;
+            default:
+                Logger.Warning("Unhandled locomotion direction {0}", direction);
+                break;
+        }
+    }
 }
