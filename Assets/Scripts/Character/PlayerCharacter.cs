@@ -1,5 +1,4 @@
-﻿using System;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class PlayerCharacter : Character
 {
@@ -75,7 +74,6 @@ public class PlayerCharacter : Character
                 TryStartCharacterMovement(ObjectDirection.Left);
             }
         }
-
     }
 
     public void TryStartCharacterMovement(ObjectDirection direction)
@@ -136,13 +134,13 @@ public class PlayerCharacter : Character
         _hasTarget = true;
     }
 
-
     public override void ReachLocomotionTarget()
     {
-        Vector3 roundedVectorPosition = new Vector3((float)Math.Round(transform.position.x - GridLocation.OffsetToTileMiddle), (float)Math.Round(transform.position.y - GridLocation.OffsetToTileMiddle));
-        transform.position = new Vector3(roundedVectorPosition.x + GridLocation.OffsetToTileMiddle, roundedVectorPosition.y + GridLocation.OffsetToTileMiddle, 0);
+        //Vector3 roundedVectorPosition = new Vector3((float)Math.Round(transform.position.x - GridLocation.OffsetToTileMiddle), (float)Math.Round(transform.position.y - GridLocation.OffsetToTileMiddle));
+        //transform.position = new Vector3(roundedVectorPosition.x + GridLocation.OffsetToTileMiddle, roundedVectorPosition.y + GridLocation.OffsetToTileMiddle, 0);
 
         _hasTarget = false;
         AnimationHandler.SetLocomotion(false);
+        CharacterPath.SearchPath(); // immediately search path when target is reached, because the player input has already set the next target
     }
 }

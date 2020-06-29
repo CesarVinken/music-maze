@@ -137,6 +137,8 @@ public class Character : MonoBehaviour
 
         if (TargetObject == null)
         {
+            if (CharacterBlueprint == null) return;
+
             GameObject targetGO = new GameObject();
             targetGO.name = "Target object " + CharacterBlueprint.CharacterType;
             targetGO.transform.SetParent(GameManager.Instance.AstarGO.transform);

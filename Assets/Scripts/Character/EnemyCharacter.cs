@@ -10,7 +10,6 @@ public class EnemyCharacter : Character
     public void Update()
     {
         if (IsFrozen) return;
-        //base.Update();
 
         if (!_hasTarget)
         {
