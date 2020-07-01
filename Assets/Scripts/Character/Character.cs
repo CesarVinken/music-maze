@@ -83,7 +83,7 @@ public class Character : MonoBehaviour
         }
         else if (directionRotation == 90)
         {
-            AnimationHandler.SetDirection(ObjectDirection.Right);
+            AnimationHandler.SetDirection(ObjectDirection.Left);
 
         }
         else if (directionRotation == 180)
@@ -93,7 +93,7 @@ public class Character : MonoBehaviour
         }
         else if (directionRotation == 270)
         {
-            AnimationHandler.SetDirection(ObjectDirection.Left);
+            AnimationHandler.SetDirection(ObjectDirection.Right);
 
         }
         else

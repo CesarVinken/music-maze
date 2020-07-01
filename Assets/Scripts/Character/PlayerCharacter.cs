@@ -5,6 +5,7 @@ public class PlayerCharacter : Character
     public KeyboardInput KeyboardInput = KeyboardInput.None;
     public int PlayerNoInGame = 1;  // in multiplayer on multiple computers there can be a player 1 and player 2, while both use their Player1 keyboard input
     private bool _hasTarget = false;
+    private Vector2 _mobileFingerDownPosition;
 
     public void OnCollisionEnter2D(Collision2D collision)
     {
@@ -27,10 +28,65 @@ public class PlayerCharacter : Character
         if (GameManager.Instance.CurrentPlatform == Platform.PC)
             CheckKeyboardInput();
 
+        CheckPointerInput();
+
         if (_hasTarget)
         {
             MoveCharacter();
         }
+    }
+
+    private void CheckPointerInput()
+    {
+        if (GameManager.Instance.CurrentPlatform == Platform.PC)
+        {
+            if (Input.GetMouseButtonDown(0))
+            {
+                Vector2 target = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+                SetPointerLocomotinTarget(target);
+            }
+        }
+        else if (Input.touchCount > 0)
+        {
+            Touch touch = Input.GetTouch(0);
+            if (touch.phase == TouchPhase.Began)
+            {
+                _mobileFingerDownPosition = touch.position;
+            }
+            else if (touch.phase == TouchPhase.Ended || touch.phase == TouchPhase.Canceled)
+            {
+                Vector2 releaseDistance = _mobileFingerDownPosition - touch.position;
+
+                if ((releaseDistance.x < 12 && releaseDistance.x > -12) && (releaseDistance.y < 12 && releaseDistance.y > -12))  // tapping start position is roughly the same as the release position
+                {
+                    Vector2 target = Camera.main.ScreenToWorldPoint(touch.position);
+                    SetPointerLocomotinTarget(target);
+                }
+                else
+                {
+                    Logger.Log("{0} and {1}", _mobileFingerDownPosition, touch.position);
+                }
+            }
+        }
+    }
+
+    private void SetPointerLocomotinTarget(Vector2 target)
+    {
+        GridLocation gridLocation = GridLocation.FindClosestGridTile(target);
+
+        if (!ValidateTarget(gridLocation)) return;
+
+        Vector2 gridTarget = GridLocation.GridToVector(gridLocation);
+
+
+        SetLocomotionTarget(gridTarget);
+
+        if (!AnimationHandler.InLocomotion)
+            AnimationHandler.SetLocomotion(true);
+
+        _hasTarget = true;
+
+        CharacterPath.SearchPath();
     }
 
     private void CheckKeyboardInput()
@@ -85,6 +141,7 @@ public class PlayerCharacter : Character
             return;
         }
 
+        CharacterPath.SearchPath();
         //CharacterPath.transform.position = transform.position;
         //CharacterPath.transform.rotation = Quaternion.identity;
         CharacterPath.enabled = true;
@@ -138,9 +195,9 @@ public class PlayerCharacter : Character
     {
         //Vector3 roundedVectorPosition = new Vector3((float)Math.Round(transform.position.x - GridLocation.OffsetToTileMiddle), (float)Math.Round(transform.position.y - GridLocation.OffsetToTileMiddle));
         //transform.position = new Vector3(roundedVectorPosition.x + GridLocation.OffsetToTileMiddle, roundedVectorPosition.y + GridLocation.OffsetToTileMiddle, 0);
+        transform.position = new Vector3(Target.x, Target.y, 0);
 
         _hasTarget = false;
         AnimationHandler.SetLocomotion(false);
-        CharacterPath.SearchPath(); // immediately search path when target is reached, because the player input has already set the next target
     }
 }
