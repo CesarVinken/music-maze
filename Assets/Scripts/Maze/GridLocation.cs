@@ -29,9 +29,31 @@ public struct GridLocation
         return new GridLocation((int)(vectorLocation.x / 1f), (int)(vectorLocation.y / 1f));
     }
 
-    // TODO return grid tile for vector location and take axis multiplier into account
-    //public static GridLocation FindBelongingGridTile(Vector2 vectorLocation)
-    //{
-    //    float x = vectorLocation.x % _xAxisMultiplier;
-    //}
+    public static GridLocation FindClosestGridTile(Vector2 vectorLocation)
+    {
+        float flooredX = Mathf.Floor(vectorLocation.x);
+        float flooredY = Mathf.Floor(vectorLocation.y);
+
+        float gridX = flooredX;
+        float gridY = flooredY;
+        if (flooredX > 0)
+        {
+            gridX = flooredX - (flooredX % _xAxisMultiplier);
+        }
+        else if (flooredX < 0)
+        {
+            gridX = flooredX - (((flooredX % _xAxisMultiplier) * -1));
+        }
+
+        if (flooredY > 0)
+        {
+            gridY = flooredY - (flooredY % _yAxisMultiplier);
+        }
+        else if (flooredY < 0)
+        {
+            gridY = flooredY - (((flooredY % _yAxisMultiplier) * -1));
+        }
+
+        return new GridLocation((int)gridX, (int)gridY);
+    }
 }
