@@ -1,10 +1,11 @@
-﻿using Pathfinding;
+﻿using Mirror;
+using Pathfinding;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-public class Character : MonoBehaviour
+public class Character : NetworkBehaviour
 {
     public CharacterBlueprint CharacterBlueprint;
     public GridLocation StartingPosition;

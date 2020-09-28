@@ -25,10 +25,13 @@ public class PlayerCharacter : Character
         if (Console.Instance && Console.Instance.ConsoleState != ConsoleState.Closed)
             return;
 
-        if (GameManager.Instance.CurrentPlatform == Platform.PC)
-            CheckKeyboardInput();
+        if (hasAuthority) // only check input for this client's characters
+        {
+            if (GameManager.Instance.CurrentPlatform == Platform.PC)
+                CheckKeyboardInput();
 
-        CheckPointerInput();
+            CheckPointerInput();
+        }
 
         if (_hasTarget)
         {
@@ -193,11 +196,7 @@ public class PlayerCharacter : Character
 
     public override void ReachLocomotionTarget()
     {
-        //Vector3 roundedVectorPosition = new Vector3((float)Math.Round(transform.position.x - GridLocation.OffsetToTileMiddle), (float)Math.Round(transform.position.y - GridLocation.OffsetToTileMiddle));
-        //transform.position = new Vector3(roundedVectorPosition.x + GridLocation.OffsetToTileMiddle, roundedVectorPosition.y + GridLocation.OffsetToTileMiddle, 0);
-        transform.position = new Vector3(Target.x, Target.y, 0);
-
         _hasTarget = false;
-        AnimationHandler.SetLocomotion(false);
+        AnimationHandler.SetLocomotion(false);    
     }
 }

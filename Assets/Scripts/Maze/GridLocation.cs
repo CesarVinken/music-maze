@@ -19,8 +19,7 @@ public struct GridLocation
 
     public static Vector2 GridToVector(GridLocation gridLocation)
     {
-        Logger.Log("Target grid location: {0}, {1}", gridLocation.X, gridLocation.Y);
-
+        //Logger.Log("Target grid location: {0}, {1}", gridLocation.X, gridLocation.Y);
         return new Vector2(gridLocation.X * _xAxisMultiplier, gridLocation.Y * _yAxisMultiplier);
     }
 

@@ -72,9 +72,9 @@ public class CharacterManager : MonoBehaviour
 
     public void PutCharacterOnGrid(GameObject characterGO, Vector3 gridVectorLocation)
     {
-        Logger.Log("it was {0},{1}", characterGO.transform.position.x, characterGO.transform.position.y);
+        //Logger.Log("it was {0},{1}", characterGO.transform.position.x, characterGO.transform.position.y);
         characterGO.transform.position = new Vector3(gridVectorLocation.x + GridLocation.OffsetToTileMiddle, gridVectorLocation.y + GridLocation.OffsetToTileMiddle);
-        Logger.Log("{0} will be now {1},{2}", characterGO.name, characterGO.transform.position.x, characterGO.transform.position.y);
+        //Logger.Log("{0} will be now {1},{2}", characterGO.name, characterGO.transform.position.x, characterGO.transform.position.y);
     }
 
     public GameObject GetCharacterPrefab(CharacterBlueprint character)
