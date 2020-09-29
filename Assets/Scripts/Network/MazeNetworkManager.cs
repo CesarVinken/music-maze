@@ -7,6 +7,7 @@ using UnityEngine.SceneManagement;
 
 public class MazeNetworkManager : NetworkManager
 {
+    [Scene] [SerializeField] private int _minPlayers = 2;
     [Scene] [SerializeField] private string _menuScene = string.Empty;
 
     [Header("Room")]
@@ -14,6 +15,8 @@ public class MazeNetworkManager : NetworkManager
 
     public static event Action OnClientConnected;
     public static event Action OnClientDisconnected;
+
+    public List<NetworkRoomPlayerLobby> RoomPlayers { get; } = new List<NetworkRoomPlayerLobby>();
 
     public override void OnStartServer()
     {
@@ -63,10 +66,38 @@ public class MazeNetworkManager : NetworkManager
     {
         if (SceneManager.GetActiveScene().path == _menuScene)
         {
+            bool isLeader = RoomPlayers.Count == 0;
+
             NetworkRoomPlayerLobby roomPlayerLobbyInstance = Instantiate(_roomPlayerPrefab);
+
+            roomPlayerLobbyInstance.IsLeader = isLeader;
 
             NetworkServer.AddPlayerForConnection(conn, roomPlayerLobbyInstance.gameObject);
         }
 
+    }
+
+    public override void OnServerDisconnect(NetworkConnection conn)
+    {
+        if (conn.identity != null)
+        {
+            NetworkRoomPlayerLobby player = conn.identity.GetComponent<NetworkRoomPlayerLobby>();
+
+            RoomPlayers.Remove(player);
+        }
+
+        base.OnServerDisconnect(conn);
+    }
+
+    public override void OnStopServer()
+    {
+        RoomPlayers.Clear();
+    }
+
+    private bool IsReadyToStart()
+    {
+        if(numPlayers < _minPlayers) { return false; }
+
+        return true;
     }
 }

@@ -31,7 +31,6 @@ public class JoinLobbyMenu : MonoBehaviour
 
         _networkManager.networkAddress = ipAddress;
         _networkManager.StartClient();
-        Logger.Log("_networkManager.networkAddress {0}", _networkManager.networkAddress);
 
         _joinButton.interactable = false;
     }
