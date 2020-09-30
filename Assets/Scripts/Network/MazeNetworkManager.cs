@@ -7,16 +7,23 @@ using UnityEngine.SceneManagement;
 
 public class MazeNetworkManager : NetworkManager
 {
-    [Scene] [SerializeField] private int _minPlayers = 2;
+    [SerializeField] private int _minPlayers = 2;
+    [SerializeField] private int _maxPlayers = 2;
     [Scene] [SerializeField] private string _menuScene = string.Empty;
 
     [Header("Room")]
-    [SerializeField] private NetworkRoomPlayerLobby _roomPlayerPrefab = null;
+    [SerializeField] private NetworkRoomPlayer _roomPlayerPrefab = null;
+
+    [Header("Game")]
+    [SerializeField] private NetworkGamePlayer _gamePlayerPrefab = null;
+    [SerializeField] private GameObject _playerSpawnSystem = null;
 
     public static event Action OnClientConnected;
     public static event Action OnClientDisconnected;
+    public static event Action<NetworkConnection> OnServerReadied;
 
-    public List<NetworkRoomPlayerLobby> RoomPlayers { get; } = new List<NetworkRoomPlayerLobby>();
+    public List<NetworkRoomPlayer> RoomPlayers { get; } = new List<NetworkRoomPlayer>();
+    public List<NetworkGamePlayer> GamePlayers { get; } = new List<NetworkGamePlayer>();
 
     public override void OnStartServer()
     {
@@ -68,20 +75,19 @@ public class MazeNetworkManager : NetworkManager
         {
             bool isLeader = RoomPlayers.Count == 0;
 
-            NetworkRoomPlayerLobby roomPlayerLobbyInstance = Instantiate(_roomPlayerPrefab);
+            NetworkRoomPlayer roomPlayerLobbyInstance = Instantiate(_roomPlayerPrefab);
 
             roomPlayerLobbyInstance.IsLeader = isLeader;
 
             NetworkServer.AddPlayerForConnection(conn, roomPlayerLobbyInstance.gameObject);
         }
-
     }
 
     public override void OnServerDisconnect(NetworkConnection conn)
     {
         if (conn.identity != null)
         {
-            NetworkRoomPlayerLobby player = conn.identity.GetComponent<NetworkRoomPlayerLobby>();
+            NetworkRoomPlayer player = conn.identity.GetComponent<NetworkRoomPlayer>();
 
             RoomPlayers.Remove(player);
         }
@@ -92,12 +98,88 @@ public class MazeNetworkManager : NetworkManager
     public override void OnStopServer()
     {
         RoomPlayers.Clear();
+        GamePlayers.Clear();
     }
 
-    private bool IsReadyToStart()
+    public void TryStartGame()
+    {
+        NetworkRoomPlayer playerLeader = null;
+
+        foreach(var player in RoomPlayers)
+        {
+            if (IsGameReadyToStart())
+            {
+                if (player.GetLeaderRoomPlayer())
+                {
+                    playerLeader = player;
+                    break;
+                }
+            }
+        }
+        if (playerLeader)
+        {
+            Logger.Log("Trigger Start game command");
+            playerLeader.CmdStartGame();
+        }
+    }
+
+    public bool IsGameReadyToStart()
     {
         if(numPlayers < _minPlayers) { return false; }
 
+        foreach(var player in RoomPlayers)
+        {
+            if(!player.IsReady) { return false; }
+        }
+
         return true;
+    }
+
+    public void StartGame()
+    {
+        Logger.Log("RoomPlayers.count: {0}", RoomPlayers.Count);
+        Logger.Log("STARTGAME!");
+        if(SceneManager.GetActiveScene().path == _menuScene)
+        {
+            if(!IsGameReadyToStart()) { return;  }
+
+            ServerChangeScene("TestLoadScene");
+        }
+    }
+
+    public override void ServerChangeScene(string newSceneName)
+    {
+        // from menu to game
+        if (SceneManager.GetActiveScene().path == _menuScene) // scene name starts with level prefix
+            //if (SceneManager.GetActiveScene().path == _menuScene && newSceneName.StartsWith("TestLoadScene")) // scene name starts with level prefix
+        {
+            for (int i = RoomPlayers.Count - 1; i >= 0; i--)
+            {
+                NetworkConnection conn = RoomPlayers[i].connectionToClient;
+                NetworkGamePlayer gamePlayerInstance = Instantiate(_gamePlayerPrefab);
+                gamePlayerInstance.SetDisplayName(RoomPlayers[i].DisplayName);
+
+                NetworkServer.Destroy(conn.identity.gameObject);
+                NetworkServer.ReplacePlayerForConnection(conn, gamePlayerInstance.gameObject, true);
+            }
+        }
+
+        base.ServerChangeScene(newSceneName);
+    }
+
+    public override void OnServerSceneChanged(string sceneName)
+    {
+        //if(sceneName.StartsWith("TestLoadScene")) // scene name starts with level prefix
+        //{
+            GameObject playerSpawnSystemInstance = Instantiate(_playerSpawnSystem);
+            NetworkServer.Spawn(playerSpawnSystemInstance);
+        //}
+    }
+
+    public override void OnServerReady(NetworkConnection conn)
+    {
+        base.OnServerReady(conn);
+
+        OnServerReadied?.Invoke(conn);
     }
 }

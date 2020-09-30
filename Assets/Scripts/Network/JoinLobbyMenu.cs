@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.UI;
 
 public class JoinLobbyMenu : MonoBehaviour
@@ -26,7 +24,6 @@ public class JoinLobbyMenu : MonoBehaviour
 
     public void JoinLobby()
     {
-        Logger.Log("join lobby");
         string ipAddress = _ipAddressInputField.text;
 
         _networkManager.networkAddress = ipAddress;

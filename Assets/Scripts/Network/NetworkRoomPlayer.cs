@@ -2,7 +2,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 
-public class NetworkRoomPlayerLobby : NetworkBehaviour
+public class NetworkRoomPlayer : NetworkBehaviour
 {
     [Header("UI")]
     [SerializeField] private GameObject _lobbyUI = null;
@@ -10,6 +10,8 @@ public class NetworkRoomPlayerLobby : NetworkBehaviour
 
     [SyncVar(hook = nameof(HandleDisplayNameChanged))]
     public string DisplayName = "Loading...";
+    [SyncVar(hook = nameof(HandleReadyStatusChanged))]
+    public bool IsReady = false;
 
     private bool _isLeader;
     public bool IsLeader
@@ -25,7 +27,7 @@ public class NetworkRoomPlayerLobby : NetworkBehaviour
     {
         get
         {
-            if(_room != null) { return _room; }
+            if (_room != null) { return _room; }
             return _room = NetworkManager.singleton as MazeNetworkManager;
         }
     }
@@ -35,6 +37,8 @@ public class NetworkRoomPlayerLobby : NetworkBehaviour
         CmdSetDisplayName(PlayerNameInputPanel.DisplayName);
 
         _lobbyUI.SetActive(true);
+
+        CmdReadyUp(); //Ready up once started
     }
 
     public override void OnStartClient()
@@ -51,13 +55,14 @@ public class NetworkRoomPlayerLobby : NetworkBehaviour
         UpdateDisplay();
     }
 
+    public void HandleReadyStatusChanged(bool oldValue, bool newValue) {}
     public void HandleDisplayNameChanged(string oldValue, string newValue) => UpdateDisplay();
 
     private void UpdateDisplay()
     {
         if (!hasAuthority)
         {
-            foreach(NetworkRoomPlayerLobby player in Room.RoomPlayers)
+            foreach(NetworkRoomPlayer player in Room.RoomPlayers)
             {
                 if (player.hasAuthority)
                 {
@@ -80,6 +85,13 @@ public class NetworkRoomPlayerLobby : NetworkBehaviour
         }
     }
 
+    public bool GetLeaderRoomPlayer()
+    {
+        if(!_isLeader) { return false; }
+
+        return true;
+    }
+
     [Command]
     private void CmdSetDisplayName(string displayName)
     {
@@ -89,11 +101,19 @@ public class NetworkRoomPlayerLobby : NetworkBehaviour
     }
 
     [Command]
+    public void CmdReadyUp()
+    {
+        IsReady = true;
+
+        Room.TryStartGame();
+    }
+
+    [Command]
     public void CmdStartGame()
     {
         // make sure RoomPlayers[0] is the leader
         if (Room.RoomPlayers[0].connectionToClient != connectionToClient) { return; }
 
-        // Start game
+        Room.StartGame();
     }
 }
