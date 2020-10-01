@@ -32,7 +32,7 @@ public class MazeLevel
         TilesContainer.SetInstance(mazeContainer.GetComponent<TilesContainer>());
         Tiles = TilesContainer.Instance.Tiles;
 
-
+        /*
         // ** PLAYERS **
 
 
@@ -72,6 +72,7 @@ public class MazeLevel
         {
             Logger.Warning(Logger.Initialisation, "The level {0} has {1} player starting positions set up. There should be 2 positions.", _mazeName, locationsForPlayers);
         }
+        */
     }
 
     public static MazeLevel Create(MazeName mazeName = MazeName.Blank6x6)
@@ -82,7 +83,7 @@ public class MazeLevel
 
     public void AddUnwalkableTile(Tile tile)
     {
-        Logger.Log("{0},{1} is an unwalkable tile", tile.transform.position.x, tile.transform.position.y);
+        //Logger.Log("{0},{1} is an unwalkable tile", tile.transform.position.x, tile.transform.position.y);
         UnwalkableTiles.Add(tile);
     }
 }

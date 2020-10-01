@@ -16,7 +16,8 @@ public class MazeNetworkManager : NetworkManager
 
     [Header("Game")]
     [SerializeField] private NetworkGamePlayer _gamePlayerPrefab = null;
-    [SerializeField] private GameObject _playerSpawnSystem = null;
+    //[SerializeField] private GameObject _playerSpawnSystem = null;
+    [SerializeField] private GameObject _gameManagerPrefab = null;
 
     public static event Action OnClientConnected;
     public static event Action OnClientDisconnected;
@@ -143,7 +144,7 @@ public class MazeNetworkManager : NetworkManager
         {
             if(!IsGameReadyToStart()) { return;  }
 
-            ServerChangeScene("TestLoadScene");
+            ServerChangeScene("SampleScene");
         }
     }
 
@@ -151,7 +152,7 @@ public class MazeNetworkManager : NetworkManager
     {
         // from menu to game
         if (SceneManager.GetActiveScene().path == _menuScene) // scene name starts with level prefix
-            //if (SceneManager.GetActiveScene().path == _menuScene && newSceneName.StartsWith("TestLoadScene")) // scene name starts with level prefix
+            //if (SceneManager.GetActiveScene().path == _menuScene && newSceneName.StartsWith("SampleScene")) // scene name starts with level prefix
         {
             for (int i = RoomPlayers.Count - 1; i >= 0; i--)
             {
@@ -169,10 +170,12 @@ public class MazeNetworkManager : NetworkManager
 
     public override void OnServerSceneChanged(string sceneName)
     {
-        //if(sceneName.StartsWith("TestLoadScene")) // scene name starts with level prefix
+        //if(sceneName.StartsWith("SampleScene")) // scene name starts with level prefix
         //{
-            GameObject playerSpawnSystemInstance = Instantiate(_playerSpawnSystem);
-            NetworkServer.Spawn(playerSpawnSystemInstance);
+        //GameObject playerSpawnSystemInstance = Instantiate(_playerSpawnSystem);
+        GameObject gameManagerInstance = Instantiate(_gameManagerPrefab);
+        //NetworkServer.Spawn(playerSpawnSystemInstance);
+        NetworkServer.Spawn(gameManagerInstance);
         //}
     }
 

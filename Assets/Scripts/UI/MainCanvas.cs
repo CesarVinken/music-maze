@@ -16,9 +16,9 @@ public class MainCanvas : MonoBehaviour
         Guard.CheckIsNull(ConsoleContainer, "ConsoleContainer");
         Guard.CheckIsNull(ConsoleButton, "ConsoleButton");
 
-        if (GameManager.Instance.CurrentPlatform == Platform.Android)
-        {
-            ConsoleButton.SetActive(true);
-        }
+        //if (GameManager.Instance.CurrentPlatform == Platform.Android)
+        //{
+        //    ConsoleButton.SetActive(true);
+        //}
     }
 }

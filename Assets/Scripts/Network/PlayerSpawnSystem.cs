@@ -27,6 +27,7 @@ public class PlayerSpawnSystem : NetworkBehaviour
     [Server]
     public void SpawnPlayer(NetworkConnection conn)
     {
+        Logger.Log("Spawn player");
         Transform spawnPoint = _spawnPoints.ElementAtOrDefault(nextIndex);
 
         if(spawnPoint == null)

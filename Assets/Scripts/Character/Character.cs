@@ -142,7 +142,7 @@ public class Character : NetworkBehaviour
 
             GameObject targetGO = new GameObject();
             targetGO.name = "Target object " + CharacterBlueprint.CharacterType;
-            targetGO.transform.SetParent(GameManager.Instance.AstarGO.transform);
+            targetGO.transform.SetParent(GameManager.Instance.PathfindingSystemGO.transform);
             TargetObject = targetGO;
         }
 

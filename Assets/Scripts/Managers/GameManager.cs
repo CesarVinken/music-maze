@@ -1,7 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using Mirror;
+using System.Collections.Generic;
 using UnityEngine;
 
-public class GameManager : MonoBehaviour
+public class GameManager : NetworkBehaviour
 {
     public static GameManager Instance;
 
@@ -10,20 +11,24 @@ public class GameManager : MonoBehaviour
     public KeyboardConfiguration KeyboardConfiguration;
 
     public GameObject GridGO;
-    public GameObject AstarGO;
+    public GameObject PathfindingSystemGO;
 
+    [Header("Prefabs")]
     public GameObject MazeLevelManagerPrefab;
     public GameObject CharacterManagerPrefab;
+    public GameObject GridPrefab;
+    public GameObject PathfindingSystemPrefab;
+    public GameObject PlayerSpawnSystemPrefab;
 
     public void Awake()
     {
         Instance = this;
 
-        Guard.CheckIsNull(GridGO, "Could not find GridGO prefab");
-        Guard.CheckIsNull(AstarGO, "AstarGO");
-
         Guard.CheckIsNull(MazeLevelManagerPrefab, "Could not find MazeLevelManagerPrefab");
         Guard.CheckIsNull(CharacterManagerPrefab, "Could not find CharacterManagerPrefab");
+        Guard.CheckIsNull(GridPrefab, "Could not find GridPrefab");
+        Guard.CheckIsNull(PathfindingSystemPrefab, "Could not find PathfindingSystemPrefab");
+        Guard.CheckIsNull(PlayerSpawnSystemPrefab, "Could not find PlayerSpawnSystemPrefab");
 
         InitialiseLoggers();
 
@@ -41,10 +46,16 @@ public class GameManager : MonoBehaviour
         KeyboardConfiguration = new KeyboardConfiguration();
 
         Instantiate(MazeLevelManagerPrefab, transform);
-        Instantiate(CharacterManagerPrefab, transform);
+        Instantiate(CharacterManagerPrefab, transform); // rework character spawning
+        //Instantiate(PlayerSpawnSystemPrefab, transform);
+        GridGO = Instantiate(GridPrefab, transform);
+        PathfindingSystemGO = Instantiate(PathfindingSystemPrefab, transform);
+
+        Guard.CheckIsNull(GridGO, "Could not find GridGO");
+        Guard.CheckIsNull(PathfindingSystemGO, "PathfindingSystemGO");
 
         MazeLevelManager.Instance.LoadLevel(MazeName.PathfindingTest);
-        CharacterManager.Instance.SpawnCharacters();
+        //CharacterManager.Instance.SpawnCharacters();
     }
 
     public void Update()
