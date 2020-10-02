@@ -7,7 +7,7 @@ using UnityEngine;
 
 public class Character : NetworkBehaviour
 {
-    public CharacterBlueprint CharacterBlueprint;
+    public CharacterType CharacterType;
     public GridLocation StartingPosition;
 
     public ObjectDirection CharacterDirection = ObjectDirection.Down;
@@ -75,7 +75,9 @@ public class Character : NetworkBehaviour
 
     public void MoveCharacter()
     {
+        Logger.Log("Move character.");
         transform.position = CharacterPath.transform.position;
+        Logger.Log("CharacterPath: {0},{1}", CharacterPath.transform.position.x, CharacterPath.transform.position.z);
         float directionRotation = CharacterPath.rotation.eulerAngles.z;
 
         if (directionRotation == 0)
@@ -85,17 +87,14 @@ public class Character : NetworkBehaviour
         else if (directionRotation == 90)
         {
             AnimationHandler.SetDirection(ObjectDirection.Left);
-
         }
         else if (directionRotation == 180)
         {
             AnimationHandler.SetDirection(ObjectDirection.Down);
-
         }
         else if (directionRotation == 270)
         {
             AnimationHandler.SetDirection(ObjectDirection.Right);
-
         }
         else
         {
@@ -125,7 +124,7 @@ public class Character : NetworkBehaviour
         // TODO this check is maybe not very efficient
         if (!MazeLevelManager.Instance.Level.Tiles.FirstOrDefault(tile => tile.GridLocation.X == targetGridLocation.X && tile.GridLocation.Y == targetGridLocation.Y))
         {
-            //Logger.Log("target is not a tile");
+            Logger.Log("target is not a tile");
             return false;
         }
 
@@ -134,14 +133,17 @@ public class Character : NetworkBehaviour
 
     public void SetLocomotionTarget(Vector3 newTarget)
     {
+        Logger.Log("set locomotion target");
         IsOnTile = false;
 
+        Logger.Log("TargetObject is null? {0}", TargetObject == null);
         if (TargetObject == null)
         {
-            if (CharacterBlueprint == null) return;
+            Logger.Log("CharacterBlueprint is null? {0}", CharacterType == CharacterType.Null);
+            if (CharacterType == CharacterType.Null) return;
 
             GameObject targetGO = new GameObject();
-            targetGO.name = "Target object " + CharacterBlueprint.CharacterType;
+            targetGO.name = "Target object " + CharacterType;
             targetGO.transform.SetParent(GameManager.Instance.PathfindingSystemGO.transform);
             TargetObject = targetGO;
         }

@@ -17,6 +17,11 @@ public class PlayerCharacter : Character
         }
     }
 
+    public void Awake()
+    {
+        CharacterType = CharacterType.Player;
+    }
+
     public void Update()
     {
         if (IsFrozen) return;
@@ -137,6 +142,8 @@ public class PlayerCharacter : Character
 
     public void TryStartCharacterMovement(ObjectDirection direction)
     {
+        Logger.Log("Try start character movement");
+        Logger.Log("_hasTarget?? {0}", _hasTarget);
         // check if character is in tile position, if so, start movement in direction.
         if (_hasTarget)
         {
@@ -148,13 +155,13 @@ public class PlayerCharacter : Character
         //CharacterPath.transform.position = transform.position;
         //CharacterPath.transform.rotation = Quaternion.identity;
         CharacterPath.enabled = true;
-
         GridLocation currentGridLocation = GridLocation.VectorToGrid(transform.position);
         GridLocation targetGridLocation;
+        Logger.Log("currentGridLocation {0},{1} ", currentGridLocation.X, currentGridLocation.Y);
 
         //Order character to go to another tile
         AnimationHandler.SetDirection(direction);
-
+        Logger.Log("Direction: {0}", direction);
         switch (direction)
         {
             case ObjectDirection.Down:
@@ -172,6 +179,7 @@ public class PlayerCharacter : Character
                 break;
             case ObjectDirection.Right:
                 targetGridLocation = new GridLocation(currentGridLocation.X + 1, currentGridLocation.Y);
+                Logger.Log("targetGridLocation to the right {0},{1} ", targetGridLocation.X, targetGridLocation.Y);
                 if (!ValidateTarget(targetGridLocation)) return;
 
                 SetLocomotionTarget(GridLocation.GridToVector(targetGridLocation));

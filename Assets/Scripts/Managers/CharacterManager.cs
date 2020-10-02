@@ -18,56 +18,99 @@ public class CharacterManager : MonoBehaviour
         Guard.CheckIsNull(PlayerCharacterPrefab, "Could not find PlayerCharacterPrefab");
     }
 
-    public void SpawnCharacters()
-    {
-        MazeLevel level = MazeLevelManager.Instance.Level;
+    //public void SpawnCharacters()
+    //{
+    //    MazeLevel level = MazeLevelManager.Instance.Level;
 
-        for (int i = 0; i < level.CharacterStartLocations.Count; i++)
-        {
-            CharacterStartLocation characterStart = level.CharacterStartLocations[i];
-            SpawnCharacter(characterStart.Character, characterStart.GridLocation);
-        }
-    }
+    //    for (int i = 0; i < level.CharacterStartLocations.Count; i++)
+    //    {
+    //        CharacterStartLocation characterStart = level.CharacterStartLocations[i];
+    //        SpawnCharacter(characterStart.Character, characterStart.GridLocation);
+    //    }
+    //}
 
-    public void SpawnCharacter(CharacterBlueprint character, GridLocation gridLocation)
+    //public void SpawnCharacter(CharacterBlueprint character, GridLocation gridLocation)
+    //{
+    //    GameObject characterGO = GetCharacterPrefab(character);
+    //    Vector3 gridVectorLocation = GridLocation.GridToVector(gridLocation);
+
+    //    // place on grid
+    //    PutCharacterOnGrid(characterGO, gridVectorLocation);
+
+    //    if(character.IsPlayable)
+    //    {
+    //        PlayerCharacter playerCharacter = characterGO.GetComponent<PlayerCharacter>();
+    //        playerCharacter.CharacterBlueprint = character;
+    //        playerCharacter.SetStartingPosition(gridLocation);
+    //        Players.Add(playerCharacter);
+
+    //        if(GameManager.Instance.CurrentPlatform == Platform.PC)
+    //        {
+    //            if (Players.Count == 1)
+    //            {
+    //                playerCharacter.KeyboardInput = KeyboardInput.Player1;
+    //                playerCharacter.PlayerNoInGame = 1;
+    //            }
+    //            else if (Players.Count == 2)
+    //            {
+    //                playerCharacter.KeyboardInput = KeyboardInput.Player2;
+    //                playerCharacter.PlayerNoInGame = 2;
+    //            }
+    //            else
+    //            {
+    //                Logger.Warning("There are {0} players in the level. There can be max 2 players in a level", Players.Count);
+    //            }
+    //        }
+    //    }
+    //    else
+    //    {
+    //        EnemyCharacter enemyCharacter = characterGO.GetComponent<EnemyCharacter>();
+    //        enemyCharacter.SetStartingPosition(gridLocation);
+    //        enemyCharacter.CharacterBlueprint = character;
+    //    }
+    //}
+
+    public GameObject RegisterCharacter(CharacterBlueprint character, GridLocation gridLocation)
     {
+        Logger.Log("Register Character");
         GameObject characterGO = GetCharacterPrefab(character);
         Vector3 gridVectorLocation = GridLocation.GridToVector(gridLocation);
 
-        // place on grid
-        PutCharacterOnGrid(characterGO, gridVectorLocation);
-
-        if(character.IsPlayable)
+        if (character.IsPlayable)
         {
             PlayerCharacter playerCharacter = characterGO.GetComponent<PlayerCharacter>();
-            playerCharacter.CharacterBlueprint = character;
+            //playerCharacter.CharacterBlueprint = character;
+            Logger.Log("gridLocation for registration is {0},{1}", gridLocation.X, gridLocation.Y);
             playerCharacter.SetStartingPosition(gridLocation);
-            Players.Add(playerCharacter);
+            PutCharacterOnGrid(characterGO, gridVectorLocation);
+            //Players.Add(playerCharacter);
 
-            if(GameManager.Instance.CurrentPlatform == Platform.PC)
-            {
-                if (Players.Count == 1)
-                {
-                    playerCharacter.KeyboardInput = KeyboardInput.Player1;
-                    playerCharacter.PlayerNoInGame = 1;
-                }
-                else if (Players.Count == 2)
-                {
-                    playerCharacter.KeyboardInput = KeyboardInput.Player2;
-                    playerCharacter.PlayerNoInGame = 2;
-                }
-                else
-                {
-                    Logger.Warning("There are {0} players in the level. There can be max 2 players in a level", Players.Count);
-                }
-            }
+            //if (GameManager.Instance.CurrentPlatform == Platform.PC)
+            //{
+            //    if (Players.Count == 1)
+            //    {
+            //        playerCharacter.KeyboardInput = KeyboardInput.Player1;
+            //        playerCharacter.PlayerNoInGame = 1;
+            //    }
+            //    else if (Players.Count == 2)
+            //    {
+            //        playerCharacter.KeyboardInput = KeyboardInput.Player2;
+            //        playerCharacter.PlayerNoInGame = 2;
+            //    }
+            //    else
+            //    {
+            //        Logger.Warning("There are {0} players in the level. There can be max 2 players in a level", Players.Count);
+            //    }
+            //}
         }
         else
         {
             EnemyCharacter enemyCharacter = characterGO.GetComponent<EnemyCharacter>();
             enemyCharacter.SetStartingPosition(gridLocation);
-            enemyCharacter.CharacterBlueprint = character;
+            enemyCharacter.CharacterType = character.CharacterType;
         }
+
+        return characterGO;
     }
 
     public void PutCharacterOnGrid(GameObject characterGO, Vector3 gridVectorLocation)
@@ -81,7 +124,7 @@ public class CharacterManager : MonoBehaviour
     {
         switch (character.CharacterType)
         {
-            case CharacterType.Bard:
+            case CharacterType.Player:
                 return Instantiate(PlayerCharacterPrefab, transform);
             case CharacterType.Dragon:
                 return Instantiate(EnemyCharacterPrefab, transform);

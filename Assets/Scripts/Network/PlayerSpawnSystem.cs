@@ -6,7 +6,7 @@ using UnityEngine;
 
 public class PlayerSpawnSystem : NetworkBehaviour
 {
-    [SerializeField] private GameObject _playerPrefab = null;
+    //[SerializeField] private GameObject _playerPrefab = null;
 
     private static List<Transform> _spawnPoints = new List<Transform>();
 
@@ -19,7 +19,7 @@ public class PlayerSpawnSystem : NetworkBehaviour
     }
     public static void RemoveSpawnPoint(Transform transform) => _spawnPoints.Remove(transform);
 
-    public override void OnStartServer() => MazeNetworkManager.OnServerReadied += SpawnPlayer;
+    public override void OnStartServer() => MazeNetworkManager.OnServerReadied += SpawnPlayer; // maybe move to game manager and create spawnsystem there with prefab?
 
     [ServerCallback]
     private void OnDestroy() => MazeNetworkManager.OnServerReadied -= SpawnPlayer;
@@ -36,7 +36,10 @@ public class PlayerSpawnSystem : NetworkBehaviour
             return;
         }
 
-        GameObject playerInstance = Instantiate(_playerPrefab, _spawnPoints[nextIndex].position, _spawnPoints[nextIndex].rotation);
+        //GameObject playerInstance = Instantiate(_playerPrefab, _spawnPoints[nextIndex].position, _spawnPoints[nextIndex].rotation);
+        GridLocation gr = GridLocation.VectorToGrid(_spawnPoints[nextIndex].position);
+        Logger.Log("GridLocation for {0},{1} is {2},{3}", _spawnPoints[nextIndex].position.x, _spawnPoints[nextIndex].position.y, gr.X, gr.Y);
+        GameObject playerInstance = CharacterManager.Instance.RegisterCharacter(new CharacterBlueprint(CharacterType.Player), GridLocation.VectorToGrid(_spawnPoints[nextIndex].position));
 
         NetworkServer.Spawn(playerInstance, conn);
 
