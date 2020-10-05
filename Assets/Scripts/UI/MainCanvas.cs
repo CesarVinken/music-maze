@@ -6,6 +6,7 @@ public class MainCanvas : MonoBehaviour
 {
     public static MainCanvas Instance;
 
+    [SerializeField] private GameManager _gameManager;
     public GameObject ConsoleContainer;
     public GameObject ConsoleButton;
 
@@ -16,7 +17,7 @@ public class MainCanvas : MonoBehaviour
         Guard.CheckIsNull(ConsoleContainer, "ConsoleContainer");
         Guard.CheckIsNull(ConsoleButton, "ConsoleButton");
 
-        if (GameManager.Instance.CurrentPlatform == Platform.Android)
+        if (_gameManager.CurrentPlatform == Platform.Android)
         {
             ConsoleButton.SetActive(true);
         }

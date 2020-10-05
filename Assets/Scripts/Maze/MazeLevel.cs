@@ -33,19 +33,25 @@ public class MazeLevel
         Tiles = TilesContainer.Instance.Tiles;
 
         // TODO set character start location through editor and load in to level
-        CharacterStartLocation playerStartLocation = new CharacterStartLocation(
+        CharacterStartLocation playerStartLocation1 = new CharacterStartLocation(
             new GridLocation(0, 0),
             new CharacterBlueprint(CharacterType.Bard)
             );
 
-        CharacterStartLocations.Add(playerStartLocation);
-
-        CharacterStartLocation enemyStartLocation = new CharacterStartLocation(
-            new GridLocation(0, 4),
-            new CharacterBlueprint(CharacterType.Dragon)
+        CharacterStartLocation playerStartLocation2 = new CharacterStartLocation(
+            new GridLocation(0, 0),
+            new CharacterBlueprint(CharacterType.Bard)
             );
 
-        CharacterStartLocations.Add(enemyStartLocation);
+        CharacterStartLocations.Add(playerStartLocation1);
+        CharacterStartLocations.Add(playerStartLocation2);
+
+        //CharacterStartLocation enemyStartLocation = new CharacterStartLocation(
+        //    new GridLocation(0, 4),
+        //    new CharacterBlueprint(CharacterType.Dragon)
+        //    );
+
+        //CharacterStartLocations.Add(enemyStartLocation);
 
 
         int locationsForPlayers = CharacterStartLocations.Where(location => location.Character.IsPlayable).ToArray().Count();

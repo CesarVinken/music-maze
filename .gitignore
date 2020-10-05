@@ -12,6 +12,7 @@ Assets/Animations/
 Assets/Animations.meta
 Assets/Materials/
 Assets/Materials.meta
+Assets/Photon/
 Assets/Plugins/
 Assets/Plugins.meta
 Assets/Resources/
@@ -21,6 +22,7 @@ Assets/Scenes.meta
 Assets/Tilemaps/
 Assets/Tilemaps.meta
 Assets/Scripts/Character/Pathfinding/AstarPathfindingProject
+
 
 # Asset meta data should only be ignored when the corresponding asset is also ignored
 !/[Aa]ssets/**/*.meta

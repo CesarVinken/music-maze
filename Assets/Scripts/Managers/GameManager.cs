@@ -1,7 +1,9 @@
-﻿using System.Collections.Generic;
+﻿using Photon.Pun;
+using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
-public class GameManager : MonoBehaviour
+public class GameManager : MonoBehaviourPunCallbacks
 {
     public static GameManager Instance;
 
@@ -44,7 +46,16 @@ public class GameManager : MonoBehaviour
         Instantiate(CharacterManagerPrefab, transform);
 
         MazeLevelManager.Instance.LoadLevel(MazeName.PathfindingTest);
+        //CharacterManager.Instance.SpawnCharacters();
+
+        if (!PhotonNetwork.IsConnected)
+        {
+            SceneManager.LoadScene("Launcher");
+            return;
+        }
+
         CharacterManager.Instance.SpawnCharacters();
+
     }
 
     public void Update()

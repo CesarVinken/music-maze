@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using Photon.Pun;
+using Photon.Pun.Demo.PunBasics;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class CharacterManager : MonoBehaviour
@@ -8,7 +10,10 @@ public class CharacterManager : MonoBehaviour
     public GameObject EnemyCharacterPrefab;
     public GameObject PlayerCharacterPrefab;
 
-    public List<PlayerCharacter> Players = new List<PlayerCharacter>();
+    public GameObject Player1GO;
+    public GameObject Player2GO;
+
+    public List<PlayerCharacter> MazePlayers = new List<PlayerCharacter>();
 
     public void Awake()
     {
@@ -20,45 +25,73 @@ public class CharacterManager : MonoBehaviour
 
     public void SpawnCharacters()
     {
-        MazeLevel level = MazeLevelManager.Instance.Level;
-
-        for (int i = 0; i < level.CharacterStartLocations.Count; i++)
+        if (PlayerManager.LocalPlayerInstance == null)
         {
-            CharacterStartLocation characterStart = level.CharacterStartLocations[i];
-            SpawnCharacter(characterStart.Character, characterStart.GridLocation);
+            MazeLevel level = MazeLevelManager.Instance.Level;
+
+            if(level.CharacterStartLocations.Count != 2)
+            {
+                Logger.Error("Did not find 2, but {0} character startlocations for level", level.CharacterStartLocations.Count);
+            }
+
+            if (PhotonNetwork.IsMasterClient)
+            {
+                Debug.Log("Instantiating Player 1");
+                CharacterStartLocation characterStart = level.CharacterStartLocations[0];
+                //Vector2 startPosition = GridLocation.GridToVector(characterStart.GridLocation);
+                Player1GO = SpawnCharacter(characterStart.Character, characterStart.GridLocation);
+                //ball = PhotonNetwork.Instantiate("Ball", ballSpawnTransform.transform.position, ballSpawnTransform.transform.rotation, 0);
+                //ball.name = "Ball";
+            }
+            else
+            {
+                Debug.Log("Instaniating Player 2");
+                CharacterStartLocation characterStart = level.CharacterStartLocations[1];
+                Vector2 startPosition = GridLocation.GridToVector(characterStart.GridLocation);
+                Player2GO = SpawnCharacter(characterStart.Character, characterStart.GridLocation); 
+                           
+            }
         }
+
+
+        //MazeLevel level = MazeLevelManager.Instance.Level;
+
+        //for (int i = 0; i < level.CharacterStartLocations.Count; i++)
+        //{
+        //    CharacterStartLocation characterStart = level.CharacterStartLocations[i];
+        //    SpawnCharacter(characterStart.Character, characterStart.GridLocation);
+        //}
     }
 
-    public void SpawnCharacter(CharacterBlueprint character, GridLocation gridLocation)
+    public GameObject SpawnCharacter(CharacterBlueprint character, GridLocation gridLocation)
     {
-        GameObject characterGO = GetCharacterPrefab(character);
-        Vector3 gridVectorLocation = GridLocation.GridToVector(gridLocation);
-
-        // place on grid
-        PutCharacterOnGrid(characterGO, gridVectorLocation);
+        string prefabName = GetPrefabNameByCharacter(character);
+        Vector2 startPosition = GetCharacterGridPosition(GridLocation.GridToVector(gridLocation)); // start position is grid position plus grid tile offset
+        GameObject characterGO = PhotonNetwork.Instantiate(prefabName, startPosition, Quaternion.identity, 0);
+        //Vector3 gridVectorLocation = GridLocation.GridToVector(gridLocation);
 
         if(character.IsPlayable)
         {
             PlayerCharacter playerCharacter = characterGO.GetComponent<PlayerCharacter>();
             playerCharacter.CharacterBlueprint = character;
             playerCharacter.SetStartingPosition(gridLocation);
-            Players.Add(playerCharacter);
+            MazePlayers.Add(playerCharacter);
 
             if(GameManager.Instance.CurrentPlatform == Platform.PC)
             {
-                if (Players.Count == 1)
+                if (MazePlayers.Count == 1)
                 {
                     playerCharacter.KeyboardInput = KeyboardInput.Player1;
                     playerCharacter.PlayerNoInGame = 1;
                 }
-                else if (Players.Count == 2)
+                else if (MazePlayers.Count == 2)
                 {
                     playerCharacter.KeyboardInput = KeyboardInput.Player2;
                     playerCharacter.PlayerNoInGame = 2;
                 }
                 else
                 {
-                    Logger.Warning("There are {0} players in the level. There can be max 2 players in a level", Players.Count);
+                    Logger.Warning("There are {0} players in the level. There can be max 2 players in a level", MazePlayers.Count);
                 }
             }
         }
@@ -68,6 +101,13 @@ public class CharacterManager : MonoBehaviour
             enemyCharacter.SetStartingPosition(gridLocation);
             enemyCharacter.CharacterBlueprint = character;
         }
+
+        return characterGO;
+    }
+
+    public Vector3 GetCharacterGridPosition(Vector3 gridVectorLocation)
+    {
+        return new Vector3(gridVectorLocation.x + GridLocation.OffsetToTileMiddle, gridVectorLocation.y + GridLocation.OffsetToTileMiddle);
     }
 
     public void PutCharacterOnGrid(GameObject characterGO, Vector3 gridVectorLocation)
@@ -77,14 +117,15 @@ public class CharacterManager : MonoBehaviour
         Logger.Log("{0} will be now {1},{2}", characterGO.name, characterGO.transform.position.x, characterGO.transform.position.y);
     }
 
-    public GameObject GetCharacterPrefab(CharacterBlueprint character)
+    public string GetPrefabNameByCharacter(CharacterBlueprint character)
     {
+
         switch (character.CharacterType)
         {
             case CharacterType.Bard:
-                return Instantiate(PlayerCharacterPrefab, transform);
+                return "Prefabs/Character/PlayerCharacter";
             case CharacterType.Dragon:
-                return Instantiate(EnemyCharacterPrefab, transform);
+                return "Prefabs/Character/EnemyCharacter";
             default:
                 Logger.Error(Logger.Initialisation, "Cannot find prefab for character type {0}", character.CharacterType);
                 return null;
