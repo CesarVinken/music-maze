@@ -50,11 +50,12 @@ public class GameManager : MonoBehaviourPunCallbacks
 
     public void Start()
     {
-        if (!PhotonNetwork.IsConnected)
-        {
-            SceneManager.LoadScene("Launcher");
-            return;
-        }
+        // Temporarily turned off for testing purposes
+        //if (!PhotonNetwork.IsConnected)
+        //{
+        //    SceneManager.LoadScene("Launcher");
+        //    return;
+        //}
         
         CharacterManager.Instance.SpawnCharacters();
 

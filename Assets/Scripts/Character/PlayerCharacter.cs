@@ -12,7 +12,7 @@ public class PlayerCharacter : Character
     {
         base.Awake();
 
-        gameObject.name = GetComponent<PhotonView>().Owner.NickName;
+        gameObject.name = GetComponent<PhotonView>().Owner?.NickName;
     }
 
     public void OnCollisionEnter2D(Collision2D collision)
@@ -42,6 +42,18 @@ public class PlayerCharacter : Character
         {
             MoveCharacter();
         }
+
+        if (CharacterPath.reachedEndOfPath)
+        {
+            ReachTarget();
+            CharacterPath.isStopped = true;
+            CharacterPath.canSearch = false;
+
+            // TODO: character gets stuck on pathfinding nodes in between tile centres that should not be stopping points.
+        }
+
+        //CharacterPath.isStopped = CharacterPath.reachedEndOfPath;
+        //CharacterPath.canSearch = !CharacterPath.isStopped;
     }
 
     private void CheckPointerInput()
@@ -80,20 +92,29 @@ public class PlayerCharacter : Character
 
     private void SetPointerLocomotinTarget(Vector2 target)
     {
-        GridLocation gridLocation = GridLocation.FindClosestGridTile(target);
+        GridLocation targetGridLocation = GridLocation.FindClosestGridTile(target);
+        Logger.Log("The closest grid tile is {0},{1}", targetGridLocation.X, targetGridLocation.Y);
+        if (!ValidateTarget(targetGridLocation)) return;
 
-        if (!ValidateTarget(gridLocation)) return;
+        Vector2 gridVectorTarget = GridLocation.GridToVector(targetGridLocation);
 
-        Vector2 gridTarget = GridLocation.GridToVector(gridLocation);
+        GridLocation currentGridLocation = GridLocation.FindClosestGridTile(transform.position);
 
+        if (currentGridLocation.X == targetGridLocation.X && currentGridLocation.Y == targetGridLocation.Y) return;
 
-        SetLocomotionTarget(gridTarget);
+        SetLocomotionTargetObject(gridVectorTarget);
 
         if (!AnimationHandler.InLocomotion)
             AnimationHandler.SetLocomotion(true);
 
         _hasTarget = true;
 
+        if (!CharacterPath.canSearch)
+        {
+            CharacterPath.isStopped = false;
+            CharacterPath.canSearch = true;
+        }
+        
         CharacterPath.SearchPath();
     }
 
@@ -149,9 +170,13 @@ public class PlayerCharacter : Character
             return;
         }
 
+        if (!CharacterPath.canSearch)
+        {
+            CharacterPath.isStopped = false;
+            CharacterPath.canSearch = true;
+        }
+
         CharacterPath.SearchPath();
-        //CharacterPath.transform.position = transform.position;
-        //CharacterPath.transform.rotation = Quaternion.identity;
         CharacterPath.enabled = true;
 
         GridLocation currentGridLocation = GridLocation.VectorToGrid(transform.position);
@@ -167,31 +192,33 @@ public class PlayerCharacter : Character
 
                 if (!ValidateTarget(targetGridLocation)) return;
 
-                SetLocomotionTarget(GridLocation.GridToVector(targetGridLocation));
+                SetLocomotionTargetObject(GridLocation.GridToVector(targetGridLocation));
                 break;
             case ObjectDirection.Left:
                 targetGridLocation = new GridLocation(currentGridLocation.X - 1, currentGridLocation.Y);
                 if (!ValidateTarget(targetGridLocation)) return;
 
-                SetLocomotionTarget(GridLocation.GridToVector(targetGridLocation));
+                SetLocomotionTargetObject(GridLocation.GridToVector(targetGridLocation));
                 break;
             case ObjectDirection.Right:
                 targetGridLocation = new GridLocation(currentGridLocation.X + 1, currentGridLocation.Y);
                 if (!ValidateTarget(targetGridLocation)) return;
 
-                SetLocomotionTarget(GridLocation.GridToVector(targetGridLocation));
+                SetLocomotionTargetObject(GridLocation.GridToVector(targetGridLocation));
                 break;
             case ObjectDirection.Up:
                 targetGridLocation = new GridLocation(currentGridLocation.X, currentGridLocation.Y + 1);
 
                 if (!ValidateTarget(targetGridLocation)) return;
 
-                SetLocomotionTarget(GridLocation.GridToVector(targetGridLocation));
+                SetLocomotionTargetObject(GridLocation.GridToVector(targetGridLocation));
                 break;
             default:
                 Logger.Warning("Unhandled locomotion direction {0}", direction);
                 break;
         }
+
+     
 
         if (!AnimationHandler.InLocomotion)
             AnimationHandler.SetLocomotion(true);
@@ -199,13 +226,44 @@ public class PlayerCharacter : Character
         _hasTarget = true;
     }
 
-    public override void ReachLocomotionTarget()
+    public void ReachTarget()
     {
-        //Vector3 roundedVectorPosition = new Vector3((float)Math.Round(transform.position.x - GridLocation.OffsetToTileMiddle), (float)Math.Round(transform.position.y - GridLocation.OffsetToTileMiddle));
-        //transform.position = new Vector3(roundedVectorPosition.x + GridLocation.OffsetToTileMiddle, roundedVectorPosition.y + GridLocation.OffsetToTileMiddle, 0);
-        transform.position = new Vector3(Target.x, Target.y, 0);
+        Logger.Warning("ReachTarget");
+        Logger.Log("DestinationSetter.target.transform.position.y - transform.position.y is {0}", Vector2.Distance(DestinationSetter.target.position, transform.position));
 
         _hasTarget = false;
+        //SetTransformToTarget();
         AnimationHandler.SetLocomotion(false);
+        //DestinationSetter.target = null;
+        CharacterPath.SetPath(null);
+
+    }
+
+    //public override void ReachLocomotionTarget()
+    //{
+    //    Logger.Log("ReachLocomotionTarget");
+    //    Logger.Log("CharacterPath.pathPending {0}", CharacterPath.pathPending);
+    //    ////Vector3 roundedVectorPosition = new Vector3((float)Math.Round(transform.position.x - GridLocation.OffsetToTileMiddle), (float)Math.Round(transform.position.y - GridLocation.OffsetToTileMiddle));
+    //    ////transform.position = new Vector3(roundedVectorPosition.x + GridLocation.OffsetToTileMiddle, roundedVectorPosition.y + GridLocation.OffsetToTileMiddle, 0);
+    //    Logger.Log("DestinationSetter.target.transform.position.y - transform.position.y is {0}", Vector2.Distance(DestinationSetter.target.position, transform.position));
+    //    //if (Vector2.Distance(DestinationSetter.target.position, transform.position) > 0.2f) {
+    //        //CharacterPath.reachedDestination = false;
+    //        _hasTarget = false;
+    //    if (Vector2.Distance(DestinationSetter.target.position, transform.position) < 0.1f)
+    //    {
+    //        SetTransformToTarget();
+    //        AnimationHandler.SetLocomotion(false);
+    //    }
+    ////}
+    //    //else
+    //    //{
+    //    //    Logger.Warning("We claimed to have reached the target even though the distance is still {0}", Vector2.Distance(DestinationSetter.target.position, transform.position));
+    //    //}
+
+    //}
+
+    private void SetTransformToTarget()
+    {
+        transform.position = new Vector3(Target.x, Target.y, 0);
     }
 }

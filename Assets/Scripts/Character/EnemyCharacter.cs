@@ -24,7 +24,7 @@ public class EnemyCharacter : Character
     public void SetRandomTarget()
     {
         Logger.Log("Set new target for enemy");
-        SetLocomotionTarget(GridLocation.GridToVector(GetRandomTileTarget().GridLocation));
+        SetLocomotionTargetObject(GridLocation.GridToVector(GetRandomTileTarget().GridLocation));
         _hasTarget = true;
     }
 

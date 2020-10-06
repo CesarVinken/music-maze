@@ -54,7 +54,8 @@ public class Character : MonoBehaviour
 
     public void ResetCharacterPosition()
     {
-        SetLocomotionTarget(GridLocation.GridToVector(StartingPosition));
+        Logger.Log("ResetCharacterPosition");
+        SetLocomotionTargetObject(GridLocation.GridToVector(StartingPosition));
         CharacterManager.Instance.PutCharacterOnGrid(gameObject, GridLocation.GridToVector(StartingPosition));
         ReachLocomotionTarget();
     }
@@ -131,7 +132,7 @@ public class Character : MonoBehaviour
         return true;
     }
 
-    public void SetLocomotionTarget(Vector3 newTarget)
+    public void SetLocomotionTargetObject(Vector3 newTarget)
     {
         IsOnTile = false;
 
