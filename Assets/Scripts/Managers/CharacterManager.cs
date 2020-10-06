@@ -3,7 +3,7 @@ using Photon.Pun.Demo.PunBasics;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class CharacterManager : MonoBehaviour
+public class CharacterManager : MonoBehaviourPunCallbacks
 {
     public static CharacterManager Instance;
 
@@ -34,22 +34,31 @@ public class CharacterManager : MonoBehaviour
                 Logger.Error("Did not find 2, but {0} character startlocations for level", level.CharacterStartLocations.Count);
             }
 
+            Logger.Warning("Loop over names");
+            for (int i = 0; i < PhotonNetwork.PlayerList.Length; i++)
+            {
+                Logger.Log(PhotonNetwork.PlayerList[i].NickName);
+                //Logger.Log(PhotonNetwork.PlayerList[i].UserId);
+            }
+
             if (PhotonNetwork.IsMasterClient)
             {
                 Debug.Log("Instantiating Player 1");
                 CharacterStartLocation characterStart = level.CharacterStartLocations[0];
                 //Vector2 startPosition = GridLocation.GridToVector(characterStart.GridLocation);
                 Player1GO = SpawnCharacter(characterStart.Character, characterStart.GridLocation);
+                //Player1GO.name = PhotonNetwork.PlayerList[0].NickName;
                 //ball = PhotonNetwork.Instantiate("Ball", ballSpawnTransform.transform.position, ballSpawnTransform.transform.rotation, 0);
                 //ball.name = "Ball";
             }
             else
             {
-                Debug.Log("Instaniating Player 2");
+                Debug.Log("Instantiating Player 2");
+
                 CharacterStartLocation characterStart = level.CharacterStartLocations[1];
-                Vector2 startPosition = GridLocation.GridToVector(characterStart.GridLocation);
-                Player2GO = SpawnCharacter(characterStart.Character, characterStart.GridLocation); 
-                           
+                //Vector2 startPosition = GridLocation.GridToVector(characterStart.GridLocation);
+                Player2GO = SpawnCharacter(characterStart.Character, characterStart.GridLocation);
+                //Player2GO.name = PhotonNetwork.PlayerList[1].NickName;
             }
         }
 

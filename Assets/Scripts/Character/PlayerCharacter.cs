@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using Photon.Pun;
 
 public class PlayerCharacter : Character
 {
@@ -6,6 +7,13 @@ public class PlayerCharacter : Character
     public int PlayerNoInGame = 1;  // in multiplayer on multiple computers there can be a player 1 and player 2, while both use their Player1 keyboard input
     private bool _hasTarget = false;
     private Vector2 _mobileFingerDownPosition;
+
+    public void Awake()
+    {
+        base.Awake();
+
+        gameObject.name = GetComponent<PhotonView>().Owner.NickName;
+    }
 
     public void OnCollisionEnter2D(Collision2D collision)
     {

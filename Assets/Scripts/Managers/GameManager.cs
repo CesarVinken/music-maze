@@ -46,14 +46,16 @@ public class GameManager : MonoBehaviourPunCallbacks
         Instantiate(CharacterManagerPrefab, transform);
 
         MazeLevelManager.Instance.LoadLevel(MazeName.PathfindingTest);
-        //CharacterManager.Instance.SpawnCharacters();
+    }
 
+    public void Start()
+    {
         if (!PhotonNetwork.IsConnected)
         {
             SceneManager.LoadScene("Launcher");
             return;
         }
-
+        
         CharacterManager.Instance.SpawnCharacters();
 
     }

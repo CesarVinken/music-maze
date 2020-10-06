@@ -39,7 +39,7 @@ public class MazeLevel
             );
 
         CharacterStartLocation playerStartLocation2 = new CharacterStartLocation(
-            new GridLocation(0, 0),
+            new GridLocation(1, 4),
             new CharacterBlueprint(CharacterType.Bard)
             );
 
