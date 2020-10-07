@@ -51,15 +51,6 @@ public class CharacterManager : MonoBehaviourPunCallbacks
                 Player2GO = SpawnCharacter(characterStart.Character, characterStart.GridLocation);
             }
         }
-
-
-        //MazeLevel level = MazeLevelManager.Instance.Level;
-
-        //for (int i = 0; i < level.CharacterStartLocations.Count; i++)
-        //{
-        //    CharacterStartLocation characterStart = level.CharacterStartLocations[i];
-        //    SpawnCharacter(characterStart.Character, characterStart.GridLocation);
-        //}
     }
 
     public GameObject SpawnCharacter(CharacterBlueprint character, GridLocation gridLocation)
@@ -67,7 +58,6 @@ public class CharacterManager : MonoBehaviourPunCallbacks
         string prefabName = GetPrefabNameByCharacter(character);
         Vector2 startPosition = GetCharacterGridPosition(GridLocation.GridToVector(gridLocation)); // start position is grid position plus grid tile offset
         GameObject characterGO = PhotonNetwork.Instantiate(prefabName, startPosition, Quaternion.identity, 0);
-        //Vector3 gridVectorLocation = GridLocation.GridToVector(gridLocation);
 
         if(character.IsPlayable)
         {

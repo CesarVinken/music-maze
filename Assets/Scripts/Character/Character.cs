@@ -1,4 +1,5 @@
 ﻿using Pathfinding;
+using Photon.Pun;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,38 +11,28 @@ public class Character : MonoBehaviour
     public GridLocation StartingPosition;
 
     public ObjectDirection CharacterDirection = ObjectDirection.Down;
-    public CharacterAnimationHandler AnimationHandler;
 
     public float BaseSpeed = 8f;
     public float Speed;
 
-    public bool IsOnTile = true; // If a character is not on a tile, it means the character is in locomotion.
-    public bool IsFrozen = false;
+    protected bool IsFrozen = false;
+    protected bool HasCalculatedTarget = false;
 
-    public AIDestinationSetter DestinationSetter;
-    public CharacterPath CharacterPath;
-    public Vector2 Target
-    {
-        get
-        {
-            return new Vector2(TargetObject.transform.position.x, TargetObject.transform.position.y);
-        }
-    }
-
-    private GameObject _targetObject;
-    public GameObject TargetObject { get => _targetObject; set => _targetObject = value; }
-
+    [SerializeField] protected CharacterAnimationHandler _animationHandler;
+    [SerializeField] protected CharacterPath _characterPath;
+    [SerializeField] protected Seeker _seeker;
+    [SerializeField] protected PhotonView _photonView;
 
     public void Awake()
     {
-        if (AnimationHandler == null)
-            Logger.Error(Logger.Initialisation, "Could not find AnimationHandler component on CharacterLocomotion");
+        if (_animationHandler == null)
+            Logger.Error(Logger.Initialisation, "Could not find AnimationHandler component on Character");
 
-        if (DestinationSetter == null)
-            Logger.Error(Logger.Initialisation, "Could not find AIDestinationSetter component on CharacterLocomotion");
+        if (_characterPath == null)
+            Logger.Error(Logger.Initialisation, "Could not find CharacterPath component on Character");
 
-        if (CharacterPath == null)
-            Logger.Error(Logger.Initialisation, "Could not find CharacterPath component on CharacterLocomotion");
+        if (_seeker == null)
+            Logger.Error(Logger.Initialisation, "Could not find Seeker component on Character");
 
         Speed = BaseSpeed;
     }
@@ -55,47 +46,38 @@ public class Character : MonoBehaviour
     public void ResetCharacterPosition()
     {
         Logger.Log("ResetCharacterPosition");
-        SetLocomotionTargetObject(GridLocation.GridToVector(StartingPosition));
+        //SetLocomotionTargetObject(GridLocation.GridToVector(StartingPosition));
+        // TODO Set to starting position with new method
         CharacterManager.Instance.PutCharacterOnGrid(gameObject, GridLocation.GridToVector(StartingPosition));
         ReachLocomotionTarget();
     }
 
-    public void Update()
+    protected Vector3 SetNewLocomotionTarget(Vector2 gridVectorTarget)
     {
-        //if (CharacterPath.reachedEndOfPath)
-        //{
-        //    CharacterPath.enabled = false;
-        //}
-
-        //if (!IsOnTile)
-        //{
-        //    MoveCharacter();
-        //}
+        float offsetToTileMiddle = GridLocation.OffsetToTileMiddle;
+        return new Vector3(gridVectorTarget.x + offsetToTileMiddle, gridVectorTarget.y + offsetToTileMiddle);
     }
 
     public void MoveCharacter()
     {
-        transform.position = CharacterPath.transform.position;
-        float directionRotation = CharacterPath.rotation.eulerAngles.z;
+        transform.position = _characterPath.transform.position;
+        float directionRotation = _characterPath.rotation.eulerAngles.z;
 
         if (directionRotation == 0)
         {
-            AnimationHandler.SetDirection(ObjectDirection.Up);
+            _animationHandler.SetDirection(ObjectDirection.Up);
         }
         else if (directionRotation == 90)
         {
-            AnimationHandler.SetDirection(ObjectDirection.Left);
-
+            _animationHandler.SetDirection(ObjectDirection.Left);
         }
         else if (directionRotation == 180)
         {
-            AnimationHandler.SetDirection(ObjectDirection.Down);
-
+            _animationHandler.SetDirection(ObjectDirection.Down);
         }
         else if (directionRotation == 270)
         {
-            AnimationHandler.SetDirection(ObjectDirection.Right);
-
+            _animationHandler.SetDirection(ObjectDirection.Right);
         }
         else
         {
@@ -132,26 +114,6 @@ public class Character : MonoBehaviour
         return true;
     }
 
-    public void SetLocomotionTargetObject(Vector3 newTarget)
-    {
-        IsOnTile = false;
-
-        if (TargetObject == null)
-        {
-            if (CharacterBlueprint == null) return;
-
-            GameObject targetGO = new GameObject();
-            targetGO.name = "Target object " + CharacterBlueprint.CharacterType;
-            targetGO.transform.SetParent(GameManager.Instance.AstarGO.transform);
-            TargetObject = targetGO;
-        }
-
-        float offsetToTileMiddle = GridLocation.OffsetToTileMiddle;
-        TargetObject.transform.position = new Vector3(newTarget.x + offsetToTileMiddle, newTarget.y + offsetToTileMiddle);
-
-        DestinationSetter.target = TargetObject.transform;
-    }
-
     public virtual void ReachLocomotionTarget() { }
 
     public IEnumerator FreezeCharacter(Character character, float freezeTime)
@@ -161,5 +123,10 @@ public class Character : MonoBehaviour
         yield return new WaitForSeconds(freezeTime);
 
         character.IsFrozen = false;
+    }
+
+    public void SetHasCalculatedTarget(bool hasCalculatedTarget)
+    {
+        HasCalculatedTarget = hasCalculatedTarget;
     }
 }

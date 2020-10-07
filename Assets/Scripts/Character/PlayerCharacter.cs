@@ -1,12 +1,13 @@
 ﻿using UnityEngine;
 using Photon.Pun;
+using Pathfinding;
 
 public class PlayerCharacter : Character
 {
     public KeyboardInput KeyboardInput = KeyboardInput.None;
     public int PlayerNoInGame = 1;  // in multiplayer on multiple computers there can be a player 1 and player 2, while both use their Player1 keyboard input
-    private bool _hasTarget = false;
     private Vector2 _mobileFingerDownPosition;
+    public bool HasCalculatedPath = false;
 
     public void Awake()
     {
@@ -28,32 +29,27 @@ public class PlayerCharacter : Character
     public void Update()
     {
         if (IsFrozen) return;
-        base.Update();
 
         if (Console.Instance && Console.Instance.ConsoleState != ConsoleState.Closed)
             return;
 
-        if (GameManager.Instance.CurrentPlatform == Platform.PC)
-            CheckKeyboardInput();
-
-        CheckPointerInput();
-
-        if (_hasTarget)
+        if(GetComponent<PhotonView>().IsMine)   // TODO: make work for single player
         {
-            MoveCharacter();
+            if (GameManager.Instance.CurrentPlatform == Platform.PC)
+                CheckKeyboardInput();
+
+            CheckPointerInput();
         }
 
-        if (CharacterPath.reachedEndOfPath)
+        if (HasCalculatedTarget)
+            {
+                MoveCharacter();
+        }
+
+        if (_characterPath.reachedEndOfPath)
         {
             ReachTarget();
-            CharacterPath.isStopped = true;
-            CharacterPath.canSearch = false;
-
-            // TODO: character gets stuck on pathfinding nodes in between tile centres that should not be stopping points.
         }
-
-        //CharacterPath.isStopped = CharacterPath.reachedEndOfPath;
-        //CharacterPath.canSearch = !CharacterPath.isStopped;
     }
 
     private void CheckPointerInput()
@@ -102,20 +98,18 @@ public class PlayerCharacter : Character
 
         if (currentGridLocation.X == targetGridLocation.X && currentGridLocation.Y == targetGridLocation.Y) return;
 
-        SetLocomotionTargetObject(gridVectorTarget);
+        if (!_animationHandler.InLocomotion)
+            _animationHandler.SetLocomotion(true);
 
-        if (!AnimationHandler.InLocomotion)
-            AnimationHandler.SetLocomotion(true);
 
-        _hasTarget = true;
-
-        if (!CharacterPath.canSearch)
+        if (!_characterPath.canSearch)
         {
-            CharacterPath.isStopped = false;
-            CharacterPath.canSearch = true;
+            _characterPath.isStopped = false;
+            _characterPath.canSearch = true;
         }
-        
-        CharacterPath.SearchPath();
+
+        Vector3 newDestinationTarget = SetNewLocomotionTarget(gridVectorTarget);
+        _seeker.StartPath(transform.position, newDestinationTarget, _characterPath.OnPathCalculated);
     }
 
     private void CheckKeyboardInput()
@@ -164,106 +158,56 @@ public class PlayerCharacter : Character
     public void TryStartCharacterMovement(ObjectDirection direction)
     {
         // check if character is in tile position, if so, start movement in direction.
-        if (_hasTarget)
+        if (HasCalculatedTarget)
         {
             // if already in locomotion, it means that we are between tiles and we are moving. Return.
             return;
         }
 
-        if (!CharacterPath.canSearch)
+        if (!_characterPath.canSearch)
         {
-            CharacterPath.isStopped = false;
-            CharacterPath.canSearch = true;
+            _characterPath.isStopped = false;
+            _characterPath.canSearch = true;
         }
 
-        CharacterPath.SearchPath();
-        CharacterPath.enabled = true;
-
         GridLocation currentGridLocation = GridLocation.VectorToGrid(transform.position);
-        GridLocation targetGridLocation;
+        GridLocation targetGridLocation = currentGridLocation;
 
         //Order character to go to another tile
-        AnimationHandler.SetDirection(direction);
+        _animationHandler.SetDirection(direction);
 
         switch (direction)
         {
             case ObjectDirection.Down:
                 targetGridLocation = new GridLocation(currentGridLocation.X, currentGridLocation.Y - 1);
-
-                if (!ValidateTarget(targetGridLocation)) return;
-
-                SetLocomotionTargetObject(GridLocation.GridToVector(targetGridLocation));
                 break;
             case ObjectDirection.Left:
                 targetGridLocation = new GridLocation(currentGridLocation.X - 1, currentGridLocation.Y);
-                if (!ValidateTarget(targetGridLocation)) return;
-
-                SetLocomotionTargetObject(GridLocation.GridToVector(targetGridLocation));
                 break;
             case ObjectDirection.Right:
                 targetGridLocation = new GridLocation(currentGridLocation.X + 1, currentGridLocation.Y);
-                if (!ValidateTarget(targetGridLocation)) return;
-
-                SetLocomotionTargetObject(GridLocation.GridToVector(targetGridLocation));
                 break;
             case ObjectDirection.Up:
                 targetGridLocation = new GridLocation(currentGridLocation.X, currentGridLocation.Y + 1);
-
-                if (!ValidateTarget(targetGridLocation)) return;
-
-                SetLocomotionTargetObject(GridLocation.GridToVector(targetGridLocation));
                 break;
             default:
                 Logger.Warning("Unhandled locomotion direction {0}", direction);
                 break;
         }
+        if (!ValidateTarget(targetGridLocation)) return;
 
-     
+        Vector3 newDestinationTarget = SetNewLocomotionTarget(GridLocation.GridToVector(targetGridLocation));
+        _seeker.StartPath(transform.position, newDestinationTarget, _characterPath.OnPathCalculated);
 
-        if (!AnimationHandler.InLocomotion)
-            AnimationHandler.SetLocomotion(true);
-
-        _hasTarget = true;
+        if (!_animationHandler.InLocomotion)
+            _animationHandler.SetLocomotion(true);
+        Logger.Log("CharacterPath.transform.position {0},{1}", _characterPath.transform.position.x, _characterPath.transform.position.y);
+        Logger.Log("newDestinationTarget {0},{1}", newDestinationTarget.x, newDestinationTarget.y);
     }
 
     public void ReachTarget()
-    {
-        Logger.Warning("ReachTarget");
-        Logger.Log("DestinationSetter.target.transform.position.y - transform.position.y is {0}", Vector2.Distance(DestinationSetter.target.position, transform.position));
-
-        _hasTarget = false;
-        //SetTransformToTarget();
-        AnimationHandler.SetLocomotion(false);
-        //DestinationSetter.target = null;
-        CharacterPath.SetPath(null);
-
-    }
-
-    //public override void ReachLocomotionTarget()
-    //{
-    //    Logger.Log("ReachLocomotionTarget");
-    //    Logger.Log("CharacterPath.pathPending {0}", CharacterPath.pathPending);
-    //    ////Vector3 roundedVectorPosition = new Vector3((float)Math.Round(transform.position.x - GridLocation.OffsetToTileMiddle), (float)Math.Round(transform.position.y - GridLocation.OffsetToTileMiddle));
-    //    ////transform.position = new Vector3(roundedVectorPosition.x + GridLocation.OffsetToTileMiddle, roundedVectorPosition.y + GridLocation.OffsetToTileMiddle, 0);
-    //    Logger.Log("DestinationSetter.target.transform.position.y - transform.position.y is {0}", Vector2.Distance(DestinationSetter.target.position, transform.position));
-    //    //if (Vector2.Distance(DestinationSetter.target.position, transform.position) > 0.2f) {
-    //        //CharacterPath.reachedDestination = false;
-    //        _hasTarget = false;
-    //    if (Vector2.Distance(DestinationSetter.target.position, transform.position) < 0.1f)
-    //    {
-    //        SetTransformToTarget();
-    //        AnimationHandler.SetLocomotion(false);
-    //    }
-    ////}
-    //    //else
-    //    //{
-    //    //    Logger.Warning("We claimed to have reached the target even though the distance is still {0}", Vector2.Distance(DestinationSetter.target.position, transform.position));
-    //    //}
-
-    //}
-
-    private void SetTransformToTarget()
-    {
-        transform.position = new Vector3(Target.x, Target.y, 0);
+    { 
+        SetHasCalculatedTarget(false);
+        _animationHandler.SetLocomotion(false);
     }
 }

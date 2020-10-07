@@ -5,13 +5,11 @@ using UnityEngine;
 
 public class EnemyCharacter : Character
 {
-    private bool _hasTarget = false;
-
     public void Update()
     {
         if (IsFrozen) return;
 
-        if (!_hasTarget)
+        if (!HasCalculatedTarget)
         {
             SetRandomTarget();
         }
@@ -24,19 +22,21 @@ public class EnemyCharacter : Character
     public void SetRandomTarget()
     {
         Logger.Log("Set new target for enemy");
-        SetLocomotionTargetObject(GridLocation.GridToVector(GetRandomTileTarget().GridLocation));
-        _hasTarget = true;
+        Vector3 randomGridVectorLocation = GridLocation.GridToVector(GetRandomTileTarget().GridLocation);
+        _seeker.StartPath(transform.position, randomGridVectorLocation, _characterPath.OnPathCalculated);
+
+        //SetHasCalculatedTarget(true);
     }
 
     public override void ReachLocomotionTarget()
     {
         Logger.Log("enemy reached target");
-        //IsOnTile = true;
+
         Vector3 roundedVectorPosition = new Vector3((float)Math.Round(transform.position.x - GridLocation.OffsetToTileMiddle), (float)Math.Round(transform.position.y - GridLocation.OffsetToTileMiddle));
         transform.position = new Vector3(roundedVectorPosition.x + GridLocation.OffsetToTileMiddle, roundedVectorPosition.y + GridLocation.OffsetToTileMiddle, 0);
 
-        AnimationHandler.SetLocomotion(false);
-        _hasTarget = false;
+        _animationHandler.SetLocomotion(false);
+        SetHasCalculatedTarget(false);
         //if (!CharacterGO.CharacterBlueprint.IsPlayable)
         //{
         //    IEnumerator coroutine = FreezeCharacter(CharacterGO, 1f);

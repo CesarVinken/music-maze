@@ -14,4 +14,12 @@ public class CharacterPath : AILerp
     {
         Character.ReachLocomotionTarget();
     }
+
+    public void OnPathCalculated(Path p)
+    {
+        //base.OnPathComplete(p);
+        //p.WaitForPath
+        Logger.Warning("Path calculation completed");
+        Character.SetHasCalculatedTarget(true);
+    }
 }
