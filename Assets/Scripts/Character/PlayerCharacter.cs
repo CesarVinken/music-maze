@@ -6,14 +6,29 @@ public class PlayerCharacter : Character
 {
     public KeyboardInput KeyboardInput = KeyboardInput.None;
     public int PlayerNoInGame = 1;  // in multiplayer on multiple computers there can be a player 1 and player 2, while both use their Player1 keyboard input
-    private Vector2 _mobileFingerDownPosition;
     public bool HasCalculatedPath = false;
+
+    private Vector2 _mobileFingerDownPosition;
+    [SerializeField] private GameObject _selectionIndicatorPrefab;
+    [SerializeField] private GameObject _selectionIndicatorGO;
 
     public void Awake()
     {
+        Guard.CheckIsNull(_selectionIndicatorPrefab, "Could not find _selectionIndicatorPrefab");
+
         base.Awake();
 
-        gameObject.name = GetComponent<PhotonView>().Owner?.NickName;
+        gameObject.name = _photonView.Owner == null ? "Player 1" : _photonView.Owner?.NickName;
+    }
+
+    public void Start()
+    {
+        if (PhotonNetwork.PlayerList.Length == 0 // singleplayer mode
+            || _photonView.IsMine)
+        {
+            _selectionIndicatorGO = Instantiate(_selectionIndicatorPrefab, SceneObjectManager.Instance.CharactersGO);
+            _selectionIndicatorGO.GetComponent<SelectionIndicator>().SelectedObject = transform;
+        }
     }
 
     public void OnCollisionEnter2D(Collision2D collision)
@@ -33,7 +48,8 @@ public class PlayerCharacter : Character
         if (Console.Instance && Console.Instance.ConsoleState != ConsoleState.Closed)
             return;
 
-        if(GetComponent<PhotonView>().IsMine)   // TODO: make work for single player
+        if (PhotonNetwork.PlayerList.Length == 0 // singleplayer mode
+            || _photonView.IsMine)
         {
             if (GameManager.Instance.CurrentPlatform == Platform.PC)
                 CheckKeyboardInput();
@@ -89,7 +105,7 @@ public class PlayerCharacter : Character
     private void SetPointerLocomotinTarget(Vector2 target)
     {
         GridLocation targetGridLocation = GridLocation.FindClosestGridTile(target);
-        Logger.Log("The closest grid tile is {0},{1}", targetGridLocation.X, targetGridLocation.Y);
+        //Logger.Log("The closest grid tile is {0},{1}", targetGridLocation.X, targetGridLocation.Y);
         if (!ValidateTarget(targetGridLocation)) return;
 
         Vector2 gridVectorTarget = GridLocation.GridToVector(targetGridLocation);
@@ -100,7 +116,6 @@ public class PlayerCharacter : Character
 
         if (!_animationHandler.InLocomotion)
             _animationHandler.SetLocomotion(true);
-
 
         if (!_characterPath.canSearch)
         {
