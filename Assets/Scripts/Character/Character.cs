@@ -43,13 +43,15 @@ public class Character : MonoBehaviour
         StartingPosition = gridLocation;
     }
 
+    // set character to current spawnpoint and reset pathfinder
     public void ResetCharacterPosition()
     {
-        Logger.Log("ResetCharacterPosition");
-        //SetLocomotionTargetObject(GridLocation.GridToVector(StartingPosition));
-        // TODO Set to starting position with new method
+        _characterPath.SetPath(null);
+        SetHasCalculatedTarget(false);
+        _animationHandler.SetLocomotion(false);
+
         CharacterManager.Instance.PutCharacterOnGrid(gameObject, GridLocation.GridToVector(StartingPosition));
-        ReachLocomotionTarget();
+        _characterPath.transform.position = transform.position;
     }
 
     protected Vector3 SetNewLocomotionTarget(Vector2 gridVectorTarget)
@@ -119,7 +121,7 @@ public class Character : MonoBehaviour
     public IEnumerator FreezeCharacter(Character character, float freezeTime)
     {
         character.IsFrozen = true;
-
+        ResetCharacterPosition();
         yield return new WaitForSeconds(freezeTime);
 
         character.IsFrozen = false;
@@ -128,5 +130,11 @@ public class Character : MonoBehaviour
     public void SetHasCalculatedTarget(bool hasCalculatedTarget)
     {
         HasCalculatedTarget = hasCalculatedTarget;
+    }
+
+    public void ReachTarget()
+    {
+        SetHasCalculatedTarget(false);
+        _animationHandler.SetLocomotion(false);
     }
 }

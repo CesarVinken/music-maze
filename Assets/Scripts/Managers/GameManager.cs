@@ -18,6 +18,8 @@ public class GameManager : MonoBehaviourPunCallbacks
     public KeyboardConfiguration KeyboardConfiguration;
     public GameType GameType;
 
+    //public Pathfinding
+
     public GameObject GridGO;
     public GameObject AstarGO;
 
@@ -55,6 +57,8 @@ public class GameManager : MonoBehaviourPunCallbacks
         Instantiate(CharacterManagerPrefab, transform);
 
         MazeLevelManager.Instance.LoadLevel(MazeName.PathfindingTest);
+
+        AstarGO.SetActive(true);    // triggers pathfinding grid scan
     }
 
     public void Start()

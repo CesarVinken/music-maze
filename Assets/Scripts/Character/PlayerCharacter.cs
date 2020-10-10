@@ -216,13 +216,5 @@ public class PlayerCharacter : Character
 
         if (!_animationHandler.InLocomotion)
             _animationHandler.SetLocomotion(true);
-        Logger.Log("CharacterPath.transform.position {0},{1}", _characterPath.transform.position.x, _characterPath.transform.position.y);
-        Logger.Log("newDestinationTarget {0},{1}", newDestinationTarget.x, newDestinationTarget.y);
-    }
-
-    public void ReachTarget()
-    { 
-        SetHasCalculatedTarget(false);
-        _animationHandler.SetLocomotion(false);
     }
 }
