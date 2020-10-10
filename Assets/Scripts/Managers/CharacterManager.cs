@@ -29,27 +29,36 @@ public class CharacterManager : MonoBehaviourPunCallbacks
         {
             MazeLevel level = MazeLevelManager.Instance.Level;
 
-            if(level.CharacterStartLocations.Count != 2)
+            if(level.PlayerCharacterStartLocations.Count != 2)
             {
-                Logger.Error("Did not find 2, but {0} character startlocations for level", level.CharacterStartLocations.Count);
+                Logger.Error("Did not find 2, but {0} character startlocations for level", level.PlayerCharacterStartLocations.Count);
             }
 
-            if (PhotonNetwork.IsMasterClient)
+            if (PhotonNetwork.IsMasterClient || GameManager.Instance.GameType == GameType.SinglePlayer)
             {
                 Debug.Log("Instantiating Player 1");
-                CharacterStartLocation characterStart = level.CharacterStartLocations[0];
+                CharacterStartLocation characterStart = level.PlayerCharacterStartLocations[0];
                 Player1GO = SpawnCharacter(characterStart.Character, characterStart.GridLocation);
 
-                //ball = PhotonNetwork.Instantiate("Ball", ballSpawnTransform.transform.position, ballSpawnTransform.transform.rotation, 0);
-                //ball.name = "Ball";
+                SpawnEnemies(level);
             }
             else
             {
                 Debug.Log("Instantiating Player 2");
 
-                CharacterStartLocation characterStart = level.CharacterStartLocations[1];
+                CharacterStartLocation characterStart = level.PlayerCharacterStartLocations[1];
                 Player2GO = SpawnCharacter(characterStart.Character, characterStart.GridLocation);
             }
+        }
+    }
+
+    private void SpawnEnemies(MazeLevel level)
+    {
+        for (int i = 0; i < level.EnemyCharacterStartLocations.Count; i++)
+        {
+            CharacterStartLocation enemyStart = level.EnemyCharacterStartLocations[i];
+            GameObject enemy = SpawnCharacter(enemyStart.Character, enemyStart.GridLocation);
+            enemy.name = "The Enemy";
         }
     }
 

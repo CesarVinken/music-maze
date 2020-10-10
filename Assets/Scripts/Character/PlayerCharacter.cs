@@ -23,7 +23,7 @@ public class PlayerCharacter : Character
 
     public void Start()
     {
-        if (PhotonNetwork.PlayerList.Length == 0 // singleplayer mode
+        if (GameManager.Instance.GameType == GameType.SinglePlayer
             || _photonView.IsMine)
         {
             _selectionIndicatorGO = Instantiate(_selectionIndicatorPrefab, SceneObjectManager.Instance.CharactersGO);
@@ -48,7 +48,7 @@ public class PlayerCharacter : Character
         if (Console.Instance && Console.Instance.ConsoleState != ConsoleState.Closed)
             return;
 
-        if (PhotonNetwork.PlayerList.Length == 0 // singleplayer mode
+        if (GameManager.Instance.GameType == GameType.SinglePlayer
             || _photonView.IsMine)
         {
             if (GameManager.Instance.CurrentPlatform == Platform.PC)
@@ -58,8 +58,8 @@ public class PlayerCharacter : Character
         }
 
         if (HasCalculatedTarget)
-            {
-                MoveCharacter();
+        {
+            MoveCharacter();
         }
 
         if (_characterPath.reachedEndOfPath)

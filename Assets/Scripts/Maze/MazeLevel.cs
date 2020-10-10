@@ -7,7 +7,8 @@ public class MazeLevel
     public List<Tile> Tiles = new List<Tile>();
     public List<Tile> UnwalkableTiles = new List<Tile>();
 
-    public List<CharacterStartLocation> CharacterStartLocations = new List<CharacterStartLocation>();
+    public List<CharacterStartLocation> PlayerCharacterStartLocations = new List<CharacterStartLocation>();
+    public List<CharacterStartLocation> EnemyCharacterStartLocations = new List<CharacterStartLocation>();
 
     private MazeName _mazeName;
 
@@ -43,18 +44,18 @@ public class MazeLevel
             new CharacterBlueprint(CharacterType.Bard)
             );
 
-        CharacterStartLocations.Add(playerStartLocation1);
-        CharacterStartLocations.Add(playerStartLocation2);
+        PlayerCharacterStartLocations.Add(playerStartLocation1);
+        PlayerCharacterStartLocations.Add(playerStartLocation2);
 
-        //CharacterStartLocation enemyStartLocation = new CharacterStartLocation(
-        //    new GridLocation(0, 4),
-        //    new CharacterBlueprint(CharacterType.Dragon)
-        //    );
+        CharacterStartLocation enemyStartLocation = new CharacterStartLocation(
+            new GridLocation(0, 4),
+            new CharacterBlueprint(CharacterType.Dragon)
+            );
 
-        //CharacterStartLocations.Add(enemyStartLocation);
+        EnemyCharacterStartLocations.Add(enemyStartLocation);
 
 
-        int locationsForPlayers = CharacterStartLocations.Where(location => location.Character.IsPlayable).ToArray().Count();
+        int locationsForPlayers = PlayerCharacterStartLocations.Where(location => location.Character.IsPlayable).ToArray().Count();
         if (locationsForPlayers == 0)
         {
             Logger.Warning(Logger.Initialisation, "The level {0} does not have any player starting positions set up while it needs 2.", _mazeName);

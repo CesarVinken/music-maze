@@ -3,6 +3,12 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
+public enum GameType
+{
+    SinglePlayer,
+    Multiplayer
+}
+
 public class GameManager : MonoBehaviourPunCallbacks
 {
     public static GameManager Instance;
@@ -10,6 +16,7 @@ public class GameManager : MonoBehaviourPunCallbacks
     public Platform CurrentPlatform;
     public IPlatformConfiguration Configuration;
     public KeyboardConfiguration KeyboardConfiguration;
+    public GameType GameType;
 
     public GameObject GridGO;
     public GameObject AstarGO;
@@ -28,6 +35,8 @@ public class GameManager : MonoBehaviourPunCallbacks
         Guard.CheckIsNull(CharacterManagerPrefab, "Could not find CharacterManagerPrefab");
 
         InitialiseLoggers();
+
+        GameType = PhotonNetwork.PlayerList.Length == 0 ? GameType.SinglePlayer : GameType.Multiplayer;
 
         if (Application.isMobilePlatform)
         {

@@ -9,7 +9,9 @@ public class EnemyCharacter : Character
     {
         if (IsFrozen) return;
 
-        if (!HasCalculatedTarget)
+        if (!HasCalculatedTarget &&
+            (GameManager.Instance.GameType == GameType.SinglePlayer
+            || _photonView.IsMine))
         {
             SetRandomTarget();
         }
@@ -21,8 +23,8 @@ public class EnemyCharacter : Character
 
     public void SetRandomTarget()
     {
-        Logger.Log("Set new target for enemy");
         Vector3 randomGridVectorLocation = GridLocation.GridToVector(GetRandomTileTarget().GridLocation);
+        Logger.Log("Set new target for enemy: {0},{1}", randomGridVectorLocation.x, randomGridVectorLocation.y);
         _seeker.StartPath(transform.position, randomGridVectorLocation, _characterPath.OnPathCalculated);
 
         //SetHasCalculatedTarget(true);
