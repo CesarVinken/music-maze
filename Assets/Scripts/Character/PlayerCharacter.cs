@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using Photon.Pun;
 using Pathfinding;
+using System.Collections;
 
 public class PlayerCharacter : Character
 {
@@ -9,8 +10,8 @@ public class PlayerCharacter : Character
     public bool HasCalculatedPath = false;
 
     private Vector2 _mobileFingerDownPosition;
-    [SerializeField] private GameObject _selectionIndicatorPrefab;
-    [SerializeField] private GameObject _selectionIndicatorGO;
+    [SerializeField] private GameObject _selectionIndicatorPrefab = null;
+    [SerializeField] private GameObject _selectionIndicatorGO = null;
 
     public void Awake()
     {
@@ -36,9 +37,17 @@ public class PlayerCharacter : Character
         EnemyCharacter enemy = collision.gameObject.GetComponent<EnemyCharacter>();
         if (enemy != null)
         {
-            Logger.Warning("Collider enter player!");
-            enemy.CatchPlayer(this);
+            _photonView.RPC("CaughtByEnemy", RpcTarget.All);
         }
+    }
+
+    [PunRPC]
+    public void CaughtByEnemy()
+    {
+        float freezeTime = 2.0f;
+
+        IEnumerator coroutine = this.FreezeCharacter(this, freezeTime);
+        StartCoroutine(coroutine);
     }
 
     public void Update()

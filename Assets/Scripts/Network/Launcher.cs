@@ -15,29 +15,27 @@ namespace Photon.Pun.Demo.PunBasics
         [SerializeField]
         private byte maxPlayersPerRoom = 2;
 
-        bool isConnecting;
-
         string gameVersion = "1";
 
         [Space(10)]
         [Header("Custom Variables")]
 
         [Space(5)]
-        [SerializeField] private Text _playerStatus;
-        [SerializeField] private Text _connectionStatus;
-        [SerializeField] private Text _errorText;
+        [SerializeField] private Text _playerStatus = null;
+        [SerializeField] private Text _connectionStatus = null;
+        [SerializeField] private Text _errorText = null;
 
         [Space(5)]
-        [SerializeField] private GameObject _roomJoinUI;
-        [SerializeField] private InputField _playerNameField;
-        [SerializeField] private InputField _roomNameField;
-        [SerializeField] private GameObject _joinRoomButtonGO;
+        [SerializeField] private GameObject _roomJoinUI = null;
+        [SerializeField] private InputField _playerNameField = null;
+        [SerializeField] private InputField _roomNameField = null;
+        [SerializeField] private GameObject _joinRoomButtonGO = null;
 
         [Space(5)]
-        [SerializeField] private GameObject _launchGameUI;
-        [SerializeField] private Text _player1Name;
-        [SerializeField] private Text _player2Name;
-        [SerializeField] private GameObject _launchGameButtonGO;
+        [SerializeField] private GameObject _launchGameUI = null;
+        [SerializeField] private Text _player1Name = null;
+        [SerializeField] private Text _player2Name = null;
+        [SerializeField] private GameObject _launchGameButtonGO = null;
 
         string playerName = "";
         string roomName = "";
@@ -173,7 +171,6 @@ namespace Photon.Pun.Demo.PunBasics
 
         public override void OnDisconnected(DisconnectCause cause)
         {
-            isConnecting = false;
             _roomJoinUI.SetActive(false);
             _launchGameUI.SetActive(false);
 

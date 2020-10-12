@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Photon.Pun;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -39,17 +40,5 @@ public class EnemyCharacter : Character
 
         _animationHandler.SetLocomotion(false);
         SetHasCalculatedTarget(false);
-        //if (!CharacterGO.CharacterBlueprint.IsPlayable)
-        //{
-        //    IEnumerator coroutine = FreezeCharacter(CharacterGO, 1f);
-        //    StartCoroutine(coroutine);
-        //}
-    }
-
-    public void CatchPlayer(PlayerCharacter playerCharacter)
-    {
-        float freezeTime = 2.0f;
-        IEnumerator coroutine = playerCharacter.FreezeCharacter(playerCharacter, freezeTime);
-        StartCoroutine(coroutine);
     }
 }

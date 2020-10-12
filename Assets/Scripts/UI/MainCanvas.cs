@@ -6,7 +6,7 @@ public class MainCanvas : MonoBehaviour
 {
     public static MainCanvas Instance;
 
-    [SerializeField] private GameManager _gameManager;
+    [SerializeField] private GameManager _gameManager = null;
     public GameObject ConsoleContainer;
     public GameObject ConsoleButton;
 

@@ -1,5 +1,7 @@
-﻿using Pathfinding;
+﻿using ExitGames.Client.Photon;
+using Pathfinding;
 using Photon.Pun;
+using Photon.Realtime;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -23,6 +25,8 @@ public class Character : MonoBehaviour
     [SerializeField] protected Seeker _seeker;
     [SerializeField] protected PhotonView _photonView;
 
+    public GameObject CharacterBody;
+
     public void Awake()
     {
         if (_animationHandler == null)
@@ -37,19 +41,21 @@ public class Character : MonoBehaviour
         Speed = BaseSpeed;
     }
 
-
-    public void SetStartingPosition(GridLocation gridLocation)
+    public void SetStartingPosition(Character character, GridLocation gridLocation)
     {
-        StartingPosition = gridLocation;
+        character.StartingPosition = gridLocation;
     }
 
     // set character to current spawnpoint and reset pathfinder
     public void ResetCharacterPosition()
     {
+        //PhotonTransformViewPositionModel m_PositionModel = new PhotonTransformViewPositionModel()
+        //_photonView.gameObject.GetComponent<PhotonTransformView>().m_SynchronizePosition.ToString
         _characterPath.SetPath(null);
         SetHasCalculatedTarget(false);
         _animationHandler.SetLocomotion(false);
 
+        Logger.Warning("Starting position for {0} is {1},{2}", gameObject.name, gameObject.GetComponent<PlayerCharacter>().StartingPosition.X, gameObject.GetComponent<PlayerCharacter>().StartingPosition.Y);
         CharacterManager.Instance.PutCharacterOnGrid(gameObject, GridLocation.GridToVector(StartingPosition));
         _characterPath.transform.position = transform.position;
     }
@@ -121,8 +127,13 @@ public class Character : MonoBehaviour
     public IEnumerator FreezeCharacter(Character character, float freezeTime)
     {
         character.IsFrozen = true;
+        CharacterBody.SetActive(false); // TODO make character animation for appearing and disappearing of character, rather than turning the GO off and on
         ResetCharacterPosition();
-        yield return new WaitForSeconds(freezeTime);
+
+        yield return new WaitForSeconds(freezeTime / 2);
+        CharacterBody.SetActive(true);
+
+        yield return new WaitForSeconds(freezeTime /2 );
 
         character.IsFrozen = false;
     }

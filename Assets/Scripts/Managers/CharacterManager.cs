@@ -72,7 +72,7 @@ public class CharacterManager : MonoBehaviourPunCallbacks
         {
             PlayerCharacter playerCharacter = characterGO.GetComponent<PlayerCharacter>();
             playerCharacter.CharacterBlueprint = character;
-            playerCharacter.SetStartingPosition(gridLocation);
+            playerCharacter.SetStartingPosition(playerCharacter, gridLocation);
             MazePlayers.Add(playerCharacter);
 
             if(GameManager.Instance.CurrentPlatform == Platform.PC)
@@ -96,7 +96,7 @@ public class CharacterManager : MonoBehaviourPunCallbacks
         else
         {
             EnemyCharacter enemyCharacter = characterGO.GetComponent<EnemyCharacter>();
-            enemyCharacter.SetStartingPosition(gridLocation);
+            enemyCharacter.SetStartingPosition(enemyCharacter, gridLocation);
             enemyCharacter.CharacterBlueprint = character;
         }
 
@@ -110,9 +110,9 @@ public class CharacterManager : MonoBehaviourPunCallbacks
 
     public void PutCharacterOnGrid(GameObject characterGO, Vector3 gridVectorLocation)
     {
-        Logger.Log("it was {0},{1}", characterGO.transform.position.x, characterGO.transform.position.y);
+        Logger.Log("{0} was on {1},{2}", characterGO.name, characterGO.transform.position.x, characterGO.transform.position.y);
         characterGO.transform.position = new Vector3(gridVectorLocation.x + GridLocation.OffsetToTileMiddle, gridVectorLocation.y + GridLocation.OffsetToTileMiddle);
-        Logger.Log("{0} will be now {1},{2}", characterGO.name, characterGO.transform.position.x, characterGO.transform.position.y);
+        Logger.Log("{0} will be reset to {1},{2}", characterGO.name, characterGO.transform.position.x, characterGO.transform.position.y);
     }
 
     public string GetPrefabNameByCharacter(CharacterBlueprint character)
