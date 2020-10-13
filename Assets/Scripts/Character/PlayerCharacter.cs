@@ -37,7 +37,14 @@ public class PlayerCharacter : Character
         EnemyCharacter enemy = collision.gameObject.GetComponent<EnemyCharacter>();
         if (enemy != null)
         {
-            _photonView.RPC("CaughtByEnemy", RpcTarget.All);
+            if(GameManager.Instance.GameType == GameType.SinglePlayer)
+            {
+                CaughtByEnemy();
+            }
+            else
+            {
+                _photonView.RPC("CaughtByEnemy", RpcTarget.All);
+            }
         }
     }
 
