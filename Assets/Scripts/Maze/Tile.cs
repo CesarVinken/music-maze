@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class Tile : MonoBehaviour
 {
@@ -32,13 +30,16 @@ public class Tile : MonoBehaviour
 
     public void OnCollisionEnter2D(Collision2D collision)
     {
+        if (!Walkable) return;
+
         PlayerCharacter player = collision.gameObject.GetComponent<PlayerCharacter>();
         if (player != null)
         {
-            Logger.Log("{0} entered tile {1},{2}", player.name, GridLocation.X, GridLocation.Y);
+            //Logger.Log("{0} entered tile {1},{2}", player.name, GridLocation.X, GridLocation.Y);
             if (PlayerMark.sprite != null) return;
 
-            MazeLevelManager.Instance.SetTileMarker(this, player);        }
+            MazeLevelManager.Instance.SetTileMarker(this, player);        
+        }
     }
 }
 

@@ -22,6 +22,23 @@ public class PlayerCharacter : Character
         base.Awake();
 
         gameObject.name = _photonView.Owner == null ? "Player 1" : _photonView.Owner?.NickName;
+
+        if(GameManager.Instance.GameType == GameType.Multiplayer)
+        {
+            if(PhotonNetwork.IsMasterClient)
+            {
+                if (_photonView.IsMine)
+                    PlayerNumber = PlayerNumber.Player1;
+                else
+                    PlayerNumber = PlayerNumber.Player2;
+            } else
+            {
+                if (_photonView.IsMine)
+                    PlayerNumber = PlayerNumber.Player2;
+                else
+                    PlayerNumber = PlayerNumber.Player1;
+            }
+        }
     }
 
     public void Start()
@@ -73,13 +90,12 @@ public class PlayerCharacter : Character
                 CheckKeyboardInput();
 
             CheckPointerInput();
-        }
 
-        if (HasCalculatedTarget)
-        {
-            MoveCharacter();
+            if (HasCalculatedTarget)
+            {
+                MoveCharacter();
+            }
         }
-
         if (_characterPath.reachedEndOfPath)
         {
             ReachTarget();

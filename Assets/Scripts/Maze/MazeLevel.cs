@@ -55,7 +55,6 @@ public class MazeLevel
 
         EnemyCharacterStartLocations.Add(enemyStartLocation);
 
-
         int locationsForPlayers = PlayerCharacterStartLocations.Where(location => location.Character.IsPlayable).ToArray().Count();
         if (locationsForPlayers == 0)
         {
@@ -90,7 +89,7 @@ public class MazeLevel
 
     public void AddUnwalkableTile(Tile tile)
     {
-        Logger.Log("{0},{1} is an unwalkable tile", tile.transform.position.x, tile.transform.position.y);
+        //Logger.Log("{0},{1} is an unwalkable tile", tile.transform.position.x, tile.transform.position.y);
         UnwalkableTiles.Add(tile);
     }
 }

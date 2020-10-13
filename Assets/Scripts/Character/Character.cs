@@ -113,7 +113,6 @@ public class Character : MonoBehaviour
             if(tile.Walkable)
                 return true;
         }
-            //Logger.Log("target is not a tile");
         return false;
     }
 

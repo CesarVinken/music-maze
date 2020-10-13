@@ -27,8 +27,6 @@ public class EnemyCharacter : Character
         Vector3 randomGridVectorLocation = GridLocation.GridToVector(GetRandomTileTarget().GridLocation);
         //Logger.Log("Set new target for enemy: {0},{1}", randomGridVectorLocation.x, randomGridVectorLocation.y);
         _seeker.StartPath(transform.position, randomGridVectorLocation, _characterPath.OnPathCalculated);
-
-        //SetHasCalculatedTarget(true);
     }
 
     public override void ReachLocomotionTarget()

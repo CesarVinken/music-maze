@@ -46,7 +46,7 @@ public class CharacterManager : MonoBehaviourPunCallbacks
             {
                 Logger.Error("Did not find 2, but {0} character startlocations for level", level.PlayerCharacterStartLocations.Count);
             }
-
+            
             if (PhotonNetwork.IsMasterClient || GameManager.Instance.GameType == GameType.SinglePlayer)
             {
                 Debug.Log("Instantiating Player 1");
@@ -54,7 +54,6 @@ public class CharacterManager : MonoBehaviourPunCallbacks
                 CharacterBundle PlayerBundle = SpawnCharacter(characterStart.Character, characterStart.GridLocation);
                 Player1GO = PlayerBundle.CharacterGO;
                 PlayerCharacter player = PlayerBundle.Character as PlayerCharacter;
-                player.PlayerNumber = PlayerNumber.Player1;
 
                 SpawnEnemies(level);
             }
@@ -66,10 +65,8 @@ public class CharacterManager : MonoBehaviourPunCallbacks
                 CharacterBundle PlayerBundle = SpawnCharacter(characterStart.Character, characterStart.GridLocation);
                 Player2GO = PlayerBundle.CharacterGO;
                 PlayerCharacter player = PlayerBundle.Character as PlayerCharacter;
-                player.PlayerNumber = PlayerNumber.Player2;
             }
         }
-
     }
 
     private void SpawnEnemies(MazeLevel level)
@@ -91,7 +88,7 @@ public class CharacterManager : MonoBehaviourPunCallbacks
         {
             PlayerCharacter playerCharacter = characterGO.GetComponent<PlayerCharacter>();
             playerCharacter.CharacterBlueprint = character;
-            //playerCharacter.PlayerNumber = playerNumber;
+
             playerCharacter.SetStartingPosition(playerCharacter, gridLocation);
             MazePlayers.Add(playerCharacter);
 
@@ -133,9 +130,9 @@ public class CharacterManager : MonoBehaviourPunCallbacks
 
     public void PutCharacterOnGrid(GameObject characterGO, Vector3 gridVectorLocation)
     {
-        Logger.Log("{0} was on {1},{2}", characterGO.name, characterGO.transform.position.x, characterGO.transform.position.y);
+        //Logger.Log("{0} was on {1},{2}", characterGO.name, characterGO.transform.position.x, characterGO.transform.position.y);
         characterGO.transform.position = new Vector3(gridVectorLocation.x + GridLocation.OffsetToTileMiddle, gridVectorLocation.y + GridLocation.OffsetToTileMiddle);
-        Logger.Log("{0} will be reset to {1},{2}", characterGO.name, characterGO.transform.position.x, characterGO.transform.position.y);
+        //Logger.Log("{0} will be reset to {1},{2}", characterGO.name, characterGO.transform.position.x, characterGO.transform.position.y);
     }
 
     public string GetPrefabNameByCharacter(CharacterBlueprint character)
