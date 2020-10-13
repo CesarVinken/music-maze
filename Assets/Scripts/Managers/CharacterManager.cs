@@ -3,20 +3,21 @@ using Photon.Pun.Demo.PunBasics;
 using System.Collections.Generic;
 using UnityEngine;
 
-public struct CharacterBundle
-{
-    public GameObject CharacterGO;
-    public Character Character;
-
-    public CharacterBundle(Character character, GameObject characterGO)
-    {
-        Character = character;
-        CharacterGO = characterGO;
-    }
-}
 
 public class CharacterManager : MonoBehaviourPunCallbacks
 {
+    public struct CharacterBundle
+    {
+        public GameObject CharacterGO;
+        public Character Character;
+
+        public CharacterBundle(Character character, GameObject characterGO)
+        {
+            Character = character;
+            CharacterGO = characterGO;
+        }
+    }
+
     public static CharacterManager Instance;
 
     public GameObject EnemyCharacterPrefab;

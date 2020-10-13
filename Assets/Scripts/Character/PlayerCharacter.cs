@@ -3,11 +3,6 @@ using Photon.Pun;
 using Pathfinding;
 using System.Collections;
 
-public enum PlayerNumber
-{
-    Player1,
-    Player2
-}
 public class PlayerCharacter : Character
 {
     public KeyboardInput KeyboardInput = KeyboardInput.None;
