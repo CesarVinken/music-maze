@@ -3,11 +3,18 @@ using Photon.Pun;
 using Pathfinding;
 using System.Collections;
 
+public enum PlayerNumber
+{
+    Player1,
+    Player2
+}
 public class PlayerCharacter : Character
 {
     public KeyboardInput KeyboardInput = KeyboardInput.None;
     public int PlayerNoInGame = 1;  // in multiplayer on multiple computers there can be a player 1 and player 2, while both use their Player1 keyboard input
+    public PlayerNumber PlayerNumber = PlayerNumber.Player1;
     public bool HasCalculatedPath = false;
+    public Tile LastTile;
 
     private Vector2 _mobileFingerDownPosition;
     [SerializeField] private GameObject _selectionIndicatorPrefab = null;

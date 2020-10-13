@@ -3,6 +3,18 @@ using Photon.Pun.Demo.PunBasics;
 using System.Collections.Generic;
 using UnityEngine;
 
+public struct CharacterBundle
+{
+    public GameObject CharacterGO;
+    public Character Character;
+
+    public CharacterBundle(Character character, GameObject characterGO)
+    {
+        Character = character;
+        CharacterGO = characterGO;
+    }
+}
+
 public class CharacterManager : MonoBehaviourPunCallbacks
 {
     public static CharacterManager Instance;
@@ -38,7 +50,10 @@ public class CharacterManager : MonoBehaviourPunCallbacks
             {
                 Debug.Log("Instantiating Player 1");
                 CharacterStartLocation characterStart = level.PlayerCharacterStartLocations[0];
-                Player1GO = SpawnCharacter(characterStart.Character, characterStart.GridLocation);
+                CharacterBundle PlayerBundle = SpawnCharacter(characterStart.Character, characterStart.GridLocation);
+                Player1GO = PlayerBundle.CharacterGO;
+                PlayerCharacter player = PlayerBundle.Character as PlayerCharacter;
+                player.PlayerNumber = PlayerNumber.Player1;
 
                 SpawnEnemies(level);
             }
@@ -47,9 +62,13 @@ public class CharacterManager : MonoBehaviourPunCallbacks
                 Debug.Log("Instantiating Player 2");
 
                 CharacterStartLocation characterStart = level.PlayerCharacterStartLocations[1];
-                Player2GO = SpawnCharacter(characterStart.Character, characterStart.GridLocation);
+                CharacterBundle PlayerBundle = SpawnCharacter(characterStart.Character, characterStart.GridLocation);
+                Player2GO = PlayerBundle.CharacterGO;
+                PlayerCharacter player = PlayerBundle.Character as PlayerCharacter;
+                player.PlayerNumber = PlayerNumber.Player2;
             }
         }
+
     }
 
     private void SpawnEnemies(MazeLevel level)
@@ -57,21 +76,21 @@ public class CharacterManager : MonoBehaviourPunCallbacks
         for (int i = 0; i < level.EnemyCharacterStartLocations.Count; i++)
         {
             CharacterStartLocation enemyStart = level.EnemyCharacterStartLocations[i];
-            GameObject enemy = SpawnCharacter(enemyStart.Character, enemyStart.GridLocation);
-            enemy.name = "The Enemy";
+            CharacterBundle enemy = SpawnCharacter(enemyStart.Character, enemyStart.GridLocation);
+            enemy.CharacterGO.name = "The Enemy";
         }
     }
 
-    public GameObject SpawnCharacter(CharacterBlueprint character, GridLocation gridLocation)
+    public CharacterBundle SpawnCharacter(CharacterBlueprint character, GridLocation gridLocation)
     {
         string prefabName = GetPrefabNameByCharacter(character);
         Vector2 startPosition = GetCharacterGridPosition(GridLocation.GridToVector(gridLocation)); // start position is grid position plus grid tile offset
         GameObject characterGO = PhotonNetwork.Instantiate(prefabName, startPosition, Quaternion.identity, 0);
-
-        if(character.IsPlayable)
+        if (character.IsPlayable)
         {
             PlayerCharacter playerCharacter = characterGO.GetComponent<PlayerCharacter>();
             playerCharacter.CharacterBlueprint = character;
+            //playerCharacter.PlayerNumber = playerNumber;
             playerCharacter.SetStartingPosition(playerCharacter, gridLocation);
             MazePlayers.Add(playerCharacter);
 
@@ -92,15 +111,18 @@ public class CharacterManager : MonoBehaviourPunCallbacks
                     Logger.Warning("There are {0} players in the level. There can be max 2 players in a level", MazePlayers.Count);
                 }
             }
+            CharacterBundle characterBundle = new CharacterBundle(playerCharacter, characterGO);
+            return characterBundle;
         }
         else
         {
             EnemyCharacter enemyCharacter = characterGO.GetComponent<EnemyCharacter>();
             enemyCharacter.SetStartingPosition(enemyCharacter, gridLocation);
             enemyCharacter.CharacterBlueprint = character;
-        }
 
-        return characterGO;
+            CharacterBundle characterBundle = new CharacterBundle(enemyCharacter, characterGO);
+            return characterBundle;
+        }
     }
 
     public Vector3 GetCharacterGridPosition(Vector3 gridVectorLocation)
