@@ -10,6 +10,7 @@ public class MazeLevel
     public List<CharacterStartLocation> PlayerCharacterStartLocations = new List<CharacterStartLocation>();
     public List<CharacterStartLocation> EnemyCharacterStartLocations = new List<CharacterStartLocation>();
 
+    public Dictionary<GridLocation, Tile> TilesByLocation = new Dictionary<GridLocation, Tile>();
     private MazeName _mazeName;
 
     public MazeLevel(MazeName mazeName)
@@ -67,6 +68,17 @@ public class MazeLevel
         else if (locationsForPlayers > 2)
         {
             Logger.Warning(Logger.Initialisation, "The level {0} has {1} player starting positions set up. There should be 2 positions.", _mazeName, locationsForPlayers);
+        }
+
+        OrderTilesByLocation();
+    }
+
+    public void OrderTilesByLocation()
+    {
+        for (int i = 0; i < Tiles.Count; i++)
+        {
+            Tile tile = Tiles[i];
+            TilesByLocation.Add(new GridLocation(tile.GridLocation.X, tile.GridLocation.Y), tile);
         }
     }
 

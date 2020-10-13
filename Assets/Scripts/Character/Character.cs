@@ -106,20 +106,15 @@ public class Character : MonoBehaviour
 
     public bool ValidateTarget(GridLocation targetGridLocation)
     {
-        if (MazeLevelManager.Instance.Level.UnwalkableTiles.FirstOrDefault(tile => tile.GridLocation.X == targetGridLocation.X && tile.GridLocation.Y == targetGridLocation.Y))
+        if (MazeLevelManager.Instance.Level.TilesByLocation.ContainsKey(targetGridLocation))
         {
-            Logger.Log(Logger.Locomotion, "target is unwalkable");
-            return false;
-        }
+            Tile tile = MazeLevelManager.Instance.Level.TilesByLocation[targetGridLocation];
 
-        // TODO this check is maybe not very efficient
-        if (!MazeLevelManager.Instance.Level.Tiles.FirstOrDefault(tile => tile.GridLocation.X == targetGridLocation.X && tile.GridLocation.Y == targetGridLocation.Y))
-        {
+            if(tile.Walkable)
+                return true;
+        }
             //Logger.Log("target is not a tile");
-            return false;
-        }
-
-        return true;
+        return false;
     }
 
     public virtual void ReachLocomotionTarget() { }

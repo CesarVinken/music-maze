@@ -36,32 +36,9 @@ public class Tile : MonoBehaviour
         if (player != null)
         {
             Logger.Log("{0} entered tile {1},{2}", player.name, GridLocation.X, GridLocation.Y);
-            if (GameManager.Instance.GameType == GameType.SinglePlayer)
-            {
-                player.LastTile = this;
+            if (PlayerMark.sprite != null) return;
 
-                if(PlayerMark.sprite == null)
-                {
-                    SetTileMarker(player.PlayerNumber);
-                }
-            }
-            else
-            {
-                //_photonView.RPC("CaughtByEnemy", RpcTarget.All);
-            }
-        }
-    }
-
-    private void SetTileMarker(PlayerNumber playerNumber)
-    {
-        if(playerNumber == PlayerNumber.Player1)
-        {
-            PlayerMark.sprite = MainCanvas.Instance.Player1TileMarker;
-        }
-        else
-        {
-            PlayerMark.sprite = MainCanvas.Instance.Player2TileMarker;
-        }
+            MazeLevelManager.Instance.SetTileMarker(this, player);        }
     }
 }
 
