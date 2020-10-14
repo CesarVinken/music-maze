@@ -1,12 +1,16 @@
 ﻿using ExitGames.Client.Photon;
 using Photon.Pun;
 using Photon.Realtime;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class MazeLevelManager : MonoBehaviour, IOnEventCallback
 {
     public static MazeLevelManager Instance;
     public MazeLevel Level;
+
+    public static List<CharacterSpawnpoint> PlayerCharacterSpawnpoints = new List<CharacterSpawnpoint>();
+    public static List<CharacterSpawnpoint> EnemyCharacterSpawnpoints = new List<CharacterSpawnpoint>();
 
     public void Awake()
     {
@@ -85,6 +89,23 @@ public class MazeLevelManager : MonoBehaviour, IOnEventCallback
             {
                 tile.PlayerMark.sprite = MainCanvas.Instance.Player2TileMarker;
             }
+        }
+    }
+
+    public void ValidateSpawnpoints()
+    {
+        int playerStartLocations = PlayerCharacterSpawnpoints.Count;
+        if (playerStartLocations == 0)
+        {
+            Logger.Warning(Logger.Initialisation, "The level {0} does not have any player starting positions set up while it needs 2.", Level.MazeName);
+        }
+        else if (playerStartLocations == 1)
+        {
+            Logger.Warning(Logger.Initialisation, "The level {0} has only 1 player starting position set up while it needs 2.", Level.MazeName);
+        }
+        else if (playerStartLocations > 2)
+        {
+            Logger.Warning(Logger.Initialisation, "The level {0} has {1} player starting positions set up. There should be 2 positions.", Level.MazeName, playerStartLocations);
         }
     }
 }

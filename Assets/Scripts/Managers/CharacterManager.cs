@@ -42,39 +42,36 @@ public class CharacterManager : MonoBehaviourPunCallbacks
         {
             MazeLevel level = MazeLevelManager.Instance.Level;
 
-            if(level.PlayerCharacterStartLocations.Count != 2)
+            if(MazeLevelManager.PlayerCharacterSpawnpoints.Count != 2)
             {
-                Logger.Error("Did not find 2, but {0} character startlocations for level", level.PlayerCharacterStartLocations.Count);
+                Logger.Error("Did not find 2, but {0} character startlocations for level", MazeLevelManager.PlayerCharacterSpawnpoints.Count);
             }
             
             if (PhotonNetwork.IsMasterClient || GameManager.Instance.GameType == GameType.SinglePlayer)
             {
                 Debug.Log("Instantiating Player 1");
-                CharacterStartLocation characterStart = level.PlayerCharacterStartLocations[0];
-                CharacterBundle PlayerBundle = SpawnCharacter(characterStart.Character, characterStart.GridLocation);
+                CharacterBundle PlayerBundle = SpawnCharacter(MazeLevelManager.PlayerCharacterSpawnpoints[0].CharacterBlueprint, MazeLevelManager.PlayerCharacterSpawnpoints[0].GridLocation);
                 Player1GO = PlayerBundle.CharacterGO;
                 PlayerCharacter player = PlayerBundle.Character as PlayerCharacter;
 
-                SpawnEnemies(level);
+                SpawnEnemies();
             }
             else
             {
                 Debug.Log("Instantiating Player 2");
 
-                CharacterStartLocation characterStart = level.PlayerCharacterStartLocations[1];
-                CharacterBundle PlayerBundle = SpawnCharacter(characterStart.Character, characterStart.GridLocation);
+                CharacterBundle PlayerBundle = SpawnCharacter(MazeLevelManager.PlayerCharacterSpawnpoints[1].CharacterBlueprint, MazeLevelManager.PlayerCharacterSpawnpoints[1].GridLocation);
                 Player2GO = PlayerBundle.CharacterGO;
                 PlayerCharacter player = PlayerBundle.Character as PlayerCharacter;
             }
         }
     }
 
-    private void SpawnEnemies(MazeLevel level)
+    private void SpawnEnemies()
     {
-        for (int i = 0; i < level.EnemyCharacterStartLocations.Count; i++)
+        for (int i = 0; i < MazeLevelManager.EnemyCharacterSpawnpoints.Count; i++)
         {
-            CharacterStartLocation enemyStart = level.EnemyCharacterStartLocations[i];
-            CharacterBundle enemy = SpawnCharacter(enemyStart.Character, enemyStart.GridLocation);
+            CharacterBundle enemy = SpawnCharacter(MazeLevelManager.EnemyCharacterSpawnpoints[i].CharacterBlueprint, MazeLevelManager.EnemyCharacterSpawnpoints[i].GridLocation);
             enemy.CharacterGO.name = "The Enemy";
         }
     }

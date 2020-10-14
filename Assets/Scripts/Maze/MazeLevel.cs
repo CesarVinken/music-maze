@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
 
 public class MazeLevel
@@ -7,15 +6,13 @@ public class MazeLevel
     public List<Tile> Tiles = new List<Tile>();
     public List<Tile> UnwalkableTiles = new List<Tile>();
 
-    public List<CharacterStartLocation> PlayerCharacterStartLocations = new List<CharacterStartLocation>();
-    public List<CharacterStartLocation> EnemyCharacterStartLocations = new List<CharacterStartLocation>();
-
     public Dictionary<GridLocation, Tile> TilesByLocation = new Dictionary<GridLocation, Tile>();
-    private MazeName _mazeName;
+
+    public MazeName MazeName;
 
     public MazeLevel(MazeName mazeName)
     {
-        _mazeName = mazeName;
+        MazeName = mazeName;
 
         if(TilesContainer.Instance != null)
         {
@@ -23,7 +20,7 @@ public class MazeLevel
             TilesContainer.Instance = null;
         }
 
-        GameObject mazeContainer = GameObject.Instantiate(Resources.Load<GameObject>("Prefabs/Level/" + _mazeName));
+        GameObject mazeContainer = GameObject.Instantiate(Resources.Load<GameObject>("Prefabs/Level/" + MazeName));
 
         if (mazeContainer == null)
             Logger.Error("Could not find prefab for level {0}", mazeName);
@@ -34,40 +31,7 @@ public class MazeLevel
         TilesContainer.SetInstance(mazeContainer.GetComponent<TilesContainer>());
         Tiles = TilesContainer.Instance.Tiles;
 
-        // TODO set character start location through editor and load in to level
-        CharacterStartLocation playerStartLocation1 = new CharacterStartLocation(
-            new GridLocation(0, 0),
-            new CharacterBlueprint(CharacterType.Bard)
-            );
-
-        CharacterStartLocation playerStartLocation2 = new CharacterStartLocation(
-            new GridLocation(1, 4),
-            new CharacterBlueprint(CharacterType.Bard)
-            );
-
-        PlayerCharacterStartLocations.Add(playerStartLocation1);
-        PlayerCharacterStartLocations.Add(playerStartLocation2);
-
-        CharacterStartLocation enemyStartLocation = new CharacterStartLocation(
-            new GridLocation(0, 4),
-            new CharacterBlueprint(CharacterType.Dragon)
-            );
-
-        EnemyCharacterStartLocations.Add(enemyStartLocation);
-
-        int locationsForPlayers = PlayerCharacterStartLocations.Where(location => location.Character.IsPlayable).ToArray().Count();
-        if (locationsForPlayers == 0)
-        {
-            Logger.Warning(Logger.Initialisation, "The level {0} does not have any player starting positions set up while it needs 2.", _mazeName);
-        }
-        else if (locationsForPlayers == 1)
-        {
-            Logger.Warning(Logger.Initialisation, "The level {0} has only 1 player starting position set up while it needs 2.", _mazeName);
-        }
-        else if (locationsForPlayers > 2)
-        {
-            Logger.Warning(Logger.Initialisation, "The level {0} has {1} player starting positions set up. There should be 2 positions.", _mazeName, locationsForPlayers);
-        }
+        MazeLevelManager.ValidateSpawnpoints(); // make sure we have exactly 2 player spawnpoints
 
         OrderTilesByLocation();
     }

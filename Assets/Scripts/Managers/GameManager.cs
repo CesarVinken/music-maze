@@ -56,7 +56,7 @@ public class GameManager : MonoBehaviourPunCallbacks
         Instantiate(MazeLevelManagerPrefab, transform);
         Instantiate(CharacterManagerPrefab, transform);
 
-        MazeLevelManager.Instance.LoadLevel(MazeName.PathfindingTest);
+        MazeLevelManager.Instance.LoadLevel(MazeName.LargerLevelTest);
 
         AstarGO.SetActive(true);    // triggers pathfinding grid scan
     }

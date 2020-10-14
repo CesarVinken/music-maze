@@ -49,8 +49,6 @@ public class Character : MonoBehaviour
     // set character to current spawnpoint and reset pathfinder
     public void ResetCharacterPosition()
     {
-        //PhotonTransformViewPositionModel m_PositionModel = new PhotonTransformViewPositionModel()
-        //_photonView.gameObject.GetComponent<PhotonTransformView>().m_SynchronizePosition.ToString
         _characterPath.SetPath(null);
         SetHasCalculatedTarget(false);
         _animationHandler.SetLocomotion(false);
