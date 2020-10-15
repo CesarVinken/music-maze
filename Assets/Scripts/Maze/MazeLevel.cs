@@ -5,10 +5,14 @@ public class MazeLevel
 {
     public List<Tile> Tiles = new List<Tile>();
     public List<Tile> UnwalkableTiles = new List<Tile>();
+    public List<MazeExit> MazeExits = new List<MazeExit>();
+
+    public int NumberOfUnmarkedTiles = -1;
 
     public Dictionary<GridLocation, Tile> TilesByLocation = new Dictionary<GridLocation, Tile>();
 
     public MazeName MazeName;
+
 
     public MazeLevel(MazeName mazeName)
     {
@@ -31,7 +35,7 @@ public class MazeLevel
         TilesContainer.SetInstance(mazeContainer.GetComponent<TilesContainer>());
         Tiles = TilesContainer.Instance.Tiles;
 
-        MazeLevelManager.ValidateSpawnpoints(); // make sure we have exactly 2 player spawnpoints
+        MazeLevelManager.Instance.ValidateSpawnpoints(); // make sure we have exactly 2 player spawnpoints
 
         OrderTilesByLocation();
     }

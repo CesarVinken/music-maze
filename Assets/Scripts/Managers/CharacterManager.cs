@@ -42,15 +42,15 @@ public class CharacterManager : MonoBehaviourPunCallbacks
         {
             MazeLevel level = MazeLevelManager.Instance.Level;
 
-            if(MazeLevelManager.PlayerCharacterSpawnpoints.Count != 2)
+            if(MazeLevelManager.Instance.PlayerCharacterSpawnpoints.Count != 2)
             {
-                Logger.Error("Did not find 2, but {0} character startlocations for level", MazeLevelManager.PlayerCharacterSpawnpoints.Count);
+                Logger.Error("Did not find 2, but {0} character startlocations for level", MazeLevelManager.Instance.PlayerCharacterSpawnpoints.Count);
             }
             
             if (PhotonNetwork.IsMasterClient || GameManager.Instance.GameType == GameType.SinglePlayer)
             {
                 Debug.Log("Instantiating Player 1");
-                CharacterBundle PlayerBundle = SpawnCharacter(MazeLevelManager.PlayerCharacterSpawnpoints[0].CharacterBlueprint, MazeLevelManager.PlayerCharacterSpawnpoints[0].GridLocation);
+                CharacterBundle PlayerBundle = SpawnCharacter(MazeLevelManager.Instance.PlayerCharacterSpawnpoints[0].CharacterBlueprint, MazeLevelManager.Instance.PlayerCharacterSpawnpoints[0].GridLocation);
                 Player1GO = PlayerBundle.CharacterGO;
                 PlayerCharacter player = PlayerBundle.Character as PlayerCharacter;
 
@@ -60,7 +60,7 @@ public class CharacterManager : MonoBehaviourPunCallbacks
             {
                 Debug.Log("Instantiating Player 2");
 
-                CharacterBundle PlayerBundle = SpawnCharacter(MazeLevelManager.PlayerCharacterSpawnpoints[1].CharacterBlueprint, MazeLevelManager.PlayerCharacterSpawnpoints[1].GridLocation);
+                CharacterBundle PlayerBundle = SpawnCharacter(MazeLevelManager.Instance.PlayerCharacterSpawnpoints[1].CharacterBlueprint, MazeLevelManager.Instance.PlayerCharacterSpawnpoints[1].GridLocation);
                 Player2GO = PlayerBundle.CharacterGO;
                 PlayerCharacter player = PlayerBundle.Character as PlayerCharacter;
             }
@@ -69,9 +69,9 @@ public class CharacterManager : MonoBehaviourPunCallbacks
 
     private void SpawnEnemies()
     {
-        for (int i = 0; i < MazeLevelManager.EnemyCharacterSpawnpoints.Count; i++)
+        for (int i = 0; i < MazeLevelManager.Instance.EnemyCharacterSpawnpoints.Count; i++)
         {
-            CharacterBundle enemy = SpawnCharacter(MazeLevelManager.EnemyCharacterSpawnpoints[i].CharacterBlueprint, MazeLevelManager.EnemyCharacterSpawnpoints[i].GridLocation);
+            CharacterBundle enemy = SpawnCharacter(MazeLevelManager.Instance.EnemyCharacterSpawnpoints[i].CharacterBlueprint, MazeLevelManager.Instance.EnemyCharacterSpawnpoints[i].GridLocation);
             enemy.CharacterGO.name = "The Enemy";
         }
     }
@@ -130,6 +130,28 @@ public class CharacterManager : MonoBehaviourPunCallbacks
         //Logger.Log("{0} was on {1},{2}", characterGO.name, characterGO.transform.position.x, characterGO.transform.position.y);
         characterGO.transform.position = new Vector3(gridVectorLocation.x + GridLocation.OffsetToTileMiddle, gridVectorLocation.y + GridLocation.OffsetToTileMiddle);
         //Logger.Log("{0} will be reset to {1},{2}", characterGO.name, characterGO.transform.position.x, characterGO.transform.position.y);
+    }
+
+    public void CharacterExit(PlayerCharacter player)
+    {
+        //For now just hide and freeze character, later play animation etc.
+        player.ReachExit();
+
+        // Check if all players are gone. If so, the level is completed;
+
+        int exitedCharacters = 0;
+        for (int i = 0; i < MazePlayers.Count; i++)
+        {
+            PlayerCharacter p = MazePlayers[i];
+
+            if(p.HasReachedExit)
+                exitedCharacters++;
+        }
+
+        if(exitedCharacters == MazePlayers.Count)
+        {
+            Logger.Warning("The level is completed!");
+        }
     }
 
     public string GetPrefabNameByCharacter(CharacterBlueprint character)

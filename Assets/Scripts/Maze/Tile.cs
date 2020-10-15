@@ -7,6 +7,7 @@ public class Tile : MonoBehaviour
     public SpriteRenderer PlayerMark;
 
     public bool Walkable = true; // TODO Automatically set value in Maze Level Editor
+    public bool Markable = true;
     public GridLocation GridLocation;
 
     public void Awake()
@@ -14,6 +15,7 @@ public class Tile : MonoBehaviour
         if (SpriteRenderer == null)
             Logger.Error(Logger.Initialisation, "Could not find sprite renderer on tile prefab");
 
+        if (transform.position.y < 0) Logger.Error("There is a tile at {0},{1}. Tiles cannot have negative Y values", transform.position.x, transform.position.y);
         Sprite = SpriteRenderer.sprite;
 
         GridLocation = GridLocation.VectorToGrid(transform.position);
@@ -24,7 +26,21 @@ public class Tile : MonoBehaviour
     {
         if (!Walkable)
         {
+            Markable = false;
             MazeLevelManager.Instance.Level.AddUnwalkableTile(this);
+        } else
+        {
+            if (!Markable) return;
+
+            if (MazeLevelManager.Instance.Level.NumberOfUnmarkedTiles == -1)
+            {
+                MazeLevelManager.Instance.Level.NumberOfUnmarkedTiles = 1;
+            }
+            else
+            {
+                MazeLevelManager.Instance.Level.NumberOfUnmarkedTiles++;
+            }
+            Logger.Log("NumberOfUnmarkedTiles: " + MazeLevelManager.Instance.Level.NumberOfUnmarkedTiles);
         }
     }
 
@@ -32,11 +48,14 @@ public class Tile : MonoBehaviour
     {
         if (!Walkable) return;
 
+
         PlayerCharacter player = collision.gameObject.GetComponent<PlayerCharacter>();
         if (player != null)
         {
             //Logger.Log("{0} entered tile {1},{2}", player.name, GridLocation.X, GridLocation.Y);
             if (PlayerMark.sprite != null) return;
+
+            if (!Markable) return;
 
             MazeLevelManager.Instance.SetTileMarker(this, player);        
         }

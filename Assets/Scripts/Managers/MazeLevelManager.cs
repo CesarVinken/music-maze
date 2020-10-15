@@ -9,8 +9,8 @@ public class MazeLevelManager : MonoBehaviour, IOnEventCallback
     public static MazeLevelManager Instance;
     public MazeLevel Level;
 
-    public static List<CharacterSpawnpoint> PlayerCharacterSpawnpoints = new List<CharacterSpawnpoint>();
-    public static List<CharacterSpawnpoint> EnemyCharacterSpawnpoints = new List<CharacterSpawnpoint>();
+    public List<CharacterSpawnpoint> PlayerCharacterSpawnpoints = new List<CharacterSpawnpoint>();
+    public List<CharacterSpawnpoint> EnemyCharacterSpawnpoints = new List<CharacterSpawnpoint>();
 
     public void Awake()
     {
@@ -67,6 +67,15 @@ public class MazeLevelManager : MonoBehaviour, IOnEventCallback
             //MazeLevelManager.Instance.SetTileMarker(this, player.PlayerNumber);
             //_photonView.RPC("CaughtByEnemy", RpcTarget.All);
         }
+
+        Level.NumberOfUnmarkedTiles--;
+        Logger.Log("{0} unmarked tiles left", Level.NumberOfUnmarkedTiles);
+
+        if(Level.NumberOfUnmarkedTiles == 0)
+        {
+            OpenExit();
+            Logger.Warning("Open exit!");
+        }
     }
 
     public void OnEvent(EventData photonEvent)
@@ -106,6 +115,16 @@ public class MazeLevelManager : MonoBehaviour, IOnEventCallback
         else if (playerStartLocations > 2)
         {
             Logger.Warning(Logger.Initialisation, "The level {0} has {1} player starting positions set up. There should be 2 positions.", Level.MazeName, playerStartLocations);
+        }
+    }
+
+    public void OpenExit()
+    {
+        for (int i = 0; i < Level.MazeExits.Count; i++)
+        {
+            MazeExit exit = Level.MazeExits[i];
+            exit.OpenExit();
+            // open exit
         }
     }
 }

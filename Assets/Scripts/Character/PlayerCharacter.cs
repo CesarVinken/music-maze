@@ -9,6 +9,7 @@ public class PlayerCharacter : Character
     public int PlayerNoInGame = 1;  // in multiplayer on multiple computers there can be a player 1 and player 2, while both use their Player1 keyboard input
     public PlayerNumber PlayerNumber = PlayerNumber.Player1;
     public bool HasCalculatedPath = false;
+    public bool HasReachedExit = false;
     public Tile LastTile;
 
     private Vector2 _mobileFingerDownPosition;
@@ -72,7 +73,7 @@ public class PlayerCharacter : Character
     {
         float freezeTime = 2.0f;
 
-        IEnumerator coroutine = this.FreezeCharacter(this, freezeTime);
+        IEnumerator coroutine = this.RespawnCharacter(this, freezeTime);
         StartCoroutine(coroutine);
     }
 
@@ -251,4 +252,13 @@ public class PlayerCharacter : Character
         if (!_animationHandler.InLocomotion)
             _animationHandler.SetLocomotion(true);
     }
+
+    public void ReachExit()
+    {
+        IsFrozen = true;
+        HasReachedExit = true;
+
+        CharacterBody.SetActive(false);
+    }
+
 }

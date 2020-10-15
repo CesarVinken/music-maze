@@ -116,7 +116,7 @@ public class Character : MonoBehaviour
 
     public virtual void ReachLocomotionTarget() { }
 
-    public IEnumerator FreezeCharacter(Character character, float freezeTime)
+    public IEnumerator RespawnCharacter(Character character, float freezeTime)
     {
         character.IsFrozen = true;
         CharacterBody.SetActive(false); // TODO make character animation for appearing and disappearing of character, rather than turning the GO off and on
