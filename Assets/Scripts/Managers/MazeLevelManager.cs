@@ -58,23 +58,13 @@ public class MazeLevelManager : MonoBehaviour, IOnEventCallback
             {
                 tile.PlayerMark.sprite = MainCanvas.Instance.Player2TileMarker;
             }
+
+            HandleNumberOfUnmarkedTiles();
         }
         else
         {
-            //Add check: only if there is no mark yet.
             PlayerMarksTileEvent playerMarksTileEvent = new PlayerMarksTileEvent();
             playerMarksTileEvent.SendPlayerMarksTileEvent(tile.GridLocation, player);
-            //MazeLevelManager.Instance.SetTileMarker(this, player.PlayerNumber);
-            //_photonView.RPC("CaughtByEnemy", RpcTarget.All);
-        }
-
-        Level.NumberOfUnmarkedTiles--;
-        Logger.Log("{0} unmarked tiles left", Level.NumberOfUnmarkedTiles);
-
-        if(Level.NumberOfUnmarkedTiles == 0)
-        {
-            OpenExit();
-            Logger.Warning("Open exit!");
         }
     }
 
@@ -86,7 +76,6 @@ public class MazeLevelManager : MonoBehaviour, IOnEventCallback
             object[] data = (object[])photonEvent.CustomData;
             GridLocation tileLocation = new GridLocation((int)data[0], (int)data[1]);
             PlayerNumber playerNumber = (PlayerNumber)data[2];
-            Logger.Log("Mark tile at {0},{1} for player {2}", tileLocation.X, tileLocation.Y, playerNumber);
 
             Tile tile = Level.TilesByLocation[tileLocation]; // add check
 
@@ -98,6 +87,8 @@ public class MazeLevelManager : MonoBehaviour, IOnEventCallback
             {
                 tile.PlayerMark.sprite = MainCanvas.Instance.Player2TileMarker;
             }
+
+            HandleNumberOfUnmarkedTiles();
         }
     }
 
@@ -125,6 +116,18 @@ public class MazeLevelManager : MonoBehaviour, IOnEventCallback
             MazeExit exit = Level.MazeExits[i];
             exit.OpenExit();
             // open exit
+        }
+    }
+
+    private void HandleNumberOfUnmarkedTiles()
+    {
+        Level.NumberOfUnmarkedTiles--;
+        Logger.Log("{0} unmarked tiles left", Level.NumberOfUnmarkedTiles);
+
+        if (Level.NumberOfUnmarkedTiles == 0)
+        {
+            OpenExit();
+            Logger.Warning("Open exit!");
         }
     }
 }

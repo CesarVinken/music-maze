@@ -23,7 +23,7 @@ public class Character : MonoBehaviour
     [SerializeField] protected CharacterAnimationHandler _animationHandler;
     [SerializeField] protected CharacterPath _characterPath;
     [SerializeField] protected Seeker _seeker;
-    [SerializeField] protected PhotonView _photonView;
+    public PhotonView PhotonView;
 
     public GameObject CharacterBody;
 

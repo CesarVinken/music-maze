@@ -22,19 +22,19 @@ public class PlayerCharacter : Character
 
         base.Awake();
 
-        gameObject.name = _photonView.Owner == null ? "Player 1" : _photonView.Owner?.NickName;
+        gameObject.name = PhotonView.Owner == null ? "Player 1" : PhotonView.Owner?.NickName;
 
         if(GameManager.Instance.GameType == GameType.Multiplayer)
         {
             if(PhotonNetwork.IsMasterClient)
             {
-                if (_photonView.IsMine)
+                if (PhotonView.IsMine)
                     PlayerNumber = PlayerNumber.Player1;
                 else
                     PlayerNumber = PlayerNumber.Player2;
             } else
             {
-                if (_photonView.IsMine)
+                if (PhotonView.IsMine)
                     PlayerNumber = PlayerNumber.Player2;
                 else
                     PlayerNumber = PlayerNumber.Player1;
@@ -45,7 +45,7 @@ public class PlayerCharacter : Character
     public void Start()
     {
         if (GameManager.Instance.GameType == GameType.SinglePlayer
-            || _photonView.IsMine)
+            || PhotonView.IsMine)
         {
             _selectionIndicatorGO = Instantiate(_selectionIndicatorPrefab, SceneObjectManager.Instance.CharactersGO);
             _selectionIndicatorGO.GetComponent<SelectionIndicator>().SelectedObject = transform;
@@ -63,7 +63,7 @@ public class PlayerCharacter : Character
             }
             else
             {
-                _photonView.RPC("CaughtByEnemy", RpcTarget.All);
+                PhotonView.RPC("CaughtByEnemy", RpcTarget.All);
             }
         }
     }
@@ -85,7 +85,7 @@ public class PlayerCharacter : Character
             return;
 
         if (GameManager.Instance.GameType == GameType.SinglePlayer
-            || _photonView.IsMine)
+            || PhotonView.IsMine)
         {
             if (GameManager.Instance.CurrentPlatform == Platform.PC)
                 CheckKeyboardInput();

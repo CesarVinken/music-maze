@@ -12,7 +12,7 @@ public class EnemyCharacter : Character
 
         if (!HasCalculatedTarget &&
             (GameManager.Instance.GameType == GameType.SinglePlayer
-            || _photonView.IsMine))
+            || PhotonView.IsMine))
         {
             SetRandomTarget();
         }

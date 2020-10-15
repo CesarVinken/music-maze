@@ -40,7 +40,6 @@ public class Tile : MonoBehaviour
             {
                 MazeLevelManager.Instance.Level.NumberOfUnmarkedTiles++;
             }
-            Logger.Log("NumberOfUnmarkedTiles: " + MazeLevelManager.Instance.Level.NumberOfUnmarkedTiles);
         }
     }
 
@@ -57,6 +56,7 @@ public class Tile : MonoBehaviour
 
             if (!Markable) return;
 
+            if (!player.PhotonView.IsMine) return;
             MazeLevelManager.Instance.SetTileMarker(this, player);        
         }
     }

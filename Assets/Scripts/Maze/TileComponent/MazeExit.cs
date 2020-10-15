@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class MazeExit : MonoBehaviour
 {
@@ -38,8 +36,6 @@ public class MazeExit : MonoBehaviour
 
     public void OnCollisionEnter2D(Collision2D collision)
     {
-        //if (!Walkable) return;
-        Logger.Log("A COLLISION ENTERED EXIT");
         PlayerCharacter player = collision.gameObject.GetComponent<PlayerCharacter>();
         if (player != null)
         {
