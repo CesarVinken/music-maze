@@ -56,7 +56,7 @@ public class Tile : MonoBehaviour
 
             if (!Markable) return;
 
-            if (!player.PhotonView.IsMine) return;
+            if (GameManager.Instance.GameType == GameType.Multiplayer && !player.PhotonView.IsMine) return;
             MazeLevelManager.Instance.SetTileMarker(this, player);        
         }
     }
