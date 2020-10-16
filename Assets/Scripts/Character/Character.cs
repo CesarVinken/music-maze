@@ -1,7 +1,5 @@
-﻿using ExitGames.Client.Photon;
-using Pathfinding;
+﻿using Pathfinding;
 using Photon.Pun;
-using Photon.Realtime;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;

@@ -71,7 +71,7 @@ public class GameManager : MonoBehaviourPunCallbacks
         //}
         
         CharacterManager.Instance.SpawnCharacters();
-
+        CameraController.Instance.FocusOnPlayer();
     }
 
     public void Update()
