@@ -110,7 +110,7 @@ public class PlayerCharacter : Character
             if (Input.GetMouseButtonDown(0))
             {
                 Vector2 target = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-                SetPointerLocomotinTarget(target);
+                SetPointerLocomotionTarget(target);
             }
         }
         else if (Input.touchCount > 0)
@@ -127,7 +127,7 @@ public class PlayerCharacter : Character
                 if ((releaseDistance.x < 12 && releaseDistance.x > -12) && (releaseDistance.y < 12 && releaseDistance.y > -12))  // tapping start position is roughly the same as the release position
                 {
                     Vector2 target = Camera.main.ScreenToWorldPoint(touch.position);
-                    SetPointerLocomotinTarget(target);
+                    SetPointerLocomotionTarget(target);
                 }
                 else
                 {
@@ -137,7 +137,7 @@ public class PlayerCharacter : Character
         }
     }
 
-    private void SetPointerLocomotinTarget(Vector2 target)
+    private void SetPointerLocomotionTarget(Vector2 target)
     {
         GridLocation targetGridLocation = GridLocation.FindClosestGridTile(target);
         //Logger.Log("The closest grid tile is {0},{1}", targetGridLocation.X, targetGridLocation.Y);
@@ -207,6 +207,8 @@ public class PlayerCharacter : Character
 
     public void TryStartCharacterMovement(ObjectDirection direction)
     {
+        Logger.Log("TryStartCharacterMovement to {0}", direction);
+
         // check if character is in tile position, if so, start movement in direction.
         if (HasCalculatedTarget)
         {

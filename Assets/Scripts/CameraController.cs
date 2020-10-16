@@ -19,12 +19,13 @@ public class CameraController : MonoBehaviour
     public bool FocussedOnPlayer = false;
     public static Dictionary<Direction, float> PanLimits = new Dictionary<Direction, float>
     {
-        { Direction.Up, 40f },
-        { Direction.Right, 40f },
-        { Direction.Down, -40f },
-        { Direction.Left, -40f },
+        { Direction.Up, 6f }, // should depend on the furthest upper edge of the maze level. Should always be => 4
+        { Direction.Right, 12f }, // should depend on the furthest right edge of the maze level Should always be => 8
+        { Direction.Down, 4f }, // should (with this zoom level) always have 4 as lowest boundary down. Never less than 4.
+        { Direction.Left, 8f }, // should (with this zoom level) always have 8 as the left most boundary. Never less than 8.
     };
     [SerializeField] private Camera _camera;
+    private Transform _player;
 
     public void Awake()
     {
@@ -45,25 +46,23 @@ public class CameraController : MonoBehaviour
             Logger.Error("Could not find player character on client");
         }
 
-        transform.position = new Vector3(player.transform.position.x, player.transform.position.y, -10f);
-    }
-
-    public void Start()
-    {
-        Logger.Log("maze players {0}", CharacterManager.Instance.MazePlayers.Count);
-
+        _player = player.transform;
+        transform.position = new Vector3(_player.position.x, _player.position.y, -10f);
     }
 
     void Update()
     {
         if (!FocussedOnPlayer) return;
 
-        //Vector2 position = new Vector2(transform.position.x, transform.position.y);
+        Vector2 position = new Vector2(transform.position.x, transform.position.y);
 
-        //// binding to the limits of the map
-        //position.x = Mathf.Clamp(position.x, PanLimits[Direction.Left], PanLimits[Direction.Right]);
-        //position.y = Mathf.Clamp(position.y, PanLimits[Direction.Down], PanLimits[Direction.Up]);
+        position.x = _player.position.x;
+        position.y = _player.position.y;
 
-        //transform.position = new Vector3(position.x, position.y, transform.position.z);
+        // binding to the limits of the map
+        position.x = Mathf.Clamp(position.x, PanLimits[Direction.Left], PanLimits[Direction.Right]);
+        position.y = Mathf.Clamp(position.y, PanLimits[Direction.Down], PanLimits[Direction.Up]);
+
+        transform.position = new Vector3(position.x, position.y, transform.position.z);
     }
 }
