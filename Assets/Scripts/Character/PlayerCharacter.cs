@@ -207,8 +207,6 @@ public class PlayerCharacter : Character
 
     public void TryStartCharacterMovement(ObjectDirection direction)
     {
-        Logger.Log("TryStartCharacterMovement to {0}", direction);
-
         // check if character is in tile position, if so, start movement in direction.
         if (HasCalculatedTarget)
         {

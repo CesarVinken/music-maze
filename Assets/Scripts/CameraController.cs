@@ -25,14 +25,26 @@ public class CameraController : MonoBehaviour
         { Direction.Left, 8f }, // should (with this zoom level) always have 8 as the left most boundary. Never less than 8.
     };
     [SerializeField] private Camera _camera;
-    private Transform _player;
+    [SerializeField] private Transform _player;
+    [SerializeField] private Transform _substitudeMiddlePoint;
+
+    private float _maxXPercentageBoundary = 70f;
+    private float _maxYPercentageBoundary = 70f;
+    private Vector2 _cameraBoundsOffset; // with this offset the camera is calculated when player is past the edge margin by calculating cameraPosition = _player.position - offset. 
 
     public void Awake()
     {
         Instance = this;
-        
+
         if (_camera == null)
             Logger.Error(Logger.Initialisation, "Could not find main camera");
+        if (_substitudeMiddlePoint == null)
+            Logger.Error(Logger.Initialisation, "Could not find substitudeMiddlePoint");
+
+        _cameraBoundsOffset = _camera.ScreenToWorldPoint(new Vector3(
+            Screen.width - (Screen.width * (1 - _maxXPercentageBoundary / 100f)),
+            Screen.height - (Screen.height * (1 - _maxYPercentageBoundary / 100f)),
+            0));
     }
 
     public void FocusOnPlayer()
@@ -54,15 +66,35 @@ public class CameraController : MonoBehaviour
     {
         if (!FocussedOnPlayer) return;
 
-        Vector2 position = new Vector2(transform.position.x, transform.position.y);
+        Vector2 cameraPosition = new Vector2(transform.position.x, transform.position.y);
 
-        position.x = _player.position.x;
-        position.y = _player.position.y;
+        // Check if the player has walked to far to the edge. If so, compensate by following the player in that direction with the camera.
+        Vector3 playerWorldToScreenPos = _camera.WorldToScreenPoint(_player.position);
+        float playerWidthPercentagePosOnScreen = (playerWorldToScreenPos.x / Screen.width) * 100f;
+        float playerHeightPercentagePosOnScreen = (playerWorldToScreenPos.y / Screen.height) * 100f;
+
+        if (playerWidthPercentagePosOnScreen >= _maxXPercentageBoundary)
+        {
+            cameraPosition.x = _player.position.x - _cameraBoundsOffset.x;
+        }
+        else if (playerWidthPercentagePosOnScreen <= 100 - _maxXPercentageBoundary)
+        {
+            cameraPosition.x = _player.position.x + _cameraBoundsOffset.x;
+        }
+
+        if (playerHeightPercentagePosOnScreen >= _maxYPercentageBoundary)
+        {
+            cameraPosition.y = _player.position.y - _cameraBoundsOffset.y;
+        }
+        else if (playerHeightPercentagePosOnScreen <= 100 - _maxYPercentageBoundary)
+        {
+            cameraPosition.y = _player.position.y + _cameraBoundsOffset.y;
+        }
 
         // binding to the limits of the map
-        position.x = Mathf.Clamp(position.x, PanLimits[Direction.Left], PanLimits[Direction.Right]);
-        position.y = Mathf.Clamp(position.y, PanLimits[Direction.Down], PanLimits[Direction.Up]);
+        cameraPosition.x = Mathf.Clamp(cameraPosition.x, PanLimits[Direction.Left], PanLimits[Direction.Right]);
+        cameraPosition.y = Mathf.Clamp(cameraPosition.y, PanLimits[Direction.Down], PanLimits[Direction.Up]);
 
-        transform.position = new Vector3(position.x, position.y, transform.position.z);
+        transform.position = new Vector3(cameraPosition.x, cameraPosition.y, transform.position.z);
     }
 }
