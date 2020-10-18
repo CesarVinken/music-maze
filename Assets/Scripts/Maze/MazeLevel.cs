@@ -13,6 +13,8 @@ public class MazeLevel
 
     public MazeName MazeName;
 
+    public GridLocation LevelBounds = new GridLocation(0, 0);
+
 
     public MazeLevel(MazeName mazeName)
     {
@@ -45,7 +47,12 @@ public class MazeLevel
         for (int i = 0; i < Tiles.Count; i++)
         {
             Tile tile = Tiles[i];
-            TilesByLocation.Add(new GridLocation(tile.GridLocation.X, tile.GridLocation.Y), tile);
+            GridLocation gridLocation = new GridLocation(tile.GridLocation.X, tile.GridLocation.Y);
+            TilesByLocation.Add(gridLocation, tile);
+
+            GridLocation furthestBounds = LevelBounds;
+            if (gridLocation.X > furthestBounds.X) LevelBounds.X = gridLocation.X;
+            if (gridLocation.Y > furthestBounds.Y) LevelBounds.Y = gridLocation.Y;
         }
     }
 

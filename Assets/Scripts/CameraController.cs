@@ -19,15 +19,12 @@ public class CameraController : MonoBehaviour
     public bool FocussedOnPlayer = false;
     public static Dictionary<Direction, float> PanLimits = new Dictionary<Direction, float>
     {
-        { Direction.Up, 6f }, // should depend on the furthest upper edge of the maze level. Should always be => 4
-        { Direction.Right, 12f }, // should depend on the furthest right edge of the maze level Should always be => 8
-        { Direction.Down, 4f }, // should (with this zoom level) always have 4 as lowest boundary down. Never less than 4.
-        { Direction.Left, 8f }, // should (with this zoom level) always have 8 as the left most boundary. Never less than 8.
+
     };
     [SerializeField] private Camera _camera;
     [SerializeField] private Transform _player;
     [SerializeField] private Transform _substitudeMiddlePoint;
-
+    
     private float _maxXPercentageBoundary = 70f;
     private float _maxYPercentageBoundary = 70f;
     private Vector2 _cameraBoundsOffset; // with this offset the camera is calculated when player is past the edge margin by calculating cameraPosition = _player.position - offset. 
@@ -45,6 +42,22 @@ public class CameraController : MonoBehaviour
             Screen.width - (Screen.width * (1 - _maxXPercentageBoundary / 100f)),
             Screen.height - (Screen.height * (1 - _maxYPercentageBoundary / 100f)),
             0));
+    }
+
+    public void Start()
+    {
+        SetPanLimits();
+    }
+
+    private void SetPanLimits()
+    {
+        PanLimits.Add(Direction.Up, MazeLevelManager.Instance.Level.LevelBounds.Y - 4f);  // should depend on the furthest upper edge of the maze level.Never less than 4.
+        PanLimits.Add(Direction.Right, MazeLevelManager.Instance.Level.LevelBounds.X - 7f);// should depend on the furthest right edge of the maze level  Never less than 8.
+        PanLimits.Add(Direction.Down, 4f); // should (with this zoom level) always have 4 as lowest boundary down. Should always be => 4
+        PanLimits.Add(Direction.Left, 8f); // should (with this zoom level) always have 8 as the left most boundary. Should always be => 8
+
+        if (MazeLevelManager.Instance.Level.LevelBounds.Y < 4) PanLimits[Direction.Up] = 4f;
+        if (MazeLevelManager.Instance.Level.LevelBounds.Y < 4) PanLimits[Direction.Right] = 8f;
     }
 
     public void FocusOnPlayer()
