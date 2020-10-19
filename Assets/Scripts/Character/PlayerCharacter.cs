@@ -11,6 +11,7 @@ public class PlayerCharacter : Character
     public bool HasCalculatedPath = false;
     public bool HasReachedExit = false;
     public Tile LastTile;
+    private PathDrawer _pathDrawer;
 
     private Vector2 _mobileFingerDownPosition;
     [SerializeField] private GameObject _selectionIndicatorPrefab = null;
@@ -49,6 +50,8 @@ public class PlayerCharacter : Character
         {
             _selectionIndicatorGO = Instantiate(_selectionIndicatorPrefab, SceneObjectManager.Instance.CharactersGO);
             _selectionIndicatorGO.GetComponent<SelectionIndicator>().SelectedObject = transform;
+
+            _pathDrawer = CameraController.Instance.PathDrawer;
         }
     }
 
@@ -90,6 +93,8 @@ public class PlayerCharacter : Character
             if (GameManager.Instance.CurrentPlatform == Platform.PC)
                 CheckKeyboardInput();
 
+            // To be replaced with pathdrawing system.
+            //CheckPointerInputOld();
             CheckPointerInput();
 
             if (HasCalculatedTarget)
@@ -104,6 +109,20 @@ public class PlayerCharacter : Character
     }
 
     private void CheckPointerInput()
+    {
+        if (Input.GetMouseButtonDown(0))
+        {
+            _pathDrawer.enabled = true;
+
+        }
+
+        if (Input.GetMouseButtonUp(0))
+        {
+            _pathDrawer.enabled = false;
+        }
+    }
+
+    private void CheckPointerInputOld()
     {
         if (GameManager.Instance.CurrentPlatform == Platform.PC)
         {

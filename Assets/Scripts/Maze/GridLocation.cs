@@ -55,4 +55,28 @@ public struct GridLocation
 
         return new GridLocation((int)gridX, (int)gridY);
     }
+
+    public static bool IsOneLeft(GridLocation newLocation, GridLocation oldLocation)
+    {
+        if (newLocation.X == oldLocation.X - 1 && newLocation.Y == oldLocation.Y) return true;
+        return false;
+    }
+
+    public static bool IsOneRight(GridLocation newLocation, GridLocation oldLocation)
+    {
+        if (newLocation.X == oldLocation.X + 1 && newLocation.Y == oldLocation.Y) return true;
+        return false;
+    }
+
+    public static bool IsOneAbove(GridLocation newLocation, GridLocation oldLocation)
+    {
+        if (newLocation.X == oldLocation.X && newLocation.Y == oldLocation.Y + 1) return true;
+        return false;
+    }
+
+    public static bool IsOneUnder(GridLocation newLocation, GridLocation oldLocation)
+    {
+        if (newLocation.X == oldLocation.X && newLocation.Y == oldLocation.Y - 1) return true;
+        return false;
+    }
 }

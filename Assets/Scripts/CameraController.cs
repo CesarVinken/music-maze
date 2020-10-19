@@ -15,6 +15,9 @@ public class CameraController : MonoBehaviour
 {
     public static CameraController Instance;
 
+    public GameObject PathDrawerGO;
+    public PathDrawer PathDrawer;
+
     private float _panSpeed;
     public bool FocussedOnPlayer = false;
     public static Dictionary<Direction, float> PanLimits = new Dictionary<Direction, float>
@@ -23,7 +26,6 @@ public class CameraController : MonoBehaviour
     };
     [SerializeField] private Camera _camera;
     [SerializeField] private Transform _player;
-    [SerializeField] private Transform _substitudeMiddlePoint;
     
     private float _maxXPercentageBoundary = 70f;
     private float _maxYPercentageBoundary = 70f;
@@ -35,8 +37,10 @@ public class CameraController : MonoBehaviour
 
         if (_camera == null)
             Logger.Error(Logger.Initialisation, "Could not find main camera");
-        if (_substitudeMiddlePoint == null)
-            Logger.Error(Logger.Initialisation, "Could not find substitudeMiddlePoint");
+        if (PathDrawer == null)
+            Logger.Error(Logger.Initialisation, "Could not find PathDrawer");
+
+        Guard.CheckIsNull(PathDrawerGO, "PathDrawerGO");
 
         _cameraBoundsOffset = _camera.ScreenToWorldPoint(new Vector3(
             Screen.width - (Screen.width * (1 - _maxXPercentageBoundary / 100f)),
@@ -51,6 +55,7 @@ public class CameraController : MonoBehaviour
 
     private void SetPanLimits()
     {
+        //TODO. the - .. value is currently hardcoded but would not work with different screen sizes or zoom levels
         PanLimits.Add(Direction.Up, MazeLevelManager.Instance.Level.LevelBounds.Y - 4f);  // should depend on the furthest upper edge of the maze level.Never less than 4.
         PanLimits.Add(Direction.Right, MazeLevelManager.Instance.Level.LevelBounds.X - 7f);// should depend on the furthest right edge of the maze level  Never less than 8.
         PanLimits.Add(Direction.Down, 4f); // should (with this zoom level) always have 4 as lowest boundary down. Should always be => 4
