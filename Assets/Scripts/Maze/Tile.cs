@@ -54,9 +54,12 @@ public class Tile : MonoBehaviour
             //Logger.Log("{0} entered tile {1},{2}", player.name, GridLocation.X, GridLocation.Y);
             if (PlayerMark.sprite != null) return;
 
-            if (!Markable) return;
 
             if (GameManager.Instance.GameType == GameType.Multiplayer && !player.PhotonView.IsMine) return;
+            player.CurrentGridLocation = GridLocation;
+
+            if (!Markable) return;
+
             MazeLevelManager.Instance.SetTileMarker(this, player);        
         }
     }

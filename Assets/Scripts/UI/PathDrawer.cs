@@ -9,6 +9,8 @@ public class PathDrawer : MonoBehaviour
     [SerializeField] private SpriteRenderer _currentTileSpriteRenderer;
     [SerializeField] private GameObject _currentTileSpriteGO;
 
+    public bool IsDrawingPath = false;
+
     private GridLocation _selectedGridLocation;
 
     public void Awake()
@@ -29,6 +31,7 @@ public class PathDrawer : MonoBehaviour
 
     public void OnEnable()
     {
+        IsDrawingPath = true;
         Logger.Log("PathDrawer enabled");
         _fingerPositions.Clear();
         _lineRenderer.positionCount = 0;
@@ -46,6 +49,8 @@ public class PathDrawer : MonoBehaviour
         Logger.Log("PathDrawer disabled");
         _fingerPositions.Clear();
         _lineRenderer.positionCount = 0;
+
+        IsDrawingPath = false;
     }
 
     public void Update()

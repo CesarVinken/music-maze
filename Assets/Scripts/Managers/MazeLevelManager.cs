@@ -122,12 +122,12 @@ public class MazeLevelManager : MonoBehaviour, IOnEventCallback
     private void HandleNumberOfUnmarkedTiles()
     {
         Level.NumberOfUnmarkedTiles--;
-        Logger.Log("{0} unmarked tiles left", Level.NumberOfUnmarkedTiles);
+        Logger.Log(Logger.Level, ,"{0} unmarked tiles left", Level.NumberOfUnmarkedTiles);
 
         if (Level.NumberOfUnmarkedTiles == 0)
         {
             OpenExit();
-            Logger.Warning("Open exit!");
+            Logger.Warning(Logger.Level, "Open exit!");
         }
     }
 }

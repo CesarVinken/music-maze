@@ -86,8 +86,8 @@ public class GameManager : MonoBehaviourPunCallbacks
     {
         Logger.General.enableLogs = true;
         Logger.Time.enableLogs = false;
+        Logger.Level.enableLogs = false;
         Logger.Locomotion.enableLogs = false;
-        Logger.Building.enableLogs = true;
         Logger.Pathfinding.enableLogs = false;
         Logger.Initialisation.enableLogs = true;
         Logger.Character.enableLogs = false;

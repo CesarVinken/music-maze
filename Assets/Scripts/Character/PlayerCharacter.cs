@@ -17,6 +17,8 @@ public class PlayerCharacter : Character
     [SerializeField] private GameObject _selectionIndicatorPrefab = null;
     [SerializeField] private GameObject _selectionIndicatorGO = null;
 
+    public GridLocation CurrentGridLocation;
+
     public void Awake()
     {
         Guard.CheckIsNull(_selectionIndicatorPrefab, "Could not find _selectionIndicatorPrefab");
@@ -112,11 +114,16 @@ public class PlayerCharacter : Character
     {
         if (Input.GetMouseButtonDown(0))
         {
-            _pathDrawer.enabled = true;
+            Vector2 tempFingerPosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+            GridLocation tempGridLocation = GridLocation.FindClosestGridTile(tempFingerPosition);
 
+            if(tempGridLocation.X == CurrentGridLocation.X && tempGridLocation.Y == CurrentGridLocation.Y)
+            {
+                _pathDrawer.enabled = true;
+            }
         }
 
-        if (Input.GetMouseButtonUp(0))
+        if (_pathDrawer.IsDrawingPath && Input.GetMouseButtonUp(0))
         {
             _pathDrawer.enabled = false;
         }
