@@ -133,7 +133,7 @@ public class Character : MonoBehaviour
         HasCalculatedTarget = hasCalculatedTarget;
     }
 
-    public void ReachTarget()
+    public virtual void ReachTarget()
     {
         SetHasCalculatedTarget(false);
         _animationHandler.SetLocomotion(false);

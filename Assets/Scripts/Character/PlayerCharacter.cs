@@ -2,6 +2,8 @@
 using Photon.Pun;
 using Pathfinding;
 using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
 
 public class PlayerCharacter : Character
 {
@@ -18,6 +20,7 @@ public class PlayerCharacter : Character
     [SerializeField] private GameObject _selectionIndicatorGO = null;
 
     public GridLocation CurrentGridLocation;
+    private List<GridLocation> _drawnPath = new List<GridLocation>();
 
     public void Awake()
     {
@@ -125,7 +128,12 @@ public class PlayerCharacter : Character
 
         if (_pathDrawer.IsDrawingPath && Input.GetMouseButtonUp(0))
         {
+            _drawnPath = _pathDrawer.GetDrawnPath().ToList();
+            Logger.Log("retrieved path length i s {0}", _drawnPath.Count);
+
             _pathDrawer.enabled = false;
+            _drawnPath.RemoveAt(0);
+            SetPointerLocomotionTarget(GridLocation.GridToVector(_drawnPath[0]));
         }
     }
 
@@ -287,4 +295,29 @@ public class PlayerCharacter : Character
         CharacterBody.SetActive(false);
     }
 
+    public override void ReachTarget()
+    {
+        if(_drawnPath.Count < 1) // This happens when character was moved through keyboard
+        {
+            SetHasCalculatedTarget(false);
+            _animationHandler.SetLocomotion(false);
+            return;
+        }
+
+        _drawnPath.RemoveAt(0);
+        Logger.Log("_drawn path Count : {0} ", _drawnPath.Count);
+
+        // Reach the end of a drawn path
+        if (_drawnPath.Count == 0)
+        {
+            SetHasCalculatedTarget(false);
+            _animationHandler.SetLocomotion(false);
+            return;
+        }
+
+        SetPointerLocomotionTarget(GridLocation.GridToVector(_drawnPath[0]));
+
+        //SetHasCalculatedTarget(false);
+        //_animationHandler.SetLocomotion(false);
+    }
 }

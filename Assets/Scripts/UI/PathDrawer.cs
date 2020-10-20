@@ -1,5 +1,4 @@
-﻿
-using Boo.Lang;
+﻿using System.Collections.Generic;
 using UnityEngine;
 
 public class PathDrawer : MonoBehaviour
@@ -80,10 +79,11 @@ public class PathDrawer : MonoBehaviour
 
         _currentTileSpriteGO.transform.position = new Vector3(roundedTempGridLocation.x + GridLocation.OffsetToTileMiddle, roundedTempGridLocation.y + GridLocation.OffsetToTileMiddle, -8);
         _selectedGridLocation = tempGridLocation;
-
     }
-    public void UpdateLine()
+
+    private void UpdateLine()
     {
+        
         Vector2 tempFingerPosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
         GridLocation tempGridLocation = GridLocation.FindClosestGridTile(tempFingerPosition);
 
@@ -101,7 +101,8 @@ public class PathDrawer : MonoBehaviour
         Vector2 roundedTempGridLocation = GridLocation.GridToVector(tempGridLocation);
 
         // check if we are moving the pointer back on the path. In that case, remove the previous point from the path
-        if(_fingerPositions[_fingerPositions.Count - 2].X == tempGridLocation.X &&
+        if (_fingerPositions.Count > 1 && 
+            _fingerPositions[_fingerPositions.Count - 2].X == tempGridLocation.X &&
            _fingerPositions[_fingerPositions.Count - 2].Y == tempGridLocation.Y)
         {
             _fingerPositions.RemoveAt(_fingerPositions.Count - 1);
@@ -130,5 +131,10 @@ public class PathDrawer : MonoBehaviour
         if (GridLocation.IsOneRight(newLocation, oldLocation)) return true;
 
         return false;
+    }
+
+    public List<GridLocation> GetDrawnPath()
+    {
+        return _fingerPositions;
     }
 }

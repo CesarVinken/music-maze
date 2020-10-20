@@ -8,7 +8,7 @@ public static class Logger
     public static LogCategory Character = new LogCategory("Character");
     public static LogCategory Level = new LogCategory("Level");
     public static LogCategory Locomotion = new LogCategory("Locomotion");
-=    public static LogCategory Pathfinding = new LogCategory("Pathfinding");
+    public static LogCategory Pathfinding = new LogCategory("Pathfinding");
     public static LogCategory Initialisation = new LogCategory("Initialisation");
     public static LogCategory Datawriting = new LogCategory("Datawriting");
     public static LogCategory Datareading = new LogCategory("Datareading");
