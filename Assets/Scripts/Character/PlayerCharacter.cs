@@ -73,6 +73,8 @@ public class PlayerCharacter : Character
             {
                 PhotonView.RPC("CaughtByEnemy", RpcTarget.All);
             }
+
+            PathDrawer.DisablePathDrawer(_pathDrawer);
         }
     }
 
@@ -122,7 +124,7 @@ public class PlayerCharacter : Character
 
             if(tempGridLocation.X == CurrentGridLocation.X && tempGridLocation.Y == CurrentGridLocation.Y)
             {
-                _pathDrawer.enabled = true;
+                PathDrawer.EnablePathDrawer(_pathDrawer);
             }
         }
 
@@ -131,8 +133,12 @@ public class PlayerCharacter : Character
             _drawnPath = _pathDrawer.GetDrawnPath().ToList();
             Logger.Log("retrieved path length i s {0}", _drawnPath.Count);
 
-            _pathDrawer.enabled = false;
-            _drawnPath.RemoveAt(0);
+            PathDrawer.DisablePathDrawer(_pathDrawer);
+            if (_drawnPath.Count > 1)
+            {
+                _drawnPath.RemoveAt(0);
+            }
+
             SetPointerLocomotionTarget(GridLocation.GridToVector(_drawnPath[0]));
         }
     }
@@ -295,6 +301,18 @@ public class PlayerCharacter : Character
         CharacterBody.SetActive(false);
     }
 
+    public void UpdateCurrentGridLocation(GridLocation gridLocation)
+    {
+        CurrentGridLocation = gridLocation;
+
+        //Update the drawn path because it may be influenced by the new grid location.
+        //if(_drawnPath.Count > 1)
+        //{
+        if(_pathDrawer && _pathDrawer.isActiveAndEnabled)
+            _pathDrawer.PlayerCurrentGridLocationUpdated(gridLocation);
+        //}
+    }
+
     public override void ReachTarget()
     {
         if(_drawnPath.Count < 1) // This happens when character was moved through keyboard
@@ -315,7 +333,9 @@ public class PlayerCharacter : Character
             return;
         }
 
+        // We are in a drawn path
         SetPointerLocomotionTarget(GridLocation.GridToVector(_drawnPath[0]));
+
 
         //SetHasCalculatedTarget(false);
         //_animationHandler.SetLocomotion(false);

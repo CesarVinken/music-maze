@@ -53,7 +53,8 @@ public class Tile : MonoBehaviour
         {
             //Logger.Log("{0} entered tile {1},{2}", player.name, GridLocation.X, GridLocation.Y);
             if (GameManager.Instance.GameType == GameType.Multiplayer && !player.PhotonView.IsMine) return;
-            player.CurrentGridLocation = GridLocation;
+
+            player.UpdateCurrentGridLocation(GridLocation);
             
             if (PlayerMark.sprite != null) return;
 
