@@ -1,6 +1,5 @@
 ﻿using Photon.Pun;
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -18,7 +17,7 @@ public class EnemyCharacter : Character
         }
         else
         {
-            MoveCharacter();
+            //MoveCharacter();
         }
     }
 
@@ -29,7 +28,7 @@ public class EnemyCharacter : Character
         _seeker.StartPath(transform.position, randomGridVectorLocation, _characterPath.OnPathCalculated);
     }
 
-    public override void ReachLocomotionTarget()
+    public override void ReachTarget()
     {
         //Logger.Log("enemy reached target");
 

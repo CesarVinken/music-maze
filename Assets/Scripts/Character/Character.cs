@@ -17,9 +17,11 @@ public class Character : MonoBehaviour
 
     protected bool IsFrozen = false;
     protected bool HasCalculatedTarget = false;
+    protected bool IsMoving = false;
+    public bool IsCalculatingPath = false;
 
     [SerializeField] protected CharacterAnimationHandler _animationHandler;
-    [SerializeField] protected CharacterPath _characterPath;
+    [SerializeField] public CharacterPath _characterPath;   // change back to protected
     [SerializeField] protected Seeker _seeker;
     public PhotonView PhotonView;
 
@@ -102,17 +104,14 @@ public class Character : MonoBehaviour
 
     public bool ValidateTarget(GridLocation targetGridLocation)
     {
-        if (MazeLevelManager.Instance.Level.TilesByLocation.ContainsKey(targetGridLocation))
+        if (MazeLevelManager.Instance.Level.TilesByLocation.TryGetValue(targetGridLocation, out Tile tile))
         {
-            Tile tile = MazeLevelManager.Instance.Level.TilesByLocation[targetGridLocation];
-
+            Logger.Log("The tile is {0}", tile.Walkable);
             if(tile.Walkable)
                 return true;
         }
         return false;
     }
-
-    public virtual void ReachLocomotionTarget() { }
 
     public IEnumerator RespawnCharacter(Character character, float freezeTime)
     {
@@ -130,6 +129,12 @@ public class Character : MonoBehaviour
 
     public void SetHasCalculatedTarget(bool hasCalculatedTarget)
     {
+        if (hasCalculatedTarget)
+        {
+            IsMoving = true;
+        }
+
+        Logger.Log("SetHasCalculatedTarget to {0}", hasCalculatedTarget);
         HasCalculatedTarget = hasCalculatedTarget;
     }
 
@@ -137,5 +142,6 @@ public class Character : MonoBehaviour
     {
         SetHasCalculatedTarget(false);
         _animationHandler.SetLocomotion(false);
+        IsMoving = false;
     }
 }

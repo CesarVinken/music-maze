@@ -83,7 +83,6 @@ public class PathDrawer : MonoBehaviour
         Vector2 tempFingerPosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
         GridLocation tempGridLocation = GridLocation.FindClosestGridTile(tempFingerPosition);
 
-        Logger.Log("tempGridLocation: {0}, {1}", tempGridLocation.X, tempGridLocation.Y);
         if (!MazeLevelManager.Instance.Level.TilesByLocation.TryGetValue(tempGridLocation, out Tile tile)) return;
 
         if (!tile.Walkable)

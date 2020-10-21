@@ -98,7 +98,7 @@ public class PlayerCharacter : Character
             || PhotonView.IsMine)
         {
             if (GameManager.Instance.CurrentPlatform == Platform.PC)
-                CheckKeyboardInput();
+                HandleKeyboardInput();
 
             // To be replaced with pathdrawing system.
             //CheckPointerInputOld();
@@ -109,8 +109,9 @@ public class PlayerCharacter : Character
                 MoveCharacter();
             }
         }
-        if (_characterPath.reachedEndOfPath)
+        if (_characterPath.reachedEndOfPath && IsMoving)
         {
+            Logger.Log("reach target");
             ReachTarget();
         }
     }
@@ -199,10 +200,11 @@ public class PlayerCharacter : Character
         }
 
         Vector3 newDestinationTarget = SetNewLocomotionTarget(gridVectorTarget);
+        IsCalculatingPath = true;
         _seeker.StartPath(transform.position, newDestinationTarget, _characterPath.OnPathCalculated);
     }
 
-    private void CheckKeyboardInput()
+    private void HandleKeyboardInput()
     {
         if (PlayerNoInGame == 1)
         {
@@ -254,11 +256,14 @@ public class PlayerCharacter : Character
             return;
         }
 
-        if (!_characterPath.canSearch)
-        {
-            _characterPath.isStopped = false;
-            _characterPath.canSearch = true;
-        }
+        if (IsCalculatingPath) return;
+
+        Logger.Log("direction {0}", direction);
+        //if (!_characterPath.canSearch)
+        //{
+        //    _characterPath.isStopped = false;
+        //    _characterPath.canSearch = true;
+        //}
 
         GridLocation currentGridLocation = GridLocation.VectorToGrid(transform.position);
         GridLocation targetGridLocation = currentGridLocation;
@@ -285,8 +290,10 @@ public class PlayerCharacter : Character
                 break;
         }
         if (!ValidateTarget(targetGridLocation)) return;
-
+        Logger.Warning("Start path!");
         Vector3 newDestinationTarget = SetNewLocomotionTarget(GridLocation.GridToVector(targetGridLocation));
+        IsCalculatingPath = true;
+
         _seeker.StartPath(transform.position, newDestinationTarget, _characterPath.OnPathCalculated);
 
         if (!_animationHandler.InLocomotion)
@@ -313,12 +320,38 @@ public class PlayerCharacter : Character
         //}
     }
 
+    private bool IsPressingMovementKey()
+    {
+        if (PlayerNoInGame == 1)
+        {
+            if (Input.GetKey(GameManager.Instance.KeyboardConfiguration.Player1Up)) return true;
+            if (Input.GetKey(GameManager.Instance.KeyboardConfiguration.Player1Right)) return true;
+            if (Input.GetKey(GameManager.Instance.KeyboardConfiguration.Player1Down)) return true;
+            if (Input.GetKey(GameManager.Instance.KeyboardConfiguration.Player1Left)) return true;
+        }
+        if (PlayerNoInGame == 2)
+        {
+            if (Input.GetKey(GameManager.Instance.KeyboardConfiguration.Player2Up)) return true;
+            if (Input.GetKey(GameManager.Instance.KeyboardConfiguration.Player2Right)) return true;
+            if (Input.GetKey(GameManager.Instance.KeyboardConfiguration.Player2Down)) return true;
+            if (Input.GetKey(GameManager.Instance.KeyboardConfiguration.Player2Left)) return true;
+        }
+
+        return false;
+    }
+
     public override void ReachTarget()
     {
-        if(_drawnPath.Count < 1) // This happens when character was moved through keyboard
+
+        if (_drawnPath.Count == 0) // This happens when character was moved through keyboard
         {
+            if (!IsPressingMovementKey())
+            {
+                _animationHandler.SetLocomotion(false);
+            }
             SetHasCalculatedTarget(false);
-            _animationHandler.SetLocomotion(false);
+            IsMoving = false;
+
             return;
         }
 
@@ -328,14 +361,13 @@ public class PlayerCharacter : Character
         // Reach the end of a drawn path
         if (_drawnPath.Count == 0)
         {
-            SetHasCalculatedTarget(false);
             _animationHandler.SetLocomotion(false);
+            SetHasCalculatedTarget(false);
             return;
         }
 
         // We are in a drawn path
         SetPointerLocomotionTarget(GridLocation.GridToVector(_drawnPath[0]));
-
 
         //SetHasCalculatedTarget(false);
         //_animationHandler.SetLocomotion(false);

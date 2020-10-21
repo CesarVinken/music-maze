@@ -10,6 +10,7 @@ public class CharacterAnimationHandler : MonoBehaviour
         get { return _inLocomotion; }
         set
         {
+            Logger.Log("Set InLocomotion for animation to {0}", value);
             _inLocomotion = value;
             Animator.SetBool("Locomotion", _inLocomotion);
         }
