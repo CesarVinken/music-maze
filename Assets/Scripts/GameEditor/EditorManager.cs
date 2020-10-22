@@ -1,29 +1,34 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-
-public static class EditorManager
+﻿public static class EditorManager
 {
-    public static bool InEditor = false;
+    private static bool _inEditor = false;
+    public static bool InEditor
+    {
+        get { return _inEditor; }
+        set
+        {
 
+            _inEditor = value;
+        }
+    }
     public static void ToggleEditorMode()
     {
-        if (InEditor)
+        if (_inEditor)
         {
-            OpenEditor();
+            CloseEditor();
             return;
         }
-
-        CloseEditor();
+        OpenEditor();
     }
 
     public static void OpenEditor()
     {
-        InEditor = true;
+        _inEditor = true;
+        EditorContainer.Instance.InitialiseEditor();
     }
 
     public static void CloseEditor()
     {
-        InEditor = false;
+        _inEditor = false;
+        EditorContainer.Instance.CloseEditor();
     }
 }
