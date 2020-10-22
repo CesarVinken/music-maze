@@ -204,5 +204,6 @@ public class Console : MonoBehaviour
         Commands.Add(ConsoleCommand.AddCommand("close", new CloseConsoleCommand()));
         Commands.Add(ConsoleCommand.AddCommand("help", 0, 1, new HelpCommand()));
         Commands.Add(ConsoleCommand.AddCommand("load", 1, 2, new LoadCommand()));
+        Commands.Add(ConsoleCommand.AddCommand("editor", 0, 1, new EditorCommand()));
     }
 }
