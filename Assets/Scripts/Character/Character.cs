@@ -106,8 +106,7 @@ public class Character : MonoBehaviour
     {
         if (MazeLevelManager.Instance.Level.TilesByLocation.TryGetValue(targetGridLocation, out Tile tile))
         {
-            Logger.Log("The tile is {0}", tile.Walkable);
-            if(tile.Walkable)
+            if (tile.Walkable)
                 return true;
         }
         return false;
@@ -128,13 +127,12 @@ public class Character : MonoBehaviour
     }
 
     public void SetHasCalculatedTarget(bool hasCalculatedTarget)
-    {
+    {        
         if (hasCalculatedTarget)
         {
             IsMoving = true;
         }
 
-        Logger.Log("SetHasCalculatedTarget to {0}", hasCalculatedTarget);
         HasCalculatedTarget = hasCalculatedTarget;
     }
 

@@ -17,7 +17,7 @@ public class EnemyCharacter : Character
         }
         else
         {
-            //MoveCharacter();
+            MoveCharacter();
         }
     }
 

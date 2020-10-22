@@ -1,6 +1,5 @@
 ﻿using UnityEngine;
 using Photon.Pun;
-using Pathfinding;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -258,13 +257,6 @@ public class PlayerCharacter : Character
 
         if (IsCalculatingPath) return;
 
-        Logger.Log("direction {0}", direction);
-        //if (!_characterPath.canSearch)
-        //{
-        //    _characterPath.isStopped = false;
-        //    _characterPath.canSearch = true;
-        //}
-
         GridLocation currentGridLocation = GridLocation.VectorToGrid(transform.position);
         GridLocation targetGridLocation = currentGridLocation;
 
@@ -289,7 +281,12 @@ public class PlayerCharacter : Character
                 Logger.Warning("Unhandled locomotion direction {0}", direction);
                 break;
         }
-        if (!ValidateTarget(targetGridLocation)) return;
+        if (!ValidateTarget(targetGridLocation))
+        {
+            // This prevents the character from displaying locomotion animation when walking into an unwalkable tile
+            _animationHandler.SetLocomotion(false);
+            return;
+        }
         Logger.Warning("Start path!");
         Vector3 newDestinationTarget = SetNewLocomotionTarget(GridLocation.GridToVector(targetGridLocation));
         IsCalculatingPath = true;
@@ -351,7 +348,13 @@ public class PlayerCharacter : Character
             }
             SetHasCalculatedTarget(false);
             IsMoving = false;
-
+            //_characterPath.isStopped = true;
+            //_characterPath.canMove = false;
+            //_characterPath.canSearch = false;
+            //_seeker.CancelCurrentPathRequest();
+            //_characterPath.
+            //_characterPath.SetPath(null);
+            //_characterPath.destination = new Vector3(float.PositiveInfinity, float.PositiveInfinity, float.PositiveInfinity);
             return;
         }
 

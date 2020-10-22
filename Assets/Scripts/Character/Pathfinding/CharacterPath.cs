@@ -17,7 +17,6 @@ public class CharacterPath : AILerp
 
     public void OnPathCalculated(Path p)
     {
-        Logger.Log("Path count: " + p.path.Count);
         Character.IsCalculatingPath = false; // Move to Character.function
         Character.SetHasCalculatedTarget(true);
     }
