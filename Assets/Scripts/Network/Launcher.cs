@@ -42,21 +42,16 @@ namespace Photon.Pun.Demo.PunBasics
 
         public void Awake()
         {
-            if (_playerNameField == null)
-                Logger.Error(Logger.Initialisation, "Could not find _playerNameField component on Launcher");
-            if (_roomNameField == null)
-                Logger.Error(Logger.Initialisation, "Could not find _roomNameField component on Launcher");
-            if (_playerStatus == null)
-                Logger.Error(Logger.Initialisation, "Could not find _playerStatus component on Launcher");
-            if (_playerNameField == null)
-                Logger.Error(Logger.Initialisation, "Could not find _connectionStatus component on Launcher");
-            if (_errorText == null)
-                Logger.Error(Logger.Initialisation, "Could not find _errorText component on Launcher");
+            Guard.CheckIsNull(_playerNameField, "_playerNameField", gameObject);
+            Guard.CheckIsNull(_roomNameField, "_roomNameField", gameObject);
+            Guard.CheckIsNull(_playerStatus, "_playerStatus", gameObject);
+            Guard.CheckIsNull(_playerNameField, "_playerNameField", gameObject);
+            Guard.CheckIsNull(_errorText, "_errorText", gameObject);
 
-            Guard.CheckIsNull(_roomJoinUI, "Could not find _roomJoinUI");
-            Guard.CheckIsNull(_launchGameButtonGO, "Could not find _loadArenaButtonGO");
-            Guard.CheckIsNull(_joinRoomButtonGO, "Could not find _joinRoomButtonGO");
-
+            Guard.CheckIsNull(_roomJoinUI, "_roomJoinUI", gameObject);
+            Guard.CheckIsNull(_launchGameButtonGO, "_launchGameButtonGO", gameObject);
+            Guard.CheckIsNull(_joinRoomButtonGO, "_joinRoomButtonGO", gameObject);
+          
             PhotonNetwork.AutomaticallySyncScene = true;
 
             SetErrorText("");

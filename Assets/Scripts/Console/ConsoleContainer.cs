@@ -23,7 +23,7 @@ public class ConsoleContainer : MonoBehaviour
 
     public void Awake()
     {
-        Guard.CheckIsNull(ConsolePrefab, "ConsolePrefab");
+        Guard.CheckIsNull(ConsolePrefab, "ConsolePrefab", gameObject);
 
         Instance = this;
     }

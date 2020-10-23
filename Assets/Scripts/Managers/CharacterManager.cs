@@ -32,8 +32,8 @@ public class CharacterManager : MonoBehaviourPunCallbacks
     {
         Instance = this;
 
-        Guard.CheckIsNull(EnemyCharacterPrefab, "Could not find EnemyCharacterPrefab");
-        Guard.CheckIsNull(PlayerCharacterPrefab, "Could not find PlayerCharacterPrefab");
+        Guard.CheckIsNull(EnemyCharacterPrefab, "EnemyCharacterPrefab", gameObject);
+        Guard.CheckIsNull(PlayerCharacterPrefab, "PlayerCharacterPrefab", gameObject);
     }
 
     public void SpawnCharacters()

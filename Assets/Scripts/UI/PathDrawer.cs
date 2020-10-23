@@ -15,13 +15,10 @@ public class PathDrawer : MonoBehaviour
 
     public void Awake()
     {
-        if (_lineRenderer == null)
-            Logger.Error(Logger.Initialisation, "Could not find _lineRenderer");
+        Guard.CheckIsNull(_lineRenderer, "_lineRenderer", gameObject);
+        Guard.CheckIsNull(_currentTileSpriteRenderer, "_currentTileSpriteRenderer", gameObject);
 
-        if (_currentTileSpriteRenderer == null)
-            Logger.Error(Logger.Initialisation, "Could not find _currentTileSpriteRenderer");
-
-        Guard.CheckIsNull(_currentTileSpriteGO, "_currentTileSpriteGO");
+        Guard.CheckIsNull(_currentTileSpriteGO, "_currentTileSpriteGO", gameObject);
     }
 
     public void Start()

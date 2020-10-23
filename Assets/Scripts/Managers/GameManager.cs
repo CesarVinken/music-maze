@@ -30,11 +30,11 @@ public class GameManager : MonoBehaviourPunCallbacks
     {
         Instance = this;
 
-        Guard.CheckIsNull(GridGO, "Could not find GridGO prefab");
-        Guard.CheckIsNull(AstarGO, "AstarGO");
+        Guard.CheckIsNull(GridGO, "GridGO", gameObject);
+        Guard.CheckIsNull(AstarGO, "AstarGO", gameObject);
 
-        Guard.CheckIsNull(MazeLevelManagerPrefab, "Could not find MazeLevelManagerPrefab");
-        Guard.CheckIsNull(CharacterManagerPrefab, "Could not find CharacterManagerPrefab");
+        Guard.CheckIsNull(MazeLevelManagerPrefab, "MazeLevelManagerPrefab", gameObject);
+        Guard.CheckIsNull(CharacterManagerPrefab, "CharacterManagerPrefab", gameObject);
 
         InitialiseLoggers();
 

@@ -29,14 +29,9 @@ public class Character : MonoBehaviour
 
     public void Awake()
     {
-        if (_animationHandler == null)
-            Logger.Error(Logger.Initialisation, "Could not find AnimationHandler component on Character");
-
-        if (_characterPath == null)
-            Logger.Error(Logger.Initialisation, "Could not find CharacterPath component on Character");
-
-        if (_seeker == null)
-            Logger.Error(Logger.Initialisation, "Could not find Seeker component on Character");
+        Guard.CheckIsNull(_animationHandler, "_animationHandler", gameObject);
+        Guard.CheckIsNull(_characterPath, "_characterPath", gameObject);
+        Guard.CheckIsNull(_seeker, "_seeker", gameObject);
 
         Speed = BaseSpeed;
     }

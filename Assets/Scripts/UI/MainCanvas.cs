@@ -17,13 +17,11 @@ public class MainCanvas : MonoBehaviour
     {
         Instance = this;
 
-        Guard.CheckIsNull(ConsoleContainer, "ConsoleContainer");
-        Guard.CheckIsNull(ConsoleButton, "ConsoleButton");
+        Guard.CheckIsNull(ConsoleContainer, "ConsoleContainer", gameObject);
+        Guard.CheckIsNull(ConsoleButton, "ConsoleButton", gameObject);
 
-        if (Player1TileMarker == null)
-            Logger.Error(Logger.Initialisation, "Could not find Player1TileMarker component on MainCanvas");
-        if (Player2TileMarker == null)
-            Logger.Error(Logger.Initialisation, "Could not find Player2TileMarker component on MainCanvas");
+        Guard.CheckIsNull(Player1TileMarker, "Player1TileMarker", gameObject);
+        Guard.CheckIsNull(Player2TileMarker, "Player2TileMarker", gameObject);
 
         if (_gameManager.CurrentPlatform == Platform.Android)
         {

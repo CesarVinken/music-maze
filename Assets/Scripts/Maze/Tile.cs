@@ -12,8 +12,7 @@ public class Tile : MonoBehaviour
 
     public void Awake()
     {
-        if (SpriteRenderer == null)
-            Logger.Error(Logger.Initialisation, "Could not find sprite renderer on tile prefab");
+        Guard.CheckIsNull(SpriteRenderer, "SpriteRenderer", gameObject);
 
         if (transform.position.y < 0) Logger.Error("There is a tile at {0},{1}. Tiles cannot have negative Y values", transform.position.x, transform.position.y);
         Sprite = SpriteRenderer.sprite;

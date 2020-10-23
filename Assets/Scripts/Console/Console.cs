@@ -16,14 +16,9 @@ public class Console : MonoBehaviour
     public List<ConsoleCommand> Commands = new List<ConsoleCommand>();
     void Awake()
     {
-        if (InputText == null)
-            Logger.Log(Logger.Initialisation, "Could not find InputText component on console");
-
-        if (ReportText == null)
-            Logger.Log(Logger.Initialisation, "Could not find ReportText component on console");
-
-        if (InputField == null)
-            Logger.Log(Logger.Initialisation, "Could not find InputField component on console");
+        Guard.CheckIsNull(InputText, "InputText", gameObject);
+        Guard.CheckIsNull(ReportText, "ReportText", gameObject);
+        Guard.CheckIsNull(InputField, "InputField", gameObject);
 
         Instance = this;
         ConsoleState = ConsoleState.Closed;

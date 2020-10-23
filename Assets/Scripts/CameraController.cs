@@ -35,12 +35,10 @@ public class CameraController : MonoBehaviour
     {
         Instance = this;
 
-        if (_camera == null)
-            Logger.Error(Logger.Initialisation, "Could not find main camera");
-        if (PathDrawer == null)
-            Logger.Error(Logger.Initialisation, "Could not find PathDrawer");
+        Guard.CheckIsNull(_camera, "_camera", gameObject);
+        Guard.CheckIsNull(PathDrawer, "PathDrawer", gameObject);
 
-        Guard.CheckIsNull(PathDrawerGO, "PathDrawerGO");
+        Guard.CheckIsNull(PathDrawerGO, "PathDrawerGO", gameObject);
 
         _cameraBoundsOffset = _camera.ScreenToWorldPoint(new Vector3(
             Screen.width - (Screen.width * (1 - _maxXPercentageBoundary / 100f)),

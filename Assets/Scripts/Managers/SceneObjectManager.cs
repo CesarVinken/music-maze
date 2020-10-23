@@ -10,8 +10,7 @@ public class SceneObjectManager : MonoBehaviour
     {
         Instance = this;
 
-        if (CharactersGO == null)
-            Logger.Error(Logger.Initialisation, "Could not find CharactersGO component on SceneObjectManager");
+        Guard.CheckIsNull(CharactersGO, "CharactersGO", gameObject);
     }
 
 }

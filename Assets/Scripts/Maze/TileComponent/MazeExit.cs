@@ -7,8 +7,7 @@ public class MazeExit : MonoBehaviour
 
     public void Awake()
     {
-        if (_spriteRenderer == null)
-            Logger.Error(Logger.Initialisation, "Could not find sprite renderer on MazeExit");
+        Guard.CheckIsNull(_spriteRenderer, "_spriteRenderer", gameObject);
 
         _gridLocation = GridLocation.VectorToGrid(transform.position);
     }

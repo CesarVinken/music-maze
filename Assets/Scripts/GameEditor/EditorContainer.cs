@@ -11,8 +11,8 @@ public class EditorContainer : MonoBehaviour
     {
         Instance = this;
 
-        Guard.CheckIsNull(EditorModeStatusTextGO, "EditorModeStatusTextGO");
-        Guard.CheckIsNull(EditorUIGO, "EditorUIGO");
+        Guard.CheckIsNull(EditorModeStatusTextGO, "EditorModeStatusTextGO", gameObject);
+        Guard.CheckIsNull(EditorUIGO, "EditorUIGO", gameObject);
     }
 
     public void InitialiseEditor()

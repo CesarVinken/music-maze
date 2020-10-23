@@ -23,7 +23,7 @@ public class PlayerCharacter : Character
 
     public void Awake()
     {
-        Guard.CheckIsNull(_selectionIndicatorPrefab, "Could not find _selectionIndicatorPrefab");
+        Guard.CheckIsNull(_selectionIndicatorPrefab, "_selectionIndicatorPrefab", gameObject);
 
         base.Awake();
 

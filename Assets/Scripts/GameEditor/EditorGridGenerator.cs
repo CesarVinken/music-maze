@@ -5,16 +5,27 @@ public class EditorGridGenerator : MonoBehaviour
 {
     public InputField WidthInputField;
     public InputField HeightInputField;
+    public Text HeighdddtInputField;
 
     private int _gridWidth = 8;
     private int _gridHeight = 8;
 
+    [SerializeField] private GameObject EmptyTilePrefab;
+    [SerializeField] private GameObject BlockedTilePrefab;
+
     public void Awake()
     {
-        if (WidthInputField == null)
-            Logger.Error(Logger.Initialisation, "Could not find WidthInputField component on EditorGridGenerator");
-        if (HeightInputField == null)
-            Logger.Error(Logger.Initialisation, "Could not find HeightInputField component on EditorGridGenerator");
+        //if (WidthInputField == null)
+        //    Logger.Error(Logger.Initialisation, "Could not find WidthInputField component on EditorGridGenerator");
+        //if (HeightInputField == null)
+        //    Logger.Error(Logger.Initialisation, "Could not find HeightInputField component on EditorGridGenerator");
+
+        Guard.CheckIsNull(HeighdddtInputField, "HeighdddtInputField", gameObject);
+        Guard.CheckIsNull(HeightInputField, "HeightInputField", gameObject);
+        Guard.CheckIsNull(WidthInputField, "WidthInputField", gameObject);
+
+        Guard.CheckIsNull(BlockedTilePrefab, "BlockedTilePrefab", gameObject);
+        Guard.CheckIsNull(EmptyTilePrefab, "EmptyTilePrefab", gameObject);
     }
 
     public void SetWidth(string input)
