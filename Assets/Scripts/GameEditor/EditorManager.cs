@@ -10,6 +10,7 @@
             _inEditor = value;
         }
     }
+
     public static void ToggleEditorMode()
     {
         if (_inEditor)

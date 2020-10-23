@@ -8,9 +8,9 @@ public class TilesContainer : MonoBehaviour
     public List<Tile> Tiles;
     public List<GameObject> TileGOs;
 
-    public static void SetInstance(TilesContainer tilesContainer)
+    public void Awake()
     {
-        Instance = tilesContainer;
+        Instance = this;
     }
 
     // TODO: Make editor button to automatically capture all tile children. That should update the lists on this container.

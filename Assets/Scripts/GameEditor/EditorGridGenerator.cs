@@ -60,23 +60,61 @@ public class EditorGridGenerator : MonoBehaviour
     {
         if (_gridWidth < 3)
         {
-            Logger.Warning(Logger.Initialisation, "Cannot generate a tile grid with a width of {0}. The minimum generatable grid is 3", _gridWidth);
+            Logger.Warning(Logger.Initialisation, "Cannot generate a tile grid with a width of {0}. The minimum generatable grid width is 3", _gridWidth);
+            return;
+        }
+
+        if (_gridWidth > 25)
+        {
+            Logger.Warning(Logger.Initialisation, "Cannot generate a tile grid with a width of {0}. The maximum generatable grid width is 20", _gridWidth);
             return;
         }
 
         if (_gridHeight < 3)
         {
-            Logger.Warning(Logger.Initialisation, "Cannot generate a tile grid with a height of {0}. The minimum generatable grid is 3", _gridHeight);
+            Logger.Warning(Logger.Initialisation, "Cannot generate a tile grid with a height of {0}. The minimum generatable grid height is 3", _gridHeight);
             return;
         }
+
+        if (_gridHeight > 25)
+        {
+            Logger.Warning(Logger.Initialisation, "Cannot generate a tile grid with a height of {0}. The maximum generatable grid height is 20", _gridHeight);
+            return;
+        }
+
+
 
         Logger.Log("Generate tile grid with a width of {0} and a height of {1}", _gridWidth, _gridHeight);
 
         // remove everything from the currently loaded level
         MazeLevelManager.Instance.UnloadLevel();
         GameObject EditorLevelContainer = new GameObject("EditorLevelContainer");
+        EditorLevelContainer.AddComponent<TilesContainer>();
+
         EditorLevelContainer.transform.SetParent(GameManager.Instance.GridGO.transform);
 
-        GameObject tile = Instantiate(EmptyTilePrefab, EditorLevelContainer.transform);
+        MazeLevel newEditorLevel = new MazeLevel();
+
+        // Create tiles
+        for (int i = 0; i < _gridWidth; i++)
+        {
+            for (int j = 0; j < _gridHeight; j++)
+            {
+                GameObject tileGO = Instantiate(EmptyTilePrefab, new Vector3(0 + i, 0 + j, 0), Quaternion.identity, EditorLevelContainer.transform);
+                Tile tile = tileGO.GetComponent<Tile>();
+                newEditorLevel.Tiles.Add(tile);
+                newEditorLevel.TilesByLocation.Add(tile.GridLocation, tile);
+            }
+        }
+
+        for (int k = 0; k < newEditorLevel.Tiles.Count; k++)
+        {
+            Tile tile = newEditorLevel.Tiles[k];
+            if (tile.GridLocation.X == 0 || tile.GridLocation.X == _gridWidth - 1 ||
+                tile.GridLocation.Y == 0 || tile.GridLocation.Y == _gridHeight - 1)
+            {
+                GameObject tileObstacle = Instantiate(TileBlockerPrefab, tile.gameObject.transform);
+            }
+        }
     }
 }

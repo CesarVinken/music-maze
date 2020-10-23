@@ -16,6 +16,11 @@ public class MazeLevel
     public GridLocation LevelBounds = new GridLocation(0, 0);
 
 
+    public MazeLevel()
+    {
+
+    }
+
     public MazeLevel(MazeName mazeName)
     {
         MazeName = mazeName;
@@ -34,7 +39,6 @@ public class MazeLevel
         mazeContainer.transform.SetParent(GameManager.Instance.GridGO.transform);
         mazeContainer.SetActive(true);
 
-        TilesContainer.SetInstance(mazeContainer.GetComponent<TilesContainer>());
         Tiles = TilesContainer.Instance.Tiles;
 
         MazeLevelManager.Instance.ValidateSpawnpoints(); // make sure we have exactly 2 player spawnpoints

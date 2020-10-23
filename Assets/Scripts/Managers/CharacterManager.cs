@@ -177,11 +177,13 @@ public class CharacterManager : MonoBehaviourPunCallbacks
         {
             Destroy(MazePlayers[i].gameObject);
         }
+        MazePlayers.Clear();
 
         for (int j = 0; j < Enemies.Count; j++)
         {
             Destroy(Enemies[j].gameObject);
         }
+        Enemies.Clear();
 
     }
 }
