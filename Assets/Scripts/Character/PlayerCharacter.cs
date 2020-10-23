@@ -54,6 +54,7 @@ public class PlayerCharacter : Character
         {
             _selectionIndicatorGO = Instantiate(_selectionIndicatorPrefab, SceneObjectManager.Instance.CharactersGO);
             _selectionIndicatorGO.GetComponent<SelectionIndicator>().SelectedObject = transform;
+            SceneObjectManager.Instance.SceneObjects.Add(_selectionIndicatorGO);
 
             _pathDrawer = CameraController.Instance.PathDrawer;
         }

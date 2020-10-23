@@ -1,5 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
@@ -49,6 +48,14 @@ public class CameraController : MonoBehaviour
     public void Start()
     {
         SetPanLimits();
+    }
+
+    public void ResetCamera()
+    {
+        FocussedOnPlayer = false;
+
+        Vector2 cameraPosition = Vector2.zero;
+        transform.position = cameraPosition;
     }
 
     private void SetPanLimits()

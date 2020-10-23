@@ -27,6 +27,7 @@ public class CharacterManager : MonoBehaviourPunCallbacks
     public GameObject Player2GO;
 
     public List<PlayerCharacter> MazePlayers = new List<PlayerCharacter>();
+    public List<EnemyCharacter> Enemies = new List<EnemyCharacter>();
 
     public void Awake()
     {
@@ -114,6 +115,7 @@ public class CharacterManager : MonoBehaviourPunCallbacks
             EnemyCharacter enemyCharacter = characterGO.GetComponent<EnemyCharacter>();
             enemyCharacter.SetStartingPosition(enemyCharacter, gridLocation);
             enemyCharacter.CharacterBlueprint = character;
+            Enemies.Add(enemyCharacter);
 
             CharacterBundle characterBundle = new CharacterBundle(enemyCharacter, characterGO);
             return characterBundle;
@@ -167,5 +169,19 @@ public class CharacterManager : MonoBehaviourPunCallbacks
                 Logger.Error(Logger.Initialisation, "Cannot find prefab for character type {0}", character.CharacterType);
                 return null;
         }
+    }
+
+    public void UnloadCharacters()
+    {
+        for (int i = 0; i < MazePlayers.Count; i++)
+        {
+            Destroy(MazePlayers[i].gameObject);
+        }
+
+        for (int j = 0; j < Enemies.Count; j++)
+        {
+            Destroy(Enemies[j].gameObject);
+        }
+
     }
 }

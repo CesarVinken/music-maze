@@ -38,7 +38,12 @@ public class MazeLevelManager : MonoBehaviour, IOnEventCallback
         Destroy(TilesContainer.Instance.gameObject);
         TilesContainer.Instance = null;
 
+        CharacterManager.Instance.UnloadCharacters();
+        SceneObjectManager.Instance.UnloadSceneObjects();
+
         Level.Tiles.Clear();
+
+        CameraController.Instance.ResetCamera();
     }
 
     // Previously tried solution with collision detection on all separate clients for all players(instead of events). 

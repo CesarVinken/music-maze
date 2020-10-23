@@ -5,13 +5,12 @@ public class EditorGridGenerator : MonoBehaviour
 {
     public InputField WidthInputField;
     public InputField HeightInputField;
-    public Text HeighdddtInputField;
 
     private int _gridWidth = 8;
     private int _gridHeight = 8;
 
     [SerializeField] private GameObject EmptyTilePrefab;
-    [SerializeField] private GameObject BlockedTilePrefab;
+    [SerializeField] private GameObject TileBlockerPrefab;
 
     public void Awake()
     {
@@ -20,11 +19,10 @@ public class EditorGridGenerator : MonoBehaviour
         //if (HeightInputField == null)
         //    Logger.Error(Logger.Initialisation, "Could not find HeightInputField component on EditorGridGenerator");
 
-        Guard.CheckIsNull(HeighdddtInputField, "HeighdddtInputField", gameObject);
         Guard.CheckIsNull(HeightInputField, "HeightInputField", gameObject);
         Guard.CheckIsNull(WidthInputField, "WidthInputField", gameObject);
 
-        Guard.CheckIsNull(BlockedTilePrefab, "BlockedTilePrefab", gameObject);
+        Guard.CheckIsNull(TileBlockerPrefab, "TileBlockerPrefab", gameObject);
         Guard.CheckIsNull(EmptyTilePrefab, "EmptyTilePrefab", gameObject);
     }
 
@@ -73,5 +71,12 @@ public class EditorGridGenerator : MonoBehaviour
         }
 
         Logger.Log("Generate tile grid with a width of {0} and a height of {1}", _gridWidth, _gridHeight);
+
+        // remove everything from the currently loaded level
+        MazeLevelManager.Instance.UnloadLevel();
+        GameObject EditorLevelContainer = new GameObject("EditorLevelContainer");
+        EditorLevelContainer.transform.SetParent(GameManager.Instance.GridGO.transform);
+
+        GameObject tile = Instantiate(EmptyTilePrefab, EditorLevelContainer.transform);
     }
 }
