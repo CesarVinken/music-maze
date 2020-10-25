@@ -23,6 +23,7 @@ public class PlayerCharacter : Character
     private List<GridLocation> _drawnPath = new List<GridLocation>();
 
     public event Action PlayerExits;
+    public event Action PlayerCaught;
 
     public void Awake()
     {
@@ -51,6 +52,7 @@ public class PlayerCharacter : Character
 
         _characterPath.CharacterReachesTarget += OnTargetReached;
         PlayerExits += OnPlayerExit;
+        PlayerCaught += OnPlayerCaught;
     }
 
     public void Start()
@@ -74,26 +76,8 @@ public class PlayerCharacter : Character
         EnemyCharacter enemy = collision.gameObject.GetComponent<EnemyCharacter>();
         if (enemy != null)
         {
-            if(GameManager.Instance.GameType == GameType.SinglePlayer)
-            {
-                CaughtByEnemy();
-            }
-            else
-            {
-                PhotonView.RPC("CaughtByEnemy", RpcTarget.All);
-            }
-
-            PathDrawer.DisablePathDrawer(_pathDrawer);
+            PlayerCaught?.Invoke();
         }
-    }
-
-    [PunRPC]
-    public void CaughtByEnemy()
-    {
-        float freezeTime = 2.0f;
-
-        IEnumerator coroutine = this.RespawnCharacter(this, freezeTime);
-        StartCoroutine(coroutine);
     }
 
     public void Update()
@@ -374,5 +358,28 @@ public class PlayerCharacter : Character
 
         // We are in a drawn path
         SetPointerLocomotionTarget(GridLocation.GridToVector(_drawnPath[0]));
+    }
+
+    public void OnPlayerCaught()
+    {
+        if (GameManager.Instance.GameType == GameType.SinglePlayer)
+        {
+            PunRPCCaughtByEnemy();
+        }
+        else
+        {
+            PhotonView.RPC("CaughtByEnemy", RpcTarget.All);
+        }
+
+        PathDrawer.DisablePathDrawer(_pathDrawer);
+    }
+
+    [PunRPC]
+    private void PunRPCCaughtByEnemy()
+    {
+        float freezeTime = 2.0f;
+
+        IEnumerator coroutine = this.RespawnCharacter(this, freezeTime);
+        StartCoroutine(coroutine);
     }
 }
