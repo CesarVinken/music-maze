@@ -45,6 +45,8 @@ public class PlayerCharacter : Character
                     PlayerNumber = PlayerNumber.Player1;
             }
         }
+
+        _characterPath.CharacterReachesTarget += OnTargetReached;
     }
 
     public void Start()
@@ -112,7 +114,7 @@ public class PlayerCharacter : Character
         if (_characterPath.reachedEndOfPath && IsMoving)
         {
             Logger.Log("reach target");
-            ReachTarget();
+            OnTargetReached();
         }
     }
 
@@ -310,12 +312,8 @@ public class PlayerCharacter : Character
     {
         CurrentGridLocation = gridLocation;
 
-        //Update the drawn path because it may be influenced by the new grid location.
-        //if(_drawnPath.Count > 1)
-        //{
         if(_pathDrawer && _pathDrawer.isActiveAndEnabled)
             _pathDrawer.PlayerCurrentGridLocationUpdated(gridLocation);
-        //}
     }
 
     private bool IsPressingMovementKey()
@@ -338,9 +336,8 @@ public class PlayerCharacter : Character
         return false;
     }
 
-    public override void ReachTarget()
+    public void OnTargetReached()
     {
-
         if (_drawnPath.Count == 0) // This happens when character was moved through keyboard
         {
             if (!IsPressingMovementKey())
@@ -349,13 +346,6 @@ public class PlayerCharacter : Character
             }
             SetHasCalculatedTarget(false);
             IsMoving = false;
-            //_characterPath.isStopped = true;
-            //_characterPath.canMove = false;
-            //_characterPath.canSearch = false;
-            //_seeker.CancelCurrentPathRequest();
-            //_characterPath.
-            //_characterPath.SetPath(null);
-            //_characterPath.destination = new Vector3(float.PositiveInfinity, float.PositiveInfinity, float.PositiveInfinity);
             return;
         }
 
@@ -372,8 +362,5 @@ public class PlayerCharacter : Character
 
         // We are in a drawn path
         SetPointerLocomotionTarget(GridLocation.GridToVector(_drawnPath[0]));
-
-        //SetHasCalculatedTarget(false);
-        //_animationHandler.SetLocomotion(false);
     }
 }

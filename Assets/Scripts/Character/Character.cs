@@ -1,5 +1,6 @@
 ﻿using Pathfinding;
 using Photon.Pun;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -26,6 +27,8 @@ public class Character : MonoBehaviour
     public PhotonView PhotonView;
 
     public GameObject CharacterBody;
+
+    //public event Action CharacterReachesTarget;
 
     public void Awake()
     {
@@ -129,12 +132,5 @@ public class Character : MonoBehaviour
         }
 
         HasCalculatedTarget = hasCalculatedTarget;
-    }
-
-    public virtual void ReachTarget()
-    {
-        SetHasCalculatedTarget(false);
-        _animationHandler.SetLocomotion(false);
-        IsMoving = false;
     }
 }

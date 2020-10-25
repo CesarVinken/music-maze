@@ -6,6 +6,7 @@ public class Tile : MonoBehaviour
     public Sprite Sprite;
     public SpriteRenderer PlayerMark;
 
+    public string TileId;
     public bool Walkable = true; // TODO Automatically set value in Maze Level Editor
     public bool Markable = true;
     public GridLocation GridLocation;

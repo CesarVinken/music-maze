@@ -1,8 +1,10 @@
 ﻿using Pathfinding;
+using System;
 
 public class CharacterPath : AILerp
 {
     public Character Character;
+    public event Action CharacterReachesTarget;
 
     public new void Awake()
     {
@@ -12,7 +14,7 @@ public class CharacterPath : AILerp
 
     public override void OnTargetReached()
     {
-        Character.ReachTarget();
+        CharacterReachesTarget?.Invoke();
     }
 
     public void OnPathCalculated(Path p)

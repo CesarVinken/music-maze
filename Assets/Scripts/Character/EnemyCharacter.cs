@@ -1,10 +1,15 @@
 ﻿using Photon.Pun;
 using System;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class EnemyCharacter : Character
 {
+    public void Awake()
+    {
+        base.Awake();
+        _characterPath.CharacterReachesTarget += OnTargetReached;
+    }
+
     public void Update()
     {
         if (IsFrozen) return;
@@ -28,7 +33,7 @@ public class EnemyCharacter : Character
         _seeker.StartPath(transform.position, randomGridVectorLocation, _characterPath.OnPathCalculated);
     }
 
-    public override void ReachTarget()
+    public void OnTargetReached()
     {
         //Logger.Log("enemy reached target");
 

@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 using UnityEngine.UI;
 
 public class EditorGridGenerator : MonoBehaviour
@@ -14,11 +15,6 @@ public class EditorGridGenerator : MonoBehaviour
 
     public void Awake()
     {
-        //if (WidthInputField == null)
-        //    Logger.Error(Logger.Initialisation, "Could not find WidthInputField component on EditorGridGenerator");
-        //if (HeightInputField == null)
-        //    Logger.Error(Logger.Initialisation, "Could not find HeightInputField component on EditorGridGenerator");
-
         Guard.CheckIsNull(HeightInputField, "HeightInputField", gameObject);
         Guard.CheckIsNull(WidthInputField, "WidthInputField", gameObject);
 
@@ -102,6 +98,8 @@ public class EditorGridGenerator : MonoBehaviour
             {
                 GameObject tileGO = Instantiate(EmptyTilePrefab, new Vector3(0 + i, 0 + j, 0), Quaternion.identity, EditorLevelContainer.transform);
                 Tile tile = tileGO.GetComponent<Tile>();
+                tile.TileId = Guid.NewGuid().ToString();
+
                 newEditorLevel.Tiles.Add(tile);
                 newEditorLevel.TilesByLocation.Add(tile.GridLocation, tile);
             }
@@ -113,7 +111,9 @@ public class EditorGridGenerator : MonoBehaviour
             if (tile.GridLocation.X == 0 || tile.GridLocation.X == _gridWidth - 1 ||
                 tile.GridLocation.Y == 0 || tile.GridLocation.Y == _gridHeight - 1)
             {
-                GameObject tileObstacle = Instantiate(TileBlockerPrefab, tile.gameObject.transform);
+                GameObject tileBlockerGO = Instantiate(TileBlockerPrefab, tile.gameObject.transform);
+                TileBlocker tileBlocker = tileBlockerGO.GetComponent<TileBlocker>();
+                tileBlocker.SetTile(tile);
             }
         }
     }
