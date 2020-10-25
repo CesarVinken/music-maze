@@ -3,6 +3,7 @@ using Photon.Pun;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System;
 
 public class PlayerCharacter : Character
 {
@@ -20,6 +21,8 @@ public class PlayerCharacter : Character
 
     public GridLocation CurrentGridLocation;
     private List<GridLocation> _drawnPath = new List<GridLocation>();
+
+    public event Action PlayerExits;
 
     public void Awake()
     {
@@ -47,6 +50,7 @@ public class PlayerCharacter : Character
         }
 
         _characterPath.CharacterReachesTarget += OnTargetReached;
+        PlayerExits += OnPlayerExit;
     }
 
     public void Start()
@@ -55,7 +59,10 @@ public class PlayerCharacter : Character
             || PhotonView.IsMine)
         {
             _selectionIndicatorGO = Instantiate(_selectionIndicatorPrefab, SceneObjectManager.Instance.CharactersGO);
-            _selectionIndicatorGO.GetComponent<SelectionIndicator>().SelectedObject = transform;
+
+            SelectionIndicator selectionIndicator = _selectionIndicatorGO.GetComponent<SelectionIndicator>();
+            selectionIndicator.Setup(transform, this);
+
             SceneObjectManager.Instance.SceneObjects.Add(_selectionIndicatorGO);
 
             _pathDrawer = CameraController.Instance.PathDrawer;
@@ -300,7 +307,12 @@ public class PlayerCharacter : Character
             _animationHandler.SetLocomotion(true);
     }
 
-    public void ReachExit()
+    public void Exit()
+    {
+        PlayerExits?.Invoke();
+    }
+
+    private void OnPlayerExit()
     {
         IsFrozen = true;
         HasReachedExit = true;

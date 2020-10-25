@@ -137,7 +137,7 @@ public class CharacterManager : MonoBehaviourPunCallbacks
     public void CharacterExit(PlayerCharacter player)
     {
         //For now just hide and freeze character, later play animation etc.
-        player.ReachExit();
+        player.Exit();
 
         // Check if all players are gone. If so, the level is completed;
 
