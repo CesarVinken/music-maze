@@ -54,7 +54,7 @@ public class CameraController : MonoBehaviour
     {
         FocussedOnPlayer = false;
 
-        Vector2 cameraPosition = Vector2.zero;
+        Vector3 cameraPosition = new Vector3(0, 0, -10);
         transform.position = cameraPosition;
     }
 

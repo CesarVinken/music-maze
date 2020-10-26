@@ -15,7 +15,6 @@ public class SelectionIndicator : MonoBehaviour
         SelectedObject = selectedObject;
         _playerCharacter = player;
         _playerCharacter.PlayerExits += OnPlayerExit;
-
     }
 
     public void OnPlayerExit()

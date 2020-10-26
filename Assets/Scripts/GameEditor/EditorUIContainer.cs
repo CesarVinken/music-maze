@@ -1,8 +1,8 @@
 ﻿using UnityEngine;
 
-public class EditorContainer : MonoBehaviour
+public class EditorUIContainer : MonoBehaviour
 {
-    public static EditorContainer Instance;
+    public static EditorUIContainer Instance;
 
     public GameObject EditorModeStatusTextGO;
     public GameObject EditorUIGO;

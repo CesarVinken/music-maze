@@ -90,6 +90,7 @@ public class EditorGridGenerator : MonoBehaviour
         EditorLevelContainer.transform.SetParent(GameManager.Instance.GridGO.transform);
 
         MazeLevel newEditorLevel = new MazeLevel();
+        newEditorLevel.LevelBounds = new GridLocation(_gridWidth - 1, _gridHeight - 1);
 
         // Create tiles
         for (int i = 0; i < _gridWidth; i++)
@@ -116,5 +117,10 @@ public class EditorGridGenerator : MonoBehaviour
                 tileBlocker.SetTile(tile);
             }
         }
+
+        EditorManager.EditorLevel = newEditorLevel;
+
+        //Update UI for the newly generated level
+        EditorWorldContainer.Instance.ShowTileSelector();
     }
 }

@@ -82,6 +82,8 @@ public class PlayerCharacter : Character
 
     public void Update()
     {
+        if (EditorManager.InEditor) return;
+
         if (IsFrozen) return;
 
         if (Console.Instance && Console.Instance.ConsoleState != ConsoleState.Closed)

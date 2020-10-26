@@ -12,6 +12,8 @@ public class EnemyCharacter : Character
 
     public void Update()
     {
+        if (EditorManager.InEditor) return;
+
         if (IsFrozen) return;
 
         if (!HasCalculatedTarget &&

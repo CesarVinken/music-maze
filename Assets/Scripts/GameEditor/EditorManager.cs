@@ -11,6 +11,8 @@
         }
     }
 
+    public static MazeLevel EditorLevel = null;
+
     public static void ToggleEditorMode()
     {
         if (_inEditor)
@@ -24,12 +26,14 @@
     public static void OpenEditor()
     {
         _inEditor = true;
-        EditorContainer.Instance.InitialiseEditor();
+        EditorUIContainer.Instance.InitialiseEditor();
+        EditorWorldContainer.Instance.InitialiseEditor();
     }
 
     public static void CloseEditor()
     {
         _inEditor = false;
-        EditorContainer.Instance.CloseEditor();
+        EditorUIContainer.Instance.CloseEditor();
+        EditorWorldContainer.Instance.CloseEditor();
     }
 }
