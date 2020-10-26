@@ -30,6 +30,9 @@ public class CameraController : MonoBehaviour
     private float _maxYPercentageBoundary = 70f;
     private Vector2 _cameraBoundsOffset; // with this offset the camera is calculated when player is past the edge margin by calculating cameraPosition = _player.position - offset. 
 
+    private Vector3 _dragOrigin;    //for camera dragging in editor
+
+
     public void Awake()
     {
         Instance = this;
@@ -47,7 +50,7 @@ public class CameraController : MonoBehaviour
 
     public void Start()
     {
-        SetPanLimits();
+        SetPanLimits(MazeLevelManager.Instance.Level.LevelBounds);
     }
 
     public void ResetCamera()
@@ -55,19 +58,24 @@ public class CameraController : MonoBehaviour
         FocussedOnPlayer = false;
 
         Vector3 cameraPosition = new Vector3(0, 0, -10);
-        transform.position = cameraPosition;
+
+        cameraPosition.x = Mathf.Clamp(cameraPosition.x, PanLimits[Direction.Left], PanLimits[Direction.Right]);
+        cameraPosition.y = Mathf.Clamp(cameraPosition.y, PanLimits[Direction.Down], PanLimits[Direction.Up]);
+
+        transform.position = new Vector3(cameraPosition.x, cameraPosition.y, cameraPosition.z);
     }
 
-    private void SetPanLimits()
+    public void SetPanLimits(GridLocation levelBounds)
     {
+        PanLimits.Clear();
         //TODO. the - .. value is currently hardcoded but would not work with different screen sizes or zoom levels
-        PanLimits.Add(Direction.Up, MazeLevelManager.Instance.Level.LevelBounds.Y - 4f);  // should depend on the furthest upper edge of the maze level.Never less than 4.
-        PanLimits.Add(Direction.Right, MazeLevelManager.Instance.Level.LevelBounds.X - 7f);// should depend on the furthest right edge of the maze level  Never less than 8.
+        PanLimits.Add(Direction.Up, levelBounds.Y - 4f);  // should depend on the furthest upper edge of the maze level.Never less than 4.
+        PanLimits.Add(Direction.Right, levelBounds.X - 7f);// should depend on the furthest right edge of the maze level  Never less than 8.
         PanLimits.Add(Direction.Down, 4f); // should (with this zoom level) always have 4 as lowest boundary down. Should always be => 4
         PanLimits.Add(Direction.Left, 8f); // should (with this zoom level) always have 8 as the left most boundary. Should always be => 8
 
-        if (MazeLevelManager.Instance.Level.LevelBounds.Y < 4) PanLimits[Direction.Up] = 4f;
-        if (MazeLevelManager.Instance.Level.LevelBounds.Y < 4) PanLimits[Direction.Right] = 8f;
+        if (levelBounds.Y < 4) PanLimits[Direction.Up] = 4f;
+        if (levelBounds.X < 8) PanLimits[Direction.Right] = 8f;
     }
 
     public void FocusOnPlayer()
@@ -87,6 +95,11 @@ public class CameraController : MonoBehaviour
 
     void Update()
     {
+        if (EditorManager.InEditor)
+        {
+            HandleMiddleMousePanning();
+        }
+
         if (!FocussedOnPlayer) return;
 
         Vector2 cameraPosition = new Vector2(transform.position.x, transform.position.y);
@@ -115,6 +128,27 @@ public class CameraController : MonoBehaviour
         }
 
         // binding to the limits of the map
+        cameraPosition.x = Mathf.Clamp(cameraPosition.x, PanLimits[Direction.Left], PanLimits[Direction.Right]);
+        cameraPosition.y = Mathf.Clamp(cameraPosition.y, PanLimits[Direction.Down], PanLimits[Direction.Up]);
+
+        transform.position = new Vector3(cameraPosition.x, cameraPosition.y, transform.position.z);
+    }
+
+    public void HandleMiddleMousePanning()
+    {
+        if (Input.GetKeyDown(KeyCode.Mouse2))
+        {
+            _dragOrigin = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+            return;
+        }
+
+        if (!Input.GetKey(KeyCode.Mouse2)) return;
+
+        Vector3 mouseCurrentPos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+        Vector3 distance = mouseCurrentPos - _dragOrigin;
+        Vector3 cameraPosition = transform.position;
+        cameraPosition += new Vector3(-distance.x, -distance.y, 0);
+
         cameraPosition.x = Mathf.Clamp(cameraPosition.x, PanLimits[Direction.Left], PanLimits[Direction.Right]);
         cameraPosition.y = Mathf.Clamp(cameraPosition.y, PanLimits[Direction.Down], PanLimits[Direction.Up]);
 

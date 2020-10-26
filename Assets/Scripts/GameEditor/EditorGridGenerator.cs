@@ -122,5 +122,7 @@ public class EditorGridGenerator : MonoBehaviour
 
         //Update UI for the newly generated level
         EditorWorldContainer.Instance.ShowTileSelector();
+        CameraController.Instance.SetPanLimits(EditorManager.EditorLevel.LevelBounds);
+        CameraController.Instance.ResetCamera();
     }
 }
