@@ -11,7 +11,7 @@ public class MazeLevel
 
     public Dictionary<GridLocation, Tile> TilesByLocation = new Dictionary<GridLocation, Tile>();
 
-    public MazeName MazeName;
+    public MazeName MazeName; // Get rid of this field, because MazeNames should be loaded data and not a hardcoded enum
 
     public GridLocation LevelBounds = new GridLocation(0, 0);
 

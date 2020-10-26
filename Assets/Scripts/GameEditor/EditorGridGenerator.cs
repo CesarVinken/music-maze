@@ -154,6 +154,11 @@ public class EditorGridGenerator : MonoBehaviour
             return;
         }
 
+        MazeLevelData mazeLevelData = new MazeLevelData(EditorManager.EditorLevel).WithName(_mazeName);
+
+        JsonMazeLevelFileWriter fileWriter = new JsonMazeLevelFileWriter();
+        fileWriter.SerialiseData(mazeLevelData);
+
         Logger.Log(Logger.Datawriting, "Level {0} Saved.", _mazeName);
     }
 }
