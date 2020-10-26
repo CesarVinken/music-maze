@@ -6,9 +6,12 @@ public class EditorGridGenerator : MonoBehaviour
 {
     public InputField WidthInputField;
     public InputField HeightInputField;
+    public InputField MazeNameInputField;
 
     private int _gridWidth = 8;
     private int _gridHeight = 8;
+
+    private string _mazeName = "";
 
     [SerializeField] private GameObject EmptyTilePrefab;
     [SerializeField] private GameObject TileBlockerPrefab;
@@ -17,6 +20,7 @@ public class EditorGridGenerator : MonoBehaviour
     {
         Guard.CheckIsNull(HeightInputField, "HeightInputField", gameObject);
         Guard.CheckIsNull(WidthInputField, "WidthInputField", gameObject);
+        Guard.CheckIsNull(MazeNameInputField, "MazeNameInputField", gameObject);
 
         Guard.CheckIsNull(TileBlockerPrefab, "TileBlockerPrefab", gameObject);
         Guard.CheckIsNull(EmptyTilePrefab, "EmptyTilePrefab", gameObject);
@@ -24,7 +28,7 @@ public class EditorGridGenerator : MonoBehaviour
 
     public void SetWidth(string input)
     {
-        if (!ValidateInput(input)) {
+        if (!ValidateNumericInput(input)) {
             WidthInputField.text = _gridWidth.ToString();
             return;
         }
@@ -34,7 +38,7 @@ public class EditorGridGenerator : MonoBehaviour
 
     public void SetHeight(string input)
     {
-        if (!ValidateInput(input))
+        if (!ValidateNumericInput(input))
         {
             HeightInputField.text = _gridHeight.ToString();
             return;
@@ -43,8 +47,18 @@ public class EditorGridGenerator : MonoBehaviour
         _gridHeight = int.Parse(input);
     }
 
+    public void SetMazeName(string input)
+    {
+        if (string.IsNullOrEmpty(input))
+        {
+            MazeNameInputField.text = "";
+            return;
+        }
 
-    public bool ValidateInput(string input)
+        _mazeName = input;
+    }
+
+    public bool ValidateNumericInput(string input)
     {
         if (int.TryParse(input, out int result)) return true;
 
@@ -56,25 +70,25 @@ public class EditorGridGenerator : MonoBehaviour
     {
         if (_gridWidth < 3)
         {
-            Logger.Warning(Logger.Initialisation, "Cannot generate a tile grid with a width of {0}. The minimum generatable grid width is 3", _gridWidth);
+            Logger.Warning(Logger.Level, "Cannot generate a tile grid with a width of {0}. The minimum generatable grid width is 3", _gridWidth);
             return;
         }
 
         if (_gridWidth > 25)
         {
-            Logger.Warning(Logger.Initialisation, "Cannot generate a tile grid with a width of {0}. The maximum generatable grid width is 20", _gridWidth);
+            Logger.Warning(Logger.Level, "Cannot generate a tile grid with a width of {0}. The maximum generatable grid width is 20", _gridWidth);
             return;
         }
 
         if (_gridHeight < 3)
         {
-            Logger.Warning(Logger.Initialisation, "Cannot generate a tile grid with a height of {0}. The minimum generatable grid height is 3", _gridHeight);
+            Logger.Warning(Logger.Level, "Cannot generate a tile grid with a height of {0}. The minimum generatable grid height is 3", _gridHeight);
             return;
         }
 
         if (_gridHeight > 25)
         {
-            Logger.Warning(Logger.Initialisation, "Cannot generate a tile grid with a height of {0}. The maximum generatable grid height is 20", _gridHeight);
+            Logger.Warning(Logger.Level, "Cannot generate a tile grid with a height of {0}. The maximum generatable grid height is 20", _gridHeight);
             return;
         }
 
@@ -124,5 +138,22 @@ public class EditorGridGenerator : MonoBehaviour
         EditorWorldContainer.Instance.ShowTileSelector();
         CameraController.Instance.SetPanLimits(EditorManager.EditorLevel.LevelBounds);
         CameraController.Instance.ResetCamera();
+    }
+
+    public void SaveMaze()
+    {
+        if (string.IsNullOrWhiteSpace(_mazeName))
+        {
+            Logger.Warning(Logger.Datawriting, "In order to save the maze level, please fill in a maze name");
+            return;
+        }
+
+        if (EditorManager.EditorLevel == null)
+        {
+            Logger.Warning(Logger.Datawriting, "Please first generate a level before saving.");
+            return;
+        }
+
+        Logger.Log(Logger.Datawriting, "Level {0} Saved.", _mazeName);
     }
 }

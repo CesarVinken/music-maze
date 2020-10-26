@@ -92,5 +92,7 @@ public class GameManager : MonoBehaviourPunCallbacks
         Logger.Initialisation.enableLogs = true;
         Logger.Character.enableLogs = false;
         Logger.UI.enableLogs = false;
+        Logger.Datawriting.enableLogs = true;
+        Logger.Datareading.enableLogs = true;
     }
 }
