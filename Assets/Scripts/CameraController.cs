@@ -69,7 +69,7 @@ public class CameraController : MonoBehaviour
     {
         PanLimits.Clear();
         //TODO. the - .. value is currently hardcoded but would not work with different screen sizes or zoom levels
-        PanLimits.Add(Direction.Up, levelBounds.Y - 4f);  // should depend on the furthest upper edge of the maze level.Never less than 4.
+        PanLimits.Add(Direction.Up, levelBounds.Y - 3f);  // should depend on the furthest upper edge of the maze level.Never less than 4.
         PanLimits.Add(Direction.Right, levelBounds.X - 7f);// should depend on the furthest right edge of the maze level  Never less than 8.
         PanLimits.Add(Direction.Down, 4f); // should (with this zoom level) always have 4 as lowest boundary down. Should always be => 4
         PanLimits.Add(Direction.Left, 8f); // should (with this zoom level) always have 8 as the left most boundary. Should always be => 8

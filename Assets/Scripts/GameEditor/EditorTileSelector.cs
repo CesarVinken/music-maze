@@ -36,6 +36,10 @@ public class EditorTileSelector : MonoBehaviour
         if (!EditorManager.InEditor) return;
         if (EditorManager.EditorLevel == null) return;
 
+        if (Input.GetKeyDown(KeyCode.Mouse0))
+        {
+            SelectTileWithMouse();
+        }
         if (Input.GetKeyDown(KeyCode.W))
         {
             UpdateCurrentSelectedLocation(0, 1);
@@ -63,12 +67,31 @@ public class EditorTileSelector : MonoBehaviour
         int tempXPosition = _currentSelectedLocation.X + xChange;
         int tempYPosition = _currentSelectedLocation.Y + yChange;
 
-        if (tempXPosition < 0) return;
-        if (tempXPosition > EditorManager.EditorLevel.LevelBounds.X) return;
+        GridLocation selectedTileLocation = new GridLocation(tempXPosition, tempYPosition);
 
-        if (tempYPosition < 0) return;
-        if (tempYPosition > EditorManager.EditorLevel.LevelBounds.Y) return;
+        if (!IsValidGridLocationToSelect(selectedTileLocation)) return;
 
-        CurrentSelectedLocation = new GridLocation(tempXPosition, tempYPosition);
+        CurrentSelectedLocation = selectedTileLocation;
+    }
+
+    private void SelectTileWithMouse()
+    {
+        Vector3 mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+        GridLocation selectedTileLocation = GridLocation.FindClosestGridTile(mousePosition);
+
+        if (!IsValidGridLocationToSelect(selectedTileLocation)) return;
+
+        CurrentSelectedLocation = selectedTileLocation;
+    }
+
+    private bool IsValidGridLocationToSelect(GridLocation selectedTileLocation)
+    {
+        if (selectedTileLocation.X < 0) return false;
+        if (selectedTileLocation.X > EditorManager.EditorLevel.LevelBounds.X) return false;
+
+        if (selectedTileLocation.Y < 0) return false;
+        if (selectedTileLocation.Y > EditorManager.EditorLevel.LevelBounds.Y) return false;
+
+        return true;
     }
 }
