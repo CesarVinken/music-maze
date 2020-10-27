@@ -1,6 +1,5 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using System.IO;
 using UnityEngine;
 
 public class LoadCommand : CommandProcedure
@@ -37,19 +36,21 @@ public class LoadCommand : CommandProcedure
             return;
         }
 
-        MazeName mazeName;
-        if(!Enum.TryParse(arguments[1], true, out mazeName))
+        JsonMazeLevelFileReader levelReader = new JsonMazeLevelFileReader();
+        MazeLevelData levelData = levelReader.LoadLevel(arguments[1]);
+
+        if(levelData == null)
         {
             string printLine = "<color=" + ConsoleConfiguration.HighlightColour + ">" + arguments[1] + "</color> is not a known level and cannot be loaded.\n\n";
             printLine += "The Currently available levels are: \n";
             printLine = GetAllLevelNames(printLine);
             Console.Instance.PrintToReportText(printLine);
-
-            return;
         }
 
+        // Make checks such as if there are starting locations for the players
+
         MazeLevelManager.Instance.UnloadLevel();
-        MazeLevelManager.Instance.LoadLevel(mazeName);
+        MazeLevelManager.Instance.LoadLevel(levelData);
     }
 
     public override void Help()
@@ -62,11 +63,11 @@ public class LoadCommand : CommandProcedure
 
     public string GetAllLevelNames(string printLine)
     {
-        MazeName[] mazeNames = (MazeName[])Enum.GetValues(typeof(MazeName));
-
-        for (int i = 0; i < mazeNames.Length; i++)
+        foreach (string mazeName in Directory.GetFiles(Application.streamingAssetsPath, "*.json"))
         {
-            printLine += "\n   -" + mazeNames[i];
+            string[] fileNameParts = mazeName.Split('\\');
+            string[] fileNameWithoutExtention = fileNameParts[fileNameParts.Length - 1].Split('.');
+            printLine += "\n   -" + fileNameWithoutExtention[0];
         }
 
         return printLine;

@@ -92,8 +92,6 @@ public class EditorGridGenerator : MonoBehaviour
             return;
         }
 
-
-
         Logger.Log("Generate tile grid with a width of {0} and a height of {1}", _gridWidth, _gridHeight);
 
         // remove everything from the currently loaded level
@@ -114,21 +112,16 @@ public class EditorGridGenerator : MonoBehaviour
                 GameObject tileGO = Instantiate(EmptyTilePrefab, new Vector3(0 + i, 0 + j, 0), Quaternion.identity, EditorLevelContainer.transform);
                 Tile tile = tileGO.GetComponent<Tile>();
                 tile.TileId = Guid.NewGuid().ToString();
+                tile.SetGridLocation(0 + i, 0 + j);
 
                 newEditorLevel.Tiles.Add(tile);
                 newEditorLevel.TilesByLocation.Add(tile.GridLocation, tile);
-            }
-        }
 
-        for (int k = 0; k < newEditorLevel.Tiles.Count; k++)
-        {
-            Tile tile = newEditorLevel.Tiles[k];
-            if (tile.GridLocation.X == 0 || tile.GridLocation.X == _gridWidth - 1 ||
+                if (tile.GridLocation.X == 0 || tile.GridLocation.X == _gridWidth - 1 ||
                 tile.GridLocation.Y == 0 || tile.GridLocation.Y == _gridHeight - 1)
-            {
-                GameObject tileBlockerGO = Instantiate(TileBlockerPrefab, tile.gameObject.transform);
-                TileBlocker tileBlocker = tileBlockerGO.GetComponent<TileBlocker>();
-                tileBlocker.SetTile(tile);
+                {
+                    tile.BuildTileObstacle();
+                }
             }
         }
 

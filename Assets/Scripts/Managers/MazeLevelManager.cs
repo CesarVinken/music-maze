@@ -9,8 +9,8 @@ public class MazeLevelManager : MonoBehaviour, IOnEventCallback
     public static MazeLevelManager Instance;
     public MazeLevel Level;
 
-    public List<CharacterSpawnpoint> PlayerCharacterSpawnpoints = new List<CharacterSpawnpoint>();
-    public List<CharacterSpawnpoint> EnemyCharacterSpawnpoints = new List<CharacterSpawnpoint>();
+    public GameObject TilePrefab;
+    public GameObject TileBlockerPrefab;
 
     public void Awake()
     {
@@ -27,23 +27,41 @@ public class MazeLevelManager : MonoBehaviour, IOnEventCallback
         PhotonNetwork.RemoveCallbackTarget(this);
     }
 
+    //// Legacy
+    //public void LoadLevel(MazeName mazeName = MazeName.Blank6x6)
+    //{
+    //    Level = MazeLevel.Create(mazeName);
+    //}
 
-    public void LoadLevel(MazeName mazeName = MazeName.Blank6x6)
+    public void LoadLevel(MazeLevelData mazeLevelData)
     {
-        Level = MazeLevel.Create(mazeName);
+        Logger.Log("Load level with new data method");
+        Level = MazeLevel.Create(mazeLevelData);
     }
 
     public void UnloadLevel()
     {
-        Destroy(TilesContainer.Instance.gameObject);
+        if(TilesContainer.Instance)
+        {
+            Destroy(TilesContainer.Instance.gameObject);
+        }
+
         TilesContainer.Instance = null;
 
         CharacterManager.Instance.UnloadCharacters();
         SceneObjectManager.Instance.UnloadSceneObjects();
 
-        Level.Tiles.Clear();
+        if(Level != null)
+        {
+            Logger.Log(Logger.Initialisation, "Unload level {0}", Level);
+            Level.Tiles.Clear();
+            Level.TilesByLocation.Clear();
+            CameraController.Instance.ResetCamera();
+            Level = null;
+        }
 
-        CameraController.Instance.ResetCamera();
+        //Level.UnwalkableTiles.Clear();
+
     }
 
     // Previously tried solution with collision detection on all separate clients for all players(instead of events). 
@@ -99,7 +117,7 @@ public class MazeLevelManager : MonoBehaviour, IOnEventCallback
 
     public void ValidateSpawnpoints()
     {
-        int playerStartLocations = PlayerCharacterSpawnpoints.Count;
+        int playerStartLocations = Level.PlayerCharacterSpawnpoints.Count;
         if (playerStartLocations == 0)
         {
             Logger.Warning(Logger.Initialisation, "The level {0} does not have any player starting positions set up while it needs 2.", Level.MazeName);

@@ -1,12 +1,11 @@
-﻿using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class TilesContainer : MonoBehaviour
 {
     public static TilesContainer Instance;
 
-    public List<Tile> Tiles;
-    public List<GameObject> TileGOs;
+    //public List<Tile> Tiles;
+    //public List<GameObject> TileGOs;
 
     public void Awake()
     {

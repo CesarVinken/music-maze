@@ -1,0 +1,389 @@
+{
+    "Name": "A",
+    "Tiles": [
+        {
+            "Id": "e5c0ca60-a8a1-4bea-9b50-d73e9c8228bf",
+            "Walkable": false,
+            "GridLocationX": 0,
+            "GridLocationY": 0
+        },
+        {
+            "Id": "2e3508d3-f8d4-4f83-9bf8-2ba0c61bc5b7",
+            "Walkable": false,
+            "GridLocationX": 0,
+            "GridLocationY": 1
+        },
+        {
+            "Id": "18aa3b29-a163-4781-89c1-284fcf030f54",
+            "Walkable": false,
+            "GridLocationX": 0,
+            "GridLocationY": 2
+        },
+        {
+            "Id": "fde3172a-3fee-4b44-b841-076d06a48824",
+            "Walkable": false,
+            "GridLocationX": 0,
+            "GridLocationY": 3
+        },
+        {
+            "Id": "4f3d6aeb-7fab-4a7c-9c30-fd703ff0dcdb",
+            "Walkable": false,
+            "GridLocationX": 0,
+            "GridLocationY": 4
+        },
+        {
+            "Id": "c63bab7a-cb86-410b-8195-c83db4e7e8c6",
+            "Walkable": false,
+            "GridLocationX": 0,
+            "GridLocationY": 5
+        },
+        {
+            "Id": "db11ab51-52ec-4706-afbf-2cafba204635",
+            "Walkable": false,
+            "GridLocationX": 0,
+            "GridLocationY": 6
+        },
+        {
+            "Id": "f27faf14-4a0c-4422-8df1-b8e94810ed93",
+            "Walkable": false,
+            "GridLocationX": 0,
+            "GridLocationY": 7
+        },
+        {
+            "Id": "87e91d28-1f33-431b-9c56-3acaca617567",
+            "Walkable": false,
+            "GridLocationX": 1,
+            "GridLocationY": 0
+        },
+        {
+            "Id": "9defbeda-6025-4996-bd5e-411171d26657",
+            "Walkable": true,
+            "GridLocationX": 1,
+            "GridLocationY": 1
+        },
+        {
+            "Id": "5d709229-fd83-421c-abb8-272567175222",
+            "Walkable": true,
+            "GridLocationX": 1,
+            "GridLocationY": 2
+        },
+        {
+            "Id": "c91dda65-dbae-4f53-ab9c-a10eaa58d3f7",
+            "Walkable": true,
+            "GridLocationX": 1,
+            "GridLocationY": 3
+        },
+        {
+            "Id": "10597696-d2c2-420a-8bef-5470a82f862b",
+            "Walkable": true,
+            "GridLocationX": 1,
+            "GridLocationY": 4
+        },
+        {
+            "Id": "6502732f-c169-4a7d-a516-20178e1103b4",
+            "Walkable": true,
+            "GridLocationX": 1,
+            "GridLocationY": 5
+        },
+        {
+            "Id": "c7762490-89d9-4f35-b951-54f203691a34",
+            "Walkable": true,
+            "GridLocationX": 1,
+            "GridLocationY": 6
+        },
+        {
+            "Id": "98bef70a-1bb6-4f2d-b006-00c4873435d2",
+            "Walkable": false,
+            "GridLocationX": 1,
+            "GridLocationY": 7
+        },
+        {
+            "Id": "3e74adbb-4d91-4d59-b1c9-62e30cb4e39e",
+            "Walkable": false,
+            "GridLocationX": 2,
+            "GridLocationY": 0
+        },
+        {
+            "Id": "9f7d6916-2a16-4ec1-b099-4eef1d85ae40",
+            "Walkable": true,
+            "GridLocationX": 2,
+            "GridLocationY": 1
+        },
+        {
+            "Id": "4b6cb2c9-e570-4bc4-9ad5-53b4dd9a15a1",
+            "Walkable": true,
+            "GridLocationX": 2,
+            "GridLocationY": 2
+        },
+        {
+            "Id": "5cdb92a7-60b2-4f77-ade6-20c263cbfc73",
+            "Walkable": true,
+            "GridLocationX": 2,
+            "GridLocationY": 3
+        },
+        {
+            "Id": "28049ad6-d3b0-46f6-9f6a-2c86c5f14bc3",
+            "Walkable": true,
+            "GridLocationX": 2,
+            "GridLocationY": 4
+        },
+        {
+            "Id": "6ea06ae0-7161-4a30-b286-ad09dc5f17b4",
+            "Walkable": true,
+            "GridLocationX": 2,
+            "GridLocationY": 5
+        },
+        {
+            "Id": "ef4a9d79-847d-4da5-8555-21cfbc27cb8c",
+            "Walkable": true,
+            "GridLocationX": 2,
+            "GridLocationY": 6
+        },
+        {
+            "Id": "ff945ab8-d8f3-453e-85a0-2012e729ec60",
+            "Walkable": false,
+            "GridLocationX": 2,
+            "GridLocationY": 7
+        },
+        {
+            "Id": "1b42da8b-2670-4788-ac54-d8f59f8d4c51",
+            "Walkable": false,
+            "GridLocationX": 3,
+            "GridLocationY": 0
+        },
+        {
+            "Id": "69926c9f-09af-4c2a-8b22-594ab691267e",
+            "Walkable": true,
+            "GridLocationX": 3,
+            "GridLocationY": 1
+        },
+        {
+            "Id": "8c220328-94f3-4fda-b9cb-8008c05d5801",
+            "Walkable": true,
+            "GridLocationX": 3,
+            "GridLocationY": 2
+        },
+        {
+            "Id": "079c0965-5074-4138-b2bc-4bf43b956477",
+            "Walkable": true,
+            "GridLocationX": 3,
+            "GridLocationY": 3
+        },
+        {
+            "Id": "2f15d32a-8e07-4230-bac0-1b3e82ca500f",
+            "Walkable": true,
+            "GridLocationX": 3,
+            "GridLocationY": 4
+        },
+        {
+            "Id": "1e9174af-f750-4f2c-a221-1642e1c86dc7",
+            "Walkable": true,
+            "GridLocationX": 3,
+            "GridLocationY": 5
+        },
+        {
+            "Id": "79018e0d-18cb-4896-b1f2-e3778b620054",
+            "Walkable": true,
+            "GridLocationX": 3,
+            "GridLocationY": 6
+        },
+        {
+            "Id": "b51c488d-aa71-4ada-8732-a8a870e85e35",
+            "Walkable": false,
+            "GridLocationX": 3,
+            "GridLocationY": 7
+        },
+        {
+            "Id": "f017c2e4-4657-4ab2-8a34-607289e02e54",
+            "Walkable": false,
+            "GridLocationX": 4,
+            "GridLocationY": 0
+        },
+        {
+            "Id": "70bcd21c-c138-4645-a59e-86eaf17a32a8",
+            "Walkable": true,
+            "GridLocationX": 4,
+            "GridLocationY": 1
+        },
+        {
+            "Id": "a448e70f-b358-47cc-b653-a674a933a64c",
+            "Walkable": true,
+            "GridLocationX": 4,
+            "GridLocationY": 2
+        },
+        {
+            "Id": "4bc7af6f-9f70-4698-ad22-ac3067eba1fe",
+            "Walkable": true,
+            "GridLocationX": 4,
+            "GridLocationY": 3
+        },
+        {
+            "Id": "562441b5-6f35-40d0-8133-6545eae366b3",
+            "Walkable": true,
+            "GridLocationX": 4,
+            "GridLocationY": 4
+        },
+        {
+            "Id": "bff6911f-1baa-40d4-a0a5-93c7d911bd5c",
+            "Walkable": true,
+            "GridLocationX": 4,
+            "GridLocationY": 5
+        },
+        {
+            "Id": "d44cf62c-183d-42ce-911c-ef163d1e5d6d",
+            "Walkable": true,
+            "GridLocationX": 4,
+            "GridLocationY": 6
+        },
+        {
+            "Id": "28b54063-e31d-4528-98f7-811eadde0a7e",
+            "Walkable": false,
+            "GridLocationX": 4,
+            "GridLocationY": 7
+        },
+        {
+            "Id": "49357514-1f94-4c84-85c8-045377fff695",
+            "Walkable": false,
+            "GridLocationX": 5,
+            "GridLocationY": 0
+        },
+        {
+            "Id": "fb10eeef-70ea-46b6-a2d4-f8837b5d0b50",
+            "Walkable": true,
+            "GridLocationX": 5,
+            "GridLocationY": 1
+        },
+        {
+            "Id": "39d55403-9054-48ca-aedc-bfb3169c992b",
+            "Walkable": true,
+            "GridLocationX": 5,
+            "GridLocationY": 2
+        },
+        {
+            "Id": "8b34258d-f84f-4c77-96f6-e9a380ae7a55",
+            "Walkable": true,
+            "GridLocationX": 5,
+            "GridLocationY": 3
+        },
+        {
+            "Id": "25ca287e-d9a5-4f3f-b339-56cda15fcefe",
+            "Walkable": true,
+            "GridLocationX": 5,
+            "GridLocationY": 4
+        },
+        {
+            "Id": "81b74001-9ca9-4f67-84bf-b44ba633ceba",
+            "Walkable": true,
+            "GridLocationX": 5,
+            "GridLocationY": 5
+        },
+        {
+            "Id": "47f5cf2a-5644-45b7-83f5-27383f9d73fb",
+            "Walkable": true,
+            "GridLocationX": 5,
+            "GridLocationY": 6
+        },
+        {
+            "Id": "004238e1-3bd5-463a-9504-667d33812288",
+            "Walkable": false,
+            "GridLocationX": 5,
+            "GridLocationY": 7
+        },
+        {
+            "Id": "3a0c1ebe-12a3-40e3-9021-ce36ca14a949",
+            "Walkable": false,
+            "GridLocationX": 6,
+            "GridLocationY": 0
+        },
+        {
+            "Id": "940c9f81-5fcf-46d7-aa7b-ed2260852b97",
+            "Walkable": true,
+            "GridLocationX": 6,
+            "GridLocationY": 1
+        },
+        {
+            "Id": "8f8e612a-453b-444b-83e5-73e59e3b131c",
+            "Walkable": true,
+            "GridLocationX": 6,
+            "GridLocationY": 2
+        },
+        {
+            "Id": "6570bc4a-2a65-4771-836e-c5a27f286071",
+            "Walkable": true,
+            "GridLocationX": 6,
+            "GridLocationY": 3
+        },
+        {
+            "Id": "ae2ad7bc-15af-4d06-8974-15fd6cf82666",
+            "Walkable": true,
+            "GridLocationX": 6,
+            "GridLocationY": 4
+        },
+        {
+            "Id": "d3da7f93-c989-40ef-99b6-873256adfdaa",
+            "Walkable": true,
+            "GridLocationX": 6,
+            "GridLocationY": 5
+        },
+        {
+            "Id": "642acaf6-670f-45fc-8c8b-b0a958c2c68e",
+            "Walkable": true,
+            "GridLocationX": 6,
+            "GridLocationY": 6
+        },
+        {
+            "Id": "aac8991b-e2ad-41eb-b24f-f1ea67c639a8",
+            "Walkable": false,
+            "GridLocationX": 6,
+            "GridLocationY": 7
+        },
+        {
+            "Id": "5bf00f17-8084-4d4e-85a3-c5cc0468fa96",
+            "Walkable": false,
+            "GridLocationX": 7,
+            "GridLocationY": 0
+        },
+        {
+            "Id": "34b4f6db-54ca-4b23-bcb2-d0e0cd3d7e0c",
+            "Walkable": false,
+            "GridLocationX": 7,
+            "GridLocationY": 1
+        },
+        {
+            "Id": "f028b180-0dbb-4e66-9a7f-c5059ff34c6e",
+            "Walkable": false,
+            "GridLocationX": 7,
+            "GridLocationY": 2
+        },
+        {
+            "Id": "76fa1f38-23d2-4d9e-8fbc-a13aba1c0ae8",
+            "Walkable": false,
+            "GridLocationX": 7,
+            "GridLocationY": 3
+        },
+        {
+            "Id": "865d6ab1-b5fe-4450-a3f6-e730143062a6",
+            "Walkable": false,
+            "GridLocationX": 7,
+            "GridLocationY": 4
+        },
+        {
+            "Id": "0ece256e-4617-424e-8eed-201c3e08b694",
+            "Walkable": false,
+            "GridLocationX": 7,
+            "GridLocationY": 5
+        },
+        {
+            "Id": "c52913cf-f02f-49b9-bcac-5d4176b99011",
+            "Walkable": false,
+            "GridLocationX": 7,
+            "GridLocationY": 6
+        },
+        {
+            "Id": "5e2fcb92-4f05-4e4a-850e-480adcc1e74a",
+            "Walkable": false,
+            "GridLocationX": 7,
+            "GridLocationY": 7
+        }
+    ]
+}

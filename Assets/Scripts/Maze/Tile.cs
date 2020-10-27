@@ -16,18 +16,20 @@ public class Tile : MonoBehaviour
         Guard.CheckIsNull(SpriteRenderer, "SpriteRenderer", gameObject);
 
         if (transform.position.y < 0) Logger.Error("There is a tile at {0},{1}. Tiles cannot have negative Y values", transform.position.x, transform.position.y);
-        Sprite = SpriteRenderer.sprite;
+        //Sprite = SpriteRenderer.sprite;
 
-        GridLocation = GridLocation.VectorToGrid(transform.position);
-        gameObject.name = "Tile" + GridLocation.X + ", " + GridLocation.Y;
+        //GridLocation = GridLocation.VectorToGrid(transform.position);// TODO REMOVE
+        //gameObject.name = "Tile" + GridLocation.X + ", " + GridLocation.Y;
     }
 
     public void Start()
     {
+        if (EditorManager.InEditor) return;
+
         if (!Walkable)
         {
             Markable = false;
-            MazeLevelManager.Instance.Level.AddUnwalkableTile(this);
+            //MazeLevelManager.Instance.Level.AddUnwalkableTile(this);
         } else
         {
             if (!Markable) return;
@@ -62,6 +64,29 @@ public class Tile : MonoBehaviour
 
             MazeLevelManager.Instance.SetTileMarker(this, player);        
         }
+    }
+
+    public void SetId(string id)
+    {
+        TileId = id;
+    }
+
+    public void SetGridLocation(int x, int y)
+    {
+        GridLocation = new GridLocation(x, y);
+    }
+
+    public void BuildTileObstacle()
+    {
+        GameObject tileBlockerGO = Instantiate(MazeLevelManager.Instance.TileBlockerPrefab, transform);
+        TileBlocker tileBlocker = tileBlockerGO.GetComponent<TileBlocker>();
+        tileBlocker.SetTile(this);
+        Walkable = false;
+    }
+
+    public void SetSprite()
+    {
+        Sprite = SpriteRenderer.sprite;
     }
 }
 

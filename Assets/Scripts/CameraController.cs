@@ -50,7 +50,8 @@ public class CameraController : MonoBehaviour
 
     public void Start()
     {
-        SetPanLimits(MazeLevelManager.Instance.Level.LevelBounds);
+        if(MazeLevelManager.Instance?.Level != null)
+            SetPanLimits(MazeLevelManager.Instance.Level.LevelBounds);
     }
 
     public void ResetCamera()

@@ -56,7 +56,14 @@ public class GameManager : MonoBehaviourPunCallbacks
         Instantiate(MazeLevelManagerPrefab, transform);
         Instantiate(CharacterManagerPrefab, transform);
 
-        MazeLevelManager.Instance.LoadLevel(MazeName.CameraBoundsTest);
+        JsonMazeLevelFileReader fileReader = new JsonMazeLevelFileReader();
+        MazeLevelData startUpLevelData = fileReader.LoadLevel("default");
+
+        if(startUpLevelData == null)
+        {
+            Logger.Error("Could not find the default level for startup");
+        }
+        MazeLevelManager.Instance.LoadLevel(startUpLevelData);
 
         AstarGO.SetActive(true);    // triggers pathfinding grid scan
     }
@@ -69,7 +76,13 @@ public class GameManager : MonoBehaviourPunCallbacks
         //    SceneManager.LoadScene("Launcher");
         //    return;
         //}
-        
+        if (MazeLevelManager.Instance.Level == null)
+        {
+            Logger.Log(Logger.Initialisation, "No level loaded on startup. Returning");
+            return;
+        }
+        if (MazeLevelManager.Instance.Level.PlayerCharacterSpawnpoints.Count == 0) return;
+
         CharacterManager.Instance.SpawnCharacters();
         CameraController.Instance.FocusOnPlayer();
     }

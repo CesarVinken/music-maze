@@ -43,15 +43,15 @@ public class CharacterManager : MonoBehaviourPunCallbacks
         {
             MazeLevel level = MazeLevelManager.Instance.Level;
 
-            if(MazeLevelManager.Instance.PlayerCharacterSpawnpoints.Count != 2)
+            if(level.PlayerCharacterSpawnpoints.Count != 2)
             {
-                Logger.Error("Did not find 2, but {0} character startlocations for level", MazeLevelManager.Instance.PlayerCharacterSpawnpoints.Count);
+                Logger.Error("Did not find 2, but {0} character startlocations for level", level.PlayerCharacterSpawnpoints.Count);
             }
             
             if (PhotonNetwork.IsMasterClient || GameManager.Instance.GameType == GameType.SinglePlayer)
             {
                 Debug.Log("Instantiating Player 1");
-                CharacterBundle PlayerBundle = SpawnCharacter(MazeLevelManager.Instance.PlayerCharacterSpawnpoints[0].CharacterBlueprint, MazeLevelManager.Instance.PlayerCharacterSpawnpoints[0].GridLocation);
+                CharacterBundle PlayerBundle = SpawnCharacter(level.PlayerCharacterSpawnpoints[0].CharacterBlueprint, level.PlayerCharacterSpawnpoints[0].GridLocation);
                 Player1GO = PlayerBundle.CharacterGO;
                 PlayerCharacter player = PlayerBundle.Character as PlayerCharacter;
 
@@ -61,7 +61,7 @@ public class CharacterManager : MonoBehaviourPunCallbacks
             {
                 Debug.Log("Instantiating Player 2");
 
-                CharacterBundle PlayerBundle = SpawnCharacter(MazeLevelManager.Instance.PlayerCharacterSpawnpoints[1].CharacterBlueprint, MazeLevelManager.Instance.PlayerCharacterSpawnpoints[1].GridLocation);
+                CharacterBundle PlayerBundle = SpawnCharacter(level.PlayerCharacterSpawnpoints[1].CharacterBlueprint, level.PlayerCharacterSpawnpoints[1].GridLocation);
                 Player2GO = PlayerBundle.CharacterGO;
                 PlayerCharacter player = PlayerBundle.Character as PlayerCharacter;
             }
@@ -70,9 +70,10 @@ public class CharacterManager : MonoBehaviourPunCallbacks
 
     private void SpawnEnemies()
     {
-        for (int i = 0; i < MazeLevelManager.Instance.EnemyCharacterSpawnpoints.Count; i++)
+        MazeLevel level = MazeLevelManager.Instance.Level;
+        for (int i = 0; i < level.EnemyCharacterSpawnpoints.Count; i++)
         {
-            CharacterBundle enemy = SpawnCharacter(MazeLevelManager.Instance.EnemyCharacterSpawnpoints[i].CharacterBlueprint, MazeLevelManager.Instance.EnemyCharacterSpawnpoints[i].GridLocation);
+            CharacterBundle enemy = SpawnCharacter(level.EnemyCharacterSpawnpoints[i].CharacterBlueprint, level.EnemyCharacterSpawnpoints[i].GridLocation);
             enemy.CharacterGO.name = "The Enemy";
         }
     }

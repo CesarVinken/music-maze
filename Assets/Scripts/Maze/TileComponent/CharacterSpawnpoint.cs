@@ -19,10 +19,10 @@ public class CharacterSpawnpoint : MonoBehaviour
         GridLocation = GridLocation.VectorToGrid(transform.position);
         if (IsPlayer)
         {
-            MazeLevelManager.Instance.PlayerCharacterSpawnpoints.Add(this);
+            MazeLevelManager.Instance.Level.PlayerCharacterSpawnpoints.Add(this);
         } else
         {
-            MazeLevelManager.Instance.EnemyCharacterSpawnpoints.Add(this);
+            MazeLevelManager.Instance.Level.EnemyCharacterSpawnpoints.Add(this);
         }
     }
 }

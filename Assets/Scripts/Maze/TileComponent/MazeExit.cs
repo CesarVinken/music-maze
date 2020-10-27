@@ -25,7 +25,7 @@ public class MazeExit : MonoBehaviour
 
         tile.Walkable = true;
         _spriteRenderer.enabled = false;
-        MazeLevelManager.Instance.Level.UnwalkableTiles.Remove(tile);
+
         gameObject.layer = 9; // set layer to PlayerOnly, which is layer 9. Should not be hardcoded
         _spriteRenderer.gameObject.layer = 9;
 

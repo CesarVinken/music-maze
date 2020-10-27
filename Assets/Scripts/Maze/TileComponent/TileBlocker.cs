@@ -13,8 +13,6 @@ public class TileBlocker : MonoBehaviour
 
         Tile = tile;
         ParentId = tile.TileId;
-
-        tile.Walkable = false;
     }
     
 }

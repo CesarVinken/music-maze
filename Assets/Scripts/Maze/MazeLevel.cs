@@ -3,73 +3,79 @@ using UnityEngine;
 
 public class MazeLevel
 {
+    public string MazeName;
+    public GridLocation LevelBounds = new GridLocation(0, 0);
+
     public List<Tile> Tiles = new List<Tile>();
-    public List<Tile> UnwalkableTiles = new List<Tile>();
     public List<MazeExit> MazeExits = new List<MazeExit>();
 
     public int NumberOfUnmarkedTiles = -1;
 
     public Dictionary<GridLocation, Tile> TilesByLocation = new Dictionary<GridLocation, Tile>();
 
-    public MazeName MazeName; // Get rid of this field, because MazeNames should be loaded data and not a hardcoded enum
+    public List<CharacterSpawnpoint> PlayerCharacterSpawnpoints = new List<CharacterSpawnpoint>();
+    public List<CharacterSpawnpoint> EnemyCharacterSpawnpoints = new List<CharacterSpawnpoint>();
 
-    public GridLocation LevelBounds = new GridLocation(0, 0);
 
+
+    private GameObject _mazeContainer;
 
     public MazeLevel()
     {
 
     }
-
-    public MazeLevel(MazeName mazeName)
+     
+    public MazeLevel(MazeLevelData mazeLevelData)
     {
-        MazeName = mazeName;
+        MazeName = mazeLevelData.Name;
 
-        if(TilesContainer.Instance != null)
+        if (TilesContainer.Instance != null)
         {
             GameObject.Destroy(TilesContainer.Instance.gameObject);
             TilesContainer.Instance = null;
         }
 
-        GameObject mazeContainer = GameObject.Instantiate(Resources.Load<GameObject>("Prefabs/Level/" + MazeName));
+        _mazeContainer = new GameObject(MazeName);
+        _mazeContainer.transform.SetParent(GameManager.Instance.GridGO.transform);
+        _mazeContainer.AddComponent<TilesContainer>();
+        _mazeContainer.SetActive(true);
 
-        if (mazeContainer == null)
-            Logger.Error("Could not find prefab for level {0}", mazeName);
-
-        mazeContainer.transform.SetParent(GameManager.Instance.GridGO.transform);
-        mazeContainer.SetActive(true);
-
-        Tiles = TilesContainer.Instance.Tiles;
-
-        MazeLevelManager.Instance.ValidateSpawnpoints(); // make sure we have exactly 2 player spawnpoints
-
-        OrderTilesByLocation();
+        BuildTiles(mazeLevelData);
+    }
+    public static MazeLevel Create(MazeLevelData mazeLevelData)
+    {
+        Logger.Log(Logger.Initialisation, "Set up new Maze Level '<color=" + ConsoleConfiguration.HighlightColour + ">" + mazeLevelData.Name + "</color>'");
+        return new MazeLevel(mazeLevelData);
     }
 
-    public void OrderTilesByLocation()
+    public void BuildTiles(MazeLevelData mazeLevelData)
     {
-        for (int i = 0; i < Tiles.Count; i++)
+        for (int i = 0; i < mazeLevelData.Tiles.Count; i++)
         {
-            Tile tile = Tiles[i];
-            GridLocation gridLocation = new GridLocation(tile.GridLocation.X, tile.GridLocation.Y);
-            TilesByLocation.Add(gridLocation, tile);
+            SerialisableTile serialisableTile = mazeLevelData.Tiles[i];
+            GameObject tileGO = GameObject.Instantiate(MazeLevelManager.Instance.TilePrefab, _mazeContainer.transform);
+
+            Tile tile = tileGO.GetComponent<Tile>();
+            tile.SetGridLocation(serialisableTile.GridLocationX, serialisableTile.GridLocationY);
+            tile.SetId(serialisableTile.Id);
+            tile.SetSprite();
+
+            tileGO.name = "Tile" + tile.GridLocation.X + ", " + tile.GridLocation.Y;
+            tileGO.transform.position = GridLocation.GridToVector(tile.GridLocation);
+
+            Tiles.Add(tile);
+
+            if (!serialisableTile.Walkable)
+            {
+                tile.BuildTileObstacle();
+            }
+
+            TilesByLocation.Add(tile.GridLocation, tile);
 
             GridLocation furthestBounds = LevelBounds;
-            if (gridLocation.X > furthestBounds.X) LevelBounds.X = gridLocation.X;
-            if (gridLocation.Y > furthestBounds.Y) LevelBounds.Y = gridLocation.Y;
+            if (tile.GridLocation.X > furthestBounds.X) LevelBounds.X = tile.GridLocation.X;
+            if (tile.GridLocation.Y > furthestBounds.Y) LevelBounds.Y = tile.GridLocation.Y;
         }
-    }
-
-    public static MazeLevel Create(MazeName mazeName = MazeName.Blank6x6)
-    {
-        Logger.Log(Logger.Initialisation, "Set up new Maze Level '<color=" + ConsoleConfiguration.HighlightColour + ">" + mazeName + "</color>'");
-        return new MazeLevel(mazeName);
-    }
-
-    public void AddUnwalkableTile(Tile tile)
-    {
-        //Logger.Log("{0},{1} is an unwalkable tile", tile.transform.position.x, tile.transform.position.y);
-        UnwalkableTiles.Add(tile);
     }
 }
 
