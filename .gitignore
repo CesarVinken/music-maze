@@ -17,8 +17,10 @@ Assets/Plugins/
 Assets/Plugins.meta
 Assets/Resources/
 Assets/Resources.meta
-Assets/Scenes/
-Assets/Scenes.meta
+Assets/StreamingAssets/
+Assets/StreamingAssets.meta
+Assets/Animations/
+Assets/Animations.meta
 Assets/Tilemaps/
 Assets/Tilemaps.meta
 Assets/Scripts/Character/Pathfinding/AstarPathfindingProject

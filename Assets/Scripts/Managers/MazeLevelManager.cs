@@ -1,7 +1,6 @@
 ﻿using ExitGames.Client.Photon;
 using Photon.Pun;
 using Photon.Realtime;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class MazeLevelManager : MonoBehaviour, IOnEventCallback
@@ -27,15 +26,8 @@ public class MazeLevelManager : MonoBehaviour, IOnEventCallback
         PhotonNetwork.RemoveCallbackTarget(this);
     }
 
-    //// Legacy
-    //public void LoadLevel(MazeName mazeName = MazeName.Blank6x6)
-    //{
-    //    Level = MazeLevel.Create(mazeName);
-    //}
-
     public void LoadLevel(MazeLevelData mazeLevelData)
     {
-        Logger.Log("Load level with new data method");
         Level = MazeLevel.Create(mazeLevelData);
     }
 
@@ -59,9 +51,6 @@ public class MazeLevelManager : MonoBehaviour, IOnEventCallback
             CameraController.Instance.ResetCamera();
             Level = null;
         }
-
-        //Level.UnwalkableTiles.Clear();
-
     }
 
     // Previously tried solution with collision detection on all separate clients for all players(instead of events). 
