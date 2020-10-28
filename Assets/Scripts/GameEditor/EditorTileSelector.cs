@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System.Linq;
+using UnityEngine;
 
 public class EditorTileSelector : MonoBehaviour
 {
@@ -59,6 +60,8 @@ public class EditorTileSelector : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Return))
         {
             Logger.Log("Do something to tile {0}, {1}", CurrentSelectedLocation.X, CurrentSelectedLocation.Y);
+            EditorMazeTileAttributeType attributeType = EditorManager.SelectedMazeTileAttributeType;
+            PlaceMazeTileAttribute(attributeType, CurrentSelectedLocation);
         }
     }
 
@@ -93,5 +96,15 @@ public class EditorTileSelector : MonoBehaviour
         if (selectedTileLocation.Y > EditorManager.EditorLevel.LevelBounds.Y) return false;
 
         return true;
+    }
+
+    public void PlaceMazeTileAttribute(EditorMazeTileAttributeType attributeType, GridLocation gridLocation)
+    {
+        IEditorMazeTileAttribute attribute = EditorSelectedAttributeContainer.Instance.EditorMazeTileAttributes.FirstOrDefault(a => a.AttributeType == attributeType);
+
+        if (attribute == null) Logger.Error($"Could not find the attribute type {attributeType}");
+
+        EditorManager.EditorLevel.TilesByLocation.TryGetValue(gridLocation, out Tile tile);
+        attribute.PlaceAttribute(tile);
     }
 }

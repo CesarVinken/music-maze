@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-public class MazeExit : MonoBehaviour
+public class MazeExit : MonoBehaviour, IMazeTileAttribute
 {
     [SerializeField] private SpriteRenderer _spriteRenderer;
     [SerializeField] private GridLocation _gridLocation;
@@ -41,5 +41,11 @@ public class MazeExit : MonoBehaviour
             Logger.Log("{0} reached the exit! {1},{2}", player.name, _gridLocation.X, _gridLocation.Y);
             CharacterManager.Instance.CharacterExit(player);
         }
+    }
+
+    public void Remove()
+    {
+        Destroy(this);
+        Destroy(gameObject);
     }
 }

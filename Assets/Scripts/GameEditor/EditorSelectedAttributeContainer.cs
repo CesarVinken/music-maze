@@ -12,7 +12,7 @@ public class EditorSelectedAttributeContainer : MonoBehaviour
     public Text SelectedAttributeLabel;
     public Image SelectedAttributeSprite;
 
-    public List<EditorMazeTileAttribute> EditorMazeTileAttributes = new List<EditorMazeTileAttribute>();
+    public List<IEditorMazeTileAttribute> EditorMazeTileAttributes = new List<IEditorMazeTileAttribute>();
 
     void Awake()
     {
@@ -25,12 +25,12 @@ public class EditorSelectedAttributeContainer : MonoBehaviour
 
         EditorMazeTileAttributes.Clear();
 
-        EditorMazeTileAttributes.Add(new EditorMazeTileAttribute(EditorMazeTileAttributeType.Obstacle));
-        EditorMazeTileAttributes.Add(new EditorMazeTileAttribute(EditorMazeTileAttributeType.PlayerSpawnpoint));
-        EditorMazeTileAttributes.Add(new EditorMazeTileAttribute(EditorMazeTileAttributeType.EnemySpawnpoint));
-        EditorMazeTileAttributes.Add(new EditorMazeTileAttribute(EditorMazeTileAttributeType.PlayerExit));
+        EditorMazeTileAttributes.Add(new EditorObstacleTileAttribute());
+        //EditorMazeTileAttributes.Add(new EditorMazeTileAttribute(EditorMazeTileAttributeType.PlayerSpawnpoint));
+        //EditorMazeTileAttributes.Add(new EditorMazeTileAttribute(EditorMazeTileAttributeType.EnemySpawnpoint));
+        //EditorMazeTileAttributes.Add(new EditorMazeTileAttribute(EditorMazeTileAttributeType.PlayerExit));
 
-        EditorMazeTileAttribute defaultAttribute = EditorMazeTileAttributes[0];
+        IEditorMazeTileAttribute defaultAttribute = EditorMazeTileAttributes[0];
         SetSelectedAttribute(defaultAttribute);
     }
 
@@ -58,11 +58,11 @@ public class EditorSelectedAttributeContainer : MonoBehaviour
         if (newIndex >= EditorMazeTileAttributes.Count)
             newIndex = 0;
 
-        EditorMazeTileAttribute attribute = EditorMazeTileAttributes[newIndex];
+        IEditorMazeTileAttribute attribute = EditorMazeTileAttributes[newIndex];
         SetSelectedAttribute(attribute);
     }
 
-    public void SetSelectedAttribute(EditorMazeTileAttribute attribute)
+    public void SetSelectedAttribute(IEditorMazeTileAttribute attribute)
     {
         SelectedAttributeLabel.text = GetSelectedAttributeLabel(attribute.Name);
         SelectedAttributeSprite.sprite = attribute.Sprite;

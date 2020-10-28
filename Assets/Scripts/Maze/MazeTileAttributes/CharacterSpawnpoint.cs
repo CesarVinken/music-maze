@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-public class CharacterSpawnpoint : MonoBehaviour
+public class CharacterSpawnpoint : MonoBehaviour, IMazeTileAttribute
 {
     public CharacterType CharacterType;
     public bool IsPlayer;
@@ -24,5 +24,11 @@ public class CharacterSpawnpoint : MonoBehaviour
         {
             MazeLevelManager.Instance.Level.EnemyCharacterSpawnpoints.Add(this);
         }
+    }
+
+    public void Remove()
+    {
+        Destroy(this);
+        Destroy(gameObject);
     }
 }

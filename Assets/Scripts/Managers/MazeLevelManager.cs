@@ -9,7 +9,7 @@ public class MazeLevelManager : MonoBehaviour, IOnEventCallback
     public MazeLevel Level;
 
     public GameObject TilePrefab;
-    public GameObject TileBlockerPrefab;
+    public GameObject TileObstaclePrefab;
 
     public void Awake()
     {

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class TileBlocker : MonoBehaviour
+public class TileObstacle : MonoBehaviour, IMazeTileAttribute
 {
     public Tile Tile;
     public string ParentId;
@@ -15,4 +15,9 @@ public class TileBlocker : MonoBehaviour
         ParentId = tile.TileId;
     }
     
+    public void Remove()
+    {
+        Destroy(this);
+        Destroy(gameObject);
+    }
 }

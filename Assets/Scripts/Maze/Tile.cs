@@ -1,4 +1,7 @@
-﻿using UnityEngine;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using UnityEngine;
 
 public class Tile : MonoBehaviour
 {
@@ -10,6 +13,8 @@ public class Tile : MonoBehaviour
     public bool Walkable = true; // TODO Automatically set value in Maze Level Editor
     public bool Markable = true;
     public GridLocation GridLocation;
+
+    public List<IMazeTileAttribute> MazeTileAttributes = new List<IMazeTileAttribute>();
 
     public void Awake()
     {
@@ -78,10 +83,21 @@ public class Tile : MonoBehaviour
 
     public void BuildTileObstacle()
     {
-        GameObject tileBlockerGO = Instantiate(MazeLevelManager.Instance.TileBlockerPrefab, transform);
-        TileBlocker tileBlocker = tileBlockerGO.GetComponent<TileBlocker>();
-        tileBlocker.SetTile(this);
+        GameObject tileObstacleGO = Instantiate(MazeLevelManager.Instance.TileObstaclePrefab, transform);
+        TileObstacle tileObstacle = tileObstacleGO.GetComponent<TileObstacle>();
+        tileObstacle.SetTile(this);
         Walkable = false;
+        MazeTileAttributes.Add(tileObstacle);
+    }
+
+    public void RemoveTileObstacle()
+    {
+        Walkable = true;
+        IMazeTileAttribute tileObstacle = (TileObstacle)MazeTileAttributes.FirstOrDefault(attribute => attribute is TileObstacle);
+        if (tileObstacle == null) return;
+        MazeTileAttributes.Remove(tileObstacle);
+        tileObstacle.Remove();
+
     }
 
     public void SetSprite()

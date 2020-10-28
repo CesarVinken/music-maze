@@ -14,7 +14,7 @@ public class EditorGridGenerator : MonoBehaviour
     private string _mazeName = "";
 
     [SerializeField] private GameObject EmptyTilePrefab;
-    [SerializeField] private GameObject TileBlockerPrefab;
+    [SerializeField] private GameObject TileObstaclePrefab;
 
     public void Awake()
     {
@@ -22,7 +22,7 @@ public class EditorGridGenerator : MonoBehaviour
         Guard.CheckIsNull(WidthInputField, "WidthInputField", gameObject);
         Guard.CheckIsNull(MazeNameInputField, "MazeNameInputField", gameObject);
 
-        Guard.CheckIsNull(TileBlockerPrefab, "TileBlockerPrefab", gameObject);
+        Guard.CheckIsNull(TileObstaclePrefab, "TileObstaclePrefab", gameObject);
         Guard.CheckIsNull(EmptyTilePrefab, "EmptyTilePrefab", gameObject);
     }
 
