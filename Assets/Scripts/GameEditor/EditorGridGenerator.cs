@@ -120,7 +120,7 @@ public class EditorGridGenerator : MonoBehaviour
                 if (tile.GridLocation.X == 0 || tile.GridLocation.X == _gridWidth - 1 ||
                 tile.GridLocation.Y == 0 || tile.GridLocation.Y == _gridHeight - 1)
                 {
-                    tile.BuildTileObstacle();
+                    tile.PlaceTileObstacle();
                 }
             }
         }

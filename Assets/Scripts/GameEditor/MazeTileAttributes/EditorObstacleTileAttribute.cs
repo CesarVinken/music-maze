@@ -2,7 +2,7 @@
 
 public class EditorObstacleTileAttribute : IEditorMazeTileAttribute
 {
-    public string Name { get => "Block"; }
+    public string Name { get => "Obstacle"; }
     public Sprite Sprite { get => null; }
     public EditorMazeTileAttributeType AttributeType { get => EditorMazeTileAttributeType.Obstacle; }
 
@@ -10,7 +10,7 @@ public class EditorObstacleTileAttribute : IEditorMazeTileAttribute
     {
         if (tile.Walkable)
         {
-            tile.BuildTileObstacle();
+            tile.PlaceTileObstacle();
             return;
         }
 

@@ -26,7 +26,7 @@ public class EditorSelectedAttributeContainer : MonoBehaviour
         EditorMazeTileAttributes.Clear();
 
         EditorMazeTileAttributes.Add(new EditorObstacleTileAttribute());
-        //EditorMazeTileAttributes.Add(new EditorMazeTileAttribute(EditorMazeTileAttributeType.PlayerSpawnpoint));
+        EditorMazeTileAttributes.Add(new EditorPlayerExitTileAttribute());
         //EditorMazeTileAttributes.Add(new EditorMazeTileAttribute(EditorMazeTileAttributeType.EnemySpawnpoint));
         //EditorMazeTileAttributes.Add(new EditorMazeTileAttribute(EditorMazeTileAttributeType.PlayerExit));
 

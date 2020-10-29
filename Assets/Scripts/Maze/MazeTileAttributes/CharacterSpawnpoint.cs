@@ -31,4 +31,9 @@ public class CharacterSpawnpoint : MonoBehaviour, IMazeTileAttribute
         Destroy(this);
         Destroy(gameObject);
     }
+
+    public void SetTile(Tile tile)
+    {
+        throw new System.NotImplementedException();
+    }
 }

@@ -81,7 +81,26 @@ public class Tile : MonoBehaviour
         GridLocation = new GridLocation(x, y);
     }
 
-    public void BuildTileObstacle()
+    public void PlacePlayerExit()
+    {
+        GameObject playerExitGO = Instantiate(MazeLevelManager.Instance.PlayerExitPrefab, transform);
+        PlayerExit playerExit = playerExitGO.GetComponent<PlayerExit>();
+        playerExit.SetTile(this);
+        MazeTileAttributes.Add(playerExit);
+
+        if(!EditorManager.InEditor)
+            MazeLevelManager.Instance.Level.MazeExits.Add(playerExit);
+    }
+
+    public void RemovePlayerExit()
+    {
+        IMazeTileAttribute playerExit = (PlayerExit)MazeTileAttributes.FirstOrDefault(attribute => attribute is PlayerExit);
+        if (playerExit == null) return;
+        MazeTileAttributes.Remove(playerExit);
+        playerExit.Remove();
+    }
+
+    public void PlaceTileObstacle()
     {
         GameObject tileObstacleGO = Instantiate(MazeLevelManager.Instance.TileObstaclePrefab, transform);
         TileObstacle tileObstacle = tileObstacleGO.GetComponent<TileObstacle>();
@@ -97,7 +116,6 @@ public class Tile : MonoBehaviour
         if (tileObstacle == null) return;
         MazeTileAttributes.Remove(tileObstacle);
         tileObstacle.Remove();
-
     }
 
     public void SetSprite()
@@ -105,4 +123,3 @@ public class Tile : MonoBehaviour
         Sprite = SpriteRenderer.sprite;
     }
 }
-

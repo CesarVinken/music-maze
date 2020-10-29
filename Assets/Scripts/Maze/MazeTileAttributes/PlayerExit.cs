@@ -1,9 +1,12 @@
 ﻿using UnityEngine;
 
-public class MazeExit : MonoBehaviour, IMazeTileAttribute
+public class PlayerExit : MonoBehaviour, IMazeTileAttribute
 {
     [SerializeField] private SpriteRenderer _spriteRenderer;
     [SerializeField] private GridLocation _gridLocation;
+
+    public Tile Tile;
+    public string ParentId;
 
     public void Awake()
     {
@@ -12,10 +15,10 @@ public class MazeExit : MonoBehaviour, IMazeTileAttribute
         _gridLocation = GridLocation.VectorToGrid(transform.position);
     }
 
-    public void Start()
-    {
-        MazeLevelManager.Instance.Level.MazeExits.Add(this);
-    }
+    //public void Start()
+    //{
+    //    MazeLevelManager.Instance.Level.MazeExits.Add(this);
+    //}
 
     public void OpenExit()
     {
@@ -41,6 +44,14 @@ public class MazeExit : MonoBehaviour, IMazeTileAttribute
             Logger.Log("{0} reached the exit! {1},{2}", player.name, _gridLocation.X, _gridLocation.Y);
             CharacterManager.Instance.CharacterExit(player);
         }
+    }
+
+    public void SetTile(Tile tile)
+    {
+        if (string.IsNullOrEmpty(tile.TileId)) Logger.Error("This tile does not have an Id");
+
+        Tile = tile;
+        ParentId = tile.TileId;
     }
 
     public void Remove()

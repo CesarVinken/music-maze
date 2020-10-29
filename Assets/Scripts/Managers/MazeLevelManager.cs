@@ -10,9 +10,14 @@ public class MazeLevelManager : MonoBehaviour, IOnEventCallback
 
     public GameObject TilePrefab;
     public GameObject TileObstaclePrefab;
+    public GameObject PlayerExitPrefab;
 
     public void Awake()
     {
+        Guard.CheckIsNull(TilePrefab, "TilePrefab", gameObject);
+        Guard.CheckIsNull(TileObstaclePrefab, "TileObstaclePrefab", gameObject);
+        Guard.CheckIsNull(PlayerExitPrefab, "PlayerExitPrefab", gameObject);
+
         Instance = this;
     }
 
@@ -125,7 +130,7 @@ public class MazeLevelManager : MonoBehaviour, IOnEventCallback
     {
         for (int i = 0; i < Level.MazeExits.Count; i++)
         {
-            MazeExit exit = Level.MazeExits[i];
+            PlayerExit exit = Level.MazeExits[i];
             exit.OpenExit();
             // open exit
         }

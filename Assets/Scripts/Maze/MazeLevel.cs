@@ -7,7 +7,7 @@ public class MazeLevel
     public GridLocation LevelBounds = new GridLocation(0, 0);
 
     public List<Tile> Tiles = new List<Tile>();
-    public List<MazeExit> MazeExits = new List<MazeExit>();
+    public List<PlayerExit> MazeExits = new List<PlayerExit>();
 
     public int NumberOfUnmarkedTiles = -1;
 
@@ -67,7 +67,7 @@ public class MazeLevel
 
             if (!serialisableTile.Walkable)
             {
-                tile.BuildTileObstacle();
+                tile.PlaceTileObstacle();
             }
 
             TilesByLocation.Add(tile.GridLocation, tile);
