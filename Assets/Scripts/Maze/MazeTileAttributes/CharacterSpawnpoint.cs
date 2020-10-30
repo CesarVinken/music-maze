@@ -3,7 +3,6 @@
 public class CharacterSpawnpoint : MonoBehaviour, IMazeTileAttribute
 {
     public CharacterType CharacterType;
-    public bool IsPlayer;
     public CharacterBlueprint CharacterBlueprint;
     public GridLocation GridLocation;
 
@@ -14,17 +13,7 @@ public class CharacterSpawnpoint : MonoBehaviour, IMazeTileAttribute
         RegisterSpawnpoint();
     }
 
-    public void RegisterSpawnpoint()
-    {
-        GridLocation = GridLocation.VectorToGrid(transform.position);
-        if (IsPlayer)
-        {
-            MazeLevelManager.Instance.Level.PlayerCharacterSpawnpoints.Add(this);
-        } else
-        {
-            MazeLevelManager.Instance.Level.EnemyCharacterSpawnpoints.Add(this);
-        }
-    }
+    public virtual void RegisterSpawnpoint() { }
 
     public void Remove()
     {

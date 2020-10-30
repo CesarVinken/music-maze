@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System.Linq;
+using UnityEngine;
 
 public class EditorObstacleTileAttribute : IEditorMazeTileAttribute
 {
@@ -8,8 +9,10 @@ public class EditorObstacleTileAttribute : IEditorMazeTileAttribute
 
     public void PlaceAttribute(Tile tile)
     {
-        if (tile.Walkable)
+        IMazeTileAttribute tileObstacle = (TileObstacle)tile.MazeTileAttributes.FirstOrDefault(attribute => attribute is TileObstacle);
+        if (tileObstacle == null)
         {
+            tile.RemovePlayerExit();
             tile.PlaceTileObstacle();
             return;
         }

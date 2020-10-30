@@ -86,14 +86,13 @@ public class Tile : MonoBehaviour
         GameObject playerExitGO = Instantiate(MazeLevelManager.Instance.PlayerExitPrefab, transform);
         PlayerExit playerExit = playerExitGO.GetComponent<PlayerExit>();
         playerExit.SetTile(this);
+        Walkable = false;
         MazeTileAttributes.Add(playerExit);
-
-        if(!EditorManager.InEditor)
-            MazeLevelManager.Instance.Level.MazeExits.Add(playerExit);
     }
 
     public void RemovePlayerExit()
     {
+        Walkable = true;
         IMazeTileAttribute playerExit = (PlayerExit)MazeTileAttributes.FirstOrDefault(attribute => attribute is PlayerExit);
         if (playerExit == null) return;
         MazeTileAttributes.Remove(playerExit);

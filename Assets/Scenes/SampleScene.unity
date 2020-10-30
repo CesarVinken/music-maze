@@ -417,8 +417,7 @@ MonoBehaviour:
   MazeNameInputField: {fileID: 678684148}
   EmptyTilePrefab: {fileID: 4537804524595095177, guid: cc5bd68f06c8d55448722850b1db58b3,
     type: 3}
-  TileBlockerPrefab: {fileID: 328215797944941407, guid: 2efaee12919ee15418cb99ccb9497d4b,
-    type: 3}
+  TileObstaclePrefab: {fileID: 0}
 --- !u!114 &94069766
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1231,7 +1230,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &379861475
 RectTransform:
   m_ObjectHideFlags: 0

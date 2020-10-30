@@ -2,718 +2,468 @@
     "Name": "B",
     "Tiles": [
         {
-            "Id": "ef9c97eb-4087-4d85-9788-014407a017c9",
-            "Walkable": false,
+            "Id": "ea1bf2c6-3d37-4a37-a530-3f72ef9400ae",
+            "TileAttributes": [
+                0
+            ],
             "GridLocationX": 0,
             "GridLocationY": 0
         },
         {
-            "Id": "16e8d38b-3db8-4dfb-86a6-7d00ffa067a3",
-            "Walkable": false,
+            "Id": "f4147b02-1c5e-4c21-aaac-84c0d3b28fe2",
+            "TileAttributes": [
+                0
+            ],
             "GridLocationX": 0,
             "GridLocationY": 1
         },
         {
-            "Id": "d45c0756-0efd-4476-b467-dea1f61ad43d",
-            "Walkable": false,
+            "Id": "349594c4-c6a5-4f73-a25f-e54ae7f864d3",
+            "TileAttributes": [
+                0
+            ],
             "GridLocationX": 0,
             "GridLocationY": 2
         },
         {
-            "Id": "4978a3e5-6adc-4c6a-ad9c-2e6b2f6c92f4",
-            "Walkable": false,
+            "Id": "af185f60-fa5c-42dc-9498-54acb8678546",
+            "TileAttributes": [
+                1
+            ],
             "GridLocationX": 0,
             "GridLocationY": 3
         },
         {
-            "Id": "cffec888-ef24-467c-b783-ada6005fe8a3",
-            "Walkable": false,
+            "Id": "7ef57687-fdd8-457b-9f8a-825dfe10b956",
+            "TileAttributes": [
+                0
+            ],
             "GridLocationX": 0,
             "GridLocationY": 4
         },
         {
-            "Id": "6fd9bab7-303d-4494-9042-37eb6cf741f2",
-            "Walkable": false,
+            "Id": "270f8ebe-390d-484f-ad12-634e69d76c33",
+            "TileAttributes": [
+                0
+            ],
             "GridLocationX": 0,
             "GridLocationY": 5
         },
         {
-            "Id": "3d2d0099-a87b-4244-81c4-d1189643f82d",
-            "Walkable": false,
+            "Id": "fa3c6f09-a461-4eb0-a13a-448ca40200e0",
+            "TileAttributes": [
+                0
+            ],
             "GridLocationX": 0,
             "GridLocationY": 6
         },
         {
-            "Id": "9432b5d1-8b27-4db0-b12f-d5b1d150573e",
-            "Walkable": false,
+            "Id": "fa5b5aa3-ecc6-4ea8-b3e5-e0e4c63491b7",
+            "TileAttributes": [
+                0
+            ],
             "GridLocationX": 0,
             "GridLocationY": 7
         },
         {
-            "Id": "d39c0f66-816f-4a34-8ac8-b57d7582d7fa",
-            "Walkable": false,
-            "GridLocationX": 0,
-            "GridLocationY": 8
-        },
-        {
-            "Id": "36bb7740-ec94-4999-8734-0912e37c6ab8",
-            "Walkable": false,
-            "GridLocationX": 0,
-            "GridLocationY": 9
-        },
-        {
-            "Id": "224ea8b3-7160-4d5a-9a40-608c91900a7f",
-            "Walkable": false,
-            "GridLocationX": 0,
-            "GridLocationY": 10
-        },
-        {
-            "Id": "84fc4225-ddc6-46fe-bbc2-037a2147db08",
-            "Walkable": false,
-            "GridLocationX": 0,
-            "GridLocationY": 11
-        },
-        {
-            "Id": "fc450b89-572e-4ffe-8fe6-ed2a5fc97e38",
-            "Walkable": false,
-            "GridLocationX": 0,
-            "GridLocationY": 12
-        },
-        {
-            "Id": "d07459d2-5628-4a18-9cfe-b2dd98466f73",
-            "Walkable": false,
-            "GridLocationX": 0,
-            "GridLocationY": 13
-        },
-        {
-            "Id": "1173519f-fbff-4db4-9f4d-3d8d411d5374",
-            "Walkable": false,
-            "GridLocationX": 0,
-            "GridLocationY": 14
-        },
-        {
-            "Id": "71cc66bf-b80a-4a8f-abf0-0b6f7346a990",
-            "Walkable": false,
-            "GridLocationX": 0,
-            "GridLocationY": 15
-        },
-        {
-            "Id": "0888c102-6b6c-46ea-8637-2e80c19a4045",
-            "Walkable": false,
-            "GridLocationX": 0,
-            "GridLocationY": 16
-        },
-        {
-            "Id": "ac5b904c-81cd-4873-8b9d-98c3ccfa0b85",
-            "Walkable": false,
+            "Id": "217fd34f-31ac-4353-8fe2-02ef636bb43f",
+            "TileAttributes": [
+                0
+            ],
             "GridLocationX": 1,
             "GridLocationY": 0
         },
         {
-            "Id": "c690444f-2c29-4cd5-82c7-4ba43ea48850",
-            "Walkable": true,
+            "Id": "2f81653f-20a8-46b7-a53e-0115d48e47fa",
+            "TileAttributes": [],
             "GridLocationX": 1,
             "GridLocationY": 1
         },
         {
-            "Id": "08ac13e1-2e50-46c7-9b8f-ee510472db04",
-            "Walkable": true,
+            "Id": "cff06bf7-4c03-461a-b1a0-ce95b3ab107f",
+            "TileAttributes": [],
             "GridLocationX": 1,
             "GridLocationY": 2
         },
         {
-            "Id": "e2779c34-96c0-4bbb-8940-f659ea819bdb",
-            "Walkable": true,
+            "Id": "fa53d8fc-5220-4bcb-b3a6-64cc369cfb43",
+            "TileAttributes": [],
             "GridLocationX": 1,
             "GridLocationY": 3
         },
         {
-            "Id": "2f6d309c-9c34-4810-9b64-38c1694082b6",
-            "Walkable": true,
+            "Id": "fe11503e-b6c0-4faf-a75a-a4430b832946",
+            "TileAttributes": [],
             "GridLocationX": 1,
             "GridLocationY": 4
         },
         {
-            "Id": "84401950-256e-41a9-9fd6-307f38a27aa7",
-            "Walkable": true,
+            "Id": "330b17f2-51dc-4863-8776-90df84db2169",
+            "TileAttributes": [],
             "GridLocationX": 1,
             "GridLocationY": 5
         },
         {
-            "Id": "de9c8f7d-6e81-468b-aab7-fb8bfb8c9ff3",
-            "Walkable": true,
+            "Id": "d71222a5-51de-44c3-9727-8b87986fe486",
+            "TileAttributes": [],
             "GridLocationX": 1,
             "GridLocationY": 6
         },
         {
-            "Id": "fa4ae5b2-dab0-4d3f-8ac5-c432b8ee6ae1",
-            "Walkable": true,
+            "Id": "8d7922cf-116b-4990-953b-77ed83378c2c",
+            "TileAttributes": [
+                0
+            ],
             "GridLocationX": 1,
             "GridLocationY": 7
         },
         {
-            "Id": "3cff5ee6-0a54-46a4-a986-85bf51f44c25",
-            "Walkable": true,
-            "GridLocationX": 1,
-            "GridLocationY": 8
-        },
-        {
-            "Id": "7e3e1c02-5064-45cc-ae0d-8cd1f0d31ffb",
-            "Walkable": true,
-            "GridLocationX": 1,
-            "GridLocationY": 9
-        },
-        {
-            "Id": "7c56ca77-24f6-4c7e-bd93-e17ee75063ed",
-            "Walkable": true,
-            "GridLocationX": 1,
-            "GridLocationY": 10
-        },
-        {
-            "Id": "0542dc2e-4e9e-4655-93a8-8e5b12c9957e",
-            "Walkable": true,
-            "GridLocationX": 1,
-            "GridLocationY": 11
-        },
-        {
-            "Id": "cc6d1492-218f-42e0-960e-e1350af608a7",
-            "Walkable": true,
-            "GridLocationX": 1,
-            "GridLocationY": 12
-        },
-        {
-            "Id": "a9b07cba-7722-4d71-957b-0df1cbf85f2b",
-            "Walkable": true,
-            "GridLocationX": 1,
-            "GridLocationY": 13
-        },
-        {
-            "Id": "f601b76c-cfc2-42e8-84ef-216026f29cb7",
-            "Walkable": true,
-            "GridLocationX": 1,
-            "GridLocationY": 14
-        },
-        {
-            "Id": "f23db7ec-99f2-46a9-a9ae-3f3374c02c1b",
-            "Walkable": true,
-            "GridLocationX": 1,
-            "GridLocationY": 15
-        },
-        {
-            "Id": "4fe0d259-2945-4235-a138-cc355a48e153",
-            "Walkable": false,
-            "GridLocationX": 1,
-            "GridLocationY": 16
-        },
-        {
-            "Id": "5a573f20-19c9-4820-8f8f-15baeab44ef8",
-            "Walkable": false,
+            "Id": "c1eb2e35-3531-4755-9276-b856b5e2dad3",
+            "TileAttributes": [
+                0
+            ],
             "GridLocationX": 2,
             "GridLocationY": 0
         },
         {
-            "Id": "f2db4bef-169e-44a4-81f7-b5ef2cd9b110",
-            "Walkable": true,
+            "Id": "d2cd94ef-04f5-43a2-b35d-593fb64af260",
+            "TileAttributes": [],
             "GridLocationX": 2,
             "GridLocationY": 1
         },
         {
-            "Id": "9b4780d6-9a27-437f-94b0-e7c7bd4e3199",
-            "Walkable": true,
+            "Id": "de5f9525-b3e6-468a-adc0-bea5cb46f112",
+            "TileAttributes": [
+                0
+            ],
             "GridLocationX": 2,
             "GridLocationY": 2
         },
         {
-            "Id": "afd72281-b028-46c7-ac57-e3734e95d4fd",
-            "Walkable": true,
+            "Id": "218b4894-da1c-4863-9eaa-c667c2b65eb6",
+            "TileAttributes": [
+                0
+            ],
             "GridLocationX": 2,
             "GridLocationY": 3
         },
         {
-            "Id": "f3e6b609-836c-4a1b-b089-f8e4108a3676",
-            "Walkable": true,
+            "Id": "c512e813-c22d-4911-847b-c65f95c866a3",
+            "TileAttributes": [
+                0
+            ],
             "GridLocationX": 2,
             "GridLocationY": 4
         },
         {
-            "Id": "0e105b4b-62a6-4ce9-a915-7d6293c59b76",
-            "Walkable": true,
+            "Id": "5e43bbe0-3cb3-4f17-b597-16b30fc755d1",
+            "TileAttributes": [
+                0
+            ],
             "GridLocationX": 2,
             "GridLocationY": 5
         },
         {
-            "Id": "8a5294e6-3230-4fa3-83c0-ef70f772fbc5",
-            "Walkable": true,
+            "Id": "9cf54588-2613-4227-9b2a-f1a56f4c32e2",
+            "TileAttributes": [],
             "GridLocationX": 2,
             "GridLocationY": 6
         },
         {
-            "Id": "089caca7-b70d-42b2-a023-c91a6f7db50b",
-            "Walkable": true,
+            "Id": "0043fb00-f788-4b51-a408-bd14475cde6c",
+            "TileAttributes": [
+                0
+            ],
             "GridLocationX": 2,
             "GridLocationY": 7
         },
         {
-            "Id": "e376d459-5315-481b-8470-26065a68d445",
-            "Walkable": true,
-            "GridLocationX": 2,
-            "GridLocationY": 8
-        },
-        {
-            "Id": "e1b8bbc3-2ebb-45c7-ae8e-500b5c3e48cd",
-            "Walkable": true,
-            "GridLocationX": 2,
-            "GridLocationY": 9
-        },
-        {
-            "Id": "38dc3a8c-3b74-411a-ab7b-2d7b8584fdc6",
-            "Walkable": true,
-            "GridLocationX": 2,
-            "GridLocationY": 10
-        },
-        {
-            "Id": "a9e253be-3151-4bca-8a56-9749ed25a185",
-            "Walkable": true,
-            "GridLocationX": 2,
-            "GridLocationY": 11
-        },
-        {
-            "Id": "c56663c8-b544-4158-8a11-791005cde9b1",
-            "Walkable": true,
-            "GridLocationX": 2,
-            "GridLocationY": 12
-        },
-        {
-            "Id": "9bb5b7b5-7e83-4de6-aafe-1df488b1a618",
-            "Walkable": true,
-            "GridLocationX": 2,
-            "GridLocationY": 13
-        },
-        {
-            "Id": "91c7fa52-0ea6-4db1-9673-46e97ba08e8a",
-            "Walkable": true,
-            "GridLocationX": 2,
-            "GridLocationY": 14
-        },
-        {
-            "Id": "fecac0b4-e5de-4c40-9e27-28fe452739e9",
-            "Walkable": true,
-            "GridLocationX": 2,
-            "GridLocationY": 15
-        },
-        {
-            "Id": "3444d6db-2199-449b-a450-5d395bd36f02",
-            "Walkable": false,
-            "GridLocationX": 2,
-            "GridLocationY": 16
-        },
-        {
-            "Id": "e2183691-b41c-4a9a-9ffc-4531109d87f0",
-            "Walkable": false,
+            "Id": "3c949c13-2f3d-40b3-9743-5ba5646be292",
+            "TileAttributes": [
+                0
+            ],
             "GridLocationX": 3,
             "GridLocationY": 0
         },
         {
-            "Id": "f70cf589-f409-47d4-b32f-65b27f938c7e",
-            "Walkable": true,
+            "Id": "30e886ee-d0a5-46ac-90b0-818c71bce901",
+            "TileAttributes": [],
             "GridLocationX": 3,
             "GridLocationY": 1
         },
         {
-            "Id": "b7290665-3558-4f58-b163-8ecfa365ded9",
-            "Walkable": true,
+            "Id": "cc0b8958-76d4-4556-97cc-cd174e2b5db9",
+            "TileAttributes": [
+                0
+            ],
             "GridLocationX": 3,
             "GridLocationY": 2
         },
         {
-            "Id": "58f07600-c348-466b-b344-16f0665b55cb",
-            "Walkable": true,
+            "Id": "bac66b26-657c-491b-8a3c-9e34fe99c529",
+            "TileAttributes": [],
             "GridLocationX": 3,
             "GridLocationY": 3
         },
         {
-            "Id": "6b4fe46b-e519-4d75-886c-6c75863307e0",
-            "Walkable": true,
+            "Id": "fab4e6e1-e827-4d6c-8087-ca0ddfb50677",
+            "TileAttributes": [],
             "GridLocationX": 3,
             "GridLocationY": 4
         },
         {
-            "Id": "c260185d-d439-4d20-954a-82c122235703",
-            "Walkable": true,
+            "Id": "7737c51a-2be5-4f9f-a061-a533d368700d",
+            "TileAttributes": [
+                0
+            ],
             "GridLocationX": 3,
             "GridLocationY": 5
         },
         {
-            "Id": "0348bef9-f796-4736-8186-c741276f9b2c",
-            "Walkable": true,
+            "Id": "f3c113d0-ada8-458b-b861-14bd8fb21af6",
+            "TileAttributes": [],
             "GridLocationX": 3,
             "GridLocationY": 6
         },
         {
-            "Id": "c175f79c-75d6-4200-962c-aaf9b343a293",
-            "Walkable": true,
+            "Id": "d2534259-95e0-4434-b497-8a9a4729451b",
+            "TileAttributes": [
+                0
+            ],
             "GridLocationX": 3,
             "GridLocationY": 7
         },
         {
-            "Id": "8e17374f-5080-499d-9463-01a67bb8965e",
-            "Walkable": true,
-            "GridLocationX": 3,
-            "GridLocationY": 8
-        },
-        {
-            "Id": "a748747f-0d76-4c83-a3f3-329b5927dc51",
-            "Walkable": true,
-            "GridLocationX": 3,
-            "GridLocationY": 9
-        },
-        {
-            "Id": "a98d71ce-44f3-49dc-80e2-ee47fac0aade",
-            "Walkable": true,
-            "GridLocationX": 3,
-            "GridLocationY": 10
-        },
-        {
-            "Id": "39dd14e3-d162-400f-be4b-599198a6a7b5",
-            "Walkable": true,
-            "GridLocationX": 3,
-            "GridLocationY": 11
-        },
-        {
-            "Id": "9d7fb2b4-c2c3-4251-9150-c4d21ebf18b8",
-            "Walkable": true,
-            "GridLocationX": 3,
-            "GridLocationY": 12
-        },
-        {
-            "Id": "d8675856-99b2-4042-b357-291a78262e7f",
-            "Walkable": true,
-            "GridLocationX": 3,
-            "GridLocationY": 13
-        },
-        {
-            "Id": "daf3da5b-afd6-425f-a3c1-e793f5ec4b79",
-            "Walkable": true,
-            "GridLocationX": 3,
-            "GridLocationY": 14
-        },
-        {
-            "Id": "02ceda1f-bb22-4b2e-8984-1733dbeec093",
-            "Walkable": true,
-            "GridLocationX": 3,
-            "GridLocationY": 15
-        },
-        {
-            "Id": "f0fa19fa-2d32-416c-9283-1e3c09ebcfe2",
-            "Walkable": false,
-            "GridLocationX": 3,
-            "GridLocationY": 16
-        },
-        {
-            "Id": "bb654f61-e61a-4d48-ad0e-0a3e5cdf00e9",
-            "Walkable": false,
+            "Id": "20ba6d80-e4ac-4dd6-bbd3-44508e37640b",
+            "TileAttributes": [
+                0
+            ],
             "GridLocationX": 4,
             "GridLocationY": 0
         },
         {
-            "Id": "4a0df3e9-6cec-460d-9db3-8273c41f3780",
-            "Walkable": true,
+            "Id": "1ff61585-a546-414d-bfea-976eb211e9cc",
+            "TileAttributes": [],
             "GridLocationX": 4,
             "GridLocationY": 1
         },
         {
-            "Id": "b1625c87-6ec8-4345-888c-45000b23572e",
-            "Walkable": true,
+            "Id": "7ffb3c2f-f7e1-4d14-8072-e440215a1b11",
+            "TileAttributes": [
+                0
+            ],
             "GridLocationX": 4,
             "GridLocationY": 2
         },
         {
-            "Id": "d0ad7415-b71b-435a-9a0f-7cf4ab5b47ea",
-            "Walkable": true,
+            "Id": "cc539057-ad97-4148-af79-8c898ebf1ecc",
+            "TileAttributes": [],
             "GridLocationX": 4,
             "GridLocationY": 3
         },
         {
-            "Id": "e9082d08-c778-4b78-af8a-47aa33002fff",
-            "Walkable": true,
+            "Id": "e535d4ec-c632-4c80-888a-abd83b3e9be1",
+            "TileAttributes": [],
             "GridLocationX": 4,
             "GridLocationY": 4
         },
         {
-            "Id": "5e87e372-6d74-40ad-ad6e-fdf91510eb08",
-            "Walkable": true,
+            "Id": "e0594699-234a-4235-9bb8-a1cfde92c927",
+            "TileAttributes": [],
             "GridLocationX": 4,
             "GridLocationY": 5
         },
         {
-            "Id": "965ef1ae-f778-41c1-bba3-ac080964268f",
-            "Walkable": true,
+            "Id": "cb57bf37-7bbd-432b-b27a-de132da47705",
+            "TileAttributes": [],
             "GridLocationX": 4,
             "GridLocationY": 6
         },
         {
-            "Id": "207a2cac-1ab8-4cc6-80a8-a4470f500a1b",
-            "Walkable": true,
+            "Id": "372987b5-7287-4172-9bd0-6e3b09eae3ba",
+            "TileAttributes": [
+                0
+            ],
             "GridLocationX": 4,
             "GridLocationY": 7
         },
         {
-            "Id": "12a8167c-9ff4-402c-8663-30770d340407",
-            "Walkable": true,
-            "GridLocationX": 4,
-            "GridLocationY": 8
-        },
-        {
-            "Id": "8889d6da-e45f-4fd9-aa24-098bd519da55",
-            "Walkable": true,
-            "GridLocationX": 4,
-            "GridLocationY": 9
-        },
-        {
-            "Id": "4b16bf60-6bb4-4f38-b4f4-a59c7fa8934d",
-            "Walkable": true,
-            "GridLocationX": 4,
-            "GridLocationY": 10
-        },
-        {
-            "Id": "71cc8658-4230-41aa-893f-03c36382d779",
-            "Walkable": true,
-            "GridLocationX": 4,
-            "GridLocationY": 11
-        },
-        {
-            "Id": "ca1a1c9c-a8bb-4689-9854-4c07de739ef2",
-            "Walkable": true,
-            "GridLocationX": 4,
-            "GridLocationY": 12
-        },
-        {
-            "Id": "1886938e-030c-48bc-966d-6eae21a52f6e",
-            "Walkable": true,
-            "GridLocationX": 4,
-            "GridLocationY": 13
-        },
-        {
-            "Id": "9072d0a2-8487-407b-9513-a310fa3e8f37",
-            "Walkable": true,
-            "GridLocationX": 4,
-            "GridLocationY": 14
-        },
-        {
-            "Id": "3622bb45-4500-4dbe-a415-5e8bc01584c5",
-            "Walkable": true,
-            "GridLocationX": 4,
-            "GridLocationY": 15
-        },
-        {
-            "Id": "f9166b5d-f971-4c57-8725-8aa6d1670f3d",
-            "Walkable": false,
-            "GridLocationX": 4,
-            "GridLocationY": 16
-        },
-        {
-            "Id": "5395b91a-5165-4779-9644-216384592194",
-            "Walkable": false,
+            "Id": "4c39f69a-7fd6-41b4-a96a-906805aebe18",
+            "TileAttributes": [
+                0
+            ],
             "GridLocationX": 5,
             "GridLocationY": 0
         },
         {
-            "Id": "d7fd8ed2-2a13-4415-89ec-41160c04fe87",
-            "Walkable": true,
+            "Id": "b89cece5-a792-4e60-b82a-890eeb04165b",
+            "TileAttributes": [],
             "GridLocationX": 5,
             "GridLocationY": 1
         },
         {
-            "Id": "93fff859-c626-4a8b-8242-bdfcb4fa0eaf",
-            "Walkable": true,
+            "Id": "7a201c30-b34c-49b7-8604-590f2ecd78aa",
+            "TileAttributes": [
+                0
+            ],
             "GridLocationX": 5,
             "GridLocationY": 2
         },
         {
-            "Id": "18b7473c-481a-45e2-b785-6c45a58d7c5b",
-            "Walkable": true,
+            "Id": "5914d6cf-5b7e-4238-bfc6-f860bbe69cb1",
+            "TileAttributes": [
+                0
+            ],
             "GridLocationX": 5,
             "GridLocationY": 3
         },
         {
-            "Id": "a15cba6e-edcc-4bef-a2b6-ddac3b079a43",
-            "Walkable": true,
+            "Id": "2dea7bc7-bbe3-4c3f-931c-be0b75246c9f",
+            "TileAttributes": [
+                0
+            ],
             "GridLocationX": 5,
             "GridLocationY": 4
         },
         {
-            "Id": "4456b679-9539-4ff2-abff-9417f252edc8",
-            "Walkable": true,
+            "Id": "79dab21f-4181-4cfe-8e38-50e743c5d6af",
+            "TileAttributes": [
+                0
+            ],
             "GridLocationX": 5,
             "GridLocationY": 5
         },
         {
-            "Id": "b573a0db-bc2a-492d-89b5-1374411c287d",
-            "Walkable": true,
+            "Id": "11116c08-2704-4e15-a574-31188bba09dd",
+            "TileAttributes": [
+                0
+            ],
             "GridLocationX": 5,
             "GridLocationY": 6
         },
         {
-            "Id": "902aff61-a711-48dd-990f-61d2a9f09e22",
-            "Walkable": true,
+            "Id": "fbc5774b-d588-4e48-8568-df874177b78e",
+            "TileAttributes": [
+                0
+            ],
             "GridLocationX": 5,
             "GridLocationY": 7
         },
         {
-            "Id": "2c5d6973-95cf-49ee-9027-b5a00cf82521",
-            "Walkable": true,
-            "GridLocationX": 5,
-            "GridLocationY": 8
-        },
-        {
-            "Id": "22ecdecc-a031-41e3-a118-bd0eefa7989d",
-            "Walkable": true,
-            "GridLocationX": 5,
-            "GridLocationY": 9
-        },
-        {
-            "Id": "2392d0bb-53c2-4c91-a218-8b558e0d20a0",
-            "Walkable": true,
-            "GridLocationX": 5,
-            "GridLocationY": 10
-        },
-        {
-            "Id": "dd6b8613-11d9-4f09-bca7-ed84618bbebf",
-            "Walkable": true,
-            "GridLocationX": 5,
-            "GridLocationY": 11
-        },
-        {
-            "Id": "2c6b3342-5659-461a-a7c5-2404f116f950",
-            "Walkable": true,
-            "GridLocationX": 5,
-            "GridLocationY": 12
-        },
-        {
-            "Id": "dc02cdb5-37b8-43a3-8991-bd085580ef07",
-            "Walkable": true,
-            "GridLocationX": 5,
-            "GridLocationY": 13
-        },
-        {
-            "Id": "4c73457e-d151-441a-bab4-04aa2e42cbd0",
-            "Walkable": true,
-            "GridLocationX": 5,
-            "GridLocationY": 14
-        },
-        {
-            "Id": "fc23a30b-9fe4-4216-9047-86492f343bea",
-            "Walkable": true,
-            "GridLocationX": 5,
-            "GridLocationY": 15
-        },
-        {
-            "Id": "8e2d8ad5-0b46-461e-91c0-0dafdc7380b2",
-            "Walkable": false,
-            "GridLocationX": 5,
-            "GridLocationY": 16
-        },
-        {
-            "Id": "77386e32-2db2-4286-9b53-8ea6e9c7c785",
-            "Walkable": false,
+            "Id": "08a74745-ecad-4d1f-b60e-eed432445483",
+            "TileAttributes": [
+                0
+            ],
             "GridLocationX": 6,
             "GridLocationY": 0
         },
         {
-            "Id": "1788c6dd-bf7b-4529-97d9-6574b4661cbd",
-            "Walkable": false,
+            "Id": "5e68dc53-12b7-4fea-bf8b-eff0505647ce",
+            "TileAttributes": [],
             "GridLocationX": 6,
             "GridLocationY": 1
         },
         {
-            "Id": "39dd571d-7c78-4dce-83b1-dbaff837cfda",
-            "Walkable": false,
+            "Id": "0bebf0bf-529a-4b71-80a2-11404da575f6",
+            "TileAttributes": [],
             "GridLocationX": 6,
             "GridLocationY": 2
         },
         {
-            "Id": "ae80b75c-ae34-4caf-aa1d-2fe2bf88c937",
-            "Walkable": false,
+            "Id": "86455608-d223-4804-9cdf-d843a2611fa9",
+            "TileAttributes": [],
             "GridLocationX": 6,
             "GridLocationY": 3
         },
         {
-            "Id": "4610df2d-9b89-4226-8028-32a096bf34f5",
-            "Walkable": false,
+            "Id": "44bc8bb5-b127-4a36-bc78-9fb5e340a446",
+            "TileAttributes": [],
             "GridLocationX": 6,
             "GridLocationY": 4
         },
         {
-            "Id": "83a2587f-0ed0-4a03-b411-6f03061ca205",
-            "Walkable": false,
+            "Id": "f454ed0c-5600-4dc8-81e5-5d6834ffe380",
+            "TileAttributes": [],
             "GridLocationX": 6,
             "GridLocationY": 5
         },
         {
-            "Id": "bee06fbd-e7d0-43e6-bd52-e956976961e5",
-            "Walkable": false,
+            "Id": "c6e85225-bbcc-4395-a192-fddaaf9ae627",
+            "TileAttributes": [],
             "GridLocationX": 6,
             "GridLocationY": 6
         },
         {
-            "Id": "d2801cdc-1647-42dd-837b-2eabc43ff036",
-            "Walkable": false,
+            "Id": "551f6954-f56b-4038-b720-b44f323be804",
+            "TileAttributes": [
+                0
+            ],
             "GridLocationX": 6,
             "GridLocationY": 7
         },
         {
-            "Id": "59fa78f5-f0d7-4401-808e-7555fcf2e2e2",
-            "Walkable": false,
-            "GridLocationX": 6,
-            "GridLocationY": 8
+            "Id": "1313b646-2bbb-4d3f-83ce-c57226e2a6c6",
+            "TileAttributes": [
+                0
+            ],
+            "GridLocationX": 7,
+            "GridLocationY": 0
         },
         {
-            "Id": "7845b40b-95e0-455c-95b4-23910067d0a6",
-            "Walkable": false,
-            "GridLocationX": 6,
-            "GridLocationY": 9
+            "Id": "66dc8623-c30b-4565-a7b7-924ee82f7d0d",
+            "TileAttributes": [
+                0
+            ],
+            "GridLocationX": 7,
+            "GridLocationY": 1
         },
         {
-            "Id": "bc8e6e8e-ece1-4d17-bbe2-4cad1849477e",
-            "Walkable": false,
-            "GridLocationX": 6,
-            "GridLocationY": 10
+            "Id": "6c61ad8a-ed54-402c-9cb4-16b3f68e4272",
+            "TileAttributes": [
+                0
+            ],
+            "GridLocationX": 7,
+            "GridLocationY": 2
         },
         {
-            "Id": "a8cde086-9dbd-448e-b6b1-a48458afab5e",
-            "Walkable": false,
-            "GridLocationX": 6,
-            "GridLocationY": 11
+            "Id": "f286ecdd-60ea-4db2-a38c-c6fad00f92f7",
+            "TileAttributes": [
+                0
+            ],
+            "GridLocationX": 7,
+            "GridLocationY": 3
         },
         {
-            "Id": "6130133c-fc57-4dcd-9eab-0ed3b5eea541",
-            "Walkable": false,
-            "GridLocationX": 6,
-            "GridLocationY": 12
+            "Id": "2d5115fc-8a32-4b00-80ff-f0bb17517f5c",
+            "TileAttributes": [
+                0
+            ],
+            "GridLocationX": 7,
+            "GridLocationY": 4
         },
         {
-            "Id": "6b404a62-0444-4378-a13b-8a0c900a425a",
-            "Walkable": false,
-            "GridLocationX": 6,
-            "GridLocationY": 13
+            "Id": "710a733d-1f15-4089-8b14-0a9aac1250e2",
+            "TileAttributes": [
+                0
+            ],
+            "GridLocationX": 7,
+            "GridLocationY": 5
         },
         {
-            "Id": "ebea9626-a27d-4e63-9724-c4180f14ba6e",
-            "Walkable": false,
-            "GridLocationX": 6,
-            "GridLocationY": 14
+            "Id": "230b56d5-779f-4315-8da6-b3f36e992971",
+            "TileAttributes": [
+                0
+            ],
+            "GridLocationX": 7,
+            "GridLocationY": 6
         },
         {
-            "Id": "2a23d6c9-a89e-4924-84c7-417c15272d93",
-            "Walkable": false,
-            "GridLocationX": 6,
-            "GridLocationY": 15
-        },
-        {
-            "Id": "6796bc07-0e75-4fca-94d1-2f35c42c83af",
-            "Walkable": false,
-            "GridLocationX": 6,
-            "GridLocationY": 16
+            "Id": "4bcc7cc2-78d3-4fbc-901d-b805680587bd",
+            "TileAttributes": [
+                0
+            ],
+            "GridLocationX": 7,
+            "GridLocationY": 7
         }
     ]
 }

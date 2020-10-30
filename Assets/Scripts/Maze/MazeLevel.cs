@@ -65,10 +65,11 @@ public class MazeLevel
 
             Tiles.Add(tile);
 
-            if (!serialisableTile.Walkable)
-            {
-                tile.PlaceTileObstacle();
-            }
+            tile = AddTileAttributes(serialisableTile, tile);
+            //if (!serialisableTile.Walkable)
+            //{
+            //    tile.PlaceTileObstacle();
+            //}
 
             TilesByLocation.Add(tile.GridLocation, tile);
 
@@ -76,6 +77,26 @@ public class MazeLevel
             if (tile.GridLocation.X > furthestBounds.X) LevelBounds.X = tile.GridLocation.X;
             if (tile.GridLocation.Y > furthestBounds.Y) LevelBounds.Y = tile.GridLocation.Y;
         }
+    }
+
+    public Tile AddTileAttributes(SerialisableTile serialisableTile, Tile tile)
+    {
+        Tile tileWithAttributes = tile;
+
+        foreach (int attributeNumber in serialisableTile.TileAttributes)
+        {
+            if (attributeNumber == SerialisableTile.ObstacleAttributeCode)
+            {
+                tile.PlaceTileObstacle();
+            }
+            if (attributeNumber == SerialisableTile.PlayerExitCode)
+            {
+                tile.PlacePlayerExit();
+            }
+
+        }
+
+        return tileWithAttributes;
     }
 }
 

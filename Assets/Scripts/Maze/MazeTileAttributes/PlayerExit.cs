@@ -15,10 +15,13 @@ public class PlayerExit : MonoBehaviour, IMazeTileAttribute
         _gridLocation = GridLocation.VectorToGrid(transform.position);
     }
 
-    //public void Start()
-    //{
-    //    MazeLevelManager.Instance.Level.MazeExits.Add(this);
-    //}
+    public void Start()
+    {
+        if (!EditorManager.InEditor)
+        {
+            MazeLevelManager.Instance.Level.MazeExits.Add(this);
+        }
+    }
 
     public void OpenExit()
     {

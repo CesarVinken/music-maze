@@ -15,9 +15,11 @@ public class EditorPlayerExitTileAttribute : IEditorMazeTileAttribute
         IMazeTileAttribute playerExit = (PlayerExit)tile.MazeTileAttributes.FirstOrDefault(attribute => attribute is PlayerExit);
         if (playerExit == null)
         {
+            tile.RemoveTileObstacle();
             tile.PlacePlayerExit();
             return;
         }
+
         tile.RemovePlayerExit();
     }
 }

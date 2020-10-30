@@ -29,7 +29,6 @@ public class JsonMazeLevelFileReader
         {
             Logger.Warning("File doesn't exist");
             return null;
-
         }
         //#endif
         //#if UNITY_ANDROID
