@@ -1,18 +1,27 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Linq;
 using UnityEngine;
 
-public class EditorEnemySpawnpointTileAttribute : MonoBehaviour
+public class EditorEnemySpawnpointTileAttribute : IEditorMazeTileAttribute
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
+    public string Name { get => "Enemy Spawnpoint"; }
 
-    // Update is called once per frame
-    void Update()
+    public Sprite Sprite { get => null; }
+
+    public EditorMazeTileAttributeType AttributeType { get => EditorMazeTileAttributeType.EnemySpawnpoint; }
+
+    public void PlaceAttribute(Tile tile)
     {
-        
+        IMazeTileAttribute enemySpawnpoint = (EnemySpawnpoint)tile.MazeTileAttributes.FirstOrDefault(attribute => attribute is EnemySpawnpoint);
+        if (enemySpawnpoint == null)
+        {
+            tile.RemoveTileObstacle();
+            tile.RemovePlayerExit();
+            tile.RemovePlayerSpawnpoint();
+
+            tile.PlaceEnemySpawnpoint();
+            return;
+        }
+
+        tile.RemoveEnemySpawnpoint();
     }
 }

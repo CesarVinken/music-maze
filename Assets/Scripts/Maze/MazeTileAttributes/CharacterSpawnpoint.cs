@@ -6,6 +6,9 @@ public class CharacterSpawnpoint : MonoBehaviour, IMazeTileAttribute
     public CharacterBlueprint CharacterBlueprint;
     public GridLocation GridLocation;
 
+    public Tile Tile;
+    public string ParentId;
+
     public void Awake()
     {
         CharacterBlueprint = new CharacterBlueprint(CharacterType);
@@ -23,6 +26,9 @@ public class CharacterSpawnpoint : MonoBehaviour, IMazeTileAttribute
 
     public void SetTile(Tile tile)
     {
-        throw new System.NotImplementedException();
+        if (string.IsNullOrEmpty(tile.TileId)) Logger.Error("This tile does not have an Id");
+
+        Tile = tile;
+        ParentId = tile.TileId;
     }
 }

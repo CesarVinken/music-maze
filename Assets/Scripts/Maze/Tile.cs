@@ -117,6 +117,40 @@ public class Tile : MonoBehaviour
         tileObstacle.Remove();
     }
 
+    public void PlacePlayerSpawnpoint()
+    {
+        GameObject playerSpawnpointGO = Instantiate(MazeLevelManager.Instance.PlayerSpawnpointPrefab, transform);
+        PlayerSpawnpoint playerSpawnpoint = playerSpawnpointGO.GetComponent<PlayerSpawnpoint>();
+        playerSpawnpoint.SetTile(this);
+
+        MazeTileAttributes.Add(playerSpawnpoint);
+    }
+
+    public void RemovePlayerSpawnpoint()
+    {
+        IMazeTileAttribute playerSpawnpoint = (PlayerSpawnpoint)MazeTileAttributes.FirstOrDefault(attribute => attribute is PlayerSpawnpoint);
+        if (playerSpawnpoint == null) return;
+        MazeTileAttributes.Remove(playerSpawnpoint);
+        playerSpawnpoint.Remove();
+    }
+
+    public void PlaceEnemySpawnpoint()
+    {
+        GameObject enemySpawnpointGO = Instantiate(MazeLevelManager.Instance.EnemySpawnpointPrefab, transform);
+        EnemySpawnpoint enemySpawnpoint = enemySpawnpointGO.GetComponent<EnemySpawnpoint>();
+        enemySpawnpoint.SetTile(this);
+
+        MazeTileAttributes.Add(enemySpawnpoint);
+    }
+
+    public void RemoveEnemySpawnpoint()
+    {
+        IMazeTileAttribute enemySpawnpoint = (EnemySpawnpoint)MazeTileAttributes.FirstOrDefault(attribute => attribute is EnemySpawnpoint);
+        if (enemySpawnpoint == null) return;
+        MazeTileAttributes.Remove(enemySpawnpoint);
+        enemySpawnpoint.Remove();
+    }
+
     public void SetSprite()
     {
         Sprite = SpriteRenderer.sprite;

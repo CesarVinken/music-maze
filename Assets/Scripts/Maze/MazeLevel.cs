@@ -93,6 +93,14 @@ public class MazeLevel
             {
                 tile.PlacePlayerExit();
             }
+            if (attributeNumber == SerialisableTile.PlayerSpawnpointCode)
+            {
+                tile.PlacePlayerSpawnpoint();
+            }
+            if (attributeNumber == SerialisableTile.EnemySpawnpointCode)
+            {
+                tile.PlaceEnemySpawnpoint();
+            }
 
         }
 

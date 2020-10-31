@@ -41,7 +41,7 @@ public class SerialisableTile
             {
                 tileAttributes.Add(PlayerSpawnpointCode);
             }
-            if (tileAttribute.GetType() == typeof(PlayerSpawnpoint))
+            if (tileAttribute.GetType() == typeof(EnemySpawnpoint))
             {
                 tileAttributes.Add(EnemySpawnpointCode);
             }

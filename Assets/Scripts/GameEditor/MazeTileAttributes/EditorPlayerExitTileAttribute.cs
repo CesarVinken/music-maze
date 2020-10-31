@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using UnityEngine;
 
 public class EditorPlayerExitTileAttribute : IEditorMazeTileAttribute
@@ -16,6 +15,9 @@ public class EditorPlayerExitTileAttribute : IEditorMazeTileAttribute
         if (playerExit == null)
         {
             tile.RemoveTileObstacle();
+            tile.RemoveEnemySpawnpoint();
+            tile.RemovePlayerSpawnpoint();
+
             tile.PlacePlayerExit();
             return;
         }

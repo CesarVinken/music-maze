@@ -13,6 +13,9 @@ public class EditorObstacleTileAttribute : IEditorMazeTileAttribute
         if (tileObstacle == null)
         {
             tile.RemovePlayerExit();
+            tile.RemoveEnemySpawnpoint();
+            tile.RemovePlayerSpawnpoint();
+
             tile.PlaceTileObstacle();
             return;
         }
