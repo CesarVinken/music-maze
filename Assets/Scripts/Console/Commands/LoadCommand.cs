@@ -30,6 +30,12 @@ public class LoadCommand : CommandProcedure
             return;
         }
 
+        //If we are in the editor, first close the editor mode before
+        if (EditorManager.InEditor)
+        {
+            EditorManager.CloseEditor();
+        }
+
         if (MazeLevelManager.Instance == null)
         {
             Logger.Error("Cannot find MazeLevelManager. Returning.");
@@ -50,7 +56,7 @@ public class LoadCommand : CommandProcedure
         // Make checks such as if there are starting locations for the players
 
         MazeLevelManager.Instance.UnloadLevel();
-        MazeLevelManager.Instance.LoadLevel(levelData);
+        MazeLevelManager.Instance.SetupLevel(levelData); // sets new Level in MazeLevelManager
     }
 
     public override void Help()

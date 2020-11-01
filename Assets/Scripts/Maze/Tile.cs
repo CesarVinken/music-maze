@@ -26,7 +26,6 @@ public class Tile : MonoBehaviour
     {
         if (EditorManager.InEditor) return;
 
-
         if (!Markable) return;
 
         if (MazeLevelManager.Instance.Level.NumberOfUnmarkedTiles == -1)
@@ -43,7 +42,6 @@ public class Tile : MonoBehaviour
     public void OnCollisionEnter2D(Collision2D collision)
     {
         if (!Walkable) return;
-
 
         PlayerCharacter player = collision.gameObject.GetComponent<PlayerCharacter>();
         if (player != null)
@@ -71,11 +69,19 @@ public class Tile : MonoBehaviour
         GridLocation = new GridLocation(x, y);
     }
 
+    public void InitialiseTileAttributes()
+    {
+        for (int i = 0; i < MazeTileAttributes.Count; i++)
+        {
+            MazeTileAttributes[i].SetTile(this);
+        }
+    }
+
     public void PlacePlayerExit()
     {
         GameObject playerExitGO = Instantiate(MazeLevelManager.Instance.PlayerExitPrefab, transform);
         PlayerExit playerExit = playerExitGO.GetComponent<PlayerExit>();
-        playerExit.SetTile(this);
+
         Walkable = false;
         Markable = false;
         MazeTileAttributes.Add(playerExit);
@@ -94,7 +100,7 @@ public class Tile : MonoBehaviour
     {
         GameObject tileObstacleGO = Instantiate(MazeLevelManager.Instance.TileObstaclePrefab, transform);
         TileObstacle tileObstacle = tileObstacleGO.GetComponent<TileObstacle>();
-        tileObstacle.SetTile(this);
+
         Walkable = false;
         Markable = false;
         MazeTileAttributes.Add(tileObstacle);
@@ -113,7 +119,7 @@ public class Tile : MonoBehaviour
     {
         GameObject playerSpawnpointGO = Instantiate(MazeLevelManager.Instance.PlayerSpawnpointPrefab, transform);
         PlayerSpawnpoint playerSpawnpoint = playerSpawnpointGO.GetComponent<PlayerSpawnpoint>();
-        playerSpawnpoint.SetTile(this);
+
         Walkable = true;
         Markable = false;
 
@@ -132,9 +138,9 @@ public class Tile : MonoBehaviour
     {
         GameObject enemySpawnpointGO = Instantiate(MazeLevelManager.Instance.EnemySpawnpointPrefab, transform);
         EnemySpawnpoint enemySpawnpoint = enemySpawnpointGO.GetComponent<EnemySpawnpoint>();
-        enemySpawnpoint.SetTile(this);
+
         Walkable = true;
-        Markable = false;
+        Markable = true;
 
         MazeTileAttributes.Add(enemySpawnpoint);
     }

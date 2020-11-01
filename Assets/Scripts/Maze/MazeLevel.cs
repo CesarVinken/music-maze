@@ -16,8 +16,6 @@ public class MazeLevel
     public List<CharacterSpawnpoint> PlayerCharacterSpawnpoints = new List<CharacterSpawnpoint>();
     public List<CharacterSpawnpoint> EnemyCharacterSpawnpoints = new List<CharacterSpawnpoint>();
 
-
-
     private GameObject _mazeContainer;
 
     public MazeLevel()

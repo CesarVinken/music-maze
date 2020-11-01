@@ -12,8 +12,10 @@ public class CharacterSpawnpoint : MonoBehaviour, IMazeTileAttribute
     public void Awake()
     {
         CharacterBlueprint = new CharacterBlueprint(CharacterType);
+    }
 
-        RegisterSpawnpoint();
+    public void Start()
+    {
     }
 
     public virtual void RegisterSpawnpoint() { }
@@ -30,5 +32,7 @@ public class CharacterSpawnpoint : MonoBehaviour, IMazeTileAttribute
 
         Tile = tile;
         ParentId = tile.TileId;
+
+        RegisterSpawnpoint();
     }
 }

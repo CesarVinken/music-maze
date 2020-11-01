@@ -1,6 +1,7 @@
 ﻿using ExitGames.Client.Photon;
 using Photon.Pun;
 using Photon.Realtime;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class MazeLevelManager : MonoBehaviour, IOnEventCallback
@@ -8,6 +9,9 @@ public class MazeLevelManager : MonoBehaviour, IOnEventCallback
     public static MazeLevelManager Instance;
     public MazeLevel Level;
 
+    public List<CharacterSpawnpoint> PlayerCharacterSpawnpoints = new List<CharacterSpawnpoint>();
+    public List<CharacterSpawnpoint> EnemyCharacterSpawnpoints = new List<CharacterSpawnpoint>();
+    
     public GameObject TilePrefab;
     public GameObject TileObstaclePrefab;
     public GameObject PlayerExitPrefab;
@@ -35,9 +39,15 @@ public class MazeLevelManager : MonoBehaviour, IOnEventCallback
         PhotonNetwork.RemoveCallbackTarget(this);
     }
 
-    public void LoadLevel(MazeLevelData mazeLevelData)
+    public void SetupLevel(MazeLevelData mazeLevelData)
     {
         Level = MazeLevel.Create(mazeLevelData);
+
+        InitialiseTileAttributes();
+        CharacterManager.Instance.SpawnCharacters();
+        CameraController.Instance.FocusOnPlayer();
+
+        AstarPath.active.Scan();
     }
 
     public void UnloadLevel()
@@ -60,6 +70,16 @@ public class MazeLevelManager : MonoBehaviour, IOnEventCallback
             CameraController.Instance.ResetCamera();
             Level = null;
         }
+    }
+
+    public void InitialiseTileAttributes()
+    {
+        for (int i = 0; i < Level.Tiles.Count; i++)
+        {
+            Tile tile = Level.Tiles[i];
+            tile.InitialiseTileAttributes();
+        }
+        
     }
 
     // Previously tried solution with collision detection on all separate clients for all players(instead of events). 

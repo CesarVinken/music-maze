@@ -6,11 +6,7 @@ using System.Collections.Generic;
 public class MazeLevelData
 {
     public string Name;
-    //public Vector2 PlayerLocation;
     public List<SerialisableTile> Tiles = new List<SerialisableTile>();
-    //public List<DictionaryToJsonItem> GameEventStatuses = new List<DictionaryToJsonItem>();
-    //public List<DictionaryToJsonItem> DialogueSeriesPassed = new List<DictionaryToJsonItem>();
-    //public List<DictionaryToJsonItem> InteractableObjectsInScene = new List<DictionaryToJsonItem>();
 
     public MazeLevelData(MazeLevel level)
     {

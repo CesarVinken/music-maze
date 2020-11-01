@@ -39,6 +39,7 @@ public class CharacterManager : MonoBehaviourPunCallbacks
 
     public void SpawnCharacters()
     {
+        Logger.Log("Spawn characters...");
         if (PlayerManager.LocalPlayerInstance == null)
         {
             MazeLevel level = MazeLevelManager.Instance.Level;

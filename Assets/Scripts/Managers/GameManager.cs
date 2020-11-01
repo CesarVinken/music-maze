@@ -22,7 +22,7 @@ public class GameManager : MonoBehaviourPunCallbacks
 
     public GameObject GridGO;
     public GameObject AstarGO;
-
+    
     public GameObject MazeLevelManagerPrefab;
     public GameObject CharacterManagerPrefab;
 
@@ -63,9 +63,7 @@ public class GameManager : MonoBehaviourPunCallbacks
         {
             Logger.Error("Could not find the default level for startup");
         }
-        MazeLevelManager.Instance.LoadLevel(startUpLevelData);
-
-        AstarGO.SetActive(true);    // triggers pathfinding grid scan
+        MazeLevelManager.Instance.SetupLevel(startUpLevelData);
     }
 
     public void Start()
