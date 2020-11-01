@@ -66,10 +66,6 @@ public class MazeLevel
             Tiles.Add(tile);
 
             tile = AddTileAttributes(serialisableTile, tile);
-            //if (!serialisableTile.Walkable)
-            //{
-            //    tile.PlaceTileObstacle();
-            //}
 
             TilesByLocation.Add(tile.GridLocation, tile);
 
@@ -101,7 +97,6 @@ public class MazeLevel
             {
                 tile.PlaceEnemySpawnpoint();
             }
-
         }
 
         return tileWithAttributes;

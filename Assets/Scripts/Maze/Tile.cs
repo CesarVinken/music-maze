@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
@@ -10,7 +9,7 @@ public class Tile : MonoBehaviour
     public SpriteRenderer PlayerMark;
 
     public string TileId;
-    public bool Walkable = true; // TODO Automatically set value in Maze Level Editor
+    public bool Walkable = true;
     public bool Markable = true;
     public GridLocation GridLocation;
 
@@ -21,33 +20,24 @@ public class Tile : MonoBehaviour
         Guard.CheckIsNull(SpriteRenderer, "SpriteRenderer", gameObject);
 
         if (transform.position.y < 0) Logger.Error("There is a tile at {0},{1}. Tiles cannot have negative Y values", transform.position.x, transform.position.y);
-        //Sprite = SpriteRenderer.sprite;
-
-        //GridLocation = GridLocation.VectorToGrid(transform.position);// TODO REMOVE
-        //gameObject.name = "Tile" + GridLocation.X + ", " + GridLocation.Y;
     }
 
     public void Start()
     {
         if (EditorManager.InEditor) return;
 
-        if (!Walkable)
-        {
-            Markable = false;
-            //MazeLevelManager.Instance.Level.AddUnwalkableTile(this);
-        } else
-        {
-            if (!Markable) return;
 
-            if (MazeLevelManager.Instance.Level.NumberOfUnmarkedTiles == -1)
-            {
-                MazeLevelManager.Instance.Level.NumberOfUnmarkedTiles = 1;
-            }
-            else
-            {
-                MazeLevelManager.Instance.Level.NumberOfUnmarkedTiles++;
-            }
+        if (!Markable) return;
+
+        if (MazeLevelManager.Instance.Level.NumberOfUnmarkedTiles == -1)
+        {
+            MazeLevelManager.Instance.Level.NumberOfUnmarkedTiles = 1;
         }
+        else
+        {
+            MazeLevelManager.Instance.Level.NumberOfUnmarkedTiles++;
+        }
+        
     }
 
     public void OnCollisionEnter2D(Collision2D collision)
@@ -87,6 +77,7 @@ public class Tile : MonoBehaviour
         PlayerExit playerExit = playerExitGO.GetComponent<PlayerExit>();
         playerExit.SetTile(this);
         Walkable = false;
+        Markable = false;
         MazeTileAttributes.Add(playerExit);
     }
 
@@ -105,6 +96,7 @@ public class Tile : MonoBehaviour
         TileObstacle tileObstacle = tileObstacleGO.GetComponent<TileObstacle>();
         tileObstacle.SetTile(this);
         Walkable = false;
+        Markable = false;
         MazeTileAttributes.Add(tileObstacle);
     }
 
@@ -122,6 +114,8 @@ public class Tile : MonoBehaviour
         GameObject playerSpawnpointGO = Instantiate(MazeLevelManager.Instance.PlayerSpawnpointPrefab, transform);
         PlayerSpawnpoint playerSpawnpoint = playerSpawnpointGO.GetComponent<PlayerSpawnpoint>();
         playerSpawnpoint.SetTile(this);
+        Walkable = true;
+        Markable = false;
 
         MazeTileAttributes.Add(playerSpawnpoint);
     }
@@ -139,6 +133,8 @@ public class Tile : MonoBehaviour
         GameObject enemySpawnpointGO = Instantiate(MazeLevelManager.Instance.EnemySpawnpointPrefab, transform);
         EnemySpawnpoint enemySpawnpoint = enemySpawnpointGO.GetComponent<EnemySpawnpoint>();
         enemySpawnpoint.SetTile(this);
+        Walkable = true;
+        Markable = false;
 
         MazeTileAttributes.Add(enemySpawnpoint);
     }
