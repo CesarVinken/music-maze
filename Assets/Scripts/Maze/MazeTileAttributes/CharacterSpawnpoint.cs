@@ -9,8 +9,12 @@ public class CharacterSpawnpoint : MonoBehaviour, IMazeTileAttribute
     public Tile Tile;
     public string ParentId;
 
+    [SerializeField] protected SpriteRenderer _spriteRenderer;
+
     public void Awake()
     {
+        Guard.CheckIsNull(_spriteRenderer, "_spriteRenderer", gameObject);
+
         CharacterBlueprint = new CharacterBlueprint(CharacterType);
     }
 

@@ -1,5 +1,17 @@
-﻿public class EnemySpawnpoint : CharacterSpawnpoint
+﻿using UnityEngine;
+
+public class EnemySpawnpoint : CharacterSpawnpoint
 {
+    [SerializeField] private Sprite _enemySpawnpointSprite;
+
+    public void Awake()
+    {
+        base.Awake();
+        Guard.CheckIsNull(_enemySpawnpointSprite, "_enemySpawnpointSprite", gameObject);
+
+        _spriteRenderer.sprite = _enemySpawnpointSprite;
+    }
+
     public override void RegisterSpawnpoint()
     {
         GridLocation = GridLocation.VectorToGrid(transform.position);

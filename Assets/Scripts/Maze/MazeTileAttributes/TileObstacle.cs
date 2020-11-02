@@ -6,6 +6,13 @@ public class TileObstacle : MonoBehaviour, IMazeTileAttribute
 {
     public Tile Tile;
     public string ParentId;
+    
+    [SerializeField] private SpriteRenderer _spriteRenderer;
+
+    public void Awake()
+    {
+        Guard.CheckIsNull(_spriteRenderer, "_spriteRenderer", gameObject);
+    }
 
     public void SetTile(Tile tile)
     {
