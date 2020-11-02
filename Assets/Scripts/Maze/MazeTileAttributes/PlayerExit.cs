@@ -5,12 +5,17 @@ public class PlayerExit : MonoBehaviour, IMazeTileAttribute
     [SerializeField] private SpriteRenderer _spriteRenderer;
     [SerializeField] private GridLocation _gridLocation;
 
+    [SerializeField] private Sprite _exitClosedSprite;
+    [SerializeField] private Sprite _exitOpenSprite;
+
     public Tile Tile;
     public string ParentId;
 
     public void Awake()
     {
         Guard.CheckIsNull(_spriteRenderer, "_spriteRenderer", gameObject);
+        Guard.CheckIsNull(_exitClosedSprite, "_exitClosedSprite", gameObject);
+        Guard.CheckIsNull(_exitOpenSprite, "_exitOpenSprite", gameObject);
 
         _gridLocation = GridLocation.VectorToGrid(transform.position);
     }
@@ -21,6 +26,8 @@ public class PlayerExit : MonoBehaviour, IMazeTileAttribute
         {
             MazeLevelManager.Instance.Level.MazeExits.Add(this);
         }
+
+        _spriteRenderer.sprite = _exitClosedSprite;
     }
 
     public void OpenExit()
@@ -30,7 +37,7 @@ public class PlayerExit : MonoBehaviour, IMazeTileAttribute
         if (tile == null) Logger.Error("Could not find a tile for grid location {0},{1}", _gridLocation.X, _gridLocation.Y);
 
         tile.Walkable = true;
-        _spriteRenderer.enabled = false;
+        _spriteRenderer.sprite = _exitOpenSprite;
 
         gameObject.layer = 9; // set layer to PlayerOnly, which is layer 9. Should not be hardcoded
         _spriteRenderer.gameObject.layer = 9;

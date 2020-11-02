@@ -80,9 +80,6 @@ public class GameManager : MonoBehaviourPunCallbacks
             return;
         }
         if (MazeLevelManager.Instance.Level.PlayerCharacterSpawnpoints.Count == 0) return;
-
-        CharacterManager.Instance.SpawnCharacters();
-        CameraController.Instance.FocusOnPlayer();
     }
 
     public void Update()
