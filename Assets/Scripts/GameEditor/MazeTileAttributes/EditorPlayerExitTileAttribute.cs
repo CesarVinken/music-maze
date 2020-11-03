@@ -11,17 +11,19 @@ public class EditorPlayerExitTileAttribute : IEditorMazeTileAttribute
 
     public void PlaceAttribute(Tile tile)
     {
+        TileAttributePlacer tileAttributePlacer = new TileAttributePlacer(tile);
+
         IMazeTileAttribute playerExit = (PlayerExit)tile.MazeTileAttributes.FirstOrDefault(attribute => attribute is PlayerExit);
         if (playerExit == null)
         {
-            tile.RemoveTileObstacle();
-            tile.RemoveEnemySpawnpoint();
-            tile.RemovePlayerSpawnpoint();
+            tileAttributePlacer.RemoveTileObstacle();
+            tileAttributePlacer.RemoveEnemySpawnpoint();
+            tileAttributePlacer.RemovePlayerSpawnpoint();
 
-            tile.PlacePlayerExit();
+            tileAttributePlacer.PlacePlayerExit();
             return;
         }
 
-        tile.RemovePlayerExit();
+        tileAttributePlacer.RemovePlayerExit();
     }
 }

@@ -71,29 +71,36 @@ public class MazeLevel
             if (tile.GridLocation.X > furthestBounds.X) LevelBounds.X = tile.GridLocation.X;
             if (tile.GridLocation.Y > furthestBounds.Y) LevelBounds.Y = tile.GridLocation.Y;
         }
+
+        for (int j = 0; j < Tiles.Count; j++)
+        {
+            Tile tile = Tiles[j];
+            tile.AddNeighbours(this);
+        }
     }
 
     public Tile AddTileAttributes(SerialisableTile serialisableTile, Tile tile)
     {
         Tile tileWithAttributes = tile;
+        TileAttributePlacer tileAttributePlacer = new TileAttributePlacer(tile);
 
         foreach (int attributeNumber in serialisableTile.TileAttributes)
         {
             if (attributeNumber == SerialisableTile.ObstacleAttributeCode)
             {
-                tile.PlaceTileObstacle();
+                tileAttributePlacer.PlaceTileObstacle(ObstacleType.Wall, -1); //TODO, get connection no from serialised tile data
             }
             if (attributeNumber == SerialisableTile.PlayerExitCode)
             {
-                tile.PlacePlayerExit();
+                tileAttributePlacer.PlacePlayerExit();
             }
             if (attributeNumber == SerialisableTile.PlayerSpawnpointCode)
             {
-                tile.PlacePlayerSpawnpoint();
+                tileAttributePlacer.PlacePlayerSpawnpoint();
             }
             if (attributeNumber == SerialisableTile.EnemySpawnpointCode)
             {
-                tile.PlaceEnemySpawnpoint();
+                tileAttributePlacer.PlaceEnemySpawnpoint();
             }
         }
 

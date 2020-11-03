@@ -103,6 +103,7 @@ public class EditorGridGenerator : MonoBehaviour
 
         MazeLevel newEditorLevel = new MazeLevel();
         newEditorLevel.LevelBounds = new GridLocation(_gridWidth - 1, _gridHeight - 1);
+        EditorManager.EditorLevel = newEditorLevel;
 
         // Create tiles
         for (int i = 0; i < _gridWidth; i++)
@@ -116,16 +117,27 @@ public class EditorGridGenerator : MonoBehaviour
 
                 newEditorLevel.Tiles.Add(tile);
                 newEditorLevel.TilesByLocation.Add(tile.GridLocation, tile);
-
-                if (tile.GridLocation.X == 0 || tile.GridLocation.X == _gridWidth - 1 ||
-                tile.GridLocation.Y == 0 || tile.GridLocation.Y == _gridHeight - 1)
-                {
-                    tile.PlaceTileObstacle();
-                }
             }
         }
 
-        EditorManager.EditorLevel = newEditorLevel;
+        for (int k = 0; k < newEditorLevel.Tiles.Count; k++)
+        {
+            Tile tile = newEditorLevel.Tiles[k];
+            tile.AddNeighbours(newEditorLevel);
+        }
+
+        for (int l = 0; l < newEditorLevel.Tiles.Count; l++)
+        {
+            Tile tile = newEditorLevel.Tiles[l];
+
+            if (tile.GridLocation.X == 0 || tile.GridLocation.X == _gridWidth - 1 ||
+            tile.GridLocation.Y == 0 || tile.GridLocation.Y == _gridHeight - 1)
+            {
+                TileAttributePlacer tileAttributePlacer = new TileAttributePlacer(tile);
+                tileAttributePlacer.PlaceTileObstacle(ObstacleType.Wall);
+            }
+        }
+
 
         //Update UI for the newly generated level
         EditorWorldContainer.Instance.ShowTileSelector();

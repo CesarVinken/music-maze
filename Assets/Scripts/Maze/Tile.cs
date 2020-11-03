@@ -14,6 +14,7 @@ public class Tile : MonoBehaviour
     public GridLocation GridLocation;
 
     public List<IMazeTileAttribute> MazeTileAttributes = new List<IMazeTileAttribute>();
+    public Dictionary<ObjectDirection, Tile> Neighbours = new Dictionary<ObjectDirection, Tile>();
 
     public void Awake()
     {
@@ -36,7 +37,6 @@ public class Tile : MonoBehaviour
         {
             MazeLevelManager.Instance.Level.NumberOfUnmarkedTiles++;
         }
-        
     }
 
     public void OnCollisionEnter2D(Collision2D collision)
@@ -77,84 +77,48 @@ public class Tile : MonoBehaviour
         }
     }
 
-    public void PlacePlayerExit()
-    {
-        GameObject playerExitGO = Instantiate(MazeLevelManager.Instance.PlayerExitPrefab, transform);
-        PlayerExit playerExit = playerExitGO.GetComponent<PlayerExit>();
-
-        Walkable = false;
-        Markable = false;
-        MazeTileAttributes.Add(playerExit);
-    }
-
-    public void RemovePlayerExit()
-    {
-        Walkable = true;
-        IMazeTileAttribute playerExit = (PlayerExit)MazeTileAttributes.FirstOrDefault(attribute => attribute is PlayerExit);
-        if (playerExit == null) return;
-        MazeTileAttributes.Remove(playerExit);
-        playerExit.Remove();
-    }
-
-    public void PlaceTileObstacle()
-    {
-        GameObject tileObstacleGO = Instantiate(MazeLevelManager.Instance.TileObstaclePrefab, transform);
-        TileObstacle tileObstacle = tileObstacleGO.GetComponent<TileObstacle>();
-
-        Walkable = false;
-        Markable = false;
-        MazeTileAttributes.Add(tileObstacle);
-    }
-
-    public void RemoveTileObstacle()
-    {
-        Walkable = true;
-        IMazeTileAttribute tileObstacle = (TileObstacle)MazeTileAttributes.FirstOrDefault(attribute => attribute is TileObstacle);
-        if (tileObstacle == null) return;
-        MazeTileAttributes.Remove(tileObstacle);
-        tileObstacle.Remove();
-    }
-
-    public void PlacePlayerSpawnpoint()
-    {
-        GameObject playerSpawnpointGO = Instantiate(MazeLevelManager.Instance.PlayerSpawnpointPrefab, transform);
-        PlayerSpawnpoint playerSpawnpoint = playerSpawnpointGO.GetComponent<PlayerSpawnpoint>();
-
-        Walkable = true;
-        Markable = false;
-
-        MazeTileAttributes.Add(playerSpawnpoint);
-    }
-
-    public void RemovePlayerSpawnpoint()
-    {
-        IMazeTileAttribute playerSpawnpoint = (PlayerSpawnpoint)MazeTileAttributes.FirstOrDefault(attribute => attribute is PlayerSpawnpoint);
-        if (playerSpawnpoint == null) return;
-        MazeTileAttributes.Remove(playerSpawnpoint);
-        playerSpawnpoint.Remove();
-    }
-
-    public void PlaceEnemySpawnpoint()
-    {
-        GameObject enemySpawnpointGO = Instantiate(MazeLevelManager.Instance.EnemySpawnpointPrefab, transform);
-        EnemySpawnpoint enemySpawnpoint = enemySpawnpointGO.GetComponent<EnemySpawnpoint>();
-
-        Walkable = true;
-        Markable = true;
-
-        MazeTileAttributes.Add(enemySpawnpoint);
-    }
-
-    public void RemoveEnemySpawnpoint()
-    {
-        IMazeTileAttribute enemySpawnpoint = (EnemySpawnpoint)MazeTileAttributes.FirstOrDefault(attribute => attribute is EnemySpawnpoint);
-        if (enemySpawnpoint == null) return;
-        MazeTileAttributes.Remove(enemySpawnpoint);
-        enemySpawnpoint.Remove();
-    }
-
     public void SetSprite()
     {
         Sprite = SpriteRenderer.sprite;
+    }
+
+    public void AddNeighbours(MazeLevel level)
+    {
+        //Add Right
+        if (GridLocation.X < level.LevelBounds.X)
+        {
+            Neighbours.Add(ObjectDirection.Right, level.TilesByLocation[new GridLocation(GridLocation.X + 1, GridLocation.Y)]);
+        }
+
+        //Add Down
+        if (GridLocation.Y > 0)
+        {
+            Neighbours.Add(ObjectDirection.Down, level.TilesByLocation[new GridLocation(GridLocation.X, GridLocation.Y - 1)]);
+        }     
+
+        //Add Left
+        if (GridLocation.X > 0)
+        {
+            Neighbours.Add(ObjectDirection.Left, level.TilesByLocation[new GridLocation(GridLocation.X - 1, GridLocation.Y)]);
+        }
+
+        //Add Up
+        if (GridLocation.Y < level.LevelBounds.Y)
+        {
+            Neighbours.Add(ObjectDirection.Up, level.TilesByLocation[new GridLocation(GridLocation.X, GridLocation.Y + 1)]);
+        }
+    }
+
+    public TileObstacle TryGetTileObstacle()
+    {
+        TileObstacle tileObstacle = (TileObstacle)MazeTileAttributes.FirstOrDefault(attribute => attribute is TileObstacle);
+
+        if (tileObstacle == null)
+        {
+            Logger.Log($"did not find a tile obstacle on {GridLocation.X},{GridLocation.Y}");
+            return null;
+        }
+        Logger.Log($"found tileObstacle {tileObstacle.ObstacleType} on {GridLocation.X},{GridLocation.Y}");
+        return tileObstacle;
     }
 }

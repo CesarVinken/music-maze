@@ -5,22 +5,24 @@ public class EditorObstacleTileAttribute : IEditorMazeTileAttribute
 {
     public string Name { get => "Obstacle"; }
     public Sprite Sprite { get => null; }
+
     public EditorMazeTileAttributeType AttributeType { get => EditorMazeTileAttributeType.Obstacle; }
 
     public void PlaceAttribute(Tile tile)
     {
+        TileAttributePlacer tileAttributePlacer = new TileAttributePlacer(tile);
         IMazeTileAttribute tileObstacle = (TileObstacle)tile.MazeTileAttributes.FirstOrDefault(attribute => attribute is TileObstacle);
         if (tileObstacle == null)
         {
-            tile.RemovePlayerExit();
-            tile.RemoveEnemySpawnpoint();
-            tile.RemovePlayerSpawnpoint();
+            tileAttributePlacer.RemovePlayerExit();
+            tileAttributePlacer.RemoveEnemySpawnpoint();
+            tileAttributePlacer.RemovePlayerSpawnpoint();
 
-            tile.PlaceTileObstacle();
+            tileAttributePlacer.PlaceTileObstacle(ObstacleType.Wall);
             return;
         }
 
         // Tile is already blocked
-        tile.RemoveTileObstacle();
+        tileAttributePlacer.RemoveTileObstacle();
     }
 }
