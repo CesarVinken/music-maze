@@ -10,9 +10,8 @@ public class TileObstacle : MonoBehaviour, IMazeTileAttribute
     public ObstacleType ObstacleType;
     [SerializeField] private SpriteRenderer _spriteRenderer;
 
-    //[SerializeField] private List<Sprite> _defaultWall = new List<Sprite>();
     [SerializeField] private Sprite[] _defaultWall;
-    [SerializeField] private int _obstacleConnectionScore; // on which sides does this obstacle border other obstacles
+    public int ObstacleConnectionScore; // on which sides does this obstacle border other obstacles
 
     public void Awake()
     {
@@ -26,7 +25,7 @@ public class TileObstacle : MonoBehaviour, IMazeTileAttribute
 
     public void WithObstacleConnectionScore(int obstacleConnectionScore)
     {
-        _obstacleConnectionScore = obstacleConnectionScore;
+        ObstacleConnectionScore = obstacleConnectionScore;
 
         if (obstacleConnectionScore == -1) return;
 

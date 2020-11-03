@@ -84,21 +84,23 @@ public class MazeLevel
         Tile tileWithAttributes = tile;
         TileAttributePlacer tileAttributePlacer = new TileAttributePlacer(tile);
 
-        foreach (int attributeNumber in serialisableTile.TileAttributes)
+        foreach (SerialisableTileAttribute serialisableTileAttribute in serialisableTile.TileAttributes)
         {
-            if (attributeNumber == SerialisableTile.ObstacleAttributeCode)
+            if (serialisableTileAttribute.TileAttributeId == SerialisableTileAttribute.ObstacleAttributeCode)
             {
-                tileAttributePlacer.PlaceTileObstacle(ObstacleType.Wall, -1); //TODO, get connection no from serialised tile data
+                //SerialisableTileObstacleAttribute serialisableTileObstacleAttribute = (SerialisableTileObstacleAttribute)serialisableTileAttribute as SerialisableTileObstacleAttribute;
+                //Logger.Log($"serialisableTileObstacleAttribute {serialisableTileObstacleAttribute.ObstacleConnectionScore}");
+                tileAttributePlacer.PlaceTileObstacle(ObstacleType.Wall, serialisableTileAttribute.ObstacleConnectionScore); //TODO, find a way to use polymorphism so we can cast as SerialisableTileObstacleAttribute instead of a general SerialisableTileAttribute
             }
-            if (attributeNumber == SerialisableTile.PlayerExitCode)
+            if (serialisableTileAttribute.TileAttributeId == SerialisableTileAttribute.PlayerExitCode)
             {
                 tileAttributePlacer.PlacePlayerExit();
             }
-            if (attributeNumber == SerialisableTile.PlayerSpawnpointCode)
+            if (serialisableTileAttribute.TileAttributeId == SerialisableTileAttribute.PlayerSpawnpointCode)
             {
                 tileAttributePlacer.PlacePlayerSpawnpoint();
             }
-            if (attributeNumber == SerialisableTile.EnemySpawnpointCode)
+            if (serialisableTileAttribute.TileAttributeId == SerialisableTileAttribute.EnemySpawnpointCode)
             {
                 tileAttributePlacer.PlaceEnemySpawnpoint();
             }

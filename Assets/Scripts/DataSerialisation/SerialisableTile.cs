@@ -5,15 +5,10 @@ using System.Collections.Generic;
 public class SerialisableTile
 {
     public string Id;
-    public List<int> TileAttributes;
-    //public bool Walkable;   // TODO: turn into enum/int value with different possible wallpieces. Eg. 0 = Walkable, 1 = CornerLeft, 2 = CorderRight etc.
+    public List<SerialisableTileAttribute> TileAttributes;
+
     public int GridLocationX;
     public int GridLocationY;
-
-    public const int ObstacleAttributeCode = 0;
-    public const int PlayerExitCode = 1;
-    public const int PlayerSpawnpointCode = 2;
-    public const int EnemySpawnpointCode = 3;
 
     public SerialisableTile(Tile tile)
     {
@@ -23,27 +18,33 @@ public class SerialisableTile
         GridLocationY = tile.GridLocation.Y;
     }
 
-    private List<int> SerialiseTileAttributes(Tile tile)
+    private List<SerialisableTileAttribute> SerialiseTileAttributes(Tile tile)
     {
-        List<int> tileAttributes = new List<int>();
+        List<SerialisableTileAttribute> tileAttributes = new List<SerialisableTileAttribute>();
 
-        foreach (var tileAttribute in tile.MazeTileAttributes)
+        foreach (IMazeTileAttribute tileAttribute in tile.MazeTileAttributes)
         {
             if (tileAttribute.GetType() == typeof(TileObstacle))
             {
-                tileAttributes.Add(ObstacleAttributeCode);
+                TileObstacle tileObstacle = tileAttribute as TileObstacle;
+                SerialisableTileObstacleAttribute serialisableTileObstacleAttribute = 
+                    new SerialisableTileObstacleAttribute(tileObstacle.ObstacleConnectionScore);
+                tileAttributes.Add(serialisableTileObstacleAttribute);
             }
-            if (tileAttribute.GetType() == typeof(PlayerExit))
+            else if (tileAttribute.GetType() == typeof(PlayerExit))
             {
-                tileAttributes.Add(PlayerExitCode);
+                SerialisablePlayerExitAttribute serialisablePlayerExitAttribute = new SerialisablePlayerExitAttribute();
+                tileAttributes.Add(serialisablePlayerExitAttribute);
             }
-            if (tileAttribute.GetType() == typeof(PlayerSpawnpoint))
+            else if (tileAttribute.GetType() == typeof(PlayerSpawnpoint))
             {
-                tileAttributes.Add(PlayerSpawnpointCode);
+                SerialisablePlayerSpawnpointAttribute serialisablePlayerSpawnpointAttribute = new SerialisablePlayerSpawnpointAttribute();
+                tileAttributes.Add(serialisablePlayerSpawnpointAttribute);
             }
-            if (tileAttribute.GetType() == typeof(EnemySpawnpoint))
+            else if (tileAttribute.GetType() == typeof(EnemySpawnpoint))
             {
-                tileAttributes.Add(EnemySpawnpointCode);
+                SerialisableEnemySpawnpointAttribute serialisableEnemySpawnpointAttribute = new SerialisableEnemySpawnpointAttribute();
+                tileAttributes.Add(serialisableEnemySpawnpointAttribute);
             }
         }
         return tileAttributes;

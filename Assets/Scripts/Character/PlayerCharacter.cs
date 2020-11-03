@@ -283,7 +283,7 @@ public class PlayerCharacter : Character
             _animationHandler.SetLocomotion(false);
             return;
         }
-        Logger.Warning("Start path!");
+        //Logger.Warning("Start path!");
         Vector3 newDestinationTarget = SetNewLocomotionTarget(GridLocation.GridToVector(targetGridLocation));
         IsCalculatingPath = true;
 
