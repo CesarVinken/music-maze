@@ -21,7 +21,7 @@ public class PlayerCharacter : Character
 
     public GridLocation CurrentGridLocation;
     private List<GridLocation> _drawnPath = new List<GridLocation>();
-    public int LevelScore = 0;
+    public int TimesCaught = 0;
 
     public event Action PlayerExits;
     public event Action PlayerCaught;
@@ -380,14 +380,11 @@ public class PlayerCharacter : Character
     [PunRPC]
     private void PunRPCCaughtByEnemy()
     {
+        TimesCaught++;
+
         float freezeTime = 2.0f;
 
         IEnumerator coroutine = this.RespawnCharacter(this, freezeTime);
         StartCoroutine(coroutine);
-    }
-
-    public void UpdateLevelScore(int score)
-    {
-        LevelScore += score;
     }
 }

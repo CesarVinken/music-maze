@@ -95,16 +95,17 @@ public class GameManager : MonoBehaviourPunCallbacks
 
     private void InitialiseLoggers()
     {
-        Logger.General.enableLogs = true;
-        Logger.Time.enableLogs = false;
-        Logger.Level.enableLogs = true;
-        Logger.Locomotion.enableLogs = false;
-        Logger.Pathfinding.enableLogs = false;
-        Logger.Initialisation.enableLogs = true;
         Logger.Character.enableLogs = false;
-        Logger.UI.enableLogs = false;
         Logger.Datawriting.enableLogs = true;
         Logger.Datareading.enableLogs = true;
+        Logger.General.enableLogs = true;
+        Logger.Initialisation.enableLogs = true;
+        Logger.Level.enableLogs = false;
+        Logger.Locomotion.enableLogs = false;
+        Logger.Pathfinding.enableLogs = false;
+        Logger.Score.enableLogs = true;
+        Logger.Time.enableLogs = false;
+        Logger.UI.enableLogs = false;
     }
 
     public void CompleteLevel()

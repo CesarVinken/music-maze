@@ -3,15 +3,16 @@ using UnityEngine;
 
 public static class Logger
 {
-    public static LogCategory General = new LogCategory("General");
-    public static LogCategory Time = new LogCategory("Time");
     public static LogCategory Character = new LogCategory("Character");
+    public static LogCategory Datawriting = new LogCategory("Datawriting");
+    public static LogCategory Datareading = new LogCategory("Datareading");
+    public static LogCategory General = new LogCategory("General");
+    public static LogCategory Initialisation = new LogCategory("Initialisation");
     public static LogCategory Level = new LogCategory("Level");
     public static LogCategory Locomotion = new LogCategory("Locomotion");
     public static LogCategory Pathfinding = new LogCategory("Pathfinding");
-    public static LogCategory Initialisation = new LogCategory("Initialisation");
-    public static LogCategory Datawriting = new LogCategory("Datawriting");
-    public static LogCategory Datareading = new LogCategory("Datareading");
+    public static LogCategory Score = new LogCategory("Score");
+    public static LogCategory Time = new LogCategory("Time");
     public static LogCategory UI = new LogCategory("UI");
 
     public static Color stringColor = new Color(144, 123, 35);
