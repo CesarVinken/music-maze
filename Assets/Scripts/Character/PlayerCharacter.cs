@@ -21,6 +21,7 @@ public class PlayerCharacter : Character
 
     public GridLocation CurrentGridLocation;
     private List<GridLocation> _drawnPath = new List<GridLocation>();
+    public int LevelScore = 0;
 
     public event Action PlayerExits;
     public event Action PlayerCaught;
@@ -33,22 +34,22 @@ public class PlayerCharacter : Character
 
         gameObject.name = PhotonView.Owner == null ? "Player 1" : PhotonView.Owner?.NickName;
 
-        if(GameManager.Instance.GameType == GameType.Multiplayer)
-        {
-            if(PhotonNetwork.IsMasterClient)
-            {
-                if (PhotonView.IsMine)
-                    PlayerNumber = PlayerNumber.Player1;
-                else
-                    PlayerNumber = PlayerNumber.Player2;
-            } else
-            {
-                if (PhotonView.IsMine)
-                    PlayerNumber = PlayerNumber.Player2;
-                else
-                    PlayerNumber = PlayerNumber.Player1;
-            }
-        }
+        //if(GameManager.Instance.GameType == GameType.Multiplayer)
+        //{
+        //    if(PhotonNetwork.IsMasterClient)
+        //    {
+        //        if (PhotonView.IsMine)
+        //            PlayerNumber = PlayerNumber.Player1;
+        //        else
+        //            PlayerNumber = PlayerNumber.Player2;
+        //    } else
+        //    {
+        //        if (PhotonView.IsMine)
+        //            PlayerNumber = PlayerNumber.Player2;
+        //        else
+        //            PlayerNumber = PlayerNumber.Player1;
+        //    }
+        //}
 
         _characterPath.CharacterReachesTarget += OnTargetReached;
         PlayerExits += OnPlayerExit;
@@ -383,5 +384,10 @@ public class PlayerCharacter : Character
 
         IEnumerator coroutine = this.RespawnCharacter(this, freezeTime);
         StartCoroutine(coroutine);
+    }
+
+    public void UpdateLevelScore(int score)
+    {
+        LevelScore += score;
     }
 }

@@ -6,12 +6,13 @@ public class Tile : MonoBehaviour
 {
     public SpriteRenderer SpriteRenderer;
     public Sprite Sprite;
-    public SpriteRenderer PlayerMark;
+    public SpriteRenderer PlayerMarkRenderer;
 
     public string TileId;
     public bool Walkable = true;
     public bool Markable = true;
     public GridLocation GridLocation;
+    public PlayerMark PlayerMark = null;
 
     public List<IMazeTileAttribute> MazeTileAttributes = new List<IMazeTileAttribute>();
     public Dictionary<ObjectDirection, Tile> Neighbours = new Dictionary<ObjectDirection, Tile>();
@@ -29,13 +30,15 @@ public class Tile : MonoBehaviour
 
         if (!Markable) return;
 
-        if (MazeLevelManager.Instance.Level.NumberOfUnmarkedTiles == -1)
+        PlayerMark = new PlayerMark();
+
+        if (MazeLevelManager.Instance.NumberOfUnmarkedTiles == -1)
         {
-            MazeLevelManager.Instance.Level.NumberOfUnmarkedTiles = 1;
+            MazeLevelManager.Instance.NumberOfUnmarkedTiles = 1;
         }
         else
         {
-            MazeLevelManager.Instance.Level.NumberOfUnmarkedTiles++;
+            MazeLevelManager.Instance.NumberOfUnmarkedTiles++;
         }
     }
 
@@ -51,7 +54,7 @@ public class Tile : MonoBehaviour
 
             player.UpdateCurrentGridLocation(GridLocation);
             
-            if (PlayerMark.sprite != null) return;
+            if (PlayerMarkRenderer.sprite != null) return;
 
             if (!Markable) return;
 

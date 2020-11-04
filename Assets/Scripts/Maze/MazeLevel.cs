@@ -9,8 +9,6 @@ public class MazeLevel
     public List<Tile> Tiles = new List<Tile>();
     public List<PlayerExit> MazeExits = new List<PlayerExit>();
 
-    public int NumberOfUnmarkedTiles = -1;
-
     public Dictionary<GridLocation, Tile> TilesByLocation = new Dictionary<GridLocation, Tile>();
 
     public List<CharacterSpawnpoint> PlayerCharacterSpawnpoints = new List<CharacterSpawnpoint>();

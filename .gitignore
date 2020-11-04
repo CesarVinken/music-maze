@@ -17,7 +17,8 @@ Assets/Plugins/
 Assets/Plugins.meta
 Assets/Resources/
 Assets/Resources.meta
-Assets/StreamingAssets/
+Assets/StreamingAssets
+Assets/StreamingAssets/*
 Assets/StreamingAssets.meta
 Assets/Animations/
 Assets/Animations.meta

@@ -18,6 +18,8 @@ public class MazeLevelManager : MonoBehaviour, IOnEventCallback
     public GameObject PlayerSpawnpointPrefab;
     public GameObject EnemySpawnpointPrefab;
 
+    public int NumberOfUnmarkedTiles = -1;
+
     public void Awake()
     {
         Guard.CheckIsNull(TilePrefab, "TilePrefab", gameObject);
@@ -90,14 +92,17 @@ public class MazeLevelManager : MonoBehaviour, IOnEventCallback
         if (GameManager.Instance.GameType == GameType.SinglePlayer)
         {
             player.LastTile = tile;
+            //player.LevelScore += 10;
 
             if (player.PlayerNumber == PlayerNumber.Player1)
             {
-                tile.PlayerMark.sprite = MainCanvas.Instance.Player1TileMarker;
+                tile.PlayerMarkRenderer.sprite = MainCanvas.Instance.Player1TileMarker;
+                tile.PlayerMark.SetOwner(PlayerMarkOwner.Player1);
             }
             else
             {
-                tile.PlayerMark.sprite = MainCanvas.Instance.Player2TileMarker;
+                tile.PlayerMarkRenderer.sprite = MainCanvas.Instance.Player2TileMarker;
+                tile.PlayerMark.SetOwner(PlayerMarkOwner.Player2);
             }
 
             HandleNumberOfUnmarkedTiles();
@@ -122,11 +127,14 @@ public class MazeLevelManager : MonoBehaviour, IOnEventCallback
 
             if (playerNumber == PlayerNumber.Player1)
             {
-                tile.PlayerMark.sprite = MainCanvas.Instance.Player1TileMarker;
+                tile.PlayerMarkRenderer.sprite = MainCanvas.Instance.Player1TileMarker;
+                tile.PlayerMark.SetOwner(PlayerMarkOwner.Player1);
+
             }
             else
             {
-                tile.PlayerMark.sprite = MainCanvas.Instance.Player2TileMarker;
+                tile.PlayerMarkRenderer.sprite = MainCanvas.Instance.Player2TileMarker;
+                tile.PlayerMark.SetOwner(PlayerMarkOwner.Player2);
             }
 
             HandleNumberOfUnmarkedTiles();
@@ -162,10 +170,10 @@ public class MazeLevelManager : MonoBehaviour, IOnEventCallback
 
     private void HandleNumberOfUnmarkedTiles()
     {
-        Level.NumberOfUnmarkedTiles--;
-        Logger.Log(Logger.Level,"{0} unmarked tiles left", Level.NumberOfUnmarkedTiles);
+        NumberOfUnmarkedTiles--;
+        Logger.Log(Logger.Level,"{0} unmarked tiles left", NumberOfUnmarkedTiles);
 
-        if (Level.NumberOfUnmarkedTiles == 0)
+        if (NumberOfUnmarkedTiles == 0)
         {
             OpenExit();
             Logger.Warning(Logger.Level, "Open exit!");

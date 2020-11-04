@@ -83,7 +83,14 @@ public class CameraController : MonoBehaviour
     {
         FocussedOnPlayer = true;
 
-        PlayerCharacter player = GameManager.Instance.GameType == GameType.SinglePlayer ? CharacterManager.Instance.MazePlayers[0] : CharacterManager.Instance.MazePlayers.FirstOrDefault(p => p.PhotonView.IsMine == true);
+        PlayerCharacter player = null;
+
+        if (GameManager.Instance.GameType == GameType.SinglePlayer)
+            player = CharacterManager.Instance.MazePlayers[PlayerNumber.Player1];
+        else
+        {
+            player = CharacterManager.Instance.MazePlayers.FirstOrDefault(p => p.Value.PhotonView.IsMine).Value;
+        }   
 
         if (player == null)
         {

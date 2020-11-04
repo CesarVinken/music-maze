@@ -26,7 +26,7 @@ public class CharacterManager : MonoBehaviourPunCallbacks
     public GameObject Player1GO;
     public GameObject Player2GO;
 
-    public List<PlayerCharacter> MazePlayers = new List<PlayerCharacter>();
+    public Dictionary<PlayerNumber, PlayerCharacter> MazePlayers = new Dictionary<PlayerNumber, PlayerCharacter>();
     public List<EnemyCharacter> Enemies = new List<EnemyCharacter>();
 
     public void Awake()
@@ -55,6 +55,8 @@ public class CharacterManager : MonoBehaviourPunCallbacks
                 CharacterBundle PlayerBundle = SpawnCharacter(level.PlayerCharacterSpawnpoints[0].CharacterBlueprint, level.PlayerCharacterSpawnpoints[0].GridLocation);
                 Player1GO = PlayerBundle.CharacterGO;
                 PlayerCharacter player = PlayerBundle.Character as PlayerCharacter;
+                MazePlayers.Add(PlayerNumber.Player1, player);
+
 
                 SpawnEnemies();
             }
@@ -65,6 +67,7 @@ public class CharacterManager : MonoBehaviourPunCallbacks
                 CharacterBundle PlayerBundle = SpawnCharacter(level.PlayerCharacterSpawnpoints[1].CharacterBlueprint, level.PlayerCharacterSpawnpoints[1].GridLocation);
                 Player2GO = PlayerBundle.CharacterGO;
                 PlayerCharacter player = PlayerBundle.Character as PlayerCharacter;
+                MazePlayers.Add(PlayerNumber.Player2, player);
             }
         }
     }
@@ -90,16 +93,17 @@ public class CharacterManager : MonoBehaviourPunCallbacks
             playerCharacter.CharacterBlueprint = character;
 
             playerCharacter.SetStartingPosition(playerCharacter, gridLocation);
-            MazePlayers.Add(playerCharacter);
+            //MazePlayers.Add(playerNumber, playerCharacter);
 
             if(GameManager.Instance.CurrentPlatform == Platform.PC)
             {
-                if (MazePlayers.Count == 1)
+                if (MazePlayers.Count == 0)
                 {
                     playerCharacter.KeyboardInput = KeyboardInput.Player1;
                     playerCharacter.PlayerNoInGame = 1;
+
                 }
-                else if (MazePlayers.Count == 2)
+                else if (MazePlayers.Count == 1)
                 {
                     playerCharacter.KeyboardInput = KeyboardInput.Player2;
                     playerCharacter.PlayerNoInGame = 2;
@@ -144,23 +148,21 @@ public class CharacterManager : MonoBehaviourPunCallbacks
         // Check if all players are gone. If so, the level is completed;
 
         int exitedCharacters = 0;
-        for (int i = 0; i < MazePlayers.Count; i++)
+        foreach (KeyValuePair<PlayerNumber, PlayerCharacter> p in MazePlayers)
         {
-            PlayerCharacter p = MazePlayers[i];
-
-            if(p.HasReachedExit)
+            if (p.Value.HasReachedExit)
                 exitedCharacters++;
         }
 
         if(exitedCharacters == MazePlayers.Count)
         {
             Logger.Warning("The level is completed!");
+            GameManager.Instance.CompleteLevel();
         }
     }
 
     public string GetPrefabNameByCharacter(CharacterBlueprint character)
     {
-
         switch (character.CharacterType)
         {
             case CharacterType.Bard:
@@ -175,10 +177,11 @@ public class CharacterManager : MonoBehaviourPunCallbacks
 
     public void UnloadCharacters()
     {
-        for (int i = 0; i < MazePlayers.Count; i++)
+        foreach (KeyValuePair<PlayerNumber, PlayerCharacter> p in MazePlayers)
         {
-            Destroy(MazePlayers[i].gameObject);
+            Destroy(p.Value.gameObject);
         }
+
         MazePlayers.Clear();
 
         for (int j = 0; j < Enemies.Count; j++)
@@ -186,6 +189,5 @@ public class CharacterManager : MonoBehaviourPunCallbacks
             Destroy(Enemies[j].gameObject);
         }
         Enemies.Clear();
-
     }
 }
