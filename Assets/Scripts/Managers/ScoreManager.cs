@@ -46,11 +46,9 @@ public class ScoreManager : MonoBehaviour
         {
             PlayerScores.Add(player.Key, 0);
         }
-
-        GameManager.Instance.CompleteMazeLevelEvent += OnMazeLevelCompleted;
     }
 
-    public void OnMazeLevelCompleted()
+    public void CalculateScores()
     {
         CountTileMarkerScore();
         CountTimesCaughtScore();
