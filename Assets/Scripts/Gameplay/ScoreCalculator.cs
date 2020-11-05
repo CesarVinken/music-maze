@@ -24,29 +24,13 @@ public struct PlayerScore
     }
 }
 
-public class ScoreManager : MonoBehaviour
+public class ScoreCalculator
 {
-    public static ScoreManager Instance;
     public PlayerScore Player1Score = new PlayerScore();
     public PlayerScore Player2Score = new PlayerScore();
 
     public const int MarkedTileValue = 10;
     public const int PlayerCaughtPenaltyValue = 10;
-
-    public Dictionary<PlayerNumber, int> PlayerScores = new Dictionary<PlayerNumber, int>();
-
-    public void Awake()
-    {
-        Instance = this;
-    }
-
-    public void Start()
-    {
-        foreach (KeyValuePair<PlayerNumber, PlayerCharacter> player in CharacterManager.Instance.MazePlayers)
-        {
-            PlayerScores.Add(player.Key, 0);
-        }
-    }
 
     public void CalculateScores()
     {

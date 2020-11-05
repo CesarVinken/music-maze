@@ -26,7 +26,6 @@ public class GameManager : MonoBehaviourPunCallbacks
     
     public GameObject MazeLevelManagerPrefab;
     public GameObject CharacterManagerPrefab;
-    public GameObject ScoreManagerPrefab;
 
     public event Action CompleteMazeLevelEvent;
 
@@ -39,7 +38,6 @@ public class GameManager : MonoBehaviourPunCallbacks
 
         Guard.CheckIsNull(MazeLevelManagerPrefab, "MazeLevelManagerPrefab", gameObject);
         Guard.CheckIsNull(CharacterManagerPrefab, "CharacterManagerPrefab", gameObject);
-        Guard.CheckIsNull(ScoreManagerPrefab, "ScoreManagerPrefab", gameObject);
 
         InitialiseLoggers();
 
@@ -60,7 +58,6 @@ public class GameManager : MonoBehaviourPunCallbacks
 
         Instantiate(MazeLevelManagerPrefab, transform);
         Instantiate(CharacterManagerPrefab, transform);
-        Instantiate(ScoreManagerPrefab, transform);
 
         JsonMazeLevelFileReader fileReader = new JsonMazeLevelFileReader();
         MazeLevelData startUpLevelData = fileReader.LoadLevel("default");
