@@ -10,6 +10,11 @@ public class EnemyCharacter : Character
         _characterPath.CharacterReachesTarget += OnTargetReached;
     }
 
+    public void Start()
+    {
+        GameManager.Instance.CompleteMazeLevelEvent += OnMazeLevelCompleted;
+    }
+
     public void Update()
     {
         if (EditorManager.InEditor) return;
@@ -44,5 +49,11 @@ public class EnemyCharacter : Character
 
         _animationHandler.SetLocomotion(false);
         SetHasCalculatedTarget(false);
+    }
+
+    public void OnMazeLevelCompleted()
+    {
+        //TODO: when maze level is completed, do not stop locomotion, but switch, if it exists, to an enemy idle animation
+        IsFrozen = true;
     }
 }

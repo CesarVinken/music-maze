@@ -157,7 +157,7 @@ public class CharacterManager : MonoBehaviourPunCallbacks
         if(exitedCharacters == MazePlayers.Count)
         {
             Logger.Warning("The level is completed!");
-            GameManager.Instance.CompleteLevel();
+            GameManager.Instance.CompleteMazeLevel();
         }
     }
 

@@ -1,4 +1,5 @@
 ﻿using Photon.Pun;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -26,6 +27,8 @@ public class GameManager : MonoBehaviourPunCallbacks
     public GameObject MazeLevelManagerPrefab;
     public GameObject CharacterManagerPrefab;
     public GameObject ScoreManagerPrefab;
+
+    public event Action CompleteMazeLevelEvent;
 
     public void Awake()
     {
@@ -108,8 +111,8 @@ public class GameManager : MonoBehaviourPunCallbacks
         Logger.UI.enableLogs = false;
     }
 
-    public void CompleteLevel()
+    public void CompleteMazeLevel()
     {
-        ScoreManager.Instance.CountScore();
+        CompleteMazeLevelEvent.Invoke();
     }
 }

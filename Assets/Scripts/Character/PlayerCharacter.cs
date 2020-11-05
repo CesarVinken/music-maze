@@ -23,8 +23,8 @@ public class PlayerCharacter : Character
     private List<GridLocation> _drawnPath = new List<GridLocation>();
     public int TimesCaught = 0;
 
-    public event Action PlayerExits;
-    public event Action PlayerCaught;
+    public event Action PlayerExitsEvent;
+    public event Action PlayerCaughtEvent;
 
     public void Awake()
     {
@@ -50,14 +50,14 @@ public class PlayerCharacter : Character
         //            PlayerNumber = PlayerNumber.Player1;
         //    }
         //}
-
-        _characterPath.CharacterReachesTarget += OnTargetReached;
-        PlayerExits += OnPlayerExit;
-        PlayerCaught += OnPlayerCaught;
     }
 
     public void Start()
     {
+        _characterPath.CharacterReachesTarget += OnTargetReached;
+        PlayerExitsEvent += OnPlayerExit;
+        PlayerCaughtEvent += OnPlayerCaught;
+
         if (GameManager.Instance.GameType == GameType.SinglePlayer
             || PhotonView.IsMine)
         {
@@ -74,10 +74,12 @@ public class PlayerCharacter : Character
 
     public void OnCollisionEnter2D(Collision2D collision)
     {
+        if (GameManager.Instance.GameType == GameType.Multiplayer && !PhotonView.IsMine) return;
+
         EnemyCharacter enemy = collision.gameObject.GetComponent<EnemyCharacter>();
         if (enemy != null)
         {
-            PlayerCaught?.Invoke();
+            PlayerCaughtEvent?.Invoke();
         }
     }
 
@@ -296,7 +298,7 @@ public class PlayerCharacter : Character
 
     public void Exit()
     {
-        PlayerExits?.Invoke();
+        PlayerExitsEvent?.Invoke();
     }
 
     private void OnPlayerExit()
@@ -374,7 +376,7 @@ public class PlayerCharacter : Character
             PhotonView.RPC("CaughtByEnemy", RpcTarget.All);
         }
 
-        PathDrawer.DisablePathDrawer(_pathDrawer);
+        PathDrawer.DisablePathDrawer(_pathDrawer); //???? Possible bug. Does this mean the PathDrawer is disabled when the other player is caught? Check and fix if neccesary
     }
 
     [PunRPC]

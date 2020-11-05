@@ -46,9 +46,11 @@ public class ScoreManager : MonoBehaviour
         {
             PlayerScores.Add(player.Key, 0);
         }
+
+        GameManager.Instance.CompleteMazeLevelEvent += OnMazeLevelCompleted;
     }
 
-    public void CountScore()
+    public void OnMazeLevelCompleted()
     {
         CountTileMarkerScore();
         CountTimesCaughtScore();
@@ -69,7 +71,7 @@ public class ScoreManager : MonoBehaviour
         }
     }
 
-    public void CountTileMarkerScore()
+    private void CountTileMarkerScore()
     {
         List<Tile> markedTiles = MazeLevelManager.Instance.Level.Tiles.Where(t => t.PlayerMark != null).ToList();
         for (int i = 0; i < markedTiles.Count; i++)
@@ -91,7 +93,7 @@ public class ScoreManager : MonoBehaviour
             Logger.Log(Logger.Score, $"Finished counting tile marker scores. Player 1 has {Player1Score.TileMarkScore} points.");
     }
 
-    public void CountTimesCaughtScore()
+    private void CountTimesCaughtScore()
     {
         Player1Score.PlayerCaughtScore = CharacterManager.Instance.MazePlayers[PlayerNumber.Player1].TimesCaught * -PlayerCaughtPenaltyValue;
 
