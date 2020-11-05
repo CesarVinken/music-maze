@@ -28,8 +28,6 @@ public class Character : MonoBehaviour
 
     public GameObject CharacterBody;
 
-    //public event Action CharacterReachesTarget;
-
     public void Awake()
     {
         Guard.CheckIsNull(_animationHandler, "_animationHandler", gameObject);
