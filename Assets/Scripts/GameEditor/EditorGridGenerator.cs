@@ -159,11 +159,29 @@ public class EditorGridGenerator : MonoBehaviour
             return;
         }
 
+        if (_mazeName == "levels")
+        {
+            Logger.Warning(Logger.Datawriting, "A maze level cannot have the name 'levels', as this is already the name of the file that lists all the maze levels");
+            return;
+        }
+
+        SaveMazeLevelDate();
+        AddMazeLevelToLevelList();
+
+        Logger.Log(Logger.Datawriting, "Level {0} Saved.", _mazeName);
+    }
+
+    private void SaveMazeLevelDate()
+    {
         MazeLevelData mazeLevelData = new MazeLevelData(EditorManager.EditorLevel).WithName(_mazeName);
 
         JsonMazeLevelFileWriter fileWriter = new JsonMazeLevelFileWriter();
         fileWriter.SerialiseData(mazeLevelData);
+    }
 
-        Logger.Log(Logger.Datawriting, "Level {0} Saved.", _mazeName);
+    private void AddMazeLevelToLevelList()
+    {
+        MazeLevelListFileWriter fileWriter = new MazeLevelListFileWriter();
+        fileWriter.SerialiseData(_mazeName);
     }
 }

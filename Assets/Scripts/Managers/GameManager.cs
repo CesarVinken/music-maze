@@ -60,7 +60,7 @@ public class GameManager : MonoBehaviourPunCallbacks
         Instantiate(CharacterManagerPrefab, transform);
 
         JsonMazeLevelFileReader fileReader = new JsonMazeLevelFileReader();
-        MazeLevelData startUpLevelData = fileReader.LoadLevel("default");
+        MazeLevelData startUpLevelData = fileReader.ReadLevelData("default");
 
         if(startUpLevelData == null)
         {

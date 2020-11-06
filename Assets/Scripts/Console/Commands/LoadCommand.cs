@@ -43,7 +43,7 @@ public class LoadCommand : CommandProcedure
         }
 
         JsonMazeLevelFileReader levelReader = new JsonMazeLevelFileReader();
-        MazeLevelData levelData = levelReader.LoadLevel(arguments[1]);
+        MazeLevelData levelData = levelReader.ReadLevelData(arguments[1]);
 
         if(levelData == null)
         {
