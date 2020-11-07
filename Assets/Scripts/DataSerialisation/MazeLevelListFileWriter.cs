@@ -1,26 +1,19 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
+﻿using System.IO;
 using UnityEngine;
 
-public class MazeLevelListFileWriter
+public class JsonMazeLevelListFileWriter
 {
-    private string _existingMazeLevelListData;
+    private LevelNamesData _levelNamesData;
+
     private string _path;
 
-    public void SerialiseData(string levelName)
+    public void SerialiseData(LevelNamesData levelNamesData)
     {
-        _path = Path.Combine(Application.dataPath, "StreamingAssets", "levels.txt");
-        MazeLevelListFileReader fileReader = new MazeLevelListFileReader();
-        _existingMazeLevelListData = fileReader.ReadMazeLevelList();
+        _levelNamesData = levelNamesData;
+        _path = Path.Combine(Application.dataPath, "StreamingAssets", "levels.json");
 
-        //TODO don't print already existing level
+        string jsonLevelNamesData = JsonUtility.ToJson(_levelNamesData, true).ToString();
 
-        Logger.Log("levelName:" + levelName);
-        string levelList = _existingMazeLevelListData + "*" + levelName + "\n";
-        Logger.Log("_existingMazeLevelListData:" + levelList);
-        File.WriteAllText(_path, levelList);
+        File.WriteAllText(_path, jsonLevelNamesData);
     }
 }
-

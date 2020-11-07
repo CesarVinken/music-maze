@@ -1,11 +1,11 @@
 ﻿using System.IO;
 using UnityEngine;
 
-public class MazeLevelListFileReader
+public class JsonMazeLevelListFileReader
 {
-    public string ReadMazeLevelList()
+    public LevelNamesData ReadMazeLevelList()
     {
-        string filePath = Path.Combine(Application.streamingAssetsPath, "levels.txt");
+        string filePath = Path.Combine(Application.streamingAssetsPath, "levels.json");
         //#if UNITY_EDITOR
         //filePath = "/StreamingAssets/" + arguments[1] + ".json";
         if (!File.Exists(filePath))
@@ -13,11 +13,11 @@ public class MazeLevelListFileReader
             File.Create(filePath).Dispose();
             Logger.Warning("File doesn't exist");
 
-            return "";
+            return null;
         }
 
         string fileContent = File.ReadAllText(filePath);
-
-        return fileContent;
+        LevelNamesData jsonFileContent = JsonUtility.FromJson<LevelNamesData>(fileContent);
+        return jsonFileContent;
     }
 }
