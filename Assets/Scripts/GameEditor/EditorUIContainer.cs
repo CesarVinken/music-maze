@@ -6,6 +6,7 @@ public class EditorUIContainer : MonoBehaviour
 
     public GameObject EditorModeStatusTextGO;
     public GameObject EditorUIGO;
+    public GameObject PlayableLevelsPanelGO;
 
     public void Awake()
     {
@@ -13,6 +14,7 @@ public class EditorUIContainer : MonoBehaviour
 
         Guard.CheckIsNull(EditorModeStatusTextGO, "EditorModeStatusTextGO", gameObject);
         Guard.CheckIsNull(EditorUIGO, "EditorUIGO", gameObject);
+        Guard.CheckIsNull(PlayableLevelsPanelGO, "PlayableLevelsPanelGO", gameObject);
     }
 
     public void InitialiseEditor()

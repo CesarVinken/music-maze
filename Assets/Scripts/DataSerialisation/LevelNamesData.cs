@@ -6,6 +6,11 @@ public class LevelNamesData
 {
     public List<LevelNameData> LevelNames = new List<LevelNameData>();
 
+    public LevelNamesData()
+    {
+
+    }
+
     public LevelNamesData(string levelName)
     {
         JsonMazeLevelListFileReader mazeLevelListFileReader = new JsonMazeLevelListFileReader();

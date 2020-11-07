@@ -3,17 +3,34 @@
 [Serializable]
 public class LevelNameData
 {
-    public string LevelName;
-    public bool IsSelected;
+    public string LevelName = "";
+    public bool IsPlayable;
+
+    public LevelNameData()
+    {
+
+    }
 
     public LevelNameData(string levelName)
     {
         LevelName = levelName;
-        IsSelected = true;
+        IsPlayable = true;
     }
 
-    public void ToggleSelection(bool isSelected)
+    public LevelNameData WithName(string levelName)
     {
-        IsSelected = isSelected;
+        LevelName = levelName;
+        return this;
+    }
+
+    public LevelNameData WithPlayability(bool isPlayable)
+    {
+        IsPlayable = isPlayable;
+        return this;
+    }
+
+    public void ToggleSelection(bool isPlayable)
+    {
+        IsPlayable = isPlayable;
     }
 }

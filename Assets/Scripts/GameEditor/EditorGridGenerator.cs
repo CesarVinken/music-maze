@@ -187,4 +187,9 @@ public class EditorGridGenerator : MonoBehaviour
         JsonMazeLevelListFileWriter fileWriter = new JsonMazeLevelListFileWriter();
         fileWriter.SerialiseData(levelData);
     }
+
+    public void OpenPlayableLevelsPanel()
+    {
+        EditorUIContainer.Instance.PlayableLevelsPanelGO.SetActive(true);
+    }
 }
