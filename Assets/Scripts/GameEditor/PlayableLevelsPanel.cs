@@ -67,4 +67,9 @@ public class PlayableLevelsPanel : MonoBehaviour
 
         jsonMazeLevelListFileWriter.SerialiseData(levelNamesData);
     }
+
+    public void ClosePanel()
+    {
+        gameObject.SetActive(false);
+    }
 }

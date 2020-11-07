@@ -188,8 +188,15 @@ public class EditorGridGenerator : MonoBehaviour
         fileWriter.SerialiseData(levelData);
     }
 
-    public void OpenPlayableLevelsPanel()
+    public void TogglePlayableLevelsPanel()
     {
-        EditorUIContainer.Instance.PlayableLevelsPanelGO.SetActive(true);
+        if (EditorUIContainer.Instance.PlayableLevelsPanelGO.activeSelf)
+        {
+            EditorUIContainer.Instance.PlayableLevelsPanelGO.SetActive(false);
+        }
+        else
+        {
+            EditorUIContainer.Instance.PlayableLevelsPanelGO.SetActive(true);
+        }
     }
 }
