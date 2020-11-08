@@ -89,4 +89,10 @@ public class ScoreCalculator
             Logger.Log(Logger.Score, $"Finished counting player caught scores. Player 1 has {Player1Score.PlayerCaughtScore} points.");
         }
     }
+
+    public void ResetMazeLevelScore()
+    {
+        Player1Score = new PlayerScore();
+        Player2Score = new PlayerScore();
+    }
 }

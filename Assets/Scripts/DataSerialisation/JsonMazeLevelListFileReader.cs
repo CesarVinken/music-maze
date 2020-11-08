@@ -10,8 +10,8 @@ public class JsonMazeLevelListFileReader
         //filePath = "/StreamingAssets/" + arguments[1] + ".json";
         if (!File.Exists(filePath))
         {
+            Logger.Warning("File doesn't exist. Creating a new levels.json file.");
             File.Create(filePath).Dispose();
-            Logger.Warning("File doesn't exist");
 
             return null;
         }

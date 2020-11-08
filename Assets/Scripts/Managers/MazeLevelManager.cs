@@ -1,6 +1,7 @@
 ﻿using ExitGames.Client.Photon;
 using Photon.Pun;
 using Photon.Realtime;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -46,10 +47,22 @@ public class MazeLevelManager : MonoBehaviour, IOnEventCallback
         Level = MazeLevel.Create(mazeLevelData);
 
         InitialiseTileAttributes();
+
+        Logger.Log("Scan");
+        IEnumerator coroutine = ScanCoroutine();
+
+        StartCoroutine(coroutine);
+    }
+
+    public IEnumerator ScanCoroutine()
+    {
+        yield return new WaitForSeconds(.2f);
+        AstarPath.active.Scan();    // We should only scan once all the tiles are loaded with their correct (walkable) attributes and obstacles
+        yield return new WaitForSeconds(.4f);
+
+        // start movement of all actors that depend on the updated pathfinding
         CharacterManager.Instance.SpawnCharacters();
         CameraController.Instance.FocusOnPlayer();
-
-        AstarPath.active.Scan();
     }
 
     public void UnloadLevel()
@@ -92,7 +105,6 @@ public class MazeLevelManager : MonoBehaviour, IOnEventCallback
         if (GameManager.Instance.GameType == GameType.SinglePlayer)
         {
             player.LastTile = tile;
-            //player.LevelScore += 10;
 
             if (player.PlayerNumber == PlayerNumber.Player1)
             {

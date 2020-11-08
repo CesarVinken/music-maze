@@ -102,6 +102,8 @@ public class GameManager : MonoBehaviourPunCallbacks
         JsonMazeLevelListFileReader jsonMazeLevelListFileReader = new JsonMazeLevelListFileReader();
         LevelNamesData levelNamesData = jsonMazeLevelListFileReader.ReadMazeLevelList();
 
+        if (levelNamesData == null) return;
+
         for (int i = 0; i < levelNamesData.LevelNames.Count; i++)
         {
             LevelNameData levelNameData = levelNamesData.LevelNames[i];

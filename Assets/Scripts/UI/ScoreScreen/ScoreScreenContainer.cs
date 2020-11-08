@@ -140,5 +140,18 @@ public class ScoreScreenContainer : MonoBehaviour
         GameManager.Instance.PlayableLevelNames.RemoveAt(randomIndex);
 
         Logger.Log($"Load next random level: {pickedLevel}");
+
+        JsonMazeLevelFileReader levelReader = new JsonMazeLevelFileReader();
+        MazeLevelData levelData = levelReader.ReadLevelData(pickedLevel);
+
+        if (levelData == null)
+        {
+            Logger.Error($"Could not load maze level data for the randomly picked maze level {pickedLevel}");
+        }
+
+        MazeLevelManager.Instance.UnloadLevel();
+        MazeLevelManager.Instance.SetupLevel(levelData);
+
+        _scoreCalculator.ResetMazeLevelScore();
     }
 }
