@@ -1,4 +1,5 @@
 ﻿using Photon.Pun;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -125,8 +126,19 @@ public class ScoreScreenContainer : MonoBehaviour
 
     public void NextLevel()
     {
-        Logger.Log("Load next random level.");
-
         ScoreScreenPanel.SetActive(false);
+
+        // pick a random level from the list of playable levels
+        if(GameManager.Instance.PlayableLevelNames.Count == 0) // there are no levels left to choose from, reload all random levels.
+        {
+            Logger.Warning("We played all playable levels. Starting the random selection from the beginning");
+            GameManager.Instance.GetAllPlayableLevelNames();
+        }
+
+        int randomIndex = Random.Range(0, GameManager.Instance.PlayableLevelNames.Count);
+        string pickedLevel = GameManager.Instance.PlayableLevelNames[randomIndex];
+        GameManager.Instance.PlayableLevelNames.RemoveAt(randomIndex);
+
+        Logger.Log($"Load next random level: {pickedLevel}");
     }
 }

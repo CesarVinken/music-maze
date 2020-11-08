@@ -86,7 +86,8 @@ public class CharacterManager : MonoBehaviourPunCallbacks
     {
         string prefabName = GetPrefabNameByCharacter(character);
         Vector2 startPosition = GetCharacterGridPosition(GridLocation.GridToVector(gridLocation)); // start position is grid position plus grid tile offset
-        GameObject characterGO = PhotonNetwork.Instantiate(prefabName, startPosition, Quaternion.identity, 0);
+
+        GameObject characterGO = PhotonNetwork.Instantiate(prefabName, startPosition, Quaternion.identity, 0); // TODO solve prefab for single player
         if (character.IsPlayable)
         {
             PlayerCharacter playerCharacter = characterGO.GetComponent<PlayerCharacter>();

@@ -29,6 +29,8 @@ public class GameManager : MonoBehaviourPunCallbacks
 
     public event Action CompleteMazeLevelEvent;
 
+    public List<string> PlayableLevelNames = new List<string>();
+
     public void Awake()
     {
         Instance = this;
@@ -83,6 +85,8 @@ public class GameManager : MonoBehaviourPunCallbacks
             return;
         }
         if (MazeLevelManager.Instance.Level.PlayerCharacterSpawnpoints.Count == 0) return;
+
+        GetAllPlayableLevelNames();
     }
 
     public void Update()
@@ -90,6 +94,23 @@ public class GameManager : MonoBehaviourPunCallbacks
         if (Input.GetKeyDown(KeyboardConfiguration.Console))
         {
             ConsoleContainer.Instance.ToggleConsole();
+        }
+    }
+
+    public void GetAllPlayableLevelNames()
+    {
+        JsonMazeLevelListFileReader jsonMazeLevelListFileReader = new JsonMazeLevelListFileReader();
+        LevelNamesData levelNamesData = jsonMazeLevelListFileReader.ReadMazeLevelList();
+
+        for (int i = 0; i < levelNamesData.LevelNames.Count; i++)
+        {
+            LevelNameData levelNameData = levelNamesData.LevelNames[i];
+
+            if (!levelNameData.IsPlayable) continue;
+
+            if (levelNameData.LevelName == MazeLevelManager.Instance.Level.MazeName) continue;
+
+            PlayableLevelNames.Add(levelNameData.LevelName);
         }
     }
 
