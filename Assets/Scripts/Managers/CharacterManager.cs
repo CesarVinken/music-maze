@@ -90,7 +90,6 @@ public class CharacterManager : MonoBehaviourPunCallbacks
             playerCharacter.CharacterBlueprint = character;
 
             playerCharacter.SetStartingPosition(playerCharacter, gridLocation);
-            //MazePlayers.Add(playerNumber, playerCharacter);
 
             if(GameManager.Instance.CurrentPlatform == Platform.PC)
             {
@@ -118,7 +117,6 @@ public class CharacterManager : MonoBehaviourPunCallbacks
             EnemyCharacter enemyCharacter = characterGO.GetComponent<EnemyCharacter>();
             enemyCharacter.SetStartingPosition(enemyCharacter, gridLocation);
             enemyCharacter.CharacterBlueprint = character;
-            Enemies.Add(enemyCharacter);
 
             CharacterBundle characterBundle = new CharacterBundle(enemyCharacter, characterGO);
             return characterBundle;

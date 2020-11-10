@@ -5,6 +5,7 @@ using UnityEngine.UI;
 
 public class ScoreScreenContainer : MonoBehaviour
 {
+    public static ScoreScreenContainer Instance; 
     public GameObject ScoreScreenPanel;
 
     [Space(10)]
@@ -45,7 +46,9 @@ public class ScoreScreenContainer : MonoBehaviour
 
         _scoreCalculator = new ScoreCalculator();
 
-        ScoreScreenPanel.SetActive(false);
+        CloseScoreScreenPanel();
+
+        Instance = this;
     }
 
     public void Start()
@@ -55,6 +58,8 @@ public class ScoreScreenContainer : MonoBehaviour
 
     public void OnMazeLevelCompleted()
     {
+        _scoreCalculator.ResetMazeLevelScore();
+
         _scoreCalculator.CalculateScores();
 
         SubtitleLabel.text = $"You escaped from {MazeLevelManager.Instance.Level.MazeName}";
@@ -85,7 +90,7 @@ public class ScoreScreenContainer : MonoBehaviour
 
         NextLevelButton.gameObject.SetActive(true);
 
-        ScoreScreenPanel.SetActive(true);
+        OpenScoreScreenPanel();
     }
 
     private void ShowMultiplayerScore()
@@ -119,15 +124,14 @@ public class ScoreScreenContainer : MonoBehaviour
         {
             WaitingForNextLevelLabel.text = $"Waiting for {PhotonNetwork.MasterClient.NickName} to start the next level...";
             WaitingForNextLevelLabel.gameObject.SetActive(true);
+            NextLevelButton.gameObject.SetActive(false);
         }
 
-        ScoreScreenPanel.SetActive(true);
+        OpenScoreScreenPanel();
     }
 
     public void NextLevel()
     {
-        ScoreScreenPanel.SetActive(false);
-
         // pick a random level from the list of playable levels
         if(GameManager.Instance.PlayableLevelNames.Count == 0) // there are no levels left to choose from, reload all random levels.
         {
@@ -137,21 +141,18 @@ public class ScoreScreenContainer : MonoBehaviour
 
         int randomIndex = Random.Range(0, GameManager.Instance.PlayableLevelNames.Count);
         string pickedLevel = GameManager.Instance.PlayableLevelNames[randomIndex];
-        GameManager.Instance.PlayableLevelNames.RemoveAt(randomIndex);
-
         Logger.Log($"Load next random level: {pickedLevel}");
 
-        JsonMazeLevelFileReader levelReader = new JsonMazeLevelFileReader();
-        MazeLevelData levelData = levelReader.ReadLevelData(pickedLevel);
+        MazeLevelManager.Instance.LoadNextLevel(pickedLevel); // triggers load next level event for both players
+    }
 
-        if (levelData == null)
-        {
-            Logger.Error($"Could not load maze level data for the randomly picked maze level {pickedLevel}");
-        }
+    public void OpenScoreScreenPanel()
+    {
+        ScoreScreenPanel.SetActive(true);
+    }
 
-        MazeLevelManager.Instance.UnloadLevel();
-        MazeLevelManager.Instance.SetupLevel(levelData);
-
-        _scoreCalculator.ResetMazeLevelScore();
+    public void CloseScoreScreenPanel()
+    {
+        ScoreScreenPanel.SetActive(false);
     }
 }

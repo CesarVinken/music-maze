@@ -8,6 +8,8 @@ public class EnemyCharacter : Character
     {
         base.Awake();
         _characterPath.CharacterReachesTarget += OnTargetReached;
+
+        CharacterManager.Instance.Enemies.Add(this);
     }
 
     public void Start()

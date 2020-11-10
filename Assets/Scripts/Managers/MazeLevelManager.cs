@@ -67,6 +67,8 @@ public class MazeLevelManager : MonoBehaviour, IOnEventCallback
 
     public void UnloadLevel()
     {
+        Logger.Log("Unload level");
+
         if(TilesContainer.Instance)
         {
             Destroy(TilesContainer.Instance.gameObject);
@@ -126,6 +128,30 @@ public class MazeLevelManager : MonoBehaviour, IOnEventCallback
         }
     }
 
+    public void LoadNextLevel(string pickedLevel)
+    {
+        if (GameManager.Instance.GameType == GameType.SinglePlayer)
+        {
+            JsonMazeLevelFileReader levelReader = new JsonMazeLevelFileReader();
+            MazeLevelData levelData = levelReader.ReadLevelData(pickedLevel);
+
+            if (levelData == null)
+            {
+                Logger.Error($"Could not load maze level data for the randomly picked maze level {pickedLevel}");
+            }
+
+            UnloadLevel();
+            SetupLevel(levelData);
+
+            ScoreScreenContainer.Instance.CloseScoreScreenPanel();
+        }
+        else
+        {
+            LoadNextMazeLevelEvent loadNextLevelEvent = new LoadNextMazeLevelEvent();
+            loadNextLevelEvent.SendLoadNextMazeLevelEvent(pickedLevel);
+        }
+    }
+
     public void OnEvent(EventData photonEvent)
     {
         byte eventCode = photonEvent.Code;
@@ -150,6 +176,23 @@ public class MazeLevelManager : MonoBehaviour, IOnEventCallback
             }
 
             HandleNumberOfUnmarkedTiles();
+        } else if(eventCode == LoadNextMazeLevelEvent.LoadNextMazeLevelEventCode)
+        {
+            object[] data = (object[])photonEvent.CustomData;
+            string pickedLevel = (string)data[0];
+
+            JsonMazeLevelFileReader levelReader = new JsonMazeLevelFileReader();
+            MazeLevelData levelData = levelReader.ReadLevelData(pickedLevel);
+
+            if (levelData == null)
+            {
+                Logger.Error($"Could not load maze level data for the randomly picked maze level {pickedLevel}");
+            }
+
+            UnloadLevel();
+            SetupLevel(levelData);
+
+            ScoreScreenContainer.Instance.CloseScoreScreenPanel();
         }
     }
 

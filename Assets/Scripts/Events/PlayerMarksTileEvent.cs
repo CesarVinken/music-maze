@@ -13,7 +13,22 @@ public class PlayerMarksTileEvent
             tileLocation.Y,
             playerCharacter.PlayerNumber
         };
-        RaiseEventOptions raiseEventOptions = new RaiseEventOptions { Receivers = ReceiverGroup.All }; // You would have to set the Receivers to All in order to receive this event on the local client as well
+        RaiseEventOptions raiseEventOptions = new RaiseEventOptions { Receivers = ReceiverGroup.All };
         PhotonNetwork.RaiseEvent(PlayerMarksTileEventCode, content, raiseEventOptions, SendOptions.SendReliable);
+    }
+}
+
+
+public class LoadNextMazeLevelEvent
+{
+    public const byte LoadNextMazeLevelEventCode = 2;
+
+    public void SendLoadNextMazeLevelEvent(string levelName)
+    {
+        object[] content = new object[] {
+            levelName
+        };
+        RaiseEventOptions raiseEventOptions = new RaiseEventOptions { Receivers = ReceiverGroup.All };
+        PhotonNetwork.RaiseEvent(LoadNextMazeLevelEventCode, content, raiseEventOptions, SendOptions.SendReliable);
     }
 }
