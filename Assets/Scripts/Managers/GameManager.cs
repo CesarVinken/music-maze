@@ -2,7 +2,6 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
 public enum GameType
 {
@@ -62,9 +61,10 @@ public class GameManager : MonoBehaviourPunCallbacks
         Instantiate(CharacterManagerPrefab, transform);
 
         JsonMazeLevelFileReader fileReader = new JsonMazeLevelFileReader();
+
         MazeLevelData startUpLevelData = fileReader.ReadLevelData("default");
 
-        if(startUpLevelData == null)
+        if (startUpLevelData == null)
         {
             Logger.Error("Could not find the default level for startup");
         }

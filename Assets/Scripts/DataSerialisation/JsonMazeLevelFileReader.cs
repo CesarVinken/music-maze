@@ -1,25 +1,36 @@
 ﻿using System.IO;
 using UnityEngine;
+using UnityEngine.Networking;
 
 public class JsonMazeLevelFileReader
 {
     public MazeLevelData ReadLevelData(string levelName)
     {
-        string filePath = Path.Combine(Application.streamingAssetsPath, levelName + ".json");
-        //#if UNITY_EDITOR
-        //filePath = "/StreamingAssets/" + arguments[1] + ".json";
-        if (!File.Exists(filePath))
+        string jsonContent;
+
+        if (Application.platform == RuntimePlatform.Android)
         {
-            Logger.Warning("File doesn't exist");
-            return null;
+            string sFilePath = Path.Combine(Application.streamingAssetsPath, levelName + ".json");
+
+            UnityWebRequest loadingRequest = UnityWebRequest.Get(sFilePath);
+            loadingRequest.SendWebRequest();
+            while (!loadingRequest.isDone);
+            jsonContent = loadingRequest.downloadHandler.text.Trim();
         }
-        //#endif
-        //#if UNITY_ANDROID
-        //    filePath = "jar:file:" + Application.dataPath + "!/assets/" + arguments[1] + ".json";
-        //#endif
-        string jsonContent = File.ReadAllText(filePath);
+        else
+        {
+            string filePath = Path.Combine(Application.streamingAssetsPath, levelName + ".json");
+
+            if (!File.Exists(filePath))
+            {
+                Logger.Warning("File doesn't exist");
+                return null;
+            }
+            jsonContent = File.ReadAllText(filePath);
+        }
         MazeLevelData levelData = JsonUtility.FromJson<MazeLevelData>(jsonContent);
 
         return levelData;
     }
 }
+
