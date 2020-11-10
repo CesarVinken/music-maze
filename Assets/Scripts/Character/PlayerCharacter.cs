@@ -34,22 +34,24 @@ public class PlayerCharacter : Character
 
         gameObject.name = PhotonView.Owner == null ? "Player 1" : PhotonView.Owner?.NickName;
 
-        //if(GameManager.Instance.GameType == GameType.Multiplayer)
-        //{
-        //    if(PhotonNetwork.IsMasterClient)
-        //    {
-        //        if (PhotonView.IsMine)
-        //            PlayerNumber = PlayerNumber.Player1;
-        //        else
-        //            PlayerNumber = PlayerNumber.Player2;
-        //    } else
-        //    {
-        //        if (PhotonView.IsMine)
-        //            PlayerNumber = PlayerNumber.Player2;
-        //        else
-        //            PlayerNumber = PlayerNumber.Player1;
-        //    }
-        //}
+        if (GameManager.Instance.GameType == GameType.Multiplayer)
+        {
+            if (PhotonNetwork.IsMasterClient)
+            {
+                if (PhotonView.IsMine)
+                    PlayerNumber = PlayerNumber.Player1;
+                else
+                    PlayerNumber = PlayerNumber.Player2;
+            }
+            else
+            {
+                if (PhotonView.IsMine)
+                    PlayerNumber = PlayerNumber.Player2;
+                else
+                    PlayerNumber = PlayerNumber.Player1;
+            }
+        }
+        CharacterManager.Instance.MazePlayers.Add(PlayerNumber, this);
     }
 
     public void Start()
@@ -373,7 +375,7 @@ public class PlayerCharacter : Character
         }
         else
         {
-            PhotonView.RPC("CaughtByEnemy", RpcTarget.All);
+            PhotonView.RPC("PunRPCCaughtByEnemy", RpcTarget.All);
         }
 
         PathDrawer.DisablePathDrawer(_pathDrawer); //???? Possible bug. Does this mean the PathDrawer is disabled when the other player is caught? Check and fix if neccesary

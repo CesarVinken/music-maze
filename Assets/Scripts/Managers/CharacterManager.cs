@@ -55,8 +55,6 @@ public class CharacterManager : MonoBehaviourPunCallbacks
                 CharacterBundle PlayerBundle = SpawnCharacter(level.PlayerCharacterSpawnpoints[0].CharacterBlueprint, level.PlayerCharacterSpawnpoints[0].GridLocation);
                 Player1GO = PlayerBundle.CharacterGO;
                 PlayerCharacter player = PlayerBundle.Character as PlayerCharacter;
-                MazePlayers.Add(PlayerNumber.Player1, player);
-
 
                 SpawnEnemies();
             }
@@ -66,9 +64,7 @@ public class CharacterManager : MonoBehaviourPunCallbacks
 
                 CharacterBundle PlayerBundle = SpawnCharacter(level.PlayerCharacterSpawnpoints[1].CharacterBlueprint, level.PlayerCharacterSpawnpoints[1].GridLocation);
                 Player2GO = PlayerBundle.CharacterGO;
-                PlayerCharacter player = PlayerBundle.Character as PlayerCharacter;
-                MazePlayers.Add(PlayerNumber.Player2, player);
-            }
+                PlayerCharacter player = PlayerBundle.Character as PlayerCharacter;            }
         }
     }
 

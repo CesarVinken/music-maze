@@ -59,7 +59,7 @@ public class ScoreCalculator
         for (int i = 0; i < markedTiles.Count; i++)
         {
             PlayerMark playerMark = markedTiles[i].PlayerMark;
-            if(playerMark.Owner == PlayerMarkOwner.Player1)
+            if (playerMark.Owner == PlayerMarkOwner.Player1)
             {
                 Player1Score.TileMarkScore += MarkedTileValue;
             }
@@ -69,7 +69,7 @@ public class ScoreCalculator
             }
         }
 
-        if(CharacterManager.Instance.MazePlayers.Count == 2)
+        if (CharacterManager.Instance.MazePlayers.Count == 2)
             Logger.Log(Logger.Score, $"Finished counting tile marker scores. Player 1 has {Player1Score.TileMarkScore} points and player 2 has {Player2Score.TileMarkScore} points.");
         else
             Logger.Log(Logger.Score, $"Finished counting tile marker scores. Player 1 has {Player1Score.TileMarkScore} points.");
