@@ -87,6 +87,8 @@ public class MazeLevelManager : MonoBehaviour, IOnEventCallback
             CameraController.Instance.ResetCamera();
             Level = null;
         }
+
+        NumberOfUnmarkedTiles = -1;
     }
 
     public void InitialiseTileAttributes()

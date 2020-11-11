@@ -123,7 +123,7 @@ public class GameManager : MonoBehaviourPunCallbacks
         Logger.Datareading.enableLogs = true;
         Logger.General.enableLogs = true;
         Logger.Initialisation.enableLogs = true;
-        Logger.Level.enableLogs = false;
+        Logger.Level.enableLogs = true;
         Logger.Locomotion.enableLogs = false;
         Logger.Pathfinding.enableLogs = false;
         Logger.Score.enableLogs = true;

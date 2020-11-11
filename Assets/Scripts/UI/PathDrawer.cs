@@ -29,7 +29,7 @@ public class PathDrawer : MonoBehaviour
     public void OnEnable()
     {
         IsDrawingPath = true;
-        Logger.Log("PathDrawer enabled");
+        Logger.Log(Logger.UI, "PathDrawer enabled");
         _fingerPositions.Clear();
         _lineRenderer.positionCount = 0;
         
@@ -43,7 +43,7 @@ public class PathDrawer : MonoBehaviour
         _currentTileSpriteGO.SetActive(false);
 
         // remove existing lines
-        Logger.Log("PathDrawer disabled");
+        Logger.Log(Logger.UI, "PathDrawer disabled");
         _fingerPositions.Clear();
         _lineRenderer.positionCount = 0;
 
@@ -144,13 +144,9 @@ public class PathDrawer : MonoBehaviour
         if (!isActiveAndEnabled)
             return;
 
-        Logger.Warning("Player entered {0}, {1}, Update the drawn path", playerCurrentGridLocation.X, playerCurrentGridLocation.Y);
-
         // Make path longer if player character walks away from starting point that is being drawn.
         if (IsAdjacent(playerCurrentGridLocation, _fingerPositions[0]))
         {
-            Logger.Warning("Add to path because the new player position is adjacent. Prepend {0},{1}", playerCurrentGridLocation.X, playerCurrentGridLocation.Y);
-
             List<GridLocation> tempFingerPositions = _fingerPositions.Prepend(playerCurrentGridLocation).ToList();
             _fingerPositions = tempFingerPositions;
 
@@ -158,16 +154,12 @@ public class PathDrawer : MonoBehaviour
 
             for (int i = _lineRenderer.positionCount - 1; i >= 1; i--)
             {
-                Logger.Log("_lineRenderer.positionCount: {0}", _lineRenderer.positionCount);
-                Logger.Log("set i {0} to {1},{2}", i, _lineRenderer.GetPosition(i - 1).x, _lineRenderer.GetPosition(i - 1).y);
                 _lineRenderer.SetPosition(i, _lineRenderer.GetPosition(i - 1));
             }
             _lineRenderer.SetPosition(0, new Vector2(
                 playerCurrentGridLocation.X + GridLocation.OffsetToTileMiddle,
                 playerCurrentGridLocation.Y + GridLocation.OffsetToTileMiddle
                 ));
-
-            Logger.Log("set i 0 to {0},{1}", _lineRenderer.GetPosition(0).x, _lineRenderer.GetPosition(0).y);
         }
     }
 

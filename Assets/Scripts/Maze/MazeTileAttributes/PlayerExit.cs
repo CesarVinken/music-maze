@@ -24,14 +24,14 @@ public class PlayerExit : TileObstacle, IMazeTileAttribute
     {
         ObstacleConnectionScore = obstacleConnectionScore;
 
-        if (obstacleConnectionScore == -1 || obstacleConnectionScore > 8)
+        if (ObstacleConnectionScore <= 0 || ObstacleConnectionScore > 8)
         {
-            Logger.Warning($"obstacleConnectionScore {obstacleConnectionScore} should be between 1 and 8");
+            Logger.Warning($"obstacleConnectionScore {ObstacleConnectionScore} should be between 1 and 8");
             _spriteRenderer.sprite = SpriteManager.Instance.DefaultDoor[0];
             return;
         }
 
-        _spriteRenderer.sprite = SpriteManager.Instance.DefaultDoor[obstacleConnectionScore - 1];
+        _spriteRenderer.sprite = SpriteManager.Instance.DefaultDoor[ObstacleConnectionScore - 1];
     }
 
     public void OpenExit()
