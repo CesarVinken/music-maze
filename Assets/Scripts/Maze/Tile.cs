@@ -114,6 +114,10 @@ public class Tile : MonoBehaviour
 
     public TileObstacle TryGetTileObstacle()
     {
+        for (int i = 0; i < MazeTileAttributes.Count; i++)
+        {
+            Logger.Log($"found attribute for {GridLocation.X}, {GridLocation.Y} is {MazeTileAttributes[i].GetType()}");
+        }
         TileObstacle tileObstacle = (TileObstacle)MazeTileAttributes.FirstOrDefault(attribute => attribute is TileObstacle);
 
         if (tileObstacle == null)

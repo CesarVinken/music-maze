@@ -11,10 +11,49 @@ public class TileAttributePlacer
         _tile = tile;
     }
 
-    public void PlacePlayerExit()
+    public void PlacePlayerExit(ObstacleType obstacleType)
+    {
+        int obstacleConnectionScore = MapNeighbourObstaclesOfTile(_tile, obstacleType, true);
+        Logger.Log($"We calculated an obstacle connection type score of {obstacleConnectionScore} for location {_tile.GridLocation.X}, {_tile.GridLocation.Y}");
+
+        GameObject playerExitGO = GameObject.Instantiate(MazeLevelManager.Instance.PlayerExitPrefab, _tile.transform);
+        PlayerExit playerExit = playerExitGO.GetComponent<PlayerExit>();
+        playerExit.WithObstacleType(obstacleType);
+        playerExit.WithObstacleConnectionScore(obstacleConnectionScore);
+
+        _tile.Walkable = false;
+        _tile.Markable = false;
+        Logger.Log("Add player exit to maze tile attribute list");
+        _tile.MazeTileAttributes.Add(playerExit);
+
+        // after adding obstacle to this tile, update connections of neighbours
+        foreach (KeyValuePair<ObjectDirection, Tile> neighbour in _tile.Neighbours)
+        {
+            TileObstacle tileObstacleOnNeighbour = neighbour.Value.TryGetTileObstacle();
+
+            if (tileObstacleOnNeighbour == null) continue;
+            Logger.Log($"We will look for connections for neighbour {neighbour.Value.GridLocation.X},{neighbour.Value.GridLocation.Y}, which is {neighbour.Key} of {_tile.GridLocation.X},{_tile.GridLocation.Y}");
+
+            bool neighbourIsDoor = false;
+            if(tileObstacleOnNeighbour is PlayerExit)
+            {
+                neighbourIsDoor = true;
+            }
+            int obstacleConnectionScoreOnNeighbour = MapNeighbourObstaclesOfTile(neighbour.Value, obstacleType, neighbourIsDoor);
+            Logger.Log($"We calculated an obstacle connection type score of {obstacleConnectionScoreOnNeighbour} for location {neighbour.Value.GridLocation.X}, {neighbour.Value.GridLocation.Y}");
+
+            //update connection score on neighbour
+            tileObstacleOnNeighbour.WithObstacleConnectionScore(obstacleConnectionScoreOnNeighbour);
+        }
+    }
+
+    // Called in game
+    public void PlacePlayerExit(ObstacleType obstacleType, int obstacleConnectionScore)
     {
         GameObject playerExitGO = GameObject.Instantiate(MazeLevelManager.Instance.PlayerExitPrefab, _tile.transform);
         PlayerExit playerExit = playerExitGO.GetComponent<PlayerExit>();
+        playerExit.WithObstacleType(obstacleType);
+        playerExit.WithObstacleConnectionScore(obstacleConnectionScore);
 
         _tile.Walkable = false;
         _tile.Markable = false;
@@ -23,23 +62,21 @@ public class TileAttributePlacer
 
     public void RemovePlayerExit()
     {
-        _tile.Walkable = true;
-        IMazeTileAttribute playerExit = (PlayerExit)_tile.MazeTileAttributes.FirstOrDefault(attribute => attribute is PlayerExit);
-        if (playerExit == null) return;
-        _tile.MazeTileAttributes.Remove(playerExit);
-        playerExit.Remove();
+        RemoveTileObstacle();
     }
 
     // Called in editor
     public void PlaceTileObstacle(ObstacleType obstacleType)
     {
         // check connections of this tile
-        int obstacleConnectionScore = MapNeighbourObstaclesOfTile(_tile, obstacleType);
+        int obstacleConnectionScore = MapNeighbourObstaclesOfTile(_tile, obstacleType, false);
+        Logger.Log($"We calculated an obstacle connection type score of {obstacleConnectionScore} for location {_tile.GridLocation.X}, {_tile.GridLocation.Y}");
 
         GameObject tileObstacleGO = GameObject.Instantiate(MazeLevelManager.Instance.TileObstaclePrefab, _tile.transform);
         TileObstacle tileObstacle = tileObstacleGO.GetComponent<TileObstacle>();
         tileObstacle.WithObstacleType(obstacleType);
         tileObstacle.WithObstacleConnectionScore(obstacleConnectionScore);
+
         _tile.Walkable = false;
         _tile.Markable = false;
         _tile.MazeTileAttributes.Add(tileObstacle);
@@ -50,8 +87,17 @@ public class TileAttributePlacer
             TileObstacle tileObstacleOnNeighbour = neighbour.Value.TryGetTileObstacle();
             
             if (tileObstacleOnNeighbour == null) continue;
+
+            bool neighbourIsDoor = false;
+            if (tileObstacleOnNeighbour is PlayerExit)
+            {
+                neighbourIsDoor = true;
+            }
+
             Logger.Log($"We will look for connections for neighbour {neighbour.Value.GridLocation.X},{neighbour.Value.GridLocation.Y}, which is {neighbour.Key} of {_tile.GridLocation.X},{_tile.GridLocation.Y}");
-            int obstacleConnectionScoreOnNeighbour = MapNeighbourObstaclesOfTile(neighbour.Value, obstacleType);
+            int obstacleConnectionScoreOnNeighbour = MapNeighbourObstaclesOfTile(neighbour.Value, obstacleType, neighbourIsDoor);
+            Logger.Log($"We calculated an obstacle connection type score of {obstacleConnectionScoreOnNeighbour} for location {neighbour.Value.GridLocation.X}, {neighbour.Value.GridLocation.Y}");
+
             //update connection score on neighbour
             tileObstacleOnNeighbour.WithObstacleConnectionScore(obstacleConnectionScoreOnNeighbour);
         }
@@ -71,7 +117,7 @@ public class TileAttributePlacer
         _tile.MazeTileAttributes.Add(tileObstacle);
     }
 
-    private int MapNeighbourObstaclesOfTile(Tile tile, ObstacleType obstacleType)
+    private int MapNeighbourObstaclesOfTile(Tile tile, ObstacleType obstacleType, bool isDoor)
     {
         Logger.Log($"Map neighbours of {tile.GridLocation.X},{tile.GridLocation.Y}");
         bool obstacleRight = false;
@@ -91,7 +137,6 @@ public class TileAttributePlacer
                 Logger.Warning($"Neighbour at {neighbour.Value.GridLocation.X}, {neighbour.Value.GridLocation.Y} is {neighbour.Key} of {tile.GridLocation.X},{tile.GridLocation.Y}");
             if (neighbour.Key == ObjectDirection.Right) {
                 TileObstacle tileObstacle = neighbour.Value.TryGetTileObstacle();
-                    Logger.Log($"Tried to find tileObstacle on {neighbour.Value.GridLocation.X}, {neighbour.Value.GridLocation.Y}");
                 if (tileObstacle != null && tileObstacle.ObstacleType == obstacleType)
                 {
                     obstacleRight = true;
@@ -122,11 +167,12 @@ public class TileAttributePlacer
                 }
             }
         }
-       
-        int obstacleConnectionScore = CalculateObstacleConnectionScore(obstacleRight, obstacleDown, obstacleLeft, obstacleUp);
-        Logger.Log($"We calculated an obstacle connection type score of {obstacleConnectionScore} for location {tile.GridLocation.X}, {tile.GridLocation.Y}");
 
-        return obstacleConnectionScore;
+        if (isDoor)
+        { 
+            return CalculateDoorConnectionScore(obstacleRight, obstacleDown, obstacleLeft, obstacleUp);
+        }
+        return CalculateObstacleConnectionScore(obstacleRight, obstacleDown, obstacleLeft, obstacleUp);
     }
 
     public void RemoveTileObstacle()
@@ -146,7 +192,9 @@ public class TileAttributePlacer
 
             if (tileObstacleOnNeighbour == null) continue;
             Logger.Log($"We will look for connections for neighbour {neighbour.Value.GridLocation.X},{neighbour.Value.GridLocation.Y}, which is {neighbour.Key} of {_tile.GridLocation.X},{_tile.GridLocation.Y}");
-            int obstacleConnectionScoreOnNeighbour = MapNeighbourObstaclesOfTile(neighbour.Value, obstacleType);
+            int obstacleConnectionScoreOnNeighbour = MapNeighbourObstaclesOfTile(neighbour.Value, obstacleType, false);
+            Logger.Log($"We calculated an obstacle connection type score of {obstacleConnectionScoreOnNeighbour} for location {neighbour.Value.GridLocation.X}, {neighbour.Value.GridLocation.Y}");
+
             //update connection score on neighbour
             tileObstacleOnNeighbour.WithObstacleConnectionScore(obstacleConnectionScoreOnNeighbour);
         }
@@ -188,6 +236,35 @@ public class TileAttributePlacer
         if (enemySpawnpoint == null) return;
         _tile.MazeTileAttributes.Remove(enemySpawnpoint);
         enemySpawnpoint.Remove();
+    }
+
+    private int CalculateDoorConnectionScore(bool right, bool down, bool left, bool up)
+    {
+        if (right)
+        {
+            if (left)
+            {
+                return 4;
+            }
+            return 2;
+        }
+        if (left)
+        {
+            return 3;
+        }
+        if (down)
+        {
+            if (up)
+            {
+                return 8;
+            }
+            return 6;
+        }
+        if (up)
+        {
+            return 7;
+        }
+        return 1;
     }
 
     private int CalculateObstacleConnectionScore(bool right, bool down, bool left, bool up)

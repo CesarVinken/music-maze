@@ -1,23 +1,15 @@
 ﻿using UnityEngine;
 
-public class PlayerExit : MonoBehaviour, IMazeTileAttribute
+public class PlayerExit : TileObstacle, IMazeTileAttribute
 {
-    [SerializeField] private SpriteRenderer _spriteRenderer;
-    [SerializeField] private GridLocation _gridLocation;
+    public bool IsOpen;
 
-    [SerializeField] private Sprite _exitClosedSprite;
-    [SerializeField] private Sprite _exitOpenSprite;
+    [SerializeField] private Sprite[] _defaultWallDoor;
 
-    public Tile Tile;
-    public string ParentId;
 
     public void Awake()
     {
         Guard.CheckIsNull(_spriteRenderer, "_spriteRenderer", gameObject);
-        Guard.CheckIsNull(_exitClosedSprite, "_exitClosedSprite", gameObject);
-        Guard.CheckIsNull(_exitOpenSprite, "_exitOpenSprite", gameObject);
-
-        _gridLocation = GridLocation.VectorToGrid(transform.position);
     }
 
     public void Start()
@@ -26,21 +18,43 @@ public class PlayerExit : MonoBehaviour, IMazeTileAttribute
         {
             MazeLevelManager.Instance.Level.MazeExits.Add(this);
         }
+    }
 
-        _spriteRenderer.sprite = _exitClosedSprite;
+    public override void WithObstacleConnectionScore(int obstacleConnectionScore)
+    {
+        ObstacleConnectionScore = obstacleConnectionScore;
+
+        if (obstacleConnectionScore == -1 || obstacleConnectionScore > 8)
+        {
+            Logger.Warning($"obstacleConnectionScore {obstacleConnectionScore} should be between 1 and 8");
+            _spriteRenderer.sprite = SpriteManager.Instance.DefaultDoor[0];
+            return;
+        }
+
+        _spriteRenderer.sprite = SpriteManager.Instance.DefaultDoor[obstacleConnectionScore - 1];
     }
 
     public void OpenExit()
     {
-        Tile tile = MazeLevelManager.Instance.Level.TilesByLocation[_gridLocation];
-
-        if (tile == null) Logger.Error("Could not find a tile for grid location {0},{1}", _gridLocation.X, _gridLocation.Y);
-
-        tile.Walkable = true;
-        _spriteRenderer.sprite = _exitOpenSprite;
+        Tile.Walkable = true;
+        IsOpen = true;
+        
+        _spriteRenderer.sprite = SpriteManager.Instance.DefaultDoor[ObstacleConnectionScore - 1 + 8]; // + 8 because the last two rows of the sprites are the Opened versions of the same sprites
 
         gameObject.layer = 9; // set layer to PlayerOnly, which is layer 9. Should not be hardcoded
         _spriteRenderer.gameObject.layer = 9;
+
+        // Refresh pathfinding. TODO: only refresh tile for pathfinding and not the whole graph.
+        AstarPath.active.Scan();
+    }
+
+    public void CloseExit()
+    {
+        Tile.Walkable = false;
+        IsOpen = false;
+
+        gameObject.layer = 8; // set layer to Unwalkable, which is layer 8. Should not be hardcoded
+        _spriteRenderer.gameObject.layer = 8;
 
         // Refresh pathfinding. TODO: only refresh tile for pathfinding and not the whole graph.
         AstarPath.active.Scan();
@@ -51,22 +65,8 @@ public class PlayerExit : MonoBehaviour, IMazeTileAttribute
         PlayerCharacter player = collision.gameObject.GetComponent<PlayerCharacter>();
         if (player != null)
         {
-            Logger.Log("{0} reached the exit! {1},{2}", player.name, _gridLocation.X, _gridLocation.Y);
+            Logger.Log("{0} reached the exit! {1},{2}", player.name, Tile.GridLocation.X, Tile.GridLocation.Y);
             CharacterManager.Instance.CharacterExit(player);
         }
-    }
-
-    public void SetTile(Tile tile)
-    {
-        if (string.IsNullOrEmpty(tile.TileId)) Logger.Error("This tile does not have an Id");
-
-        Tile = tile;
-        ParentId = tile.TileId;
-    }
-
-    public void Remove()
-    {
-        Destroy(this);
-        Destroy(gameObject);
     }
 }

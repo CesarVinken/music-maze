@@ -92,7 +92,7 @@ public class MazeLevel
             }
             if (serialisableTileAttribute.TileAttributeId == SerialisableTileAttribute.PlayerExitCode)
             {
-                tileAttributePlacer.PlacePlayerExit();
+                tileAttributePlacer.PlacePlayerExit(ObstacleType.Wall, serialisableTileAttribute.ObstacleConnectionScore);
             }
             if (serialisableTileAttribute.TileAttributeId == SerialisableTileAttribute.PlayerSpawnpointCode)
             {

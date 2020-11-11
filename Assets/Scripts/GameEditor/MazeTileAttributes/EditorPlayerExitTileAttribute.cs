@@ -20,7 +20,8 @@ public class EditorPlayerExitTileAttribute : IEditorMazeTileAttribute
             tileAttributePlacer.RemoveEnemySpawnpoint();
             tileAttributePlacer.RemovePlayerSpawnpoint();
 
-            tileAttributePlacer.PlacePlayerExit();
+            Logger.Warning($"Now place player exit at {tile.GridLocation.X}, {tile.GridLocation.Y}");
+            tileAttributePlacer.PlacePlayerExit(ObstacleType.Wall);
             return;
         }
 
