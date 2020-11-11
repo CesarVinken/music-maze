@@ -17,18 +17,3 @@ public class PlayerMarksTileEvent
         PhotonNetwork.RaiseEvent(PlayerMarksTileEventCode, content, raiseEventOptions, SendOptions.SendReliable);
     }
 }
-
-
-public class LoadNextMazeLevelEvent
-{
-    public const byte LoadNextMazeLevelEventCode = 2;
-
-    public void SendLoadNextMazeLevelEvent(string levelName)
-    {
-        object[] content = new object[] {
-            levelName
-        };
-        RaiseEventOptions raiseEventOptions = new RaiseEventOptions { Receivers = ReceiverGroup.All };
-        PhotonNetwork.RaiseEvent(LoadNextMazeLevelEventCode, content, raiseEventOptions, SendOptions.SendReliable);
-    }
-}
