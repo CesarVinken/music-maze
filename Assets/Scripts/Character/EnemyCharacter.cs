@@ -23,11 +23,13 @@ public class EnemyCharacter : Character
 
         if (IsFrozen) return;
 
+        if (IsCalculatingPath) return;
+
         if (!HasCalculatedTarget &&
             (GameManager.Instance.GameType == GameType.SinglePlayer
             || PhotonView.IsMine))
         {
-            SetRandomTarget();
+            SetNextTarget();
         }
         else
         {
@@ -35,11 +37,39 @@ public class EnemyCharacter : Character
         }
     }
 
-    public void SetRandomTarget()
+    private void SetNextTarget()
     {
-        Vector3 randomGridVectorLocation = GridLocation.GridToVector(GetRandomTileTarget().GridLocation);
-        //Logger.Log("Set new target for enemy: {0},{1}", randomGridVectorLocation.x, randomGridVectorLocation.y);
-        _seeker.StartPath(transform.position, randomGridVectorLocation, _characterPath.OnPathCalculated);
+        IsCalculatingPath = true;
+        int RandomMax = 20;
+        int RandomNumber = UnityEngine.Random.Range(1, RandomMax + 1);
+        float targetPlayerChance = 0.25f; // 25% chance to go chase a player
+
+        if (RandomNumber <= targetPlayerChance * RandomMax) 
+        {
+            TargetPlayer();
+        }
+        else
+        {
+            SetRandomTarget();
+        }
+    }
+
+    private void TargetPlayer()
+    {
+        //Randomly pick one of the players
+        int randomNumber = UnityEngine.Random.Range(0, CharacterManager.Instance.MazePlayers.Count);
+
+        PlayerCharacter randomPlayer = randomNumber == 0 ?
+            CharacterManager.Instance.MazePlayers[PlayerNumber.Player1] :
+            CharacterManager.Instance.MazePlayers[PlayerNumber.Player2];
+
+        Vector3 playerVectorLocation = GridLocation.GridToVector(randomPlayer.CurrentGridLocation);
+
+        // Known issue: The enemy will not plot a path to the actual location of the player, because the player's pathfinding node on the grid is already taken by the player. Thus the enemy will try to move next to the player 
+
+        _seeker.StartPath(transform.position, playerVectorLocation, _characterPath.OnPathCalculated);
+
+        Logger.Log($"The enemy {gameObject.name} is now going to the location of player {randomPlayer.gameObject.name} at {randomPlayer.CurrentGridLocation.X},{randomPlayer.CurrentGridLocation.Y}");
     }
 
     public void OnTargetReached()

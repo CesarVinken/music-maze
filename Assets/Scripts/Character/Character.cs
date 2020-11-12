@@ -87,6 +87,14 @@ public class Character : MonoBehaviour
         }
     }
 
+    public void SetRandomTarget()
+    {
+        Vector3 randomGridVectorLocation = GridLocation.GridToVector(GetRandomTileTarget().GridLocation);
+        //Logger.Log("Set new target for enemy: {0},{1}", randomGridVectorLocation.x, randomGridVectorLocation.y);
+        _seeker.StartPath(transform.position, randomGridVectorLocation, _characterPath.OnPathCalculated);
+    }
+
+
     public Tile GetRandomTileTarget()
     {
         List<Tile> walkableTiles = MazeLevelManager.Instance.Level.Tiles.Where(tile => tile.Walkable).ToList(); // to do keep central list in Tilemanager

@@ -29,7 +29,6 @@ public class TileObstacle : MonoBehaviour, IMazeTileAttribute
         ObstacleConnectionScore = obstacleConnectionScore;
 
         if (obstacleConnectionScore == -1) return;
-
         _spriteRenderer.sprite = SpriteManager.Instance.DefaultWall[ObstacleConnectionScore - 1];
     }
 

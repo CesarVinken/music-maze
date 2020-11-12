@@ -353,7 +353,6 @@ public class PlayerCharacter : Character
         }
 
         _drawnPath.RemoveAt(0);
-        Logger.Log("_drawn path Count : {0} ", _drawnPath.Count);
 
         // Reach the end of a drawn path
         if (_drawnPath.Count == 0)
