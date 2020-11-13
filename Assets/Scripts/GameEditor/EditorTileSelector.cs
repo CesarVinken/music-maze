@@ -35,7 +35,7 @@ public class EditorTileSelector : MonoBehaviour
     void Update()
     {
         if (!EditorManager.InEditor) return;
-        if (EditorManager.EditorLevel == null) return;
+        if (MazeLevelManager.Instance.Level == null) return;
 
         if (Input.GetKeyDown(KeyCode.Mouse0))
         {
@@ -90,10 +90,10 @@ public class EditorTileSelector : MonoBehaviour
     private bool IsValidGridLocationToSelect(GridLocation selectedTileLocation)
     {
         if (selectedTileLocation.X < 0) return false;
-        if (selectedTileLocation.X > EditorManager.EditorLevel.LevelBounds.X) return false;
+        if (selectedTileLocation.X > MazeLevelManager.Instance.Level.LevelBounds.X) return false;
 
         if (selectedTileLocation.Y < 0) return false;
-        if (selectedTileLocation.Y > EditorManager.EditorLevel.LevelBounds.Y) return false;
+        if (selectedTileLocation.Y > MazeLevelManager.Instance.Level.LevelBounds.Y) return false;
 
         return true;
     }
@@ -104,7 +104,7 @@ public class EditorTileSelector : MonoBehaviour
 
         if (attribute == null) Logger.Error($"Could not find the attribute type {attributeType}");
 
-        EditorManager.EditorLevel.TilesByLocation.TryGetValue(gridLocation, out Tile tile);
+        MazeLevelManager.Instance.Level.TilesByLocation.TryGetValue(gridLocation, out Tile tile);
         attribute.PlaceAttribute(tile);
     }
 }

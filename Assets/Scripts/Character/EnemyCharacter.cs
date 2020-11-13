@@ -69,7 +69,7 @@ public class EnemyCharacter : Character
 
         _seeker.StartPath(transform.position, playerVectorLocation, _characterPath.OnPathCalculated);
 
-        Logger.Log($"The enemy {gameObject.name} is now going to the location of player {randomPlayer.gameObject.name} at {randomPlayer.CurrentGridLocation.X},{randomPlayer.CurrentGridLocation.Y}");
+        Logger.Log(Logger.Pathfinding, $"The enemy {gameObject.name} is now going to the location of player {randomPlayer.gameObject.name} at {randomPlayer.CurrentGridLocation.X},{randomPlayer.CurrentGridLocation.Y}");
     }
 
     public void OnTargetReached()
@@ -86,6 +86,6 @@ public class EnemyCharacter : Character
     public void OnMazeLevelCompleted()
     {
         //TODO: when maze level is completed, do not stop locomotion, but switch, if it exists, to an enemy idle animation
-        IsFrozen = true;
+        FreezeCharacter();
     }
 }

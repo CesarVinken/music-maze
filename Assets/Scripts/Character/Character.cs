@@ -118,7 +118,7 @@ public class Character : MonoBehaviour
 
     public IEnumerator RespawnCharacter(Character character, float freezeTime)
     {
-        character.IsFrozen = true;
+        character.FreezeCharacter();
         CharacterBody.SetActive(false); // TODO make character animation for appearing and disappearing of character, rather than turning the GO off and on
         ResetCharacterPosition();
 
@@ -127,7 +127,7 @@ public class Character : MonoBehaviour
 
         yield return new WaitForSeconds(freezeTime /2 );
 
-        character.IsFrozen = false;
+        character.UnfreezeCharacter();
     }
 
     public void SetHasCalculatedTarget(bool hasCalculatedTarget)
@@ -138,5 +138,15 @@ public class Character : MonoBehaviour
         }
 
         HasCalculatedTarget = hasCalculatedTarget;
+    }
+
+    public void FreezeCharacter()
+    {
+        IsFrozen = true;
+    }
+
+    public void UnfreezeCharacter()
+    {
+        IsFrozen = false;
     }
 }

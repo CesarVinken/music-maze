@@ -305,7 +305,7 @@ public class PlayerCharacter : Character
 
     private void OnPlayerExit()
     {
-        IsFrozen = true;
+        FreezeCharacter();
         HasReachedExit = true;
 
         CharacterBody.SetActive(false);

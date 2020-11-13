@@ -25,15 +25,9 @@ public class LoadCommand : CommandProcedure
             Logger.Warning(message);
 
             message += "\nThe Currently available levels are: \n";
-            message = GetAllLevelNames(message);
+            message = MazeLevelLoader.GetAllLevelNames(message);
             Console.Instance.PrintToReportText(message);
             return;
-        }
-
-        //If we are in the editor, first close the editor mode before
-        if (EditorManager.InEditor)
-        {
-            EditorManager.CloseEditor();
         }
 
         if (MazeLevelManager.Instance == null)
@@ -42,40 +36,26 @@ public class LoadCommand : CommandProcedure
             return;
         }
 
-        JsonMazeLevelFileReader levelReader = new JsonMazeLevelFileReader();
-        MazeLevelData levelData = levelReader.ReadLevelData(arguments[1]);
+        MazeLevelData mazeLevelData = MazeLevelLoader.LoadMazeLevelData(arguments[1]);
 
-        if(levelData == null)
+        if (mazeLevelData == null && Console.Instance.ConsoleState != ConsoleState.Closed)
         {
             string printLine = "<color=" + ConsoleConfiguration.HighlightColour + ">" + arguments[1] + "</color> is not a known level and cannot be loaded.\n\n";
             printLine += "The Currently available levels are: \n";
-            printLine = GetAllLevelNames(printLine);
+            printLine = MazeLevelLoader.GetAllLevelNames(printLine);
             Console.Instance.PrintToReportText(printLine);
         }
 
-        // Make checks such as if there are starting locations for the players
-
-        MazeLevelManager.Instance.UnloadLevel();
-        MazeLevelManager.Instance.SetupLevel(levelData); // sets new Level in MazeLevelManager
+        MazeLevelLoader.LoadMazeLevel(mazeLevelData);
     }
 
     public override void Help()
     {
         string printLine = "To load a level with argument 'maze' and then the name of the level. \n\n";
         printLine += "The Currently available levels are: \n";
-        printLine = GetAllLevelNames(printLine);
+        printLine = MazeLevelLoader.GetAllLevelNames(printLine);
         Console.Instance.PrintToReportText(printLine);
     }
 
-    public string GetAllLevelNames(string printLine)
-    {
-        foreach (string mazeName in Directory.GetFiles(Application.streamingAssetsPath, "*.json"))
-        {
-            string[] fileNameParts = mazeName.Split('\\');
-            string[] fileNameWithoutExtention = fileNameParts[fileNameParts.Length - 1].Split('.');
-            printLine += "\n   -" + fileNameWithoutExtention[0];
-        }
 
-        return printLine;
-    }
 }

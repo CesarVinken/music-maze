@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.IO;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -96,53 +98,35 @@ public class EditorGridGenerator : MonoBehaviour
 
         // remove everything from the currently loaded level
         MazeLevelManager.Instance.UnloadLevel();
-        GameObject EditorLevelContainer = new GameObject("EditorLevelContainer");
-        EditorLevelContainer.AddComponent<TilesContainer>();
 
-        EditorLevelContainer.transform.SetParent(GameManager.Instance.GridGO.transform);
 
-        MazeLevel newEditorLevel = new MazeLevel();
-        newEditorLevel.LevelBounds = new GridLocation(_gridWidth - 1, _gridHeight - 1);
-        EditorManager.EditorLevel = newEditorLevel;
+        // Create a new level from scratch with a obstacle ring at the edges
+        List<SerialisableTile> tiles = new List<SerialisableTile>();
 
-        // Create tiles
         for (int i = 0; i < _gridWidth; i++)
         {
             for (int j = 0; j < _gridHeight; j++)
             {
-                GameObject tileGO = Instantiate(EmptyTilePrefab, new Vector3(0 + i, 0 + j, 0), Quaternion.identity, EditorLevelContainer.transform);
-                Tile tile = tileGO.GetComponent<Tile>();
-                tile.TileId = Guid.NewGuid().ToString();
-                tile.SetGridLocation(0 + i, 0 + j);
+                string tileId = Guid.NewGuid().ToString();
 
-                newEditorLevel.Tiles.Add(tile);
-                newEditorLevel.TilesByLocation.Add(tile.GridLocation, tile);
+                GridLocation gridLocation = new GridLocation(i, j);
+                List<SerialisableTileAttribute> tileAttributes = new List<SerialisableTileAttribute>();
+
+                SerialisableTileAttribute edgeObstacle = TryAddEdgeObstacle(gridLocation);
+
+                if(edgeObstacle != null)
+                {
+                    tileAttributes.Add(edgeObstacle);
+                }
+
+                SerialisableTile tile = new SerialisableTile(tileId, tileAttributes, gridLocation.X, gridLocation.Y);
+                tiles.Add(tile);
             }
         }
 
-        for (int k = 0; k < newEditorLevel.Tiles.Count; k++)
-        {
-            Tile tile = newEditorLevel.Tiles[k];
-            tile.AddNeighbours(newEditorLevel);
-        }
-
-        for (int l = 0; l < newEditorLevel.Tiles.Count; l++)
-        {
-            Tile tile = newEditorLevel.Tiles[l];
-
-            if (tile.GridLocation.X == 0 || tile.GridLocation.X == _gridWidth - 1 ||
-            tile.GridLocation.Y == 0 || tile.GridLocation.Y == _gridHeight - 1)
-            {
-                TileAttributePlacer tileAttributePlacer = new TileAttributePlacer(tile);
-                tileAttributePlacer.PlaceTileObstacle(ObstacleType.Wall);
-            }
-        }
-
-
-        //Update UI for the newly generated level
-        EditorWorldContainer.Instance.ShowTileSelector();
-        CameraController.Instance.SetPanLimits(EditorManager.EditorLevel.LevelBounds);
-        CameraController.Instance.ResetCamera();
+        MazeLevelData newMazeLevelData = new MazeLevelData();
+        newMazeLevelData.Tiles = tiles;
+        MazeLevelLoader.LoadMazelLevelForEditor(newMazeLevelData);
     }
 
     public void SaveMaze()
@@ -153,7 +137,7 @@ public class EditorGridGenerator : MonoBehaviour
             return;
         }
 
-        if (EditorManager.EditorLevel == null)
+        if (MazeLevelManager.Instance.Level == null)
         {
             Logger.Warning(Logger.Datawriting, "Please first generate a level before saving.");
             return;
@@ -165,24 +149,40 @@ public class EditorGridGenerator : MonoBehaviour
             return;
         }
 
-        SaveMazeLevelDate();
+        SaveMazeLevelData();
         AddMazeLevelToLevelList();
 
         Logger.Log(Logger.Datawriting, "Level {0} Saved.", _mazeName);
     }
 
-    private void SaveMazeLevelDate()
+    private void SaveMazeLevelData()
     {
-        MazeLevelData mazeLevelData = new MazeLevelData(EditorManager.EditorLevel).WithName(_mazeName);
+        MazeLevelData mazeLevelData = new MazeLevelData(MazeLevelManager.Instance.Level).WithName(_mazeName);
 
         JsonMazeLevelFileWriter fileWriter = new JsonMazeLevelFileWriter();
         fileWriter.SerialiseData(mazeLevelData);
     }
 
+    public void LoadMaze()
+    {
+        if (string.IsNullOrWhiteSpace(_mazeName))
+        {
+            Logger.Warning(Logger.Datawriting, "In order to save the maze level, please fill in a maze name");
+            return;
+        }
+
+        bool mazeLevelNameExists = MazeLevelLoader.MazeLevelExists(_mazeName);
+
+        if (mazeLevelNameExists)
+        {
+            MazeLevelData mazeLevelData = MazeLevelLoader.LoadMazeLevelData(_mazeName);
+            MazeLevelLoader.LoadMazelLevelForEditor(mazeLevelData);
+        }
+    }
+
     private void AddMazeLevelToLevelList()
     {
         LevelNamesData levelData = new LevelNamesData(_mazeName);
-
 
         JsonMazeLevelListFileWriter fileWriter = new JsonMazeLevelListFileWriter();
         fileWriter.SerialiseData(levelData);
@@ -198,5 +198,49 @@ public class EditorGridGenerator : MonoBehaviour
         {
             EditorUIContainer.Instance.PlayableLevelsPanelGO.SetActive(true);
         }
+    }
+
+    private SerialisableTileAttribute TryAddEdgeObstacle(GridLocation gridLocation)
+    {
+        if (gridLocation.X == 0)
+        {
+            if (gridLocation.Y == 0) // Bottom left
+            {
+                return new SerialisableTileObstacleAttribute(8);
+            }
+            else if (gridLocation.Y == _gridHeight - 1) // Top left
+            {
+                return new SerialisableTileObstacleAttribute(6);
+            }
+            else // Colomn left
+            {
+                return new SerialisableTileObstacleAttribute(9);
+            }
+        }
+        else if (gridLocation.X == _gridWidth - 1)
+        {
+            if (gridLocation.Y == 0) // Bottom right
+            {
+                return new SerialisableTileObstacleAttribute(11);
+            }
+            else if (gridLocation.Y == _gridHeight - 1) // Top right
+            {
+                return new SerialisableTileObstacleAttribute(10);
+            }
+            else // Colomn right
+            {
+                return new SerialisableTileObstacleAttribute(9);
+            }
+        }
+        else if (gridLocation.Y == 0) // Bottom row
+        {
+            return new SerialisableTileObstacleAttribute(7);
+        }
+        else if (gridLocation.Y == _gridHeight - 1) // Top row
+        {
+            return new SerialisableTileObstacleAttribute(7);
+        }
+
+        return null;
     }
 }

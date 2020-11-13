@@ -5,8 +5,13 @@ using System.Collections.Generic;
 [Serializable]
 public class MazeLevelData
 {
-    public string Name;
+    public string Name { private set; get; }
     public List<SerialisableTile> Tiles = new List<SerialisableTile>();
+
+    public MazeLevelData()
+    {
+
+    }
 
     public MazeLevelData(MazeLevel level)
     {
@@ -19,7 +24,7 @@ public class MazeLevelData
 
     public MazeLevelData WithName(string name)
     {
-        Name = name;
+        Name = name.ToLower().Replace(" ", "-");
         return this;
     }
 }

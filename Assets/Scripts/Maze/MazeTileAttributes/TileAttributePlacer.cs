@@ -130,7 +130,7 @@ public class TileAttributePlacer
             return -1;
         }
 
-        MazeLevel mazeLevel = EditorManager.EditorLevel;
+        MazeLevel mazeLevel = MazeLevelManager.Instance.Level;
 
         foreach (KeyValuePair<ObjectDirection, Tile> neighbour in tile.Neighbours)
         {

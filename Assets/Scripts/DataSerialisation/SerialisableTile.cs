@@ -18,6 +18,14 @@ public class SerialisableTile
         GridLocationY = tile.GridLocation.Y;
     }
 
+    public SerialisableTile(string id, List<SerialisableTileAttribute> tileAttributes, int gridLocationX, int gridLocationY)
+    {
+        Id = id;
+        TileAttributes = tileAttributes;
+        GridLocationX = gridLocationX;
+        GridLocationY = gridLocationY;
+    }
+
     private List<SerialisableTileAttribute> SerialiseTileAttributes(Tile tile)
     {
         List<SerialisableTileAttribute> tileAttributes = new List<SerialisableTileAttribute>();

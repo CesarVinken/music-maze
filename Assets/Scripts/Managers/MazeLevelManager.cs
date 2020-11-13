@@ -48,26 +48,40 @@ public class MazeLevelManager : MonoBehaviour, IOnEventCallback
 
         InitialiseTileAttributes();
 
-        Logger.Log("Scan");
+        Logger.Log("Start scan...");
         IEnumerator coroutine = ScanCoroutine();
 
         StartCoroutine(coroutine);
     }
 
+    public void SetupLevelForEditor(MazeLevelData mazeLevelData)
+    {
+
+        Level = MazeLevel.Create(mazeLevelData);
+
+        InitialiseTileAttributes();
+
+        CameraController.Instance.ResetCamera();
+        CameraController.Instance.SetPanLimits(MazeLevelManager.Instance.Level.LevelBounds);
+    }
+
     public IEnumerator ScanCoroutine()
     {
+        CharacterManager.Instance.SpawnCharacters();
+        CameraController.Instance.SetPanLimits(Level.LevelBounds);
+        CameraController.Instance.FocusOnPlayer();
+
         yield return new WaitForSeconds(.2f);
         AstarPath.active.Scan();    // We should only scan once all the tiles are loaded with their correct (walkable) attributes and obstacles
         yield return new WaitForSeconds(.4f);
 
-        // start movement of all actors that depend on the updated pathfinding
-        CharacterManager.Instance.SpawnCharacters();
-        CameraController.Instance.FocusOnPlayer();
+        // start movement of all actors that depend on the updated pathfinding only after the scan.
+        CharacterManager.Instance.UnfreezeCharacters();
     }
 
     public void UnloadLevel()
     {
-        Logger.Log("Unload level");
+        if (Level == null) return;
 
         if(TilesContainer.Instance)
         {
@@ -79,14 +93,11 @@ public class MazeLevelManager : MonoBehaviour, IOnEventCallback
         CharacterManager.Instance.UnloadCharacters();
         SceneObjectManager.Instance.UnloadSceneObjects();
 
-        if(Level != null)
-        {
-            Logger.Log(Logger.Initialisation, "Unload level {0}", Level);
-            Level.Tiles.Clear();
-            Level.TilesByLocation.Clear();
-            CameraController.Instance.ResetCamera();
-            Level = null;
-        }
+        Logger.Log(Logger.Initialisation, "Unload level {0}", Level);
+        Level.Tiles.Clear();
+        Level.TilesByLocation.Clear();
+        CameraController.Instance.ResetCamera();
+        Level = null;
 
         NumberOfUnmarkedTiles = -1;
     }
@@ -183,16 +194,15 @@ public class MazeLevelManager : MonoBehaviour, IOnEventCallback
             object[] data = (object[])photonEvent.CustomData;
             string pickedLevel = (string)data[0];
 
-            JsonMazeLevelFileReader levelReader = new JsonMazeLevelFileReader();
-            MazeLevelData levelData = levelReader.ReadLevelData(pickedLevel);
+            
+            MazeLevelData mazeLevelData = MazeLevelLoader.LoadMazeLevelData(pickedLevel);
 
-            if (levelData == null)
+            if (mazeLevelData == null)
             {
                 Logger.Error($"Could not load maze level data for the randomly picked maze level {pickedLevel}");
             }
 
-            UnloadLevel();
-            SetupLevel(levelData);
+            MazeLevelLoader.LoadMazeLevel(mazeLevelData);
 
             ScoreScreenContainer.Instance.CloseScoreScreenPanel();
         }

@@ -11,7 +11,7 @@
         }
     }
 
-    public static MazeLevel EditorLevel = null;
+    //public static MazeLevel EditorLevel = null;
     public static EditorMazeTileAttributeType SelectedMazeTileAttributeType;
 
     public static void ToggleEditorMode()

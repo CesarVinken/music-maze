@@ -63,15 +63,15 @@ public class GameManager : MonoBehaviourPunCallbacks
         Instantiate(CharacterManagerPrefab, transform);
         Instantiate(SpriteManagerPrefab, transform);
 
-        JsonMazeLevelFileReader fileReader = new JsonMazeLevelFileReader();
+        MazeLevelData startUpMazeLevelData = MazeLevelLoader.LoadMazeLevelData("default");
 
-        MazeLevelData startUpLevelData = fileReader.ReadLevelData("default");
-
-        if (startUpLevelData == null)
+        if (startUpMazeLevelData == null)
         {
             Logger.Error("Could not find the default level for startup");
         }
-        MazeLevelManager.Instance.SetupLevel(startUpLevelData);
+
+        MazeLevelLoader.LoadMazeLevel(startUpMazeLevelData);
+        //MazeLevelManager.Instance.SetupLevel(startUpMazeLevelData);
     }
 
     public void Start()

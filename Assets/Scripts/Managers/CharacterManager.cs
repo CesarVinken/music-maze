@@ -52,10 +52,11 @@ public class CharacterManager : MonoBehaviourPunCallbacks
             if (PhotonNetwork.IsMasterClient || GameManager.Instance.GameType == GameType.SinglePlayer)
             {
                 Debug.Log("Instantiating Player 1");
+
                 CharacterBundle PlayerBundle = SpawnCharacter(level.PlayerCharacterSpawnpoints[0].CharacterBlueprint, level.PlayerCharacterSpawnpoints[0].GridLocation);
                 Player1GO = PlayerBundle.CharacterGO;
                 PlayerCharacter player = PlayerBundle.Character as PlayerCharacter;
-
+                
                 SpawnEnemies();
             }
             else
@@ -89,6 +90,7 @@ public class CharacterManager : MonoBehaviourPunCallbacks
             PlayerCharacter playerCharacter = characterGO.GetComponent<PlayerCharacter>();
             playerCharacter.CharacterBlueprint = character;
 
+            playerCharacter.FreezeCharacter();
             playerCharacter.SetStartingPosition(playerCharacter, gridLocation);
 
             if(GameManager.Instance.CurrentPlatform == Platform.PC)
@@ -116,6 +118,7 @@ public class CharacterManager : MonoBehaviourPunCallbacks
         {
             EnemyCharacter enemyCharacter = characterGO.GetComponent<EnemyCharacter>();
             enemyCharacter.SetStartingPosition(enemyCharacter, gridLocation);
+            enemyCharacter.FreezeCharacter();
             enemyCharacter.CharacterBlueprint = character;
 
             CharacterBundle characterBundle = new CharacterBundle(enemyCharacter, characterGO);
@@ -184,5 +187,19 @@ public class CharacterManager : MonoBehaviourPunCallbacks
             Destroy(Enemies[j].gameObject);
         }
         Enemies.Clear();
+    }
+
+    public void UnfreezeCharacters()
+    {
+        foreach (KeyValuePair<PlayerNumber, PlayerCharacter> p in MazePlayers)
+        {
+            p.Value.UnfreezeCharacter();
+        }
+
+
+        for (int j = 0; j < Enemies.Count; j++)
+        {
+            Enemies[j].UnfreezeCharacter();
+        }
     }
 }
