@@ -1,5 +1,5 @@
 ﻿using Photon.Pun;
-using Photon.Pun.Demo.PunBasics;
+//using Photon.Pun.Demo.PunBasics;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -40,8 +40,8 @@ public class CharacterManager : MonoBehaviourPunCallbacks
     public void SpawnCharacters()
     {
         Logger.Log("Spawn characters...");
-        if (PlayerManager.LocalPlayerInstance == null)
-        {
+        //if (PlayerManager.LocalPlayerInstance == null)
+        //{
             MazeLevel level = MazeLevelManager.Instance.Level;
 
             if(level.PlayerCharacterSpawnpoints.Count != 2)
@@ -66,7 +66,7 @@ public class CharacterManager : MonoBehaviourPunCallbacks
                 CharacterBundle PlayerBundle = SpawnCharacter(level.PlayerCharacterSpawnpoints[1].CharacterBlueprint, level.PlayerCharacterSpawnpoints[1].GridLocation);
                 Player2GO = PlayerBundle.CharacterGO;
                 PlayerCharacter player = PlayerBundle.Character as PlayerCharacter;            }
-        }
+        //}
     }
 
     private void SpawnEnemies()

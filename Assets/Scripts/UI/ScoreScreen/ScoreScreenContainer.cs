@@ -65,18 +65,18 @@ public class ScoreScreenContainer : MonoBehaviour
         SubtitleLabel.text = $"You escaped from {MazeLevelManager.Instance.Level.MazeName}";
 
         if (GameManager.Instance.GameType == GameType.SinglePlayer)
-            ShowSingleplayerScore();
+            ShowSingleplayerScore(_scoreCalculator.PlayerScores);
         else
-            ShowMultiplayerScore();
+            ShowMultiplayerScore(_scoreCalculator.PlayerScores);
     }
 
-    private void ShowSingleplayerScore()
+    private void ShowSingleplayerScore(Dictionary<PlayerNumber, PlayerScore> playerScores)
     {
         Player1Label.text = "Player 1";
 
-        Player1MarkedTilesScoreLabel.text = _scoreCalculator.Player1Score.TileMarkScore.ToString();
-        Player1TimesCaughtScoreLabel.text = _scoreCalculator.Player1Score.PlayerCaughtScore.ToString();
-        Player1TotalScoreLabel.text = _scoreCalculator.Player1Score.TotalScore.ToString();
+        Player1MarkedTilesScoreLabel.text = playerScores[PlayerNumber.Player1].TileMarkScore.ToString();
+        Player1TimesCaughtScoreLabel.text = playerScores[PlayerNumber.Player1].PlayerCaughtScore.ToString();
+        Player1TotalScoreLabel.text = playerScores[PlayerNumber.Player1].TotalScore.ToString();
 
         Player1Label.gameObject.SetActive(true);
         Player2Label.gameObject.SetActive(false);
@@ -93,17 +93,17 @@ public class ScoreScreenContainer : MonoBehaviour
         OpenScoreScreenPanel();
     }
 
-    private void ShowMultiplayerScore()
+    private void ShowMultiplayerScore(Dictionary<PlayerNumber, PlayerScore> playerScores)
     {
         Player1Label.text = CharacterManager.Instance.MazePlayers[PlayerNumber.Player1].PhotonView.Owner?.NickName;
         Player2Label.text = CharacterManager.Instance.MazePlayers[PlayerNumber.Player2].PhotonView.Owner?.NickName;
 
-        Player1MarkedTilesScoreLabel.text = _scoreCalculator.Player1Score.TileMarkScore.ToString();
-        Player2MarkedTilesScoreLabel.text = _scoreCalculator.Player2Score.TileMarkScore.ToString();
-        Player1TimesCaughtScoreLabel.text = _scoreCalculator.Player1Score.PlayerCaughtScore.ToString();
-        Player2TimesCaughtScoreLabel.text = _scoreCalculator.Player2Score.PlayerCaughtScore.ToString();
-        Player1TotalScoreLabel.text = _scoreCalculator.Player1Score.TotalScore.ToString();
-        Player2TotalScoreLabel.text = _scoreCalculator.Player2Score.TotalScore.ToString();
+        Player1MarkedTilesScoreLabel.text = playerScores[PlayerNumber.Player1].TileMarkScore.ToString();
+        Player2MarkedTilesScoreLabel.text = playerScores[PlayerNumber.Player2].TileMarkScore.ToString();
+        Player1TimesCaughtScoreLabel.text = playerScores[PlayerNumber.Player1].PlayerCaughtScore.ToString();
+        Player2TimesCaughtScoreLabel.text = playerScores[PlayerNumber.Player2].PlayerCaughtScore.ToString();
+        Player1TotalScoreLabel.text = playerScores[PlayerNumber.Player1].TotalScore.ToString();
+        Player2TotalScoreLabel.text = playerScores[PlayerNumber.Player2].TotalScore.ToString();
 
         Player1Label.gameObject.SetActive(true);
         Player2Label.gameObject.SetActive(true);

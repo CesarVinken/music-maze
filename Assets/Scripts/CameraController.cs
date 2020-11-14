@@ -56,7 +56,6 @@ public class CameraController : MonoBehaviour
 
     public void ResetCamera()
     {
-        Logger.Log("reset camera");
         FocussedOnPlayer = false;
 
         Vector3 cameraPosition = new Vector3(0, 0, -10);
@@ -99,7 +98,7 @@ public class CameraController : MonoBehaviour
         }
 
         _player = player.transform;
-        Logger.Log($"focus camera on player, with the player at {_player.position.x}.{_player.position.y}");
+
         transform.position = new Vector3(_player.position.x, _player.position.y, -10f);
     }
 
