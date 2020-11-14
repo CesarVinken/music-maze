@@ -11,8 +11,8 @@ public struct PlayerScore
 
     public PlayerScore(int tileMarkScore = 0, int playerCaughtScore = 0)
     {
-        TileMarkScore = 0;
-        PlayerCaughtScore = 0;
+        TileMarkScore = tileMarkScore;
+        PlayerCaughtScore = playerCaughtScore;
 
         TotalScore = 0;
     }
@@ -22,77 +22,100 @@ public struct PlayerScore
         TotalScore = TileMarkScore + PlayerCaughtScore;
         return TotalScore;
     }
+
 }
 
 public class ScoreCalculator
 {
-    public PlayerScore Player1Score = new PlayerScore();
-    public PlayerScore Player2Score = new PlayerScore();
 
     public const int MarkedTileValue = 10;
     public const int PlayerCaughtPenaltyValue = 10;
 
+    public Dictionary<PlayerNumber, PlayerScore> PlayerScores = new Dictionary<PlayerNumber, PlayerScore>();
+
     public void CalculateScores()
     {
-        CountTileMarkerScore();
-        CountTimesCaughtScore();
-
         Logger.Log(Logger.Score, "Finished counting score.");
 
         if (CharacterManager.Instance.MazePlayers.Count == 1)
         {
-            Player1Score.CountTotal();
-            Logger.Log(Logger.Score, $"Total score Player 1: {Player1Score.TotalScore}");
+            PlayerScores.Add(PlayerNumber.Player1, new PlayerScore());
         }
         else
         {
-            Player1Score.CountTotal();
-            Player2Score.CountTotal();
-            Logger.Log(Logger.Score, $"Total score Player 1: {Player1Score.TotalScore}");
-            Logger.Log(Logger.Score, $"Total score Player 2: {Player2Score.TotalScore}");
+            PlayerScores.Add(PlayerNumber.Player1, new PlayerScore());
+            PlayerScores.Add(PlayerNumber.Player2, new PlayerScore());
         }
+
+        CountTileMarkerScores();
+        CountTimesCaughtScores();
+
+        Dictionary<PlayerNumber, PlayerScore> tempPlayerScores = new Dictionary<PlayerNumber, PlayerScore>();
+
+        foreach (KeyValuePair<PlayerNumber, PlayerScore> item in PlayerScores)
+        {
+            int total = item.Value.CountTotal();
+            PlayerScore p = item.Value;
+            p.TotalScore = total;
+            tempPlayerScores.Add(item.Key, p);
+            Logger.Log(Logger.Score, $"Total score {item.Key.ToString()}: {item.Value.TotalScore}");
+        }
+
+        PlayerScores = tempPlayerScores;
     }
 
-    private void CountTileMarkerScore()
+    private void CountTileMarkerScores()
     {
+        Dictionary<PlayerNumber, int> tempPlayerScores = new Dictionary<PlayerNumber, int>();
+
+        int playerMarkScorePlayer1 = 0;
+        int playerMarkScorePlayer2 = 0;
         List<Tile> markedTiles = MazeLevelManager.Instance.Level.Tiles.Where(t => t.PlayerMark != null).ToList();
         for (int i = 0; i < markedTiles.Count; i++)
         {
             PlayerMark playerMark = markedTiles[i].PlayerMark;
+
             if (playerMark.Owner == PlayerMarkOwner.Player1)
             {
-                Player1Score.TileMarkScore += MarkedTileValue;
+                playerMarkScorePlayer1 += MarkedTileValue;
             }
             else if (playerMark.Owner == PlayerMarkOwner.Player2)
             {
-                Player2Score.TileMarkScore += MarkedTileValue;
+                playerMarkScorePlayer2 += MarkedTileValue;
             }
         }
 
-        if (CharacterManager.Instance.MazePlayers.Count == 2)
-            Logger.Log(Logger.Score, $"Finished counting tile marker scores. Player 1 has {Player1Score.TileMarkScore} points and player 2 has {Player2Score.TileMarkScore} points.");
-        else
-            Logger.Log(Logger.Score, $"Finished counting tile marker scores. Player 1 has {Player1Score.TileMarkScore} points.");
+        tempPlayerScores.Add(PlayerNumber.Player1, playerMarkScorePlayer1);
+        if (PlayerScores.ContainsKey(PlayerNumber.Player2))
+        {
+            tempPlayerScores.Add(PlayerNumber.Player2, playerMarkScorePlayer2);
+        }
+
+        foreach (KeyValuePair<PlayerNumber, int> item in tempPlayerScores)
+        {
+            PlayerScore p = PlayerScores[item.Key];
+            p.TileMarkScore = item.Value;
+            PlayerScores[item.Key] = p;
+            Logger.Log(Logger.Score, $"Tile marker scores: ${item.Key.ToString()} has {PlayerScores[item.Key].TileMarkScore} points.");
+        }
     }
 
-    private void CountTimesCaughtScore()
+    private void CountTimesCaughtScores()
     {
-        Player1Score.PlayerCaughtScore = CharacterManager.Instance.MazePlayers[PlayerNumber.Player1].TimesCaught * -PlayerCaughtPenaltyValue;
-
-        if (CharacterManager.Instance.MazePlayers.Count == 2)
+        Dictionary<PlayerNumber, PlayerScore> tempPlayerScores = new Dictionary<PlayerNumber, PlayerScore>();
+        
+        foreach (KeyValuePair<PlayerNumber, PlayerScore> item in PlayerScores)
         {
-            Player2Score.PlayerCaughtScore = CharacterManager.Instance.MazePlayers[PlayerNumber.Player2].TimesCaught * -PlayerCaughtPenaltyValue;
-            Logger.Log(Logger.Score, $"Finished counting player caught scores. Player 1 has {Player1Score.PlayerCaughtScore} points and player 2 has {Player2Score.PlayerCaughtScore} points.");
+            int playerCaughtScore = CharacterManager.Instance.MazePlayers[item.Key].TimesCaught * -PlayerCaughtPenaltyValue;
+            PlayerScore p = item.Value;
+            p.PlayerCaughtScore = playerCaughtScore;
+            tempPlayerScores.Add(item.Key, p);
         }
-        else
-        {
-            Logger.Log(Logger.Score, $"Finished counting player caught scores. Player 1 has {Player1Score.PlayerCaughtScore} points.");
-        }
+        PlayerScores = tempPlayerScores;
     }
 
     public void ResetMazeLevelScore()
     {
-        Player1Score = new PlayerScore();
-        Player2Score = new PlayerScore();
+        PlayerScores.Clear();
     }
 }
