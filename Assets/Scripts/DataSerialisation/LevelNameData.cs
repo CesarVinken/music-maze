@@ -13,13 +13,13 @@ public class LevelNameData
 
     public LevelNameData(string levelName)
     {
-        LevelName = levelName;
+        LevelName = levelName.ToLower().Replace(" ", "-");
         IsPlayable = true;
     }
 
     public LevelNameData WithName(string levelName)
     {
-        LevelName = levelName;
+        LevelName = levelName.ToLower().Replace(" ", "-");
         return this;
     }
 

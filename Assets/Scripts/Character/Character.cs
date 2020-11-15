@@ -22,11 +22,13 @@ public class Character : MonoBehaviour
     public bool IsCalculatingPath = false;
 
     [SerializeField] protected CharacterAnimationHandler _animationHandler;
-    [SerializeField] public CharacterPath _characterPath;   // change back to protected
+    [SerializeField] protected CharacterPath _characterPath;   // change back to protected
     [SerializeField] protected Seeker _seeker;
     public PhotonView PhotonView;
 
     public GameObject CharacterBody;
+
+    [SerializeField] private Transform _characterPathTransform;
 
     public void Awake()
     {
@@ -35,7 +37,9 @@ public class Character : MonoBehaviour
         Guard.CheckIsNull(_seeker, "_seeker", gameObject);
 
         Speed = BaseSpeed;
+        _characterPathTransform = _characterPath.transform;
     }
+
 
     public void SetStartingPosition(Character character, GridLocation gridLocation)
     {
@@ -51,7 +55,7 @@ public class Character : MonoBehaviour
 
         Logger.Warning("Starting position for {0} is {1},{2}", gameObject.name, gameObject.GetComponent<PlayerCharacter>().StartingPosition.X, gameObject.GetComponent<PlayerCharacter>().StartingPosition.Y);
         CharacterManager.Instance.PutCharacterOnGrid(gameObject, GridLocation.GridToVector(StartingPosition));
-        _characterPath.transform.position = transform.position;
+        _characterPathTransform.position = transform.position;
     }
 
     protected Vector3 SetNewLocomotionTarget(Vector2 gridVectorTarget)
@@ -62,7 +66,7 @@ public class Character : MonoBehaviour
 
     public void MoveCharacter()
     {
-        transform.position = _characterPath.transform.position;
+        transform.position = _characterPathTransform.position;
         float directionRotation = _characterPath.rotation.eulerAngles.z;
 
         if (directionRotation == 0)
