@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 
 public class ConfigureCommand : CommandProcedure
@@ -12,10 +13,41 @@ public class ConfigureCommand : CommandProcedure
                 arguments.RemoveAt(0);
                 ConfigureMazeLevel(arguments);
                 break;
+            case "default-maze":
+                arguments.RemoveAt(0);
+                SetDefaultMazeLevel(arguments);
+                break;
             default:
                 Console.Instance.PrintToReportText("Unknown configure command " + arguments[0]);
                 break;
         }
+    }
+
+    private void SetDefaultMazeLevel(List<string> arguments)
+    {
+        if (arguments.Count < 1)
+        {
+            string message = "The command '<color=" + ConsoleConfiguration.HighlightColour + ">configure default-maze</color>' needs an additional argument with the name of the level that should be the new default.json";
+            Logger.Warning(message);
+
+            message += GetConfigurableArguments();
+            Console.Instance.PrintToReportText(message);
+            return;
+        }
+
+        string sanatisedLevelName = arguments[0].ToLower().Replace(" ", "-");
+
+        bool levelExists = MazeLevelLoader.MazeLevelExists(sanatisedLevelName);
+
+        if (!levelExists)
+        {
+            string message = $"Could not find a maze level with the name {sanatisedLevelName}.";
+            Console.Instance.PrintToReportText(message);
+            return;
+        }
+
+        MazeLevelLoader.ReplaceMazeLevel(sanatisedLevelName, "default");
+
     }
 
     private void ConfigureMazeLevel(List<string> arguments)
@@ -105,7 +137,10 @@ public class ConfigureCommand : CommandProcedure
 
     public override void Help()
     {
-        string printLine = "The configure command can be used to configure things such as maze levels. For this use 'maze' as a second argument and enter as a third argument what should be configured. The configured state, such as 'on' or 'off' should be given as a fourth argument. \n\n";
+        string printLine = "The configure command can be used to configure things such as maze levels.\n";
+        printLine += "With 'default-maze' as a second argument, you can set the default level. Input the name of the level as third argument\n";
+        printLine += "For this use 'maze' as a second argument and enter as a third argument what should be configured. The configured state, such as 'on' or 'off' should be given as a fourth argument. \n\n";
+
         Console.Instance.PrintToReportText(printLine);
     }
 }
