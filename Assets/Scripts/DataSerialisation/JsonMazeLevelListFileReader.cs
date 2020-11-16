@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class JsonMazeLevelListFileReader
 {
-    public LevelNamesData ReadMazeLevelList()
+    public MazeLevelNamesData ReadMazeLevelList()
     {
         string filePath = Path.Combine(Application.streamingAssetsPath, "levels.json");
         //#if UNITY_EDITOR
@@ -17,7 +17,7 @@ public class JsonMazeLevelListFileReader
         }
 
         string fileContent = File.ReadAllText(filePath);
-        LevelNamesData jsonFileContent = JsonUtility.FromJson<LevelNamesData>(fileContent);
+        MazeLevelNamesData jsonFileContent = JsonUtility.FromJson<MazeLevelNamesData>(fileContent);
         return jsonFileContent;
     }
 }

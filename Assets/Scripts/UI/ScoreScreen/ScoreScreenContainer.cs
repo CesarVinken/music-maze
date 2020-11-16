@@ -136,7 +136,7 @@ public class ScoreScreenContainer : MonoBehaviour
         if(GameManager.Instance.PlayableLevelNames.Count == 0) // there are no levels left to choose from, reload all random levels.
         {
             Logger.Warning("We played all playable levels. Starting the random selection from the beginning");
-            GameManager.Instance.GetAllPlayableLevelNames();
+            GameManager.Instance.PlayableLevelNames = MazeLevelLoader.GetAllPlayableLevelNames();
         }
 
         int randomIndex = Random.Range(0, GameManager.Instance.PlayableLevelNames.Count);

@@ -48,7 +48,7 @@ public static class MazeLevelLoader
         return true;
     }
 
-    public static string GetAllLevelNames(string printLine)
+    public static string GetAllLevelNamesForPrint(string printLine)
     {
         foreach (string mazeName in Directory.GetFiles(Application.streamingAssetsPath, "*.json"))
         {
@@ -58,6 +58,37 @@ public static class MazeLevelLoader
         }
 
         return printLine;
+    }
+
+    public static MazeLevelNamesData GetAllLevelNamesData()
+    {
+        JsonMazeLevelListFileReader jsonMazeLevelListFileReader = new JsonMazeLevelListFileReader();
+        MazeLevelNamesData levelNamesData = jsonMazeLevelListFileReader.ReadMazeLevelList();
+
+        return levelNamesData;
+    }
+
+    public static List<string> GetAllPlayableLevelNames()
+    {
+        List<string> playableLevelNames = new List<string>();
+
+        JsonMazeLevelListFileReader jsonMazeLevelListFileReader = new JsonMazeLevelListFileReader();
+        MazeLevelNamesData levelNamesData = jsonMazeLevelListFileReader.ReadMazeLevelList();
+
+        if (levelNamesData == null) return playableLevelNames;
+
+        for (int i = 0; i < levelNamesData.LevelNames.Count; i++)
+        {
+            MazeLevelNameData levelNameData = levelNamesData.LevelNames[i];
+
+            if (!levelNameData.IsPlayable) continue;
+
+            if (levelNameData.LevelName == MazeLevelManager.Instance.Level.MazeName) continue;
+
+            playableLevelNames.Add(levelNameData.LevelName);
+        }
+
+        return playableLevelNames;
     }
 
     public static void ReplaceMazeLevel(string sourceLevelName, string destinationLevelName)

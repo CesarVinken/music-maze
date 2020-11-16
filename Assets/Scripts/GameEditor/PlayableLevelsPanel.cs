@@ -9,7 +9,7 @@ public class PlayableLevelsPanel : MonoBehaviour
     public GameObject PlayableLevelNameTogglePrefab;
     public Transform PlayableLevelListContainer;
 
-    public Dictionary<PlayableMazeLevelNameToggle, LevelNameData> LevelNameToggleData = new Dictionary<PlayableMazeLevelNameToggle, LevelNameData>();
+    public Dictionary<PlayableMazeLevelNameToggle, MazeLevelNameData> LevelNameToggleData = new Dictionary<PlayableMazeLevelNameToggle, MazeLevelNameData>();
 
     public void Awake()
     {
@@ -22,13 +22,13 @@ public class PlayableLevelsPanel : MonoBehaviour
     public void OnEnable()
     {
         JsonMazeLevelListFileReader jsonMazeLevelListFileReader = new JsonMazeLevelListFileReader();
-        LevelNamesData levelNamesData = jsonMazeLevelListFileReader.ReadMazeLevelList();
+        MazeLevelNamesData levelNamesData = jsonMazeLevelListFileReader.ReadMazeLevelList();
         
         LevelNameToggleData.Clear();
 
         for (int i = 0; i < levelNamesData.LevelNames.Count; i++)
         {
-            LevelNameData levelNameData = levelNamesData.LevelNames[i];
+            MazeLevelNameData levelNameData = levelNamesData.LevelNames[i];
 
             GameObject levelNameToggleGO = Instantiate(PlayableLevelNameTogglePrefab, PlayableLevelListContainer);
 
@@ -54,11 +54,11 @@ public class PlayableLevelsPanel : MonoBehaviour
         Logger.Log("Playable level selection changes were saved.");
 
         JsonMazeLevelListFileWriter jsonMazeLevelListFileWriter = new JsonMazeLevelListFileWriter();
-        LevelNamesData levelNamesData = new LevelNamesData();
+        MazeLevelNamesData levelNamesData = new MazeLevelNamesData();
 
-        foreach (KeyValuePair<PlayableMazeLevelNameToggle, LevelNameData> mazeLevelNameToggleData in LevelNameToggleData)
+        foreach (KeyValuePair<PlayableMazeLevelNameToggle, MazeLevelNameData> mazeLevelNameToggleData in LevelNameToggleData)
         {
-            LevelNameData levelNameData = new LevelNameData()
+            MazeLevelNameData levelNameData = new MazeLevelNameData()
                 .WithName(mazeLevelNameToggleData.Value.LevelName)
                 .WithPlayability(mazeLevelNameToggleData.Key.Toggle.isOn);
 

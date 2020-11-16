@@ -1,29 +1,29 @@
 ﻿using System;
 
 [Serializable]
-public class LevelNameData
+public class MazeLevelNameData
 {
     public string LevelName = "";
     public bool IsPlayable;
 
-    public LevelNameData()
+    public MazeLevelNameData()
     {
 
     }
 
-    public LevelNameData(string levelName)
+    public MazeLevelNameData(string levelName)
     {
         LevelName = levelName.ToLower().Replace(" ", "-");
         IsPlayable = true;
     }
 
-    public LevelNameData WithName(string levelName)
+    public MazeLevelNameData WithName(string levelName)
     {
         LevelName = levelName.ToLower().Replace(" ", "-");
         return this;
     }
 
-    public LevelNameData WithPlayability(bool isPlayable)
+    public MazeLevelNameData WithPlayability(bool isPlayable)
     {
         IsPlayable = isPlayable;
         return this;

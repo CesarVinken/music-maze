@@ -2,19 +2,19 @@
 using System.Collections.Generic;
 
 [Serializable]
-public class LevelNamesData
+public class MazeLevelNamesData
 {
-    public List<LevelNameData> LevelNames = new List<LevelNameData>();
+    public List<MazeLevelNameData> LevelNames = new List<MazeLevelNameData>();
 
-    public LevelNamesData()
+    public MazeLevelNamesData()
     {
 
     }
 
-    public LevelNamesData(string levelName)
+    public MazeLevelNamesData(string levelName)
     {
         JsonMazeLevelListFileReader mazeLevelListFileReader = new JsonMazeLevelListFileReader();
-        LevelNamesData oldData = mazeLevelListFileReader.ReadMazeLevelList();
+        MazeLevelNamesData oldData = mazeLevelListFileReader.ReadMazeLevelList();
 
         if (oldData != null)
         {
@@ -25,7 +25,7 @@ public class LevelNamesData
 
     public void AddLevelName(string levelName)
     {
-        LevelNameData myObject = new LevelNameData(levelName);
+        MazeLevelNameData myObject = new MazeLevelNameData(levelName);
         LevelNames.Add(myObject);
     }
 }

@@ -9,7 +9,7 @@ public class JsonMazeLevelFileWriter
     public void SerialiseData(MazeLevelData levelData)
     {
         _levelData = levelData;
-        //_path = Path.Combine(Application.persistentDataPath, "mazes", levelData.Name + ".json");
+
         _path = Path.Combine(Application.dataPath, "StreamingAssets", levelData.Name + ".json");
 
         string jsonDataString = JsonUtility.ToJson(_levelData, true).ToString();

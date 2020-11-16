@@ -89,7 +89,7 @@ public class GameManager : MonoBehaviourPunCallbacks
         }
         if (MazeLevelManager.Instance.Level.PlayerCharacterSpawnpoints.Count == 0) return;
 
-        GetAllPlayableLevelNames();
+        PlayableLevelNames = MazeLevelLoader.GetAllPlayableLevelNames();
     }
 
     public void Update()
@@ -97,25 +97,6 @@ public class GameManager : MonoBehaviourPunCallbacks
         if (Input.GetKeyDown(KeyboardConfiguration.Console))
         {
             ConsoleContainer.Instance.ToggleConsole();
-        }
-    }
-
-    public void GetAllPlayableLevelNames()
-    {
-        JsonMazeLevelListFileReader jsonMazeLevelListFileReader = new JsonMazeLevelListFileReader();
-        LevelNamesData levelNamesData = jsonMazeLevelListFileReader.ReadMazeLevelList();
-
-        if (levelNamesData == null) return;
-
-        for (int i = 0; i < levelNamesData.LevelNames.Count; i++)
-        {
-            LevelNameData levelNameData = levelNamesData.LevelNames[i];
-
-            if (!levelNameData.IsPlayable) continue;
-
-            if (levelNameData.LevelName == MazeLevelManager.Instance.Level.MazeName) continue;
-
-            PlayableLevelNames.Add(levelNameData.LevelName);
         }
     }
 

@@ -25,7 +25,7 @@ public class LoadCommand : CommandProcedure
             Logger.Warning(message);
 
             message += "\nThe Currently available levels are: \n";
-            message = MazeLevelLoader.GetAllLevelNames(message);
+            message = MazeLevelLoader.GetAllLevelNamesForPrint(message);
             Console.Instance.PrintToReportText(message);
             return;
         }
@@ -42,7 +42,7 @@ public class LoadCommand : CommandProcedure
         {
             string printLine = "<color=" + ConsoleConfiguration.HighlightColour + ">" + arguments[1] + "</color> is not a known level and cannot be loaded.\n\n";
             printLine += "The Currently available levels are: \n";
-            printLine = MazeLevelLoader.GetAllLevelNames(printLine);
+            printLine = MazeLevelLoader.GetAllLevelNamesForPrint(printLine);
             Console.Instance.PrintToReportText(printLine);
         }
 
@@ -53,7 +53,7 @@ public class LoadCommand : CommandProcedure
     {
         string printLine = "To load a level with argument 'maze' and then the name of the level. \n\n";
         printLine += "The Currently available levels are: \n";
-        printLine = MazeLevelLoader.GetAllLevelNames(printLine);
+        printLine = MazeLevelLoader.GetAllLevelNamesForPrint(printLine);
         Console.Instance.PrintToReportText(printLine);
     }
 

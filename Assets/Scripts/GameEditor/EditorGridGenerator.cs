@@ -182,7 +182,7 @@ public class EditorGridGenerator : MonoBehaviour
 
     private void AddMazeLevelToLevelList()
     {
-        LevelNamesData levelData = new LevelNamesData(_mazeName);
+        MazeLevelNamesData levelData = new MazeLevelNamesData(_mazeName);
 
         JsonMazeLevelListFileWriter fileWriter = new JsonMazeLevelListFileWriter();
         fileWriter.SerialiseData(levelData);

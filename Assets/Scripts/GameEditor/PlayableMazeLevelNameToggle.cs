@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 public class PlayableMazeLevelNameToggle : MonoBehaviour
 {
-    private LevelNameData _levelNameData;
+    private MazeLevelNameData _levelNameData;
     public Toggle Toggle;
     [SerializeField] private Text _levelNameToggleLabel;
 
@@ -14,7 +14,7 @@ public class PlayableMazeLevelNameToggle : MonoBehaviour
         Guard.CheckIsNull(_levelNameToggleLabel, "LevelNameToggleLabel", gameObject);    
     }
 
-    public void Initialise(LevelNameData levelNameData)
+    public void Initialise(MazeLevelNameData levelNameData)
     {
         _levelNameData = levelNameData;
 

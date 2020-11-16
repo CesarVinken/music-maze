@@ -3,11 +3,11 @@ using UnityEngine;
 
 public class JsonMazeLevelListFileWriter
 {
-    private LevelNamesData _levelNamesData;
+    private MazeLevelNamesData _levelNamesData;
 
     private string _path;
 
-    public void SerialiseData(LevelNamesData levelNamesData)
+    public void SerialiseData(MazeLevelNamesData levelNamesData)
     {
         _levelNamesData = levelNamesData;
         _path = Path.Combine(Application.dataPath, "StreamingAssets", "levels.json");

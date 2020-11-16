@@ -47,7 +47,6 @@ public class ConfigureCommand : CommandProcedure
         }
 
         MazeLevelLoader.ReplaceMazeLevel(sanatisedLevelName, "default");
-
     }
 
     private void ConfigureMazeLevel(List<string> arguments)
@@ -89,7 +88,7 @@ public class ConfigureCommand : CommandProcedure
         }
 
         JsonMazeLevelListFileReader jsonMazeLevelListFileReader = new JsonMazeLevelListFileReader();
-        LevelNamesData levelNamesData = jsonMazeLevelListFileReader.ReadMazeLevelList();
+        MazeLevelNamesData levelNamesData = jsonMazeLevelListFileReader.ReadMazeLevelList();
 
         string sanatisedLevelName = levelName.ToLower().Replace(" ", "-");
         int levelNameIndex = levelNamesData.LevelNames.FindIndex(l => l.LevelName == sanatisedLevelName);
@@ -100,7 +99,7 @@ public class ConfigureCommand : CommandProcedure
             return;
         }
         
-        LevelNameData levelNameData = levelNamesData.LevelNames.ElementAt(levelNameIndex);
+        MazeLevelNameData levelNameData = levelNamesData.LevelNames.ElementAt(levelNameIndex);
 
         if (levelNameData == null)
         {
