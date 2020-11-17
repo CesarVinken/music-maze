@@ -16,7 +16,6 @@ public class InfoCommand : CommandProcedure
                 Console.Instance.PrintToReportText("Unknown info command " + infoObject);
                 break;
         }
-
     }
 
     private void GetInfo(IInfoCommand infoCommand, List<string> arguments)

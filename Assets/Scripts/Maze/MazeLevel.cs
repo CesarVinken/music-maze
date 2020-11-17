@@ -38,9 +38,10 @@ public class MazeLevel
 
         BuildTiles(mazeLevelData);
     }
+
     public static MazeLevel Create(MazeLevelData mazeLevelData)
     {
-        Logger.Log(Logger.Initialisation, "Set up new Maze Level '<color=" + ConsoleConfiguration.HighlightColour + ">" + mazeLevelData.Name + "</color>'");
+        Logger.Log(Logger.Initialisation, $"Set up new Maze Level '<color={ConsoleConfiguration.HighlightColour}>{mazeLevelData.Name}</color>'");
         return new MazeLevel(mazeLevelData);
     }
 

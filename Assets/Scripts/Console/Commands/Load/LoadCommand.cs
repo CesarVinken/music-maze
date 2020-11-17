@@ -12,8 +12,8 @@ public class LoadCommand : CommandProcedure
                 LoadMazeLevel(arguments);
                 break;
             default:
-                Console.Instance.PrintToReportText("Unknown build command to build " + arguments[0]);
-                break;
+                string message = $"Unknown build command to build {arguments[0]}.";
+                throw new UnknownArgumentConsoleException(message);
         }
     }
 
@@ -26,8 +26,7 @@ public class LoadCommand : CommandProcedure
 
             message += "\nThe Currently available levels are: \n";
             message = MazeLevelLoader.GetAllLevelNamesForPrint(message);
-            Console.Instance.PrintToReportText(message);
-            return;
+            throw new NotEnoughArgumentsConsoleException(message);
         }
 
         if (MazeLevelManager.Instance == null)
