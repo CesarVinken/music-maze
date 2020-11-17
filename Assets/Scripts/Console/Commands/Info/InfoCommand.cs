@@ -10,7 +10,7 @@ public class InfoCommand : CommandProcedure
         switch (infoObject)
         {
             case "maze":
-                GetMazeInfo(new MazeLevelInfo(), arguments);
+                GetInfo(new MazeLevelInfo(), arguments);
                 break;
             default:
                 Console.Instance.PrintToReportText("Unknown info command " + infoObject);
@@ -19,7 +19,7 @@ public class InfoCommand : CommandProcedure
 
     }
 
-    private void GetMazeInfo(IInfoCommand infoCommand, List<string> arguments)
+    private void GetInfo(IInfoCommand infoCommand, List<string> arguments)
     {
         string infoMessage = infoCommand.GetInfo(arguments);
         Console.Instance.PrintToReportText(infoMessage);
