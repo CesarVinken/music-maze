@@ -56,17 +56,18 @@ public class MazeLevelManager : MonoBehaviour, IOnEventCallback
 
     public void SetupLevelForEditor(MazeLevelData mazeLevelData)
     {
-
         Level = MazeLevel.Create(mazeLevelData);
 
         InitialiseTileAttributes();
 
+        MainCanvas.Instance.BlackOutSquare.ResetToDefault();
         CameraController.Instance.ResetCamera();
         CameraController.Instance.SetPanLimits(MazeLevelManager.Instance.Level.LevelBounds);
     }
 
     public IEnumerator ScanCoroutine()
     {
+        MainCanvas.Instance.BlackOutSquare.ResetToDefault();
         CharacterManager.Instance.SpawnCharacters();
         CameraController.Instance.SetPanLimits(Level.LevelBounds);
         CameraController.Instance.FocusOnPlayer();

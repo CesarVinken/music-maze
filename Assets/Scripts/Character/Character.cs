@@ -46,18 +46,6 @@ public class Character : MonoBehaviour
         character.StartingPosition = gridLocation;
     }
 
-    // set character to current spawnpoint and reset pathfinder
-    public void ResetCharacterPosition()
-    {
-        _characterPath.SetPath(null);
-        SetHasCalculatedTarget(false);
-        _animationHandler.SetLocomotion(false);
-
-        Logger.Warning("Starting position for {0} is {1},{2}", gameObject.name, gameObject.GetComponent<PlayerCharacter>().StartingPosition.X, gameObject.GetComponent<PlayerCharacter>().StartingPosition.Y);
-        CharacterManager.Instance.PutCharacterOnGrid(gameObject, GridLocation.GridToVector(StartingPosition));
-        _characterPathTransform.position = transform.position;
-    }
-
     protected Vector3 SetNewLocomotionTarget(Vector2 gridVectorTarget)
     {
         float offsetToTileMiddle = GridLocation.OffsetToTileMiddle;
@@ -120,17 +108,43 @@ public class Character : MonoBehaviour
         return false;
     }
 
+    // set character to current spawnpoint and reset pathfinder
+    public void ResetCharacterPosition()
+    {
+        _characterPath.SetPath(null);
+        SetHasCalculatedTarget(false);
+        _animationHandler.SetLocomotion(false);
+
+        Logger.Warning("Starting position for {0} is {1},{2}", gameObject.name, gameObject.GetComponent<PlayerCharacter>().StartingPosition.X, gameObject.GetComponent<PlayerCharacter>().StartingPosition.Y);
+        CharacterManager.Instance.PutCharacterOnGrid(gameObject, GridLocation.GridToVector(StartingPosition));
+        _characterPathTransform.position = transform.position;
+    }
+
     public IEnumerator RespawnCharacter(Character character, float freezeTime)
     {
+        BlackOutSquare blackOutSquare = MainCanvas.Instance.BlackOutSquare;
         character.FreezeCharacter();
         CharacterBody.SetActive(false); // TODO make character animation for appearing and disappearing of character, rather than turning the GO off and on
-        ResetCharacterPosition();
 
-        yield return new WaitForSeconds(freezeTime / 2);
+        // Screen to black
+        IEnumerator toBlackCoroutine = blackOutSquare.ToBlack();
+
+        StartCoroutine(toBlackCoroutine);
+        while (blackOutSquare.BlackStatus == BlackStatus.InTransition)
+        {
+            yield return null;
+        }
+        ResetCharacterPosition();
         CharacterBody.SetActive(true);
 
-        yield return new WaitForSeconds(freezeTime /2 );
+        //Screem back to clear
+        IEnumerator toClearCoroutine = blackOutSquare.ToClear();
 
+        StartCoroutine(toClearCoroutine);
+        while (blackOutSquare.BlackStatus == BlackStatus.InTransition)
+        {
+            yield return null;
+        }
         character.UnfreezeCharacter();
     }
 

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections;
+using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
@@ -19,10 +20,8 @@ public class CameraController : MonoBehaviour
 
     private float _panSpeed;
     public bool FocussedOnPlayer = false;
-    public static Dictionary<Direction, float> PanLimits = new Dictionary<Direction, float>
-    {
+    public static Dictionary<Direction, float> PanLimits = new Dictionary<Direction, float> { };
 
-    };
     [SerializeField] private Camera _camera;
     [SerializeField] private Transform _player;
     
@@ -31,7 +30,6 @@ public class CameraController : MonoBehaviour
     private Vector2 _cameraBoundsOffset; // with this offset the camera is calculated when player is past the edge margin by calculating cameraPosition = _player.position - offset. 
 
     private Vector3 _dragOrigin;    //for camera dragging in editor
-
 
     public void Awake()
     {
@@ -133,12 +131,17 @@ public class CameraController : MonoBehaviour
         }
         else if (playerHeightPercentagePosOnScreen <= 100 - _maxYPercentageBoundary)
         {
+            //Logger.Warning($"cameraPosition.y {cameraPosition.y}");
+            //if (cameraPosition.y == _player.position.y - _cameraBoundsOffset.y)
+            //{
+            //    Logger.Warning("Got you!");
+            //}
             cameraPosition.y = _player.position.y + _cameraBoundsOffset.y;
         }
 
         // binding to the limits of the map
-        cameraPosition.x = Mathf.Clamp(cameraPosition.x, PanLimits[Direction.Left], PanLimits[Direction.Right]);
-        cameraPosition.y = Mathf.Clamp(cameraPosition.y, PanLimits[Direction.Down], PanLimits[Direction.Up]);
+        //cameraPosition.x = Mathf.Clamp(cameraPosition.x, PanLimits[Direction.Left], PanLimits[Direction.Right]);
+        //cameraPosition.y = Mathf.Clamp(cameraPosition.y, PanLimits[Direction.Down], PanLimits[Direction.Up]);
 
         transform.position = new Vector3(cameraPosition.x, cameraPosition.y, transform.position.z);
     }

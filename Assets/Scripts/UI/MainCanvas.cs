@@ -13,6 +13,8 @@ public class MainCanvas : MonoBehaviour
     public Sprite Player1TileMarker;    // TODO maybe move to PlayerCharacter class so we can say player.marker
     public Sprite Player2TileMarker;
 
+    public BlackOutSquare BlackOutSquare;
+
     public void Awake()
     {
         Instance = this;
@@ -22,6 +24,8 @@ public class MainCanvas : MonoBehaviour
 
         Guard.CheckIsNull(Player1TileMarker, "Player1TileMarker", gameObject);
         Guard.CheckIsNull(Player2TileMarker, "Player2TileMarker", gameObject);
+
+        Guard.CheckIsNull(BlackOutSquare, "BlackOutSquare", gameObject);
 
         if (_gameManager.CurrentPlatform == Platform.Android)
         {
