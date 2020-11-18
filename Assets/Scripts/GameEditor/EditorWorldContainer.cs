@@ -4,15 +4,15 @@ public class EditorWorldContainer : MonoBehaviour
 {
     public static EditorWorldContainer Instance;
 
-    public GameObject EditorTileSelectorGO;
-    public EditorTileSelector EditorTileSelector;
+    [SerializeField] private GameObject _editorTileSelectorGO;
+    [SerializeField] private EditorTileSelector _editorTileSelector;
 
     private void Awake()
     {
         Instance = this;
 
-        Guard.CheckIsNull(EditorTileSelector, "EditorTileSelector", gameObject);
-        Guard.CheckIsNull(EditorTileSelectorGO, "EditorTileSelectorGO", gameObject);
+        Guard.CheckIsNull(_editorTileSelector, "EditorTileSelector", gameObject);
+        Guard.CheckIsNull(_editorTileSelectorGO, "EditorTileSelectorGO", gameObject);
     }
 
     public void InitialiseEditor()
@@ -21,12 +21,12 @@ public class EditorWorldContainer : MonoBehaviour
 
     public void CloseEditor()
     {
-        EditorTileSelectorGO.SetActive(false);
+        _editorTileSelectorGO.SetActive(false);
     }
 
     public void ShowTileSelector()
     {
-        EditorTileSelector.CurrentSelectedLocation = new GridLocation(0, 0);
-        EditorTileSelectorGO.SetActive(true);
+        _editorTileSelector.CurrentSelectedLocation = new GridLocation(0, 0);
+        _editorTileSelectorGO.SetActive(true);
     }
 }

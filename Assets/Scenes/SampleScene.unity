@@ -406,17 +406,17 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ScoreScreenPanel: {fileID: 2037339656}
-  SubtitleLabel: {fileID: 134831207}
-  Player1Label: {fileID: 1154196320}
-  Player2Label: {fileID: 362708772}
-  Player1MarkedTilesScoreLabel: {fileID: 1365266345}
-  Player2MarkedTilesScoreLabel: {fileID: 1538246057}
-  Player1TimesCaughtScoreLabel: {fileID: 294037753}
-  Player2TimesCaughtScoreLabel: {fileID: 854548107}
-  Player1TotalScoreLabel: {fileID: 1699786455}
-  Player2TotalScoreLabel: {fileID: 1790773557}
-  WaitingForNextLevelLabel: {fileID: 518359143}
-  NextLevelButton: {fileID: 1679013104}
+  _subtitleLabel: {fileID: 134831207}
+  _player1Label: {fileID: 1154196320}
+  _player2Label: {fileID: 362708772}
+  _player1MarkedTilesScoreLabel: {fileID: 1365266345}
+  _player2MarkedTilesScoreLabel: {fileID: 1538246057}
+  _player1TimesCaughtScoreLabel: {fileID: 294037753}
+  _player2TimesCaughtScoreLabel: {fileID: 854548107}
+  _player1TotalScoreLabel: {fileID: 1699786455}
+  _player2TotalScoreLabel: {fileID: 1790773557}
+  _waitingForNextLevelLabel: {fileID: 518359143}
+  _nextLevelButton: {fileID: 1679013104}
 --- !u!222 &81165052
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -1675,8 +1675,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dc647573aab49c045b9edc6828a57d26, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  EditorTileSelectorGO: {fileID: 265838597}
-  EditorTileSelector: {fileID: 265838599}
+  _editorTileSelectorGO: {fileID: 265838597}
+  _editorTileSelector: {fileID: 265838599}
 --- !u!4 &317612319
 Transform:
   m_ObjectHideFlags: 0
