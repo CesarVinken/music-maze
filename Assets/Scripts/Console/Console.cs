@@ -7,18 +7,21 @@ public class Console : MonoBehaviour
     public static Console Instance;
     public ConsoleState ConsoleState;
 
-    public Text InputText;
-    public Text ReportText;
-    public InputField InputField;
-    public int inputHistoryIndex = 0;
-
-    public List<ConsoleLine> ConsoleLines = new List<ConsoleLine>();
     public List<ConsoleCommand> Commands = new List<ConsoleCommand>();
+
+    [SerializeField] private Text _inputText;
+    [SerializeField] private Text _reportText;
+    [SerializeField] private InputField _inputField;
+    [SerializeField] private int _inputHistoryIndex = 0;
+
+    private List<ConsoleLine> _consoleLines = new List<ConsoleLine>();
+    private string _inputFieldText = "";
+
     void Awake()
     {
-        Guard.CheckIsNull(InputText, "InputText", gameObject);
-        Guard.CheckIsNull(ReportText, "ReportText", gameObject);
-        Guard.CheckIsNull(InputField, "InputField", gameObject);
+        Guard.CheckIsNull(_inputText, "InputText", gameObject);
+        Guard.CheckIsNull(_reportText, "ReportText", gameObject);
+        Guard.CheckIsNull(_inputField, "InputField", gameObject);
 
         Instance = this;
         ConsoleState = ConsoleState.Closed;
@@ -28,7 +31,7 @@ public class Console : MonoBehaviour
 
     public void Update()
     {
-        if (InputField.isFocused)
+        if (_inputField.isFocused)
         {
             if (Input.GetKeyDown(KeyCode.UpArrow))
             {
@@ -44,22 +47,34 @@ public class Console : MonoBehaviour
     public void SetConsoleState(ConsoleState newConsoleState)
     {
         ConsoleState = newConsoleState;
-        InputField.ActivateInputField();
-        InputField.Select();
+        _inputField.ActivateInputField();
+        _inputField.Select();
+    }
+
+    public void SetInputFieldText(string input)
+    {
+        if (ConsoleState == ConsoleState.Closed)
+        {
+            _inputField.text = _inputFieldText;
+            return;
+        }
+
+        _inputFieldText = input;
+        _inputField.text = _inputFieldText;
     }
 
     public void PublishInputText()
     {
-        if (InputField.text == "") return;
+        if (_inputField.text == "") return;
 
-        string inputText = InputText.text;
+        string inputText = _inputText.text;
 
         PrintToReportText(inputText, true);
 
-        InputField.text = "";
+        _inputField.text = "";
 
-        InputField.ActivateInputField();
-        InputField.Select();
+        _inputField.ActivateInputField();
+        _inputField.Select();
 
         if (inputText[0] == '$')
         {
@@ -71,97 +86,97 @@ public class Console : MonoBehaviour
     {
         string consoleLine = "\n" + text;
 
-        if (ConsoleLines.Count > 30)
+        if (_consoleLines.Count > 30)
         {
-            ConsoleLines.RemoveAt(0);
+            _consoleLines.RemoveAt(0);
         }
 
-        ConsoleLines.Add(new ConsoleLine(consoleLine, isPlayerInput));
-        inputHistoryIndex = ConsoleLines.Count;
+        _consoleLines.Add(new ConsoleLine(consoleLine, isPlayerInput));
+        _inputHistoryIndex = _consoleLines.Count;
 
         string reportText = "";
 
-        for (int i = 0; i < ConsoleLines.Count; i++)
+        for (int i = 0; i < _consoleLines.Count; i++)
         {
-            reportText = reportText + ConsoleLines[i].Text;
+            reportText = reportText + _consoleLines[i].Text;
         }
 
-        ReportText.text = reportText;
+        _reportText.text = reportText;
     }
 
     public void GetPreviousInput()
     {
-        if (ConsoleLines.Count == 0) return;
+        if (_consoleLines.Count == 0) return;
 
-        int localInputHistoryIndex = inputHistoryIndex;
+        int localInputHistoryIndex = _inputHistoryIndex;
 
         for (int i = localInputHistoryIndex - 1; i >= 0; i--)
         {
-            if(ConsoleLines[i].IsPlayerInput)
+            if(_consoleLines[i].IsPlayerInput)
             {
-                inputHistoryIndex = i;
+                _inputHistoryIndex = i;
                 break;
             }
         }
 
-        if(inputHistoryIndex == localInputHistoryIndex)
+        if(_inputHistoryIndex == localInputHistoryIndex)
         {
-            for (int j = ConsoleLines.Count - 1; j >= 0; j--)
+            for (int j = _consoleLines.Count - 1; j >= 0; j--)
             {
-                if (ConsoleLines[j].IsPlayerInput)
+                if (_consoleLines[j].IsPlayerInput)
                 {
-                    inputHistoryIndex = j;
+                    _inputHistoryIndex = j;
                     break;
                 }
             }
         }
 
-        if (inputHistoryIndex == localInputHistoryIndex)
+        if (_inputHistoryIndex == localInputHistoryIndex)
         {
-            InputField.text = "";
+            _inputField.text = "";
         }
         else
         {
-            string previousReportText = ConsoleLines[inputHistoryIndex].Text;
-            InputField.text = previousReportText;
+            string previousReportText = _consoleLines[_inputHistoryIndex].Text;
+            _inputField.text = previousReportText;
         }
 
     }
 
     public void GetNextInput()
     {
-        if (ConsoleLines.Count == 0) return;
+        if (_consoleLines.Count == 0) return;
 
-        int localInputHistoryIndex = inputHistoryIndex;
+        int localInputHistoryIndex = _inputHistoryIndex;
 
-        for (int i = inputHistoryIndex + 1; i < ConsoleLines.Count; i++)
+        for (int i = _inputHistoryIndex + 1; i < _consoleLines.Count; i++)
         {
-            if (ConsoleLines[i].IsPlayerInput)
+            if (_consoleLines[i].IsPlayerInput)
             {
-                inputHistoryIndex = i;
+                _inputHistoryIndex = i;
                 break;
             }
         }
-        if (inputHistoryIndex == localInputHistoryIndex)
+        if (_inputHistoryIndex == localInputHistoryIndex)
         {
-            for (int j = 0; j < ConsoleLines.Count; j++)
+            for (int j = 0; j < _consoleLines.Count; j++)
             {
-                if (ConsoleLines[j].IsPlayerInput)
+                if (_consoleLines[j].IsPlayerInput)
                 {
-                    inputHistoryIndex = j;
+                    _inputHistoryIndex = j;
                     break;
                 }
             }
         }
 
-        if (inputHistoryIndex == localInputHistoryIndex)
+        if (_inputHistoryIndex == localInputHistoryIndex)
         {
-            InputField.text = "";
+            _inputField.text = "";
         }
         else
         {
-            string nextReportText = ConsoleLines[inputHistoryIndex].Text;
-            InputField.text = nextReportText;
+            string nextReportText = _consoleLines[_inputHistoryIndex].Text;
+            _inputField.text = nextReportText;
         }
     }
 

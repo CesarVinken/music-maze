@@ -4,7 +4,7 @@ public class ConsoleContainer : MonoBehaviour
 {
     public static ConsoleContainer Instance;
 
-    public GameObject ConsolePrefab;
+    [SerializeField] private GameObject _consolePrefab;
     public GameObject ConsoleGO;
 
     private Animator _animator;
@@ -23,7 +23,7 @@ public class ConsoleContainer : MonoBehaviour
 
     public void Awake()
     {
-        Guard.CheckIsNull(ConsolePrefab, "ConsolePrefab", gameObject);
+        Guard.CheckIsNull(_consolePrefab, "_consolePrefab", gameObject);
 
         Instance = this;
     }
@@ -32,7 +32,7 @@ public class ConsoleContainer : MonoBehaviour
     {
         if (!ConsoleGO)
         {
-            ConsoleGO = Instantiate(ConsolePrefab, transform, false);
+            ConsoleGO = Instantiate(_consolePrefab, transform, false);
 
             _animator = ConsoleGO.GetComponent<Animator>();
 
@@ -45,7 +45,6 @@ public class ConsoleContainer : MonoBehaviour
 
         if (Console.Instance.ConsoleState == ConsoleState.Closed)
         {
-
             SetConsoleState(ConsoleState.Small);
         }
         else if (Console.Instance.ConsoleState == ConsoleState.Small)
@@ -62,7 +61,7 @@ public class ConsoleContainer : MonoBehaviour
     {
         if (!ConsoleGO)
         {
-            ConsoleGO = Instantiate(ConsolePrefab, transform, false);
+            ConsoleGO = Instantiate(_consolePrefab, transform, false);
 
             _animator = ConsoleGO.GetComponent<Animator>();
 
