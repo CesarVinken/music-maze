@@ -365,29 +365,12 @@ public class PlayerCharacter : Character
 
     public void OnTargetReached()
     {
-        //if (_drawnPath.Count == 0) // This happens when character was moved through keyboard
-        //{
-            if (!IsPressingMovementKey() && !_isPressingPointer)
-            {
-                _animationHandler.SetLocomotion(false);
-            }
-            SetHasCalculatedTarget(false);
-            IsMoving = false;
-            //return;
-        //}
-
-        //_drawnPath.RemoveAt(0);
-
-        // Reach the end of a drawn path
-        //if (_drawnPath.Count == 0)
-        //{
-        //    _animationHandler.SetLocomotion(false);
-        //    SetHasCalculatedTarget(false);
-        //    return;
-        //}
-
-        //// We are in a drawn path
-        //SetPointerLocomotionTarget(GridLocation.GridToVector(_drawnPath[0]));
+        if (!IsPressingMovementKey() && !_isPressingPointer)
+        {
+            _animationHandler.SetLocomotion(false);
+        }
+        SetHasCalculatedTarget(false);
+        IsMoving = false;
     }
 
     public void OnPlayerCaught()
@@ -401,17 +384,17 @@ public class PlayerCharacter : Character
             PhotonView.RPC("PunRPCCaughtByEnemy", RpcTarget.All);
         }
 
-        _isPressingPointer = false;
-    }
-
-    [PunRPC]
-    private void PunRPCCaughtByEnemy()
-    {
-        TimesCaught++;
-
         float freezeTime = 2.0f;
 
         IEnumerator coroutine = this.RespawnCharacter(this, freezeTime);
         StartCoroutine(coroutine);
+
+        _isPressingPointer = false;
+    }
+
+    [PunRPC] // the part all clients need to be informed about
+    private void PunRPCCaughtByEnemy()
+    {
+        TimesCaught++;
     }
 }
