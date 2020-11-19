@@ -15,9 +15,6 @@ public class CameraController : MonoBehaviour
 {
     public static CameraController Instance;
 
-    public GameObject PathDrawerGO;
-    public PathDrawer PathDrawer;
-
     private float _panSpeed;
     public bool FocussedOnPlayer = false;
     public static Dictionary<Direction, float> PanLimits = new Dictionary<Direction, float> { };
@@ -36,9 +33,6 @@ public class CameraController : MonoBehaviour
         Instance = this;
 
         Guard.CheckIsNull(_camera, "_camera", gameObject);
-        Guard.CheckIsNull(PathDrawer, "PathDrawer", gameObject);
-
-        Guard.CheckIsNull(PathDrawerGO, "PathDrawerGO", gameObject);
 
         _cameraBoundsOffset = _camera.ScreenToWorldPoint(new Vector3(
             Screen.width - (Screen.width * (1 - _maxXPercentageBoundary / 100f)),

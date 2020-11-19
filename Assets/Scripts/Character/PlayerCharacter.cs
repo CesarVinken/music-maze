@@ -1,8 +1,6 @@
 ﻿using UnityEngine;
 using Photon.Pun;
 using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
 using System;
 
 public class PlayerCharacter : Character
@@ -13,15 +11,17 @@ public class PlayerCharacter : Character
     public bool HasCalculatedPath = false;
     public bool HasReachedExit = false;
     public Tile LastTile;
-    private PathDrawer _pathDrawer;
 
     private Vector2 _mobileFingerDownPosition;
     [SerializeField] private GameObject _selectionIndicatorPrefab = null;
     [SerializeField] private GameObject _selectionIndicatorGO = null;
 
     public GridLocation CurrentGridLocation;
-    private List<GridLocation> _drawnPath = new List<GridLocation>();
     public int TimesCaught = 0;
+
+    private bool _isPressingPointer = false;
+    private float _pointerPresserTimer = 1;
+    private float _pointerPresserDelay = 0.25f;
 
     public event Action PlayerExitsEvent;
     public event Action PlayerCaughtEvent;
@@ -33,7 +33,8 @@ public class PlayerCharacter : Character
         base.Awake();
 
         gameObject.name = PhotonView.Owner == null ? "Player 1" : PhotonView.Owner?.NickName;
-
+        Logger.Log("do we have a game manageR? " + GameManager.Instance == null);
+        Logger.Log("do we have a GameType? " + GameManager.Instance.GameType);
         if (GameManager.Instance.GameType == GameType.Multiplayer)
         {
             if (PhotonNetwork.IsMasterClient)
@@ -52,6 +53,8 @@ public class PlayerCharacter : Character
             }
         }
         CharacterManager.Instance.MazePlayers.Add(PlayerNumber, this);
+
+        _pointerPresserTimer = _pointerPresserDelay;
     }
 
     public void Start()
@@ -69,8 +72,6 @@ public class PlayerCharacter : Character
             selectionIndicator.Setup(transform, this);
 
             SceneObjectManager.Instance.SceneObjects.Add(_selectionIndicatorGO);
-
-            _pathDrawer = CameraController.Instance.PathDrawer;
         }
     }
 
@@ -102,7 +103,45 @@ public class PlayerCharacter : Character
 
             // To be replaced with pathdrawing system.
             //CheckPointerInputOld();
-            CheckPointerInput();
+            //CheckPointerInputDrawingPathVersion();
+
+
+
+
+
+
+
+
+
+            if (Input.GetMouseButtonDown(0) &&  _pointerPresserTimer == 0)
+            {
+                //_isPressingPointer = true;
+                StartCoroutine(RunPointerPresserTimer());
+                //_pointerPresserTimerRunning = true;
+            }
+            if (Input.GetMouseButtonUp(0))
+            {
+                _isPressingPointer = false;
+                _pointerPresserTimer = 0;
+            }
+
+            if (_isPressingPointer)//only check after we are pressing for x seconds
+            {
+                CheckPointerInput();
+            }
+
+
+
+
+
+
+
+
+
+
+
+
+
 
             if (HasCalculatedTarget)
             {
@@ -111,71 +150,59 @@ public class PlayerCharacter : Character
         }
         if (_characterPath.reachedEndOfPath && IsMoving)
         {
-            Logger.Log("reach target");
+            Logger.Log("player reached target");
             OnTargetReached();
         }
     }
 
-    private void CheckPointerInput()
+    private IEnumerator RunPointerPresserTimer()
     {
-        if (Input.GetMouseButtonDown(0))
+        while(_pointerPresserTimer < _pointerPresserDelay)
         {
-            Vector2 tempFingerPosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-            GridLocation tempGridLocation = GridLocation.FindClosestGridTile(tempFingerPosition);
-
-            if(tempGridLocation.X == CurrentGridLocation.X && tempGridLocation.Y == CurrentGridLocation.Y)
-            {
-                PathDrawer.EnablePathDrawer(_pathDrawer);
-            }
+            yield return null;
+            _pointerPresserTimer += Time.deltaTime;
         }
 
-        if (_pathDrawer.IsDrawingPath && Input.GetMouseButtonUp(0))
-        {
-            _drawnPath = _pathDrawer.GetDrawnPath().ToList();
-            Logger.Log("retrieved path length i s {0}", _drawnPath.Count);
-
-            PathDrawer.DisablePathDrawer(_pathDrawer);
-            if (_drawnPath.Count > 1)
-            {
-                _drawnPath.RemoveAt(0);
-            }
-
-            SetPointerLocomotionTarget(GridLocation.GridToVector(_drawnPath[0]));
-        }
+        _isPressingPointer = true;
+        _pointerPresserTimer = 0;
     }
 
-    private void CheckPointerInputOld()
+    private void CheckPointerInput()
     {
-        if (GameManager.Instance.CurrentPlatform == Platform.PC)
-        {
-            if (Input.GetMouseButtonDown(0))
-            {
-                Vector2 target = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-                SetPointerLocomotionTarget(target);
-            }
-        }
-        else if (Input.touchCount > 0)
-        {
-            Touch touch = Input.GetTouch(0);
-            if (touch.phase == TouchPhase.Began)
-            {
-                _mobileFingerDownPosition = touch.position;
-            }
-            else if (touch.phase == TouchPhase.Ended || touch.phase == TouchPhase.Canceled)
-            {
-                Vector2 releaseDistance = _mobileFingerDownPosition - touch.position;
+        if (HasCalculatedTarget) return;
 
-                if ((releaseDistance.x < 12 && releaseDistance.x > -12) && (releaseDistance.y < 12 && releaseDistance.y > -12))  // tapping start position is roughly the same as the release position
-                {
-                    Vector2 target = Camera.main.ScreenToWorldPoint(touch.position);
-                    SetPointerLocomotionTarget(target);
-                }
-                else
-                {
-                    Logger.Log("{0} and {1}", _mobileFingerDownPosition, touch.position);
-                }
-            }
+        Vector2 tempFingerPosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+        GridLocation closestGridLocation = GridLocation.FindClosestGridTile(tempFingerPosition);
+
+        if (closestGridLocation.X == CurrentGridLocation.X && closestGridLocation.Y == CurrentGridLocation.Y) return;
+
+        GridLocation newLocomotionTarget = CurrentGridLocation;
+
+        Vector2 direction = tempFingerPosition - (Vector2)transform.position;
+        float angle = Vector2.SignedAngle(Vector2.up, direction) * -1;
+
+        new GridLocation(CurrentGridLocation.X, CurrentGridLocation.Y);
+        if (angle <= -135)  // go down
+        {
+            newLocomotionTarget = new GridLocation(CurrentGridLocation.X, CurrentGridLocation.Y - 1);
         }
+        else if (angle <= -45) // go left
+        {
+            newLocomotionTarget = new GridLocation(CurrentGridLocation.X - 1, CurrentGridLocation.Y);
+        }
+        else if (angle <= 45) // go up
+        {
+            newLocomotionTarget = new GridLocation(CurrentGridLocation.X, CurrentGridLocation.Y + 1);
+        }
+        else if (angle <= 135) // go right
+        {
+            newLocomotionTarget = new GridLocation(CurrentGridLocation.X + 1, CurrentGridLocation.Y);
+        }
+        else // go down
+        {
+            newLocomotionTarget = new GridLocation(CurrentGridLocation.X, CurrentGridLocation.Y - 1);
+        }
+        SetPointerLocomotionTarget(GridLocation.GridToVector(newLocomotionTarget));
     }
 
     private void SetPointerLocomotionTarget(Vector2 target)
@@ -314,9 +341,6 @@ public class PlayerCharacter : Character
     public void UpdateCurrentGridLocation(GridLocation gridLocation)
     {
         CurrentGridLocation = gridLocation;
-
-        if(_pathDrawer && _pathDrawer.isActiveAndEnabled)
-            _pathDrawer.PlayerCurrentGridLocationUpdated(gridLocation);
     }
 
     private bool IsPressingMovementKey()
@@ -341,29 +365,29 @@ public class PlayerCharacter : Character
 
     public void OnTargetReached()
     {
-        if (_drawnPath.Count == 0) // This happens when character was moved through keyboard
-        {
-            if (!IsPressingMovementKey())
+        //if (_drawnPath.Count == 0) // This happens when character was moved through keyboard
+        //{
+            if (!IsPressingMovementKey() && !_isPressingPointer)
             {
                 _animationHandler.SetLocomotion(false);
             }
             SetHasCalculatedTarget(false);
             IsMoving = false;
-            return;
-        }
+            //return;
+        //}
 
-        _drawnPath.RemoveAt(0);
+        //_drawnPath.RemoveAt(0);
 
         // Reach the end of a drawn path
-        if (_drawnPath.Count == 0)
-        {
-            _animationHandler.SetLocomotion(false);
-            SetHasCalculatedTarget(false);
-            return;
-        }
+        //if (_drawnPath.Count == 0)
+        //{
+        //    _animationHandler.SetLocomotion(false);
+        //    SetHasCalculatedTarget(false);
+        //    return;
+        //}
 
-        // We are in a drawn path
-        SetPointerLocomotionTarget(GridLocation.GridToVector(_drawnPath[0]));
+        //// We are in a drawn path
+        //SetPointerLocomotionTarget(GridLocation.GridToVector(_drawnPath[0]));
     }
 
     public void OnPlayerCaught()
@@ -377,7 +401,7 @@ public class PlayerCharacter : Character
             PhotonView.RPC("PunRPCCaughtByEnemy", RpcTarget.All);
         }
 
-        PathDrawer.DisablePathDrawer(_pathDrawer); //???? Possible bug. Does this mean the PathDrawer is disabled when the other player is caught? Check and fix if neccesary
+        _isPressingPointer = false;
     }
 
     [PunRPC]

@@ -18,8 +18,6 @@ public class GameManager : MonoBehaviourPunCallbacks
     public KeyboardConfiguration KeyboardConfiguration;
     public GameType GameType;
 
-    //public Pathfinding
-
     public GameObject GridGO;
     public GameObject AstarGO;
     
@@ -45,7 +43,7 @@ public class GameManager : MonoBehaviourPunCallbacks
         InitialiseLoggers();
 
         GameType = PhotonNetwork.PlayerList.Length == 0 ? GameType.SinglePlayer : GameType.Multiplayer;
-
+        Logger.Warning("We set the game type to " + GameType);
         if (Application.isMobilePlatform)
         {
             CurrentPlatform = Platform.Android;
@@ -63,19 +61,19 @@ public class GameManager : MonoBehaviourPunCallbacks
         Instantiate(CharacterManagerPrefab, transform);
         Instantiate(SpriteManagerPrefab, transform);
 
+
+
+    }
+
+    public void Start()
+    {
         MazeLevelData startUpMazeLevelData = MazeLevelLoader.LoadMazeLevelData("default");
 
         if (startUpMazeLevelData == null)
         {
             Logger.Error("Could not find the default level for startup");
         }
-
         MazeLevelLoader.LoadMazeLevel(startUpMazeLevelData);
-        //MazeLevelManager.Instance.SetupLevel(startUpMazeLevelData);
-    }
-
-    public void Start()
-    {
         // Temporarily turned off for testing purposes
         //if (!PhotonNetwork.IsConnected)
         //{

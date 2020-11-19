@@ -87,12 +87,12 @@ public class MazeLevelManager : MonoBehaviour, IOnEventCallback
 
     public IEnumerator ScanCoroutine()
     {
+        yield return new WaitForSeconds(.2f); // This waiting time should be dealt with more efficiently. Currently it is there to make sure that the characters are spawned in 
         MainCanvas.Instance.BlackOutSquare.ResetToDefault();
         CharacterManager.Instance.SpawnCharacters();
         CameraController.Instance.SetPanLimits(Level.LevelBounds);
         CameraController.Instance.FocusOnPlayer();
 
-        yield return new WaitForSeconds(.2f);
         AstarPath.active.Scan();    // We should only scan once all the tiles are loaded with their correct (walkable) attributes and obstacles
         yield return new WaitForSeconds(.4f);
 
