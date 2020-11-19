@@ -1917,7 +1917,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b66496faff9c4e5469802393be9710b6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ConsolePrefab: {fileID: 8446523261438736192, guid: 08ce92e9be8c58342a3b3e0a53f74454,
+  _consolePrefab: {fileID: 8446523261438736192, guid: 08ce92e9be8c58342a3b3e0a53f74454,
     type: 3}
   ConsoleGO: {fileID: 0}
 --- !u!224 &451462792

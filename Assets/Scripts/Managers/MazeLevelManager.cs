@@ -1,6 +1,7 @@
 ﻿using ExitGames.Client.Photon;
 using Photon.Pun;
 using Photon.Realtime;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -20,6 +21,25 @@ public class MazeLevelManager : MonoBehaviour, IOnEventCallback
     public GameObject EnemySpawnpointPrefab;
 
     public int NumberOfUnmarkedTiles = -1;
+
+    public GameObject GetTileAttributePrefab<T>() where T : IMazeTileAttribute
+    {
+        switch (typeof(T))
+        {
+            case Type playerExit when playerExit == typeof(PlayerExit):
+                return PlayerExitPrefab;
+            case Type tileObstacle when tileObstacle == typeof(TileObstacle):
+                return TileObstaclePrefab;
+            case Type playerSpawnpoint when playerSpawnpoint == typeof(PlayerSpawnpoint):
+                return PlayerSpawnpointPrefab;
+            case Type enemySpawnpoint when enemySpawnpoint == typeof(EnemySpawnpoint):
+                return EnemySpawnpointPrefab;
+
+            default:
+                Logger.Error($"Could not find a prefab for the tile attribute type of {typeof(T)}");
+                return null ;
+        }
+    }
 
     public void Awake()
     {

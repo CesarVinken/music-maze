@@ -12,17 +12,19 @@ public class EditorEnemySpawnpointTileAttribute : IEditorMazeTileAttribute
     public void PlaceAttribute(Tile tile)
     {
         TileAttributePlacer tileAttributePlacer = new TileAttributePlacer(tile);
+        TileAttributeRemover tileAttributeRemover = new TileAttributeRemover(tile);
+
         IMazeTileAttribute enemySpawnpoint = (EnemySpawnpoint)tile.MazeTileAttributes.FirstOrDefault(attribute => attribute is EnemySpawnpoint);
         if (enemySpawnpoint == null)
         {
-            tileAttributePlacer.RemoveTileObstacle();
-            tileAttributePlacer.RemovePlayerExit();
-            tileAttributePlacer.RemovePlayerSpawnpoint();
+            tileAttributeRemover.RemoveTileObstacle();
+            tileAttributeRemover.RemovePlayerExit();
+            tileAttributeRemover.RemovePlayerSpawnpoint();
 
             tileAttributePlacer.PlaceEnemySpawnpoint();
             return;
         }
 
-        tileAttributePlacer.RemoveEnemySpawnpoint();
+        tileAttributeRemover.RemoveEnemySpawnpoint();
     }
 }
