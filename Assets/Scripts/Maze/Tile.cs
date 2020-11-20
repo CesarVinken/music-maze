@@ -4,8 +4,10 @@ using UnityEngine;
 
 public class Tile : MonoBehaviour
 {
-    public SpriteRenderer SpriteRenderer;
-    public Sprite Sprite;
+    public Transform BackgroundsContainer;
+
+    //public SpriteRenderer SpriteRenderer;
+    //public Sprite Sprite;
     public SpriteRenderer PlayerMarkRenderer;
 
     public string TileId;
@@ -14,12 +16,13 @@ public class Tile : MonoBehaviour
     public GridLocation GridLocation;
     public PlayerMark PlayerMark = null;
 
-    public List<IMazeTileAttribute> MazeTileAttributes = new List<IMazeTileAttribute>();
+    [SerializeField] public List<IMazeTileBackground> MazeTileBackgrounds = new List<IMazeTileBackground>();
+    [SerializeField] public List<IMazeTileAttribute> MazeTileAttributes = new List<IMazeTileAttribute>();
     public Dictionary<ObjectDirection, Tile> Neighbours = new Dictionary<ObjectDirection, Tile>();
 
     public void Awake()
     {
-        Guard.CheckIsNull(SpriteRenderer, "SpriteRenderer", gameObject);
+        Guard.CheckIsNull(BackgroundsContainer, "BackgroundsContainer", gameObject);
 
         if (transform.position.y < 0) Logger.Error("There is a tile at {0},{1}. Tiles cannot have negative Y values", transform.position.x, transform.position.y);
     }
@@ -80,9 +83,13 @@ public class Tile : MonoBehaviour
         }
     }
 
-    public void SetSprite()
+    public void SetBackgroundSprites()
     {
-        Sprite = SpriteRenderer.sprite;
+        //TODO: pass on connection score
+        GameObject backgroundGO = Instantiate(MazeLevelManager.Instance.TileBackgroundPrefab, transform);
+        MazeTileBackground background = backgroundGO.GetComponent<MazeTileBackground>();
+        background.SetSprite(0); // TODO
+        MazeTileBackgrounds.Add(background as IMazeTileBackground);
     }
 
     public void AddNeighbours(MazeLevel level)

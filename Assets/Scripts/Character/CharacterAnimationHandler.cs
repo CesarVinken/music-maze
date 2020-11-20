@@ -33,8 +33,7 @@ public class CharacterAnimationHandler : MonoBehaviour
     }
 
     public void SetLocomotion(bool value)
-    {
-        Logger.Log($"Locomotion is now {value}");
+    {   
         InLocomotion = value;
     }
 

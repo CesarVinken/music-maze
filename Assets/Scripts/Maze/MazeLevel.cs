@@ -55,7 +55,7 @@ public class MazeLevel
             Tile tile = tileGO.GetComponent<Tile>();
             tile.SetGridLocation(serialisableTile.GridLocationX, serialisableTile.GridLocationY);
             tile.SetId(serialisableTile.Id);
-            tile.SetSprite();
+            tile.SetBackgroundSprites();
 
             tileGO.name = "Tile" + tile.GridLocation.X + ", " + tile.GridLocation.Y;
             tileGO.transform.position = GridLocation.GridToVector(tile.GridLocation);

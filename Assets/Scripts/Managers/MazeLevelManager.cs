@@ -15,10 +15,12 @@ public class MazeLevelManager : MonoBehaviour, IOnEventCallback
     public List<CharacterSpawnpoint> EnemyCharacterSpawnpoints = new List<CharacterSpawnpoint>();
     
     public GameObject TilePrefab;
+    public GameObject TileBackgroundPrefab;
     public GameObject TileObstaclePrefab;
     public GameObject PlayerExitPrefab;
     public GameObject PlayerSpawnpointPrefab;
     public GameObject EnemySpawnpointPrefab;
+
 
     public int NumberOfUnmarkedTiles = -1;
 
@@ -44,6 +46,7 @@ public class MazeLevelManager : MonoBehaviour, IOnEventCallback
     public void Awake()
     {
         Guard.CheckIsNull(TilePrefab, "TilePrefab", gameObject);
+        Guard.CheckIsNull(TileBackgroundPrefab, "TileBackgroundPrefab", gameObject);
         Guard.CheckIsNull(TileObstaclePrefab, "TileObstaclePrefab", gameObject);
         Guard.CheckIsNull(PlayerExitPrefab, "PlayerExitPrefab", gameObject);
         Guard.CheckIsNull(PlayerSpawnpointPrefab, "PlayerSpawnpointPrefab", gameObject);

@@ -7,6 +7,7 @@ public class SpriteManager : MonoBehaviour
     public static SpriteManager Instance;
 
     public Sprite[] DefaultDoor;
+    public Sprite[] DefaultPath;
     public Sprite[] DefaultWall;
 
     public void Awake()
