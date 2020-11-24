@@ -33,6 +33,7 @@ public class MazeLevel
 
         _mazeContainer = new GameObject(MazeName);
         _mazeContainer.transform.SetParent(GameManager.Instance.GridGO.transform);
+        _mazeContainer.transform.position = new Vector3(0, 0, 0);
         _mazeContainer.AddComponent<TilesContainer>();
         _mazeContainer.SetActive(true);
 

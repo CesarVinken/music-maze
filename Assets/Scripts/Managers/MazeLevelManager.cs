@@ -16,6 +16,7 @@ public class MazeLevelManager : MonoBehaviour, IOnEventCallback
     
     public GameObject TilePrefab;
     public GameObject TileBackgroundPrefab;
+    public GameObject TilePathPrefab;
     public GameObject TileObstaclePrefab;
     public GameObject PlayerExitPrefab;
     public GameObject PlayerSpawnpointPrefab;
@@ -47,6 +48,7 @@ public class MazeLevelManager : MonoBehaviour, IOnEventCallback
     {
         Guard.CheckIsNull(TilePrefab, "TilePrefab", gameObject);
         Guard.CheckIsNull(TileBackgroundPrefab, "TileBackgroundPrefab", gameObject);
+        Guard.CheckIsNull(TilePathPrefab, "TilePathPrefab", gameObject);
         Guard.CheckIsNull(TileObstaclePrefab, "TileObstaclePrefab", gameObject);
         Guard.CheckIsNull(PlayerExitPrefab, "PlayerExitPrefab", gameObject);
         Guard.CheckIsNull(PlayerSpawnpointPrefab, "PlayerSpawnpointPrefab", gameObject);

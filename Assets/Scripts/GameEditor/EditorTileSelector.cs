@@ -1,5 +1,4 @@
-﻿using System.Linq;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class EditorTileSelector : MonoBehaviour
 {
@@ -12,11 +11,11 @@ public class EditorTileSelector : MonoBehaviour
             _currentSelectedLocation = value;
             transform.position = new Vector2(_currentSelectedLocation.X, _currentSelectedLocation.Y);
 
-            _lineRenderer.SetPosition(0, new Vector2(transform.position.x, transform.position.y));
-            _lineRenderer.SetPosition(1, new Vector2(transform.position.x + 1, transform.position.y));
-            _lineRenderer.SetPosition(2, new Vector2(transform.position.x + 1, transform.position.y + 1));
-            _lineRenderer.SetPosition(3, new Vector2(transform.position.x, transform.position.y + 1));
-            _lineRenderer.SetPosition(4, new Vector2(transform.position.x, transform.position.y));
+            _lineRenderer.SetPosition(0, new Vector3(transform.position.x, transform.position.y));
+            _lineRenderer.SetPosition(1, new Vector3(transform.position.x + 1, transform.position.y));
+            _lineRenderer.SetPosition(2, new Vector3(transform.position.x + 1, transform.position.y + 1));
+            _lineRenderer.SetPosition(3, new Vector3(transform.position.x, transform.position.y + 1));
+            _lineRenderer.SetPosition(4, new Vector3(transform.position.x, transform.position.y));
         }
     }
 
@@ -60,8 +59,7 @@ public class EditorTileSelector : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Return))
         {
             Logger.Log("Do something to tile {0}, {1}", CurrentSelectedLocation.X, CurrentSelectedLocation.Y);
-            EditorMazeTileAttributeType attributeType = EditorManager.SelectedMazeTileAttributeType;
-            PlaceMazeTileAttribute(attributeType, CurrentSelectedLocation);
+            PlaceMazeTileModifier();
         }
     }
 
@@ -98,13 +96,36 @@ public class EditorTileSelector : MonoBehaviour
         return true;
     }
 
-    public void PlaceMazeTileAttribute(EditorMazeTileAttributeType attributeType, GridLocation gridLocation)
+    private void PlaceMazeTileModifier()
     {
-        IEditorMazeTileAttribute attribute = EditorSelectedAttributeContainer.Instance.EditorMazeTileAttributes.FirstOrDefault(a => a.AttributeType == attributeType);
+        EditorMazeTileModifierType editorMazeTileModifierType = EditorManager.SelectedMazeTileModifierType;
 
-        if (attribute == null) Logger.Error($"Could not find the attribute type {attributeType}");
+        if(editorMazeTileModifierType == EditorMazeTileModifierType.Attribute)
+        {
+            IEditorMazeTileAttribute attribute = EditorSelectedModifierContainer.Instance.EditorMazeTileAttributes[EditorManager.SelectedMazeTileAttributeModifierIndex];
+            PlaceMazeTileAttribute(CurrentSelectedLocation, attribute);
+        }
+        else
+        {
+            IEditorMazeTileBackground background = EditorSelectedModifierContainer.Instance.EditorMazeTileBackgrounds[EditorManager.SelectedMazeTileBackgroundModifierIndex];
+            Logger.Warning("TO BE IMPLEMENTED");
+            PlaceMazeTileBackground(CurrentSelectedLocation, background);
+        }
+    }
+
+    private void PlaceMazeTileAttribute(GridLocation gridLocation, IEditorMazeTileAttribute attribute)
+    {
+        if (attribute == null) Logger.Error($"Could not find the attribute type {attribute.GetType()}");
 
         MazeLevelManager.Instance.Level.TilesByLocation.TryGetValue(gridLocation, out Tile tile);
         attribute.PlaceAttribute(tile);
+    }
+
+    private void PlaceMazeTileBackground(GridLocation gridLocation, IEditorMazeTileBackground background)
+    {
+        if (background == null) Logger.Error($"Could not find the background type {background.GetType()}");
+
+        MazeLevelManager.Instance.Level.TilesByLocation.TryGetValue(gridLocation, out Tile tile);
+        background.PlaceBackground(tile);
     }
 }

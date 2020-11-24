@@ -1,15 +1,11 @@
 ﻿using System.Linq;
-using UnityEngine;
 
-public class EditorPlayerExitTileAttribute : IEditorMazeTileAttribute
+public class EditorPlayerExitTileAttribute : EditorMazeTileAttributeModifier
 {
-    public string Name { get => "Player Exit"; }
+    public override string Name { get => "Player Exit"; }
 
-    public Sprite Sprite { get => null; }
 
-    public EditorMazeTileAttributeType AttributeType { get => EditorMazeTileAttributeType.PlayerExit; }
-
-    public void PlaceAttribute(Tile tile)
+    public override void PlaceAttribute(Tile tile)
     {
         TileAttributePlacer tileAttributePlacer = new TileAttributePlacer(tile);
         TileAttributeRemover tileAttributeRemover = new TileAttributeRemover(tile);

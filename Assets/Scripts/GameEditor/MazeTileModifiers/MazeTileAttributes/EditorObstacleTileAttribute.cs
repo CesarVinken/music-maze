@@ -1,14 +1,10 @@
 ﻿using System.Linq;
-using UnityEngine;
 
-public class EditorObstacleTileAttribute : IEditorMazeTileAttribute
+public class EditorObstacleTileAttribute : EditorMazeTileAttributeModifier
 {
-    public string Name { get => "Obstacle"; }
-    public Sprite Sprite { get => null; }
+    public override string Name { get => "Obstacle"; }
 
-    public EditorMazeTileAttributeType AttributeType { get => EditorMazeTileAttributeType.Obstacle; }
-
-    public void PlaceAttribute(Tile tile)
+    public override void PlaceAttribute(Tile tile)
     {
         TileAttributePlacer tileAttributePlacer = new TileAttributePlacer(tile);
         TileAttributeRemover tileAttributeRemover = new TileAttributeRemover(tile);

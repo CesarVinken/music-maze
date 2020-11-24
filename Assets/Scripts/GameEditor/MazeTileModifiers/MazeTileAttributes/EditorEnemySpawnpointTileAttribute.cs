@@ -1,15 +1,10 @@
 ﻿using System.Linq;
-using UnityEngine;
 
-public class EditorEnemySpawnpointTileAttribute : IEditorMazeTileAttribute
+public class EditorEnemySpawnpointTileAttribute : EditorMazeTileAttributeModifier
 {
-    public string Name { get => "Enemy Spawnpoint"; }
+    public override string Name { get => "Enemy Spawnpoint"; }
 
-    public Sprite Sprite { get => null; }
-
-    public EditorMazeTileAttributeType AttributeType { get => EditorMazeTileAttributeType.EnemySpawnpoint; }
-
-    public void PlaceAttribute(Tile tile)
+    public override void PlaceAttribute(Tile tile)
     {
         TileAttributePlacer tileAttributePlacer = new TileAttributePlacer(tile);
         TileAttributeRemover tileAttributeRemover = new TileAttributeRemover(tile);

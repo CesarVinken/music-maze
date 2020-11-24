@@ -1,4 +1,5 @@
-﻿public static class EditorManager
+﻿
+public static class EditorManager
 {
     private static bool _inEditor = false;
     public static bool InEditor
@@ -11,8 +12,11 @@
         }
     }
 
-    //public static MazeLevel EditorLevel = null;
-    public static EditorMazeTileAttributeType SelectedMazeTileAttributeType;
+    public static EditorMazeTileModifierType SelectedMazeTileModifierType; // Are we selecting an Attribute or a Background?
+    public static IEditorMazeTileModifierType SelectedMazeTileModifier;
+
+    public static int SelectedMazeTileAttributeModifierIndex;
+    public static int SelectedMazeTileBackgroundModifierIndex;
 
     public static void ToggleEditorMode()
     {

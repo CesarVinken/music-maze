@@ -86,10 +86,22 @@ public class Tile : MonoBehaviour
     public void SetBackgroundSprites()
     {
         //TODO: pass on connection score
-        GameObject backgroundGO = Instantiate(MazeLevelManager.Instance.TileBackgroundPrefab, transform);
-        MazeTileBackground background = backgroundGO.GetComponent<MazeTileBackground>();
-        background.SetSprite(0); // TODO
-        MazeTileBackgrounds.Add(background as IMazeTileBackground);
+
+        int connectionScore = 0;
+
+        //TODO path sprite should not be set if there is no path.
+        GameObject pathGO = Instantiate(MazeLevelManager.Instance.TilePathPrefab, transform);
+        MazeTilePath path = pathGO.GetComponent<MazeTilePath>();
+        path.SetSprite(connectionScore);
+        MazeTileBackgrounds.Add(path as IMazeTileBackground);
+
+        if (connectionScore != 15) // TODO also don't add background for fully covering wall tiles
+        {
+            GameObject backgroundGO = Instantiate(MazeLevelManager.Instance.TileBackgroundPrefab, transform);
+            MazeTileBackground background = backgroundGO.GetComponent<MazeTileBackground>();
+            background.SetSprite(); // background is currently always the default grass background
+            MazeTileBackgrounds.Add(background as IMazeTileBackground);
+        }
     }
 
     public void AddNeighbours(MazeLevel level)

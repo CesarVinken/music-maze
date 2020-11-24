@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class SpriteManager : MonoBehaviour
 {
@@ -9,6 +7,7 @@ public class SpriteManager : MonoBehaviour
     public Sprite[] DefaultDoor;
     public Sprite[] DefaultPath;
     public Sprite[] DefaultWall;
+    public Sprite[] DefaultMazeTileBackground;
 
     public void Awake()
     {
