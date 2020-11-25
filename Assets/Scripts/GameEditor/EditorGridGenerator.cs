@@ -110,6 +110,7 @@ public class EditorGridGenerator : MonoBehaviour
 
                 GridLocation gridLocation = new GridLocation(i, j);
                 List<SerialisableTileAttribute> tileAttributes = new List<SerialisableTileAttribute>();
+                List<SerialisableTileBackground> tileBackgrounds = new List<SerialisableTileBackground>();
 
                 SerialisableTileAttribute edgeObstacle = TryAddEdgeObstacle(gridLocation);
 
@@ -118,7 +119,14 @@ public class EditorGridGenerator : MonoBehaviour
                     tileAttributes.Add(edgeObstacle);
                 }
 
-                SerialisableTile tile = new SerialisableTile(tileId, tileAttributes, gridLocation.X, gridLocation.Y);
+                SerialisableTileBackground mazeTilePath = TryAddNewMazePath(gridLocation);
+
+                if (mazeTilePath != null)
+                {
+                    tileBackgrounds.Add(mazeTilePath);
+                }
+
+                SerialisableTile tile = new SerialisableTile(tileId, tileAttributes, tileBackgrounds, gridLocation.X, gridLocation.Y);
                 tiles.Add(tile);
             }
         }

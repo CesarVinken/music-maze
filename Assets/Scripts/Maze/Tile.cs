@@ -87,7 +87,7 @@ public class Tile : MonoBehaviour
     {
         //TODO: pass on connection score
 
-        int connectionScore = 0;
+        int connectionScore = 1;
 
         //TODO path sprite should not be set if there is no path.
         GameObject pathGO = Instantiate(MazeLevelManager.Instance.TilePathPrefab, transform);
@@ -99,7 +99,7 @@ public class Tile : MonoBehaviour
         {
             GameObject backgroundGO = Instantiate(MazeLevelManager.Instance.TileBackgroundPrefab, transform);
             MazeTileBackground background = backgroundGO.GetComponent<MazeTileBackground>();
-            background.SetSprite(); // background is currently always the default grass background
+            background.SetSprite(-1); // background is currently always the default grass background. Connection score of -1 is temporary
             MazeTileBackgrounds.Add(background as IMazeTileBackground);
         }
     }
@@ -146,5 +146,22 @@ public class Tile : MonoBehaviour
         }
         Logger.Log($"found tileObstacle {tileObstacle.ObstacleType} on {GridLocation.X},{GridLocation.Y}");
         return tileObstacle;
+    }
+
+    public MazeTilePath TryGetTilePath()
+    {
+        for (int i = 0; i < MazeTileBackgrounds.Count; i++)
+        {
+            Logger.Log($"found background for {GridLocation.X}, {GridLocation.Y} is {MazeTileBackgrounds[i].GetType()}!");
+        }
+        MazeTilePath mazeTilePath = (MazeTilePath)MazeTileBackgrounds.FirstOrDefault(background => background is MazeTilePath);
+
+        if (mazeTilePath == null)
+        {
+            Logger.Log($"did not find a maze tile path on {GridLocation.X},{GridLocation.Y}");
+            return null;
+        }
+        Logger.Log($"found maze tile path {mazeTilePath.MazeTilePathType} on {GridLocation.X},{GridLocation.Y}");
+        return mazeTilePath;
     }
 }

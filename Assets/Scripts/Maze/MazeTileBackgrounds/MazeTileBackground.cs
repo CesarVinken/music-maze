@@ -1,11 +1,11 @@
 ﻿using UnityEngine;
 
-public class MazeTileBackground : MonoBehaviour
+public class MazeTileBackground : MonoBehaviour, IMazeTileBackground
 {
     [SerializeField] private Sprite _sprite;
     [SerializeField] private SpriteRenderer _spriteRenderer;
 
-    public void SetSprite()
+    public void SetSprite(int connectionScore)
     {
         _sprite = SpriteManager.Instance.DefaultMazeTileBackground[0];
         _spriteRenderer.sprite = _sprite;

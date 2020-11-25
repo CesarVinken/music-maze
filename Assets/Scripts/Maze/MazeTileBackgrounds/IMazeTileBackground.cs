@@ -1,4 +1,4 @@
 ﻿public interface IMazeTileBackground
 {
-    void SetSprite();
+    void SetSprite(int conectionScore);
 }

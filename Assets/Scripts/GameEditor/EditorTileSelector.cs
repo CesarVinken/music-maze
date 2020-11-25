@@ -108,7 +108,6 @@ public class EditorTileSelector : MonoBehaviour
         else
         {
             IEditorMazeTileBackground background = EditorSelectedModifierContainer.Instance.EditorMazeTileBackgrounds[EditorManager.SelectedMazeTileBackgroundModifierIndex];
-            Logger.Warning("TO BE IMPLEMENTED");
             PlaceMazeTileBackground(CurrentSelectedLocation, background);
         }
     }
