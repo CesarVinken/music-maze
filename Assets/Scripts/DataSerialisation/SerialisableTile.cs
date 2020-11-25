@@ -6,6 +6,7 @@ public class SerialisableTile
 {
     public string Id;
     public List<SerialisableTileAttribute> TileAttributes;
+    public List<SerialisableTileBackground> TileBackgrounds;
 
     public int GridLocationX;
     public int GridLocationY;
@@ -14,14 +15,16 @@ public class SerialisableTile
     {
         Id = tile.TileId;
         TileAttributes = SerialiseTileAttributes(tile);
+        TileBackgrounds = SerialiseTileBackgrounds(tile);
         GridLocationX = tile.GridLocation.X;
         GridLocationY = tile.GridLocation.Y;
     }
 
-    public SerialisableTile(string id, List<SerialisableTileAttribute> tileAttributes, int gridLocationX, int gridLocationY)
+    public SerialisableTile(string id, List<SerialisableTileAttribute> tileAttributes, List<SerialisableTileBackground> tileBackgrounds, int gridLocationX, int gridLocationY)
     {
         Id = id;
         TileAttributes = tileAttributes;
+        TileBackgrounds = tileBackgrounds;
         GridLocationX = gridLocationX;
         GridLocationY = gridLocationY;
     }
@@ -56,7 +59,33 @@ public class SerialisableTile
                 SerialisableEnemySpawnpointAttribute serialisableEnemySpawnpointAttribute = new SerialisableEnemySpawnpointAttribute();
                 tileAttributes.Add(serialisableEnemySpawnpointAttribute);
             }
+            else
+            {
+                Logger.Error($"Could not serialise the tile attribute {tileAttribute.GetType()}");
+            }
         }
         return tileAttributes;
+    }
+
+    private List<SerialisableTileBackground> SerialiseTileBackgrounds(Tile tile)
+    {
+        List<SerialisableTileBackground> tilebackgrounds = new List<SerialisableTileBackground>();
+
+        foreach (IMazeTileBackground tileBackground in tile.MazeTileBackgrounds)
+        {
+            if (tileBackground.GetType() == typeof(MazeTilePath))
+            {
+                MazeTilePath mazeTilePath = tileBackground as MazeTilePath;
+                SerialisableTilePathBackground serialisedTilePathBackground =
+                    new SerialisableTilePathBackground(mazeTilePath.PathConnectionScore);
+                tilebackgrounds.Add(serialisedTilePathBackground);
+            }
+            else
+            {
+                Logger.Error($"Could not serialise the tile background {tileBackground.GetType()}");
+            }
+        }
+
+        return tilebackgrounds;
     }
 }

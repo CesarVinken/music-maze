@@ -16,6 +16,7 @@ public class TileAttributePlacer
         return tileAttributeGO.GetComponent<T>();
     }
 
+    // called in editor when calculations are needed
     public void PlacePlayerExit(ObstacleType obstacleType)
     {
         int obstacleConnectionScore = NeighbourTileCalculator.MapNeighbourObstaclesOfTile(_tile, obstacleType, true);
@@ -51,7 +52,7 @@ public class TileAttributePlacer
         }
     }
 
-    // Called in game
+    // Called in game when we already have the connection score
     public void PlacePlayerExit(ObstacleType obstacleType, int obstacleConnectionScore)
     {
         PlayerExit playerExit = (PlayerExit)InstantiateTileAttributeGO<PlayerExit>();

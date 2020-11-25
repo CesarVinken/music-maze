@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -119,12 +120,21 @@ public class EditorGridGenerator : MonoBehaviour
                     tileAttributes.Add(edgeObstacle);
                 }
 
-                SerialisableTileBackground mazeTilePath = TryAddNewMazePath(gridLocation);
+                SerialisableTileBackground mazeTilePath = TryAddPathsForNewMaze(gridLocation, tileAttributes);
 
                 if (mazeTilePath != null)
                 {
                     tileBackgrounds.Add(mazeTilePath);
                 }
+
+                //TODO
+                //SerialisableTileBackground baseBackground = TryAddBaseBackgroundForNewMazetileAttributes();
+
+                //if (baseBackground != null)
+                //{
+                //    tileBackgrounds.Add(mazeTilePath);
+                //}
+                //TODO
 
                 SerialisableTile tile = new SerialisableTile(tileId, tileAttributes, tileBackgrounds, gridLocation.X, gridLocation.Y);
                 tiles.Add(tile);
@@ -133,6 +143,7 @@ public class EditorGridGenerator : MonoBehaviour
 
         MazeLevelData newMazeLevelData = new MazeLevelData();
         newMazeLevelData.Tiles = tiles;
+
         MazeLevelLoader.LoadMazelLevelForEditor(newMazeLevelData);
     }
 
@@ -249,4 +260,74 @@ public class EditorGridGenerator : MonoBehaviour
 
         return null;
     }
+
+    private SerialisableTileBackground TryAddPathsForNewMaze(GridLocation gridLocation, List<SerialisableTileAttribute> tileAttributes)
+    {
+        bool hasObstacleAttribute = tileAttributes.Any(attribute => attribute.TileAttributeId == SerialisableTileAttribute.ObstacleAttributeCode);
+
+        if (hasObstacleAttribute)
+        {
+            return null;
+        }
+
+
+        if (gridLocation.X == 1)
+        {
+            if (gridLocation.Y == 1) // Bottom left
+            {
+                return new SerialisableTilePathBackground(23);
+            }
+            else if (gridLocation.Y == _gridHeight - 2) // Top left
+            {
+                return new SerialisableTilePathBackground(21);
+            }
+            else // Colomn left
+            {
+                return new SerialisableTilePathBackground(32);
+            }
+        }
+        else if (gridLocation.X == _gridWidth - 2)
+        {
+            if (gridLocation.Y == 1) // Bottom right
+            {
+                return new SerialisableTilePathBackground(26);
+            }
+            else if (gridLocation.Y == _gridHeight - 2) // Top right
+            {
+                return new SerialisableTilePathBackground(25);
+            }
+            else // Colomn right
+            {
+                return new SerialisableTilePathBackground(34);
+            }
+        }
+        else if (gridLocation.Y == 1) // Bottom row
+        {
+            return new SerialisableTilePathBackground(33);
+        }
+        else if (gridLocation.Y == _gridHeight - 2) // Top row
+        {
+            return new SerialisableTilePathBackground(31);
+        }
+
+        return new SerialisableTilePathBackground(16);
+    }
+
+    //// return a base background, except for tiles that are completely covered by an obstacle (with connections to all sides)
+    //private SerialisableTileBackground TryAddBaseBackgroundForNewMaze(List<SerialisableTileAttribute> tileAttributes)
+    //{
+    //    SerialisableTileAttribute obstacleAttribute = tileAttributes.FirstOrDefault(attribute => attribute.TileAttributeId == SerialisableTileAttribute.ObstacleAttributeCode);
+
+    //    if(obstacleAttribute == null)
+    //    {
+    //        return new SerialisableTileBaseBackground();
+    //    }
+
+    //    if(obstacleAttribute.ObstacleConnectionScore == 16)
+    //    {
+    //        return null;
+    //    }
+
+    //    return new SerialisableTileBaseBackground();
+    //}
 }

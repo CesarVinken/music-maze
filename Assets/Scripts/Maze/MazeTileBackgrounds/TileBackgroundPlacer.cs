@@ -10,12 +10,7 @@ public class TileBackgroundPlacer
         _tile = tile;
     }
 
-    //private IMazeTileAttribute InstantiateTileBackgroundGO<T>() where T : IMazeTileAttribute
-    //{
-    //    GameObject tileAttributeGO = GameObject.Instantiate(MazeLevelManager.Instance.GetTileAttributePrefab<T>(), _tile.transform);
-    //    return tileAttributeGO.GetComponent<T>();
-    //}
-
+    // Called in the editor, when we need to update the connection score
     public void PlacePath(MazeTilePathType mazeTilePathType)
     {
         Logger.Warning("Start placing path.....");
@@ -24,7 +19,7 @@ public class TileBackgroundPlacer
         GameObject mazeTilePathGO = GameObject.Instantiate(MazeLevelManager.Instance.TilePathPrefab, _tile.transform);
         MazeTilePath mazeTilePath = mazeTilePathGO.GetComponent<MazeTilePath>();
         mazeTilePath.WithPathType(MazeTilePathType.Default);
-        mazeTilePath.SetSprite(pathConnectionScore);
+        mazeTilePath.WithPathConnectionScore(pathConnectionScore);
         _tile.MazeTileBackgrounds.Add(mazeTilePath as IMazeTileBackground);
 
         // Update pathConnections for neighbouring tiles
@@ -41,5 +36,16 @@ public class TileBackgroundPlacer
             //update connection score on neighbour
             tilePathOnNeighbour.WithPathConnectionScore(mazeTilePathConnectionScoreOnNeighbour);
         }
+    }
+
+    // Called in game when we already have the connection score
+    public void PlacePath(MazeTilePathType mazeTilePathType, int pathConnectionScore)
+    {
+        GameObject mazeTilePathGO = GameObject.Instantiate(MazeLevelManager.Instance.TilePathPrefab, _tile.transform);
+        MazeTilePath mazeTilePath = mazeTilePathGO.GetComponent<MazeTilePath>();
+        mazeTilePath.WithPathType(mazeTilePathType);
+        mazeTilePath.WithPathConnectionScore(pathConnectionScore);
+
+        _tile.MazeTileBackgrounds.Add(mazeTilePath);
     }
 }

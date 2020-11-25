@@ -25,15 +25,15 @@ public class NeighbourTileCalculator
                 if (tilePath != null && tilePath.MazeTilePathType == pathType)
                 {
                     // Check if the neighbour has a Full connection width on its left side (so the right side connection for THIS tile)
-                    if (tilePath._pathConnectionScore == 16 ||
-                        tilePath._pathConnectionScore == 19 ||
-                        tilePath._pathConnectionScore == 22 ||
-                        tilePath._pathConnectionScore == 25 ||
-                        tilePath._pathConnectionScore == 26 ||
-                        tilePath._pathConnectionScore == 29 ||
-                        tilePath._pathConnectionScore == 31 ||
-                        tilePath._pathConnectionScore == 33 ||
-                        tilePath._pathConnectionScore == 34)
+                    if (tilePath.PathConnectionScore == 16 ||
+                        tilePath.PathConnectionScore == 19 ||
+                        tilePath.PathConnectionScore == 22 ||
+                        tilePath.PathConnectionScore == 25 ||
+                        tilePath.PathConnectionScore == 26 ||
+                        tilePath.PathConnectionScore == 29 ||
+                        tilePath.PathConnectionScore == 31 ||
+                        tilePath.PathConnectionScore == 33 ||
+                        tilePath.PathConnectionScore == 34)
                     {
                         pathRight = TileConnectionWidth.Full;
                     }
@@ -48,15 +48,15 @@ public class NeighbourTileCalculator
                 MazeTilePath tilePath = neighbour.Value.TryGetTilePath();
                 if (tilePath != null && tilePath.MazeTilePathType == pathType)
                 {
-                    if (tilePath._pathConnectionScore == 16 ||
-                        tilePath._pathConnectionScore == 20 ||
-                        tilePath._pathConnectionScore == 23 ||
-                        tilePath._pathConnectionScore == 24 ||
-                        tilePath._pathConnectionScore == 26 ||
-                        tilePath._pathConnectionScore == 30 ||
-                        tilePath._pathConnectionScore == 32 ||
-                        tilePath._pathConnectionScore == 33 ||
-                        tilePath._pathConnectionScore == 34)
+                    if (tilePath.PathConnectionScore == 16 ||
+                        tilePath.PathConnectionScore == 20 ||
+                        tilePath.PathConnectionScore == 23 ||
+                        tilePath.PathConnectionScore == 24 ||
+                        tilePath.PathConnectionScore == 26 ||
+                        tilePath.PathConnectionScore == 30 ||
+                        tilePath.PathConnectionScore == 32 ||
+                        tilePath.PathConnectionScore == 33 ||
+                        tilePath.PathConnectionScore == 34)
                     {
                         pathDown = TileConnectionWidth.Full;
                     }
@@ -71,15 +71,15 @@ public class NeighbourTileCalculator
                 MazeTilePath tilePath = neighbour.Value.TryGetTilePath();
                 if (tilePath != null && tilePath.MazeTilePathType == pathType)
                 {
-                    if (tilePath._pathConnectionScore == 16 ||
-                        tilePath._pathConnectionScore == 17 ||
-                        tilePath._pathConnectionScore == 21 ||
-                        tilePath._pathConnectionScore == 22 ||
-                        tilePath._pathConnectionScore == 23 ||
-                        tilePath._pathConnectionScore == 27 ||
-                        tilePath._pathConnectionScore == 31 ||
-                        tilePath._pathConnectionScore == 32 ||
-                        tilePath._pathConnectionScore == 33)
+                    if (tilePath.PathConnectionScore == 16 ||
+                        tilePath.PathConnectionScore == 17 ||
+                        tilePath.PathConnectionScore == 21 ||
+                        tilePath.PathConnectionScore == 22 ||
+                        tilePath.PathConnectionScore == 23 ||
+                        tilePath.PathConnectionScore == 27 ||
+                        tilePath.PathConnectionScore == 31 ||
+                        tilePath.PathConnectionScore == 32 ||
+                        tilePath.PathConnectionScore == 33)
                     {
                         pathLeft = TileConnectionWidth.Full;
                     }
@@ -94,15 +94,15 @@ public class NeighbourTileCalculator
                 MazeTilePath tilePath = neighbour.Value.TryGetTilePath();
                 if (tilePath != null && tilePath.MazeTilePathType == pathType)
                 {
-                    if (tilePath._pathConnectionScore == 16 ||
-                        tilePath._pathConnectionScore == 18 ||
-                        tilePath._pathConnectionScore == 21 ||
-                        tilePath._pathConnectionScore == 24 ||
-                        tilePath._pathConnectionScore == 25 ||
-                        tilePath._pathConnectionScore == 28 ||
-                        tilePath._pathConnectionScore == 31 ||
-                        tilePath._pathConnectionScore == 32 ||
-                        tilePath._pathConnectionScore == 34)
+                    if (tilePath.PathConnectionScore == 16 ||
+                        tilePath.PathConnectionScore == 18 ||
+                        tilePath.PathConnectionScore == 21 ||
+                        tilePath.PathConnectionScore == 24 ||
+                        tilePath.PathConnectionScore == 25 ||
+                        tilePath.PathConnectionScore == 28 ||
+                        tilePath.PathConnectionScore == 31 ||
+                        tilePath.PathConnectionScore == 32 ||
+                        tilePath.PathConnectionScore == 34)
                     {
                         pathUp = TileConnectionWidth.Full;
                     }

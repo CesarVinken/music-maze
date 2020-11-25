@@ -56,14 +56,14 @@ public class MazeLevel
             Tile tile = tileGO.GetComponent<Tile>();
             tile.SetGridLocation(serialisableTile.GridLocationX, serialisableTile.GridLocationY);
             tile.SetId(serialisableTile.Id);
-            tile.SetBackgroundSprites();
 
             tileGO.name = "Tile" + tile.GridLocation.X + ", " + tile.GridLocation.Y;
             tileGO.transform.position = GridLocation.GridToVector(tile.GridLocation);
 
             Tiles.Add(tile);
 
-            tile = AddTileAttributes(serialisableTile, tile);
+            AddTileAttributes(serialisableTile, tile);
+            AddBackgroundSprites(serialisableTile, tile);
 
             TilesByLocation.Add(tile.GridLocation, tile);
 
@@ -79,34 +79,47 @@ public class MazeLevel
         }
     }
 
-    public Tile AddTileAttributes(SerialisableTile serialisableTile, Tile tile)
+    public void AddTileAttributes(SerialisableTile serialisableTile, Tile tile)
     {
-        Tile tileWithAttributes = tile;
         TileAttributePlacer tileAttributePlacer = new TileAttributePlacer(tile);
 
         foreach (SerialisableTileAttribute serialisableTileAttribute in serialisableTile.TileAttributes)
         {
-            if (serialisableTileAttribute.TileAttributeId == SerialisableTileAttribute.ObstacleAttributeCode)
+            int tileAttributeId = serialisableTileAttribute.TileAttributeId;
+            if (tileAttributeId == SerialisableTileAttribute.ObstacleAttributeCode)
             {
-                //SerialisableTileObstacleAttribute serialisableTileObstacleAttribute = (SerialisableTileObstacleAttribute)serialisableTileAttribute as SerialisableTileObstacleAttribute;
-                //Logger.Log($"serialisableTileObstacleAttribute {serialisableTileObstacleAttribute.ObstacleConnectionScore}");
                 tileAttributePlacer.PlaceTileObstacle(ObstacleType.Wall, serialisableTileAttribute.ObstacleConnectionScore); //TODO, find a way to use polymorphism so we can cast as SerialisableTileObstacleAttribute instead of a general SerialisableTileAttribute
             }
-            if (serialisableTileAttribute.TileAttributeId == SerialisableTileAttribute.PlayerExitCode)
+            else if (tileAttributeId == SerialisableTileAttribute.PlayerExitCode)
             {
                 tileAttributePlacer.PlacePlayerExit(ObstacleType.Wall, serialisableTileAttribute.ObstacleConnectionScore);
             }
-            if (serialisableTileAttribute.TileAttributeId == SerialisableTileAttribute.PlayerSpawnpointCode)
+            else if (tileAttributeId == SerialisableTileAttribute.PlayerSpawnpointCode)
             {
                 tileAttributePlacer.PlacePlayerSpawnpoint();
             }
-            if (serialisableTileAttribute.TileAttributeId == SerialisableTileAttribute.EnemySpawnpointCode)
+            else if (tileAttributeId == SerialisableTileAttribute.EnemySpawnpointCode)
             {
                 tileAttributePlacer.PlaceEnemySpawnpoint();
             }
         }
+    }
 
-        return tileWithAttributes;
+    public void AddBackgroundSprites(SerialisableTile serialisableTile, Tile tile)
+    {
+        TileBackgroundPlacer tileBackgroundPlacer = new TileBackgroundPlacer(tile);
+
+        foreach (SerialisableTileBackground serialisableTileBackground in serialisableTile.TileBackgrounds)
+        {
+            if (serialisableTileBackground.TileBackgroundId == SerialisableTileBackground.PathBackgroundCode)
+            {
+                tileBackgroundPlacer.PlacePath(MazeTilePathType.Default, serialisableTileBackground.PathConnectionScore); //TODO, fi
+            }
+            else
+            {
+                Logger.Error($"Unknown TileBackgroundId {serialisableTileBackground.TileBackgroundId}");
+            }
+        }
     }
 }
 

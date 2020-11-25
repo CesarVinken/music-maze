@@ -5,9 +5,6 @@ using UnityEngine;
 public class Tile : MonoBehaviour
 {
     public Transform BackgroundsContainer;
-
-    //public SpriteRenderer SpriteRenderer;
-    //public Sprite Sprite;
     public SpriteRenderer PlayerMarkRenderer;
 
     public string TileId;
@@ -83,23 +80,35 @@ public class Tile : MonoBehaviour
         }
     }
 
+    public void InitialiseTileBackgrounds()
+    {
+        for (int i = 0; i < MazeTileBackgrounds.Count; i++)
+        {
+            MazeTileBackgrounds[i].SetTile(this);
+        }
+    }
+
     public void SetBackgroundSprites()
     {
+        
+
+
+
         //TODO: pass on connection score
 
         int connectionScore = 1;
 
         //TODO path sprite should not be set if there is no path.
         GameObject pathGO = Instantiate(MazeLevelManager.Instance.TilePathPrefab, transform);
-        MazeTilePath path = pathGO.GetComponent<MazeTilePath>();
-        path.SetSprite(connectionScore);
-        MazeTileBackgrounds.Add(path as IMazeTileBackground);
+        MazeTilePath mazeTilePath = pathGO.GetComponent<MazeTilePath>();
+        mazeTilePath.WithPathConnectionScore(connectionScore);
+        MazeTileBackgrounds.Add(mazeTilePath as IMazeTileBackground);
 
         if (connectionScore != 15) // TODO also don't add background for fully covering wall tiles
         {
             GameObject backgroundGO = Instantiate(MazeLevelManager.Instance.TileBackgroundPrefab, transform);
             MazeTileBackground background = backgroundGO.GetComponent<MazeTileBackground>();
-            background.SetSprite(-1); // background is currently always the default grass background. Connection score of -1 is temporary
+            background.WithPathConnectionScore(-1); // background is currently always the default grass background. Connection score of -1 is temporary
             MazeTileBackgrounds.Add(background as IMazeTileBackground);
         }
     }

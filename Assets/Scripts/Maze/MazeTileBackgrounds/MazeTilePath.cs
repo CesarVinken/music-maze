@@ -2,18 +2,21 @@
 
 public class MazeTilePath : MonoBehaviour, IMazeTileBackground
 {
-    public int _pathConnectionScore;
+    public Tile Tile;
+    public string ParentId;
+
+    public int PathConnectionScore;
     [SerializeField] private Sprite _sprite;
     [SerializeField] private SpriteRenderer _spriteRenderer;
 
     public MazeTilePathType MazeTilePathType;
 
-    public void SetSprite(int pathConnectionScore)
-    {
-        _pathConnectionScore = pathConnectionScore;
-        _sprite = SpriteManager.Instance.DefaultPath[_pathConnectionScore - 1];
-        _spriteRenderer.sprite = _sprite;
-    }
+    //public void SetSprite(int pathConnectionScore)
+    //{
+    //    PathConnectionScore = pathConnectionScore;
+    //    _sprite = SpriteManager.Instance.DefaultPath[PathConnectionScore - 1];
+    //    _spriteRenderer.sprite = _sprite;
+    //}
 
     public void WithPathType(MazeTilePathType mazeTilePathType)
     {
@@ -22,17 +25,18 @@ public class MazeTilePath : MonoBehaviour, IMazeTileBackground
 
     public void WithPathConnectionScore(int score)
     {
-        _pathConnectionScore = score;
-        SetSprite(_pathConnectionScore);
+        PathConnectionScore = score;
+        _sprite = SpriteManager.Instance.DefaultPath[PathConnectionScore - 1];
+        _spriteRenderer.sprite = _sprite;
     }
 
-    //public void SetTile(Tile tile)
-    //{
-    //    if (string.IsNullOrEmpty(tile.TileId)) Logger.Error("This tile does not have an Id");
+    public void SetTile(Tile tile)
+    {
+        if (string.IsNullOrEmpty(tile.TileId)) Logger.Error("This tile does not have an Id");
 
-    //    Tile = tile;
-    //    ParentId = tile.TileId;
-    //}
+        Tile = tile;
+        ParentId = tile.TileId;
+    }
 
     public void Remove()
     {
