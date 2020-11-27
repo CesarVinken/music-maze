@@ -13,6 +13,11 @@ public class EditorMazeTilePath : EditorMazeTileBackgroundModifier
         if (mazeTilePath == null)
         {
             Logger.Log("there is no path yet, place the path");
+
+            TileAttributeRemover tileAttributeRemover = new TileAttributeRemover(tile);
+            tileAttributeRemover.RemoveTileObstacle();
+            tileAttributeRemover.RemovePlayerExit();
+
             tileBackgroundPlacer.PlacePath(MazeTilePathType.Default);
             return;
         }

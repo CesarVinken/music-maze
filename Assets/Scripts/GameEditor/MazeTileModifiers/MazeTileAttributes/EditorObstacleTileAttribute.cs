@@ -16,6 +16,9 @@ public class EditorObstacleTileAttribute : EditorMazeTileAttributeModifier
             tileAttributeRemover.RemoveEnemySpawnpoint();
             tileAttributeRemover.RemovePlayerSpawnpoint();
 
+            TileBackgroundRemover tileBackgroundRemover = new TileBackgroundRemover(tile);
+            tileBackgroundRemover.RemovePath();
+
             tileAttributePlacer.PlaceTileObstacle(ObstacleType.Wall);
             return;
         }

@@ -68,7 +68,6 @@ public class TileAttributePlacer
     public void PlaceTileObstacle(ObstacleType obstacleType)
     {
         // check connections of this tile
-
         int obstacleConnectionScore = NeighbourTileCalculator.MapNeighbourObstaclesOfTile(_tile, obstacleType, false);
         Logger.Log($"We calculated an obstacle connection type score of {obstacleConnectionScore} for location {_tile.GridLocation.X}, {_tile.GridLocation.Y}");
 
