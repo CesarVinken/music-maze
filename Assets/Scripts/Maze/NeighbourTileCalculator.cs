@@ -1,14 +1,28 @@
 ﻿using System.Collections.Generic;
 
+public struct TileConnectionInfo
+{
+    public Direction Direction;
+    public bool HasConnection;
+    public int NeighbourConnectionScore; // the connection score of the opposing tile.
+
+    public TileConnectionInfo(Direction direction, bool hasConnection = false, int neighbourConnectionScore = -1)
+    {
+        Direction = direction;
+        HasConnection = hasConnection;
+        NeighbourConnectionScore = neighbourConnectionScore;
+    }
+}
+
 public class NeighbourTileCalculator
 {
     public static int MapNeighbourPathsOfTile(Tile tile, MazeTilePathType pathType)
     {
-        Logger.Log($"Map neighbours of {tile.GridLocation.X},{tile.GridLocation.Y}");
-        TileConnectionWidth pathRight = TileConnectionWidth.None;
-        TileConnectionWidth pathDown = TileConnectionWidth.None;
-        TileConnectionWidth pathLeft = TileConnectionWidth.None;
-        TileConnectionWidth pathUp = TileConnectionWidth.None;
+        Logger.Log($"---------Map neighbours of {tile.GridLocation.X},{tile.GridLocation.Y}--------");
+        TileConnectionInfo pathRight = new TileConnectionInfo(Direction.Right);
+        TileConnectionInfo pathDown = new TileConnectionInfo(Direction.Down);
+        TileConnectionInfo pathLeft = new TileConnectionInfo(Direction.Left);
+        TileConnectionInfo pathUp = new TileConnectionInfo(Direction.Up);
 
         if (!EditorManager.InEditor)
         {
@@ -18,29 +32,14 @@ public class NeighbourTileCalculator
 
         foreach (KeyValuePair<ObjectDirection, Tile> neighbour in tile.Neighbours)
         {
-            Logger.Warning($"Neighbour at {neighbour.Value.GridLocation.X}, {neighbour.Value.GridLocation.Y} is {neighbour.Key} of {tile.GridLocation.X},{tile.GridLocation.Y}");
+            Logger.Warning($"Neighbour at {neighbour.Value.GridLocation.X},{neighbour.Value.GridLocation.Y} is {neighbour.Key} of {tile.GridLocation.X},{tile.GridLocation.Y}");
             if (neighbour.Key == ObjectDirection.Right)
             {
                 MazeTilePath tilePath = neighbour.Value.TryGetTilePath();
                 if (tilePath != null && tilePath.MazeTilePathType == pathType)
                 {
-                    // Check if the neighbour has a Full connection width on its left side (so the right side connection for THIS tile)
-                    if (tilePath.PathConnectionScore == 16 ||
-                        tilePath.PathConnectionScore == 19 ||
-                        tilePath.PathConnectionScore == 22 ||
-                        tilePath.PathConnectionScore == 25 ||
-                        tilePath.PathConnectionScore == 26 ||
-                        tilePath.PathConnectionScore == 29 ||
-                        tilePath.PathConnectionScore == 31 ||
-                        tilePath.PathConnectionScore == 33 ||
-                        tilePath.PathConnectionScore == 34)
-                    {
-                        pathRight = TileConnectionWidth.Full;
-                    }
-                    else
-                    {
-                        pathRight = TileConnectionWidth.Normal;
-                    }
+                    pathRight.HasConnection = true;
+                    pathRight.NeighbourConnectionScore = tilePath.PathConnectionScore;
                 }
             }
             else if (neighbour.Key == ObjectDirection.Down)
@@ -48,22 +47,8 @@ public class NeighbourTileCalculator
                 MazeTilePath tilePath = neighbour.Value.TryGetTilePath();
                 if (tilePath != null && tilePath.MazeTilePathType == pathType)
                 {
-                    if (tilePath.PathConnectionScore == 16 ||
-                        tilePath.PathConnectionScore == 20 ||
-                        tilePath.PathConnectionScore == 23 ||
-                        tilePath.PathConnectionScore == 24 ||
-                        tilePath.PathConnectionScore == 26 ||
-                        tilePath.PathConnectionScore == 30 ||
-                        tilePath.PathConnectionScore == 32 ||
-                        tilePath.PathConnectionScore == 33 ||
-                        tilePath.PathConnectionScore == 34)
-                    {
-                        pathDown = TileConnectionWidth.Full;
-                    }
-                    else
-                    {
-                        pathDown = TileConnectionWidth.Normal;
-                    }
+                    pathDown.HasConnection = true;
+                    pathDown.NeighbourConnectionScore = tilePath.PathConnectionScore;                    
                 }
             }
             else if (neighbour.Key == ObjectDirection.Left)
@@ -71,22 +56,8 @@ public class NeighbourTileCalculator
                 MazeTilePath tilePath = neighbour.Value.TryGetTilePath();
                 if (tilePath != null && tilePath.MazeTilePathType == pathType)
                 {
-                    if (tilePath.PathConnectionScore == 16 ||
-                        tilePath.PathConnectionScore == 17 ||
-                        tilePath.PathConnectionScore == 21 ||
-                        tilePath.PathConnectionScore == 22 ||
-                        tilePath.PathConnectionScore == 23 ||
-                        tilePath.PathConnectionScore == 27 ||
-                        tilePath.PathConnectionScore == 31 ||
-                        tilePath.PathConnectionScore == 32 ||
-                        tilePath.PathConnectionScore == 33)
-                    {
-                        pathLeft = TileConnectionWidth.Full;
-                    }
-                    else
-                    {
-                        pathLeft = TileConnectionWidth.Normal;
-                    }
+                    pathLeft.HasConnection = true;
+                    pathLeft.NeighbourConnectionScore = tilePath.PathConnectionScore;
                 }
             }
             else if (neighbour.Key == ObjectDirection.Up)
@@ -94,22 +65,8 @@ public class NeighbourTileCalculator
                 MazeTilePath tilePath = neighbour.Value.TryGetTilePath();
                 if (tilePath != null && tilePath.MazeTilePathType == pathType)
                 {
-                    if (tilePath.PathConnectionScore == 16 ||
-                        tilePath.PathConnectionScore == 18 ||
-                        tilePath.PathConnectionScore == 21 ||
-                        tilePath.PathConnectionScore == 24 ||
-                        tilePath.PathConnectionScore == 25 ||
-                        tilePath.PathConnectionScore == 28 ||
-                        tilePath.PathConnectionScore == 31 ||
-                        tilePath.PathConnectionScore == 32 ||
-                        tilePath.PathConnectionScore == 34)
-                    {
-                        pathUp = TileConnectionWidth.Full;
-                    }
-                    else
-                    {
-                        pathUp = TileConnectionWidth.Normal;
-                    }
+                    pathUp.HasConnection = true;
+                    pathUp.NeighbourConnectionScore = tilePath.PathConnectionScore;
                 }
             }
         }
@@ -120,7 +77,7 @@ public class NeighbourTileCalculator
     public static int MapNeighbourObstaclesOfTile(Tile tile, ObstacleType obstacleType, bool isDoor)
     {
         Logger.Log($"Map neighbours of {tile.GridLocation.X},{tile.GridLocation.Y}");
-        bool obstacleRight = false;
+        bool obstacleRight = false; // TODO turn bools in to TileConnectionWidth
         bool obstacleDown = false;
         bool obstacleLeft = false;
         bool obstacleUp = false;
@@ -174,137 +131,65 @@ public class NeighbourTileCalculator
         return CalculateObstacleConnectionScore(obstacleRight, obstacleDown, obstacleLeft, obstacleUp);
     }
 
-    private static int CalculatePathConnectionScore(TileConnectionWidth right, TileConnectionWidth down, TileConnectionWidth left, TileConnectionWidth up)
+    private static int CalculatePathConnectionScore(TileConnectionInfo right, TileConnectionInfo down, TileConnectionInfo left, TileConnectionInfo up)
     {
-        if (right == TileConnectionWidth.Normal) 
+        if (right.HasConnection)
         {
-            if(left == TileConnectionWidth.Full)
+            if (down.HasConnection)
             {
-                return 29;
-            }
-            if (down == TileConnectionWidth.Normal)
-            {
-                if (left == TileConnectionWidth.Normal)
+                if (left.HasConnection)
                 {
-                    if (up == TileConnectionWidth.Normal)
+                    if (up.HasConnection)
                     {
                         return 16;
                     }
-                    return 12;
-                }
-                if (up == TileConnectionWidth.Normal)
-                {
-                    return 13;
-                }
-                return 6;
-            }
-            if (left == TileConnectionWidth.Normal)
-            {
-                if (up == TileConnectionWidth.Normal)
-                {
-                    return 14;
-                }
-                return 7;
-            }
-            if (up == TileConnectionWidth.Normal)
-            {
-                return 8;
-            }
-            return 2;
-        }
-        if (down == TileConnectionWidth.Normal)
-        {
-            if(up == TileConnectionWidth.Full)
-            {
-                return 30;
-            }
-            if (up == TileConnectionWidth.Normal)
-            {
-                return 9;
-            }
-            if (left == TileConnectionWidth.Normal)
-            {
-                if (up == TileConnectionWidth.Normal)
-                {
-                    return 15;
-                }
-                return 10;
-            }
-            return 3;
-        }
-        if (left == TileConnectionWidth.Normal)
-        {
-            if (up == TileConnectionWidth.Normal)
-            {
-                return 11;
-            }
-            return 4;
-        }
-        if (up == TileConnectionWidth.Normal)
-        {
-            return 5;
-        }
-        if (right == TileConnectionWidth.Full)
-        {
-            if (left == TileConnectionWidth.Normal)
-            {
-                return 27;
-            }
-            if(down == TileConnectionWidth.Full)
-            {
-                if(left == TileConnectionWidth.Full)
-                {
                     return 31;
                 }
-                if(up == TileConnectionWidth.Full)
+                if (up.HasConnection)
                 {
                     return 32;
                 }
                 return 21;
             }
-            if (left == TileConnectionWidth.Full)
+            if (left.HasConnection)
             {
-                if(up == TileConnectionWidth.Full)
+                if (up.HasConnection)
                 {
                     return 33;
                 }
                 return 22;
             }
-            if (up == TileConnectionWidth.Full)
+            if (up.HasConnection)
             {
                 return 23;
             }
             return 17;
         }
-        if (down == TileConnectionWidth.Full)
+        if (down.HasConnection)
         {
-            if(up == TileConnectionWidth.Normal)
+            if(left.HasConnection)
             {
-                return 28;
-            }
-            if (up == TileConnectionWidth.Full)
-            {
-                return 24;
-            }
-            if (left == TileConnectionWidth.Full)
-            {
-                if(up == TileConnectionWidth.Full)
+                if (up.HasConnection)
                 {
                     return 34;
                 }
                 return 25;
             }
+            if (up.HasConnection)
+            {
+                return 24;
+            }
             return 18;
         }
-        if (left == TileConnectionWidth.Full)
+        if (left.HasConnection)
         {
-            if (up == TileConnectionWidth.Full)
+            if (up.HasConnection)
             {
                 return 26;
             }
             return 19;
         }
-        if (up == TileConnectionWidth.Full)
+        if (up.HasConnection)
         {
             return 20;
         }

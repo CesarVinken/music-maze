@@ -81,11 +81,6 @@ public class MazeLevelManager : MonoBehaviour, IOnEventCallback
 
     public void SetupLevelForEditor(MazeLevelData mazeLevelData)
     {
-        for (int j = 0; j < mazeLevelData.Tiles.Count; j++)
-        {
-            if (mazeLevelData.Tiles[j].TileBackgrounds.Count > 0)
-                Logger.Warning($"{mazeLevelData.Tiles[j].TileBackgrounds[0].PathConnectionScore}");
-        }
         Level = MazeLevel.Create(mazeLevelData);
 
         InitialiseTileBackgrounds();
