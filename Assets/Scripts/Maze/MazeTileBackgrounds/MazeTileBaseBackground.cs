@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-public class MazeTileBackground : MonoBehaviour, IMazeTileBackground
+public class MazeTileBaseBackground : MonoBehaviour, IMazeTileBackground
 {
     public Tile Tile;
     public string ParentId;
@@ -14,7 +14,6 @@ public class MazeTileBackground : MonoBehaviour, IMazeTileBackground
 
         Tile = tile;
         ParentId = tile.TileId;
-
     }
 
     public void WithPathConnectionScore(int score)

@@ -22,6 +22,15 @@ public class TileAttributeRemover
         if (tileObstacle == null) return;
 
         ObstacleType obstacleType = tileObstacle.ObstacleType;
+        int oldConnectionScore = tileObstacle.ObstacleConnectionScore;
+
+        // If needed, place a background in the gap that the removed path left
+        if (oldConnectionScore == NeighbourTileCalculator.ConnectionOnAllSidesScore)
+        {
+            TileBackgroundPlacer tileBackgroundPlacer = new TileBackgroundPlacer(_tile);
+            tileBackgroundPlacer.PlaceBaseBackground(MazeTileBaseBackgroundType.DefaultGrass);
+        }
+
         _tile.MazeTileAttributes.Remove(tileObstacle);
         tileObstacle.Remove();
 
@@ -37,6 +46,13 @@ public class TileAttributeRemover
 
             //update connection score on neighbour
             tileObstacleOnNeighbour.WithObstacleConnectionScore(obstacleConnectionScoreOnNeighbour);
+
+            // If needed, place a background
+            if (obstacleConnectionScoreOnNeighbour == NeighbourTileCalculator.ConnectionOnAllSidesScore)
+            {
+                TileBackgroundRemover tileBackgroundRemover = new TileBackgroundRemover(neighbour.Value);
+                tileBackgroundRemover.RemoveBaseBackground(MazeTileBaseBackgroundType.DefaultGrass);
+            }
         }
     }
 

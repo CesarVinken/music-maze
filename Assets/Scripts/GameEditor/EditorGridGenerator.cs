@@ -120,21 +120,19 @@ public class EditorGridGenerator : MonoBehaviour
                     tileAttributes.Add(edgeObstacle);
                 }
 
-                SerialisableTileBackground mazeTilePath = TryAddPathsForNewMaze(gridLocation, tileAttributes);
+                SerialisableTilePathBackground mazeTilePath = TryAddPathsForNewMaze(gridLocation, tileAttributes);
 
                 if (mazeTilePath != null)
                 {
                     tileBackgrounds.Add(mazeTilePath);
                 }
 
-                //TODO
-                //SerialisableTileBackground baseBackground = TryAddBaseBackgroundForNewMazetileAttributes();
+                SerialisableTileBaseBackground baseBackground = TryAddBaseBackgroundForNewMaze(tileBackgrounds, tileAttributes);
 
-                //if (baseBackground != null)
-                //{
-                //    tileBackgrounds.Add(mazeTilePath);
-                //}
-                //TODO
+                if (baseBackground != null)
+                {
+                    tileBackgrounds.Add(baseBackground);
+                }
 
                 SerialisableTile tile = new SerialisableTile(tileId, tileAttributes, tileBackgrounds, gridLocation.X, gridLocation.Y);
                 tiles.Add(tile);
@@ -261,7 +259,7 @@ public class EditorGridGenerator : MonoBehaviour
         return null;
     }
 
-    private SerialisableTileBackground TryAddPathsForNewMaze(GridLocation gridLocation, List<SerialisableTileAttribute> tileAttributes)
+    private SerialisableTilePathBackground TryAddPathsForNewMaze(GridLocation gridLocation, List<SerialisableTileAttribute> tileAttributes)
     {
         bool hasObstacleAttribute = tileAttributes.Any(attribute => attribute.TileAttributeId == SerialisableTileAttribute.ObstacleAttributeCode);
 
@@ -269,7 +267,6 @@ public class EditorGridGenerator : MonoBehaviour
         {
             return null;
         }
-
 
         if (gridLocation.X == 1)
         {
@@ -313,21 +310,27 @@ public class EditorGridGenerator : MonoBehaviour
         return new SerialisableTilePathBackground(16);
     }
 
-    //// return a base background, except for tiles that are completely covered by an obstacle (with connections to all sides)
-    //private SerialisableTileBackground TryAddBaseBackgroundForNewMaze(List<SerialisableTileAttribute> tileAttributes)
-    //{
-    //    SerialisableTileAttribute obstacleAttribute = tileAttributes.FirstOrDefault(attribute => attribute.TileAttributeId == SerialisableTileAttribute.ObstacleAttributeCode);
+    // return a base background, except for tiles that are completely covered by an obstacle or path (with connections to all sides)
+    private SerialisableTileBaseBackground TryAddBaseBackgroundForNewMaze(List<SerialisableTileBackground> tileBackgrounds, List<SerialisableTileAttribute> tileAttributes)
+    {
+        SerialisableTileBackground pathBackgrounds = tileBackgrounds.FirstOrDefault(background => background.TileConnectionScore == 16);
+        if (pathBackgrounds != null)
+        {
+            return null;
+        }
 
-    //    if(obstacleAttribute == null)
-    //    {
-    //        return new SerialisableTileBaseBackground();
-    //    }
+        SerialisableTileAttribute obstacleAttribute = tileAttributes.FirstOrDefault(attribute => attribute.TileAttributeId == SerialisableTileAttribute.ObstacleAttributeCode);
 
-    //    if(obstacleAttribute.ObstacleConnectionScore == 16)
-    //    {
-    //        return null;
-    //    }
+        if (obstacleAttribute == null)
+        {
+            return new SerialisableTileBaseBackground(-1);
+        }
 
-    //    return new SerialisableTileBaseBackground();
-    //}
+        if (obstacleAttribute.ObstacleConnectionScore == 16)
+        {
+            return null;
+        }
+
+        return new SerialisableTileBaseBackground(-1);
+    }
 }

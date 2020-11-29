@@ -6,6 +6,6 @@ public class SerialisableTilePathBackground : SerialisableTileBackground
     public SerialisableTilePathBackground(int pathConnectionScore)
     {
         TileBackgroundId = PathBackgroundCode;
-        PathConnectionScore = pathConnectionScore;
+        TileConnectionScore = pathConnectionScore;
     }
 }

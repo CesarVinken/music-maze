@@ -11,13 +11,6 @@ public class MazeTilePath : MonoBehaviour, IMazeTileBackground
 
     public MazeTilePathType MazeTilePathType;
 
-    //public void SetSprite(int pathConnectionScore)
-    //{
-    //    PathConnectionScore = pathConnectionScore;
-    //    _sprite = SpriteManager.Instance.DefaultPath[PathConnectionScore - 1];
-    //    _spriteRenderer.sprite = _sprite;
-    //}
-
     public void WithPathType(MazeTilePathType mazeTilePathType)
     {
         MazeTilePathType = mazeTilePathType;

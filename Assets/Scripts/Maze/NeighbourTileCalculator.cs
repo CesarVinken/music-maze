@@ -16,6 +16,8 @@ public struct TilePathConnectionInfo
 
 public class NeighbourTileCalculator
 {
+    public static readonly int ConnectionOnAllSidesScore = 16;
+
     public static int MapNeighbourPathsOfTile(Tile tile, MazeTilePathType pathType)
     {
         Logger.Log($"---------Map neighbours of {tile.GridLocation.X},{tile.GridLocation.Y}--------");

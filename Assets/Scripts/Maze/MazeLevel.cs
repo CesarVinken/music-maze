@@ -113,7 +113,11 @@ public class MazeLevel
         {
             if (serialisableTileBackground.TileBackgroundId == SerialisableTileBackground.PathBackgroundCode)
             {
-                tileBackgroundPlacer.PlacePath(MazeTilePathType.Default, serialisableTileBackground.PathConnectionScore); //TODO, fi
+                tileBackgroundPlacer.PlacePath(MazeTilePathType.Default, serialisableTileBackground.TileConnectionScore); //TODO, fix path type
+            }
+            else if(serialisableTileBackground.TileBackgroundId == SerialisableTileBackground.BaseBackgroundCode)
+            {
+                tileBackgroundPlacer.PlaceBaseBackground(MazeTileBaseBackgroundType.DefaultGrass); // TODO fix background type
             }
             else
             {

@@ -88,30 +88,30 @@ public class Tile : MonoBehaviour
         }
     }
 
-    public void SetBackgroundSprites()
-    {
-        
+    //public void SetBackgroundSprites()
+    //{
 
 
 
-        //TODO: pass on connection score
 
-        int connectionScore = 1;
+    //TODO: pass on connection score
 
-        //TODO path sprite should not be set if there is no path.
-        GameObject pathGO = Instantiate(MazeLevelManager.Instance.TilePathPrefab, transform);
-        MazeTilePath mazeTilePath = pathGO.GetComponent<MazeTilePath>();
-        mazeTilePath.WithPathConnectionScore(connectionScore);
-        MazeTileBackgrounds.Add(mazeTilePath as IMazeTileBackground);
+    //    int connectionScore = 1;
 
-        if (connectionScore != 15) // TODO also don't add background for fully covering wall tiles
-        {
-            GameObject backgroundGO = Instantiate(MazeLevelManager.Instance.TileBackgroundPrefab, transform);
-            MazeTileBackground background = backgroundGO.GetComponent<MazeTileBackground>();
-            background.WithPathConnectionScore(-1); // background is currently always the default grass background. Connection score of -1 is temporary
-            MazeTileBackgrounds.Add(background as IMazeTileBackground);
-        }
-    }
+    //    TODO path sprite should not be set if there is no path.
+    //    GameObject pathGO = Instantiate(MazeLevelManager.Instance.TilePathPrefab, transform);
+    //    MazeTilePath mazeTilePath = pathGO.GetComponent<MazeTilePath>();
+    //    mazeTilePath.WithPathConnectionScore(connectionScore);
+    //    MazeTileBackgrounds.Add(mazeTilePath as IMazeTileBackground);
+
+    //    if (connectionScore != 15) // TODO also don't add background for fully covering wall tiles
+    //    {
+    //        GameObject baseBackgroundGO = Instantiate(MazeLevelManager.Instance.TileBaseBackgroundPrefab, transform);
+    //        MazeTileBaseBackground baseBackground = baseBackgroundGO.GetComponent<MazeTileBaseBackground>();
+    //        baseBackground.WithPathConnectionScore(-1); // background is currently always the default grass background. Connection score of -1 is temporary
+    //        MazeTileBackgrounds.Add(baseBackground as IMazeTileBackground);
+    //    }
+    //}
 
     public void AddNeighbours(MazeLevel level)
     {
@@ -159,10 +159,6 @@ public class Tile : MonoBehaviour
 
     public MazeTilePath TryGetTilePath()
     {
-        //for (int i = 0; i < MazeTileBackgrounds.Count; i++)
-        //{
-        //    Logger.Log($"found background for {GridLocation.X}, {GridLocation.Y} is {MazeTileBackgrounds[i].GetType()}!");
-        //}
         MazeTilePath mazeTilePath = (MazeTilePath)MazeTileBackgrounds.FirstOrDefault(background => background is MazeTilePath);
         
         if (mazeTilePath == null)

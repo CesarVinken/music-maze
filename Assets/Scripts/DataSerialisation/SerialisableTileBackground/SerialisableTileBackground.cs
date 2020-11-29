@@ -5,7 +5,8 @@ public class SerialisableTileBackground
 {
     public int TileBackgroundId;
 
-    public int PathConnectionScore; // Should only be on TileObstacle class, but polymorphism is currently not possible on serialisation
+    public int TileConnectionScore;
 
-    public const int PathBackgroundCode = 0;
+    public const int BaseBackgroundCode = 0;
+    public const int PathBackgroundCode = 1;
 }

@@ -79,6 +79,13 @@ public class TileAttributePlacer
         _tile.Markable = false;
         _tile.MazeTileAttributes.Add(tileObstacle);
 
+        // If we now have obstacle connections on all sides, remove the backgrounds
+        if (obstacleConnectionScore == NeighbourTileCalculator.ConnectionOnAllSidesScore)
+        {
+            TileBackgroundRemover tileBackgroundRemover = new TileBackgroundRemover(_tile);
+            tileBackgroundRemover.RemoveBaseBackground(MazeTileBaseBackgroundType.DefaultGrass);
+        }
+
         // after adding obstacle to this tile, update connections of neighbours
         foreach (KeyValuePair<ObjectDirection, Tile> neighbour in _tile.Neighbours)
         {
@@ -98,6 +105,13 @@ public class TileAttributePlacer
 
             //update connection score on neighbour
             tileObstacleOnNeighbour.WithObstacleConnectionScore(obstacleConnectionScoreOnNeighbour);
+
+            // If we now have obstacle connections on all sides, remove the backgrounds
+            if (obstacleConnectionScoreOnNeighbour == NeighbourTileCalculator.ConnectionOnAllSidesScore)
+            {
+                TileBackgroundRemover tileBackgroundRemover = new TileBackgroundRemover(neighbour.Value);
+                tileBackgroundRemover.RemoveBaseBackground(MazeTileBaseBackgroundType.DefaultGrass);
+            }
         }
     }
 

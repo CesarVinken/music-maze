@@ -15,7 +15,7 @@ public class MazeLevelManager : MonoBehaviour, IOnEventCallback
     public List<CharacterSpawnpoint> EnemyCharacterSpawnpoints = new List<CharacterSpawnpoint>();
     
     public GameObject TilePrefab;
-    public GameObject TileBackgroundPrefab;
+    public GameObject TileBaseBackgroundPrefab;
     public GameObject TilePathPrefab;
     public GameObject TileObstaclePrefab;
     public GameObject PlayerExitPrefab;
@@ -47,7 +47,7 @@ public class MazeLevelManager : MonoBehaviour, IOnEventCallback
     public void Awake()
     {
         Guard.CheckIsNull(TilePrefab, "TilePrefab", gameObject);
-        Guard.CheckIsNull(TileBackgroundPrefab, "TileBackgroundPrefab", gameObject);
+        Guard.CheckIsNull(TileBaseBackgroundPrefab, "TileBaseBackgroundPrefab", gameObject);
         Guard.CheckIsNull(TilePathPrefab, "TilePathPrefab", gameObject);
         Guard.CheckIsNull(TileObstaclePrefab, "TileObstaclePrefab", gameObject);
         Guard.CheckIsNull(PlayerExitPrefab, "PlayerExitPrefab", gameObject);
@@ -140,7 +140,6 @@ public class MazeLevelManager : MonoBehaviour, IOnEventCallback
 
     public void InitialiseTileBackgrounds()
     {
-        Logger.Log("INITIALISE BACKGROUNds");
         for (int i = 0; i < Level.Tiles.Count; i++)
         {
             Tile tile = Level.Tiles[i];
