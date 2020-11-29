@@ -12,8 +12,6 @@ public class EditorMazeTilePath : EditorMazeTileBackgroundModifier
         IMazeTileBackground mazeTilePath = (MazeTilePath)tile.MazeTileBackgrounds.FirstOrDefault(background => background is MazeTilePath);
         if (mazeTilePath == null)
         {
-            Logger.Log("there is no path yet, place the path");
-
             TileAttributeRemover tileAttributeRemover = new TileAttributeRemover(tile);
             tileAttributeRemover.RemoveTileObstacle();
             tileAttributeRemover.RemovePlayerExit();
@@ -21,8 +19,18 @@ public class EditorMazeTilePath : EditorMazeTileBackgroundModifier
             tileBackgroundPlacer.PlacePath(MazeTilePathType.Default);
             return;
         }
-        Logger.Log("This path already exists on this tile, so remove it");
+
         // This path already exists on this tile, so remove it
         tileBackgroundRemover.RemovePath();
+    }
+
+    public override void PlaceBackgroundVariation(Tile tile)
+    {
+        IMazeTileBackground mazeTilePath = (MazeTilePath)tile.MazeTileBackgrounds.FirstOrDefault(background => background is MazeTilePath);
+        
+        if (mazeTilePath == null) return; // only place variation if there is already a path
+
+        TileBackgroundPlacer tileBackgroundPlacer = new TileBackgroundPlacer(tile);
+        tileBackgroundPlacer.PlacePathVariation((MazeTilePath)mazeTilePath);
     }
 }

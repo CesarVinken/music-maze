@@ -10,4 +10,9 @@ public abstract class EditorMazeTileBackgroundModifier : IEditorMazeTileBackgrou
     {
         throw new System.NotImplementedException();
     }
+
+    public virtual void PlaceBackgroundVariation(Tile tile)
+    {
+        throw new System.NotImplementedException();
+    }
 }

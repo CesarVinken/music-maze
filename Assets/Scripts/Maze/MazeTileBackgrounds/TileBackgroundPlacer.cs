@@ -48,4 +48,16 @@ public class TileBackgroundPlacer
 
         _tile.MazeTileBackgrounds.Add(mazeTilePath);
     }
+
+    public void PlacePathVariation(MazeTilePath mazeTilePath)
+    {
+        //return only connections that were updated
+        List<MazeTilePath> updatedPathConnections = NeighbourTileCalculator.GetUpdatedTilePathsForVariation(_tile, mazeTilePath, mazeTilePath.MazeTilePathType); ;
+
+        //update the sprites with the new variations
+        for (int i = 0; i < updatedPathConnections.Count; i++)
+        {
+            updatedPathConnections[i].WithPathConnectionScore(updatedPathConnections[i].PathConnectionScore);
+        }
+    }
 }

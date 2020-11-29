@@ -40,26 +40,33 @@ public class EditorTileSelector : MonoBehaviour
         {
             SelectTileWithMouse();
         }
-        if (Input.GetKeyDown(KeyCode.W))
+        if (Input.GetKeyDown(KeyCode.W) || Input.GetKeyDown(KeyCode.UpArrow))
         {
             UpdateCurrentSelectedLocation(0, 1);
         }
-        if (Input.GetKeyDown(KeyCode.A))
+        if (Input.GetKeyDown(KeyCode.A) || Input.GetKeyDown(KeyCode.LeftArrow))
         {
             UpdateCurrentSelectedLocation(-1, 0);
         }
-        if (Input.GetKeyDown(KeyCode.S))
+        if (Input.GetKeyDown(KeyCode.S) || Input.GetKeyDown(KeyCode.DownArrow))
         {
             UpdateCurrentSelectedLocation(0, -1);
         }
-        if (Input.GetKeyDown(KeyCode.D))
+        if (Input.GetKeyDown(KeyCode.D) || Input.GetKeyDown(KeyCode.RightArrow))
         {
             UpdateCurrentSelectedLocation(1, 0);
         }
         if (Input.GetKeyDown(KeyCode.Return))
         {
             Logger.Log("Do something to tile {0}, {1}", CurrentSelectedLocation.X, CurrentSelectedLocation.Y);
-            PlaceMazeTileModifier();
+            if (Input.GetKey(KeyCode.LeftShift))
+            {
+                PlaceMazeTileModifierVariation();
+            }
+            else
+            {
+                PlaceMazeTileModifier();
+            }
         }
     }
 
@@ -112,6 +119,23 @@ public class EditorTileSelector : MonoBehaviour
         }
     }
 
+    private void PlaceMazeTileModifierVariation()
+    {
+        Logger.Log("place a variation");
+        EditorMazeTileModifierType editorMazeTileModifierType = EditorManager.SelectedMazeTileModifierType;
+
+        if (editorMazeTileModifierType == EditorMazeTileModifierType.Attribute)
+        {
+            //IEditorMazeTileAttribute attribute = EditorSelectedModifierContainer.Instance.EditorMazeTileAttributes[EditorManager.SelectedMazeTileAttributeModifierIndex];
+            //PlaceMazeTileAttribute(CurrentSelectedLocation, attribute);
+        }
+        else
+        {
+            IEditorMazeTileBackground background = EditorSelectedModifierContainer.Instance.EditorMazeTileBackgrounds[EditorManager.SelectedMazeTileBackgroundModifierIndex];
+            PlaceMazeTileBackgroundVariation(CurrentSelectedLocation, background);
+        }
+    }
+
     private void PlaceMazeTileAttribute(GridLocation gridLocation, IEditorMazeTileAttribute attribute)
     {
         if (attribute == null) Logger.Error($"Could not find the attribute type {attribute.GetType()}");
@@ -126,5 +150,13 @@ public class EditorTileSelector : MonoBehaviour
 
         MazeLevelManager.Instance.Level.TilesByLocation.TryGetValue(gridLocation, out Tile tile);
         background.PlaceBackground(tile);
+    }
+
+    private void PlaceMazeTileBackgroundVariation(GridLocation gridLocation, IEditorMazeTileBackground background)
+    {
+        if (background == null) Logger.Error($"Could not find the background type {background.GetType()}");
+
+        MazeLevelManager.Instance.Level.TilesByLocation.TryGetValue(gridLocation, out Tile tile);
+        background.PlaceBackgroundVariation(tile);
     }
 }

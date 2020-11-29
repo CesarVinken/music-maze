@@ -6,4 +6,5 @@ public interface IEditorMazeTileBackground : IEditorMazeTileModifierType
     Sprite Sprite { get; }
 
     void PlaceBackground(Tile tile);
+    void PlaceBackgroundVariation(Tile tile);
 }
