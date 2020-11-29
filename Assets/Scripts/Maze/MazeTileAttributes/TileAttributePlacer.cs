@@ -109,7 +109,9 @@ public class TileAttributePlacer
             // If we now have obstacle connections on all sides, remove the backgrounds
             if (obstacleConnectionScoreOnNeighbour == NeighbourTileCalculator.ConnectionOnAllSidesScore)
             {
+                Logger.Log($"Remove the background on tile {neighbour.Value.GridLocation.X}, {neighbour.Value.GridLocation.Y}");
                 TileBackgroundRemover tileBackgroundRemover = new TileBackgroundRemover(neighbour.Value);
+
                 tileBackgroundRemover.RemoveBaseBackground(MazeTileBaseBackgroundType.DefaultGrass);
             }
         }

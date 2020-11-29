@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class TileBackgroundPlacer
@@ -71,6 +72,9 @@ public class TileBackgroundPlacer
 
     public void PlaceBaseBackground(MazeTileBaseBackgroundType mazeTileBaseBackgroundType)
     {
+        MazeTileBaseBackground oldBackground = (MazeTileBaseBackground)_tile.MazeTileBackgrounds.FirstOrDefault(background => background is MazeTileBaseBackground);
+        if (oldBackground != null) return;
+
         Logger.Warning("Start placing base background.....");
         GameObject mazeTileBaseBackgroundGO = GameObject.Instantiate(MazeLevelManager.Instance.TileBaseBackgroundPrefab, _tile.transform);
         MazeTileBaseBackground mazeTileBaseBackground = mazeTileBaseBackgroundGO.GetComponent<MazeTileBaseBackground>();

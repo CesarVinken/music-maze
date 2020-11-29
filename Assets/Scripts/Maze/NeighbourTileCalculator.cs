@@ -143,7 +143,7 @@ public class NeighbourTileCalculator
 
         foreach (KeyValuePair<ObjectDirection, Tile> neighbour in tile.Neighbours)
         {
-            Logger.Warning($"Neighbour at {neighbour.Value.GridLocation.X}, {neighbour.Value.GridLocation.Y} is {neighbour.Key} of {tile.GridLocation.X},{tile.GridLocation.Y}");
+            Logger.Warning($"Neighbour at {neighbour.Value.GridLocation.X},{neighbour.Value.GridLocation.Y} is {neighbour.Key} of {tile.GridLocation.X},{tile.GridLocation.Y}");
             if (neighbour.Key == ObjectDirection.Right)
             {
                 TileObstacle tileObstacle = neighbour.Value.TryGetTileObstacle();

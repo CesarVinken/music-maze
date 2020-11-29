@@ -24,7 +24,8 @@ public class TileAttributeRemover
         ObstacleType obstacleType = tileObstacle.ObstacleType;
         int oldConnectionScore = tileObstacle.ObstacleConnectionScore;
 
-        // If needed, place a background in the gap that the removed path left
+        // If needed, place a background in the gap that the removed path left. 
+        // OPTIMISATION: Currently only looking at connection score from obstacles, but should also take eg. door attributes into account.
         if (oldConnectionScore == NeighbourTileCalculator.ConnectionOnAllSidesScore)
         {
             TileBackgroundPlacer tileBackgroundPlacer = new TileBackgroundPlacer(_tile);
@@ -48,10 +49,10 @@ public class TileAttributeRemover
             tileObstacleOnNeighbour.WithObstacleConnectionScore(obstacleConnectionScoreOnNeighbour);
 
             // If needed, place a background
-            if (obstacleConnectionScoreOnNeighbour == NeighbourTileCalculator.ConnectionOnAllSidesScore)
+            if (obstacleConnectionScoreOnNeighbour != NeighbourTileCalculator.ConnectionOnAllSidesScore)
             {
-                TileBackgroundRemover tileBackgroundRemover = new TileBackgroundRemover(neighbour.Value);
-                tileBackgroundRemover.RemoveBaseBackground(MazeTileBaseBackgroundType.DefaultGrass);
+                TileBackgroundPlacer tileBackgroundPlacer = new TileBackgroundPlacer(neighbour.Value);
+                tileBackgroundPlacer.PlaceBaseBackground(MazeTileBaseBackgroundType.DefaultGrass);
             }
         }
     }
