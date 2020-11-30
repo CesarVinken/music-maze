@@ -41,14 +41,14 @@ public static class MazeLevelLoader
         if (!File.Exists(filePath))
         {
             Logger.Warning(Logger.Datawriting, $"Looked for the maze level '{sanatisedMazeName}' but could not find it");
-
+            Logger.Log($"The available levels are: {GetAllLevelNamesForPrint()}");
             return false;
         }
 
         return true;
     }
 
-    public static string GetAllLevelNamesForPrint(string printLine)
+    public static string GetAllLevelNamesForPrint(string printLine = "")
     {
         foreach (string mazeName in Directory.GetFiles(Application.streamingAssetsPath, "*.json"))
         {

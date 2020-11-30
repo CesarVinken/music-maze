@@ -75,8 +75,7 @@ public class TileBackgroundPlacer
         MazeTileBaseBackground oldBackground = (MazeTileBaseBackground)_tile.MazeTileBackgrounds.FirstOrDefault(background => background is MazeTileBaseBackground);
         if (oldBackground != null) return;
 
-        Logger.Warning("Start placing base background.....");
-        GameObject mazeTileBaseBackgroundGO = GameObject.Instantiate(MazeLevelManager.Instance.TileBaseBackgroundPrefab, _tile.transform);
+        GameObject mazeTileBaseBackgroundGO = GameObject.Instantiate(MazeLevelManager.Instance.TileBaseBackgroundPrefab, _tile.BackgroundsContainer);
         MazeTileBaseBackground mazeTileBaseBackground = mazeTileBaseBackgroundGO.GetComponent<MazeTileBaseBackground>();
 
         int defaultConnectionScore = -1;

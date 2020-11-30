@@ -80,6 +80,13 @@ public class SerialisableTile
                     new SerialisableTilePathBackground(mazeTilePath.PathConnectionScore);
                 tilebackgrounds.Add(serialisedTilePathBackground);
             }
+            else if (tileBackground.GetType() == typeof(MazeTileBaseBackground))
+            {
+                MazeTileBaseBackground baseBackground = tileBackground as MazeTileBaseBackground;
+                SerialisableTileBaseBackground serialisedTileBaseBackground =
+                    new SerialisableTileBaseBackground(-1); // TODO: make work/remove connection scores for BaseBackground
+                tilebackgrounds.Add(serialisedTileBaseBackground);
+            }
             else
             {
                 Logger.Error($"Could not serialise the tile background {tileBackground.GetType()}");

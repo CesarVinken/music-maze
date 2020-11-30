@@ -22,14 +22,13 @@ public class ConfigureCommand : CommandProcedure
                     break;
                 default:
                     //Console.Instance.PrintToReportText();
-                    string message = $"Unknown configure argument '{infoObject}' for the configure command.";
+                    string message = $"Unknown configure argument '{infoObject}' for the configure command. Try 'maze' or 'default-maze'";
                     throw new UnknownArgumentConsoleException(message);
             }
         }
-        catch (System.Exception)
+        catch (System.Exception e)
         {
-
-            throw;
+            Logger.Warning(e.Message);
         }
     }
 
