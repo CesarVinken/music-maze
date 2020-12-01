@@ -14,14 +14,13 @@ public class MazeTileBaseBackground : MonoBehaviour, IMazeTileBackground
 
         Tile = tile;
         ParentId = tile.TileId;
+        _spriteRenderer.sortingOrder = SpriteManager.BaseBackgroundSortingOrder;
     }
 
     public void WithPathConnectionScore(int score)
     {
         _sprite = SpriteManager.Instance.DefaultMazeTileBackground[0];
         _spriteRenderer.sprite = _sprite;
-
-        transform.position = new Vector3(transform.position.x, transform.position.y, 1f); //Adjusted Z value to have it further away from the camera
     }
 
     public void Remove()

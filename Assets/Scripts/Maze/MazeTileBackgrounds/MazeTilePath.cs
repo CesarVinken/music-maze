@@ -29,6 +29,7 @@ public class MazeTilePath : MonoBehaviour, IMazeTileBackground
 
         Tile = tile;
         ParentId = tile.TileId;
+        _spriteRenderer.sortingOrder = SpriteManager.PathSortingOrder;
     }
 
     public void Remove()

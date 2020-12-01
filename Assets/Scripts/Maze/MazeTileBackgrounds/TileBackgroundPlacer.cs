@@ -18,7 +18,7 @@ public class TileBackgroundPlacer
 
         int pathConnectionScore = NeighbourTileCalculator.MapNeighbourPathsOfTile(_tile, mazeTilePathType);
         Logger.Log($"Found a score of {pathConnectionScore}");
-        GameObject mazeTilePathGO = GameObject.Instantiate(MazeLevelManager.Instance.TilePathPrefab, _tile.transform);
+        GameObject mazeTilePathGO = GameObject.Instantiate(MazeLevelManager.Instance.TilePathPrefab, _tile.BackgroundsContainer);
         MazeTilePath mazeTilePath = mazeTilePathGO.GetComponent<MazeTilePath>();
         mazeTilePath.WithPathType(MazeTilePathType.Default);
         mazeTilePath.WithPathConnectionScore(pathConnectionScore);
@@ -50,10 +50,11 @@ public class TileBackgroundPlacer
     // Called in game when we already have the connection score
     public void PlacePath(MazeTilePathType mazeTilePathType, int pathConnectionScore)
     {
-        GameObject mazeTilePathGO = GameObject.Instantiate(MazeLevelManager.Instance.TilePathPrefab, _tile.transform);
+        GameObject mazeTilePathGO = GameObject.Instantiate(MazeLevelManager.Instance.TilePathPrefab, _tile.BackgroundsContainer);
         MazeTilePath mazeTilePath = mazeTilePathGO.GetComponent<MazeTilePath>();
         mazeTilePath.WithPathType(mazeTilePathType);
         mazeTilePath.WithPathConnectionScore(pathConnectionScore);
+        mazeTilePath.SetTile(_tile);
 
         _tile.MazeTileBackgrounds.Add(mazeTilePath);
     }
@@ -80,6 +81,7 @@ public class TileBackgroundPlacer
 
         int defaultConnectionScore = -1;
         mazeTileBaseBackground.WithPathConnectionScore(defaultConnectionScore);
+        mazeTileBaseBackground.SetTile(_tile);
         _tile.MazeTileBackgrounds.Add(mazeTileBaseBackground as IMazeTileBackground);
     }
 }
