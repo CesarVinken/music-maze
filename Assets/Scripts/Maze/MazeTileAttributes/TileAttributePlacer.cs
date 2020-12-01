@@ -27,7 +27,8 @@ public class TileAttributePlacer
         playerExit.WithObstacleConnectionScore(obstacleConnectionScore);
 
         _tile.Walkable = false;
-        _tile.Markable = false;
+        _tile.TryMakeMarkable(false);
+
         Logger.Log("Add player exit to maze tile attribute list");
         _tile.MazeTileAttributes.Add(playerExit);
 
@@ -60,7 +61,7 @@ public class TileAttributePlacer
         playerExit.WithObstacleConnectionScore(obstacleConnectionScore);
 
         _tile.Walkable = false;
-        _tile.Markable = false;
+        _tile.TryMakeMarkable(false);
         _tile.MazeTileAttributes.Add(playerExit);
     }
 
@@ -76,7 +77,7 @@ public class TileAttributePlacer
         tileObstacle.WithObstacleConnectionScore(obstacleConnectionScore);
 
         _tile.Walkable = false;
-        _tile.Markable = false;
+        _tile.TryMakeMarkable(false);
         _tile.MazeTileAttributes.Add(tileObstacle);
 
         // If we now have obstacle connections on all sides, remove the backgrounds
@@ -126,7 +127,7 @@ public class TileAttributePlacer
         tileObstacle.WithObstacleConnectionScore(obstacleConnectionScore);
 
         _tile.Walkable = false;
-        _tile.Markable = false;
+        _tile.TryMakeMarkable(false);
         _tile.MazeTileAttributes.Add(tileObstacle);
     }
 
@@ -135,7 +136,7 @@ public class TileAttributePlacer
         PlayerSpawnpoint playerSpawnpoint = (PlayerSpawnpoint)InstantiateTileAttributeGO<PlayerSpawnpoint>();
 
         _tile.Walkable = true;
-        _tile.Markable = false;
+        _tile.TryMakeMarkable(false);
 
         _tile.MazeTileAttributes.Add(playerSpawnpoint);
     }
@@ -145,8 +146,7 @@ public class TileAttributePlacer
         EnemySpawnpoint enemySpawnpoint = (EnemySpawnpoint)InstantiateTileAttributeGO<EnemySpawnpoint>();
 
         _tile.Walkable = true;
-        _tile.Markable = true;
-
+        _tile.TryMakeMarkable(true);
         _tile.MazeTileAttributes.Add(enemySpawnpoint);
     } 
 }

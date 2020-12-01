@@ -57,6 +57,7 @@ public class TileBackgroundPlacer
         mazeTilePath.SetTile(_tile);
 
         _tile.MazeTileBackgrounds.Add(mazeTilePath);
+        _tile.TryMakeMarkable(true);
     }
 
     public void PlacePathVariation(MazeTilePath mazeTilePath)

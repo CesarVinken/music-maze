@@ -278,7 +278,7 @@ public class MazeLevelManager : MonoBehaviour, IOnEventCallback
         if (NumberOfUnmarkedTiles == 0)
         {
             OpenExit();
-            Logger.Warning(Logger.Level, "Open exit!");
+            Logger.Warning(Logger.Level, "Open exits!");
         }
     }
 }

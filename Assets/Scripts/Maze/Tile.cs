@@ -9,7 +9,7 @@ public class Tile : MonoBehaviour
 
     public string TileId;
     public bool Walkable = true;
-    public bool Markable = true;
+    public bool Markable = false;
     public GridLocation GridLocation;
     public PlayerMark PlayerMark = null;
 
@@ -88,31 +88,6 @@ public class Tile : MonoBehaviour
         }
     }
 
-    //public void SetBackgroundSprites()
-    //{
-
-
-
-
-    //TODO: pass on connection score
-
-    //    int connectionScore = 1;
-
-    //    TODO path sprite should not be set if there is no path.
-    //    GameObject pathGO = Instantiate(MazeLevelManager.Instance.TilePathPrefab, transform);
-    //    MazeTilePath mazeTilePath = pathGO.GetComponent<MazeTilePath>();
-    //    mazeTilePath.WithPathConnectionScore(connectionScore);
-    //    MazeTileBackgrounds.Add(mazeTilePath as IMazeTileBackground);
-
-    //    if (connectionScore != 15) // TODO also don't add background for fully covering wall tiles
-    //    {
-    //        GameObject baseBackgroundGO = Instantiate(MazeLevelManager.Instance.TileBaseBackgroundPrefab, transform);
-    //        MazeTileBaseBackground baseBackground = baseBackgroundGO.GetComponent<MazeTileBaseBackground>();
-    //        baseBackground.WithPathConnectionScore(-1); // background is currently always the default grass background. Connection score of -1 is temporary
-    //        MazeTileBackgrounds.Add(baseBackground as IMazeTileBackground);
-    //    }
-    //}
-
     public void AddNeighbours(MazeLevel level)
     {
         //Add Right
@@ -169,4 +144,32 @@ public class Tile : MonoBehaviour
         Logger.Log($"found maze tile path {mazeTilePath.MazeTilePathType} on {GridLocation.X},{GridLocation.Y} with score {mazeTilePath.PathConnectionScore}");
         return mazeTilePath;
     }
+
+    public void TryMakeMarkable(bool isMarkable)
+    {
+        MazeTilePath mazeTilePath = (MazeTilePath)MazeTileBackgrounds.FirstOrDefault(background => background is MazeTilePath);
+
+        if (mazeTilePath == null)
+        {
+            Markable = false;
+            return;
+        }
+
+        for (int i = 0; i < MazeTileAttributes.Count; i++)
+        {
+            if (MazeTileAttributes[i] is PlayerSpawnpoint)
+            {
+                Markable = false;
+                return;
+            }
+
+            if (MazeTileAttributes[i] is PlayerExit)
+            {
+                Markable = false;
+                return;
+            }
+        }
+        Markable = isMarkable;
+    }
+
 }

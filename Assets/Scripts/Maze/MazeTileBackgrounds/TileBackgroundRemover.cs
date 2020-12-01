@@ -28,6 +28,8 @@ public class TileBackgroundRemover
         _tile.MazeTileBackgrounds.Remove(mazeTilePath);
         mazeTilePath.Remove();
 
+        TrySetTileNotMarkable();
+
 
         //After removing tile, check with neighbour tiles if wall connections should be updated
         foreach (KeyValuePair<ObjectDirection, Tile> neighbour in _tile.Neighbours)
@@ -62,5 +64,15 @@ public class TileBackgroundRemover
 
         _tile.MazeTileBackgrounds.Remove(mazeTileBaseBackground);
         mazeTileBaseBackground.Remove();
+    }
+
+    private void TrySetTileNotMarkable()
+    {
+        MazeTilePath mazeTilePath = (MazeTilePath)_tile.MazeTileBackgrounds.FirstOrDefault(background => background is MazeTilePath);
+
+        if (mazeTilePath == null)
+        {
+            _tile.TryMakeMarkable(false);
+        }
     }
 }
