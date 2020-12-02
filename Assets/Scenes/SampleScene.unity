@@ -3349,8 +3349,6 @@ MonoBehaviour:
   _gameManager: {fileID: 1237718925}
   ConsoleContainer: {fileID: 451462790}
   ConsoleButton: {fileID: 2041238810}
-  Player1TileMarker: {fileID: 21300000, guid: 0a217b22d4545f6488c6fc85057956d3, type: 3}
-  Player2TileMarker: {fileID: 21300000, guid: eb40d759e44b4ee488269c140b908328, type: 3}
   BlackOutSquare: {fileID: 1730241098}
 --- !u!114 &800624754
 MonoBehaviour:

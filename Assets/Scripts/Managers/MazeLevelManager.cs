@@ -4,6 +4,7 @@ using Photon.Realtime;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class MazeLevelManager : MonoBehaviour, IOnEventCallback
@@ -156,15 +157,22 @@ public class MazeLevelManager : MonoBehaviour, IOnEventCallback
         {
             player.LastTile = tile;
 
+            MazeTilePath mazeTilePath = (MazeTilePath)tile.MazeTileBackgrounds.FirstOrDefault(background => background is MazeTilePath);
+            if (mazeTilePath == null) return;
+
+            PlayerMark playerMark = new PlayerMark(mazeTilePath.PathConnectionScore);
+
             if (player.PlayerNumber == PlayerNumber.Player1)
             {
-                tile.PlayerMarkRenderer.sprite = MainCanvas.Instance.Player1TileMarker;
-                tile.PlayerMark.SetOwner(PlayerMarkOwner.Player1);
+                playerMark.SetOwner(PlayerMarkOwner.Player1);
+                tile.PlayerMarkRenderer.sprite = SpriteManager.Instance.Player1TileMarker[playerMark.ConnectionScore - 1];
+                tile.PlayerMark = playerMark;
             }
             else
             {
-                tile.PlayerMarkRenderer.sprite = MainCanvas.Instance.Player2TileMarker;
-                tile.PlayerMark.SetOwner(PlayerMarkOwner.Player2);
+                playerMark.SetOwner(PlayerMarkOwner.Player2);
+                tile.PlayerMarkRenderer.sprite = SpriteManager.Instance.Player2TileMarker[playerMark.ConnectionScore - 1];
+                tile.PlayerMark = playerMark;
             }
 
             HandleNumberOfUnmarkedTiles();
@@ -209,18 +217,24 @@ public class MazeLevelManager : MonoBehaviour, IOnEventCallback
             GridLocation tileLocation = new GridLocation((int)data[0], (int)data[1]);
             PlayerNumber playerNumber = (PlayerNumber)data[2];
 
-            Tile tile = Level.TilesByLocation[tileLocation]; // add check
+            Tile tile = Level.TilesByLocation[tileLocation];
+
+            MazeTilePath mazeTilePath = (MazeTilePath)tile.MazeTileBackgrounds.FirstOrDefault(background => background is MazeTilePath);
+            if (mazeTilePath == null) return;
+
+            PlayerMark playerMark = new PlayerMark(mazeTilePath.PathConnectionScore);
 
             if (playerNumber == PlayerNumber.Player1)
             {
-                tile.PlayerMarkRenderer.sprite = MainCanvas.Instance.Player1TileMarker;
-                tile.PlayerMark.SetOwner(PlayerMarkOwner.Player1);
-
+                playerMark.SetOwner(PlayerMarkOwner.Player1);
+                tile.PlayerMarkRenderer.sprite = SpriteManager.Instance.Player1TileMarker[playerMark.ConnectionScore - 1];
+                tile.PlayerMark = playerMark;
             }
             else
             {
-                tile.PlayerMarkRenderer.sprite = MainCanvas.Instance.Player2TileMarker;
-                tile.PlayerMark.SetOwner(PlayerMarkOwner.Player2);
+                playerMark.SetOwner(PlayerMarkOwner.Player2);
+                tile.PlayerMarkRenderer.sprite = SpriteManager.Instance.Player2TileMarker[playerMark.ConnectionScore - 1];
+                tile.PlayerMark = playerMark;
             }
 
             HandleNumberOfUnmarkedTiles();

@@ -9,11 +9,19 @@ public class SpriteManager : MonoBehaviour
     public Sprite[] DefaultWall;
     public Sprite[] DefaultMazeTileBackground;
 
+    [Space(10)]
+    [Header("Player graphics")]
+    public Sprite[] Player1TileMarker;
+    public Sprite[] Player2TileMarker;
+
     public const int BaseBackgroundSortingOrder = -20;
     public const int PathSortingOrder = -10;
 
     public void Awake()
     {
         Instance = this;
+
+        Guard.CheckIsNull(Player1TileMarker, "Player1TileMarker", gameObject);
+        Guard.CheckIsNull(Player2TileMarker, "Player2TileMarker", gameObject);
     }
 }

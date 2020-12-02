@@ -30,8 +30,6 @@ public class Tile : MonoBehaviour
 
         if (!Markable) return;
 
-        PlayerMark = new PlayerMark();
-
         if (MazeLevelManager.Instance.NumberOfUnmarkedTiles == -1)
         {
             MazeLevelManager.Instance.NumberOfUnmarkedTiles = 1;
