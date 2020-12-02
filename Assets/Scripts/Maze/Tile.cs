@@ -6,6 +6,7 @@ public class Tile : MonoBehaviour
 {
     public Transform BackgroundsContainer;
     public SpriteRenderer PlayerMarkRenderer;
+    public SpriteRenderer PlayerMarkEndsRenderer;
 
     public string TileId;
     public bool Walkable = true;
@@ -20,6 +21,9 @@ public class Tile : MonoBehaviour
     public void Awake()
     {
         Guard.CheckIsNull(BackgroundsContainer, "BackgroundsContainer", gameObject);
+
+        Guard.CheckIsNull(PlayerMarkRenderer, "PlayerMarkRenderer", gameObject);
+        Guard.CheckIsNull(PlayerMarkEndsRenderer, "PlayerMarkEndsRenderer", gameObject);
 
         if (transform.position.y < 0) Logger.Error("There is a tile at {0},{1}. Tiles cannot have negative Y values", transform.position.x, transform.position.y);
     }
@@ -170,4 +174,8 @@ public class Tile : MonoBehaviour
         Markable = isMarkable;
     }
 
+    public void ResetPlayerMarkEndsRenderer()
+    {
+        PlayerMarkEndsRenderer.sprite = null;
+    }
 }

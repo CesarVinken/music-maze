@@ -13,6 +13,7 @@ public class SpriteManager : MonoBehaviour
     [Header("Player graphics")]
     public Sprite[] Player1TileMarker;
     public Sprite[] Player2TileMarker;
+    public Sprite[] PlayerTileMarkerEdge;
 
     public const int BaseBackgroundSortingOrder = -20;
     public const int PathSortingOrder = -10;
@@ -23,5 +24,6 @@ public class SpriteManager : MonoBehaviour
 
         Guard.CheckIsNull(Player1TileMarker, "Player1TileMarker", gameObject);
         Guard.CheckIsNull(Player2TileMarker, "Player2TileMarker", gameObject);
+        Guard.CheckIsNull(PlayerTileMarkerEdge, "PlayerTileMarkerEdge", gameObject);
     }
 }

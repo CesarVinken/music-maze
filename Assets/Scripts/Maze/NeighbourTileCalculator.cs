@@ -18,6 +18,37 @@ public class NeighbourTileCalculator
 {
     public static readonly int ConnectionOnAllSidesScore = 16;
 
+    public static int MapNeighbourPlayerMarkEndsOfTile(Tile tile)
+    {
+        bool hasMarkRight = false;
+        bool hasMarkDown = false;
+        bool hasMarkLeft = false;
+        bool hasMarkUp = false;
+
+        foreach (KeyValuePair<ObjectDirection, Tile> neighbour in tile.Neighbours)
+        {
+            if (neighbour.Value.PlayerMark == null || neighbour.Value.PlayerMark.Owner == PlayerMarkOwner.None) continue;
+
+            if (neighbour.Key == ObjectDirection.Right)
+            {
+                hasMarkRight = true;
+            }
+            else if (neighbour.Key == ObjectDirection.Down)
+            {
+                hasMarkDown = true;
+            }
+            else if (neighbour.Key == ObjectDirection.Left)
+            {
+                hasMarkLeft = true;
+            }
+            else if (neighbour.Key == ObjectDirection.Up)
+            {
+                hasMarkUp = true;
+            }
+        }
+        return CalculatePlayerMarkConnectionScore(hasMarkRight, hasMarkDown, hasMarkLeft, hasMarkUp);
+    }
+
     public static int MapNeighbourPathsOfTile(Tile tile, MazeTilePathType pathType)
     {
         Logger.Log($"---------Map neighbours of {tile.GridLocation.X},{tile.GridLocation.Y}--------");
@@ -131,7 +162,7 @@ public class NeighbourTileCalculator
     public static int MapNeighbourObstaclesOfTile(Tile tile, ObstacleType obstacleType, bool isDoor)
     {
         Logger.Log($"Map neighbours of {tile.GridLocation.X},{tile.GridLocation.Y}");
-        bool obstacleRight = false; // TODO turn bools in to TileConnectionWidth
+        bool obstacleRight = false;
         bool obstacleDown = false;
         bool obstacleLeft = false;
         bool obstacleUp = false;
@@ -1271,6 +1302,10 @@ public class NeighbourTileCalculator
         return 1;
     }
 
+    private static int CalculatePlayerMarkConnectionScore(bool right, bool down, bool left, bool up)
+    {
+        return CalculateObstacleConnectionScore(right, down, left, up);
+    }
     private static int CalculateObstacleConnectionScore(bool right, bool down, bool left, bool up)
     {
         if (right)

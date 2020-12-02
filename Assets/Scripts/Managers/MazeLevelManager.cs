@@ -162,20 +162,11 @@ public class MazeLevelManager : MonoBehaviour, IOnEventCallback
 
             PlayerMark playerMark = new PlayerMark(mazeTilePath.PathConnectionScore);
 
-            if (player.PlayerNumber == PlayerNumber.Player1)
-            {
-                playerMark.SetOwner(PlayerMarkOwner.Player1);
-                tile.PlayerMarkRenderer.sprite = SpriteManager.Instance.Player1TileMarker[playerMark.ConnectionScore - 1];
-                tile.PlayerMark = playerMark;
-            }
-            else
-            {
-                playerMark.SetOwner(PlayerMarkOwner.Player2);
-                tile.PlayerMarkRenderer.sprite = SpriteManager.Instance.Player2TileMarker[playerMark.ConnectionScore - 1];
-                tile.PlayerMark = playerMark;
-            }
-
+            HandlePlayerMarkerSprite(tile, player.PlayerNumber, playerMark);
+            HandlePlayerTileMarkerEnds(tile);
             HandleNumberOfUnmarkedTiles();
+
+            tile.ResetPlayerMarkEndsRenderer();
         }
         else
         {
@@ -224,20 +215,11 @@ public class MazeLevelManager : MonoBehaviour, IOnEventCallback
 
             PlayerMark playerMark = new PlayerMark(mazeTilePath.PathConnectionScore);
 
-            if (playerNumber == PlayerNumber.Player1)
-            {
-                playerMark.SetOwner(PlayerMarkOwner.Player1);
-                tile.PlayerMarkRenderer.sprite = SpriteManager.Instance.Player1TileMarker[playerMark.ConnectionScore - 1];
-                tile.PlayerMark = playerMark;
-            }
-            else
-            {
-                playerMark.SetOwner(PlayerMarkOwner.Player2);
-                tile.PlayerMarkRenderer.sprite = SpriteManager.Instance.Player2TileMarker[playerMark.ConnectionScore - 1];
-                tile.PlayerMark = playerMark;
-            }
-
+            HandlePlayerMarkerSprite(tile, playerNumber, playerMark);
+            HandlePlayerTileMarkerEnds(tile);
             HandleNumberOfUnmarkedTiles();
+
+            tile.ResetPlayerMarkEndsRenderer();
         } else if(eventCode == LoadNextMazeLevelEvent.LoadNextMazeLevelEventCode)
         {
             object[] data = (object[])photonEvent.CustomData;
@@ -284,6 +266,22 @@ public class MazeLevelManager : MonoBehaviour, IOnEventCallback
         }
     }
 
+    private void HandlePlayerMarkerSprite(Tile tile, PlayerNumber playerNumber, PlayerMark playerMark)
+    {
+        if (playerNumber == PlayerNumber.Player1)
+        {
+            playerMark.SetOwner(PlayerMarkOwner.Player1);
+            tile.PlayerMarkRenderer.sprite = SpriteManager.Instance.Player1TileMarker[playerMark.ConnectionScore - 1];
+            tile.PlayerMark = playerMark;
+        }
+        else
+        {
+            playerMark.SetOwner(PlayerMarkOwner.Player2);
+            tile.PlayerMarkRenderer.sprite = SpriteManager.Instance.Player2TileMarker[playerMark.ConnectionScore - 1];
+            tile.PlayerMark = playerMark;
+        }
+    }
+
     private void HandleNumberOfUnmarkedTiles()
     {
         NumberOfUnmarkedTiles--;
@@ -294,5 +292,22 @@ public class MazeLevelManager : MonoBehaviour, IOnEventCallback
             OpenExit();
             Logger.Warning(Logger.Level, "Open exits!");
         }
+    }
+
+    private void HandlePlayerTileMarkerEnds(Tile tile)
+    {
+        foreach (KeyValuePair<ObjectDirection, Tile> item in tile.Neighbours)
+        {
+            Tile neighbour = item.Value;
+
+            MazeTilePath mazeTilePath = (MazeTilePath)neighbour.MazeTileBackgrounds.FirstOrDefault(background => background is MazeTilePath);
+            if (mazeTilePath == null) continue;
+            
+            if (neighbour.PlayerMark != null && neighbour.PlayerMark.Owner != PlayerMarkOwner.None) continue;
+
+            int neighbourConnectionScore = NeighbourTileCalculator.MapNeighbourPlayerMarkEndsOfTile(neighbour);
+            neighbour.PlayerMarkEndsRenderer.sprite = SpriteManager.Instance.PlayerTileMarkerEdge[neighbourConnectionScore - 1];
+        }
+
     }
 }
