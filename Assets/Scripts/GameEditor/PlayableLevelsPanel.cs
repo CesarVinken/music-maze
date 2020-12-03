@@ -51,8 +51,6 @@ public class PlayableLevelsPanel : MonoBehaviour
     //Save changes to which levels are playable to the levels.json file
     public void SaveChanges()
     {
-        Logger.Log("Playable level selection changes were saved.");
-
         JsonMazeLevelListFileWriter jsonMazeLevelListFileWriter = new JsonMazeLevelListFileWriter();
         MazeLevelNamesData levelNamesData = new MazeLevelNamesData();
 
@@ -66,6 +64,8 @@ public class PlayableLevelsPanel : MonoBehaviour
         }
 
         jsonMazeLevelListFileWriter.SerialiseData(levelNamesData);
+
+        Logger.Log("Playable level selection changes were saved.");
     }
 
     public void ClosePanel()

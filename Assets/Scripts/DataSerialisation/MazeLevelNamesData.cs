@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 
 [Serializable]
 public class MazeLevelNamesData
@@ -20,12 +21,30 @@ public class MazeLevelNamesData
         {
             LevelNames = oldData.LevelNames;
         }
-        AddLevelName(levelName);
     }
 
-    public void AddLevelName(string levelName)
+    public MazeLevelNamesData AddLevelName(string mazeLevelName)
     {
-        MazeLevelNameData myObject = new MazeLevelNameData(levelName);
-        LevelNames.Add(myObject);
+        if(LevelNameExists(mazeLevelName))
+        {
+            Logger.Log($"A level with the name {mazeLevelName} was already registered. Not adding it to the maze name list");
+            return this;
+        }
+
+        MazeLevelNameData mazeLevelNameData = new MazeLevelNameData(mazeLevelName);
+        LevelNames.Add(mazeLevelNameData);
+
+        return this;
+    }
+
+    public bool LevelNameExists(string levelName)
+    {
+        MazeLevelNameData levelNameData = LevelNames.FirstOrDefault(l => l.LevelName == levelName);
+
+        if(levelNameData == null)
+        {
+            return false;
+        }
+        return true;
     }
 }
