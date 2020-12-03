@@ -229,7 +229,7 @@ public class EditorGridGenerator : MonoBehaviour
             }
             else // Colomn left
             {
-                return new SerialisableTileObstacleAttribute(9);
+                return new SerialisableTileObstacleAttribute(10);
             }
         }
         else if (gridLocation.X == _gridWidth - 1)
@@ -240,11 +240,11 @@ public class EditorGridGenerator : MonoBehaviour
             }
             else if (gridLocation.Y == _gridHeight - 1) // Top right
             {
-                return new SerialisableTileObstacleAttribute(10);
+                return new SerialisableTileObstacleAttribute(9);
             }
             else // Colomn right
             {
-                return new SerialisableTileObstacleAttribute(9);
+                return new SerialisableTileObstacleAttribute(10);
             }
         }
         else if (gridLocation.Y == 0) // Bottom row

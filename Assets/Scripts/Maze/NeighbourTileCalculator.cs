@@ -1348,11 +1348,11 @@ public class NeighbourTileCalculator
                 {
                     return 15;
                 }
-                return 10;
+                return 9;
             }
             else if (up)
             {
-                return 9;
+                return 10;
             }
             return 3;
         }
