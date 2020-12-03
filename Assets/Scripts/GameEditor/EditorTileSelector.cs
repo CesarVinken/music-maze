@@ -11,11 +11,11 @@ public class EditorTileSelector : MonoBehaviour
             _currentSelectedLocation = value;
             transform.position = new Vector2(_currentSelectedLocation.X, _currentSelectedLocation.Y);
 
-            _lineRenderer.SetPosition(0, new Vector3(transform.position.x, transform.position.y));
-            _lineRenderer.SetPosition(1, new Vector3(transform.position.x + 1, transform.position.y));
-            _lineRenderer.SetPosition(2, new Vector3(transform.position.x + 1, transform.position.y + 1));
-            _lineRenderer.SetPosition(3, new Vector3(transform.position.x, transform.position.y + 1));
-            _lineRenderer.SetPosition(4, new Vector3(transform.position.x, transform.position.y));
+            _lineRenderer.SetPosition(0, new Vector3(transform.position.x, transform.position.y, -1));
+            _lineRenderer.SetPosition(1, new Vector3(transform.position.x + 1, transform.position.y, -1));
+            _lineRenderer.SetPosition(2, new Vector3(transform.position.x + 1, transform.position.y + 1, -1));
+            _lineRenderer.SetPosition(3, new Vector3(transform.position.x, transform.position.y + 1, -1));
+            _lineRenderer.SetPosition(4, new Vector3(transform.position.x, transform.position.y, -1));
         }
     }
 
