@@ -95,7 +95,6 @@ public static class MazeLevelLoader
     {
         string sourceLevelFilePath = Path.Combine(Application.streamingAssetsPath, sourceLevelName + ".json");
         string destinationLevelFilePath = Path.Combine(Application.streamingAssetsPath, destinationLevelName + ".json");
-        string backupLevelFilePath = Path.Combine(Application.streamingAssetsPath, "backup-" + destinationLevelName + ".json");
-        File.Replace(sourceLevelFilePath, destinationLevelFilePath, backupLevelFilePath);
+        File.Copy(sourceLevelFilePath, destinationLevelFilePath, true);
     }
 }
