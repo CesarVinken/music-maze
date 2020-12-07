@@ -98,9 +98,17 @@ public class MazeLevel
             {
                 tileAttributePlacer.PlacePlayerSpawnpoint();
             }
+            else if (tileAttributeId == SerialisableTileAttribute.PlayerOnlyAttributeCode)
+            {
+                tileAttributePlacer.PlacePlayerOnlyAttribute(PlayerOnlyType.Bush);
+            }
             else if (tileAttributeId == SerialisableTileAttribute.EnemySpawnpointCode)
             {
                 tileAttributePlacer.PlaceEnemySpawnpoint();
+            }
+            else
+            {
+                Logger.Error($"Unknown tile attribute with tileAttributeId {tileAttributeId}");
             }
         }
     }

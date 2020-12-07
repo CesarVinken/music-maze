@@ -20,6 +20,7 @@ public class MazeLevelManager : MonoBehaviour, IOnEventCallback
     public GameObject TilePathPrefab;
     public GameObject TileObstaclePrefab;
     public GameObject PlayerExitPrefab;
+    public GameObject PlayerOnlyPrefab;
     public GameObject PlayerSpawnpointPrefab;
     public GameObject EnemySpawnpointPrefab;
 
@@ -34,6 +35,8 @@ public class MazeLevelManager : MonoBehaviour, IOnEventCallback
                 return PlayerExitPrefab;
             case Type tileObstacle when tileObstacle == typeof(TileObstacle):
                 return TileObstaclePrefab;
+            case Type playerOnly when playerOnly == typeof(PlayerOnly):
+                return PlayerOnlyPrefab;
             case Type playerSpawnpoint when playerSpawnpoint == typeof(PlayerSpawnpoint):
                 return PlayerSpawnpointPrefab;
             case Type enemySpawnpoint when enemySpawnpoint == typeof(EnemySpawnpoint):
@@ -52,6 +55,7 @@ public class MazeLevelManager : MonoBehaviour, IOnEventCallback
         Guard.CheckIsNull(TilePathPrefab, "TilePathPrefab", gameObject);
         Guard.CheckIsNull(TileObstaclePrefab, "TileObstaclePrefab", gameObject);
         Guard.CheckIsNull(PlayerExitPrefab, "PlayerExitPrefab", gameObject);
+        Guard.CheckIsNull(PlayerOnlyPrefab, "PlayerOnlyPrefab", gameObject);
         Guard.CheckIsNull(PlayerSpawnpointPrefab, "PlayerSpawnpointPrefab", gameObject);
         Guard.CheckIsNull(EnemySpawnpointPrefab, "EnemySpawnpointPrefab", gameObject);
 

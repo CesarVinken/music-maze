@@ -72,4 +72,12 @@ public class TileAttributeRemover
         _tile.MazeTileAttributes.Remove(enemySpawnpoint);
         enemySpawnpoint.Remove();
     }
+
+    public void RemovePlayerOnlyAttribute()
+    {
+        IMazeTileAttribute playerOnlyAttribute = (PlayerOnly)_tile.MazeTileAttributes.FirstOrDefault(attribute => attribute is PlayerOnly);
+        if (playerOnlyAttribute == null) return;
+        _tile.MazeTileAttributes.Remove(playerOnlyAttribute);
+        playerOnlyAttribute.Remove();
+    }
 }

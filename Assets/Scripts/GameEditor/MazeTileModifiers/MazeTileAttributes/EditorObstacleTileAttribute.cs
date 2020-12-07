@@ -12,8 +12,9 @@ public class EditorObstacleTileAttribute : EditorMazeTileAttributeModifier
         IMazeTileAttribute tileObstacle = (TileObstacle)tile.MazeTileAttributes.FirstOrDefault(attribute => attribute is TileObstacle);
         if (tileObstacle == null)
         {
-            tileAttributeRemover.RemovePlayerExit();
             tileAttributeRemover.RemoveEnemySpawnpoint();
+            tileAttributeRemover.RemovePlayerExit();
+            tileAttributeRemover.RemovePlayerOnlyAttribute();
             tileAttributeRemover.RemovePlayerSpawnpoint();
 
             TileBackgroundRemover tileBackgroundRemover = new TileBackgroundRemover(tile);

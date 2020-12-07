@@ -37,6 +37,7 @@ public class EditorSelectedModifierContainer : MonoBehaviour
         EditorMazeTileAttributes.Add(new EditorObstacleTileAttribute());
         EditorMazeTileAttributes.Add(new EditorPlayerExitTileAttribute());
         EditorMazeTileAttributes.Add(new EditorPlayerSpawnpointTileAttribute());
+        EditorMazeTileAttributes.Add(new EditorPlayerOnlyTileAttribute());
         EditorMazeTileAttributes.Add(new EditorEnemySpawnpointTileAttribute());
 
         _editorMazeTileAttributeSelector.SetSelectedModifier(0);

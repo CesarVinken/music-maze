@@ -8,6 +8,7 @@ public class SpriteManager : MonoBehaviour
     public Sprite[] DefaultPath;
     public Sprite[] DefaultWall;
     public Sprite[] DefaultMazeTileBackground;
+    public Sprite[] Bush;
 
     [Space(10)]
     [Header("Player graphics")]
@@ -25,5 +26,6 @@ public class SpriteManager : MonoBehaviour
         Guard.CheckIsNull(Player1TileMarker, "Player1TileMarker", gameObject);
         Guard.CheckIsNull(Player2TileMarker, "Player2TileMarker", gameObject);
         Guard.CheckIsNull(PlayerTileMarkerEdge, "PlayerTileMarkerEdge", gameObject);
+        Guard.CheckIsNull(Bush, "Bush", gameObject);
     }
 }

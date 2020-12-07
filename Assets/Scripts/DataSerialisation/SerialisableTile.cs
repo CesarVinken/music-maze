@@ -49,6 +49,11 @@ public class SerialisableTile
                 SerialisablePlayerExitAttribute serialisablePlayerExitAttribute = new SerialisablePlayerExitAttribute(playerExit.ObstacleConnectionScore);
                 tileAttributes.Add(serialisablePlayerExitAttribute);
             }
+            else if (tileAttribute.GetType() == typeof(PlayerOnly))
+            {
+                SerialisablePlayerOnlyAttribute serialisablePlayerOnlyAttribute = new SerialisablePlayerOnlyAttribute();
+                tileAttributes.Add(serialisablePlayerOnlyAttribute);
+            }
             else if (tileAttribute.GetType() == typeof(PlayerSpawnpoint))
             {
                 SerialisablePlayerSpawnpointAttribute serialisablePlayerSpawnpointAttribute = new SerialisablePlayerSpawnpointAttribute();

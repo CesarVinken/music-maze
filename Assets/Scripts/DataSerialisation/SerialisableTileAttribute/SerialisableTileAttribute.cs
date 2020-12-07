@@ -11,4 +11,5 @@ public class SerialisableTileAttribute
     public const int PlayerExitCode = 1;
     public const int PlayerSpawnpointCode = 2;
     public const int EnemySpawnpointCode = 3;
+    public const int PlayerOnlyAttributeCode = 4;
 }

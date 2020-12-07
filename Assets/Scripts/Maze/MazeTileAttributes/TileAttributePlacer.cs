@@ -148,5 +148,15 @@ public class TileAttributePlacer
         _tile.Walkable = true;
         _tile.TryMakeMarkable(true);
         _tile.MazeTileAttributes.Add(enemySpawnpoint);
-    } 
+    }
+
+    public void PlacePlayerOnlyAttribute(PlayerOnlyType playerOnlyType)
+    {
+        PlayerOnly playerOnly = (PlayerOnly)InstantiateTileAttributeGO<PlayerOnly>();
+
+        _tile.Walkable = true;
+        //_tile.TryMakeMarkable(false);
+
+        _tile.MazeTileAttributes.Add(playerOnly);
+    }
 }
