@@ -7,4 +7,5 @@ public interface IEditorMazeTileAttribute : IEditorMazeTileModifierType
     //EditorMazeTileAttributeType AttributeType { get; }
 
     void PlaceAttribute(Tile tile);
+    void PlaceAttributeVariation(Tile tile);
 }

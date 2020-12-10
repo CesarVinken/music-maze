@@ -22,7 +22,7 @@ public class TileAttributeRemover
         if (tileObstacle == null) return;
 
         ObstacleType obstacleType = tileObstacle.ObstacleType;
-        int oldConnectionScore = tileObstacle.ObstacleConnectionScore;
+        int oldConnectionScore = tileObstacle.ConnectionScore;
 
         // If needed, place a background in the gap that the removed path left. 
         // OPTIMISATION: Currently only looking at connection score from obstacles, but should also take eg. door attributes into account.
@@ -46,7 +46,7 @@ public class TileAttributeRemover
             Logger.Log($"We calculated an obstacle connection type score of {obstacleConnectionScoreOnNeighbour} for location {neighbour.Value.GridLocation.X}, {neighbour.Value.GridLocation.Y}");
 
             //update connection score on neighbour
-            tileObstacleOnNeighbour.WithObstacleConnectionScore(obstacleConnectionScoreOnNeighbour);
+            tileObstacleOnNeighbour.WithConnectionScore(obstacleConnectionScoreOnNeighbour);
 
             // If needed, place a background
             if (obstacleConnectionScoreOnNeighbour != NeighbourTileCalculator.ConnectionOnAllSidesScore)

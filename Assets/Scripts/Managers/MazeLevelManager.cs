@@ -164,7 +164,7 @@ public class MazeLevelManager : MonoBehaviour, IOnEventCallback
             MazeTilePath mazeTilePath = (MazeTilePath)tile.MazeTileBackgrounds.FirstOrDefault(background => background is MazeTilePath);
             if (mazeTilePath == null) return;
 
-            PlayerMark playerMark = new PlayerMark(mazeTilePath.PathConnectionScore);
+            PlayerMark playerMark = new PlayerMark(mazeTilePath.ConnectionScore);
 
             HandlePlayerMarkerSprite(tile, player.PlayerNumber, playerMark);
             HandlePlayerTileMarkerEnds(tile);
@@ -217,7 +217,7 @@ public class MazeLevelManager : MonoBehaviour, IOnEventCallback
             MazeTilePath mazeTilePath = (MazeTilePath)tile.MazeTileBackgrounds.FirstOrDefault(background => background is MazeTilePath);
             if (mazeTilePath == null) return;
 
-            PlayerMark playerMark = new PlayerMark(mazeTilePath.PathConnectionScore);
+            PlayerMark playerMark = new PlayerMark(mazeTilePath.ConnectionScore);
 
             HandlePlayerMarkerSprite(tile, playerNumber, playerMark);
             HandlePlayerTileMarkerEnds(tile);

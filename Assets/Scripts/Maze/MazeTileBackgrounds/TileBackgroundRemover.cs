@@ -16,7 +16,7 @@ public class TileBackgroundRemover
         if (mazeTilePath == null) return;
 
         MazeTilePathType mazeTilePathType = mazeTilePath.MazeTilePathType;
-        int oldConnectionScore = mazeTilePath.PathConnectionScore;
+        int oldConnectionScore = mazeTilePath.ConnectionScore;
 
         // If needed, place a background in the gap that the removed path left
         if (oldConnectionScore == NeighbourTileCalculator.ConnectionOnAllSidesScore)
@@ -38,14 +38,14 @@ public class TileBackgroundRemover
 
             if (mazeTilePathOnNeighbour == null) continue;
 
-            int oldConnectionScoreOnNeighbour = mazeTilePathOnNeighbour.PathConnectionScore;
+            int oldConnectionScoreOnNeighbour = mazeTilePathOnNeighbour.ConnectionScore;
 
             Logger.Log($"We will look for connections for neighbour {neighbour.Value.GridLocation.X},{neighbour.Value.GridLocation.Y}, which is {neighbour.Key} of {_tile.GridLocation.X},{_tile.GridLocation.Y}");
             int mazeTilePathConnectionScoreOnNeighbour = NeighbourTileCalculator.MapNeighbourPathsOfTile(neighbour.Value, mazeTilePathType);
             Logger.Log($"We calculated an path connection type score of {mazeTilePathConnectionScoreOnNeighbour} for location {neighbour.Value.GridLocation.X}, {neighbour.Value.GridLocation.Y}");
 
             //update connection score on neighbour
-            mazeTilePathOnNeighbour.WithPathConnectionScore(mazeTilePathConnectionScoreOnNeighbour);
+            mazeTilePathOnNeighbour.WithConnectionScore(mazeTilePathConnectionScoreOnNeighbour);
 
             //Add background where needed
             if (oldConnectionScoreOnNeighbour == NeighbourTileCalculator.ConnectionOnAllSidesScore && mazeTilePathConnectionScoreOnNeighbour != NeighbourTileCalculator.ConnectionOnAllSidesScore)

@@ -27,4 +27,14 @@ public class EditorObstacleTileAttribute : EditorMazeTileAttributeModifier
         // Tile is already blocked
         tileAttributeRemover.RemoveTileObstacle();
     }
+
+    public override void PlaceAttributeVariation(Tile tile)
+    {
+        IMazeTileAttribute tileObstacle = (TileObstacle)tile.MazeTileAttributes.FirstOrDefault(attribute => attribute is TileObstacle);
+
+        if (tileObstacle == null) return; // only place variation if there is already an obstacle
+
+        TileAttributePlacer tileAttributePlacer = new TileAttributePlacer(tile);
+        tileAttributePlacer.PlaceTileObstacleVariation((TileObstacle)tileObstacle);
+    }
 }

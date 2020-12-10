@@ -143,7 +143,7 @@ public class Tile : MonoBehaviour
             Logger.Log($"did NOT find a maze tile path on {GridLocation.X},{GridLocation.Y}");
             return null;
         }
-        Logger.Log($"found maze tile path {mazeTilePath.MazeTilePathType} on {GridLocation.X},{GridLocation.Y} with score {mazeTilePath.PathConnectionScore}");
+        Logger.Log($"found maze tile path {mazeTilePath.MazeTilePathType} on {GridLocation.X},{GridLocation.Y} with score {mazeTilePath.ConnectionScore}");
         return mazeTilePath;
     }
 

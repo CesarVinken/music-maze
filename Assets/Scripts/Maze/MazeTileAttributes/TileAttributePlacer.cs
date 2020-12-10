@@ -24,7 +24,7 @@ public class TileAttributePlacer
 
         PlayerExit playerExit = (PlayerExit)InstantiateTileAttributeGO<PlayerExit>();
         playerExit.WithObstacleType(obstacleType);
-        playerExit.WithObstacleConnectionScore(obstacleConnectionScore);
+        playerExit.WithConnectionScore(obstacleConnectionScore);
 
         _tile.Walkable = false;
         _tile.TryMakeMarkable(false);
@@ -49,7 +49,7 @@ public class TileAttributePlacer
             Logger.Log($"We calculated an obstacle connection type score of {obstacleConnectionScoreOnNeighbour} for location {neighbour.Value.GridLocation.X}, {neighbour.Value.GridLocation.Y}");
 
             //update connection score on neighbour
-            tileObstacleOnNeighbour.WithObstacleConnectionScore(obstacleConnectionScoreOnNeighbour);
+            tileObstacleOnNeighbour.WithConnectionScore(obstacleConnectionScoreOnNeighbour);
         }
     }
 
@@ -58,7 +58,7 @@ public class TileAttributePlacer
     {
         PlayerExit playerExit = (PlayerExit)InstantiateTileAttributeGO<PlayerExit>();
         playerExit.WithObstacleType(obstacleType);
-        playerExit.WithObstacleConnectionScore(obstacleConnectionScore);
+        playerExit.WithConnectionScore(obstacleConnectionScore);
 
         _tile.Walkable = false;
         _tile.TryMakeMarkable(false);
@@ -74,7 +74,7 @@ public class TileAttributePlacer
 
         TileObstacle tileObstacle = (TileObstacle)InstantiateTileAttributeGO<TileObstacle>();
         tileObstacle.WithObstacleType(obstacleType);
-        tileObstacle.WithObstacleConnectionScore(obstacleConnectionScore);
+        tileObstacle.WithConnectionScore(obstacleConnectionScore);
 
         _tile.Walkable = false;
         _tile.TryMakeMarkable(false);
@@ -105,7 +105,7 @@ public class TileAttributePlacer
             Logger.Log($"We calculated an obstacle connection type score of {obstacleConnectionScoreOnNeighbour} for location {neighbour.Value.GridLocation.X}, {neighbour.Value.GridLocation.Y}");
 
             //update connection score on neighbour
-            tileObstacleOnNeighbour.WithObstacleConnectionScore(obstacleConnectionScoreOnNeighbour);
+            tileObstacleOnNeighbour.WithConnectionScore(obstacleConnectionScoreOnNeighbour);
 
             // If we now have obstacle connections on all sides, remove the backgrounds
             if (obstacleConnectionScoreOnNeighbour == NeighbourTileCalculator.ConnectionOnAllSidesScore)
@@ -124,7 +124,7 @@ public class TileAttributePlacer
     {
         TileObstacle tileObstacle = (TileObstacle)InstantiateTileAttributeGO<TileObstacle>();
         tileObstacle.WithObstacleType(obstacleType);
-        tileObstacle.WithObstacleConnectionScore(obstacleConnectionScore);
+        tileObstacle.WithConnectionScore(obstacleConnectionScore);
 
         _tile.Walkable = false;
         _tile.TryMakeMarkable(false);
@@ -158,5 +158,17 @@ public class TileAttributePlacer
         //_tile.TryMakeMarkable(false);
 
         _tile.MazeTileAttributes.Add(playerOnly);
+    }
+
+    public void PlaceTileObstacleVariation(TileObstacle tileObstacle)
+    {
+        //return only connections that were updated
+        List<TileObstacle> updatedObstacleConnections = NeighbourTileCalculator.GetUpdatedTileModifiersForVariation(_tile, tileObstacle, tileObstacle.ObstacleType.ToString());
+
+        //update the sprites with the new variations
+        for (int i = 0; i < updatedObstacleConnections.Count; i++)
+        {
+            updatedObstacleConnections[i].WithConnectionScore(updatedObstacleConnections[i].ConnectionScore);
+        }
     }
 }

@@ -1,30 +1,19 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using UnityEngine;
 
-public struct TilePathConnectionInfo
+public struct TileModifierConnectionInfo<T> where T : MonoBehaviour, ITileConnectable
 {
     public Direction Direction;
     public bool HasConnection;
-    public MazeTilePath MazeTilePath;
+    public T TileModifier;
 
-    public TilePathConnectionInfo(Direction direction, bool hasConnection = false, MazeTilePath mazeTilePath = null)
+    public TileModifierConnectionInfo(Direction direction, bool hasConnection = false, T tileModifier = null)
     {
         Direction = direction;
         HasConnection = hasConnection;
-        MazeTilePath = mazeTilePath;
-    }
-}
-
-public struct TileObstacleConnectionInfo
-{
-    public Direction Direction;
-    public bool HasConnection;
-    public TileObstacle TileObstacle;
-
-    public TileObstacleConnectionInfo(Direction direction, bool hasConnection = false, TileObstacle tileObstacle = null)
-    {
-        Direction = direction;
-        HasConnection = hasConnection;
-        TileObstacle = tileObstacle;
+        TileModifier = tileModifier;
     }
 }
 
@@ -66,10 +55,10 @@ public class NeighbourTileCalculator
     public static int MapNeighbourPathsOfTile(Tile tile, MazeTilePathType pathType)
     {
         Logger.Log($"---------Map neighbours of {tile.GridLocation.X},{tile.GridLocation.Y}--------");
-        TilePathConnectionInfo pathRight = new TilePathConnectionInfo(Direction.Right);
-        TilePathConnectionInfo pathDown = new TilePathConnectionInfo(Direction.Down);
-        TilePathConnectionInfo pathLeft = new TilePathConnectionInfo(Direction.Left);
-        TilePathConnectionInfo pathUp = new TilePathConnectionInfo(Direction.Up);
+        TileModifierConnectionInfo<MazeTilePath> pathRight = new TileModifierConnectionInfo<MazeTilePath>(Direction.Right);
+        TileModifierConnectionInfo<MazeTilePath> pathDown = new TileModifierConnectionInfo<MazeTilePath>(Direction.Down);
+        TileModifierConnectionInfo<MazeTilePath> pathLeft = new TileModifierConnectionInfo<MazeTilePath>(Direction.Left);
+        TileModifierConnectionInfo<MazeTilePath> pathUp = new TileModifierConnectionInfo<MazeTilePath>(Direction.Up);
 
         if (!EditorManager.InEditor)
         {
@@ -80,106 +69,46 @@ public class NeighbourTileCalculator
         foreach (KeyValuePair<ObjectDirection, Tile> neighbour in tile.Neighbours)
         {
             Logger.Warning($"Neighbour at {neighbour.Value.GridLocation.X},{neighbour.Value.GridLocation.Y} is {neighbour.Key} of {tile.GridLocation.X},{tile.GridLocation.Y}");
+            
+            MazeTilePath tilePath = neighbour.Value.TryGetTilePath();
+
+            if (tilePath == null || tilePath.MazeTilePathType != pathType)
+            {
+                continue;
+            }
+
             if (neighbour.Key == ObjectDirection.Right)
             {
-                MazeTilePath tilePath = neighbour.Value.TryGetTilePath();
-                if (tilePath != null && tilePath.MazeTilePathType == pathType)
-                {
-                    pathRight.HasConnection = true;
-                    pathRight.MazeTilePath = tilePath;
-                }
+                pathRight.HasConnection = true;
+                pathRight.TileModifier = tilePath;
             }
             else if (neighbour.Key == ObjectDirection.Down)
             {
-                MazeTilePath tilePath = neighbour.Value.TryGetTilePath();
-                if (tilePath != null && tilePath.MazeTilePathType == pathType)
-                {
-                    pathDown.HasConnection = true;
-                    pathDown.MazeTilePath = tilePath;
-                }
+                pathDown.HasConnection = true;
+                pathDown.TileModifier = tilePath;
             }
             else if (neighbour.Key == ObjectDirection.Left)
             {
-                MazeTilePath tilePath = neighbour.Value.TryGetTilePath();
-                if (tilePath != null && tilePath.MazeTilePathType == pathType)
-                {
-                    pathLeft.HasConnection = true;
-                    pathLeft.MazeTilePath = tilePath;
-                }
+                pathLeft.HasConnection = true;
+                pathLeft.TileModifier = tilePath;
             }
             else if (neighbour.Key == ObjectDirection.Up)
             {
-                MazeTilePath tilePath = neighbour.Value.TryGetTilePath();
-                if (tilePath != null && tilePath.MazeTilePathType == pathType)
-                {
-                    pathUp.HasConnection = true;
-                    pathUp.MazeTilePath = tilePath;
-                }
+                pathUp.HasConnection = true;
+                pathUp.TileModifier = tilePath;
             }
         }
 
-        return CalculatePathConnectionScore(pathRight, pathDown, pathLeft, pathUp);
-    }
-
-    public static List<MazeTilePath> GetUpdatedTilePathsForVariation(Tile tile, MazeTilePath thisMazeTilePath, MazeTilePathType pathType)
-    {
-        Logger.Log($"---------Map neighbours of {tile.GridLocation.X},{tile.GridLocation.Y}--------");
-        TilePathConnectionInfo pathRight = new TilePathConnectionInfo(Direction.Right);
-        TilePathConnectionInfo pathDown = new TilePathConnectionInfo(Direction.Down);
-        TilePathConnectionInfo pathLeft = new TilePathConnectionInfo(Direction.Left);
-        TilePathConnectionInfo pathUp = new TilePathConnectionInfo(Direction.Up);
-
-        foreach (KeyValuePair<ObjectDirection, Tile> neighbour in tile.Neighbours)
-        {
-            Logger.Warning($"Neighbour at {neighbour.Value.GridLocation.X},{neighbour.Value.GridLocation.Y} is {neighbour.Key} of {tile.GridLocation.X},{tile.GridLocation.Y}");
-            if (neighbour.Key == ObjectDirection.Right)
-            {
-                MazeTilePath tilePath = neighbour.Value.TryGetTilePath();
-                if (tilePath != null && tilePath.MazeTilePathType == pathType)
-                {
-                    pathRight.HasConnection = true;
-                    pathRight.MazeTilePath = tilePath;
-                }
-            }
-            else if (neighbour.Key == ObjectDirection.Down)
-            {
-                MazeTilePath tilePath = neighbour.Value.TryGetTilePath();
-                if (tilePath != null && tilePath.MazeTilePathType == pathType)
-                {
-                    pathDown.HasConnection = true;
-                    pathDown.MazeTilePath = tilePath;
-                }
-            }
-            else if (neighbour.Key == ObjectDirection.Left)
-            {
-                MazeTilePath tilePath = neighbour.Value.TryGetTilePath();
-                if (tilePath != null && tilePath.MazeTilePathType == pathType)
-                {
-                    pathLeft.HasConnection = true;
-                    pathLeft.MazeTilePath = tilePath;
-                }
-            }
-            else if (neighbour.Key == ObjectDirection.Up)
-            {
-                MazeTilePath tilePath = neighbour.Value.TryGetTilePath();
-                if (tilePath != null && tilePath.MazeTilePathType == pathType)
-                {
-                    pathUp.HasConnection = true;
-                    pathUp.MazeTilePath = tilePath;
-                }
-            }
-        }
-
-        return CalculatePathConnectionScoreForVariations(thisMazeTilePath, pathRight, pathDown, pathLeft, pathUp);
+        return CalculateTileConnectionScore(pathRight, pathDown, pathLeft, pathUp);
     }
 
     public static int MapNeighbourObstaclesOfTile(Tile tile, ObstacleType obstacleType, bool isDoor)
     {
         Logger.Log($"Map neighbours of {tile.GridLocation.X},{tile.GridLocation.Y}");
-        TileObstacleConnectionInfo obstacleRight = new TileObstacleConnectionInfo(Direction.Right);
-        TileObstacleConnectionInfo obstacleDown = new TileObstacleConnectionInfo(Direction.Down);
-        TileObstacleConnectionInfo obstacleLeft = new TileObstacleConnectionInfo(Direction.Left);
-        TileObstacleConnectionInfo obstacleUp = new TileObstacleConnectionInfo(Direction.Up);
+        TileModifierConnectionInfo<TileObstacle> obstacleRight = new TileModifierConnectionInfo<TileObstacle>(Direction.Right);
+        TileModifierConnectionInfo<TileObstacle> obstacleDown = new TileModifierConnectionInfo<TileObstacle>(Direction.Down);
+        TileModifierConnectionInfo<TileObstacle> obstacleLeft = new TileModifierConnectionInfo<TileObstacle>(Direction.Left);
+        TileModifierConnectionInfo<TileObstacle> obstacleUp = new TileModifierConnectionInfo<TileObstacle>(Direction.Up);
 
         if (!EditorManager.InEditor)
         {
@@ -190,41 +119,33 @@ public class NeighbourTileCalculator
         foreach (KeyValuePair<ObjectDirection, Tile> neighbour in tile.Neighbours)
         {
             Logger.Warning($"Neighbour at {neighbour.Value.GridLocation.X},{neighbour.Value.GridLocation.Y} is {neighbour.Key} of {tile.GridLocation.X},{tile.GridLocation.Y}");
+            
+            TileObstacle tileObstacle = neighbour.Value.TryGetTileObstacle();
+
+            if (tileObstacle == null || tileObstacle.ObstacleType != obstacleType)
+            {
+                continue;
+            }
+
             if (neighbour.Key == ObjectDirection.Right)
             {
-                TileObstacle tileObstacle = neighbour.Value.TryGetTileObstacle();
-                if (tileObstacle != null && tileObstacle.ObstacleType == obstacleType)
-                {
-                    obstacleRight.HasConnection = true;
-                    obstacleRight.TileObstacle = tileObstacle;
-                }
+                obstacleRight.HasConnection = true;
+                obstacleRight.TileModifier = tileObstacle;
             }
             else if (neighbour.Key == ObjectDirection.Down)
             {
-                TileObstacle tileObstacle = neighbour.Value.TryGetTileObstacle();
-                if (tileObstacle != null && tileObstacle.ObstacleType == obstacleType)
-                {
-                    obstacleDown.HasConnection = true;
-                    obstacleDown.TileObstacle = tileObstacle;
-                }
+                obstacleDown.HasConnection = true;
+                obstacleDown.TileModifier = tileObstacle;
             }
             else if (neighbour.Key == ObjectDirection.Left)
             {
-                TileObstacle tileObstacle = neighbour.Value.TryGetTileObstacle();
-                if (tileObstacle != null && tileObstacle.ObstacleType == obstacleType)
-                {
-                    obstacleLeft.HasConnection = true;
-                    obstacleLeft.TileObstacle = tileObstacle;
-                }
+                obstacleLeft.HasConnection = true;
+                obstacleLeft.TileModifier = tileObstacle;
             }
             else if (neighbour.Key == ObjectDirection.Up)
             {
-                TileObstacle tileObstacle = neighbour.Value.TryGetTileObstacle();
-                if (tileObstacle != null && tileObstacle.ObstacleType == obstacleType)
-                {
-                    obstacleUp.HasConnection = true;
-                    obstacleUp.TileObstacle = tileObstacle;
-                }
+                obstacleUp.HasConnection = true;
+                obstacleUp.TileModifier = tileObstacle;
             }
         }
 
@@ -232,10 +153,66 @@ public class NeighbourTileCalculator
         {
             return CalculateDoorConnectionScore(obstacleRight, obstacleDown, obstacleLeft, obstacleUp);
         }
-        return CalculateObstacleConnectionScore(obstacleRight, obstacleDown, obstacleLeft, obstacleUp);
+        return CalculateTileConnectionScore(obstacleRight, obstacleDown, obstacleLeft, obstacleUp);
     }
 
-    private static int CalculatePathConnectionScore(TilePathConnectionInfo right, TilePathConnectionInfo down, TilePathConnectionInfo left, TilePathConnectionInfo up)
+    public static List<T> GetUpdatedTileModifiersForVariation<T>(Tile tile, T thisMazeTileModifier, string modifierSubtype) where T : MonoBehaviour, ITileConnectable
+    {
+        Logger.Log($"---------Map neighbours of {tile.GridLocation.X},{tile.GridLocation.Y}--------");
+        TileModifierConnectionInfo<T> connectionRight = new TileModifierConnectionInfo<T>(Direction.Right);
+        TileModifierConnectionInfo<T> connectionDown = new TileModifierConnectionInfo<T>(Direction.Down);
+        TileModifierConnectionInfo<T> connectionLeft = new TileModifierConnectionInfo<T>(Direction.Left);
+        TileModifierConnectionInfo<T> connectionUp = new TileModifierConnectionInfo<T>(Direction.Up);
+
+        foreach (KeyValuePair<ObjectDirection, Tile> neighbour in tile.Neighbours)
+        {
+            Logger.Warning($"Neighbour at {neighbour.Value.GridLocation.X},{neighbour.Value.GridLocation.Y} is {neighbour.Key} of {tile.GridLocation.X},{tile.GridLocation.Y}");
+
+            T connectedModifier;
+            Type modifierType = typeof(T);
+
+            if (modifierType is IMazeTileAttribute)
+            {
+                connectedModifier = (T)neighbour.Value.MazeTileAttributes.FirstOrDefault(attribute => attribute is T);
+            } 
+            else
+            {
+                connectedModifier = (T)neighbour.Value.MazeTileBackgrounds.FirstOrDefault(attribute => attribute is T);
+            }
+
+            if (connectedModifier == null || connectedModifier.GetSubtypeAsString() != modifierSubtype)
+            {
+                continue;
+            }
+
+            if (neighbour.Key == ObjectDirection.Right)
+            {
+                connectionRight.HasConnection = true;
+                connectionRight.TileModifier = connectedModifier;
+            }
+            else if (neighbour.Key == ObjectDirection.Down)
+            {
+                
+                connectionDown.HasConnection = true;
+                connectionDown.TileModifier = connectedModifier;
+
+            }
+            else if (neighbour.Key == ObjectDirection.Left)
+            {
+                connectionLeft.HasConnection = true;
+                connectionLeft.TileModifier = connectedModifier;
+            }
+            else if (neighbour.Key == ObjectDirection.Up)
+            {
+                connectionUp.HasConnection = true;
+                connectionUp.TileModifier = connectedModifier;
+            }
+        }
+
+        return CalculateTileConnectionScoreForVariations(thisMazeTileModifier, connectionRight, connectionDown, connectionLeft, connectionUp);
+    }
+
+    private static int CalculateTileConnectionScore<T>(TileModifierConnectionInfo<T> right, TileModifierConnectionInfo<T> down, TileModifierConnectionInfo<T> left, TileModifierConnectionInfo<T> up) where T : MonoBehaviour, ITileConnectable
     {
         if (right.HasConnection)
         {
@@ -300,102 +277,37 @@ public class NeighbourTileCalculator
         return 1;
     }
 
-    private static int CalculateObstacleConnectionScore(TileObstacleConnectionInfo right, TileObstacleConnectionInfo down, TileObstacleConnectionInfo left, TileObstacleConnectionInfo up)
+    private static List<T> CalculateTileConnectionScoreForVariations<T>(T thisMazeTileAttribute, TileModifierConnectionInfo<T> connectionRight, TileModifierConnectionInfo<T> connectionDown, TileModifierConnectionInfo<T> connectionLeft, TileModifierConnectionInfo<T> connectionUp) where T : MonoBehaviour, ITileConnectable
     {
-        if (right.HasConnection)
-        {
-            if (down.HasConnection)
-            {
-                if (left.HasConnection)
-                {
-                    if (up.HasConnection)
-                    {
-                        return 16;
-                    }
-                    return 31;
-                }
-                if (up.HasConnection)
-                {
-                    return 32;
-                }
-                return 21;
-            }
-            if (left.HasConnection)
-            {
-                if (up.HasConnection)
-                {
-                    return 33;
-                }
-                return 22;
-            }
-            if (up.HasConnection)
-            {
-                return 23;
-            }
-            return 17;
-        }
-        if (down.HasConnection)
-        {
-            if (left.HasConnection)
-            {
-                if (up.HasConnection)
-                {
-                    return 34;
-                }
-                return 25;
-            }
-            if (up.HasConnection)
-            {
-                return 24;
-            }
-            return 18;
-        }
-        if (left.HasConnection)
-        {
-            if (up.HasConnection)
-            {
-                return 26;
-            }
-            return 19;
-        }
-        if (up.HasConnection)
-        {
-            return 20;
-        }
-        return 1;
-    }
+        List<T> updatedConnections = new List<T>();
 
-    private static List<MazeTilePath> CalculatePathConnectionScoreForVariations(MazeTilePath thisTilePath, TilePathConnectionInfo right, TilePathConnectionInfo down, TilePathConnectionInfo left, TilePathConnectionInfo up)
-    {
-        List<MazeTilePath> updatedConnections = new List<MazeTilePath>();
-
-        int currentScoreThisTilePath = thisTilePath.PathConnectionScore;
-        int currentScoreRight = right.MazeTilePath ? right.MazeTilePath.PathConnectionScore : -1;
-        int currentScoreDown = down.MazeTilePath ? down.MazeTilePath.PathConnectionScore : -1;
-        int currentScoreLeft = left.MazeTilePath? left.MazeTilePath.PathConnectionScore : -1;
-        int currentScoreUp = up.MazeTilePath ? up.MazeTilePath.PathConnectionScore : -1;
+        int currentScoreThisTilePath = thisMazeTileAttribute.ConnectionScore;
+        int currentScoreRight = connectionRight.TileModifier ? connectionRight.TileModifier.ConnectionScore : -1;
+        int currentScoreDown = connectionDown.TileModifier ? connectionDown.TileModifier.ConnectionScore : -1;
+        int currentScoreLeft = connectionLeft.TileModifier ? connectionLeft.TileModifier.ConnectionScore : -1;
+        int currentScoreUp = connectionUp.TileModifier ? connectionUp.TileModifier.ConnectionScore : -1;
 
         if (currentScoreThisTilePath == 2)
         {
-            if(currentScoreRight == 22)
+            if (currentScoreRight == 22)
             {
-                right.MazeTilePath.PathConnectionScore = 27;
+                connectionRight.TileModifier.ConnectionScore = 27;
             }
-            else if(currentScoreRight == 29)
+            else if (currentScoreRight == 29)
             {
-                right.MazeTilePath.PathConnectionScore = 7;
+                connectionRight.TileModifier.ConnectionScore = 7;
             }
         }
 
         if (currentScoreThisTilePath == 3)
         {
-            if(currentScoreDown == 24)
+            if (currentScoreDown == 24)
             {
-                down.MazeTilePath.PathConnectionScore = 28;
+                connectionDown.TileModifier.ConnectionScore = 28;
             }
-            else if(currentScoreDown == 30)
+            else if (currentScoreDown == 30)
             {
-                down.MazeTilePath.PathConnectionScore = 10;
+                connectionDown.TileModifier.ConnectionScore = 10;
             }
         }
 
@@ -403,120 +315,120 @@ public class NeighbourTileCalculator
         {
             if (currentScoreLeft == 22)
             {
-                left.MazeTilePath.PathConnectionScore = 29;
+                connectionLeft.TileModifier.ConnectionScore = 29;
             }
-            else if(currentScoreLeft == 27)
+            else if (currentScoreLeft == 27)
             {
-                left.MazeTilePath.PathConnectionScore = 7;
+                connectionLeft.TileModifier.ConnectionScore = 7;
             }
         }
 
         if (currentScoreThisTilePath == 5)
         {
-            if(currentScoreUp == 24)
+            if (currentScoreUp == 24)
             {
-                up.MazeTilePath.PathConnectionScore = 30;
+                connectionUp.TileModifier.ConnectionScore = 30;
             }
-            else if(currentScoreUp == 28)
+            else if (currentScoreUp == 28)
             {
-                up.MazeTilePath.PathConnectionScore = 10;
+                connectionUp.TileModifier.ConnectionScore = 10;
             }
         }
 
         if (currentScoreThisTilePath == 7)
         {
-            if(currentScoreRight == 19)
+            if (currentScoreRight == 19)
             {
-                right.MazeTilePath.PathConnectionScore = 4;
+                connectionRight.TileModifier.ConnectionScore = 4;
             }
             else if (currentScoreRight == 22)
             {
-                right.MazeTilePath.PathConnectionScore = 27;
+                connectionRight.TileModifier.ConnectionScore = 27;
             }
-            else if(currentScoreRight == 29)
+            else if (currentScoreRight == 29)
             {
-                right.MazeTilePath.PathConnectionScore = 7;
+                connectionRight.TileModifier.ConnectionScore = 7;
             }
 
-            if(currentScoreLeft == 17)
+            if (currentScoreLeft == 17)
             {
-                left.MazeTilePath.PathConnectionScore = 2;
+                connectionLeft.TileModifier.ConnectionScore = 2;
             }
             else if (currentScoreLeft == 22)
             {
-                left.MazeTilePath.PathConnectionScore = 29;
+                connectionLeft.TileModifier.ConnectionScore = 29;
             }
-            else if(currentScoreLeft == 27)
+            else if (currentScoreLeft == 27)
             {
-                left.MazeTilePath.PathConnectionScore = 7;
+                connectionLeft.TileModifier.ConnectionScore = 7;
             }
         }
 
         if (currentScoreThisTilePath == 10)
         {
-            if(currentScoreDown == 20)
+            if (currentScoreDown == 20)
             {
-                down.MazeTilePath.PathConnectionScore = 5;
+                connectionDown.TileModifier.ConnectionScore = 5;
             }
             else if (currentScoreDown == 24)
             {
-                down.MazeTilePath.PathConnectionScore = 28;
+                connectionDown.TileModifier.ConnectionScore = 28;
             }
-            else if(currentScoreDown == 30)
+            else if (currentScoreDown == 30)
             {
-                down.MazeTilePath.PathConnectionScore = 10;
+                connectionDown.TileModifier.ConnectionScore = 10;
             }
 
-            if(currentScoreUp == 18)
+            if (currentScoreUp == 18)
             {
-                up.MazeTilePath.PathConnectionScore = 3;
+                connectionUp.TileModifier.ConnectionScore = 3;
             }
             else if (currentScoreUp == 24)
             {
-                up.MazeTilePath.PathConnectionScore = 30;
+                connectionUp.TileModifier.ConnectionScore = 30;
             }
-            else if(currentScoreUp == 28)
+            else if (currentScoreUp == 28)
             {
-                up.MazeTilePath.PathConnectionScore = 10;
+                connectionUp.TileModifier.ConnectionScore = 10;
             }
         }
 
         if (currentScoreThisTilePath == 16)
         {
-            if(currentScoreRight == 7)
+            if (currentScoreRight == 7)
             {
-                right.MazeTilePath.PathConnectionScore = 29;
+                connectionRight.TileModifier.ConnectionScore = 29;
             }
             else if (currentScoreLeft == 27)
             {
-                right.MazeTilePath.PathConnectionScore = 22;
+                connectionRight.TileModifier.ConnectionScore = 22;
             }
 
-            if(currentScoreDown == 10)
+            if (currentScoreDown == 10)
             {
-                down.MazeTilePath.PathConnectionScore = 30;
+                connectionDown.TileModifier.ConnectionScore = 30;
             }
-            else if(currentScoreDown == 28)
+            else if (currentScoreDown == 28)
             {
-                down.MazeTilePath.PathConnectionScore = 24;
-            }
-
-            if(currentScoreLeft == 7)
-            {
-                left.MazeTilePath.PathConnectionScore = 27;
-            }
-            else if(currentScoreLeft == 27)
-            {
-                left.MazeTilePath.PathConnectionScore = 22;
+                connectionDown.TileModifier.ConnectionScore = 24;
             }
 
-            if(currentScoreUp == 10)
+            if (currentScoreLeft == 7)
             {
-                up.MazeTilePath.PathConnectionScore = 28;
+                connectionLeft.TileModifier.ConnectionScore = 27;
             }
-            else if(currentScoreUp == 30)
+            else if (currentScoreLeft == 27)
             {
-                up.MazeTilePath.PathConnectionScore = 24;
+                connectionLeft.TileModifier.ConnectionScore = 22;
+            }
+
+            if (currentScoreUp == 10)
+            {
+                connectionUp.TileModifier.ConnectionScore = 28;
+            }
+            else if (currentScoreUp == 30)
+            {
+                connectionUp.TileModifier.ConnectionScore = 24;
             }
         }
 
@@ -528,19 +440,19 @@ public class NeighbourTileCalculator
             }
             else
             {
-                thisTilePath.PathConnectionScore = 2;
+                thisMazeTileAttribute.ConnectionScore = 2;
 
-                if(currentScoreRight == 19)
+                if (currentScoreRight == 19)
                 {
-                    right.MazeTilePath.PathConnectionScore = 4;
+                    connectionRight.TileModifier.ConnectionScore = 4;
                 }
                 else if (currentScoreRight == 22)
                 {
-                    right.MazeTilePath.PathConnectionScore = 27;
+                    connectionRight.TileModifier.ConnectionScore = 27;
                 }
                 else if (currentScoreRight == 29)
                 {
-                    right.MazeTilePath.PathConnectionScore = 27;
+                    connectionRight.TileModifier.ConnectionScore = 27;
                 }
             }
         }
@@ -553,69 +465,69 @@ public class NeighbourTileCalculator
             }
             else
             {
-                thisTilePath.PathConnectionScore = 3;
+                thisMazeTileAttribute.ConnectionScore = 3;
 
                 if (currentScoreDown == 20)
                 {
-                    down.MazeTilePath.PathConnectionScore = 5;
+                    connectionDown.TileModifier.ConnectionScore = 5;
                 }
                 else if (currentScoreDown == 24)
                 {
-                    down.MazeTilePath.PathConnectionScore = 28;
+                    connectionDown.TileModifier.ConnectionScore = 28;
                 }
                 else if (currentScoreDown == 30)
                 {
-                    down.MazeTilePath.PathConnectionScore = 10;
+                    connectionDown.TileModifier.ConnectionScore = 10;
                 }
             }
         }
 
         if (currentScoreThisTilePath == 19)
         {
-            if(currentScoreLeft == 16 || currentScoreLeft == 21 || currentScoreLeft == 23 || currentScoreLeft == 31 || currentScoreLeft == 32 || currentScoreLeft == 33)
+            if (currentScoreLeft == 16 || currentScoreLeft == 21 || currentScoreLeft == 23 || currentScoreLeft == 31 || currentScoreLeft == 32 || currentScoreLeft == 33)
             {
 
             }
             else
             {
-                thisTilePath.PathConnectionScore = 4;
+                thisMazeTileAttribute.ConnectionScore = 4;
 
                 if (currentScoreLeft == 17)
                 {
-                    left.MazeTilePath.PathConnectionScore = 2;
+                    connectionLeft.TileModifier.ConnectionScore = 2;
                 }
                 else if (currentScoreLeft == 22)
                 {
-                    left.MazeTilePath.PathConnectionScore = 29;
+                    connectionLeft.TileModifier.ConnectionScore = 29;
                 }
                 else if (currentScoreLeft == 27)
                 {
-                    left.MazeTilePath.PathConnectionScore = 7;
+                    connectionLeft.TileModifier.ConnectionScore = 7;
                 }
             }
         }
 
         else if (currentScoreThisTilePath == 20)
         {
-            if(currentScoreUp == 16 || currentScoreUp == 21 || currentScoreUp == 25 || currentScoreUp == 31 || currentScoreUp == 32 || currentScoreUp == 34)
+            if (currentScoreUp == 16 || currentScoreUp == 21 || currentScoreUp == 25 || currentScoreUp == 31 || currentScoreUp == 32 || currentScoreUp == 34)
             {
 
             }
             else
             {
-                thisTilePath.PathConnectionScore = 5;
+                thisMazeTileAttribute.ConnectionScore = 5;
 
                 if (currentScoreUp == 18)
                 {
-                    up.MazeTilePath.PathConnectionScore = 5;
+                    connectionUp.TileModifier.ConnectionScore = 5;
                 }
                 else if (currentScoreUp == 24)
                 {
-                    up.MazeTilePath.PathConnectionScore = 30;
+                    connectionUp.TileModifier.ConnectionScore = 30;
                 }
-                else if(currentScoreUp == 28)
+                else if (currentScoreUp == 28)
                 {
-                    up.MazeTilePath.PathConnectionScore = 10;
+                    connectionUp.TileModifier.ConnectionScore = 10;
                 }
             }
         }
@@ -629,32 +541,32 @@ public class NeighbourTileCalculator
             }
             else
             {
-                thisTilePath.PathConnectionScore = 6;
+                thisMazeTileAttribute.ConnectionScore = 6;
 
-                if(currentScoreRight == 19)
+                if (currentScoreRight == 19)
                 {
-                    right.MazeTilePath.PathConnectionScore = 4;
+                    connectionRight.TileModifier.ConnectionScore = 4;
                 }
                 else if (currentScoreRight == 22)
                 {
-                    right.MazeTilePath.PathConnectionScore = 27;
+                    connectionRight.TileModifier.ConnectionScore = 27;
                 }
                 else if (currentScoreRight == 29)
                 {
-                    right.MazeTilePath.PathConnectionScore = 7;
+                    connectionRight.TileModifier.ConnectionScore = 7;
                 }
 
-                if(currentScoreDown == 20)
+                if (currentScoreDown == 20)
                 {
-                    down.MazeTilePath.PathConnectionScore = 5;
+                    connectionDown.TileModifier.ConnectionScore = 5;
                 }
                 else if (currentScoreDown == 24)
                 {
-                    down.MazeTilePath.PathConnectionScore = 28;
+                    connectionDown.TileModifier.ConnectionScore = 28;
                 }
                 else if (currentScoreDown == 30)
                 {
-                    down.MazeTilePath.PathConnectionScore = 10;
+                    connectionDown.TileModifier.ConnectionScore = 10;
                 }
             }
         }
@@ -668,45 +580,45 @@ public class NeighbourTileCalculator
             }
             else
             {
-                thisTilePath.PathConnectionScore = 7;
+                thisMazeTileAttribute.ConnectionScore = 7;
 
-                if(currentScoreLeft == 17)
+                if (currentScoreLeft == 17)
                 {
-                    left.MazeTilePath.PathConnectionScore = 2;
+                    connectionLeft.TileModifier.ConnectionScore = 2;
                 }
                 else if (currentScoreLeft == 22)
                 {
-                    left.MazeTilePath.PathConnectionScore = 29;
+                    connectionLeft.TileModifier.ConnectionScore = 29;
                 }
                 else if ((currentScoreLeft == 16 || currentScoreLeft == 21 || currentScoreLeft == 23 || currentScoreLeft == 31 || currentScoreLeft == 32 || currentScoreLeft == 33) && currentScoreRight != 25 && currentScoreRight != 26 && currentScoreRight != 31 && currentScoreRight != 33 && currentScoreRight != 34)
                 {
-                    thisTilePath.PathConnectionScore = 29;
+                    thisMazeTileAttribute.ConnectionScore = 29;
                 }
-                else if(currentScoreLeft == 27)
+                else if (currentScoreLeft == 27)
                 {
-                    left.MazeTilePath.PathConnectionScore = 7;
+                    connectionLeft.TileModifier.ConnectionScore = 7;
                 }
 
                 if (currentScoreRight == 19)
                 {
-                    right.MazeTilePath.PathConnectionScore = 4;
+                    connectionRight.TileModifier.ConnectionScore = 4;
                 }
                 else if (currentScoreRight == 22)
                 {
-                    right.MazeTilePath.PathConnectionScore = 27;
+                    connectionRight.TileModifier.ConnectionScore = 27;
                 }
                 else if ((currentScoreRight == 16 || currentScoreRight == 25 || currentScoreRight == 26 || currentScoreRight == 31 || currentScoreRight == 33 || currentScoreRight == 34) && currentScoreLeft != 21 && currentScoreLeft != 23 && currentScoreLeft != 31 && currentScoreLeft != 32 && currentScoreLeft != 33)
                 {
-                    thisTilePath.PathConnectionScore = 27;
+                    thisMazeTileAttribute.ConnectionScore = 27;
                 }
                 else if (currentScoreRight == 29)
                 {
-                    right.MazeTilePath.PathConnectionScore = 7;
+                    connectionRight.TileModifier.ConnectionScore = 7;
                 }
             }
         }
 
-        else if(currentScoreThisTilePath == 23)
+        else if (currentScoreThisTilePath == 23)
         {
             if (currentScoreRight == 16 || currentScoreRight == 25 || currentScoreRight == 26 || currentScoreRight == 31 || currentScoreRight == 33 || currentScoreRight == 34 ||
                 currentScoreUp == 16 || currentScoreUp == 21 || currentScoreUp == 25 || currentScoreUp == 31 || currentScoreUp == 32 || currentScoreUp == 34)
@@ -715,32 +627,32 @@ public class NeighbourTileCalculator
             }
             else
             {
-                thisTilePath.PathConnectionScore = 8;
-            
-                if(currentScoreRight == 19)
+                thisMazeTileAttribute.ConnectionScore = 8;
+
+                if (currentScoreRight == 19)
                 {
-                    right.MazeTilePath.PathConnectionScore = 4;
+                    connectionRight.TileModifier.ConnectionScore = 4;
                 }
                 else if (currentScoreRight == 22)
                 {
-                    right.MazeTilePath.PathConnectionScore = 27;
+                    connectionRight.TileModifier.ConnectionScore = 27;
                 }
                 else if (currentScoreRight == 29)
                 {
-                    right.MazeTilePath.PathConnectionScore = 7;
+                    connectionRight.TileModifier.ConnectionScore = 7;
                 }
 
-                if(currentScoreUp == 18)
+                if (currentScoreUp == 18)
                 {
-                    up.MazeTilePath.PathConnectionScore = 3;
+                    connectionUp.TileModifier.ConnectionScore = 3;
                 }
                 else if (currentScoreUp == 24)
                 {
-                    up.MazeTilePath.PathConnectionScore = 30;
+                    connectionUp.TileModifier.ConnectionScore = 30;
                 }
                 else if (currentScoreUp == 28)
                 {
-                    up.MazeTilePath.PathConnectionScore = 10;
+                    connectionUp.TileModifier.ConnectionScore = 10;
                 }
             }
         }
@@ -754,79 +666,79 @@ public class NeighbourTileCalculator
             }
             else
             {
-                thisTilePath.PathConnectionScore = 10;
+                thisMazeTileAttribute.ConnectionScore = 10;
 
                 if (currentScoreDown == 20)
                 {
-                    down.MazeTilePath.PathConnectionScore = 5;
+                    connectionDown.TileModifier.ConnectionScore = 5;
                 }
                 else if (currentScoreDown == 24)
                 {
-                    down.MazeTilePath.PathConnectionScore = 28;
+                    connectionDown.TileModifier.ConnectionScore = 28;
                 }
                 else if ((currentScoreDown == 16 || currentScoreDown == 23 || currentScoreDown == 26 || currentScoreDown == 32 || currentScoreDown == 33 || currentScoreDown == 34) && currentScoreUp != 21 && currentScoreUp != 25 && currentScoreUp != 31 && currentScoreUp != 32 && currentScoreUp != 34)
                 {
-                    thisTilePath.PathConnectionScore = 28;
+                    thisMazeTileAttribute.ConnectionScore = 28;
                 }
                 else if (currentScoreDown == 30)
                 {
-                    down.MazeTilePath.PathConnectionScore = 10;
+                    connectionDown.TileModifier.ConnectionScore = 10;
                 }
 
                 if (currentScoreUp == 18)
                 {
-                    up.MazeTilePath.PathConnectionScore = 3;
+                    connectionUp.TileModifier.ConnectionScore = 3;
                 }
                 else if (currentScoreUp == 24)
                 {
-                    up.MazeTilePath.PathConnectionScore = 30;
+                    connectionUp.TileModifier.ConnectionScore = 30;
                 }
                 else if ((currentScoreUp == 16 || currentScoreUp == 21 || currentScoreUp == 25 || currentScoreUp == 31 || currentScoreUp == 32 || currentScoreUp == 34) && currentScoreDown != 23 && currentScoreDown != 26 && currentScoreDown != 32 && currentScoreDown != 33 && currentScoreDown != 34)
                 {
-                    thisTilePath.PathConnectionScore = 30;
+                    thisMazeTileAttribute.ConnectionScore = 30;
                 }
                 else if (currentScoreUp == 28)
                 {
-                    up.MazeTilePath.PathConnectionScore = 10;
+                    connectionUp.TileModifier.ConnectionScore = 10;
                 }
-            }      
+            }
         }
 
         else if (currentScoreThisTilePath == 25)
         {
-            if(currentScoreDown == 16 || currentScoreDown == 23 || currentScoreDown == 26 || currentScoreDown == 32 || currentScoreDown == 33 || currentScoreDown == 34 ||
+            if (currentScoreDown == 16 || currentScoreDown == 23 || currentScoreDown == 26 || currentScoreDown == 32 || currentScoreDown == 33 || currentScoreDown == 34 ||
                 currentScoreLeft == 16 || currentScoreLeft == 21 || currentScoreLeft == 23 || currentScoreLeft == 31 || currentScoreLeft == 33 || currentScoreLeft == 34)
             {
 
             }
             else
             {
-                thisTilePath.PathConnectionScore = 9;
+                thisMazeTileAttribute.ConnectionScore = 9;
 
-                if(currentScoreLeft == 17)
+                if (currentScoreLeft == 17)
                 {
-                    left.MazeTilePath.PathConnectionScore = 2;
+                    connectionLeft.TileModifier.ConnectionScore = 2;
                 }
                 else if (currentScoreLeft == 22)
                 {
-                    left.MazeTilePath.PathConnectionScore = 29;
+                    connectionLeft.TileModifier.ConnectionScore = 29;
                 }
                 else if (currentScoreLeft == 27)
                 {
-                    left.MazeTilePath.PathConnectionScore = 7;
+                    connectionLeft.TileModifier.ConnectionScore = 7;
                 }
 
-                if(currentScoreDown == 20)
+                if (currentScoreDown == 20)
                 {
-                    down.MazeTilePath.PathConnectionScore = 5;
+                    connectionDown.TileModifier.ConnectionScore = 5;
                 }
                 else if (currentScoreDown == 24)
                 {
-                    down.MazeTilePath.PathConnectionScore = 28;
+                    connectionDown.TileModifier.ConnectionScore = 28;
                 }
                 else if (currentScoreDown == 30)
                 {
-                    down.MazeTilePath.PathConnectionScore = 10;
+                    connectionDown.TileModifier.ConnectionScore = 10;
                 }
             }
         }
@@ -840,145 +752,145 @@ public class NeighbourTileCalculator
             }
             else
             {
-                thisTilePath.PathConnectionScore = 11;
+                thisMazeTileAttribute.ConnectionScore = 11;
 
-                if(currentScoreLeft == 17)
+                if (currentScoreLeft == 17)
                 {
-                    left.MazeTilePath.PathConnectionScore = 2;
+                    connectionLeft.TileModifier.ConnectionScore = 2;
                 }
                 else if (currentScoreLeft == 22)
                 {
-                    left.MazeTilePath.PathConnectionScore = 29;
+                    connectionLeft.TileModifier.ConnectionScore = 29;
                 }
                 else if (currentScoreLeft == 27)
                 {
-                    left.MazeTilePath.PathConnectionScore = 7;
+                    connectionLeft.TileModifier.ConnectionScore = 7;
                 }
 
-                if(currentScoreUp == 18)
+                if (currentScoreUp == 18)
                 {
-                    up.MazeTilePath.PathConnectionScore = 3;
+                    connectionUp.TileModifier.ConnectionScore = 3;
                 }
                 else if (currentScoreUp == 24)
                 {
-                    up.MazeTilePath.PathConnectionScore = 30;
+                    connectionUp.TileModifier.ConnectionScore = 30;
                 }
                 else if (currentScoreUp == 28)
                 {
-                    up.MazeTilePath.PathConnectionScore = 10;
+                    connectionUp.TileModifier.ConnectionScore = 10;
                 }
             }
         }
 
-        else if(currentScoreThisTilePath == 27)
+        else if (currentScoreThisTilePath == 27)
         {
             if (currentScoreRight == 25 || currentScoreRight == 26 || currentScoreRight == 31 || currentScoreRight == 33 || currentScoreRight == 34)
             {
-                if(currentScoreLeft == 22)
+                if (currentScoreLeft == 22)
                 {
-                    left.MazeTilePath.PathConnectionScore = 29;
+                    connectionLeft.TileModifier.ConnectionScore = 29;
                 }
-                else if(currentScoreLeft == 27)
+                else if (currentScoreLeft == 27)
                 {
-                    left.MazeTilePath.PathConnectionScore = 7;
+                    connectionLeft.TileModifier.ConnectionScore = 7;
                 }
             }
             else
-            { 
-                thisTilePath.PathConnectionScore = 7;
-            
-                if(currentScoreRight == 22)
+            {
+                thisMazeTileAttribute.ConnectionScore = 7;
+
+                if (currentScoreRight == 22)
                 {
-                    right.MazeTilePath.PathConnectionScore = 27;
+                    connectionRight.TileModifier.ConnectionScore = 27;
                 }
-                else if(currentScoreRight == 29)
+                else if (currentScoreRight == 29)
                 {
-                    right.MazeTilePath.PathConnectionScore = 7;
+                    connectionRight.TileModifier.ConnectionScore = 7;
                 }
             }
         }
 
-        else if(currentScoreThisTilePath == 28)
+        else if (currentScoreThisTilePath == 28)
         {
             if (currentScoreDown == 23 || currentScoreDown == 26 || currentScoreUp == 31 || currentScoreDown == 33 || currentScoreDown == 34)
             {
-                if(currentScoreUp == 24)
+                if (currentScoreUp == 24)
                 {
-                    up.MazeTilePath.PathConnectionScore = 30;
+                    connectionUp.TileModifier.ConnectionScore = 30;
                 }
-                else if(currentScoreUp == 28)
+                else if (currentScoreUp == 28)
                 {
-                    up.MazeTilePath.PathConnectionScore = 10;
+                    connectionUp.TileModifier.ConnectionScore = 10;
                 }
             }
             else
             {
-                thisTilePath.PathConnectionScore = 10;
+                thisMazeTileAttribute.ConnectionScore = 10;
 
                 if (currentScoreDown == 24)
                 {
-                    down.MazeTilePath.PathConnectionScore = 28;
+                    connectionDown.TileModifier.ConnectionScore = 28;
                 }
 
                 else if (currentScoreDown == 30)
                 {
-                    down.MazeTilePath.PathConnectionScore = 10;
+                    connectionDown.TileModifier.ConnectionScore = 10;
                 }
-            }         
+            }
         }
 
-        else if(currentScoreThisTilePath == 29)
+        else if (currentScoreThisTilePath == 29)
         {
             if (currentScoreLeft == 21 || currentScoreLeft == 23 || currentScoreLeft == 31 || currentScoreLeft == 32 || currentScoreLeft == 33)
             {
-                if(currentScoreRight == 22)
+                if (currentScoreRight == 22)
                 {
-                    right.MazeTilePath.PathConnectionScore = 27;
+                    connectionRight.TileModifier.ConnectionScore = 27;
                 }
-                else if(currentScoreRight == 29)
+                else if (currentScoreRight == 29)
                 {
-                    right.MazeTilePath.PathConnectionScore = 7;
+                    connectionRight.TileModifier.ConnectionScore = 7;
                 }
             }
             else
             {
-                thisTilePath.PathConnectionScore = 7;
+                thisMazeTileAttribute.ConnectionScore = 7;
 
                 if (currentScoreLeft == 22)
                 {
-                    left.MazeTilePath.PathConnectionScore = 29;
+                    connectionLeft.TileModifier.ConnectionScore = 29;
                 }
 
                 else if (currentScoreLeft == 27)
                 {
-                    left.MazeTilePath.PathConnectionScore = 7;
+                    connectionLeft.TileModifier.ConnectionScore = 7;
                 }
-            }    
+            }
         }
 
-        else if(currentScoreThisTilePath == 30)
+        else if (currentScoreThisTilePath == 30)
         {
             if (currentScoreUp == 21 || currentScoreUp == 25 || currentScoreUp == 31 || currentScoreUp == 32 || currentScoreUp == 33 || currentScoreUp == 34)
             {
-                if(currentScoreDown == 24)
+                if (currentScoreDown == 24)
                 {
-                    down.MazeTilePath.PathConnectionScore = 28;
+                    connectionDown.TileModifier.ConnectionScore = 28;
                 }
-                else if(currentScoreDown == 30)
+                else if (currentScoreDown == 30)
                 {
-                    down.MazeTilePath.PathConnectionScore = 10;
+                    connectionDown.TileModifier.ConnectionScore = 10;
                 }
             }
             else
             {
-                thisTilePath.PathConnectionScore = 10;
+                thisMazeTileAttribute.ConnectionScore = 10;
                 if (currentScoreUp == 24)
                 {
-                    up.MazeTilePath.PathConnectionScore = 30;
+                    connectionUp.TileModifier.ConnectionScore = 30;
                 }
-                else if(currentScoreUp == 28)
+                else if (currentScoreUp == 28)
                 {
-                    up.MazeTilePath.PathConnectionScore = 10;
+                    connectionUp.TileModifier.ConnectionScore = 10;
                 }
             }
         }
@@ -989,86 +901,86 @@ public class NeighbourTileCalculator
                 currentScoreDown == 23 || currentScoreDown == 26 || currentScoreDown == 32 || currentScoreDown == 33 || currentScoreDown == 34 ||
                 currentScoreLeft == 21 || currentScoreLeft == 23 || currentScoreLeft == 31 || currentScoreLeft == 32 || currentScoreLeft == 33)
             {
-                if(currentScoreRight == 4)
+                if (currentScoreRight == 4)
                 {
-                    right.MazeTilePath.PathConnectionScore = 19;
+                    connectionRight.TileModifier.ConnectionScore = 19;
                 }
-                else if(currentScoreRight == 7)
+                else if (currentScoreRight == 7)
                 {
-                    right.MazeTilePath.PathConnectionScore = 29;
+                    connectionRight.TileModifier.ConnectionScore = 29;
                 }
-                else if(currentScoreRight == 27)
+                else if (currentScoreRight == 27)
                 {
-                    right.MazeTilePath.PathConnectionScore = 22;
-                }
-
-                if(currentScoreDown == 5)
-                {
-                    down.MazeTilePath.PathConnectionScore = 20;
-                }
-                else if(currentScoreDown == 10)
-                {
-                    down.MazeTilePath.PathConnectionScore = 30;
-                }
-                else if(currentScoreDown == 28)
-                {
-                    down.MazeTilePath.PathConnectionScore = 24;
+                    connectionRight.TileModifier.ConnectionScore = 22;
                 }
 
-                if(currentScoreLeft == 2)
+                if (currentScoreDown == 5)
                 {
-                    left.MazeTilePath.PathConnectionScore = 17;
+                    connectionDown.TileModifier.ConnectionScore = 20;
                 }
-                else if(currentScoreLeft == 7)
+                else if (currentScoreDown == 10)
                 {
-                    left.MazeTilePath.PathConnectionScore = 27;
+                    connectionDown.TileModifier.ConnectionScore = 30;
                 }
-                else if(currentScoreLeft == 29)
+                else if (currentScoreDown == 28)
                 {
-                    left.MazeTilePath.PathConnectionScore = 22;
+                    connectionDown.TileModifier.ConnectionScore = 24;
+                }
+
+                if (currentScoreLeft == 2)
+                {
+                    connectionLeft.TileModifier.ConnectionScore = 17;
+                }
+                else if (currentScoreLeft == 7)
+                {
+                    connectionLeft.TileModifier.ConnectionScore = 27;
+                }
+                else if (currentScoreLeft == 29)
+                {
+                    connectionLeft.TileModifier.ConnectionScore = 22;
                 }
             }
             else
             {
-                thisTilePath.PathConnectionScore = 12;
+                thisMazeTileAttribute.ConnectionScore = 12;
 
                 if (currentScoreRight == 19)
                 {
-                    right.MazeTilePath.PathConnectionScore = 4;
+                    connectionRight.TileModifier.ConnectionScore = 4;
                 }
                 else if (currentScoreRight == 22)
                 {
-                    right.MazeTilePath.PathConnectionScore = 27;
+                    connectionRight.TileModifier.ConnectionScore = 27;
                 }
                 else if (currentScoreRight == 29)
                 {
-                    right.MazeTilePath.PathConnectionScore = 7;
+                    connectionRight.TileModifier.ConnectionScore = 7;
                 }
 
                 if (currentScoreDown == 20)
                 {
-                    down.MazeTilePath.PathConnectionScore = 5;
+                    connectionDown.TileModifier.ConnectionScore = 5;
                 }
                 else if (currentScoreDown == 24)
                 {
-                    down.MazeTilePath.PathConnectionScore = 28;
+                    connectionDown.TileModifier.ConnectionScore = 28;
                 }
                 else if (currentScoreDown == 30)
                 {
-                    down.MazeTilePath.PathConnectionScore = 10;
+                    connectionDown.TileModifier.ConnectionScore = 10;
                 }
 
                 if (currentScoreLeft == 17)
                 {
-                    left.MazeTilePath.PathConnectionScore = 2;
+                    connectionLeft.TileModifier.ConnectionScore = 2;
                 }
                 else if (currentScoreLeft == 22)
                 {
-                    left.MazeTilePath.PathConnectionScore = 29;
+                    connectionLeft.TileModifier.ConnectionScore = 29;
                 }
                 else if (currentScoreLeft == 27)
                 {
-                    left.MazeTilePath.PathConnectionScore = 7;
+                    connectionLeft.TileModifier.ConnectionScore = 7;
                 }
             }
         }
@@ -1081,84 +993,84 @@ public class NeighbourTileCalculator
             {
                 if (currentScoreRight == 4)
                 {
-                    right.MazeTilePath.PathConnectionScore = 19;
+                    connectionRight.TileModifier.ConnectionScore = 19;
                 }
                 else if (currentScoreRight == 7)
                 {
-                    right.MazeTilePath.PathConnectionScore = 29;
+                    connectionRight.TileModifier.ConnectionScore = 29;
                 }
                 else if (currentScoreRight == 27)
                 {
-                    right.MazeTilePath.PathConnectionScore = 22;
+                    connectionRight.TileModifier.ConnectionScore = 22;
                 }
 
                 if (currentScoreDown == 5)
                 {
-                    down.MazeTilePath.PathConnectionScore = 20;
+                    connectionDown.TileModifier.ConnectionScore = 20;
                 }
                 else if (currentScoreDown == 10)
                 {
-                    down.MazeTilePath.PathConnectionScore = 30;
+                    connectionDown.TileModifier.ConnectionScore = 30;
                 }
                 else if (currentScoreDown == 28)
                 {
-                    down.MazeTilePath.PathConnectionScore = 24;
+                    connectionDown.TileModifier.ConnectionScore = 24;
                 }
 
                 if (currentScoreUp == 3)
                 {
-                    up.MazeTilePath.PathConnectionScore = 18;
+                    connectionUp.TileModifier.ConnectionScore = 18;
                 }
                 else if (currentScoreUp == 10)
                 {
-                    up.MazeTilePath.PathConnectionScore = 28;
+                    connectionUp.TileModifier.ConnectionScore = 28;
                 }
                 else if (currentScoreUp == 30)
                 {
-                    up.MazeTilePath.PathConnectionScore = 24;
+                    connectionUp.TileModifier.ConnectionScore = 24;
                 }
             }
             else
             {
-                thisTilePath.PathConnectionScore = 13;
+                thisMazeTileAttribute.ConnectionScore = 13;
 
                 if (currentScoreRight == 19)
                 {
-                    right.MazeTilePath.PathConnectionScore = 4;
+                    connectionRight.TileModifier.ConnectionScore = 4;
                 }
                 else if (currentScoreRight == 22)
                 {
-                    right.MazeTilePath.PathConnectionScore = 27;
+                    connectionRight.TileModifier.ConnectionScore = 27;
                 }
                 else if (currentScoreRight == 29)
                 {
-                    right.MazeTilePath.PathConnectionScore = 7;
+                    connectionRight.TileModifier.ConnectionScore = 7;
                 }
-                
+
                 if (currentScoreDown == 20)
                 {
-                    down.MazeTilePath.PathConnectionScore = 5;
+                    connectionDown.TileModifier.ConnectionScore = 5;
                 }
                 else if (currentScoreDown == 24)
                 {
-                    down.MazeTilePath.PathConnectionScore = 28;
+                    connectionDown.TileModifier.ConnectionScore = 28;
                 }
                 else if (currentScoreDown == 30)
                 {
-                    down.MazeTilePath.PathConnectionScore = 10;
+                    connectionDown.TileModifier.ConnectionScore = 10;
                 }
 
                 if (currentScoreUp == 18)
                 {
-                    up.MazeTilePath.PathConnectionScore = 3;
+                    connectionUp.TileModifier.ConnectionScore = 3;
                 }
                 else if (currentScoreUp == 24)
                 {
-                    up.MazeTilePath.PathConnectionScore = 30;
+                    connectionUp.TileModifier.ConnectionScore = 30;
                 }
                 else if (currentScoreUp == 28)
                 {
-                    up.MazeTilePath.PathConnectionScore = 10;
+                    connectionUp.TileModifier.ConnectionScore = 10;
                 }
             }
         }
@@ -1169,86 +1081,86 @@ public class NeighbourTileCalculator
                 currentScoreLeft == 21 || currentScoreLeft == 2 || currentScoreLeft == 31 || currentScoreLeft == 32 || currentScoreLeft == 33 ||
                 currentScoreUp == 21 || currentScoreUp == 25 || currentScoreUp == 32 || currentScoreUp == 33 || currentScoreUp == 34)
             {
-                if(currentScoreRight == 4)
+                if (currentScoreRight == 4)
                 {
-                    right.MazeTilePath.PathConnectionScore = 19;
+                    connectionRight.TileModifier.ConnectionScore = 19;
                 }
                 else if (currentScoreRight == 7)
                 {
-                    right.MazeTilePath.PathConnectionScore = 29;
+                    connectionRight.TileModifier.ConnectionScore = 29;
                 }
                 else if (currentScoreRight == 27)
                 {
-                    right.MazeTilePath.PathConnectionScore = 22;
+                    connectionRight.TileModifier.ConnectionScore = 22;
                 }
 
-                if(currentScoreLeft == 2)
+                if (currentScoreLeft == 2)
                 {
-                    left.MazeTilePath.PathConnectionScore = 17;
+                    connectionLeft.TileModifier.ConnectionScore = 17;
                 }
                 else if (currentScoreLeft == 7)
                 {
-                    left.MazeTilePath.PathConnectionScore = 27;
+                    connectionLeft.TileModifier.ConnectionScore = 27;
                 }
                 else if (currentScoreLeft == 29)
                 {
-                    left.MazeTilePath.PathConnectionScore = 22;
+                    connectionLeft.TileModifier.ConnectionScore = 22;
                 }
 
-                if(currentScoreUp == 3)
+                if (currentScoreUp == 3)
                 {
-                    up.MazeTilePath.PathConnectionScore = 18;
+                    connectionUp.TileModifier.ConnectionScore = 18;
                 }
                 else if (currentScoreUp == 10)
                 {
-                    up.MazeTilePath.PathConnectionScore = 28;
+                    connectionUp.TileModifier.ConnectionScore = 28;
                 }
                 else if (currentScoreUp == 30)
                 {
-                    up.MazeTilePath.PathConnectionScore = 24;
+                    connectionUp.TileModifier.ConnectionScore = 24;
                 }
             }
             else
             {
-                thisTilePath.PathConnectionScore = 14;
+                thisMazeTileAttribute.ConnectionScore = 14;
 
                 if (currentScoreRight == 19)
                 {
-                    right.MazeTilePath.PathConnectionScore = 4;
+                    connectionRight.TileModifier.ConnectionScore = 4;
                 }
                 else if (currentScoreRight == 22)
                 {
-                    right.MazeTilePath.PathConnectionScore = 27;
+                    connectionRight.TileModifier.ConnectionScore = 27;
                 }
                 else if (currentScoreRight == 29)
                 {
-                    right.MazeTilePath.PathConnectionScore = 7;
+                    connectionRight.TileModifier.ConnectionScore = 7;
                 }
 
                 if (currentScoreLeft == 17)
                 {
-                    left.MazeTilePath.PathConnectionScore = 2;
+                    connectionLeft.TileModifier.ConnectionScore = 2;
                 }
                 else if (currentScoreLeft == 22)
                 {
-                    left.MazeTilePath.PathConnectionScore = 29;
+                    connectionLeft.TileModifier.ConnectionScore = 29;
                 }
                 else if (currentScoreLeft == 27)
                 {
-                    left.MazeTilePath.PathConnectionScore = 7;
+                    connectionLeft.TileModifier.ConnectionScore = 7;
                 }
 
                 if (currentScoreUp == 18)
                 {
-                    up.MazeTilePath.PathConnectionScore = 3;
+                    connectionUp.TileModifier.ConnectionScore = 3;
                 }
                 else if (currentScoreUp == 24)
                 {
-                    up.MazeTilePath.PathConnectionScore = 30;
+                    connectionUp.TileModifier.ConnectionScore = 30;
                 }
                 else if (currentScoreUp == 28)
                 {
-                    up.MazeTilePath.PathConnectionScore = 10;
+                    connectionUp.TileModifier.ConnectionScore = 10;
                 }
             }
         }
@@ -1261,103 +1173,103 @@ public class NeighbourTileCalculator
             {
                 if (currentScoreDown == 5)
                 {
-                    down.MazeTilePath.PathConnectionScore = 20;
+                    connectionDown.TileModifier.ConnectionScore = 20;
                 }
                 else if (currentScoreDown == 10)
                 {
-                    down.MazeTilePath.PathConnectionScore = 30;
+                    connectionDown.TileModifier.ConnectionScore = 30;
                 }
                 else if (currentScoreDown == 28)
                 {
-                    down.MazeTilePath.PathConnectionScore = 24;
+                    connectionDown.TileModifier.ConnectionScore = 24;
                 }
 
                 if (currentScoreLeft == 2)
                 {
-                    left.MazeTilePath.PathConnectionScore = 17;
+                    connectionLeft.TileModifier.ConnectionScore = 17;
                 }
                 else if (currentScoreLeft == 7)
                 {
-                    left.MazeTilePath.PathConnectionScore = 27;
+                    connectionLeft.TileModifier.ConnectionScore = 27;
                 }
                 else if (currentScoreLeft == 29)
                 {
-                    left.MazeTilePath.PathConnectionScore = 22;
+                    connectionLeft.TileModifier.ConnectionScore = 22;
                 }
 
                 if (currentScoreUp == 3)
                 {
-                    up.MazeTilePath.PathConnectionScore = 18;
+                    connectionUp.TileModifier.ConnectionScore = 18;
                 }
                 else if (currentScoreUp == 10)
                 {
-                    up.MazeTilePath.PathConnectionScore = 28;
+                    connectionUp.TileModifier.ConnectionScore = 28;
                 }
                 else if (currentScoreUp == 30)
                 {
-                    up.MazeTilePath.PathConnectionScore = 24;
+                    connectionUp.TileModifier.ConnectionScore = 24;
                 }
             }
             else
             {
-                thisTilePath.PathConnectionScore = 15;
+                thisMazeTileAttribute.ConnectionScore = 15;
 
                 if (currentScoreDown == 20)
                 {
-                    down.MazeTilePath.PathConnectionScore = 5;
+                    connectionDown.TileModifier.ConnectionScore = 5;
                 }
                 else if (currentScoreDown == 24)
                 {
-                    down.MazeTilePath.PathConnectionScore = 28;
+                    connectionDown.TileModifier.ConnectionScore = 28;
                 }
                 else if (currentScoreDown == 30)
                 {
-                    down.MazeTilePath.PathConnectionScore = 10;
+                    connectionDown.TileModifier.ConnectionScore = 10;
                 }
 
                 if (currentScoreLeft == 17)
                 {
-                    left.MazeTilePath.PathConnectionScore = 2;
+                    connectionLeft.TileModifier.ConnectionScore = 2;
                 }
                 else if (currentScoreLeft == 22)
                 {
-                    left.MazeTilePath.PathConnectionScore = 29;
+                    connectionLeft.TileModifier.ConnectionScore = 29;
                 }
                 else if (currentScoreLeft == 27)
                 {
-                    left.MazeTilePath.PathConnectionScore = 7;
+                    connectionLeft.TileModifier.ConnectionScore = 7;
                 }
 
                 if (currentScoreUp == 18)
                 {
-                    up.MazeTilePath.PathConnectionScore = 3;
+                    connectionUp.TileModifier.ConnectionScore = 3;
                 }
                 else if (currentScoreUp == 24)
                 {
-                    up.MazeTilePath.PathConnectionScore = 30;
+                    connectionUp.TileModifier.ConnectionScore = 30;
                 }
                 else if (currentScoreUp == 28)
                 {
-                    up.MazeTilePath.PathConnectionScore = 10;
+                    connectionUp.TileModifier.ConnectionScore = 10;
                 }
             }
         }
 
-        if (currentScoreThisTilePath != thisTilePath.PathConnectionScore)
-            updatedConnections.Add(thisTilePath);
-        if (right.MazeTilePath && currentScoreRight != right.MazeTilePath.PathConnectionScore)
-            updatedConnections.Add(right.MazeTilePath);
-        if (down.MazeTilePath && currentScoreDown != down.MazeTilePath.PathConnectionScore)
-            updatedConnections.Add(down.MazeTilePath);
-        if (left.MazeTilePath && currentScoreLeft != left.MazeTilePath.PathConnectionScore)
-            updatedConnections.Add(left.MazeTilePath);
-        if (up.MazeTilePath && currentScoreUp != up.MazeTilePath.PathConnectionScore)
-            updatedConnections.Add(up.MazeTilePath);
+        if (currentScoreThisTilePath != thisMazeTileAttribute.ConnectionScore)
+            updatedConnections.Add(thisMazeTileAttribute);
+        if (connectionRight.TileModifier && currentScoreRight != connectionRight.TileModifier.ConnectionScore)
+            updatedConnections.Add(connectionRight.TileModifier);
+        if (connectionDown.TileModifier && currentScoreDown != connectionDown.TileModifier.ConnectionScore)
+            updatedConnections.Add(connectionDown.TileModifier);
+        if (connectionLeft.TileModifier && currentScoreLeft != connectionLeft.TileModifier.ConnectionScore)
+            updatedConnections.Add(connectionLeft.TileModifier);
+        if (connectionUp.TileModifier && currentScoreUp != connectionUp.TileModifier.ConnectionScore)
+            updatedConnections.Add(connectionUp.TileModifier);
 
         return updatedConnections;
     }
 
-    private static int CalculateDoorConnectionScore(TileObstacleConnectionInfo right, TileObstacleConnectionInfo down, TileObstacleConnectionInfo left, TileObstacleConnectionInfo up)
+    private static int CalculateDoorConnectionScore(TileModifierConnectionInfo<TileObstacle> right, TileModifierConnectionInfo<TileObstacle> down, TileModifierConnectionInfo<TileObstacle> left, TileModifierConnectionInfo<TileObstacle> up)
     {
         if (right.HasConnection)
         {

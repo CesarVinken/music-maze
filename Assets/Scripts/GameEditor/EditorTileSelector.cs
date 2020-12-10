@@ -126,8 +126,8 @@ public class EditorTileSelector : MonoBehaviour
 
         if (editorMazeTileModifierType == EditorMazeTileModifierType.Attribute)
         {
-            //IEditorMazeTileAttribute attribute = EditorSelectedModifierContainer.Instance.EditorMazeTileAttributes[EditorManager.SelectedMazeTileAttributeModifierIndex];
-            //PlaceMazeTileAttribute(CurrentSelectedLocation, attribute);
+            IEditorMazeTileAttribute attribute = EditorSelectedModifierContainer.Instance.EditorMazeTileAttributes[EditorManager.SelectedMazeTileAttributeModifierIndex];
+            PlaceMazeTileAttributeVariation(CurrentSelectedLocation, attribute);
         }
         else
         {
@@ -158,5 +158,13 @@ public class EditorTileSelector : MonoBehaviour
 
         MazeLevelManager.Instance.Level.TilesByLocation.TryGetValue(gridLocation, out Tile tile);
         background.PlaceBackgroundVariation(tile);
+    }
+
+    private void PlaceMazeTileAttributeVariation(GridLocation gridLocation, IEditorMazeTileAttribute attribute)
+    {
+        if (attribute == null) Logger.Error($"Could not find the background type {attribute.GetType()}");
+
+        MazeLevelManager.Instance.Level.TilesByLocation.TryGetValue(gridLocation, out Tile tile);
+        attribute.PlaceAttributeVariation(tile);
     }
 }

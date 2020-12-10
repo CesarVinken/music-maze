@@ -10,4 +10,9 @@ public abstract class EditorMazeTileAttributeModifier : IEditorMazeTileAttribute
     {
         throw new System.NotImplementedException();
     }
+
+    public virtual void PlaceAttributeVariation(Tile tile)
+    {
+        Logger.Log("There are no attribute variations implemented for this attribute type");
+    }
 }

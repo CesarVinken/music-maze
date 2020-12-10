@@ -1,8 +1,6 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
-public class TileObstacle : MonoBehaviour, IMazeTileAttribute
+public class TileObstacle : MonoBehaviour, IMazeTileAttribute, ITileConnectable
 {
     public Tile Tile;
     public string ParentId;
@@ -11,8 +9,9 @@ public class TileObstacle : MonoBehaviour, IMazeTileAttribute
 
     [SerializeField] protected SpriteRenderer _spriteRenderer;
 
+    private int _connectionScore = -1;
 
-    public int ObstacleConnectionScore = -1; // on which sides does this obstacle border other obstacles
+    public int ConnectionScore { get => _connectionScore; set => _connectionScore = value; }
 
     public void Awake()
     {
@@ -24,12 +23,12 @@ public class TileObstacle : MonoBehaviour, IMazeTileAttribute
         }
     }
 
-    public virtual void WithObstacleConnectionScore(int obstacleConnectionScore)
+    public virtual void WithConnectionScore(int obstacleConnectionScore)
     {
-        ObstacleConnectionScore = obstacleConnectionScore;
+        ConnectionScore = obstacleConnectionScore;
 
         if (obstacleConnectionScore == -1) return;
-        _spriteRenderer.sprite = SpriteManager.Instance.DefaultWall[ObstacleConnectionScore - 1];
+        _spriteRenderer.sprite = SpriteManager.Instance.DefaultWall[ConnectionScore - 1];
     }
 
     public void WithObstacleType(ObstacleType obstacleType)
@@ -49,5 +48,10 @@ public class TileObstacle : MonoBehaviour, IMazeTileAttribute
     {
         Destroy(this);
         Destroy(gameObject);
+    }
+
+    public string GetSubtypeAsString()
+    {
+        return ObstacleType.ToString();
     }
 }

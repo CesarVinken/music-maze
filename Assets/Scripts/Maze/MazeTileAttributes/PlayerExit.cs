@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-public class PlayerExit : TileObstacle, IMazeTileAttribute
+public class PlayerExit : TileObstacle, IMazeTileAttribute, ITileConnectable
 {
     public bool IsOpen;
 
@@ -20,18 +20,18 @@ public class PlayerExit : TileObstacle, IMazeTileAttribute
         }
     }
 
-    public override void WithObstacleConnectionScore(int obstacleConnectionScore)
+    public override void WithConnectionScore(int obstacleConnectionScore)
     {
-        ObstacleConnectionScore = obstacleConnectionScore;
+        ConnectionScore = obstacleConnectionScore;
 
-        if (ObstacleConnectionScore <= 0 || ObstacleConnectionScore > 8)
+        if (ConnectionScore <= 0 || ConnectionScore > 8)
         {
-            Logger.Warning($"obstacleConnectionScore {ObstacleConnectionScore} should be between 1 and 8");
+            Logger.Warning($"obstacleConnectionScore {ConnectionScore} should be between 1 and 8");
             _spriteRenderer.sprite = SpriteManager.Instance.DefaultDoor[0];
             return;
         }
 
-        _spriteRenderer.sprite = SpriteManager.Instance.DefaultDoor[ObstacleConnectionScore - 1];
+        _spriteRenderer.sprite = SpriteManager.Instance.DefaultDoor[ConnectionScore - 1];
     }
 
     public void OpenExit()
@@ -39,7 +39,7 @@ public class PlayerExit : TileObstacle, IMazeTileAttribute
         Tile.Walkable = true;
         IsOpen = true;
         
-        _spriteRenderer.sprite = SpriteManager.Instance.DefaultDoor[ObstacleConnectionScore - 1 + 8]; // + 8 because the last two rows of the sprites are the Opened versions of the same sprites
+        _spriteRenderer.sprite = SpriteManager.Instance.DefaultDoor[ConnectionScore - 1 + 8]; // + 8 because the last two rows of the sprites are the Opened versions of the same sprites
 
         gameObject.layer = 9; // set layer to PlayerOnly, which is layer 9. Should not be hardcoded
         _spriteRenderer.gameObject.layer = 9;

@@ -1,25 +1,28 @@
 ﻿using UnityEngine;
 
-public class MazeTilePath : MonoBehaviour, IMazeTileBackground
+public class MazeTilePath : MonoBehaviour, IMazeTileBackground, ITileConnectable
 {
     public Tile Tile;
     public string ParentId;
 
-    public int PathConnectionScore;
     [SerializeField] private Sprite _sprite;
     [SerializeField] private SpriteRenderer _spriteRenderer;
 
     public MazeTilePathType MazeTilePathType;
+
+    private int connectionScore = -1;
+
+    public int ConnectionScore { get => connectionScore; set => connectionScore = value; }
 
     public void WithPathType(MazeTilePathType mazeTilePathType)
     {
         MazeTilePathType = mazeTilePathType;
     }
 
-    public void WithPathConnectionScore(int score)
+    public void WithConnectionScore(int score)
     {
-        PathConnectionScore = score;
-        _sprite = SpriteManager.Instance.DefaultPath[PathConnectionScore - 1];
+        ConnectionScore = score;
+        _sprite = SpriteManager.Instance.DefaultPath[ConnectionScore - 1];
         _spriteRenderer.sprite = _sprite;
     }
 
@@ -36,5 +39,10 @@ public class MazeTilePath : MonoBehaviour, IMazeTileBackground
     {
         Destroy(this);
         Destroy(gameObject);
+    }
+
+    public string GetSubtypeAsString()
+    {
+        return MazeTilePathType.ToString();
     }
 }

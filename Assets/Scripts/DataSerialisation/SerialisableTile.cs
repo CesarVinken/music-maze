@@ -39,14 +39,14 @@ public class SerialisableTile
             {
                 TileObstacle tileObstacle = tileAttribute as TileObstacle;
                 SerialisableTileObstacleAttribute serialisableTileObstacleAttribute = 
-                    new SerialisableTileObstacleAttribute(tileObstacle.ObstacleConnectionScore);
+                    new SerialisableTileObstacleAttribute(tileObstacle.ConnectionScore);
                 tileAttributes.Add(serialisableTileObstacleAttribute);
             }
             else if (tileAttribute.GetType() == typeof(PlayerExit))
             {
                 PlayerExit playerExit = tileAttribute as PlayerExit;
 
-                SerialisablePlayerExitAttribute serialisablePlayerExitAttribute = new SerialisablePlayerExitAttribute(playerExit.ObstacleConnectionScore);
+                SerialisablePlayerExitAttribute serialisablePlayerExitAttribute = new SerialisablePlayerExitAttribute(playerExit.ConnectionScore);
                 tileAttributes.Add(serialisablePlayerExitAttribute);
             }
             else if (tileAttribute.GetType() == typeof(PlayerOnly))
@@ -82,7 +82,7 @@ public class SerialisableTile
             {
                 MazeTilePath mazeTilePath = tileBackground as MazeTilePath;
                 SerialisableTilePathBackground serialisedTilePathBackground =
-                    new SerialisableTilePathBackground(mazeTilePath.PathConnectionScore);
+                    new SerialisableTilePathBackground(mazeTilePath.ConnectionScore);
                 tilebackgrounds.Add(serialisedTilePathBackground);
             }
             else if (tileBackground.GetType() == typeof(MazeTileBaseBackground))
