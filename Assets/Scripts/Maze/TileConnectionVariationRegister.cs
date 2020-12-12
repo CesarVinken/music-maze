@@ -10,6 +10,44 @@ public class TileConnectionVariationRegister<T> where T : MonoBehaviour, ITileCo
     private ITileConnectable _connectionLeft;
     private ITileConnectable _connectionUp;
 
+    private Dictionary<int, int[]> _mazeTilePathSpriteNumberByConnectionScore = new Dictionary<int, int[]>
+    {
+        { 1, new [] { 1 } },
+        { 2, new [] { 2 } },
+        { 3, new [] { 3 } },
+        { 4, new [] { 4 } },
+        { 5, new [] { 5 } },
+        { 6, new [] { 6 } },
+        { 7, new [] { 7 } },
+        { 8, new [] { 8 } },
+        { 9, new [] { 9 } },
+        { 10, new [] { 10 } },
+        { 11, new [] { 11 } },
+        { 12, new [] { 12 } },
+        { 13, new [] { 13 } },
+        { 14, new [] { 14 } },
+        { 15, new [] { 15 } },
+        { 16, new [] { 16 } },
+        { 17, new [] { 17 } },
+        { 18, new [] { 18 } },
+        { 19, new [] { 19 } },
+        { 20, new [] { 20 } },
+        { 21, new [] { 21 } },
+        { 22, new [] { 22 } },
+        { 23, new [] { 23 } },
+        { 24, new [] { 24 } },
+        { 25, new [] { 25 } },
+        { 26, new [] { 26 } },
+        { 27, new [] { 27 } },
+        { 28, new [] { 28 } },
+        { 29, new [] { 29 } },
+        { 30, new [] { 30 } },
+        { 31, new [] { 31 } },
+        { 32, new [] { 32 } },
+        { 33, new [] { 33 } },
+        { 34, new [] { 34 } },
+    };
+
     public TileConnectionVariationRegister(T _thisMazeTileAttribute, TileModifierConnectionInfo<T> connectionRight, TileModifierConnectionInfo<T> connectionDown, TileModifierConnectionInfo<T> connectionLeft, TileModifierConnectionInfo<T> connectionUp)
     {
         this._thisMazeTileAttribute = _thisMazeTileAttribute;
@@ -17,6 +55,15 @@ public class TileConnectionVariationRegister<T> where T : MonoBehaviour, ITileCo
         _connectionDown = connectionDown.TileModifier;
         _connectionLeft = connectionLeft.TileModifier;
         _connectionUp = connectionUp.TileModifier;
+    }
+
+    private int _pickSpriteNumber(int connectionScore)
+    {
+        int randomVariation = Random.Range(0, _mazeTilePathSpriteNumberByConnectionScore[connectionScore].Length - 1);
+
+        int spriteNumber = _mazeTilePathSpriteNumberByConnectionScore[connectionScore][randomVariation];
+
+        return spriteNumber;
     }
 
     public List<MazeTilePath> MazeTilePath()
@@ -33,16 +80,16 @@ public class TileConnectionVariationRegister<T> where T : MonoBehaviour, ITileCo
         {
             if (currentScoreRight == 7)
             {
-                _thisMazeTileAttribute.ConnectionScore = 17;
-                _connectionRight.ConnectionScore = 29;
+                _thisMazeTileAttribute.ConnectionScore = _pickSpriteNumber(17);
+                _connectionRight.ConnectionScore = _pickSpriteNumber(29);
             }
             else if (currentScoreRight == 22)
             {
-                _connectionRight.ConnectionScore = 27;
+                _connectionRight.ConnectionScore = _pickSpriteNumber(27);
             }
             else if (currentScoreRight == 29)
             {
-                _connectionRight.ConnectionScore = 7;
+                _connectionRight.ConnectionScore = _pickSpriteNumber(7);
             }
         }
 
@@ -50,16 +97,16 @@ public class TileConnectionVariationRegister<T> where T : MonoBehaviour, ITileCo
         {
             if (currentScoreDown == 10)
             {
-                _thisMazeTileAttribute.ConnectionScore = 18;
-                _connectionDown.ConnectionScore = 30;
+                _thisMazeTileAttribute.ConnectionScore = _pickSpriteNumber(18);
+                _connectionDown.ConnectionScore = _pickSpriteNumber(30);
             }
             else if (currentScoreDown == 24)
             {
-                _connectionDown.ConnectionScore = 28;
+                _connectionDown.ConnectionScore = _pickSpriteNumber(28);
             }
             else if (currentScoreDown == 30)
             {
-                _connectionDown.ConnectionScore = 10;
+                _connectionDown.ConnectionScore = _pickSpriteNumber(10);
             }
         }
 
@@ -67,16 +114,16 @@ public class TileConnectionVariationRegister<T> where T : MonoBehaviour, ITileCo
         {
             if (currentScoreLeft == 7)
             {
-                _thisMazeTileAttribute.ConnectionScore = 19;
-                _connectionLeft.ConnectionScore = 27;
+                _thisMazeTileAttribute.ConnectionScore = _pickSpriteNumber(19);
+                _connectionLeft.ConnectionScore = _pickSpriteNumber(27);
             }
             else if (currentScoreLeft == 22)
             {
-                _connectionLeft.ConnectionScore = 29;
+                _connectionLeft.ConnectionScore = _pickSpriteNumber(29);
             }
             else if (currentScoreLeft == 27)
             {
-                _connectionLeft.ConnectionScore = 7;
+                _connectionLeft.ConnectionScore = _pickSpriteNumber(7);
             }
         }
 
@@ -84,16 +131,16 @@ public class TileConnectionVariationRegister<T> where T : MonoBehaviour, ITileCo
         {
             if (currentScoreUp == 10)
             {
-                _thisMazeTileAttribute.ConnectionScore = 20;
-                _connectionUp.ConnectionScore = 28;
+                _thisMazeTileAttribute.ConnectionScore = _pickSpriteNumber(20);
+                _connectionUp.ConnectionScore = _pickSpriteNumber(28);
             }
             else if (currentScoreUp == 24)
             {
-                _connectionUp.ConnectionScore = 30;
+                _connectionUp.ConnectionScore = _pickSpriteNumber(30);
             }
             else if (currentScoreUp == 28)
             {
-                _connectionUp.ConnectionScore = 10;
+                _connectionUp.ConnectionScore = _pickSpriteNumber(10);
             }
         }
 
@@ -103,7 +150,57 @@ public class TileConnectionVariationRegister<T> where T : MonoBehaviour, ITileCo
             {
                 if (currentScoreDown == 23 || currentScoreDown == 24 || currentScoreDown == 26 || currentScoreDown == 30 || currentScoreDown == 32 || currentScoreDown == 33 || currentScoreDown == 34)
                 {
-                    _thisMazeTileAttribute.ConnectionScore = 21;
+                    _thisMazeTileAttribute.ConnectionScore = _pickSpriteNumber(21);
+                }
+                else if (currentScoreDown == 10)
+                {
+                    _thisMazeTileAttribute.ConnectionScore = _pickSpriteNumber(21);
+                    _connectionDown.ConnectionScore = _pickSpriteNumber(30);
+                }
+                else if (currentScoreDown == 28)
+                {
+                    _thisMazeTileAttribute.ConnectionScore = _pickSpriteNumber(21);
+                    _connectionDown.ConnectionScore = _pickSpriteNumber(24);
+                }
+            }
+            else if (currentScoreRight == 7)
+            {
+                if (currentScoreDown == 23 || currentScoreDown == 24 || currentScoreDown == 26 || currentScoreDown == 30 || currentScoreDown == 32 || currentScoreDown == 33 || currentScoreDown == 34)
+                {
+                    _thisMazeTileAttribute.ConnectionScore = _pickSpriteNumber(21);
+                    _connectionRight.ConnectionScore = _pickSpriteNumber(29);
+                }
+                else if (currentScoreDown == 10)
+                {
+                    _thisMazeTileAttribute.ConnectionScore = _pickSpriteNumber(21);
+                    _connectionRight.ConnectionScore = _pickSpriteNumber(29);
+                    _connectionDown.ConnectionScore = _pickSpriteNumber(30);
+                }
+                else if (currentScoreDown == 28)
+                {
+                    _thisMazeTileAttribute.ConnectionScore = _pickSpriteNumber(21);
+                    _connectionRight.ConnectionScore = _pickSpriteNumber(29);
+                    _connectionDown.ConnectionScore = _pickSpriteNumber(24);
+                }
+            }
+            else if (currentScoreRight == 27)
+            {
+                if (currentScoreDown == 23 || currentScoreDown == 24 || currentScoreDown == 26 || currentScoreDown == 30 || currentScoreDown == 32 || currentScoreDown == 33 || currentScoreDown == 34)
+                {
+                    _thisMazeTileAttribute.ConnectionScore = _pickSpriteNumber(21);
+                    _connectionRight.ConnectionScore = _pickSpriteNumber(22);
+                }
+                else if (currentScoreDown == 10)
+                {
+                    _thisMazeTileAttribute.ConnectionScore = _pickSpriteNumber(21);
+                    _connectionRight.ConnectionScore = _pickSpriteNumber(22);
+                    _connectionDown.ConnectionScore = _pickSpriteNumber(30);
+                }
+                else if (currentScoreDown == 28)
+                {
+                    _thisMazeTileAttribute.ConnectionScore = _pickSpriteNumber(21);
+                    _connectionRight.ConnectionScore = _pickSpriteNumber(22);
+                    _connectionDown.ConnectionScore = _pickSpriteNumber(24);
                 }
             }
         }
@@ -114,7 +211,58 @@ public class TileConnectionVariationRegister<T> where T : MonoBehaviour, ITileCo
             {
                 if (currentScoreUp == 21 || currentScoreUp == 24 || currentScoreUp == 25 || currentScoreUp == 28 || currentScoreUp == 31 || currentScoreUp == 32 || currentScoreUp == 34)
                 {
-                    _thisMazeTileAttribute.ConnectionScore = 23;
+                    _thisMazeTileAttribute.ConnectionScore = _pickSpriteNumber(23);
+                }
+                else if (currentScoreUp == 10)
+                {
+                    _thisMazeTileAttribute.ConnectionScore = _pickSpriteNumber(23);
+                    _connectionUp.ConnectionScore = _pickSpriteNumber(28);
+
+                }
+                else if(currentScoreUp == 30)
+                {
+                    _thisMazeTileAttribute.ConnectionScore = _pickSpriteNumber(23);
+                    _connectionUp.ConnectionScore = _pickSpriteNumber(24);
+                }
+            }
+            else if (currentScoreRight == 7)
+            {
+                if (currentScoreUp == 23 || currentScoreUp == 24 || currentScoreUp == 26 || currentScoreUp == 30 || currentScoreUp == 32 || currentScoreUp == 33 || currentScoreUp == 34)
+                {
+                    _thisMazeTileAttribute.ConnectionScore = _pickSpriteNumber(23);
+                    _connectionRight.ConnectionScore = _pickSpriteNumber(29);
+                }
+                else if (currentScoreUp == 10)
+                {
+                    _thisMazeTileAttribute.ConnectionScore = _pickSpriteNumber(23);
+                    _connectionRight.ConnectionScore = _pickSpriteNumber(29);
+                    _connectionUp.ConnectionScore = _pickSpriteNumber(28);
+                }
+                else if (currentScoreUp == 30)
+                {
+                    _thisMazeTileAttribute.ConnectionScore = _pickSpriteNumber(23);
+                    _connectionRight.ConnectionScore = _pickSpriteNumber(29);
+                    _connectionUp.ConnectionScore = _pickSpriteNumber(24);
+                }
+            }
+            else if (currentScoreRight == 27)
+            {
+                if (currentScoreUp == 23 || currentScoreUp == 24 || currentScoreUp == 26 || currentScoreUp == 30 || currentScoreUp == 32 || currentScoreUp == 33 || currentScoreUp == 34)
+                {
+                    _thisMazeTileAttribute.ConnectionScore = _pickSpriteNumber(23);
+                    _connectionRight.ConnectionScore = _pickSpriteNumber(22);
+                }
+                else if (currentScoreUp == 10)
+                {
+                    _thisMazeTileAttribute.ConnectionScore = _pickSpriteNumber(23);
+                    _connectionRight.ConnectionScore = _pickSpriteNumber(22);
+                    _connectionUp.ConnectionScore = _pickSpriteNumber(28);
+                }
+                else if (currentScoreUp == 30)
+                {
+                    _thisMazeTileAttribute.ConnectionScore = _pickSpriteNumber(23);
+                    _connectionRight.ConnectionScore = _pickSpriteNumber(22);
+                    _connectionUp.ConnectionScore = _pickSpriteNumber(24);
                 }
             }
         }
@@ -125,7 +273,57 @@ public class TileConnectionVariationRegister<T> where T : MonoBehaviour, ITileCo
             {
                 if (currentScoreDown == 23 || currentScoreDown == 24 || currentScoreDown == 26 || currentScoreDown == 30 || currentScoreDown == 32 || currentScoreDown == 33 || currentScoreDown == 34)
                 {
-                    _thisMazeTileAttribute.ConnectionScore = 25;
+                    _thisMazeTileAttribute.ConnectionScore = _pickSpriteNumber(25);
+                }
+                else if (currentScoreDown == 10)
+                {
+                    _thisMazeTileAttribute.ConnectionScore = _pickSpriteNumber(25);
+                    _connectionDown.ConnectionScore = _pickSpriteNumber(30);
+                }
+                else if (currentScoreDown == 28)
+                {
+                    _thisMazeTileAttribute.ConnectionScore = _pickSpriteNumber(25);
+                    _connectionDown.ConnectionScore = _pickSpriteNumber(24);
+                }
+            }
+            else if(currentScoreLeft == 7)
+            {
+                if (currentScoreDown == 23 || currentScoreDown == 24 || currentScoreDown == 26 || currentScoreDown == 30 || currentScoreDown == 32 || currentScoreDown == 33 || currentScoreDown == 34)
+                {
+                    _thisMazeTileAttribute.ConnectionScore = _pickSpriteNumber(25);
+                    _connectionLeft.ConnectionScore = _pickSpriteNumber(27);
+                }
+                else if (currentScoreDown == 10)
+                {
+                    _thisMazeTileAttribute.ConnectionScore = _pickSpriteNumber(25);
+                    _connectionDown.ConnectionScore = _pickSpriteNumber(30);
+                    _connectionLeft.ConnectionScore = _pickSpriteNumber(27);
+                }
+                else if (currentScoreDown == 28)
+                {
+                    _thisMazeTileAttribute.ConnectionScore = _pickSpriteNumber(25);
+                    _connectionDown.ConnectionScore = _pickSpriteNumber(24);
+                    _connectionLeft.ConnectionScore = _pickSpriteNumber(27);
+                }
+            }
+            else if(currentScoreLeft == 29)
+            {
+                if (currentScoreDown == 23 || currentScoreDown == 24 || currentScoreDown == 26 || currentScoreDown == 30 || currentScoreDown == 32 || currentScoreDown == 33 || currentScoreDown == 34)
+                {
+                    _thisMazeTileAttribute.ConnectionScore = _pickSpriteNumber(25);
+                    _connectionLeft.ConnectionScore = _pickSpriteNumber(22);
+                }
+                else if (currentScoreDown == 10)
+                {
+                    _thisMazeTileAttribute.ConnectionScore = _pickSpriteNumber(25);
+                    _connectionDown.ConnectionScore = _pickSpriteNumber(30);
+                    _connectionLeft.ConnectionScore = _pickSpriteNumber(22);
+                }
+                else if (currentScoreDown == 28)
+                {
+                    _thisMazeTileAttribute.ConnectionScore = _pickSpriteNumber(25);
+                    _connectionDown.ConnectionScore = _pickSpriteNumber(24);
+                    _connectionLeft.ConnectionScore = _pickSpriteNumber(22);
                 }
             }
         }
@@ -136,7 +334,57 @@ public class TileConnectionVariationRegister<T> where T : MonoBehaviour, ITileCo
             {
                 if (currentScoreLeft == 21 || currentScoreLeft == 22 || currentScoreLeft == 23 || currentScoreLeft == 27 || currentScoreLeft == 31 || currentScoreLeft == 32 || currentScoreLeft == 33)
                 {
-                    _thisMazeTileAttribute.ConnectionScore = 26;
+                    _thisMazeTileAttribute.ConnectionScore = _pickSpriteNumber(26);
+                }
+                else if (currentScoreLeft == 7)
+                {
+                    _thisMazeTileAttribute.ConnectionScore = _pickSpriteNumber(26);
+                    _connectionLeft.ConnectionScore = _pickSpriteNumber(27);
+                }
+                else if (currentScoreLeft == 29)
+                {
+                    _thisMazeTileAttribute.ConnectionScore = _pickSpriteNumber(26);
+                    _connectionLeft.ConnectionScore = _pickSpriteNumber(22);
+                }
+            }
+            else if (currentScoreUp == 10)
+            {
+                if (currentScoreLeft == 21 || currentScoreLeft == 22 || currentScoreLeft == 23 || currentScoreLeft == 27 || currentScoreLeft == 31 || currentScoreLeft == 32 || currentScoreLeft == 33)
+                {
+                    _thisMazeTileAttribute.ConnectionScore = _pickSpriteNumber(26);
+                    _connectionUp.ConnectionScore = _pickSpriteNumber(28);
+                }
+                else if (currentScoreLeft == 7)
+                {
+                    _thisMazeTileAttribute.ConnectionScore = _pickSpriteNumber(26);
+                    _connectionLeft.ConnectionScore = _pickSpriteNumber(27);
+                    _connectionUp.ConnectionScore = _pickSpriteNumber(28);
+                }
+                else if (currentScoreLeft == 29)
+                {
+                    _thisMazeTileAttribute.ConnectionScore = _pickSpriteNumber(26);
+                    _connectionLeft.ConnectionScore = _pickSpriteNumber(22);
+                    _connectionUp.ConnectionScore = _pickSpriteNumber(28);
+                }
+            }
+            else if (currentScoreUp == 30)
+            {
+                if (currentScoreLeft == 21 || currentScoreLeft == 22 || currentScoreLeft == 23 || currentScoreLeft == 27 || currentScoreLeft == 31 || currentScoreLeft == 32 || currentScoreLeft == 33)
+                {
+                    _thisMazeTileAttribute.ConnectionScore = _pickSpriteNumber(26);
+                    _connectionUp.ConnectionScore = _pickSpriteNumber(24);
+                }
+                else if (currentScoreLeft == 7)
+                {
+                    _thisMazeTileAttribute.ConnectionScore = _pickSpriteNumber(26);
+                    _connectionLeft.ConnectionScore = _pickSpriteNumber(27);
+                    _connectionUp.ConnectionScore = _pickSpriteNumber(24);
+                }
+                else if (currentScoreLeft == 29)
+                {
+                    _thisMazeTileAttribute.ConnectionScore = _pickSpriteNumber(26);
+                    _connectionLeft.ConnectionScore = _pickSpriteNumber(22);
+                    _connectionUp.ConnectionScore = _pickSpriteNumber(24);
                 }
             }
         }
@@ -145,28 +393,28 @@ public class TileConnectionVariationRegister<T> where T : MonoBehaviour, ITileCo
         {
             if (currentScoreRight == 19)
             {
-                _connectionRight.ConnectionScore = 4;
+                _connectionRight.ConnectionScore = _pickSpriteNumber(4);
             }
             else if (currentScoreRight == 22)
             {
-                _connectionRight.ConnectionScore = 27;
+                _connectionRight.ConnectionScore = _pickSpriteNumber(27);
             }
             else if (currentScoreRight == 29)
             {
-                _connectionRight.ConnectionScore = 7;
+                _connectionRight.ConnectionScore = _pickSpriteNumber(7);
             }
 
             if (currentScoreLeft == 17)
             {
-                _connectionLeft.ConnectionScore = 2;
+                _connectionLeft.ConnectionScore = _pickSpriteNumber(2);
             }
             else if (currentScoreLeft == 22)
             {
-                _connectionLeft.ConnectionScore = 29;
+                _connectionLeft.ConnectionScore = _pickSpriteNumber(29);
             }
             else if (currentScoreLeft == 27)
             {
-                _connectionLeft.ConnectionScore = 7;
+                _connectionLeft.ConnectionScore = _pickSpriteNumber(7);
             }
         }
 
@@ -174,28 +422,28 @@ public class TileConnectionVariationRegister<T> where T : MonoBehaviour, ITileCo
         {
             if (currentScoreDown == 20)
             {
-                _connectionDown.ConnectionScore = 5;
+                _connectionDown.ConnectionScore = _pickSpriteNumber(5);
             }
             else if (currentScoreDown == 24)
             {
-                _connectionDown.ConnectionScore = 28;
+                _connectionDown.ConnectionScore = _pickSpriteNumber(28);
             }
             else if (currentScoreDown == 30)
             {
-                _connectionDown.ConnectionScore = 10;
+                _connectionDown.ConnectionScore = _pickSpriteNumber(10);
             }
 
             if (currentScoreUp == 18)
             {
-                _connectionUp.ConnectionScore = 3;
+                _connectionUp.ConnectionScore = _pickSpriteNumber(3);
             }
             else if (currentScoreUp == 24)
             {
-                _connectionUp.ConnectionScore = 30;
+                _connectionUp.ConnectionScore = _pickSpriteNumber(30);
             }
             else if (currentScoreUp == 28)
             {
-                _connectionUp.ConnectionScore = 10;
+                _connectionUp.ConnectionScore = _pickSpriteNumber(10);
             }
         }
 
@@ -203,38 +451,38 @@ public class TileConnectionVariationRegister<T> where T : MonoBehaviour, ITileCo
         {
             if (currentScoreRight == 7)
             {
-                _connectionRight.ConnectionScore = 29;
+                _connectionRight.ConnectionScore = _pickSpriteNumber(29);
             }
             else if (currentScoreLeft == 27)
             {
-                _connectionRight.ConnectionScore = 22;
+                _connectionRight.ConnectionScore = _pickSpriteNumber(22);
             }
 
             if (currentScoreDown == 10)
             {
-                _connectionDown.ConnectionScore = 30;
+                _connectionDown.ConnectionScore = _pickSpriteNumber(30);
             }
             else if (currentScoreDown == 28)
             {
-                _connectionDown.ConnectionScore = 24;
+                _connectionDown.ConnectionScore = _pickSpriteNumber(24);
             }
 
             if (currentScoreLeft == 7)
             {
-                _connectionLeft.ConnectionScore = 27;
+                _connectionLeft.ConnectionScore = _pickSpriteNumber(27);
             }
             else if (currentScoreLeft == 27)
             {
-                _connectionLeft.ConnectionScore = 22;
+                _connectionLeft.ConnectionScore = _pickSpriteNumber(22);
             }
 
             if (currentScoreUp == 10)
             {
-                _connectionUp.ConnectionScore = 28;
+                _connectionUp.ConnectionScore = _pickSpriteNumber(28);
             }
             else if (currentScoreUp == 30)
             {
-                _connectionUp.ConnectionScore = 24;
+                _connectionUp.ConnectionScore = _pickSpriteNumber(24);
             }
         }
 
@@ -246,19 +494,19 @@ public class TileConnectionVariationRegister<T> where T : MonoBehaviour, ITileCo
             }
             else
             {
-                _thisMazeTileAttribute.ConnectionScore = 2;
+                _thisMazeTileAttribute.ConnectionScore = _pickSpriteNumber(2);
 
                 if (currentScoreRight == 19)
                 {
-                    _connectionRight.ConnectionScore = 4;
+                    _connectionRight.ConnectionScore = _pickSpriteNumber(4);
                 }
                 else if (currentScoreRight == 22)
                 {
-                    _connectionRight.ConnectionScore = 27;
+                    _connectionRight.ConnectionScore = _pickSpriteNumber(27);
                 }
                 else if (currentScoreRight == 29)
                 {
-                    _connectionRight.ConnectionScore = 27;
+                    _connectionRight.ConnectionScore = _pickSpriteNumber(27);
                 }
             }
         }
@@ -271,19 +519,19 @@ public class TileConnectionVariationRegister<T> where T : MonoBehaviour, ITileCo
             }
             else
             {
-                _thisMazeTileAttribute.ConnectionScore = 3;
+                _thisMazeTileAttribute.ConnectionScore = _pickSpriteNumber(3);
 
                 if (currentScoreDown == 20)
                 {
-                    _connectionDown.ConnectionScore = 5;
+                    _connectionDown.ConnectionScore = _pickSpriteNumber(5);
                 }
                 else if (currentScoreDown == 24)
                 {
-                    _connectionDown.ConnectionScore = 28;
+                    _connectionDown.ConnectionScore = _pickSpriteNumber(28);
                 }
                 else if (currentScoreDown == 30)
                 {
-                    _connectionDown.ConnectionScore = 10;
+                    _connectionDown.ConnectionScore = _pickSpriteNumber(10);
                 }
             }
         }
@@ -296,19 +544,19 @@ public class TileConnectionVariationRegister<T> where T : MonoBehaviour, ITileCo
             }
             else
             {
-                _thisMazeTileAttribute.ConnectionScore = 4;
+                _thisMazeTileAttribute.ConnectionScore = _pickSpriteNumber(4);
 
                 if (currentScoreLeft == 17)
                 {
-                    _connectionLeft.ConnectionScore = 2;
+                    _connectionLeft.ConnectionScore = _pickSpriteNumber(2);
                 }
                 else if (currentScoreLeft == 22)
                 {
-                    _connectionLeft.ConnectionScore = 29;
+                    _connectionLeft.ConnectionScore = _pickSpriteNumber(29);
                 }
                 else if (currentScoreLeft == 27)
                 {
-                    _connectionLeft.ConnectionScore = 7;
+                    _connectionLeft.ConnectionScore = _pickSpriteNumber(7);
                 }
             }
         }
@@ -321,19 +569,19 @@ public class TileConnectionVariationRegister<T> where T : MonoBehaviour, ITileCo
             }
             else
             {
-                _thisMazeTileAttribute.ConnectionScore = 5;
+                _thisMazeTileAttribute.ConnectionScore = _pickSpriteNumber(5);
 
                 if (currentScoreUp == 18)
                 {
-                    _connectionUp.ConnectionScore = 3;
+                    _connectionUp.ConnectionScore = _pickSpriteNumber(3);
                 }
                 else if (currentScoreUp == 24)
                 {
-                    _connectionUp.ConnectionScore = 30;
+                    _connectionUp.ConnectionScore = _pickSpriteNumber(30);
                 }
                 else if (currentScoreUp == 28)
                 {
-                    _connectionUp.ConnectionScore = 10;
+                    _connectionUp.ConnectionScore = _pickSpriteNumber(10);
                 }
             }
         }
@@ -347,32 +595,32 @@ public class TileConnectionVariationRegister<T> where T : MonoBehaviour, ITileCo
             }
             else
             {
-                _thisMazeTileAttribute.ConnectionScore = 6;
+                _thisMazeTileAttribute.ConnectionScore = _pickSpriteNumber(6);
 
                 if (currentScoreRight == 19)
                 {
-                    _connectionRight.ConnectionScore = 4;
+                    _connectionRight.ConnectionScore = _pickSpriteNumber(4);
                 }
                 else if (currentScoreRight == 22)
                 {
-                    _connectionRight.ConnectionScore = 27;
+                    _connectionRight.ConnectionScore = _pickSpriteNumber(27);
                 }
                 else if (currentScoreRight == 29)
                 {
-                    _connectionRight.ConnectionScore = 7;
+                    _connectionRight.ConnectionScore = _pickSpriteNumber(7);
                 }
 
                 if (currentScoreDown == 20)
                 {
-                    _connectionDown.ConnectionScore = 5;
+                    _connectionDown.ConnectionScore = _pickSpriteNumber(5);
                 }
                 else if (currentScoreDown == 24)
                 {
-                    _connectionDown.ConnectionScore = 28;
+                    _connectionDown.ConnectionScore = _pickSpriteNumber(28);
                 }
                 else if (currentScoreDown == 30)
                 {
-                    _connectionDown.ConnectionScore = 10;
+                    _connectionDown.ConnectionScore = _pickSpriteNumber(10);
                 }
             }
         }
@@ -386,40 +634,40 @@ public class TileConnectionVariationRegister<T> where T : MonoBehaviour, ITileCo
             }
             else
             {
-                _thisMazeTileAttribute.ConnectionScore = 7;
+                _thisMazeTileAttribute.ConnectionScore = _pickSpriteNumber(7);
 
                 if (currentScoreLeft == 17)
                 {
-                    _connectionLeft.ConnectionScore = 2;
+                    _connectionLeft.ConnectionScore = _pickSpriteNumber(2);
                 }
                 else if (currentScoreLeft == 22)
                 {
-                    _connectionLeft.ConnectionScore = 29;
+                    _connectionLeft.ConnectionScore = _pickSpriteNumber(29);
                 }
                 else if ((currentScoreLeft == 16 || currentScoreLeft == 21 || currentScoreLeft == 23 || currentScoreLeft == 31 || currentScoreLeft == 32 || currentScoreLeft == 33) && currentScoreRight != 25 && currentScoreRight != 26 && currentScoreRight != 31 && currentScoreRight != 33 && currentScoreRight != 34)
                 {
-                    _thisMazeTileAttribute.ConnectionScore = 29;
+                    _thisMazeTileAttribute.ConnectionScore = _pickSpriteNumber(29);
                 }
                 else if (currentScoreLeft == 27)
                 {
-                    _connectionLeft.ConnectionScore = 7;
+                    _connectionLeft.ConnectionScore = _pickSpriteNumber(7);
                 }
 
                 if (currentScoreRight == 19)
                 {
-                    _connectionRight.ConnectionScore = 4;
+                    _connectionRight.ConnectionScore = _pickSpriteNumber(4);
                 }
                 else if (currentScoreRight == 22)
                 {
-                    _connectionRight.ConnectionScore = 27;
+                    _connectionRight.ConnectionScore = _pickSpriteNumber(27);
                 }
                 else if ((currentScoreRight == 16 || currentScoreRight == 25 || currentScoreRight == 26 || currentScoreRight == 31 || currentScoreRight == 33 || currentScoreRight == 34) && currentScoreLeft != 21 && currentScoreLeft != 23 && currentScoreLeft != 31 && currentScoreLeft != 32 && currentScoreLeft != 33)
                 {
-                    _thisMazeTileAttribute.ConnectionScore = 27;
+                    _thisMazeTileAttribute.ConnectionScore = _pickSpriteNumber(27);
                 }
                 else if (currentScoreRight == 29)
                 {
-                    _connectionRight.ConnectionScore = 7;
+                    _connectionRight.ConnectionScore = _pickSpriteNumber(7);
                 }
             }
         }
@@ -433,32 +681,32 @@ public class TileConnectionVariationRegister<T> where T : MonoBehaviour, ITileCo
             }
             else
             {
-                _thisMazeTileAttribute.ConnectionScore = 8;
+                _thisMazeTileAttribute.ConnectionScore = _pickSpriteNumber(8);
 
                 if (currentScoreRight == 19)
                 {
-                    _connectionRight.ConnectionScore = 4;
+                    _connectionRight.ConnectionScore = _pickSpriteNumber(4);
                 }
                 else if (currentScoreRight == 22)
                 {
-                    _connectionRight.ConnectionScore = 27;
+                    _connectionRight.ConnectionScore = _pickSpriteNumber(27);
                 }
                 else if (currentScoreRight == 29)
                 {
-                    _connectionRight.ConnectionScore = 7;
+                    _connectionRight.ConnectionScore = _pickSpriteNumber(7);
                 }
 
                 if (currentScoreUp == 18)
                 {
-                    _connectionUp.ConnectionScore = 3;
+                    _connectionUp.ConnectionScore = _pickSpriteNumber(3);
                 }
                 else if (currentScoreUp == 24)
                 {
-                    _connectionUp.ConnectionScore = 30;
+                    _connectionUp.ConnectionScore = _pickSpriteNumber(30);
                 }
                 else if (currentScoreUp == 28)
                 {
-                    _connectionUp.ConnectionScore = 10;
+                    _connectionUp.ConnectionScore = _pickSpriteNumber(10);
                 }
             }
         }
@@ -472,40 +720,40 @@ public class TileConnectionVariationRegister<T> where T : MonoBehaviour, ITileCo
             }
             else
             {
-                _thisMazeTileAttribute.ConnectionScore = 10;
+                _thisMazeTileAttribute.ConnectionScore = _pickSpriteNumber(10);
 
                 if (currentScoreDown == 20)
                 {
-                    _connectionDown.ConnectionScore = 5;
+                    _connectionDown.ConnectionScore = _pickSpriteNumber(5);
                 }
                 else if (currentScoreDown == 24)
                 {
-                    _connectionDown.ConnectionScore = 28;
+                    _connectionDown.ConnectionScore = _pickSpriteNumber(28);
                 }
                 else if ((currentScoreDown == 16 || currentScoreDown == 23 || currentScoreDown == 26 || currentScoreDown == 32 || currentScoreDown == 33 || currentScoreDown == 34) && currentScoreUp != 21 && currentScoreUp != 25 && currentScoreUp != 31 && currentScoreUp != 32 && currentScoreUp != 34)
                 {
-                    _thisMazeTileAttribute.ConnectionScore = 28;
+                    _thisMazeTileAttribute.ConnectionScore = _pickSpriteNumber(28);
                 }
                 else if (currentScoreDown == 30)
                 {
-                    _connectionDown.ConnectionScore = 10;
+                    _connectionDown.ConnectionScore = _pickSpriteNumber(10);
                 }
 
                 if (currentScoreUp == 18)
                 {
-                    _connectionUp.ConnectionScore = 3;
+                    _connectionUp.ConnectionScore = _pickSpriteNumber(3);
                 }
                 else if (currentScoreUp == 24)
                 {
-                    _connectionUp.ConnectionScore = 30;
+                    _connectionUp.ConnectionScore = _pickSpriteNumber(30);
                 }
                 else if ((currentScoreUp == 16 || currentScoreUp == 21 || currentScoreUp == 25 || currentScoreUp == 31 || currentScoreUp == 32 || currentScoreUp == 34) && currentScoreDown != 23 && currentScoreDown != 26 && currentScoreDown != 32 && currentScoreDown != 33 && currentScoreDown != 34)
                 {
-                    _thisMazeTileAttribute.ConnectionScore = 30;
+                    _thisMazeTileAttribute.ConnectionScore = _pickSpriteNumber(30);
                 }
                 else if (currentScoreUp == 28)
                 {
-                    _connectionUp.ConnectionScore = 10;
+                    _connectionUp.ConnectionScore = _pickSpriteNumber(10);
                 }
             }
         }
@@ -519,32 +767,32 @@ public class TileConnectionVariationRegister<T> where T : MonoBehaviour, ITileCo
             }
             else
             {
-                _thisMazeTileAttribute.ConnectionScore = 9;
+                _thisMazeTileAttribute.ConnectionScore = _pickSpriteNumber(9);
 
                 if (currentScoreLeft == 17)
                 {
-                    _connectionLeft.ConnectionScore = 2;
+                    _connectionLeft.ConnectionScore = _pickSpriteNumber(2);
                 }
                 else if (currentScoreLeft == 22)
                 {
-                    _connectionLeft.ConnectionScore = 29;
+                    _connectionLeft.ConnectionScore = _pickSpriteNumber(29);
                 }
                 else if (currentScoreLeft == 27)
                 {
-                    _connectionLeft.ConnectionScore = 7;
+                    _connectionLeft.ConnectionScore = _pickSpriteNumber(7);
                 }
 
                 if (currentScoreDown == 20)
                 {
-                    _connectionDown.ConnectionScore = 5;
+                    _connectionDown.ConnectionScore = _pickSpriteNumber(5);
                 }
                 else if (currentScoreDown == 24)
                 {
-                    _connectionDown.ConnectionScore = 28;
+                    _connectionDown.ConnectionScore = _pickSpriteNumber(28);
                 }
                 else if (currentScoreDown == 30)
                 {
-                    _connectionDown.ConnectionScore = 10;
+                    _connectionDown.ConnectionScore = _pickSpriteNumber(10);
                 }
             }
         }
@@ -558,32 +806,32 @@ public class TileConnectionVariationRegister<T> where T : MonoBehaviour, ITileCo
             }
             else
             {
-                _thisMazeTileAttribute.ConnectionScore = 11;
+                _thisMazeTileAttribute.ConnectionScore = _pickSpriteNumber(11);
 
                 if (currentScoreLeft == 17)
                 {
-                    _connectionLeft.ConnectionScore = 2;
+                    _connectionLeft.ConnectionScore = _pickSpriteNumber(2);
                 }
                 else if (currentScoreLeft == 22)
                 {
-                    _connectionLeft.ConnectionScore = 29;
+                    _connectionLeft.ConnectionScore = _pickSpriteNumber(29);
                 }
                 else if (currentScoreLeft == 27)
                 {
-                    _connectionLeft.ConnectionScore = 7;
+                    _connectionLeft.ConnectionScore = _pickSpriteNumber(7);
                 }
 
                 if (currentScoreUp == 18)
                 {
-                    _connectionUp.ConnectionScore = 3;
+                    _connectionUp.ConnectionScore = _pickSpriteNumber(3);
                 }
                 else if (currentScoreUp == 24)
                 {
-                    _connectionUp.ConnectionScore = 30;
+                    _connectionUp.ConnectionScore = _pickSpriteNumber(30);
                 }
                 else if (currentScoreUp == 28)
                 {
-                    _connectionUp.ConnectionScore = 10;
+                    _connectionUp.ConnectionScore = _pickSpriteNumber(10);
                 }
             }
         }
@@ -594,28 +842,28 @@ public class TileConnectionVariationRegister<T> where T : MonoBehaviour, ITileCo
             {
                 if (currentScoreLeft == 22)
                 {
-                    _connectionLeft.ConnectionScore = 29;
+                    _connectionLeft.ConnectionScore = _pickSpriteNumber(29);
                 }
                 else if (currentScoreLeft == 27)
                 {
-                    _connectionLeft.ConnectionScore = 7;
+                    _connectionLeft.ConnectionScore = _pickSpriteNumber(7);
                 }
             }
             else
             {
-                _thisMazeTileAttribute.ConnectionScore = 7;
+                _thisMazeTileAttribute.ConnectionScore = _pickSpriteNumber(7);
 
                 if (currentScoreRight == 19)
                 {
-                    _connectionRight.ConnectionScore = 4;
+                    _connectionRight.ConnectionScore = _pickSpriteNumber(4);
                 }
                 else if(currentScoreRight == 22)
                 {
-                    _connectionRight.ConnectionScore = 27;
+                    _connectionRight.ConnectionScore = _pickSpriteNumber(27);
                 }
                 else if (currentScoreRight == 29)
                 {
-                    _connectionRight.ConnectionScore = 7;
+                    _connectionRight.ConnectionScore = _pickSpriteNumber(7);
                 }
             }
         }
@@ -626,28 +874,28 @@ public class TileConnectionVariationRegister<T> where T : MonoBehaviour, ITileCo
             {
                 if (currentScoreUp == 24)
                 {
-                    _connectionUp.ConnectionScore = 30;
+                    _connectionUp.ConnectionScore = _pickSpriteNumber(30);
                 }
                 else if (currentScoreUp == 28)
                 {
-                    _connectionUp.ConnectionScore = 10;
+                    _connectionUp.ConnectionScore = _pickSpriteNumber(10);
                 }
             }
             else
             {
-                _thisMazeTileAttribute.ConnectionScore = 10;
+                _thisMazeTileAttribute.ConnectionScore = _pickSpriteNumber(10);
 
                 if (currentScoreDown == 20)
                 {
-                    _connectionDown.ConnectionScore = 5;
+                    _connectionDown.ConnectionScore = _pickSpriteNumber(5);
                 }
                 else if (currentScoreDown == 24)
                 {
-                    _connectionDown.ConnectionScore = 28;
+                    _connectionDown.ConnectionScore = _pickSpriteNumber(28);
                 }
                 else if (currentScoreDown == 30)
                 {
-                    _connectionDown.ConnectionScore = 10;
+                    _connectionDown.ConnectionScore = _pickSpriteNumber(10);
                 }
             }
         }
@@ -658,29 +906,29 @@ public class TileConnectionVariationRegister<T> where T : MonoBehaviour, ITileCo
             {
                 if (currentScoreRight == 22)
                 {
-                    _connectionRight.ConnectionScore = 27;
+                    _connectionRight.ConnectionScore = _pickSpriteNumber(27);
                 }
                 else if (currentScoreRight == 29)
                 {
-                    _connectionRight.ConnectionScore = 7;
+                    _connectionRight.ConnectionScore = _pickSpriteNumber(7);
                 }
             }
             else
             {
-                _thisMazeTileAttribute.ConnectionScore = 7;
+                _thisMazeTileAttribute.ConnectionScore = _pickSpriteNumber(7);
 
                 if (currentScoreLeft == 17)
                 {
-                    _connectionLeft.ConnectionScore = 2;
+                    _connectionLeft.ConnectionScore = _pickSpriteNumber(2);
                 }
                 else if (currentScoreLeft == 22)
                 {
-                    _connectionLeft.ConnectionScore = 29;
+                    _connectionLeft.ConnectionScore = _pickSpriteNumber(29);
                 }
 
                 else if (currentScoreLeft == 27)
                 {
-                    _connectionLeft.ConnectionScore = 7;
+                    _connectionLeft.ConnectionScore = _pickSpriteNumber(7);
                 }
             }
         }
@@ -691,28 +939,28 @@ public class TileConnectionVariationRegister<T> where T : MonoBehaviour, ITileCo
             {
                 if (currentScoreDown == 24)
                 {
-                    _connectionDown.ConnectionScore = 28;
+                    _connectionDown.ConnectionScore = _pickSpriteNumber(28);
                 }
                 else if (currentScoreDown == 30)
                 {
-                    _connectionDown.ConnectionScore = 10;
+                    _connectionDown.ConnectionScore = _pickSpriteNumber(10);
                 }
             }
             else
             {
-                _thisMazeTileAttribute.ConnectionScore = 10;
+                _thisMazeTileAttribute.ConnectionScore = _pickSpriteNumber(10);
 
                 if (currentScoreUp == 18)
                 {
-                    _connectionUp.ConnectionScore = 3;
+                    _connectionUp.ConnectionScore = _pickSpriteNumber(3);
                 }
                 else if (currentScoreUp == 24)
                 {
-                    _connectionUp.ConnectionScore = 30;
+                    _connectionUp.ConnectionScore = _pickSpriteNumber(30);
                 }
                 else if (currentScoreUp == 28)
                 {
-                    _connectionUp.ConnectionScore = 10;
+                    _connectionUp.ConnectionScore = _pickSpriteNumber(10);
                 }
             }
         }
@@ -725,84 +973,84 @@ public class TileConnectionVariationRegister<T> where T : MonoBehaviour, ITileCo
             {
                 if (currentScoreRight == 4)
                 {
-                    _connectionRight.ConnectionScore = 19;
+                    _connectionRight.ConnectionScore = _pickSpriteNumber(19);
                 }
                 else if (currentScoreRight == 7)
                 {
-                    _connectionRight.ConnectionScore = 29;
+                    _connectionRight.ConnectionScore = _pickSpriteNumber(29);
                 }
                 else if (currentScoreRight == 27)
                 {
-                    _connectionRight.ConnectionScore = 22;
+                    _connectionRight.ConnectionScore = _pickSpriteNumber(22);
                 }
 
                 if (currentScoreDown == 5)
                 {
-                    _connectionDown.ConnectionScore = 20;
+                    _connectionDown.ConnectionScore = _pickSpriteNumber(20);
                 }
                 else if (currentScoreDown == 10)
                 {
-                    _connectionDown.ConnectionScore = 30;
+                    _connectionDown.ConnectionScore = _pickSpriteNumber(30);
                 }
                 else if (currentScoreDown == 28)
                 {
-                    _connectionDown.ConnectionScore = 24;
+                    _connectionDown.ConnectionScore = _pickSpriteNumber(24);
                 }
 
                 if (currentScoreLeft == 2)
                 {
-                    _connectionLeft.ConnectionScore = 17;
+                    _connectionLeft.ConnectionScore = _pickSpriteNumber(17);
                 }
                 else if (currentScoreLeft == 7)
                 {
-                    _connectionLeft.ConnectionScore = 27;
+                    _connectionLeft.ConnectionScore = _pickSpriteNumber(27);
                 }
                 else if (currentScoreLeft == 29)
                 {
-                    _connectionLeft.ConnectionScore = 22;
+                    _connectionLeft.ConnectionScore = _pickSpriteNumber(22);
                 }
             }
             else
             {
-                _thisMazeTileAttribute.ConnectionScore = 12;
+                _thisMazeTileAttribute.ConnectionScore = _pickSpriteNumber(12);
 
                 if (currentScoreRight == 19)
                 {
-                    _connectionRight.ConnectionScore = 4;
+                    _connectionRight.ConnectionScore = _pickSpriteNumber(4);
                 }
                 else if (currentScoreRight == 22)
                 {
-                    _connectionRight.ConnectionScore = 27;
+                    _connectionRight.ConnectionScore = _pickSpriteNumber(27);
                 }
                 else if (currentScoreRight == 29)
                 {
-                    _connectionRight.ConnectionScore = 7;
+                    _connectionRight.ConnectionScore = _pickSpriteNumber(7);
                 }
 
                 if (currentScoreDown == 20)
                 {
-                    _connectionDown.ConnectionScore = 5;
+                    _connectionDown.ConnectionScore = _pickSpriteNumber(5);
                 }
                 else if (currentScoreDown == 24)
                 {
-                    _connectionDown.ConnectionScore = 28;
+                    _connectionDown.ConnectionScore = _pickSpriteNumber(28);
                 }
                 else if (currentScoreDown == 30)
                 {
-                    _connectionDown.ConnectionScore = 10;
+                    _connectionDown.ConnectionScore = _pickSpriteNumber(10);
                 }
 
                 if (currentScoreLeft == 17)
                 {
-                    _connectionLeft.ConnectionScore = 2;
+                    _connectionLeft.ConnectionScore = _pickSpriteNumber(2);
                 }
                 else if (currentScoreLeft == 22)
                 {
-                    _connectionLeft.ConnectionScore = 29;
+                    _connectionLeft.ConnectionScore = _pickSpriteNumber(29);
                 }
                 else if (currentScoreLeft == 27)
                 {
-                    _connectionLeft.ConnectionScore = 7;
+                    _connectionLeft.ConnectionScore = _pickSpriteNumber(7);
                 }
             }
         }
@@ -815,84 +1063,84 @@ public class TileConnectionVariationRegister<T> where T : MonoBehaviour, ITileCo
             {
                 if (currentScoreRight == 4)
                 {
-                    _connectionRight.ConnectionScore = 19;
+                    _connectionRight.ConnectionScore = _pickSpriteNumber(19);
                 }
                 else if (currentScoreRight == 7)
                 {
-                    _connectionRight.ConnectionScore = 29;
+                    _connectionRight.ConnectionScore = _pickSpriteNumber(29);
                 }
                 else if (currentScoreRight == 27)
                 {
-                    _connectionRight.ConnectionScore = 22;
+                    _connectionRight.ConnectionScore = _pickSpriteNumber(22);
                 }
 
                 if (currentScoreDown == 5)
                 {
-                    _connectionDown.ConnectionScore = 20;
+                    _connectionDown.ConnectionScore = _pickSpriteNumber(20);
                 }
                 else if (currentScoreDown == 10)
                 {
-                    _connectionDown.ConnectionScore = 30;
+                    _connectionDown.ConnectionScore = _pickSpriteNumber(30);
                 }
                 else if (currentScoreDown == 28)
                 {
-                    _connectionDown.ConnectionScore = 24;
+                    _connectionDown.ConnectionScore = _pickSpriteNumber(24);
                 }
 
                 if (currentScoreUp == 3)
                 {
-                    _connectionUp.ConnectionScore = 18;
+                    _connectionUp.ConnectionScore = _pickSpriteNumber(18);
                 }
                 else if (currentScoreUp == 10)
                 {
-                    _connectionUp.ConnectionScore = 28;
+                    _connectionUp.ConnectionScore = _pickSpriteNumber(28);
                 }
                 else if (currentScoreUp == 30)
                 {
-                    _connectionUp.ConnectionScore = 24;
+                    _connectionUp.ConnectionScore = _pickSpriteNumber(24);
                 }
             }
             else
             {
-                _thisMazeTileAttribute.ConnectionScore = 13;
+                _thisMazeTileAttribute.ConnectionScore = _pickSpriteNumber(13);
 
                 if (currentScoreRight == 19)
                 {
-                    _connectionRight.ConnectionScore = 4;
+                    _connectionRight.ConnectionScore = _pickSpriteNumber(4);
                 }
                 else if (currentScoreRight == 22)
                 {
-                    _connectionRight.ConnectionScore = 27;
+                    _connectionRight.ConnectionScore = _pickSpriteNumber(27);
                 }
                 else if (currentScoreRight == 29)
                 {
-                    _connectionRight.ConnectionScore = 7;
+                    _connectionRight.ConnectionScore = _pickSpriteNumber(7);
                 }
 
                 if (currentScoreDown == 20)
                 {
-                    _connectionDown.ConnectionScore = 5;
+                    _connectionDown.ConnectionScore = _pickSpriteNumber(5);
                 }
                 else if (currentScoreDown == 24)
                 {
-                    _connectionDown.ConnectionScore = 28;
+                    _connectionDown.ConnectionScore = _pickSpriteNumber(28);
                 }
                 else if (currentScoreDown == 30)
                 {
-                    _connectionDown.ConnectionScore = 10;
+                    _connectionDown.ConnectionScore = _pickSpriteNumber(10);
                 }
 
                 if (currentScoreUp == 18)
                 {
-                    _connectionUp.ConnectionScore = 3;
+                    _connectionUp.ConnectionScore = _pickSpriteNumber(3);
                 }
                 else if (currentScoreUp == 24)
                 {
-                    _connectionUp.ConnectionScore = 30;
+                    _connectionUp.ConnectionScore = _pickSpriteNumber(30);
                 }
                 else if (currentScoreUp == 28)
                 {
-                    _connectionUp.ConnectionScore = 10;
+                    _connectionUp.ConnectionScore = _pickSpriteNumber(10);
                 }
             }
         }
@@ -905,84 +1153,84 @@ public class TileConnectionVariationRegister<T> where T : MonoBehaviour, ITileCo
             {
                 if (currentScoreRight == 4)
                 {
-                    _connectionRight.ConnectionScore = 19;
+                    _connectionRight.ConnectionScore = _pickSpriteNumber(19);
                 }
                 else if (currentScoreRight == 7)
                 {
-                    _connectionRight.ConnectionScore = 29;
+                    _connectionRight.ConnectionScore = _pickSpriteNumber(29);
                 }
                 else if (currentScoreRight == 27)
                 {
-                    _connectionRight.ConnectionScore = 22;
+                    _connectionRight.ConnectionScore = _pickSpriteNumber(22);
                 }
 
                 if (currentScoreLeft == 2)
                 {
-                    _connectionLeft.ConnectionScore = 17;
+                    _connectionLeft.ConnectionScore = _pickSpriteNumber(17);
                 }
                 else if (currentScoreLeft == 7)
                 {
-                    _connectionLeft.ConnectionScore = 27;
+                    _connectionLeft.ConnectionScore = _pickSpriteNumber(27);
                 }
                 else if (currentScoreLeft == 29)
                 {
-                    _connectionLeft.ConnectionScore = 22;
+                    _connectionLeft.ConnectionScore = _pickSpriteNumber(22);
                 }
 
                 if (currentScoreUp == 3)
                 {
-                    _connectionUp.ConnectionScore = 18;
+                    _connectionUp.ConnectionScore = _pickSpriteNumber(18);
                 }
                 else if (currentScoreUp == 10)
                 {
-                    _connectionUp.ConnectionScore = 28;
+                    _connectionUp.ConnectionScore = _pickSpriteNumber(28);
                 }
                 else if (currentScoreUp == 30)
                 {
-                    _connectionUp.ConnectionScore = 24;
+                    _connectionUp.ConnectionScore = _pickSpriteNumber(24);
                 }
             }
             else
             {
-                _thisMazeTileAttribute.ConnectionScore = 14;
+                _thisMazeTileAttribute.ConnectionScore = _pickSpriteNumber(14);
 
                 if (currentScoreRight == 19)
                 {
-                    _connectionRight.ConnectionScore = 4;
+                    _connectionRight.ConnectionScore = _pickSpriteNumber(4);
                 }
                 else if (currentScoreRight == 22)
                 {
-                    _connectionRight.ConnectionScore = 27;
+                    _connectionRight.ConnectionScore = _pickSpriteNumber(27);
                 }
                 else if (currentScoreRight == 29)
                 {
-                    _connectionRight.ConnectionScore = 7;
+                    _connectionRight.ConnectionScore = _pickSpriteNumber(7);
                 }
 
                 if (currentScoreLeft == 17)
                 {
-                    _connectionLeft.ConnectionScore = 2;
+                    _connectionLeft.ConnectionScore = _pickSpriteNumber(2);
                 }
                 else if (currentScoreLeft == 22)
                 {
-                    _connectionLeft.ConnectionScore = 29;
+                    _connectionLeft.ConnectionScore = _pickSpriteNumber(29);
                 }
                 else if (currentScoreLeft == 27)
                 {
-                    _connectionLeft.ConnectionScore = 7;
+                    _connectionLeft.ConnectionScore = _pickSpriteNumber(7);
                 }
 
                 if (currentScoreUp == 18)
                 {
-                    _connectionUp.ConnectionScore = 3;
+                    _connectionUp.ConnectionScore = _pickSpriteNumber(3);
                 }
                 else if (currentScoreUp == 24)
                 {
-                    _connectionUp.ConnectionScore = 30;
+                    _connectionUp.ConnectionScore = _pickSpriteNumber(30);
                 }
                 else if (currentScoreUp == 28)
                 {
-                    _connectionUp.ConnectionScore = 10;
+                    _connectionUp.ConnectionScore = _pickSpriteNumber(10);
                 }
             }
         }
@@ -995,84 +1243,84 @@ public class TileConnectionVariationRegister<T> where T : MonoBehaviour, ITileCo
             {
                 if (currentScoreDown == 5)
                 {
-                    _connectionDown.ConnectionScore = 20;
+                    _connectionDown.ConnectionScore = _pickSpriteNumber(20);
                 }
                 else if (currentScoreDown == 10)
                 {
-                    _connectionDown.ConnectionScore = 30;
+                    _connectionDown.ConnectionScore = _pickSpriteNumber(30);
                 }
                 else if (currentScoreDown == 28)
                 {
-                    _connectionDown.ConnectionScore = 24;
+                    _connectionDown.ConnectionScore = _pickSpriteNumber(24);
                 }
 
                 if (currentScoreLeft == 2)
                 {
-                    _connectionLeft.ConnectionScore = 17;
+                    _connectionLeft.ConnectionScore = _pickSpriteNumber(17);
                 }
                 else if (currentScoreLeft == 7)
                 {
-                    _connectionLeft.ConnectionScore = 27;
+                    _connectionLeft.ConnectionScore = _pickSpriteNumber(27);
                 }
                 else if (currentScoreLeft == 29)
                 {
-                    _connectionLeft.ConnectionScore = 22;
+                    _connectionLeft.ConnectionScore = _pickSpriteNumber(22);
                 }
 
                 if (currentScoreUp == 3)
                 {
-                    _connectionUp.ConnectionScore = 18;
+                    _connectionUp.ConnectionScore = _pickSpriteNumber(18);
                 }
                 else if (currentScoreUp == 10)
                 {
-                    _connectionUp.ConnectionScore = 28;
+                    _connectionUp.ConnectionScore = _pickSpriteNumber(28);
                 }
                 else if (currentScoreUp == 30)
                 {
-                    _connectionUp.ConnectionScore = 24;
+                    _connectionUp.ConnectionScore = _pickSpriteNumber(24);
                 }
             }
             else
             {
-                _thisMazeTileAttribute.ConnectionScore = 15;
+                _thisMazeTileAttribute.ConnectionScore = _pickSpriteNumber(15);
 
                 if (currentScoreDown == 20)
                 {
-                    _connectionDown.ConnectionScore = 5;
+                    _connectionDown.ConnectionScore = _pickSpriteNumber(5);
                 }
                 else if (currentScoreDown == 24)
                 {
-                    _connectionDown.ConnectionScore = 28;
+                    _connectionDown.ConnectionScore = _pickSpriteNumber(28);
                 }
                 else if (currentScoreDown == 30)
                 {
-                    _connectionDown.ConnectionScore = 10;
+                    _connectionDown.ConnectionScore = _pickSpriteNumber(10);
                 }
 
                 if (currentScoreLeft == 17)
                 {
-                    _connectionLeft.ConnectionScore = 2;
+                    _connectionLeft.ConnectionScore = _pickSpriteNumber(2);
                 }
                 else if (currentScoreLeft == 22)
                 {
-                    _connectionLeft.ConnectionScore = 29;
+                    _connectionLeft.ConnectionScore = _pickSpriteNumber(29);
                 }
                 else if (currentScoreLeft == 27)
                 {
-                    _connectionLeft.ConnectionScore = 7;
+                    _connectionLeft.ConnectionScore = _pickSpriteNumber(7);
                 }
 
                 if (currentScoreUp == 18)
                 {
-                    _connectionUp.ConnectionScore = 3;
+                    _connectionUp.ConnectionScore = _pickSpriteNumber(3);
                 }
                 else if (currentScoreUp == 24)
                 {
-                    _connectionUp.ConnectionScore = 30;
+                    _connectionUp.ConnectionScore = _pickSpriteNumber(30);
                 }
                 else if (currentScoreUp == 28)
                 {
-                    _connectionUp.ConnectionScore = 10;
+                    _connectionUp.ConnectionScore = _pickSpriteNumber(10);
                 }
             }
         }
@@ -1105,16 +1353,16 @@ public class TileConnectionVariationRegister<T> where T : MonoBehaviour, ITileCo
         {
             if (currentScoreRight == 7)
             {
-                _thisMazeTileAttribute.ConnectionScore = 17;
-                _connectionRight.ConnectionScore = 29;
+                _thisMazeTileAttribute.ConnectionScore = _pickSpriteNumber(17);
+                _connectionRight.ConnectionScore = _pickSpriteNumber(29);
             }
             else if (currentScoreRight == 22)
             {
-                _connectionRight.ConnectionScore = 27;
+                _connectionRight.ConnectionScore = _pickSpriteNumber(27);
             }
             else if (currentScoreRight == 29)
             {
-                _connectionRight.ConnectionScore = 7;
+                _connectionRight.ConnectionScore = _pickSpriteNumber(7);
             }
         }
 
@@ -1122,16 +1370,16 @@ public class TileConnectionVariationRegister<T> where T : MonoBehaviour, ITileCo
         {
             if (currentScoreDown == 10)
             {
-                _thisMazeTileAttribute.ConnectionScore = 18;
-                _connectionDown.ConnectionScore = 30;
+                _thisMazeTileAttribute.ConnectionScore = _pickSpriteNumber(18);
+                _connectionDown.ConnectionScore = _pickSpriteNumber(30);
             }
             else if (currentScoreDown == 24)
             {
-                _connectionDown.ConnectionScore = 28;
+                _connectionDown.ConnectionScore = _pickSpriteNumber(28);
             }
             else if (currentScoreDown == 30)
             {
-                _connectionDown.ConnectionScore = 10;
+                _connectionDown.ConnectionScore = _pickSpriteNumber(10);
             }
         }
 
@@ -1139,16 +1387,16 @@ public class TileConnectionVariationRegister<T> where T : MonoBehaviour, ITileCo
         {
             if (currentScoreLeft == 7)
             {
-                _thisMazeTileAttribute.ConnectionScore = 19;
-                _connectionLeft.ConnectionScore = 27;
+                _thisMazeTileAttribute.ConnectionScore = _pickSpriteNumber(19);
+                _connectionLeft.ConnectionScore = _pickSpriteNumber(27);
             }
             else if (currentScoreLeft == 22)
             {
-                _connectionLeft.ConnectionScore = 29;
+                _connectionLeft.ConnectionScore = _pickSpriteNumber(29);
             }
             else if (currentScoreLeft == 27)
             {
-                _connectionLeft.ConnectionScore = 7;
+                _connectionLeft.ConnectionScore = _pickSpriteNumber(7);
             }
         }
 
@@ -1156,16 +1404,16 @@ public class TileConnectionVariationRegister<T> where T : MonoBehaviour, ITileCo
         {
             if (currentScoreUp == 10)
             {
-                _thisMazeTileAttribute.ConnectionScore = 20;
-                _connectionUp.ConnectionScore = 28;
+                _thisMazeTileAttribute.ConnectionScore = _pickSpriteNumber(20);
+                _connectionUp.ConnectionScore = _pickSpriteNumber(28);
             }
             else if (currentScoreUp == 24)
             {
-                _connectionUp.ConnectionScore = 30;
+                _connectionUp.ConnectionScore = _pickSpriteNumber(30);
             }
             else if (currentScoreUp == 28)
             {
-                _connectionUp.ConnectionScore = 10;
+                _connectionUp.ConnectionScore = _pickSpriteNumber(10);
             }
         }
 
@@ -1175,7 +1423,57 @@ public class TileConnectionVariationRegister<T> where T : MonoBehaviour, ITileCo
             {
                 if (currentScoreDown == 23 || currentScoreDown == 24 || currentScoreDown == 26 || currentScoreDown == 30 || currentScoreDown == 32 || currentScoreDown == 33 || currentScoreDown == 34)
                 {
-                    _thisMazeTileAttribute.ConnectionScore = 21;
+                    _thisMazeTileAttribute.ConnectionScore = _pickSpriteNumber(21);
+                }
+                else if (currentScoreDown == 10)
+                {
+                    _thisMazeTileAttribute.ConnectionScore = _pickSpriteNumber(21);
+                    _connectionDown.ConnectionScore = _pickSpriteNumber(30);
+                }
+                else if (currentScoreDown == 28)
+                {
+                    _thisMazeTileAttribute.ConnectionScore = _pickSpriteNumber(21);
+                    _connectionDown.ConnectionScore = _pickSpriteNumber(24);
+                }
+            }
+            else if (currentScoreRight == 7)
+            {
+                if (currentScoreDown == 23 || currentScoreDown == 24 || currentScoreDown == 26 || currentScoreDown == 30 || currentScoreDown == 32 || currentScoreDown == 33 || currentScoreDown == 34)
+                {
+                    _thisMazeTileAttribute.ConnectionScore = _pickSpriteNumber(21);
+                    _connectionRight.ConnectionScore = _pickSpriteNumber(29);
+                }
+                else if (currentScoreDown == 10)
+                {
+                    _thisMazeTileAttribute.ConnectionScore = _pickSpriteNumber(21);
+                    _connectionRight.ConnectionScore = _pickSpriteNumber(29);
+                    _connectionDown.ConnectionScore = _pickSpriteNumber(30);
+                }
+                else if (currentScoreDown == 28)
+                {
+                    _thisMazeTileAttribute.ConnectionScore = _pickSpriteNumber(21);
+                    _connectionRight.ConnectionScore = _pickSpriteNumber(29);
+                    _connectionDown.ConnectionScore = _pickSpriteNumber(24);
+                }
+            }
+            else if (currentScoreRight == 27)
+            {
+                if (currentScoreDown == 23 || currentScoreDown == 24 || currentScoreDown == 26 || currentScoreDown == 30 || currentScoreDown == 32 || currentScoreDown == 33 || currentScoreDown == 34)
+                {
+                    _thisMazeTileAttribute.ConnectionScore = _pickSpriteNumber(21);
+                    _connectionRight.ConnectionScore = _pickSpriteNumber(22);
+                }
+                else if (currentScoreDown == 10)
+                {
+                    _thisMazeTileAttribute.ConnectionScore = _pickSpriteNumber(21);
+                    _connectionRight.ConnectionScore = _pickSpriteNumber(22);
+                    _connectionDown.ConnectionScore = _pickSpriteNumber(30);
+                }
+                else if (currentScoreDown == 28)
+                {
+                    _thisMazeTileAttribute.ConnectionScore = _pickSpriteNumber(21);
+                    _connectionRight.ConnectionScore = _pickSpriteNumber(22);
+                    _connectionDown.ConnectionScore = _pickSpriteNumber(24);
                 }
             }
         }
@@ -1186,7 +1484,58 @@ public class TileConnectionVariationRegister<T> where T : MonoBehaviour, ITileCo
             {
                 if (currentScoreUp == 21 || currentScoreUp == 24 || currentScoreUp == 25 || currentScoreUp == 28 || currentScoreUp == 31 || currentScoreUp == 32 || currentScoreUp == 34)
                 {
-                    _thisMazeTileAttribute.ConnectionScore = 23;
+                    _thisMazeTileAttribute.ConnectionScore = _pickSpriteNumber(23);
+                }
+                else if (currentScoreUp == 10)
+                {
+                    _thisMazeTileAttribute.ConnectionScore = _pickSpriteNumber(23);
+                    _connectionUp.ConnectionScore = _pickSpriteNumber(28);
+
+                }
+                else if (currentScoreUp == 30)
+                {
+                    _thisMazeTileAttribute.ConnectionScore = _pickSpriteNumber(23);
+                    _connectionUp.ConnectionScore = _pickSpriteNumber(24);
+                }
+            }
+            else if (currentScoreRight == 7)
+            {
+                if (currentScoreUp == 23 || currentScoreUp == 24 || currentScoreUp == 26 || currentScoreUp == 30 || currentScoreUp == 32 || currentScoreUp == 33 || currentScoreUp == 34)
+                {
+                    _thisMazeTileAttribute.ConnectionScore = _pickSpriteNumber(23);
+                    _connectionRight.ConnectionScore = _pickSpriteNumber(29);
+                }
+                else if (currentScoreUp == 10)
+                {
+                    _thisMazeTileAttribute.ConnectionScore = _pickSpriteNumber(23);
+                    _connectionRight.ConnectionScore = _pickSpriteNumber(29);
+                    _connectionUp.ConnectionScore = _pickSpriteNumber(28);
+                }
+                else if (currentScoreUp == 30)
+                {
+                    _thisMazeTileAttribute.ConnectionScore = _pickSpriteNumber(23);
+                    _connectionRight.ConnectionScore = _pickSpriteNumber(29);
+                    _connectionUp.ConnectionScore = _pickSpriteNumber(24);
+                }
+            }
+            else if (currentScoreRight == 27)
+            {
+                if (currentScoreUp == 23 || currentScoreUp == 24 || currentScoreUp == 26 || currentScoreUp == 30 || currentScoreUp == 32 || currentScoreUp == 33 || currentScoreUp == 34)
+                {
+                    _thisMazeTileAttribute.ConnectionScore = _pickSpriteNumber(23);
+                    _connectionRight.ConnectionScore = _pickSpriteNumber(22);
+                }
+                else if (currentScoreUp == 10)
+                {
+                    _thisMazeTileAttribute.ConnectionScore = _pickSpriteNumber(23);
+                    _connectionRight.ConnectionScore = _pickSpriteNumber(22);
+                    _connectionUp.ConnectionScore = _pickSpriteNumber(28);
+                }
+                else if (currentScoreUp == 30)
+                {
+                    _thisMazeTileAttribute.ConnectionScore = _pickSpriteNumber(23);
+                    _connectionRight.ConnectionScore = _pickSpriteNumber(22);
+                    _connectionUp.ConnectionScore = _pickSpriteNumber(24);
                 }
             }
         }
@@ -1197,7 +1546,57 @@ public class TileConnectionVariationRegister<T> where T : MonoBehaviour, ITileCo
             {
                 if (currentScoreDown == 23 || currentScoreDown == 24 || currentScoreDown == 26 || currentScoreDown == 30 || currentScoreDown == 32 || currentScoreDown == 33 || currentScoreDown == 34)
                 {
-                    _thisMazeTileAttribute.ConnectionScore = 25;
+                    _thisMazeTileAttribute.ConnectionScore = _pickSpriteNumber(25);
+                }
+                else if (currentScoreDown == 10)
+                {
+                    _thisMazeTileAttribute.ConnectionScore = _pickSpriteNumber(25);
+                    _connectionDown.ConnectionScore = _pickSpriteNumber(30);
+                }
+                else if (currentScoreDown == 28)
+                {
+                    _thisMazeTileAttribute.ConnectionScore = _pickSpriteNumber(25);
+                    _connectionDown.ConnectionScore = _pickSpriteNumber(24);
+                }
+            }
+            else if (currentScoreLeft == 7)
+            {
+                if (currentScoreDown == 23 || currentScoreDown == 24 || currentScoreDown == 26 || currentScoreDown == 30 || currentScoreDown == 32 || currentScoreDown == 33 || currentScoreDown == 34)
+                {
+                    _thisMazeTileAttribute.ConnectionScore = _pickSpriteNumber(25);
+                    _connectionLeft.ConnectionScore = _pickSpriteNumber(27);
+                }
+                else if (currentScoreDown == 10)
+                {
+                    _thisMazeTileAttribute.ConnectionScore = _pickSpriteNumber(25);
+                    _connectionDown.ConnectionScore = _pickSpriteNumber(30);
+                    _connectionLeft.ConnectionScore = _pickSpriteNumber(27);
+                }
+                else if (currentScoreDown == 28)
+                {
+                    _thisMazeTileAttribute.ConnectionScore = _pickSpriteNumber(25);
+                    _connectionDown.ConnectionScore = _pickSpriteNumber(24);
+                    _connectionLeft.ConnectionScore = _pickSpriteNumber(27);
+                }
+            }
+            else if (currentScoreLeft == 29)
+            {
+                if (currentScoreDown == 23 || currentScoreDown == 24 || currentScoreDown == 26 || currentScoreDown == 30 || currentScoreDown == 32 || currentScoreDown == 33 || currentScoreDown == 34)
+                {
+                    _thisMazeTileAttribute.ConnectionScore = _pickSpriteNumber(25);
+                    _connectionLeft.ConnectionScore = _pickSpriteNumber(22);
+                }
+                else if (currentScoreDown == 10)
+                {
+                    _thisMazeTileAttribute.ConnectionScore = _pickSpriteNumber(25);
+                    _connectionDown.ConnectionScore = _pickSpriteNumber(30);
+                    _connectionLeft.ConnectionScore = _pickSpriteNumber(22);
+                }
+                else if (currentScoreDown == 28)
+                {
+                    _thisMazeTileAttribute.ConnectionScore = _pickSpriteNumber(25);
+                    _connectionDown.ConnectionScore = _pickSpriteNumber(24);
+                    _connectionLeft.ConnectionScore = _pickSpriteNumber(22);
                 }
             }
         }
@@ -1208,7 +1607,57 @@ public class TileConnectionVariationRegister<T> where T : MonoBehaviour, ITileCo
             {
                 if (currentScoreLeft == 21 || currentScoreLeft == 22 || currentScoreLeft == 23 || currentScoreLeft == 27 || currentScoreLeft == 31 || currentScoreLeft == 32 || currentScoreLeft == 33)
                 {
-                    _thisMazeTileAttribute.ConnectionScore = 26;
+                    _thisMazeTileAttribute.ConnectionScore = _pickSpriteNumber(26);
+                }
+                else if (currentScoreLeft == 7)
+                {
+                    _thisMazeTileAttribute.ConnectionScore = _pickSpriteNumber(26);
+                    _connectionLeft.ConnectionScore = _pickSpriteNumber(27);
+                }
+                else if (currentScoreLeft == 29)
+                {
+                    _thisMazeTileAttribute.ConnectionScore = _pickSpriteNumber(26);
+                    _connectionLeft.ConnectionScore = _pickSpriteNumber(22);
+                }
+            }
+            else if (currentScoreUp == 10)
+            {
+                if (currentScoreLeft == 21 || currentScoreLeft == 22 || currentScoreLeft == 23 || currentScoreLeft == 27 || currentScoreLeft == 31 || currentScoreLeft == 32 || currentScoreLeft == 33)
+                {
+                    _thisMazeTileAttribute.ConnectionScore = _pickSpriteNumber(26);
+                    _connectionUp.ConnectionScore = _pickSpriteNumber(28);
+                }
+                else if (currentScoreLeft == 7)
+                {
+                    _thisMazeTileAttribute.ConnectionScore = _pickSpriteNumber(26);
+                    _connectionLeft.ConnectionScore = _pickSpriteNumber(27);
+                    _connectionUp.ConnectionScore = _pickSpriteNumber(28);
+                }
+                else if (currentScoreLeft == 29)
+                {
+                    _thisMazeTileAttribute.ConnectionScore = _pickSpriteNumber(26);
+                    _connectionLeft.ConnectionScore = _pickSpriteNumber(22);
+                    _connectionUp.ConnectionScore = _pickSpriteNumber(28);
+                }
+            }
+            else if (currentScoreUp == 30)
+            {
+                if (currentScoreLeft == 21 || currentScoreLeft == 22 || currentScoreLeft == 23 || currentScoreLeft == 27 || currentScoreLeft == 31 || currentScoreLeft == 32 || currentScoreLeft == 33)
+                {
+                    _thisMazeTileAttribute.ConnectionScore = _pickSpriteNumber(26);
+                    _connectionUp.ConnectionScore = _pickSpriteNumber(24);
+                }
+                else if (currentScoreLeft == 7)
+                {
+                    _thisMazeTileAttribute.ConnectionScore = _pickSpriteNumber(26);
+                    _connectionLeft.ConnectionScore = _pickSpriteNumber(27);
+                    _connectionUp.ConnectionScore = _pickSpriteNumber(24);
+                }
+                else if (currentScoreLeft == 29)
+                {
+                    _thisMazeTileAttribute.ConnectionScore = _pickSpriteNumber(26);
+                    _connectionLeft.ConnectionScore = _pickSpriteNumber(22);
+                    _connectionUp.ConnectionScore = _pickSpriteNumber(24);
                 }
             }
         }
@@ -1217,28 +1666,28 @@ public class TileConnectionVariationRegister<T> where T : MonoBehaviour, ITileCo
         {
             if (currentScoreRight == 19)
             {
-                _connectionRight.ConnectionScore = 4;
+                _connectionRight.ConnectionScore = _pickSpriteNumber(4);
             }
             else if (currentScoreRight == 22)
             {
-                _connectionRight.ConnectionScore = 27;
+                _connectionRight.ConnectionScore = _pickSpriteNumber(27);
             }
             else if (currentScoreRight == 29)
             {
-                _connectionRight.ConnectionScore = 7;
+                _connectionRight.ConnectionScore = _pickSpriteNumber(7);
             }
 
             if (currentScoreLeft == 17)
             {
-                _connectionLeft.ConnectionScore = 2;
+                _connectionLeft.ConnectionScore = _pickSpriteNumber(2);
             }
             else if (currentScoreLeft == 22)
             {
-                _connectionLeft.ConnectionScore = 29;
+                _connectionLeft.ConnectionScore = _pickSpriteNumber(29);
             }
             else if (currentScoreLeft == 27)
             {
-                _connectionLeft.ConnectionScore = 7;
+                _connectionLeft.ConnectionScore = _pickSpriteNumber(7);
             }
         }
 
@@ -1246,28 +1695,28 @@ public class TileConnectionVariationRegister<T> where T : MonoBehaviour, ITileCo
         {
             if (currentScoreDown == 20)
             {
-                _connectionDown.ConnectionScore = 5;
+                _connectionDown.ConnectionScore = _pickSpriteNumber(5);
             }
             else if (currentScoreDown == 24)
             {
-                _connectionDown.ConnectionScore = 28;
+                _connectionDown.ConnectionScore = _pickSpriteNumber(28);
             }
             else if (currentScoreDown == 30)
             {
-                _connectionDown.ConnectionScore = 10;
+                _connectionDown.ConnectionScore = _pickSpriteNumber(10);
             }
 
             if (currentScoreUp == 18)
             {
-                _connectionUp.ConnectionScore = 3;
+                _connectionUp.ConnectionScore = _pickSpriteNumber(3);
             }
             else if (currentScoreUp == 24)
             {
-                _connectionUp.ConnectionScore = 30;
+                _connectionUp.ConnectionScore = _pickSpriteNumber(30);
             }
             else if (currentScoreUp == 28)
             {
-                _connectionUp.ConnectionScore = 10;
+                _connectionUp.ConnectionScore = _pickSpriteNumber(10);
             }
         }
 
@@ -1275,38 +1724,38 @@ public class TileConnectionVariationRegister<T> where T : MonoBehaviour, ITileCo
         {
             if (currentScoreRight == 7)
             {
-                _connectionRight.ConnectionScore = 29;
+                _connectionRight.ConnectionScore = _pickSpriteNumber(29);
             }
             else if (currentScoreLeft == 27)
             {
-                _connectionRight.ConnectionScore = 22;
+                _connectionRight.ConnectionScore = _pickSpriteNumber(22);
             }
 
             if (currentScoreDown == 10)
             {
-                _connectionDown.ConnectionScore = 30;
+                _connectionDown.ConnectionScore = _pickSpriteNumber(30);
             }
             else if (currentScoreDown == 28)
             {
-                _connectionDown.ConnectionScore = 24;
+                _connectionDown.ConnectionScore = _pickSpriteNumber(24);
             }
 
             if (currentScoreLeft == 7)
             {
-                _connectionLeft.ConnectionScore = 27;
+                _connectionLeft.ConnectionScore = _pickSpriteNumber(27);
             }
             else if (currentScoreLeft == 27)
             {
-                _connectionLeft.ConnectionScore = 22;
+                _connectionLeft.ConnectionScore = _pickSpriteNumber(22);
             }
 
             if (currentScoreUp == 10)
             {
-                _connectionUp.ConnectionScore = 28;
+                _connectionUp.ConnectionScore = _pickSpriteNumber(28);
             }
             else if (currentScoreUp == 30)
             {
-                _connectionUp.ConnectionScore = 24;
+                _connectionUp.ConnectionScore = _pickSpriteNumber(24);
             }
         }
 
@@ -1318,19 +1767,19 @@ public class TileConnectionVariationRegister<T> where T : MonoBehaviour, ITileCo
             }
             else
             {
-                _thisMazeTileAttribute.ConnectionScore = 2;
+                _thisMazeTileAttribute.ConnectionScore = _pickSpriteNumber(2);
 
                 if (currentScoreRight == 19)
                 {
-                    _connectionRight.ConnectionScore = 4;
+                    _connectionRight.ConnectionScore = _pickSpriteNumber(4);
                 }
                 else if (currentScoreRight == 22)
                 {
-                    _connectionRight.ConnectionScore = 27;
+                    _connectionRight.ConnectionScore = _pickSpriteNumber(27);
                 }
                 else if (currentScoreRight == 29)
                 {
-                    _connectionRight.ConnectionScore = 27;
+                    _connectionRight.ConnectionScore = _pickSpriteNumber(27);
                 }
             }
         }
@@ -1343,19 +1792,19 @@ public class TileConnectionVariationRegister<T> where T : MonoBehaviour, ITileCo
             }
             else
             {
-                _thisMazeTileAttribute.ConnectionScore = 3;
+                _thisMazeTileAttribute.ConnectionScore = _pickSpriteNumber(3);
 
                 if (currentScoreDown == 20)
                 {
-                    _connectionDown.ConnectionScore = 5;
+                    _connectionDown.ConnectionScore = _pickSpriteNumber(5);
                 }
                 else if (currentScoreDown == 24)
                 {
-                    _connectionDown.ConnectionScore = 28;
+                    _connectionDown.ConnectionScore = _pickSpriteNumber(28);
                 }
                 else if (currentScoreDown == 30)
                 {
-                    _connectionDown.ConnectionScore = 10;
+                    _connectionDown.ConnectionScore = _pickSpriteNumber(10);
                 }
             }
         }
@@ -1368,19 +1817,19 @@ public class TileConnectionVariationRegister<T> where T : MonoBehaviour, ITileCo
             }
             else
             {
-                _thisMazeTileAttribute.ConnectionScore = 4;
+                _thisMazeTileAttribute.ConnectionScore = _pickSpriteNumber(4);
 
                 if (currentScoreLeft == 17)
                 {
-                    _connectionLeft.ConnectionScore = 2;
+                    _connectionLeft.ConnectionScore = _pickSpriteNumber(2);
                 }
                 else if (currentScoreLeft == 22)
                 {
-                    _connectionLeft.ConnectionScore = 29;
+                    _connectionLeft.ConnectionScore = _pickSpriteNumber(29);
                 }
                 else if (currentScoreLeft == 27)
                 {
-                    _connectionLeft.ConnectionScore = 7;
+                    _connectionLeft.ConnectionScore = _pickSpriteNumber(7);
                 }
             }
         }
@@ -1393,19 +1842,19 @@ public class TileConnectionVariationRegister<T> where T : MonoBehaviour, ITileCo
             }
             else
             {
-                _thisMazeTileAttribute.ConnectionScore = 5;
+                _thisMazeTileAttribute.ConnectionScore = _pickSpriteNumber(5);
 
                 if (currentScoreUp == 18)
                 {
-                    _connectionUp.ConnectionScore = 3;
+                    _connectionUp.ConnectionScore = _pickSpriteNumber(3);
                 }
                 else if (currentScoreUp == 24)
                 {
-                    _connectionUp.ConnectionScore = 30;
+                    _connectionUp.ConnectionScore = _pickSpriteNumber(30);
                 }
                 else if (currentScoreUp == 28)
                 {
-                    _connectionUp.ConnectionScore = 10;
+                    _connectionUp.ConnectionScore = _pickSpriteNumber(10);
                 }
             }
         }
@@ -1419,32 +1868,32 @@ public class TileConnectionVariationRegister<T> where T : MonoBehaviour, ITileCo
             }
             else
             {
-                _thisMazeTileAttribute.ConnectionScore = 6;
+                _thisMazeTileAttribute.ConnectionScore = _pickSpriteNumber(6);
 
                 if (currentScoreRight == 19)
                 {
-                    _connectionRight.ConnectionScore = 4;
+                    _connectionRight.ConnectionScore = _pickSpriteNumber(4);
                 }
                 else if (currentScoreRight == 22)
                 {
-                    _connectionRight.ConnectionScore = 27;
+                    _connectionRight.ConnectionScore = _pickSpriteNumber(27);
                 }
                 else if (currentScoreRight == 29)
                 {
-                    _connectionRight.ConnectionScore = 7;
+                    _connectionRight.ConnectionScore = _pickSpriteNumber(7);
                 }
 
                 if (currentScoreDown == 20)
                 {
-                    _connectionDown.ConnectionScore = 5;
+                    _connectionDown.ConnectionScore = _pickSpriteNumber(5);
                 }
                 else if (currentScoreDown == 24)
                 {
-                    _connectionDown.ConnectionScore = 28;
+                    _connectionDown.ConnectionScore = _pickSpriteNumber(28);
                 }
                 else if (currentScoreDown == 30)
                 {
-                    _connectionDown.ConnectionScore = 10;
+                    _connectionDown.ConnectionScore = _pickSpriteNumber(10);
                 }
             }
         }
@@ -1458,40 +1907,40 @@ public class TileConnectionVariationRegister<T> where T : MonoBehaviour, ITileCo
             }
             else
             {
-                _thisMazeTileAttribute.ConnectionScore = 7;
+                _thisMazeTileAttribute.ConnectionScore = _pickSpriteNumber(7);
 
                 if (currentScoreLeft == 17)
                 {
-                    _connectionLeft.ConnectionScore = 2;
+                    _connectionLeft.ConnectionScore = _pickSpriteNumber(2);
                 }
                 else if (currentScoreLeft == 22)
                 {
-                    _connectionLeft.ConnectionScore = 29;
+                    _connectionLeft.ConnectionScore = _pickSpriteNumber(29);
                 }
                 else if ((currentScoreLeft == 16 || currentScoreLeft == 21 || currentScoreLeft == 23 || currentScoreLeft == 31 || currentScoreLeft == 32 || currentScoreLeft == 33) && currentScoreRight != 25 && currentScoreRight != 26 && currentScoreRight != 31 && currentScoreRight != 33 && currentScoreRight != 34)
                 {
-                    _thisMazeTileAttribute.ConnectionScore = 29;
+                    _thisMazeTileAttribute.ConnectionScore = _pickSpriteNumber(29);
                 }
                 else if (currentScoreLeft == 27)
                 {
-                    _connectionLeft.ConnectionScore = 7;
+                    _connectionLeft.ConnectionScore = _pickSpriteNumber(7);
                 }
 
                 if (currentScoreRight == 19)
                 {
-                    _connectionRight.ConnectionScore = 4;
+                    _connectionRight.ConnectionScore = _pickSpriteNumber(4);
                 }
                 else if (currentScoreRight == 22)
                 {
-                    _connectionRight.ConnectionScore = 27;
+                    _connectionRight.ConnectionScore = _pickSpriteNumber(27);
                 }
                 else if ((currentScoreRight == 16 || currentScoreRight == 25 || currentScoreRight == 26 || currentScoreRight == 31 || currentScoreRight == 33 || currentScoreRight == 34) && currentScoreLeft != 21 && currentScoreLeft != 23 && currentScoreLeft != 31 && currentScoreLeft != 32 && currentScoreLeft != 33)
                 {
-                    _thisMazeTileAttribute.ConnectionScore = 27;
+                    _thisMazeTileAttribute.ConnectionScore = _pickSpriteNumber(27);
                 }
                 else if (currentScoreRight == 29)
                 {
-                    _connectionRight.ConnectionScore = 7;
+                    _connectionRight.ConnectionScore = _pickSpriteNumber(7);
                 }
             }
         }
@@ -1505,32 +1954,32 @@ public class TileConnectionVariationRegister<T> where T : MonoBehaviour, ITileCo
             }
             else
             {
-                _thisMazeTileAttribute.ConnectionScore = 8;
+                _thisMazeTileAttribute.ConnectionScore = _pickSpriteNumber(8);
 
                 if (currentScoreRight == 19)
                 {
-                    _connectionRight.ConnectionScore = 4;
+                    _connectionRight.ConnectionScore = _pickSpriteNumber(4);
                 }
                 else if (currentScoreRight == 22)
                 {
-                    _connectionRight.ConnectionScore = 27;
+                    _connectionRight.ConnectionScore = _pickSpriteNumber(27);
                 }
                 else if (currentScoreRight == 29)
                 {
-                    _connectionRight.ConnectionScore = 7;
+                    _connectionRight.ConnectionScore = _pickSpriteNumber(7);
                 }
 
                 if (currentScoreUp == 18)
                 {
-                    _connectionUp.ConnectionScore = 3;
+                    _connectionUp.ConnectionScore = _pickSpriteNumber(3);
                 }
                 else if (currentScoreUp == 24)
                 {
-                    _connectionUp.ConnectionScore = 30;
+                    _connectionUp.ConnectionScore = _pickSpriteNumber(30);
                 }
                 else if (currentScoreUp == 28)
                 {
-                    _connectionUp.ConnectionScore = 10;
+                    _connectionUp.ConnectionScore = _pickSpriteNumber(10);
                 }
             }
         }
@@ -1544,40 +1993,40 @@ public class TileConnectionVariationRegister<T> where T : MonoBehaviour, ITileCo
             }
             else
             {
-                _thisMazeTileAttribute.ConnectionScore = 10;
+                _thisMazeTileAttribute.ConnectionScore = _pickSpriteNumber(10);
 
                 if (currentScoreDown == 20)
                 {
-                    _connectionDown.ConnectionScore = 5;
+                    _connectionDown.ConnectionScore = _pickSpriteNumber(5);
                 }
                 else if (currentScoreDown == 24)
                 {
-                    _connectionDown.ConnectionScore = 28;
+                    _connectionDown.ConnectionScore = _pickSpriteNumber(28);
                 }
                 else if ((currentScoreDown == 16 || currentScoreDown == 23 || currentScoreDown == 26 || currentScoreDown == 32 || currentScoreDown == 33 || currentScoreDown == 34) && currentScoreUp != 21 && currentScoreUp != 25 && currentScoreUp != 31 && currentScoreUp != 32 && currentScoreUp != 34)
                 {
-                    _thisMazeTileAttribute.ConnectionScore = 28;
+                    _thisMazeTileAttribute.ConnectionScore = _pickSpriteNumber(28);
                 }
                 else if (currentScoreDown == 30)
                 {
-                    _connectionDown.ConnectionScore = 10;
+                    _connectionDown.ConnectionScore = _pickSpriteNumber(10);
                 }
 
                 if (currentScoreUp == 18)
                 {
-                    _connectionUp.ConnectionScore = 3;
+                    _connectionUp.ConnectionScore = _pickSpriteNumber(3);
                 }
                 else if (currentScoreUp == 24)
                 {
-                    _connectionUp.ConnectionScore = 30;
+                    _connectionUp.ConnectionScore = _pickSpriteNumber(30);
                 }
                 else if ((currentScoreUp == 16 || currentScoreUp == 21 || currentScoreUp == 25 || currentScoreUp == 31 || currentScoreUp == 32 || currentScoreUp == 34) && currentScoreDown != 23 && currentScoreDown != 26 && currentScoreDown != 32 && currentScoreDown != 33 && currentScoreDown != 34)
                 {
-                    _thisMazeTileAttribute.ConnectionScore = 30;
+                    _thisMazeTileAttribute.ConnectionScore = _pickSpriteNumber(30);
                 }
                 else if (currentScoreUp == 28)
                 {
-                    _connectionUp.ConnectionScore = 10;
+                    _connectionUp.ConnectionScore = _pickSpriteNumber(10);
                 }
             }
         }
@@ -1591,32 +2040,32 @@ public class TileConnectionVariationRegister<T> where T : MonoBehaviour, ITileCo
             }
             else
             {
-                _thisMazeTileAttribute.ConnectionScore = 9;
+                _thisMazeTileAttribute.ConnectionScore = _pickSpriteNumber(9);
 
                 if (currentScoreLeft == 17)
                 {
-                    _connectionLeft.ConnectionScore = 2;
+                    _connectionLeft.ConnectionScore = _pickSpriteNumber(2);
                 }
                 else if (currentScoreLeft == 22)
                 {
-                    _connectionLeft.ConnectionScore = 29;
+                    _connectionLeft.ConnectionScore = _pickSpriteNumber(29);
                 }
                 else if (currentScoreLeft == 27)
                 {
-                    _connectionLeft.ConnectionScore = 7;
+                    _connectionLeft.ConnectionScore = _pickSpriteNumber(7);
                 }
 
                 if (currentScoreDown == 20)
                 {
-                    _connectionDown.ConnectionScore = 5;
+                    _connectionDown.ConnectionScore = _pickSpriteNumber(5);
                 }
                 else if (currentScoreDown == 24)
                 {
-                    _connectionDown.ConnectionScore = 28;
+                    _connectionDown.ConnectionScore = _pickSpriteNumber(28);
                 }
                 else if (currentScoreDown == 30)
                 {
-                    _connectionDown.ConnectionScore = 10;
+                    _connectionDown.ConnectionScore = _pickSpriteNumber(10);
                 }
             }
         }
@@ -1630,32 +2079,32 @@ public class TileConnectionVariationRegister<T> where T : MonoBehaviour, ITileCo
             }
             else
             {
-                _thisMazeTileAttribute.ConnectionScore = 11;
+                _thisMazeTileAttribute.ConnectionScore = _pickSpriteNumber(11);
 
                 if (currentScoreLeft == 17)
                 {
-                    _connectionLeft.ConnectionScore = 2;
+                    _connectionLeft.ConnectionScore = _pickSpriteNumber(2);
                 }
                 else if (currentScoreLeft == 22)
                 {
-                    _connectionLeft.ConnectionScore = 29;
+                    _connectionLeft.ConnectionScore = _pickSpriteNumber(29);
                 }
                 else if (currentScoreLeft == 27)
                 {
-                    _connectionLeft.ConnectionScore = 7;
+                    _connectionLeft.ConnectionScore = _pickSpriteNumber(7);
                 }
 
                 if (currentScoreUp == 18)
                 {
-                    _connectionUp.ConnectionScore = 3;
+                    _connectionUp.ConnectionScore = _pickSpriteNumber(3);
                 }
                 else if (currentScoreUp == 24)
                 {
-                    _connectionUp.ConnectionScore = 30;
+                    _connectionUp.ConnectionScore = _pickSpriteNumber(30);
                 }
                 else if (currentScoreUp == 28)
                 {
-                    _connectionUp.ConnectionScore = 10;
+                    _connectionUp.ConnectionScore = _pickSpriteNumber(10);
                 }
             }
         }
@@ -1666,28 +2115,28 @@ public class TileConnectionVariationRegister<T> where T : MonoBehaviour, ITileCo
             {
                 if (currentScoreLeft == 22)
                 {
-                    _connectionLeft.ConnectionScore = 29;
+                    _connectionLeft.ConnectionScore = _pickSpriteNumber(29);
                 }
                 else if (currentScoreLeft == 27)
                 {
-                    _connectionLeft.ConnectionScore = 7;
+                    _connectionLeft.ConnectionScore = _pickSpriteNumber(7);
                 }
             }
             else
             {
-                _thisMazeTileAttribute.ConnectionScore = 7;
+                _thisMazeTileAttribute.ConnectionScore = _pickSpriteNumber(7);
 
                 if (currentScoreRight == 19)
                 {
-                    _connectionRight.ConnectionScore = 4;
+                    _connectionRight.ConnectionScore = _pickSpriteNumber(4);
                 }
                 else if (currentScoreRight == 22)
                 {
-                    _connectionRight.ConnectionScore = 27;
+                    _connectionRight.ConnectionScore = _pickSpriteNumber(27);
                 }
                 else if (currentScoreRight == 29)
                 {
-                    _connectionRight.ConnectionScore = 7;
+                    _connectionRight.ConnectionScore = _pickSpriteNumber(7);
                 }
             }
         }
@@ -1698,28 +2147,28 @@ public class TileConnectionVariationRegister<T> where T : MonoBehaviour, ITileCo
             {
                 if (currentScoreUp == 24)
                 {
-                    _connectionUp.ConnectionScore = 30;
+                    _connectionUp.ConnectionScore = _pickSpriteNumber(30);
                 }
                 else if (currentScoreUp == 28)
                 {
-                    _connectionUp.ConnectionScore = 10;
+                    _connectionUp.ConnectionScore = _pickSpriteNumber(10);
                 }
             }
             else
             {
-                _thisMazeTileAttribute.ConnectionScore = 10;
+                _thisMazeTileAttribute.ConnectionScore = _pickSpriteNumber(10);
 
                 if (currentScoreDown == 20)
                 {
-                    _connectionDown.ConnectionScore = 5;
+                    _connectionDown.ConnectionScore = _pickSpriteNumber(5);
                 }
                 else if (currentScoreDown == 24)
                 {
-                    _connectionDown.ConnectionScore = 28;
+                    _connectionDown.ConnectionScore = _pickSpriteNumber(28);
                 }
                 else if (currentScoreDown == 30)
                 {
-                    _connectionDown.ConnectionScore = 10;
+                    _connectionDown.ConnectionScore = _pickSpriteNumber(10);
                 }
             }
         }
@@ -1730,29 +2179,29 @@ public class TileConnectionVariationRegister<T> where T : MonoBehaviour, ITileCo
             {
                 if (currentScoreRight == 22)
                 {
-                    _connectionRight.ConnectionScore = 27;
+                    _connectionRight.ConnectionScore = _pickSpriteNumber(27);
                 }
                 else if (currentScoreRight == 29)
                 {
-                    _connectionRight.ConnectionScore = 7;
+                    _connectionRight.ConnectionScore = _pickSpriteNumber(7);
                 }
             }
             else
             {
-                _thisMazeTileAttribute.ConnectionScore = 7;
+                _thisMazeTileAttribute.ConnectionScore = _pickSpriteNumber(7);
 
                 if (currentScoreLeft == 17)
                 {
-                    _connectionLeft.ConnectionScore = 2;
+                    _connectionLeft.ConnectionScore = _pickSpriteNumber(2);
                 }
                 else if (currentScoreLeft == 22)
                 {
-                    _connectionLeft.ConnectionScore = 29;
+                    _connectionLeft.ConnectionScore = _pickSpriteNumber(29);
                 }
 
                 else if (currentScoreLeft == 27)
                 {
-                    _connectionLeft.ConnectionScore = 7;
+                    _connectionLeft.ConnectionScore = _pickSpriteNumber(7);
                 }
             }
         }
@@ -1763,28 +2212,28 @@ public class TileConnectionVariationRegister<T> where T : MonoBehaviour, ITileCo
             {
                 if (currentScoreDown == 24)
                 {
-                    _connectionDown.ConnectionScore = 28;
+                    _connectionDown.ConnectionScore = _pickSpriteNumber(28);
                 }
                 else if (currentScoreDown == 30)
                 {
-                    _connectionDown.ConnectionScore = 10;
+                    _connectionDown.ConnectionScore = _pickSpriteNumber(10);
                 }
             }
             else
             {
-                _thisMazeTileAttribute.ConnectionScore = 10;
+                _thisMazeTileAttribute.ConnectionScore = _pickSpriteNumber(10);
 
                 if (currentScoreUp == 18)
                 {
-                    _connectionUp.ConnectionScore = 3;
+                    _connectionUp.ConnectionScore = _pickSpriteNumber(3);
                 }
                 else if (currentScoreUp == 24)
                 {
-                    _connectionUp.ConnectionScore = 30;
+                    _connectionUp.ConnectionScore = _pickSpriteNumber(30);
                 }
                 else if (currentScoreUp == 28)
                 {
-                    _connectionUp.ConnectionScore = 10;
+                    _connectionUp.ConnectionScore = _pickSpriteNumber(10);
                 }
             }
         }
@@ -1797,84 +2246,84 @@ public class TileConnectionVariationRegister<T> where T : MonoBehaviour, ITileCo
             {
                 if (currentScoreRight == 4)
                 {
-                    _connectionRight.ConnectionScore = 19;
+                    _connectionRight.ConnectionScore = _pickSpriteNumber(19);
                 }
                 else if (currentScoreRight == 7)
                 {
-                    _connectionRight.ConnectionScore = 29;
+                    _connectionRight.ConnectionScore = _pickSpriteNumber(29);
                 }
                 else if (currentScoreRight == 27)
                 {
-                    _connectionRight.ConnectionScore = 22;
+                    _connectionRight.ConnectionScore = _pickSpriteNumber(22);
                 }
 
                 if (currentScoreDown == 5)
                 {
-                    _connectionDown.ConnectionScore = 20;
+                    _connectionDown.ConnectionScore = _pickSpriteNumber(20);
                 }
                 else if (currentScoreDown == 10)
                 {
-                    _connectionDown.ConnectionScore = 30;
+                    _connectionDown.ConnectionScore = _pickSpriteNumber(30);
                 }
                 else if (currentScoreDown == 28)
                 {
-                    _connectionDown.ConnectionScore = 24;
+                    _connectionDown.ConnectionScore = _pickSpriteNumber(24);
                 }
 
                 if (currentScoreLeft == 2)
                 {
-                    _connectionLeft.ConnectionScore = 17;
+                    _connectionLeft.ConnectionScore = _pickSpriteNumber(17);
                 }
                 else if (currentScoreLeft == 7)
                 {
-                    _connectionLeft.ConnectionScore = 27;
+                    _connectionLeft.ConnectionScore = _pickSpriteNumber(27);
                 }
                 else if (currentScoreLeft == 29)
                 {
-                    _connectionLeft.ConnectionScore = 22;
+                    _connectionLeft.ConnectionScore = _pickSpriteNumber(22);
                 }
             }
             else
             {
-                _thisMazeTileAttribute.ConnectionScore = 12;
+                _thisMazeTileAttribute.ConnectionScore = _pickSpriteNumber(12);
 
                 if (currentScoreRight == 19)
                 {
-                    _connectionRight.ConnectionScore = 4;
+                    _connectionRight.ConnectionScore = _pickSpriteNumber(4);
                 }
                 else if (currentScoreRight == 22)
                 {
-                    _connectionRight.ConnectionScore = 27;
+                    _connectionRight.ConnectionScore = _pickSpriteNumber(27);
                 }
                 else if (currentScoreRight == 29)
                 {
-                    _connectionRight.ConnectionScore = 7;
+                    _connectionRight.ConnectionScore = _pickSpriteNumber(7);
                 }
 
                 if (currentScoreDown == 20)
                 {
-                    _connectionDown.ConnectionScore = 5;
+                    _connectionDown.ConnectionScore = _pickSpriteNumber(5);
                 }
                 else if (currentScoreDown == 24)
                 {
-                    _connectionDown.ConnectionScore = 28;
+                    _connectionDown.ConnectionScore = _pickSpriteNumber(28);
                 }
                 else if (currentScoreDown == 30)
                 {
-                    _connectionDown.ConnectionScore = 10;
+                    _connectionDown.ConnectionScore = _pickSpriteNumber(10);
                 }
 
                 if (currentScoreLeft == 17)
                 {
-                    _connectionLeft.ConnectionScore = 2;
+                    _connectionLeft.ConnectionScore = _pickSpriteNumber(2);
                 }
                 else if (currentScoreLeft == 22)
                 {
-                    _connectionLeft.ConnectionScore = 29;
+                    _connectionLeft.ConnectionScore = _pickSpriteNumber(29);
                 }
                 else if (currentScoreLeft == 27)
                 {
-                    _connectionLeft.ConnectionScore = 7;
+                    _connectionLeft.ConnectionScore = _pickSpriteNumber(7);
                 }
             }
         }
@@ -1887,84 +2336,84 @@ public class TileConnectionVariationRegister<T> where T : MonoBehaviour, ITileCo
             {
                 if (currentScoreRight == 4)
                 {
-                    _connectionRight.ConnectionScore = 19;
+                    _connectionRight.ConnectionScore = _pickSpriteNumber(19);
                 }
                 else if (currentScoreRight == 7)
                 {
-                    _connectionRight.ConnectionScore = 29;
+                    _connectionRight.ConnectionScore = _pickSpriteNumber(29);
                 }
                 else if (currentScoreRight == 27)
                 {
-                    _connectionRight.ConnectionScore = 22;
+                    _connectionRight.ConnectionScore = _pickSpriteNumber(22);
                 }
 
                 if (currentScoreDown == 5)
                 {
-                    _connectionDown.ConnectionScore = 20;
+                    _connectionDown.ConnectionScore = _pickSpriteNumber(20);
                 }
                 else if (currentScoreDown == 10)
                 {
-                    _connectionDown.ConnectionScore = 30;
+                    _connectionDown.ConnectionScore = _pickSpriteNumber(30);
                 }
                 else if (currentScoreDown == 28)
                 {
-                    _connectionDown.ConnectionScore = 24;
+                    _connectionDown.ConnectionScore = _pickSpriteNumber(24);
                 }
 
                 if (currentScoreUp == 3)
                 {
-                    _connectionUp.ConnectionScore = 18;
+                    _connectionUp.ConnectionScore = _pickSpriteNumber(18);
                 }
                 else if (currentScoreUp == 10)
                 {
-                    _connectionUp.ConnectionScore = 28;
+                    _connectionUp.ConnectionScore = _pickSpriteNumber(28);
                 }
                 else if (currentScoreUp == 30)
                 {
-                    _connectionUp.ConnectionScore = 24;
+                    _connectionUp.ConnectionScore = _pickSpriteNumber(24);
                 }
             }
             else
             {
-                _thisMazeTileAttribute.ConnectionScore = 13;
+                _thisMazeTileAttribute.ConnectionScore = _pickSpriteNumber(13);
 
                 if (currentScoreRight == 19)
                 {
-                    _connectionRight.ConnectionScore = 4;
+                    _connectionRight.ConnectionScore = _pickSpriteNumber(4);
                 }
                 else if (currentScoreRight == 22)
                 {
-                    _connectionRight.ConnectionScore = 27;
+                    _connectionRight.ConnectionScore = _pickSpriteNumber(27);
                 }
                 else if (currentScoreRight == 29)
                 {
-                    _connectionRight.ConnectionScore = 7;
+                    _connectionRight.ConnectionScore = _pickSpriteNumber(7);
                 }
 
                 if (currentScoreDown == 20)
                 {
-                    _connectionDown.ConnectionScore = 5;
+                    _connectionDown.ConnectionScore = _pickSpriteNumber(5);
                 }
                 else if (currentScoreDown == 24)
                 {
-                    _connectionDown.ConnectionScore = 28;
+                    _connectionDown.ConnectionScore = _pickSpriteNumber(28);
                 }
                 else if (currentScoreDown == 30)
                 {
-                    _connectionDown.ConnectionScore = 10;
+                    _connectionDown.ConnectionScore = _pickSpriteNumber(10);
                 }
 
                 if (currentScoreUp == 18)
                 {
-                    _connectionUp.ConnectionScore = 3;
+                    _connectionUp.ConnectionScore = _pickSpriteNumber(3);
                 }
                 else if (currentScoreUp == 24)
                 {
-                    _connectionUp.ConnectionScore = 30;
+                    _connectionUp.ConnectionScore = _pickSpriteNumber(30);
                 }
                 else if (currentScoreUp == 28)
                 {
-                    _connectionUp.ConnectionScore = 10;
+                    _connectionUp.ConnectionScore = _pickSpriteNumber(10);
                 }
             }
         }
@@ -1977,84 +2426,84 @@ public class TileConnectionVariationRegister<T> where T : MonoBehaviour, ITileCo
             {
                 if (currentScoreRight == 4)
                 {
-                    _connectionRight.ConnectionScore = 19;
+                    _connectionRight.ConnectionScore = _pickSpriteNumber(19);
                 }
                 else if (currentScoreRight == 7)
                 {
-                    _connectionRight.ConnectionScore = 29;
+                    _connectionRight.ConnectionScore = _pickSpriteNumber(29);
                 }
                 else if (currentScoreRight == 27)
                 {
-                    _connectionRight.ConnectionScore = 22;
+                    _connectionRight.ConnectionScore = _pickSpriteNumber(22);
                 }
 
                 if (currentScoreLeft == 2)
                 {
-                    _connectionLeft.ConnectionScore = 17;
+                    _connectionLeft.ConnectionScore = _pickSpriteNumber(17);
                 }
                 else if (currentScoreLeft == 7)
                 {
-                    _connectionLeft.ConnectionScore = 27;
+                    _connectionLeft.ConnectionScore = _pickSpriteNumber(27);
                 }
                 else if (currentScoreLeft == 29)
                 {
-                    _connectionLeft.ConnectionScore = 22;
+                    _connectionLeft.ConnectionScore = _pickSpriteNumber(22);
                 }
 
                 if (currentScoreUp == 3)
                 {
-                    _connectionUp.ConnectionScore = 18;
+                    _connectionUp.ConnectionScore = _pickSpriteNumber(18);
                 }
                 else if (currentScoreUp == 10)
                 {
-                    _connectionUp.ConnectionScore = 28;
+                    _connectionUp.ConnectionScore = _pickSpriteNumber(28);
                 }
                 else if (currentScoreUp == 30)
                 {
-                    _connectionUp.ConnectionScore = 24;
+                    _connectionUp.ConnectionScore = _pickSpriteNumber(24);
                 }
             }
             else
             {
-                _thisMazeTileAttribute.ConnectionScore = 14;
+                _thisMazeTileAttribute.ConnectionScore = _pickSpriteNumber(14);
 
                 if (currentScoreRight == 19)
                 {
-                    _connectionRight.ConnectionScore = 4;
+                    _connectionRight.ConnectionScore = _pickSpriteNumber(4);
                 }
                 else if (currentScoreRight == 22)
                 {
-                    _connectionRight.ConnectionScore = 27;
+                    _connectionRight.ConnectionScore = _pickSpriteNumber(27);
                 }
                 else if (currentScoreRight == 29)
                 {
-                    _connectionRight.ConnectionScore = 7;
+                    _connectionRight.ConnectionScore = _pickSpriteNumber(7);
                 }
 
                 if (currentScoreLeft == 17)
                 {
-                    _connectionLeft.ConnectionScore = 2;
+                    _connectionLeft.ConnectionScore = _pickSpriteNumber(2);
                 }
                 else if (currentScoreLeft == 22)
                 {
-                    _connectionLeft.ConnectionScore = 29;
+                    _connectionLeft.ConnectionScore = _pickSpriteNumber(29);
                 }
                 else if (currentScoreLeft == 27)
                 {
-                    _connectionLeft.ConnectionScore = 7;
+                    _connectionLeft.ConnectionScore = _pickSpriteNumber(7);
                 }
 
                 if (currentScoreUp == 18)
                 {
-                    _connectionUp.ConnectionScore = 3;
+                    _connectionUp.ConnectionScore = _pickSpriteNumber(3);
                 }
                 else if (currentScoreUp == 24)
                 {
-                    _connectionUp.ConnectionScore = 30;
+                    _connectionUp.ConnectionScore = _pickSpriteNumber(30);
                 }
                 else if (currentScoreUp == 28)
                 {
-                    _connectionUp.ConnectionScore = 10;
+                    _connectionUp.ConnectionScore = _pickSpriteNumber(10);
                 }
             }
         }
@@ -2067,84 +2516,84 @@ public class TileConnectionVariationRegister<T> where T : MonoBehaviour, ITileCo
             {
                 if (currentScoreDown == 5)
                 {
-                    _connectionDown.ConnectionScore = 20;
+                    _connectionDown.ConnectionScore = _pickSpriteNumber(20);
                 }
                 else if (currentScoreDown == 10)
                 {
-                    _connectionDown.ConnectionScore = 30;
+                    _connectionDown.ConnectionScore = _pickSpriteNumber(30);
                 }
                 else if (currentScoreDown == 28)
                 {
-                    _connectionDown.ConnectionScore = 24;
+                    _connectionDown.ConnectionScore = _pickSpriteNumber(24);
                 }
 
                 if (currentScoreLeft == 2)
                 {
-                    _connectionLeft.ConnectionScore = 17;
+                    _connectionLeft.ConnectionScore = _pickSpriteNumber(17);
                 }
                 else if (currentScoreLeft == 7)
                 {
-                    _connectionLeft.ConnectionScore = 27;
+                    _connectionLeft.ConnectionScore = _pickSpriteNumber(27);
                 }
                 else if (currentScoreLeft == 29)
                 {
-                    _connectionLeft.ConnectionScore = 22;
+                    _connectionLeft.ConnectionScore = _pickSpriteNumber(22);
                 }
 
                 if (currentScoreUp == 3)
                 {
-                    _connectionUp.ConnectionScore = 18;
+                    _connectionUp.ConnectionScore = _pickSpriteNumber(18);
                 }
                 else if (currentScoreUp == 10)
                 {
-                    _connectionUp.ConnectionScore = 28;
+                    _connectionUp.ConnectionScore = _pickSpriteNumber(28);
                 }
                 else if (currentScoreUp == 30)
                 {
-                    _connectionUp.ConnectionScore = 24;
+                    _connectionUp.ConnectionScore = _pickSpriteNumber(24);
                 }
             }
             else
             {
-                _thisMazeTileAttribute.ConnectionScore = 15;
+                _thisMazeTileAttribute.ConnectionScore = _pickSpriteNumber(15);
 
                 if (currentScoreDown == 20)
                 {
-                    _connectionDown.ConnectionScore = 5;
+                    _connectionDown.ConnectionScore = _pickSpriteNumber(5);
                 }
                 else if (currentScoreDown == 24)
                 {
-                    _connectionDown.ConnectionScore = 28;
+                    _connectionDown.ConnectionScore = _pickSpriteNumber(28);
                 }
                 else if (currentScoreDown == 30)
                 {
-                    _connectionDown.ConnectionScore = 10;
+                    _connectionDown.ConnectionScore = _pickSpriteNumber(10);
                 }
 
                 if (currentScoreLeft == 17)
                 {
-                    _connectionLeft.ConnectionScore = 2;
+                    _connectionLeft.ConnectionScore = _pickSpriteNumber(2);
                 }
                 else if (currentScoreLeft == 22)
                 {
-                    _connectionLeft.ConnectionScore = 29;
+                    _connectionLeft.ConnectionScore = _pickSpriteNumber(29);
                 }
                 else if (currentScoreLeft == 27)
                 {
-                    _connectionLeft.ConnectionScore = 7;
+                    _connectionLeft.ConnectionScore = _pickSpriteNumber(7);
                 }
 
                 if (currentScoreUp == 18)
                 {
-                    _connectionUp.ConnectionScore = 3;
+                    _connectionUp.ConnectionScore = _pickSpriteNumber(3);
                 }
                 else if (currentScoreUp == 24)
                 {
-                    _connectionUp.ConnectionScore = 30;
+                    _connectionUp.ConnectionScore = _pickSpriteNumber(30);
                 }
                 else if (currentScoreUp == 28)
                 {
-                    _connectionUp.ConnectionScore = 10;
+                    _connectionUp.ConnectionScore = _pickSpriteNumber(10);
                 }
             }
         }

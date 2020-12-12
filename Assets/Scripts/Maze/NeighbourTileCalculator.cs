@@ -19,6 +19,8 @@ public struct TileModifierConnectionInfo<T> where T : MonoBehaviour, ITileConnec
 
 public class NeighbourTileCalculator
 {
+    
+
     public static readonly int ConnectionOnAllSidesScore = 16;
 
     public static int MapNeighbourPlayerMarkEndsOfTile(Tile tile)
