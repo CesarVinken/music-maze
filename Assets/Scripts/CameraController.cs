@@ -52,6 +52,11 @@ public class CameraController : MonoBehaviour
 
         Vector3 cameraPosition = new Vector3(0, 0, -10);
 
+        if(!PanLimits.ContainsKey(Direction.Left) || !PanLimits.ContainsKey(Direction.Right) || !PanLimits.ContainsKey(Direction.Down) || !PanLimits.ContainsKey(Direction.Up))
+        {
+            return;
+        }
+
         cameraPosition.x = Mathf.Clamp(cameraPosition.x, PanLimits[Direction.Left], PanLimits[Direction.Right]);
         cameraPosition.y = Mathf.Clamp(cameraPosition.y, PanLimits[Direction.Down], PanLimits[Direction.Up]);
 

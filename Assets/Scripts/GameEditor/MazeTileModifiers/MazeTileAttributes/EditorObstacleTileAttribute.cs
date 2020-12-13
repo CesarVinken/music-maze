@@ -20,7 +20,7 @@ public class EditorObstacleTileAttribute : EditorMazeTileAttributeModifier
             TileBackgroundRemover tileBackgroundRemover = new TileBackgroundRemover(tile);
             tileBackgroundRemover.RemovePath();
 
-            tileAttributePlacer.PlaceTileObstacle(ObstacleType.Wall);
+            tileAttributePlacer.PlaceTileObstacle(ObstacleType.Bush);
             return;
         }
 

@@ -23,7 +23,7 @@ public class NeighbourTileCalculator
 
     public static readonly int ConnectionOnAllSidesScore = 16;
 
-    public static int MapNeighbourPlayerMarkEndsOfTile(Tile tile)
+    public static TileConnectionScoreInfo MapNeighbourPlayerMarkEndsOfTile(Tile tile)
     {
         bool hasMarkRight = false;
         bool hasMarkDown = false;
@@ -54,7 +54,7 @@ public class NeighbourTileCalculator
         return Calculate16TileMapConnectionScore(hasMarkRight, hasMarkDown, hasMarkLeft, hasMarkUp);
     }
 
-    public static int MapNeighbourPathsOfTile(Tile tile, MazeTilePathType pathType)
+    public static TileConnectionScoreInfo MapNeighbourPathsOfTile(Tile tile, MazeTilePathType pathType)
     {
         Logger.Log($"---------Map neighbours of {tile.GridLocation.X},{tile.GridLocation.Y}--------");
         TileModifierConnectionInfo<MazeTilePath> pathRight = new TileModifierConnectionInfo<MazeTilePath>(Direction.Right);
@@ -65,7 +65,7 @@ public class NeighbourTileCalculator
         if (!EditorManager.InEditor)
         {
             Logger.Error("MapNeighbourPathsOfTile was not called from the editor");
-            return -1;
+            return null;
         }
 
         foreach (KeyValuePair<ObjectDirection, Tile> neighbour in tile.Neighbours)
@@ -104,7 +104,7 @@ public class NeighbourTileCalculator
         return CalculateTileConnectionScore(pathRight, pathDown, pathLeft, pathUp);
     }
 
-    public static int MapNeighbourObstaclesOfTile(Tile tile, ObstacleType obstacleType, bool isDoor)
+    public static TileConnectionScoreInfo MapNeighbourObstaclesOfTile(Tile tile, ObstacleType obstacleType, bool isDoor)
     {
         Logger.Log($"Map neighbours of {tile.GridLocation.X},{tile.GridLocation.Y}");
         TileModifierConnectionInfo<TileObstacle> obstacleRight = new TileModifierConnectionInfo<TileObstacle>(Direction.Right);
@@ -115,7 +115,7 @@ public class NeighbourTileCalculator
         if (!EditorManager.InEditor)
         {
             Logger.Error("MapNeighbourObstaclesOfTile was not called from the editor");
-            return -1;
+            return null;
         }
 
         foreach (KeyValuePair<ObjectDirection, Tile> neighbour in tile.Neighbours)
@@ -211,7 +211,7 @@ public class NeighbourTileCalculator
         return CalculateTileConnectionScoreForVariations(thisMazeTileModifier, connectionRight, connectionDown, connectionLeft, connectionUp);
     }
 
-    private static int CalculateTileConnectionScore<T>(TileModifierConnectionInfo<T> right, TileModifierConnectionInfo<T> down, TileModifierConnectionInfo<T> left, TileModifierConnectionInfo<T> up) where T : MonoBehaviour, ITileConnectable
+    private static TileConnectionScoreInfo CalculateTileConnectionScore<T>(TileModifierConnectionInfo<T> right, TileModifierConnectionInfo<T> down, TileModifierConnectionInfo<T> left, TileModifierConnectionInfo<T> up) where T : MonoBehaviour, ITileConnectable
     {
         if (right.HasConnection)
         {
@@ -221,29 +221,29 @@ public class NeighbourTileCalculator
                 {
                     if (up.HasConnection)
                     {
-                        return 16;
+                        return new TileConnectionScoreInfo(16);
                     }
-                    return 31;
+                    return new TileConnectionScoreInfo(31);
                 }
                 if (up.HasConnection)
                 {
-                    return 32;
+                    return new TileConnectionScoreInfo(32);
                 }
-                return 21;
+                return new TileConnectionScoreInfo(21);
             }
             if (left.HasConnection)
             {
                 if (up.HasConnection)
                 {
-                    return 33;
+                    return new TileConnectionScoreInfo(33);
                 }
-                return 22;
+                return new TileConnectionScoreInfo(22);
             }
             if (up.HasConnection)
             {
-                return 23;
+                return new TileConnectionScoreInfo(23);
             }
-            return 17;
+            return new TileConnectionScoreInfo(17);
         }
         if (down.HasConnection)
         {
@@ -251,29 +251,29 @@ public class NeighbourTileCalculator
             {
                 if (up.HasConnection)
                 {
-                    return 34;
+                    return new TileConnectionScoreInfo(34);
                 }
-                return 25;
+                return new TileConnectionScoreInfo(25);
             }
             if (up.HasConnection)
             {
-                return 24;
+                return new TileConnectionScoreInfo(24);
             }
-            return 18;
+            return new TileConnectionScoreInfo(18);
         }
         if (left.HasConnection)
         {
             if (up.HasConnection)
             {
-                return 26;
+                return new TileConnectionScoreInfo(26);
             }
-            return 19;
+            return new TileConnectionScoreInfo(19);
         }
         if (up.HasConnection)
         {
-            return 20;
+            return new TileConnectionScoreInfo(20);
         }
-        return 1;
+        return new TileConnectionScoreInfo(1);
     }
 
     private static List<T> CalculateTileConnectionScoreForVariations<T>(T thisMazeTileAttribute, TileModifierConnectionInfo<T> connectionRight, TileModifierConnectionInfo<T> connectionDown, TileModifierConnectionInfo<T> connectionLeft, TileModifierConnectionInfo<T> connectionUp) where T : MonoBehaviour, ITileConnectable
@@ -296,36 +296,36 @@ public class NeighbourTileCalculator
         }
     }
 
-    private static int CalculateDoorConnectionScore(TileModifierConnectionInfo<TileObstacle> right, TileModifierConnectionInfo<TileObstacle> down, TileModifierConnectionInfo<TileObstacle> left, TileModifierConnectionInfo<TileObstacle> up)
+    private static TileConnectionScoreInfo CalculateDoorConnectionScore(TileModifierConnectionInfo<TileObstacle> right, TileModifierConnectionInfo<TileObstacle> down, TileModifierConnectionInfo<TileObstacle> left, TileModifierConnectionInfo<TileObstacle> up)
     {
         if (right.HasConnection)
         {
             if (left.HasConnection)
             {
-                return 4;
+                return new TileConnectionScoreInfo(4);
             }
-            return 2;
+            return new TileConnectionScoreInfo(2);
         }
         if (left.HasConnection)
         {
-            return 3;
+            return new TileConnectionScoreInfo(3);
         }
         if (down.HasConnection)
         {
             if (up.HasConnection)
             {
-                return 8;
+                return new TileConnectionScoreInfo(8);
             }
-            return 6;
+            return new TileConnectionScoreInfo(6);
         }
         if (up.HasConnection)
         {
-            return 7;
+            return new TileConnectionScoreInfo(7);
         }
-        return 1;
+        return new TileConnectionScoreInfo(1);
     }
     
-    private static int Calculate16TileMapConnectionScore(bool right, bool down, bool left, bool up)
+    private static TileConnectionScoreInfo Calculate16TileMapConnectionScore(bool right, bool down, bool left, bool up)
     {
         if (right)
         {
@@ -335,29 +335,29 @@ public class NeighbourTileCalculator
                 {
                     if (up)
                     {
-                        return 16;
+                        return new TileConnectionScoreInfo(16);
                     }
-                    return 12;
+                    return new TileConnectionScoreInfo(12);
                 }
                 else if (up)
                 {
-                    return 13;
+                    return new TileConnectionScoreInfo(13);
                 }
-                return 6;
+                return new TileConnectionScoreInfo(6);
             }
             else if (left)
             {
                 if (up)
                 {
-                    return 14;
+                    return new TileConnectionScoreInfo(14);
                 }
-                return 7;
+                return new TileConnectionScoreInfo(7);
             }
             else if (up)
             {
-                return 8;
+                return new TileConnectionScoreInfo(8);
             }
-            return 2;
+            return new TileConnectionScoreInfo(2);
         }
         else if (down)
         {
@@ -365,29 +365,29 @@ public class NeighbourTileCalculator
             {
                 if (up)
                 {
-                    return 15;
+                    return new TileConnectionScoreInfo(15);
                 }
-                return 9;
+                return new TileConnectionScoreInfo(9);
             }
             else if (up)
             {
-                return 10;
+                return new TileConnectionScoreInfo(10);
             }
-            return 3;
+            return new TileConnectionScoreInfo(3);
         }
         else if (left)
         {
             if (up)
             {
-                return 11;
+                return new TileConnectionScoreInfo(11);
             }
-            return 4;
+            return new TileConnectionScoreInfo(4);
         }
         else if (up)
         {
-            return 5;
+            return new TileConnectionScoreInfo(5);
         }
 
-        return 1;
+        return new TileConnectionScoreInfo(1);
     }
 }

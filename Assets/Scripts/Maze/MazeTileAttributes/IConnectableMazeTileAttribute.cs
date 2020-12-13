@@ -3,7 +3,9 @@
 public interface ITileConnectable
 {
     int ConnectionScore { get; set; }
+    int SpriteNumber { get; set; }
 
-    void WithConnectionScore(int score);
+    void WithConnectionScoreInfo(TileConnectionScoreInfo score);
+
     string GetSubtypeAsString();
 }

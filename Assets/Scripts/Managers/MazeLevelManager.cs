@@ -309,8 +309,8 @@ public class MazeLevelManager : MonoBehaviour, IOnEventCallback
             
             if (neighbour.PlayerMark != null && neighbour.PlayerMark.Owner != PlayerMarkOwner.None) continue;
 
-            int neighbourConnectionScore = NeighbourTileCalculator.MapNeighbourPlayerMarkEndsOfTile(neighbour);
-            neighbour.PlayerMarkEndsRenderer.sprite = SpriteManager.Instance.PlayerTileMarkerEdge[neighbourConnectionScore - 1];
+            TileConnectionScoreInfo neighbourConnectionScoreInfo = NeighbourTileCalculator.MapNeighbourPlayerMarkEndsOfTile(neighbour);
+            neighbour.PlayerMarkEndsRenderer.sprite = SpriteManager.Instance.PlayerTileMarkerEdge[neighbourConnectionScoreInfo.SpriteNumber - 1];
         }
 
     }

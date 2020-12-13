@@ -10,25 +10,27 @@ public class TileObstacle : MonoBehaviour, IMazeTileAttribute, ITileConnectable
     [SerializeField] protected SpriteRenderer _spriteRenderer;
 
     private int _connectionScore = -1;
+    private int _spriteNumber = -1;
 
     public int ConnectionScore { get => _connectionScore; set => _connectionScore = value; }
+    public int SpriteNumber { get => _spriteNumber; set => _spriteNumber = value; }
 
     public void Awake()
     {
         Guard.CheckIsNull(_spriteRenderer, "_spriteRenderer", gameObject);
 
-        if(ObstacleType == ObstacleType.Wall)
+        if(ObstacleType == ObstacleType.Bush)
         {
             _spriteRenderer.sprite = SpriteManager.Instance.DefaultWall[0];
         }
     }
 
-    public virtual void WithConnectionScore(int obstacleConnectionScore)
+    public virtual void WithConnectionScoreInfo(TileConnectionScoreInfo obstacleConnectionScoreInfo)
     {
-        ConnectionScore = obstacleConnectionScore;
+        ConnectionScore = obstacleConnectionScoreInfo.RawConnectionScore;
+        SpriteNumber = obstacleConnectionScoreInfo.SpriteNumber;
 
-        if (obstacleConnectionScore == -1) return;
-        _spriteRenderer.sprite = SpriteManager.Instance.DefaultWall[ConnectionScore - 1];
+        _spriteRenderer.sprite = SpriteManager.Instance.DefaultWall[SpriteNumber - 1];
     }
 
     public void WithObstacleType(ObstacleType obstacleType)

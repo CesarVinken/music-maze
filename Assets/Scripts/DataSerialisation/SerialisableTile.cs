@@ -39,14 +39,16 @@ public class SerialisableTile
             {
                 TileObstacle tileObstacle = tileAttribute as TileObstacle;
                 SerialisableTileObstacleAttribute serialisableTileObstacleAttribute = 
-                    new SerialisableTileObstacleAttribute(tileObstacle.ConnectionScore);
+                    new SerialisableTileObstacleAttribute(
+                        new TileConnectionScoreInfo(tileObstacle.ConnectionScore, tileObstacle.SpriteNumber));
                 tileAttributes.Add(serialisableTileObstacleAttribute);
             }
             else if (tileAttribute.GetType() == typeof(PlayerExit))
             {
                 PlayerExit playerExit = tileAttribute as PlayerExit;
 
-                SerialisablePlayerExitAttribute serialisablePlayerExitAttribute = new SerialisablePlayerExitAttribute(playerExit.ConnectionScore);
+                SerialisablePlayerExitAttribute serialisablePlayerExitAttribute = new SerialisablePlayerExitAttribute(
+                    new TileConnectionScoreInfo(playerExit.ConnectionScore, playerExit.SpriteNumber));
                 tileAttributes.Add(serialisablePlayerExitAttribute);
             }
             else if (tileAttribute.GetType() == typeof(PlayerOnly))

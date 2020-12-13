@@ -42,14 +42,14 @@ public class TileAttributeRemover
 
             if (tileObstacleOnNeighbour == null) continue;
             Logger.Log($"We will look for connections for neighbour {neighbour.Value.GridLocation.X},{neighbour.Value.GridLocation.Y}, which is {neighbour.Key} of {_tile.GridLocation.X},{_tile.GridLocation.Y}");
-            int obstacleConnectionScoreOnNeighbour = NeighbourTileCalculator.MapNeighbourObstaclesOfTile(neighbour.Value, obstacleType, false);
+            TileConnectionScoreInfo obstacleConnectionScoreOnNeighbour = NeighbourTileCalculator.MapNeighbourObstaclesOfTile(neighbour.Value, obstacleType, false);
             Logger.Log($"We calculated an obstacle connection type score of {obstacleConnectionScoreOnNeighbour} for location {neighbour.Value.GridLocation.X}, {neighbour.Value.GridLocation.Y}");
 
             //update connection score on neighbour
-            tileObstacleOnNeighbour.WithConnectionScore(obstacleConnectionScoreOnNeighbour);
+            tileObstacleOnNeighbour.WithConnectionScoreInfo(obstacleConnectionScoreOnNeighbour);
 
             // If needed, place a background
-            if (obstacleConnectionScoreOnNeighbour != NeighbourTileCalculator.ConnectionOnAllSidesScore)
+            if (obstacleConnectionScoreOnNeighbour.RawConnectionScore != NeighbourTileCalculator.ConnectionOnAllSidesScore)
             {
                 TileBackgroundPlacer tileBackgroundPlacer = new TileBackgroundPlacer(neighbour.Value);
                 tileBackgroundPlacer.PlaceBaseBackground(MazeTileBaseBackgroundType.DefaultGrass);

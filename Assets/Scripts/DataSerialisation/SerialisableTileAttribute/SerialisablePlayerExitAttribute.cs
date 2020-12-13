@@ -3,9 +3,10 @@
 [Serializable]
 public class SerialisablePlayerExitAttribute : SerialisableTileAttribute
 {
-    public SerialisablePlayerExitAttribute(int obstacleConnectionScore)
+    public SerialisablePlayerExitAttribute(TileConnectionScoreInfo ConnectionScoreInfo)
     {
         TileAttributeId = PlayerExitCode;
-        ObstacleConnectionScore = obstacleConnectionScore;
+        ObstacleConnectionScore = ConnectionScoreInfo.RawConnectionScore;
+        SpriteNumber = ConnectionScoreInfo.SpriteNumber;
     }
 }

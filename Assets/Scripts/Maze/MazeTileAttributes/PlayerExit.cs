@@ -20,9 +20,10 @@ public class PlayerExit : TileObstacle, IMazeTileAttribute, ITileConnectable
         }
     }
 
-    public override void WithConnectionScore(int obstacleConnectionScore)
+    public override void WithConnectionScoreInfo(TileConnectionScoreInfo obstacleConnectionScoreInfo)
     {
-        ConnectionScore = obstacleConnectionScore;
+        ConnectionScore = obstacleConnectionScoreInfo.RawConnectionScore;
+        SpriteNumber = ConnectionScore;
 
         if (ConnectionScore <= 0 || ConnectionScore > 8)
         {
@@ -31,7 +32,7 @@ public class PlayerExit : TileObstacle, IMazeTileAttribute, ITileConnectable
             return;
         }
 
-        _spriteRenderer.sprite = SpriteManager.Instance.DefaultDoor[ConnectionScore - 1];
+        _spriteRenderer.sprite = SpriteManager.Instance.DefaultDoor[SpriteNumber - 1];
     }
 
     public void OpenExit()

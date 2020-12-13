@@ -3,9 +3,10 @@
 [Serializable]
 public class SerialisableTileObstacleAttribute : SerialisableTileAttribute
 {
-    public SerialisableTileObstacleAttribute(int obstacleConnectionScore)
+    public SerialisableTileObstacleAttribute(TileConnectionScoreInfo obstacleConnectionScoreInfo)
     {
         TileAttributeId = ObstacleAttributeCode;
-        ObstacleConnectionScore = obstacleConnectionScore;
+        ObstacleConnectionScore = obstacleConnectionScoreInfo.RawConnectionScore;
+        SpriteNumber = obstacleConnectionScoreInfo.SpriteNumber;
     }
 }

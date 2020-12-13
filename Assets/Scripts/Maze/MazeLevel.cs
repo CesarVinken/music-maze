@@ -88,11 +88,11 @@ public class MazeLevel
             int tileAttributeId = serialisableTileAttribute.TileAttributeId;
             if (tileAttributeId == SerialisableTileAttribute.ObstacleAttributeCode)
             {
-                tileAttributePlacer.PlaceTileObstacle(ObstacleType.Wall, serialisableTileAttribute.ObstacleConnectionScore); //TODO, find a way to use polymorphism so we can cast as SerialisableTileObstacleAttribute instead of a general SerialisableTileAttribute
+                tileAttributePlacer.PlaceTileObstacle(ObstacleType.Bush, new TileConnectionScoreInfo(serialisableTileAttribute.ObstacleConnectionScore, serialisableTileAttribute.SpriteNumber)); //TODO, find a way to use polymorphism so we can cast as SerialisableTileObstacleAttribute instead of a general SerialisableTileAttribute
             }
             else if (tileAttributeId == SerialisableTileAttribute.PlayerExitCode)
             {
-                tileAttributePlacer.PlacePlayerExit(ObstacleType.Wall, serialisableTileAttribute.ObstacleConnectionScore);
+                tileAttributePlacer.PlacePlayerExit(ObstacleType.Bush, new TileConnectionScoreInfo(serialisableTileAttribute.ObstacleConnectionScore, serialisableTileAttribute.SpriteNumber));
             }
             else if (tileAttributeId == SerialisableTileAttribute.PlayerSpawnpointCode)
             {
@@ -121,7 +121,7 @@ public class MazeLevel
         {
             if (serialisableTileBackground.TileBackgroundId == SerialisableTileBackground.PathBackgroundCode)
             {
-                tileBackgroundPlacer.PlacePath(MazeTilePathType.Default, serialisableTileBackground.TileConnectionScore); //TODO, fix path type
+                tileBackgroundPlacer.PlacePath(MazeTilePathType.Default, new TileConnectionScoreInfo(serialisableTileBackground.TileConnectionScore)); //TODO, fix path type
             }
             else if(serialisableTileBackground.TileBackgroundId == SerialisableTileBackground.BaseBackgroundCode)
             {

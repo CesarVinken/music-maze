@@ -221,39 +221,47 @@ public class EditorGridGenerator : MonoBehaviour
         {
             if (gridLocation.Y == 0) // Bottom left
             {
-                return new SerialisableTileObstacleAttribute(8);
+                return new SerialisableTileObstacleAttribute(
+                    new TileConnectionScoreInfo(8));
             }
             else if (gridLocation.Y == _gridHeight - 1) // Top left
             {
-                return new SerialisableTileObstacleAttribute(6);
+                return new SerialisableTileObstacleAttribute(
+                    new TileConnectionScoreInfo(6));
             }
             else // Colomn left
             {
-                return new SerialisableTileObstacleAttribute(10);
+                return new SerialisableTileObstacleAttribute(
+                    new TileConnectionScoreInfo(10));
             }
         }
         else if (gridLocation.X == _gridWidth - 1)
         {
             if (gridLocation.Y == 0) // Bottom right
             {
-                return new SerialisableTileObstacleAttribute(11);
+                return new SerialisableTileObstacleAttribute(
+                    new TileConnectionScoreInfo(11));
             }
             else if (gridLocation.Y == _gridHeight - 1) // Top right
             {
-                return new SerialisableTileObstacleAttribute(9);
+                return new SerialisableTileObstacleAttribute(
+                    new TileConnectionScoreInfo(9));
             }
             else // Colomn right
             {
-                return new SerialisableTileObstacleAttribute(10);
+                return new SerialisableTileObstacleAttribute(
+                    new TileConnectionScoreInfo(10));
             }
         }
         else if (gridLocation.Y == 0) // Bottom row
         {
-            return new SerialisableTileObstacleAttribute(7);
+            return new SerialisableTileObstacleAttribute(
+                new TileConnectionScoreInfo(7));
         }
         else if (gridLocation.Y == _gridHeight - 1) // Top row
         {
-            return new SerialisableTileObstacleAttribute(7);
+            return new SerialisableTileObstacleAttribute(
+                new TileConnectionScoreInfo(7));
         }
 
         return null;

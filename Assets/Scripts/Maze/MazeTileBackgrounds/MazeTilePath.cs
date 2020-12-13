@@ -10,19 +10,23 @@ public class MazeTilePath : MonoBehaviour, IMazeTileBackground, ITileConnectable
 
     public MazeTilePathType MazeTilePathType;
 
-    private int connectionScore = -1;
+    private int _connectionScore = -1;
+    private int _spriteNumber = -1;
 
-    public int ConnectionScore { get => connectionScore; set => connectionScore = value; }
+    public int ConnectionScore { get => _connectionScore; set => _connectionScore = value; }
+    public int SpriteNumber { get => _spriteNumber; set => _spriteNumber = value; }
 
     public void WithPathType(MazeTilePathType mazeTilePathType)
     {
         MazeTilePathType = mazeTilePathType;
     }
 
-    public void WithConnectionScore(int score)
+    public void WithConnectionScoreInfo(TileConnectionScoreInfo connectionScoreInfo)
     {
-        ConnectionScore = score;
-        _sprite = SpriteManager.Instance.DefaultPath[ConnectionScore - 1];
+        ConnectionScore = connectionScoreInfo.RawConnectionScore;
+        SpriteNumber = connectionScoreInfo.SpriteNumber;
+
+        _sprite = SpriteManager.Instance.DefaultPath[SpriteNumber - 1];
         _spriteRenderer.sprite = _sprite;
     }
 
