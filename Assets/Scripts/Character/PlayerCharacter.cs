@@ -8,20 +8,18 @@ public class PlayerCharacter : Character
     public KeyboardInput KeyboardInput = KeyboardInput.None;
     public int PlayerNoInGame = 1;  // in multiplayer on multiple computers there can be a player 1 and player 2, while both use their Player1 keyboard input
     public PlayerNumber PlayerNumber = PlayerNumber.Player1;
-    public bool HasCalculatedPath = false;
     public bool HasReachedExit = false;
     public Tile LastTile;
 
-    private Vector2 _mobileFingerDownPosition;
     [SerializeField] private GameObject _selectionIndicatorPrefab = null;
     [SerializeField] private GameObject _selectionIndicatorGO = null;
 
     public GridLocation CurrentGridLocation;
     public int TimesCaught = 0;
 
-    private bool _isPressingPointer = false;
-    private float _pointerPresserTimer = 1;
-    private float _pointerPresserDelay = 0.25f;
+    private bool _isPressingPointerForSeconds = false;
+    [SerializeField] private float _pointerPresserTimer = 1;
+    private const float _pointerPresserDelay = 0.25f;
 
     public event Action PlayerExitsEvent;
     public event Action PlayerCaughtEvent;
@@ -101,47 +99,50 @@ public class PlayerCharacter : Character
             if (GameManager.Instance.CurrentPlatform == Platform.PC)
                 HandleKeyboardInput();
 
-            // To be replaced with pathdrawing system.
-            //CheckPointerInputOld();
-            //CheckPointerInputDrawingPathVersion();
-
-
-
-
-
-
-
-
-
-            if (Input.GetMouseButtonDown(0) &&  _pointerPresserTimer == 0)
-            {
-                //_isPressingPointer = true;
-                StartCoroutine(RunPointerPresserTimer());
-                //_pointerPresserTimerRunning = true;
-            }
             if (Input.GetMouseButtonUp(0))
             {
-                _isPressingPointer = false;
+                _isPressingPointerForSeconds = false;
                 _pointerPresserTimer = 0;
+
+                if (!IsPressingMovementKey() && !HasCalculatedTarget)
+                {
+                    _animationHandler.SetLocomotion(false);
+                    IsMoving = false;
+                }
             }
 
-            if (_isPressingPointer)//only check after we are pressing for x seconds
+            if (Input.GetMouseButton(0))
             {
-                CheckPointerInput();
+                if (!HasCalculatedTarget)
+                {
+                    _animationHandler.SetLocomotion(false);
+                    IsMoving = false;
+                }
             }
 
+            if (Input.GetMouseButtonDown(0) && _pointerPresserTimer == 0)
+            {
+                StartCoroutine(RunPointerPresserTimer());
+            }
 
+            if (_isPressingPointerForSeconds) //only check after we are pressing for x seconds
+            {
+                if (!Input.GetMouseButton(0))
+                {
+                    _isPressingPointerForSeconds = false;
+                    _pointerPresserTimer = 0;
 
-
-
-
-
-
-
-
-
-
-
+                    if (!IsPressingMovementKey())
+                    {
+                        _animationHandler.SetLocomotion(false);
+                    }
+                    IsMoving = false;
+                }
+                else
+                {
+                    CheckPointerInput();
+                }
+            }
 
             if (HasCalculatedTarget)
             {
@@ -157,13 +158,13 @@ public class PlayerCharacter : Character
 
     private IEnumerator RunPointerPresserTimer()
     {
-        while(_pointerPresserTimer < _pointerPresserDelay)
+        while (_pointerPresserTimer < _pointerPresserDelay)
         {
             yield return null;
             _pointerPresserTimer += Time.deltaTime;
         }
 
-        _isPressingPointer = true;
+        _isPressingPointerForSeconds = true;
         _pointerPresserTimer = 0;
     }
 
@@ -365,11 +366,13 @@ public class PlayerCharacter : Character
 
     public void OnTargetReached()
     {
-        if (!IsPressingMovementKey() && !_isPressingPointer)
+        SetHasCalculatedTarget(false);
+
+        if (!IsPressingMovementKey() && !_isPressingPointerForSeconds)
+        //if (!IsPressingMovementKey() && (!_isPressingPointerForSeconds || !Input.GetMouseButton(0)))
         {
             _animationHandler.SetLocomotion(false);
         }
-        SetHasCalculatedTarget(false);
         IsMoving = false;
     }
 
@@ -389,7 +392,7 @@ public class PlayerCharacter : Character
         IEnumerator coroutine = this.RespawnCharacter(this, freezeTime);
         StartCoroutine(coroutine);
 
-        _isPressingPointer = false;
+        _isPressingPointerForSeconds = false;
     }
 
     [PunRPC] // the part all clients need to be informed about

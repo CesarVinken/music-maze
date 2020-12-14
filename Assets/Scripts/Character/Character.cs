@@ -15,9 +15,9 @@ public class Character : MonoBehaviour
     public float BaseSpeed = 8f;
     public float Speed;
 
-    protected bool IsFrozen = false;
-    protected bool HasCalculatedTarget = false;
-    protected bool IsMoving = false;
+    [SerializeField] protected bool IsFrozen = false;
+    [SerializeField] protected bool HasCalculatedTarget = false;
+    [SerializeField] protected bool IsMoving = false;
     public bool IsCalculatingPath = false;
 
     [SerializeField] protected CharacterAnimationHandler _animationHandler;
