@@ -12,6 +12,11 @@ public class TileObstacle : MonoBehaviour, IMazeTileAttribute, ITileConnectable
     private int _connectionScore = -1;
     private int _spriteNumber = -1;
 
+    private int _sortingOrderBase = 5000;
+    private const float _sortingOrderCalculationOffset = .5f;
+
+    public int SortingOrderBase { get => _sortingOrderBase; set => _sortingOrderBase = value; }
+
     public int ConnectionScore { get => _connectionScore; set => _connectionScore = value; }
     public int SpriteNumber { get => _spriteNumber; set => _spriteNumber = value; }
 
@@ -23,6 +28,8 @@ public class TileObstacle : MonoBehaviour, IMazeTileAttribute, ITileConnectable
         {
             _spriteRenderer.sprite = SpriteManager.Instance.DefaultWall[0];
         }
+
+        _spriteRenderer.sortingOrder = (int)(_sortingOrderBase - transform.position.y - _sortingOrderCalculationOffset);
     }
 
     public virtual void WithConnectionScoreInfo(TileConnectionScoreInfo obstacleConnectionScoreInfo)

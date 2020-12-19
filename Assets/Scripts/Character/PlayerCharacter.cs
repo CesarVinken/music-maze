@@ -5,6 +5,9 @@ using System;
 
 public class PlayerCharacter : Character
 {
+    [Space(10)]
+    [Header("Player specific")]
+
     public KeyboardInput KeyboardInput = KeyboardInput.None;
     public int PlayerNoInGame = 1;  // in multiplayer on multiple computers there can be a player 1 and player 2, while both use their Player1 keyboard input
     public PlayerNumber PlayerNumber = PlayerNumber.Player1;
@@ -18,7 +21,7 @@ public class PlayerCharacter : Character
     public int TimesCaught = 0;
 
     private bool _isPressingPointerForSeconds = false;
-    [SerializeField] private float _pointerPresserTimer = 1;
+    private float _pointerPresserTimer = 1;
     private const float _pointerPresserDelay = 0.25f;
 
     public event Action PlayerExitsEvent;
@@ -31,8 +34,7 @@ public class PlayerCharacter : Character
         base.Awake();
 
         gameObject.name = PhotonView.Owner == null ? "Player 1" : PhotonView.Owner?.NickName;
-        Logger.Log("do we have a game manageR? " + GameManager.Instance == null);
-        Logger.Log("do we have a GameType? " + GameManager.Instance.GameType);
+
         if (GameManager.Instance.GameType == GameType.Multiplayer)
         {
             if (PhotonNetwork.IsMasterClient)

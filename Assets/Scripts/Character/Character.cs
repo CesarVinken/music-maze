@@ -9,36 +9,62 @@ public class Character : MonoBehaviour
 {
     public CharacterBlueprint CharacterBlueprint;
     public GridLocation StartingPosition;
+    public GameObject CharacterBody;
 
-    public ObjectDirection CharacterDirection = ObjectDirection.Down;
+    [Space(10)]
+    [Header("Rendering")]
 
-    public float BaseSpeed = 8f;
-    public float Speed;
+    [SerializeField] protected int _sortingOrderBase = 5000;
+    protected float _sortingOrderCalculationOffset = .5f;
+    protected float _sortingOrderTimer = 0;
+    protected float _sortingOrderTimerLimit = .2f;
 
+    [SerializeField] protected Renderer _bodyRenderer;
+
+    [Space(10)]
+    [Header("Locomotion")]
+
+    [SerializeField] private float _baseSpeed = 8f;
+    [SerializeField] private float _speed;
     [SerializeField] protected bool IsFrozen = false;
     [SerializeField] protected bool HasCalculatedTarget = false;
     [SerializeField] protected bool IsMoving = false;
+
+    [Space(10)]
+    [Header("Pathfinding")]
+
     public bool IsCalculatingPath = false;
 
+    [SerializeField] private Transform _characterPathTransform;
     [SerializeField] protected CharacterAnimationHandler _animationHandler;
     [SerializeField] protected CharacterPath _characterPath;   // change back to protected
     [SerializeField] protected Seeker _seeker;
+
+    [Space(10)]
+    [Header("Networking")]
+
     public PhotonView PhotonView;
-
-    public GameObject CharacterBody;
-
-    [SerializeField] private Transform _characterPathTransform;
 
     public void Awake()
     {
+        Guard.CheckIsNull(_bodyRenderer, "_bodyRenderer", gameObject);
         Guard.CheckIsNull(_animationHandler, "_animationHandler", gameObject);
         Guard.CheckIsNull(_characterPath, "_characterPath", gameObject);
         Guard.CheckIsNull(_seeker, "_seeker", gameObject);
 
-        Speed = BaseSpeed;
+        _speed = _baseSpeed;
         _characterPathTransform = _characterPath.transform;
     }
 
+    public void LateUpdate()
+    {
+        _sortingOrderTimer -= Time.deltaTime;
+        if(_sortingOrderTimer <= 0f)
+        {
+            _sortingOrderTimer = _sortingOrderTimerLimit;
+            _bodyRenderer.sortingOrder = (int)(_sortingOrderBase - transform.position.y - _sortingOrderCalculationOffset);
+        }
+    }
 
     public void SetStartingPosition(Character character, GridLocation gridLocation)
     {
