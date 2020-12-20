@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.EventSystems;
 
 public class EditorTileSelector : MonoBehaviour
 {
@@ -34,6 +35,9 @@ public class EditorTileSelector : MonoBehaviour
     void Update()
     {
         if (!EditorManager.InEditor) return;
+
+        if (PlayableLevelsPanel.IsOpen) return;
+
         if (MazeLevelManager.Instance.Level == null) return;
 
         if (Input.GetKeyDown(KeyCode.Mouse0))
@@ -84,6 +88,12 @@ public class EditorTileSelector : MonoBehaviour
 
     private void SelectTileWithMouse()
     {
+        if (EventSystem.current.IsPointerOverGameObject())
+        {
+            // clicked on the UI
+            return;
+        }
+
         Vector3 mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
         GridLocation selectedTileLocation = GridLocation.FindClosestGridTile(mousePosition);
 

@@ -11,12 +11,25 @@ public class PlayableLevelsPanel : MonoBehaviour
 
     public Dictionary<PlayableMazeLevelNameToggle, MazeLevelNameData> LevelNameToggleData = new Dictionary<PlayableMazeLevelNameToggle, MazeLevelNameData>();
 
+    public static bool IsOpen = false;
+
     public void Awake()
     {
         Guard.CheckIsNull(PlayableLevelNameTogglePrefab, "PlayableLevelNameTogglePrefab", gameObject);
         Guard.CheckIsNull(PlayableLevelListContainer, "PlayableLevelListContainer", gameObject);
 
         Instance = this;
+    }
+
+    public void Update()
+    {
+        if (IsOpen)
+        {
+            if (Input.GetKeyDown(KeyCode.Escape))
+            {
+                ClosePanel();
+            }
+        }
     }
 
     public void OnEnable()
@@ -37,6 +50,8 @@ public class PlayableLevelsPanel : MonoBehaviour
 
             LevelNameToggleData.Add(playableLevelNameToggle, levelNameData);
         }
+
+        IsOpen = true;
     }
 
     public void OnDisable()
@@ -46,6 +61,8 @@ public class PlayableLevelsPanel : MonoBehaviour
         {
             GameObject.Destroy(child.gameObject);
         }
+
+        IsOpen = false;
     }
 
     //Save changes to which levels are playable to the levels.json file
@@ -66,6 +83,8 @@ public class PlayableLevelsPanel : MonoBehaviour
         jsonMazeLevelListFileWriter.SerialiseData(levelNamesData);
 
         Logger.Log("Playable level selection changes were saved.");
+
+        ClosePanel();
     }
 
     public void ClosePanel()
