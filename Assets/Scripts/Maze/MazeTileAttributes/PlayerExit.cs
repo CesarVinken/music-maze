@@ -7,9 +7,10 @@ public class PlayerExit : TileObstacle, IMazeTileAttribute, ITileConnectable
     [SerializeField] private Sprite[] _defaultWallDoor;
 
 
-    public void Awake()
+    public override void Awake()
     {
         Guard.CheckIsNull(_spriteRenderer, "_spriteRenderer", gameObject);
+        base.Awake();
     }
 
     public void Start()

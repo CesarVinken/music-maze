@@ -20,7 +20,7 @@ public class TileObstacle : MonoBehaviour, IMazeTileAttribute, ITileConnectable
     public int ConnectionScore { get => _connectionScore; set => _connectionScore = value; }
     public int SpriteNumber { get => _spriteNumber; set => _spriteNumber = value; }
 
-    public void Awake()
+    public virtual void Awake()
     {
         Guard.CheckIsNull(_spriteRenderer, "_spriteRenderer", gameObject);
 

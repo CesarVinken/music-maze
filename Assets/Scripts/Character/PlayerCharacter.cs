@@ -27,7 +27,7 @@ public class PlayerCharacter : Character
     public event Action PlayerExitsEvent;
     public event Action PlayerCaughtEvent;
 
-    public void Awake()
+    public override void Awake()
     {
         Guard.CheckIsNull(_selectionIndicatorPrefab, "_selectionIndicatorPrefab", gameObject);
 

@@ -4,7 +4,7 @@ public class EnemySpawnpoint : CharacterSpawnpoint
 {
     [SerializeField] private Sprite _enemySpawnpointSprite;
 
-    public void Awake()
+    public override void Awake()
     {
         base.Awake();
         Guard.CheckIsNull(_enemySpawnpointSprite, "_enemySpawnpointSprite", gameObject);

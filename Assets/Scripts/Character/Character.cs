@@ -45,7 +45,7 @@ public class Character : MonoBehaviour
 
     public PhotonView PhotonView;
 
-    public void Awake()
+    public virtual void Awake()
     {
         Guard.CheckIsNull(_bodyRenderer, "_bodyRenderer", gameObject);
         Guard.CheckIsNull(_animationHandler, "_animationHandler", gameObject);

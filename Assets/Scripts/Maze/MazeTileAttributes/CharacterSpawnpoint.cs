@@ -16,7 +16,7 @@ public class CharacterSpawnpoint : MonoBehaviour, IMazeTileAttribute
 
     public int SortingOrderBase { get => _sortingOrderBase; set => _sortingOrderBase = value; }
 
-    public void Awake()
+    public virtual void Awake()
     {
         Guard.CheckIsNull(_spriteRenderer, "_spriteRenderer", gameObject);
 

@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class EnemyCharacter : Character
 {
-    public void Awake()
+    public override void Awake()
     {
         base.Awake();
         _characterPath.CharacterReachesTarget += OnTargetReached;
