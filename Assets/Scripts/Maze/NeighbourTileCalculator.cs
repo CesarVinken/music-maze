@@ -19,8 +19,6 @@ public struct TileModifierConnectionInfo<T> where T : MonoBehaviour, ITileConnec
 
 public class NeighbourTileCalculator
 {
-    
-
     public static readonly int ConnectionOnAllSidesScore = 16;
 
     public static TileConnectionScoreInfo MapNeighbourPlayerMarkEndsOfTile(Tile tile)
@@ -104,7 +102,7 @@ public class NeighbourTileCalculator
         return CalculateTileConnectionScore(pathRight, pathDown, pathLeft, pathUp);
     }
 
-    public static TileConnectionScoreInfo MapNeighbourObstaclesOfTile(Tile tile, ObstacleType obstacleType, bool isDoor)
+    public static TileConnectionScoreInfo MapNeighbourObstaclesOfTile(Tile tile, ObstacleType obstacleType)
     {
         Logger.Log($"Map neighbours of {tile.GridLocation.X},{tile.GridLocation.Y}");
         TileModifierConnectionInfo<TileObstacle> obstacleRight = new TileModifierConnectionInfo<TileObstacle>(Direction.Right);
@@ -151,10 +149,6 @@ public class NeighbourTileCalculator
             }
         }
 
-        if (isDoor)
-        {
-            return CalculateDoorConnectionScore(obstacleRight, obstacleDown, obstacleLeft, obstacleUp);
-        }
         return CalculateTileConnectionScore(obstacleRight, obstacleDown, obstacleLeft, obstacleUp);
     }
 
@@ -294,35 +288,6 @@ public class NeighbourTileCalculator
             Logger.Error($"Type {modifierType} was not yet implemented for Tile Connetion Register");
             return null;
         }
-    }
-
-    private static TileConnectionScoreInfo CalculateDoorConnectionScore(TileModifierConnectionInfo<TileObstacle> right, TileModifierConnectionInfo<TileObstacle> down, TileModifierConnectionInfo<TileObstacle> left, TileModifierConnectionInfo<TileObstacle> up)
-    {
-        if (right.HasConnection)
-        {
-            if (left.HasConnection)
-            {
-                return new TileConnectionScoreInfo(4);
-            }
-            return new TileConnectionScoreInfo(2);
-        }
-        if (left.HasConnection)
-        {
-            return new TileConnectionScoreInfo(3);
-        }
-        if (down.HasConnection)
-        {
-            if (up.HasConnection)
-            {
-                return new TileConnectionScoreInfo(8);
-            }
-            return new TileConnectionScoreInfo(6);
-        }
-        if (up.HasConnection)
-        {
-            return new TileConnectionScoreInfo(7);
-        }
-        return new TileConnectionScoreInfo(1);
     }
     
     private static TileConnectionScoreInfo Calculate16TileMapConnectionScore(bool right, bool down, bool left, bool up)

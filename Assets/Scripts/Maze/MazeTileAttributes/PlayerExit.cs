@@ -4,12 +4,17 @@ public class PlayerExit : TileObstacle, IMazeTileAttribute, ITileConnectable
 {
     public bool IsOpen;
 
-    [SerializeField] private Sprite[] _defaultWallDoor;
+    [SerializeField] private SpriteRenderer _secondarySpriteRenderer; // this sprite always comes in front of things, such as the lower half of a door that is viewed from the side.
 
+    private int _secondarySpriteNumber;
+    private int _secondaryGateSpriteSortingOrderBase = 5001; // should be in front of tile marker and path layers
+    private const float _secondaryGateSpriteSortingOrderCalculationOffset = .5f;
 
+    public int SecondaryGateSpriteSortingOrderBase { get => _secondaryGateSpriteSortingOrderBase; set => _secondaryGateSpriteSortingOrderBase = value; }
     public override void Awake()
     {
         Guard.CheckIsNull(_spriteRenderer, "_spriteRenderer", gameObject);
+        Guard.CheckIsNull(_secondarySpriteRenderer, "_spriteRendererForInFrontOfThings", gameObject);
         base.Awake();
     }
 
@@ -24,16 +29,29 @@ public class PlayerExit : TileObstacle, IMazeTileAttribute, ITileConnectable
     public override void WithConnectionScoreInfo(TileConnectionScoreInfo obstacleConnectionScoreInfo)
     {
         ConnectionScore = obstacleConnectionScoreInfo.RawConnectionScore;
-        SpriteNumber = ConnectionScore;
 
-        if (ConnectionScore <= 0 || ConnectionScore > 8)
+        int[] spriteNumbers = TileDoorRegister._closedDoorSpriteNumberRegister[ConnectionScore];
+        if(spriteNumbers.Length != 2)
         {
-            Logger.Warning($"obstacleConnectionScore {ConnectionScore} should be between 1 and 8");
-            _spriteRenderer.sprite = SpriteManager.Instance.DefaultDoor[0];
-            return;
+            spriteNumbers = new[] { 1, 7};
         }
 
+        SpriteNumber = spriteNumbers[0];
+        _secondarySpriteNumber = spriteNumbers[1];
+
+
         _spriteRenderer.sprite = SpriteManager.Instance.DefaultDoor[SpriteNumber - 1];
+        _secondarySpriteRenderer.sprite = SpriteManager.Instance.DefaultDoor[_secondarySpriteNumber - 1];
+
+        if(ConnectionScore == 0000) // side view left/right
+        {
+            //TODO: set sprite order so it appears in front of the player but behind the tile down to it (such as overhangingtrees)
+            _secondarySpriteRenderer.sortingOrder = (int)(_secondaryGateSpriteSortingOrderBase - transform.position.y - _secondaryGateSpriteSortingOrderCalculationOffset);
+        }
+        else
+        {
+            //_secondarySpriteRenderer.sortingOrder = null;
+        }
     }
 
     public void OpenExit()
@@ -41,7 +59,8 @@ public class PlayerExit : TileObstacle, IMazeTileAttribute, ITileConnectable
         Tile.Walkable = true;
         IsOpen = true;
         
-        _spriteRenderer.sprite = SpriteManager.Instance.DefaultDoor[ConnectionScore - 1 + 8]; // + 8 because the last two rows of the sprites are the Opened versions of the same sprites
+        _spriteRenderer.sprite = SpriteManager.Instance.DefaultDoor[SpriteNumber - 1 + 3]; // + 3 to get to the 'open' version of the sprite
+        _secondarySpriteRenderer.sprite = SpriteManager.Instance.DefaultDoor[_secondarySpriteNumber - 1 + 3];
 
         gameObject.layer = 9; // set layer to PlayerOnly, which is layer 9. Should not be hardcoded
         _spriteRenderer.gameObject.layer = 9;
@@ -54,6 +73,9 @@ public class PlayerExit : TileObstacle, IMazeTileAttribute, ITileConnectable
     {
         Tile.Walkable = false;
         IsOpen = false;
+
+        _spriteRenderer.sprite = SpriteManager.Instance.DefaultDoor[SpriteNumber - 1];
+        _secondarySpriteRenderer.sprite = SpriteManager.Instance.DefaultDoor[_secondarySpriteNumber - 1];
 
         gameObject.layer = 8; // set layer to Unwalkable, which is layer 8. Should not be hardcoded
         _spriteRenderer.gameObject.layer = 8;

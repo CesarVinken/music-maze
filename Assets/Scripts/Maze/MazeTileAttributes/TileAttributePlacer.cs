@@ -19,7 +19,7 @@ public class TileAttributePlacer
     // called in editor when calculations are needed
     public void PlacePlayerExit(ObstacleType obstacleType)
     {
-        TileConnectionScoreInfo obstacleConnectionScore = NeighbourTileCalculator.MapNeighbourObstaclesOfTile(_tile, obstacleType, true);
+        TileConnectionScoreInfo obstacleConnectionScore = NeighbourTileCalculator.MapNeighbourObstaclesOfTile(_tile, obstacleType);
         Logger.Log($"We calculated an obstacle connection type score of {obstacleConnectionScore} for location {_tile.GridLocation.X}, {_tile.GridLocation.Y}");
 
         PlayerExit playerExit = (PlayerExit)InstantiateTileAttributeGO<PlayerExit>();
@@ -40,12 +40,7 @@ public class TileAttributePlacer
             if (tileObstacleOnNeighbour == null) continue;
             Logger.Log($"We will look for connections for neighbour {neighbour.Value.GridLocation.X},{neighbour.Value.GridLocation.Y}, which is {neighbour.Key} of {_tile.GridLocation.X},{_tile.GridLocation.Y}");
 
-            bool neighbourIsDoor = false;
-            if(tileObstacleOnNeighbour is PlayerExit)
-            {
-                neighbourIsDoor = true;
-            }
-            TileConnectionScoreInfo obstacleConnectionScoreOnNeighbour = NeighbourTileCalculator.MapNeighbourObstaclesOfTile(neighbour.Value, obstacleType, neighbourIsDoor);
+            TileConnectionScoreInfo obstacleConnectionScoreOnNeighbour = NeighbourTileCalculator.MapNeighbourObstaclesOfTile(neighbour.Value, obstacleType);
             Logger.Log($"We calculated an obstacle connection type score of {obstacleConnectionScoreOnNeighbour} for location {neighbour.Value.GridLocation.X}, {neighbour.Value.GridLocation.Y}");
 
             //update connection score on neighbour
@@ -69,7 +64,7 @@ public class TileAttributePlacer
     public void PlaceTileObstacle(ObstacleType obstacleType)
     {
         // check connections of this tile
-        TileConnectionScoreInfo obstacleConnectionScore = NeighbourTileCalculator.MapNeighbourObstaclesOfTile(_tile, obstacleType, false);
+        TileConnectionScoreInfo obstacleConnectionScore = NeighbourTileCalculator.MapNeighbourObstaclesOfTile(_tile, obstacleType);
         Logger.Log($"We calculated an obstacle connection type score of {obstacleConnectionScore} for location {_tile.GridLocation.X}, {_tile.GridLocation.Y}");
 
         TileObstacle tileObstacle = (TileObstacle)InstantiateTileAttributeGO<TileObstacle>();
@@ -94,14 +89,8 @@ public class TileAttributePlacer
             
             if (tileObstacleOnNeighbour == null) continue;
 
-            bool neighbourIsDoor = false;
-            if (tileObstacleOnNeighbour is PlayerExit)
-            {
-                neighbourIsDoor = true;
-            }
-
             Logger.Log($"We will look for connections for neighbour {neighbour.Value.GridLocation.X},{neighbour.Value.GridLocation.Y}, which is {neighbour.Key} of {_tile.GridLocation.X},{_tile.GridLocation.Y}");
-            TileConnectionScoreInfo obstacleConnectionScoreOnNeighbour = NeighbourTileCalculator.MapNeighbourObstaclesOfTile(neighbour.Value, obstacleType, neighbourIsDoor);
+            TileConnectionScoreInfo obstacleConnectionScoreOnNeighbour = NeighbourTileCalculator.MapNeighbourObstaclesOfTile(neighbour.Value, obstacleType);
             Logger.Log($"We calculated an obstacle connection type score of {obstacleConnectionScoreOnNeighbour} for location {neighbour.Value.GridLocation.X}, {neighbour.Value.GridLocation.Y}");
 
             //update connection score on neighbour
