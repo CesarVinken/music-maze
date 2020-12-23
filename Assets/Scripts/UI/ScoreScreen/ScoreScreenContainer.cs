@@ -1,4 +1,5 @@
 ﻿using Photon.Pun;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -58,6 +59,17 @@ public class ScoreScreenContainer : MonoBehaviour
 
     public void OnMazeLevelCompleted()
     {
+        // wait a moment so that the player can see exit animation before bringing up the scores.
+        IEnumerator coroutine = OnMazeLevelCompletedCoroutine();
+        StartCoroutine(coroutine);
+    }
+
+    private IEnumerator OnMazeLevelCompletedCoroutine()
+    {
+        float waitTime = 1.5f;
+
+        yield return new WaitForSeconds(waitTime);
+
         _scoreCalculator.ResetMazeLevelScore();
         _scoreCalculator.CalculateScores();
 

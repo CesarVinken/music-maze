@@ -27,7 +27,6 @@ public struct PlayerScore
 
 public class ScoreCalculator
 {
-
     public const int MarkedTileValue = 10;
     public const int PlayerCaughtPenaltyValue = 10;
 
