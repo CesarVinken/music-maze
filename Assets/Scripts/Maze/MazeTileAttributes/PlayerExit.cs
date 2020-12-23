@@ -7,7 +7,7 @@ public class PlayerExit : TileObstacle, IMazeTileAttribute, ITileConnectable
     [SerializeField] private SpriteRenderer _secondarySpriteRenderer; // this sprite always comes in front of things, such as the lower half of a door that is viewed from the side.
 
     private int _secondarySpriteNumber;
-    private int _secondaryGateSpriteSortingOrderBase = 5001; // should be in front of tile marker and path layers
+    private int _secondaryGateSpriteSortingOrderBase = 501; // should be in front of tile marker and path layers
     private const float _secondaryGateSpriteSortingOrderCalculationOffset = .5f;
 
     public int SecondaryGateSpriteSortingOrderBase { get => _secondaryGateSpriteSortingOrderBase; set => _secondaryGateSpriteSortingOrderBase = value; }
@@ -43,10 +43,10 @@ public class PlayerExit : TileObstacle, IMazeTileAttribute, ITileConnectable
         _spriteRenderer.sprite = SpriteManager.Instance.DefaultDoor[SpriteNumber - 1];
         _secondarySpriteRenderer.sprite = SpriteManager.Instance.DefaultDoor[_secondarySpriteNumber - 1];
 
-        if(ConnectionScore == 0000) // side view left/right
+        if(_secondarySpriteNumber == 19 || _secondarySpriteNumber == 20 || _secondarySpriteNumber == 21) // lower part of side view left/right
         {
             //TODO: set sprite order so it appears in front of the player but behind the tile down to it (such as overhangingtrees)
-            _secondarySpriteRenderer.sortingOrder = (int)(_secondaryGateSpriteSortingOrderBase - transform.position.y - _secondaryGateSpriteSortingOrderCalculationOffset);
+            _secondarySpriteRenderer.sortingOrder = (int)(_secondaryGateSpriteSortingOrderBase - transform.position.y - _secondaryGateSpriteSortingOrderCalculationOffset) * 10;
         }
         else
         {

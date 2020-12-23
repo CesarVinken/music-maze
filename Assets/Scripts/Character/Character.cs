@@ -1,5 +1,6 @@
 ﻿using Pathfinding;
 using Photon.Pun;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,7 +15,7 @@ public class Character : MonoBehaviour
     [Space(10)]
     [Header("Rendering")]
 
-    [SerializeField] protected int _sortingOrderBase = 5000;
+    [SerializeField] protected int _sortingOrderBase = 500;
     protected float _sortingOrderCalculationOffset = .5f;
     protected float _sortingOrderTimer = 0;
     protected float _sortingOrderTimerLimit = .2f;
@@ -62,7 +63,7 @@ public class Character : MonoBehaviour
         if(_sortingOrderTimer <= 0f)
         {
             _sortingOrderTimer = _sortingOrderTimerLimit;
-            _bodyRenderer.sortingOrder = (int)(_sortingOrderBase - transform.position.y - _sortingOrderCalculationOffset);
+            _bodyRenderer.sortingOrder = (int)(Math.Round(_sortingOrderBase - transform.position.y - _sortingOrderCalculationOffset) * 10);
         }
     }
 

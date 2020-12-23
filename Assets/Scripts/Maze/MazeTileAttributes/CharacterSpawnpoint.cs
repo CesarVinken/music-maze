@@ -11,7 +11,7 @@ public class CharacterSpawnpoint : MonoBehaviour, IMazeTileAttribute
 
     [SerializeField] protected SpriteRenderer _spriteRenderer;
 
-    private int _sortingOrderBase = 5000;
+    private int _sortingOrderBase = 500;
     private const float _sortingOrderCalculationOffset = .5f;
 
     public int SortingOrderBase { get => _sortingOrderBase; set => _sortingOrderBase = value; }
@@ -22,7 +22,7 @@ public class CharacterSpawnpoint : MonoBehaviour, IMazeTileAttribute
 
         CharacterBlueprint = new CharacterBlueprint(CharacterType);
 
-        _spriteRenderer.sortingOrder = (int)(_sortingOrderBase - transform.position.y - _sortingOrderCalculationOffset);
+        _spriteRenderer.sortingOrder = (int)(_sortingOrderBase - transform.position.y - _sortingOrderCalculationOffset) * 10;
     }
 
     public void Start()

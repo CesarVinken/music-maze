@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 
 public class PlayerOnly : MonoBehaviour, IMazeTileAttribute
 {
@@ -9,7 +10,7 @@ public class PlayerOnly : MonoBehaviour, IMazeTileAttribute
 
     [SerializeField] private SpriteRenderer _spriteRenderer;
 
-    private int _sortingOrderBase = 5001; // should be in front of tile marker and path layers
+    private int _sortingOrderBase = 500; // MAKE SURE that tile should be in front of tile marker and path layers AND player
     private const float _sortingOrderCalculationOffset = .5f;
 
     public int SortingOrderBase { get => _sortingOrderBase; set => _sortingOrderBase = value; }
@@ -23,7 +24,7 @@ public class PlayerOnly : MonoBehaviour, IMazeTileAttribute
             _spriteRenderer.sprite = SpriteManager.Instance.Bush[0];
         }
 
-        _spriteRenderer.sortingOrder = (int)(_sortingOrderBase - transform.position.y - _sortingOrderCalculationOffset);
+        _spriteRenderer.sortingOrder = (int)(_sortingOrderBase - transform.position.y - _sortingOrderCalculationOffset) * 10 + 1; // plus 1 should place it before a character when it is on the same y as the character
     }
 
     public void WithPlayerOnlyType(PlayerOnlyType playerOnlyType)
