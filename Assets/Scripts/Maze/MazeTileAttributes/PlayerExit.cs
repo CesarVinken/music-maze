@@ -43,14 +43,9 @@ public class PlayerExit : TileObstacle, IMazeTileAttribute, ITileConnectable
         _spriteRenderer.sprite = SpriteManager.Instance.DefaultDoor[SpriteNumber - 1];
         _secondarySpriteRenderer.sprite = SpriteManager.Instance.DefaultDoor[_secondarySpriteNumber - 1];
 
-        if(_secondarySpriteNumber == 19 || _secondarySpriteNumber == 20 || _secondarySpriteNumber == 21) // lower part of side view left/right
+        if (_secondarySpriteRenderer.sprite)
         {
-            //TODO: set sprite order so it appears in front of the player but behind the tile down to it (such as overhangingtrees)
             _secondarySpriteRenderer.sortingOrder = (int)(_secondaryGateSpriteSortingOrderBase - transform.position.y - _secondaryGateSpriteSortingOrderCalculationOffset) * 10;
-        }
-        else
-        {
-            //_secondarySpriteRenderer.sortingOrder = null;
         }
     }
 

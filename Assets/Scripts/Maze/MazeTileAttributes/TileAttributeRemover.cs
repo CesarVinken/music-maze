@@ -20,6 +20,7 @@ public class TileAttributeRemover
         _tile.Walkable = true;
         TileObstacle tileObstacle = (TileObstacle)_tile.MazeTileAttributes.FirstOrDefault(attribute => attribute is TileObstacle);
         if (tileObstacle == null) return;
+        if (tileObstacle is PlayerExit) return;
 
         ObstacleType obstacleType = tileObstacle.ObstacleType;
         int oldConnectionScore = tileObstacle.ConnectionScore;
