@@ -99,7 +99,7 @@ public class NeighbourTileCalculator
             }
         }
 
-        return CalculateTileConnectionScore(pathRight, pathDown, pathLeft, pathUp);
+        return TileConnectionRegister.CalculateTileConnectionScore(pathRight, pathDown, pathLeft, pathUp);
     }
 
     public static TileConnectionScoreInfo MapNeighbourObstaclesOfTile(Tile tile, ObstacleType obstacleType)
@@ -149,7 +149,7 @@ public class NeighbourTileCalculator
             }
         }
 
-        return CalculateTileConnectionScore(obstacleRight, obstacleDown, obstacleLeft, obstacleUp);
+        return TileConnectionRegister.CalculateTileConnectionScore(obstacleRight, obstacleDown, obstacleLeft, obstacleUp);
     }
 
     public static List<T> GetUpdatedTileModifiersForVariation<T>(Tile tile, T thisMazeTileModifier, string modifierSubtype) where T : MonoBehaviour, ITileConnectable
@@ -203,71 +203,6 @@ public class NeighbourTileCalculator
         }
 
         return CalculateTileConnectionScoreForVariations(thisMazeTileModifier, connectionRight, connectionDown, connectionLeft, connectionUp);
-    }
-
-    private static TileConnectionScoreInfo CalculateTileConnectionScore<T>(TileModifierConnectionInfo<T> right, TileModifierConnectionInfo<T> down, TileModifierConnectionInfo<T> left, TileModifierConnectionInfo<T> up) where T : MonoBehaviour, ITileConnectable
-    {
-        if (right.HasConnection)
-        {
-            if (down.HasConnection)
-            {
-                if (left.HasConnection)
-                {
-                    if (up.HasConnection)
-                    {
-                        return new TileConnectionScoreInfo(16);
-                    }
-                    return new TileConnectionScoreInfo(31);
-                }
-                if (up.HasConnection)
-                {
-                    return new TileConnectionScoreInfo(32);
-                }
-                return new TileConnectionScoreInfo(21);
-            }
-            if (left.HasConnection)
-            {
-                if (up.HasConnection)
-                {
-                    return new TileConnectionScoreInfo(33);
-                }
-                return new TileConnectionScoreInfo(22);
-            }
-            if (up.HasConnection)
-            {
-                return new TileConnectionScoreInfo(23);
-            }
-            return new TileConnectionScoreInfo(17);
-        }
-        if (down.HasConnection)
-        {
-            if (left.HasConnection)
-            {
-                if (up.HasConnection)
-                {
-                    return new TileConnectionScoreInfo(34);
-                }
-                return new TileConnectionScoreInfo(25);
-            }
-            if (up.HasConnection)
-            {
-                return new TileConnectionScoreInfo(24);
-            }
-            return new TileConnectionScoreInfo(18);
-        }
-        if (left.HasConnection)
-        {
-            if (up.HasConnection)
-            {
-                return new TileConnectionScoreInfo(26);
-            }
-            return new TileConnectionScoreInfo(19);
-        }
-        if (up.HasConnection)
-        {
-            return new TileConnectionScoreInfo(20);
-        }
-        return new TileConnectionScoreInfo(1);
     }
 
     private static List<T> CalculateTileConnectionScoreForVariations<T>(T thisMazeTileAttribute, TileModifierConnectionInfo<T> connectionRight, TileModifierConnectionInfo<T> connectionDown, TileModifierConnectionInfo<T> connectionLeft, TileModifierConnectionInfo<T> connectionUp) where T : MonoBehaviour, ITileConnectable
