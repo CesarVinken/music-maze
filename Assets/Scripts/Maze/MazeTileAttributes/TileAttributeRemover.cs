@@ -12,7 +12,18 @@ public class TileAttributeRemover
 
     public void RemovePlayerExit()
     {
-        RemoveTileObstacle();
+        //RemoveTileObstacle();
+
+        _tile.Walkable = true;
+        PlayerExit playerExit = (PlayerExit)_tile.MazeTileAttributes.FirstOrDefault(attribute => attribute is PlayerExit);
+        if (playerExit == null) return;
+
+        ObstacleType obstacleType = playerExit.ObstacleType;
+
+        _tile.MazeTileAttributes.Remove(playerExit);
+        playerExit.Remove();
+
+        UpdateNeighboursForRemovedObstacle(obstacleType);
     }
 
     public void RemoveTileObstacle()
@@ -37,25 +48,7 @@ public class TileAttributeRemover
         tileObstacle.Remove();
 
         //After removing tile, check with neighbour tiles if wall connections should be updated
-        foreach (KeyValuePair<ObjectDirection, Tile> neighbour in _tile.Neighbours)
-        {
-            TileObstacle tileObstacleOnNeighbour = neighbour.Value.TryGetTileObstacle();
-
-            if (tileObstacleOnNeighbour == null) continue;
-            Logger.Log($"We will look for connections for neighbour {neighbour.Value.GridLocation.X},{neighbour.Value.GridLocation.Y}, which is {neighbour.Key} of {_tile.GridLocation.X},{_tile.GridLocation.Y}");
-            TileConnectionScoreInfo obstacleConnectionScoreOnNeighbour = NeighbourTileCalculator.MapNeighbourObstaclesOfTile(neighbour.Value, obstacleType);
-            Logger.Log($"We calculated an obstacle connection type score of {obstacleConnectionScoreOnNeighbour} for location {neighbour.Value.GridLocation.X}, {neighbour.Value.GridLocation.Y}");
-
-            //update connection score on neighbour
-            tileObstacleOnNeighbour.WithConnectionScoreInfo(obstacleConnectionScoreOnNeighbour);
-
-            // If needed, place a background
-            if (obstacleConnectionScoreOnNeighbour.RawConnectionScore != NeighbourTileCalculator.ConnectionOnAllSidesScore)
-            {
-                TileBackgroundPlacer tileBackgroundPlacer = new TileBackgroundPlacer(neighbour.Value);
-                tileBackgroundPlacer.PlaceBaseBackground(MazeTileBaseBackgroundType.DefaultGrass);
-            }
-        }
+        UpdateNeighboursForRemovedObstacle(obstacleType);
     }
 
     public void RemovePlayerSpawnpoint()
@@ -80,5 +73,28 @@ public class TileAttributeRemover
         if (playerOnlyAttribute == null) return;
         _tile.MazeTileAttributes.Remove(playerOnlyAttribute);
         playerOnlyAttribute.Remove();
+    }
+
+    private void UpdateNeighboursForRemovedObstacle(ObstacleType obstacleType)
+    {
+        foreach (KeyValuePair<ObjectDirection, Tile> neighbour in _tile.Neighbours)
+        {
+            TileObstacle tileObstacleOnNeighbour = neighbour.Value.TryGetTileObstacle();
+
+            if (tileObstacleOnNeighbour == null) continue;
+            Logger.Log($"We will look for connections for neighbour {neighbour.Value.GridLocation.X},{neighbour.Value.GridLocation.Y}, which is {neighbour.Key} of {_tile.GridLocation.X},{_tile.GridLocation.Y}");
+            TileConnectionScoreInfo obstacleConnectionScoreOnNeighbour = NeighbourTileCalculator.MapNeighbourObstaclesOfTile(neighbour.Value, obstacleType);
+            Logger.Log($"We calculated an obstacle connection type score of {obstacleConnectionScoreOnNeighbour} for location {neighbour.Value.GridLocation.X}, {neighbour.Value.GridLocation.Y}");
+
+            //update connection score on neighbour
+            tileObstacleOnNeighbour.WithConnectionScoreInfo(obstacleConnectionScoreOnNeighbour);
+
+            // If needed, place a background
+            if (obstacleConnectionScoreOnNeighbour.RawConnectionScore != NeighbourTileCalculator.ConnectionOnAllSidesScore)
+            {
+                TileBackgroundPlacer tileBackgroundPlacer = new TileBackgroundPlacer(neighbour.Value);
+                tileBackgroundPlacer.PlaceBaseBackground(MazeTileBaseBackgroundType.DefaultGrass);
+            }
+        }
     }
 }
