@@ -28,6 +28,6 @@ public class EditorPlayerExitTileAttribute : EditorMazeTileAttributeModifier
 
     public override Sprite GetSprite()
     {
-        return EditorUIContainer.Instance.TileAttributeSprites[2];
+        return EditorUIContainer.Instance.TileAttributeIcons[1];
     }
 }

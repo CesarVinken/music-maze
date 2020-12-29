@@ -1,4 +1,6 @@
-﻿public class EditorMazeTileBackgroundSelector : EditorMazeTileModifierSelector
+﻿using UnityEngine;
+
+public class EditorMazeTileBackgroundSelector : EditorMazeTileModifierSelector
 {
     public EditorMazeTileBackgroundSelector(EditorSelectedModifierContainer editorSelectedModifierContainer) : base(editorSelectedModifierContainer) { }
 
@@ -19,7 +21,7 @@
     {
         IEditorMazeTileBackground background = _editorSelectedModifierContainer.EditorMazeTileBackgrounds[modifierIndex];
         _editorSelectedModifierContainer.SelectedModifierLabel.text = GetSelectedModifierLabel(background.Name);
-        _editorSelectedModifierContainer.SelectedModifierSprite.sprite = background.Sprite;
+        _editorSelectedModifierContainer.SelectedModifierSprite.sprite = background.GetSprite();
         EditorManager.SelectedMazeTileBackgroundModifierIndex = modifierIndex;
     }
 }

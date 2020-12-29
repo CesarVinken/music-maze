@@ -8,7 +8,8 @@ public class EditorUIContainer : MonoBehaviour
     public GameObject EditorUIGO;
     public GameObject PlayableLevelsPanelGO;
 
-    public Sprite[] TileAttributeSprites;
+    public Sprite DefaultIcon;
+    public Sprite[] TileAttributeIcons;
 
     public void Awake()
     {

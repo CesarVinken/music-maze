@@ -15,4 +15,9 @@ public abstract class EditorMazeTileBackgroundModifier : IEditorMazeTileBackgrou
     {
         throw new System.NotImplementedException();
     }
+
+    public virtual Sprite GetSprite()
+    {
+        return EditorUIContainer.Instance.DefaultIcon;
+    }
 }

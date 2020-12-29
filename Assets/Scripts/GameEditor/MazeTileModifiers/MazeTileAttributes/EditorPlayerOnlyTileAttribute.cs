@@ -28,6 +28,6 @@ public class EditorPlayerOnlyTileAttribute : EditorMazeTileAttributeModifier
 
     public override Sprite GetSprite()
     {
-        return EditorUIContainer.Instance.TileAttributeSprites[5];
+        return EditorUIContainer.Instance.TileAttributeIcons[4];
     }
 }

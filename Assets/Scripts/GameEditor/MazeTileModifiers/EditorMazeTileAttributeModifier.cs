@@ -18,6 +18,6 @@ public abstract class EditorMazeTileAttributeModifier : IEditorMazeTileAttribute
 
     public virtual Sprite GetSprite()
     {
-        return EditorUIContainer.Instance.TileAttributeSprites[0];
+        return EditorUIContainer.Instance.DefaultIcon;
     }
 }
