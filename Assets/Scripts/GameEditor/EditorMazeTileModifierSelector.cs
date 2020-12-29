@@ -12,6 +12,6 @@
 
     protected string GetSelectedModifierLabel(string modifierName)
     {
-        return $"Selected: {modifierName}";
+        return $"{modifierName}";
     }
 }

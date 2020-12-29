@@ -8,4 +8,5 @@ public interface IEditorMazeTileAttribute : IEditorMazeTileModifierType
 
     void PlaceAttribute(Tile tile);
     void PlaceAttributeVariation(Tile tile);
+    Sprite GetSprite();
 }

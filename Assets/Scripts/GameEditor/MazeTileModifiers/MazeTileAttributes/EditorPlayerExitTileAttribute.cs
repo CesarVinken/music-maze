@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using UnityEngine;
 
 public class EditorPlayerExitTileAttribute : EditorMazeTileAttributeModifier
 {
@@ -23,5 +24,10 @@ public class EditorPlayerExitTileAttribute : EditorMazeTileAttributeModifier
         }
 
         tileAttributeRemover.RemovePlayerExit();
+    }
+
+    public override Sprite GetSprite()
+    {
+        return EditorUIContainer.Instance.TileAttributeSprites[2];
     }
 }

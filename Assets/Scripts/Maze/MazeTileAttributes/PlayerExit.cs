@@ -39,7 +39,6 @@ public class PlayerExit : TileObstacle, IMazeTileAttribute, ITileConnectable
         SpriteNumber = spriteNumbers[0];
         _secondarySpriteNumber = spriteNumbers[1];
 
-
         _spriteRenderer.sprite = SpriteManager.Instance.DefaultDoor[SpriteNumber - 1];
         _secondarySpriteRenderer.sprite = SpriteManager.Instance.DefaultDoor[_secondarySpriteNumber - 1];
 

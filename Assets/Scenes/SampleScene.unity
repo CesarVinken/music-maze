@@ -6293,7 +6293,7 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1881419487}
-  m_RootOrder: 0
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
@@ -6714,8 +6714,8 @@ RectTransform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
-  - {fileID: 1758718693}
   - {fileID: 1937872327}
+  - {fileID: 1758718693}
   m_Father: {fileID: 64180158}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -6973,7 +6973,7 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1881419487}
-  m_RootOrder: 1
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
@@ -7316,6 +7316,13 @@ MonoBehaviour:
   EditorModeStatusTextGO: {fileID: 1606556628}
   EditorUIGO: {fileID: 379861474}
   PlayableLevelsPanelGO: {fileID: 1125860676}
+  TileAttributeSprites:
+  - {fileID: -1104929532417864259, guid: e103ef6a03d89e843a9e869411681a7e, type: 3}
+  - {fileID: -6222529915385023436, guid: e103ef6a03d89e843a9e869411681a7e, type: 3}
+  - {fileID: -1593288939001201457, guid: e103ef6a03d89e843a9e869411681a7e, type: 3}
+  - {fileID: 4216386145348086018, guid: e103ef6a03d89e843a9e869411681a7e, type: 3}
+  - {fileID: -2824705566531166528, guid: e103ef6a03d89e843a9e869411681a7e, type: 3}
+  - {fileID: 3637463510864136836, guid: e103ef6a03d89e843a9e869411681a7e, type: 3}
 --- !u!1 &2037339656
 GameObject:
   m_ObjectHideFlags: 0

@@ -20,7 +20,7 @@
     {
         IEditorMazeTileAttribute attribute = _editorSelectedModifierContainer.EditorMazeTileAttributes[modifierIndex];
         _editorSelectedModifierContainer.SelectedModifierLabel.text = GetSelectedModifierLabel(attribute.Name);
-        _editorSelectedModifierContainer.SelectedModifierSprite.sprite = attribute.Sprite;
+        _editorSelectedModifierContainer.SelectedModifierSprite.sprite = attribute.GetSprite();
         EditorManager.SelectedMazeTileAttributeModifierIndex = modifierIndex;
     }
 }

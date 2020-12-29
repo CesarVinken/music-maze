@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using UnityEngine;
 
 public class EditorPlayerOnlyTileAttribute : EditorMazeTileAttributeModifier
 {
@@ -23,5 +24,10 @@ public class EditorPlayerOnlyTileAttribute : EditorMazeTileAttributeModifier
         }
 
         tileAttributeRemover.RemovePlayerOnlyAttribute();
+    }
+
+    public override Sprite GetSprite()
+    {
+        return EditorUIContainer.Instance.TileAttributeSprites[5];
     }
 }

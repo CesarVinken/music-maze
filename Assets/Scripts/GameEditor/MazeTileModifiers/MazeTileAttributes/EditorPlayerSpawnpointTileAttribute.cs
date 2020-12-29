@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using UnityEngine;
 
 public class EditorPlayerSpawnpointTileAttribute : EditorMazeTileAttributeModifier
 {
@@ -22,5 +23,10 @@ public class EditorPlayerSpawnpointTileAttribute : EditorMazeTileAttributeModifi
         }
 
         tileAttributeRemover.RemovePlayerSpawnpoint();
+    }
+
+    public override Sprite GetSprite()
+    {
+        return EditorUIContainer.Instance.TileAttributeSprites[3];
     }
 }

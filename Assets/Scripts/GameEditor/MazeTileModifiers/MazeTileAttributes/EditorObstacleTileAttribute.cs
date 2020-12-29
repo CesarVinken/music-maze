@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using UnityEngine;
 
 public class EditorObstacleTileAttribute : EditorMazeTileAttributeModifier
 {
@@ -36,5 +37,10 @@ public class EditorObstacleTileAttribute : EditorMazeTileAttributeModifier
 
         TileAttributePlacer tileAttributePlacer = new TileAttributePlacer(tile);
         tileAttributePlacer.PlaceTileObstacleVariation((TileObstacle)tileObstacle);
+    }
+
+    public override Sprite GetSprite()
+    {
+        return EditorUIContainer.Instance.TileAttributeSprites[1];
     }
 }
