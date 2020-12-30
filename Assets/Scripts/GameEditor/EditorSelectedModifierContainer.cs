@@ -50,9 +50,12 @@ public class EditorSelectedModifierContainer : MonoBehaviour
 
         ModifierSelectorsByType.Add(EditorMazeTileModifierType.Attribute, _editorMazeTileAttributeSelector);
         ModifierSelectorsByType.Add(EditorMazeTileModifierType.Background, _editorMazeTileBackgroundSelector);
+    }
 
+    public void Start()
+    {
         SetSelectedMazeTileModifierType(EditorMazeTileModifierType.Attribute);
-        SetSelectedMazeTileModifier(0);//Set selected modifier to Background -> Path
+        SetSelectedMazeTileModifier(0);//Set selected modifier to Background -> Path 
     }
 
     private void Update()
@@ -95,7 +98,20 @@ public class EditorSelectedModifierContainer : MonoBehaviour
 
     // background or attribute
     public void SetSelectedMazeTileModifierType(EditorMazeTileModifierType editorMazeTileModifierType)
-    {
+    {   
+        if (editorMazeTileModifierType == EditorMazeTileModifierType.Attribute)
+        {
+            EditorModifierTypeSelectionContainer.Instance.EnableAttributesSelectionImage();
+        }
+        else if (editorMazeTileModifierType == EditorMazeTileModifierType.Background)
+        {
+            EditorModifierTypeSelectionContainer.Instance.EnableBackgroundsSelectionImage();
+        }
+        else
+        {
+            Logger.Error("Unknown modifier type");
+        }
+
         EditorManager.SelectedMazeTileModifierType = editorMazeTileModifierType;
     }
 
