@@ -52,7 +52,7 @@ public class EditorSelectedModifierContainer : MonoBehaviour
         ModifierSelectorsByType.Add(EditorMazeTileModifierType.Background, _editorMazeTileBackgroundSelector);
 
         SetSelectedMazeTileModifierType(EditorMazeTileModifierType.Attribute);
-        SetSelectedMazeTileModifier(EditorMazeTileAttributes[0]);//Set selected modifier to Background -> Path
+        SetSelectedMazeTileModifier(0);//Set selected modifier to Background -> Path
     }
 
     private void Update()
@@ -61,11 +61,11 @@ public class EditorSelectedModifierContainer : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.PageDown))
         {
-            if (EditorManager.SelectedMazeTileModifier is EditorMazeTileBackgroundModifier)
+            if (EditorManager.SelectedMazeTileModifierType == EditorMazeTileModifierType.Background)
             {
                 _editorMazeTileBackgroundSelector.SwitchSelectedModifier(1);
             }
-            else if(EditorManager.SelectedMazeTileModifier is EditorMazeTileAttributeModifier)
+            else if(EditorManager.SelectedMazeTileModifierType == EditorMazeTileModifierType.Attribute)
             {
                 _editorMazeTileAttributeSelector.SwitchSelectedModifier(1);
             }
@@ -77,11 +77,11 @@ public class EditorSelectedModifierContainer : MonoBehaviour
         }
         else if (Input.GetKeyDown(KeyCode.PageUp))
         {
-            if (EditorManager.SelectedMazeTileModifier is EditorMazeTileBackgroundModifier)
+            if (EditorManager.SelectedMazeTileModifierType == EditorMazeTileModifierType.Background)
             {
                 _editorMazeTileBackgroundSelector.SwitchSelectedModifier(-1);
             }
-            else if (EditorManager.SelectedMazeTileModifier is EditorMazeTileAttributeModifier)
+            else if (EditorManager.SelectedMazeTileModifierType == EditorMazeTileModifierType.Attribute)
             {
                 _editorMazeTileAttributeSelector.SwitchSelectedModifier(-1);
             }
@@ -99,24 +99,19 @@ public class EditorSelectedModifierContainer : MonoBehaviour
         EditorManager.SelectedMazeTileModifierType = editorMazeTileModifierType;
     }
 
-    public void SetSelectedMazeTileModifier(IEditorMazeTileModifierType editorMazeTileModifierType)
+    public void SetSelectedMazeTileModifier(int modifierIndex)
     {
-        int modifierIndex = -1;
-        EditorManager.SelectedMazeTileModifier = editorMazeTileModifierType;
-
-        if(EditorManager.SelectedMazeTileModifierType == EditorMazeTileModifierType.Attribute)
+        if (EditorManager.SelectedMazeTileModifierType == EditorMazeTileModifierType.Attribute)
         {
-            modifierIndex = EditorMazeTileAttributes.FindIndex(m => m.GetType() == editorMazeTileModifierType.GetType());
+            _editorMazeTileAttributeSelector.SetSelectedModifier(modifierIndex);
         }
         else if (EditorManager.SelectedMazeTileModifierType == EditorMazeTileModifierType.Background)
         {
-            modifierIndex = EditorMazeTileBackgrounds.FindIndex(m => m.GetType() == editorMazeTileModifierType.GetType());
+            _editorMazeTileBackgroundSelector.SetSelectedModifier(modifierIndex);
         }
         else
         {
             Logger.Error("Unknown modifier type");
         }
-
-        ModifierSelectorsByType[EditorManager.SelectedMazeTileModifierType].SetSelectedModifier(modifierIndex);
     }
 }

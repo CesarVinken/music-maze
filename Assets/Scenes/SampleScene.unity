@@ -7184,6 +7184,75 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1939014533}
   m_CullTransparentMesh: 0
+--- !u!1001 &1950373506
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 2253522871524733704, guid: eea6021e043275440bb076026299bce4,
+        type: 3}
+      propertyPath: m_RootOrder
+      value: 9
+      objectReference: {fileID: 0}
+    - target: {fileID: 2253522871524733704, guid: eea6021e043275440bb076026299bce4,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2253522871524733704, guid: eea6021e043275440bb076026299bce4,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2253522871524733704, guid: eea6021e043275440bb076026299bce4,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2253522871524733704, guid: eea6021e043275440bb076026299bce4,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2253522871524733704, guid: eea6021e043275440bb076026299bce4,
+        type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2253522871524733704, guid: eea6021e043275440bb076026299bce4,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2253522871524733704, guid: eea6021e043275440bb076026299bce4,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2253522871524733704, guid: eea6021e043275440bb076026299bce4,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2253522871524733704, guid: eea6021e043275440bb076026299bce4,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2253522871524733704, guid: eea6021e043275440bb076026299bce4,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2698219414069826461, guid: eea6021e043275440bb076026299bce4,
+        type: 3}
+      propertyPath: m_Name
+      value: SpriteManager
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: eea6021e043275440bb076026299bce4, type: 3}
 --- !u!1 &1972324672
 GameObject:
   m_ObjectHideFlags: 0
@@ -7316,13 +7385,13 @@ MonoBehaviour:
   EditorModeStatusTextGO: {fileID: 1606556628}
   EditorUIGO: {fileID: 379861474}
   PlayableLevelsPanelGO: {fileID: 1125860676}
-  TileAttributeSprites:
-  - {fileID: -1104929532417864259, guid: e103ef6a03d89e843a9e869411681a7e, type: 3}
-  - {fileID: -6222529915385023436, guid: e103ef6a03d89e843a9e869411681a7e, type: 3}
-  - {fileID: -1593288939001201457, guid: e103ef6a03d89e843a9e869411681a7e, type: 3}
-  - {fileID: 4216386145348086018, guid: e103ef6a03d89e843a9e869411681a7e, type: 3}
-  - {fileID: -2824705566531166528, guid: e103ef6a03d89e843a9e869411681a7e, type: 3}
-  - {fileID: 3637463510864136836, guid: e103ef6a03d89e843a9e869411681a7e, type: 3}
+  DefaultIcon: {fileID: 21300000, guid: bab6d546556225640a96ccb9b4c3dede, type: 3}
+  TileAttributeIcons:
+  - {fileID: -8862780121039871825, guid: e103ef6a03d89e843a9e869411681a7e, type: 3}
+  - {fileID: 9137789565096548852, guid: e103ef6a03d89e843a9e869411681a7e, type: 3}
+  - {fileID: -3477921486913051841, guid: e103ef6a03d89e843a9e869411681a7e, type: 3}
+  - {fileID: 2660842858155241554, guid: e103ef6a03d89e843a9e869411681a7e, type: 3}
+  - {fileID: 2919295014559996977, guid: e103ef6a03d89e843a9e869411681a7e, type: 3}
 --- !u!1 &2037339656
 GameObject:
   m_ObjectHideFlags: 0

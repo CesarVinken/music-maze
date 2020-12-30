@@ -8,12 +8,21 @@
         int newIndex = selectedAttributeIndex + newValue;
 
         if (newIndex < 0)
-            newIndex = _editorSelectedModifierContainer.EditorMazeTileAttributes.Count - 1;
-        if (newIndex >= _editorSelectedModifierContainer.EditorMazeTileAttributes.Count)
-            newIndex = 0;
-
-        IEditorMazeTileAttribute attribute = _editorSelectedModifierContainer.EditorMazeTileAttributes[newIndex];
-        SetSelectedModifier(newIndex);
+        {
+            // switch from attributes to last Background, because Backgrounds come before TileAttributes
+            EditorSelectedModifierContainer.Instance.SetSelectedMazeTileModifierType(EditorMazeTileModifierType.Background);
+            EditorSelectedModifierContainer.Instance.SetSelectedMazeTileModifier(EditorSelectedModifierContainer.Instance.EditorMazeTileBackgrounds.Count - 1);
+        }
+        else if (newIndex >= _editorSelectedModifierContainer.EditorMazeTileAttributes.Count)
+        {
+            // switch from attributes to first Background, because Backgrounds come after TileAttributes
+            EditorSelectedModifierContainer.Instance.SetSelectedMazeTileModifierType(EditorMazeTileModifierType.Background);
+            EditorSelectedModifierContainer.Instance.SetSelectedMazeTileModifier(0);
+        }
+        else
+        {
+            SetSelectedModifier(newIndex);
+        }
     }
 
     public override void SetSelectedModifier(int modifierIndex)

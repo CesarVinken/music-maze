@@ -7,7 +7,7 @@ public class EditorModifierTypeSelectionContainer : MonoBehaviour
         EditorSelectedModifierContainer.Instance.SetSelectedMazeTileModifierType(EditorMazeTileModifierType.Attribute);
 
         int index = EditorManager.SelectedMazeTileAttributeModifierIndex;
-        EditorSelectedModifierContainer.Instance.SetSelectedMazeTileModifier(EditorSelectedModifierContainer.Instance.EditorMazeTileAttributes[index]);
+        EditorSelectedModifierContainer.Instance.SetSelectedMazeTileModifier(index);
     }
 
     public void SelectBackgrounds()
@@ -15,6 +15,6 @@ public class EditorModifierTypeSelectionContainer : MonoBehaviour
         EditorSelectedModifierContainer.Instance.SetSelectedMazeTileModifierType(EditorMazeTileModifierType.Background);
 
         int index = EditorManager.SelectedMazeTileBackgroundModifierIndex;
-        EditorSelectedModifierContainer.Instance.SetSelectedMazeTileModifier(EditorSelectedModifierContainer.Instance.EditorMazeTileBackgrounds[index]);
+        EditorSelectedModifierContainer.Instance.SetSelectedMazeTileModifier(index);
     }
 }
