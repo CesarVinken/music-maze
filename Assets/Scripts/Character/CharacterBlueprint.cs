@@ -8,7 +8,7 @@ public class CharacterBlueprint
     { 
         get
         {
-            if (CharacterType == CharacterType.Bard) return true;
+            if (CharacterType == CharacterType.Bard1 || CharacterType == CharacterType.Bard2) return true;
             return false;
         }
     }
@@ -21,6 +21,7 @@ public class CharacterBlueprint
 
 public enum CharacterType
 {
-    Bard,
+    Bard1,
+    Bard2,
     Dragon
 }

@@ -20,6 +20,7 @@ public class PlayerCharacter : Character
     public GridLocation CurrentGridLocation;
     public int TimesCaught = 0;
 
+    protected CharacterType _characterType = CharacterType.Bard1;
     private bool _isPressingPointerForSeconds = false;
     private float _pointerPresserTimer = 1;
     private const float _pointerPresserDelay = 0.25f;
@@ -55,6 +56,24 @@ public class PlayerCharacter : Character
         CharacterManager.Instance.MazePlayers.Add(PlayerNumber, this);
 
         _pointerPresserTimer = _pointerPresserDelay;
+
+        switch (PlayerNumber)
+        {
+            case PlayerNumber.Player1:
+                SetCharacterType(CharacterType.Bard1);
+                break;
+            case PlayerNumber.Player2:
+                SetCharacterType(CharacterType.Bard2);
+                break;
+            default:
+                break;
+        }        
+    }
+
+    private void SetCharacterType(CharacterType characterType)
+    {
+        _characterType = characterType;
+        _animationHandler.SetAnimationControllerForCharacterType(_characterType);
     }
 
     public void Start()

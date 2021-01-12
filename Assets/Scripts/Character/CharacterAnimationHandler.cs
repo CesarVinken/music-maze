@@ -22,6 +22,23 @@ public class CharacterAnimationHandler : MonoBehaviour
             Animator = GetComponent<Animator>();
     }
 
+    public void SetAnimationControllerForCharacterType(CharacterType characterType)
+    {
+
+        switch (characterType)
+        {
+            case CharacterType.Bard1:
+                Animator.runtimeAnimatorController = CharacterManager.Instance.Bard1Controller;
+                break;
+            case CharacterType.Bard2:
+                Animator.runtimeAnimatorController = CharacterManager.Instance.Bard2Controller;
+                break;
+            default:
+                Logger.Error($"The CharacterType {characterType} is not yet implemented");
+                break;
+        }
+    }
+
     public void SetHorizontal(float speed)
     {
         Animator.SetFloat("Horizontal", speed);

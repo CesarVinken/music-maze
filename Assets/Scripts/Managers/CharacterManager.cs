@@ -1,5 +1,4 @@
 ﻿using Photon.Pun;
-//using Photon.Pun.Demo.PunBasics;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -20,11 +19,21 @@ public class CharacterManager : MonoBehaviourPunCallbacks
 
     public static CharacterManager Instance;
 
+    [Header("Player Characters")]
+
     public GameObject EnemyCharacterPrefab;
     public GameObject PlayerCharacterPrefab;
 
     public GameObject Player1GO;
     public GameObject Player2GO;
+
+    [Space(10)]
+    [Header("Animation controllers for each type")]
+    public RuntimeAnimatorController Bard1Controller;
+    public RuntimeAnimatorController Bard2Controller;
+
+    [Space(10)]
+    [Header("Enemies")]
 
     public Dictionary<PlayerNumber, PlayerCharacter> MazePlayers = new Dictionary<PlayerNumber, PlayerCharacter>();
     public List<EnemyCharacter> Enemies = new List<EnemyCharacter>();
@@ -35,6 +44,9 @@ public class CharacterManager : MonoBehaviourPunCallbacks
 
         Guard.CheckIsNull(EnemyCharacterPrefab, "EnemyCharacterPrefab", gameObject);
         Guard.CheckIsNull(PlayerCharacterPrefab, "PlayerCharacterPrefab", gameObject);
+
+        Guard.CheckIsNull(PlayerCharacterPrefab, "Bard1Controller", gameObject);
+        Guard.CheckIsNull(PlayerCharacterPrefab, "Bard2Controller", gameObject);
     }
 
     public void SpawnCharacters()
@@ -56,8 +68,7 @@ public class CharacterManager : MonoBehaviourPunCallbacks
                 CharacterBundle PlayerBundle = SpawnCharacter(level.PlayerCharacterSpawnpoints[0].CharacterBlueprint, level.PlayerCharacterSpawnpoints[0].GridLocation);
                 Player1GO = PlayerBundle.CharacterGO;
                 PlayerCharacter player = PlayerBundle.Character as PlayerCharacter;
-                
-                SpawnEnemies();
+            SpawnEnemies();
             }
             else
             {
@@ -65,8 +76,8 @@ public class CharacterManager : MonoBehaviourPunCallbacks
 
                 CharacterBundle PlayerBundle = SpawnCharacter(level.PlayerCharacterSpawnpoints[1].CharacterBlueprint, level.PlayerCharacterSpawnpoints[1].GridLocation);
                 Player2GO = PlayerBundle.CharacterGO;
-                PlayerCharacter player = PlayerBundle.Character as PlayerCharacter;            }
-        //}
+                PlayerCharacter player = PlayerBundle.Character as PlayerCharacter;
+        }
     }
 
     private void SpawnEnemies()
@@ -163,7 +174,7 @@ public class CharacterManager : MonoBehaviourPunCallbacks
     {
         switch (character.CharacterType)
         {
-            case CharacterType.Bard:
+            case CharacterType.Bard1:
                 return "Prefabs/Character/PlayerCharacter";
             case CharacterType.Dragon:
                 return "Prefabs/Character/EnemyCharacter";
