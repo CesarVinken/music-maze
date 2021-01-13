@@ -31,6 +31,7 @@ public class CharacterManager : MonoBehaviourPunCallbacks
     [Header("Animation controllers for each type")]
     public RuntimeAnimatorController Bard1Controller;
     public RuntimeAnimatorController Bard2Controller;
+    public RuntimeAnimatorController EnemyController;
 
     [Space(10)]
     [Header("Enemies")]
@@ -45,8 +46,9 @@ public class CharacterManager : MonoBehaviourPunCallbacks
         Guard.CheckIsNull(EnemyCharacterPrefab, "EnemyCharacterPrefab", gameObject);
         Guard.CheckIsNull(PlayerCharacterPrefab, "PlayerCharacterPrefab", gameObject);
 
-        Guard.CheckIsNull(PlayerCharacterPrefab, "Bard1Controller", gameObject);
-        Guard.CheckIsNull(PlayerCharacterPrefab, "Bard2Controller", gameObject);
+        Guard.CheckIsNull(Bard1Controller, "Bard1Controller", gameObject);
+        Guard.CheckIsNull(Bard2Controller, "Bard2Controller", gameObject);
+        Guard.CheckIsNull(EnemyController, "EnemyController", gameObject);
     }
 
     public void SpawnCharacters()

@@ -39,7 +39,7 @@ public class CharacterAnimationHandler : MonoBehaviour
                 Animator.runtimeAnimatorController = CharacterManager.Instance.Bard2Controller;
                 break;
             case CharacterType.Enemy:
-
+                Animator.runtimeAnimatorController = CharacterManager.Instance.EnemyController;
                 break;
             default:
                 Logger.Error($"The CharacterType {characterType} is not yet implemented");
