@@ -11,6 +11,7 @@ public class Character : MonoBehaviour
     public CharacterBlueprint CharacterBlueprint;
     public GridLocation StartingPosition;
     public GameObject CharacterBody;
+    protected CharacterType _characterType;
 
     [Space(10)]
     [Header("Rendering")]
@@ -66,6 +67,13 @@ public class Character : MonoBehaviour
             _bodyRenderer.sortingOrder = (int)(Math.Round(_sortingOrderBase - transform.position.y - _sortingOrderCalculationOffset) * 10);
         }
     }
+
+    protected void SetCharacterType(CharacterType characterType)
+    {
+        _characterType = characterType;
+        _animationHandler.SetAnimationControllerForCharacterType(_characterType);
+    }
+
 
     public void SetStartingPosition(Character character, GridLocation gridLocation)
     {

@@ -1,7 +1,4 @@
-﻿using System.Collections.Generic;
-using UnityEngine;
-
-public class CharacterBlueprint
+﻿public class CharacterBlueprint
 {
     public CharacterType CharacterType;
     public bool IsPlayable 
@@ -17,11 +14,4 @@ public class CharacterBlueprint
     {
         CharacterType = characterType;
     }
-}
-
-public enum CharacterType
-{
-    Bard1,
-    Bard2,
-    Dragon
 }

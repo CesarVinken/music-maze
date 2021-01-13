@@ -20,7 +20,6 @@ public class PlayerCharacter : Character
     public GridLocation CurrentGridLocation;
     public int TimesCaught = 0;
 
-    protected CharacterType _characterType = CharacterType.Bard1;
     private bool _isPressingPointerForSeconds = false;
     private float _pointerPresserTimer = 1;
     private const float _pointerPresserDelay = 0.25f;
@@ -68,12 +67,6 @@ public class PlayerCharacter : Character
             default:
                 break;
         }        
-    }
-
-    private void SetCharacterType(CharacterType characterType)
-    {
-        _characterType = characterType;
-        _animationHandler.SetAnimationControllerForCharacterType(_characterType);
     }
 
     public void Start()

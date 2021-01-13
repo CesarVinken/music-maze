@@ -15,6 +15,8 @@ public class EnemyCharacter : Character
     public void Start()
     {
         GameManager.Instance.CompleteMazeLevelEvent += OnMazeLevelCompleted;
+
+        SetCharacterType(CharacterType.Enemy);
     }
 
     public void Update()

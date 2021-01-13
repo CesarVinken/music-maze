@@ -52,31 +52,30 @@ public class CharacterManager : MonoBehaviourPunCallbacks
     public void SpawnCharacters()
     {
         Logger.Log("Spawn characters...");
-        //if (PlayerManager.LocalPlayerInstance == null)
-        //{
-            MazeLevel level = MazeLevelManager.Instance.Level;
 
-            if(level.PlayerCharacterSpawnpoints.Count != 2)
-            {
-                Logger.Error("Did not find 2, but {0} character startlocations for level", level.PlayerCharacterSpawnpoints.Count);
-            }
+        MazeLevel level = MazeLevelManager.Instance.Level;
+
+        if(level.PlayerCharacterSpawnpoints.Count != 2)
+        {
+            Logger.Error("Did not find 2, but {0} character startlocations for level", level.PlayerCharacterSpawnpoints.Count);
+        }
             
-            if (PhotonNetwork.IsMasterClient || GameManager.Instance.GameType == GameType.SinglePlayer)
-            {
-                Debug.Log("Instantiating Player 1");
+        if (PhotonNetwork.IsMasterClient || GameManager.Instance.GameType == GameType.SinglePlayer)
+        {
+            Debug.Log("Instantiating Player 1");
 
-                CharacterBundle PlayerBundle = SpawnCharacter(level.PlayerCharacterSpawnpoints[0].CharacterBlueprint, level.PlayerCharacterSpawnpoints[0].GridLocation);
-                Player1GO = PlayerBundle.CharacterGO;
-                PlayerCharacter player = PlayerBundle.Character as PlayerCharacter;
+            CharacterBundle PlayerBundle = SpawnCharacter(level.PlayerCharacterSpawnpoints[0].CharacterBlueprint, level.PlayerCharacterSpawnpoints[0].GridLocation);
+            Player1GO = PlayerBundle.CharacterGO;
+            PlayerCharacter player = PlayerBundle.Character as PlayerCharacter;
             SpawnEnemies();
-            }
-            else
-            {
-                Debug.Log("Instantiating Player 2");
+        }
+        else
+        {
+            Debug.Log("Instantiating Player 2");
 
-                CharacterBundle PlayerBundle = SpawnCharacter(level.PlayerCharacterSpawnpoints[1].CharacterBlueprint, level.PlayerCharacterSpawnpoints[1].GridLocation);
-                Player2GO = PlayerBundle.CharacterGO;
-                PlayerCharacter player = PlayerBundle.Character as PlayerCharacter;
+            CharacterBundle PlayerBundle = SpawnCharacter(level.PlayerCharacterSpawnpoints[1].CharacterBlueprint, level.PlayerCharacterSpawnpoints[1].GridLocation);
+            Player2GO = PlayerBundle.CharacterGO;
+            PlayerCharacter player = PlayerBundle.Character as PlayerCharacter;
         }
     }
 
@@ -175,8 +174,9 @@ public class CharacterManager : MonoBehaviourPunCallbacks
         switch (character.CharacterType)
         {
             case CharacterType.Bard1:
+            case CharacterType.Bard2:
                 return "Prefabs/Character/PlayerCharacter";
-            case CharacterType.Dragon:
+            case CharacterType.Enemy:
                 return "Prefabs/Character/EnemyCharacter";
             default:
                 Logger.Error(Logger.Initialisation, "Cannot find prefab for character type {0}", character.CharacterType);

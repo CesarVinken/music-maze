@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using Photon.Pun;
 
 public class CharacterAnimationHandler : MonoBehaviour
 {
@@ -16,15 +17,19 @@ public class CharacterAnimationHandler : MonoBehaviour
         }
     }
 
+    [SerializeField] private PhotonAnimatorView _photonAnimatorView;
+
     public void Awake()
     {
         if (Animator == null)
             Animator = GetComponent<Animator>();
+
+        if (Animator == null)
+            _photonAnimatorView = GetComponent<PhotonAnimatorView>();
     }
 
     public void SetAnimationControllerForCharacterType(CharacterType characterType)
     {
-
         switch (characterType)
         {
             case CharacterType.Bard1:
@@ -33,10 +38,18 @@ public class CharacterAnimationHandler : MonoBehaviour
             case CharacterType.Bard2:
                 Animator.runtimeAnimatorController = CharacterManager.Instance.Bard2Controller;
                 break;
+            case CharacterType.Enemy:
+
+                break;
             default:
                 Logger.Error($"The CharacterType {characterType} is not yet implemented");
                 break;
         }
+
+        // valid for both player and enemy animators
+        _photonAnimatorView.SetParameterSynchronized("Locomotion", PhotonAnimatorView.ParameterType.Bool, PhotonAnimatorView.SynchronizeType.Discrete);
+        _photonAnimatorView.SetParameterSynchronized("Horizontal", PhotonAnimatorView.ParameterType.Float, PhotonAnimatorView.SynchronizeType.Discrete);
+        _photonAnimatorView.SetParameterSynchronized("Vertical", PhotonAnimatorView.ParameterType.Float, PhotonAnimatorView.SynchronizeType.Discrete);
     }
 
     public void SetHorizontal(float speed)

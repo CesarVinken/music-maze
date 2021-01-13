@@ -95,7 +95,7 @@ public class ScoreCalculator
             PlayerScore p = PlayerScores[item.Key];
             p.TileMarkScore = item.Value;
             PlayerScores[item.Key] = p;
-            Logger.Log(Logger.Score, $"Tile marker scores: ${item.Key.ToString()} has {PlayerScores[item.Key].TileMarkScore} points.");
+            Logger.Log(Logger.Score, $"Tile marker scores: {item.Key.ToString()} has {PlayerScores[item.Key].TileMarkScore} points.");
         }
     }
 
