@@ -61,12 +61,12 @@ public class GameManager : MonoBehaviourPunCallbacks
         Instantiate(CharacterManagerPrefab, transform);
         Instantiate(SpriteManagerPrefab, transform);
 
-
-
     }
 
     public void Start()
     {
+        CameraController.Instance.SetZoomLevel(Configuration.CameraZoomLevel);
+
         MazeLevelData startUpMazeLevelData = MazeLevelLoader.LoadMazeLevelData("default");
 
         if (startUpMazeLevelData == null)

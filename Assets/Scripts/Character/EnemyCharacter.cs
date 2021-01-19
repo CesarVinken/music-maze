@@ -33,7 +33,8 @@ public class EnemyCharacter : Character
         {
             SetNextTarget();
         }
-        else
+
+        if (HasCalculatedTarget)
         {
             MoveCharacter();
         }

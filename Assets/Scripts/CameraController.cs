@@ -46,6 +46,11 @@ public class CameraController : MonoBehaviour
             SetPanLimits(MazeLevelManager.Instance.Level.LevelBounds);
     }
 
+    public void SetZoomLevel(float zoomLevel)
+    {
+        _camera.orthographicSize = zoomLevel;
+    }
+
     public void ResetCamera()
     {
         FocussedOnPlayer = false;
