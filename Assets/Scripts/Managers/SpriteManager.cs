@@ -7,6 +7,7 @@ public class SpriteManager : MonoBehaviour
     public Sprite[] DefaultDoor;
     public Sprite[] DefaultPath;
     public Sprite[] DefaultWall;
+    public Sprite[] DefaultWallTransformed;
     public Sprite[] DefaultMazeTileBackground;
     public Sprite[] Bush;
 

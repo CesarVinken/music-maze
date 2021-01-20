@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-public class TileObstacle : MonoBehaviour, IMazeTileAttribute, ITileConnectable
+public class TileObstacle : MonoBehaviour, IMazeTileAttribute, ITileConnectable, ITransformable
 {
     public Tile Tile;
     public string ParentId;
@@ -30,6 +30,14 @@ public class TileObstacle : MonoBehaviour, IMazeTileAttribute, ITileConnectable
         }
 
         _spriteRenderer.sortingOrder = (int)(_sortingOrderBase - transform.position.y - _sortingOrderCalculationOffset) * 10;
+    }
+
+    public virtual void TriggerTransformation()
+    {
+        if (ObstacleType == ObstacleType.Bush)
+        {
+            _spriteRenderer.sprite = SpriteManager.Instance.DefaultWallTransformed[SpriteNumber - 1];
+        }
     }
 
     public virtual void WithConnectionScoreInfo(TileConnectionScoreInfo obstacleConnectionScoreInfo)

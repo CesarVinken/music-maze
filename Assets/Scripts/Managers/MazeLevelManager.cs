@@ -171,6 +171,8 @@ public class MazeLevelManager : MonoBehaviour, IOnEventCallback
             HandleNumberOfUnmarkedTiles();
 
             tile.ResetPlayerMarkEndsRenderer();
+
+            tile.TriggerTransformations();
         }
         else
         {
@@ -224,6 +226,8 @@ public class MazeLevelManager : MonoBehaviour, IOnEventCallback
             HandleNumberOfUnmarkedTiles();
 
             tile.ResetPlayerMarkEndsRenderer();
+
+            tile.TriggerTransformations();
         } else if(eventCode == LoadNextMazeLevelEvent.LoadNextMazeLevelEventCode)
         {
             object[] data = (object[])photonEvent.CustomData;
@@ -312,6 +316,5 @@ public class MazeLevelManager : MonoBehaviour, IOnEventCallback
             TileConnectionScoreInfo neighbourConnectionScoreInfo = NeighbourTileCalculator.MapNeighbourPlayerMarkEndsOfTile(neighbour);
             neighbour.PlayerMarkEndsRenderer.sprite = SpriteManager.Instance.PlayerTileMarkerEdge[neighbourConnectionScoreInfo.SpriteNumber - 1];
         }
-
     }
 }

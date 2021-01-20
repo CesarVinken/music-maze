@@ -11,12 +11,16 @@ public class Tile : MonoBehaviour
     public string TileId;
     public bool Walkable = true;
     public bool Markable = false;
+    public TransformationState TransformationState = TransformationState.Bleak;
+
     public GridLocation GridLocation;
     public PlayerMark PlayerMark = null;
 
     [SerializeField] public List<IMazeTileBackground> MazeTileBackgrounds = new List<IMazeTileBackground>();
     [SerializeField] public List<IMazeTileAttribute> MazeTileAttributes = new List<IMazeTileAttribute>();
     public Dictionary<ObjectDirection, Tile> Neighbours = new Dictionary<ObjectDirection, Tile>();
+
+    public List<Tile> TilesToTransform = new List<Tile>();
 
     public void Awake()
     {
@@ -177,5 +181,45 @@ public class Tile : MonoBehaviour
     public void ResetPlayerMarkEndsRenderer()
     {
         PlayerMarkEndsRenderer.sprite = null;
+    }
+
+    // Once the tile is marked, trigger the transformation of all tiles set up for this tile in the TilesToTransform list
+    public void TriggerTransformations()
+    {
+        if(TransformationState == TransformationState.Bleak)
+            TriggerTransformationOnSelf();
+
+        for (int i = 0; i < TilesToTransform.Count; i++)
+        {
+            Tile tileToTransform = TilesToTransform[i];
+
+            if (TransformationState == TransformationState.Bleak)
+                continue;
+
+            tileToTransform.TriggerTransformationOnSelf();
+        }
+    }
+
+    public void TriggerTransformationOnSelf()
+    {
+        for (int i = 0; i < MazeTileAttributes.Count; i++)
+        {
+            ITransformable attribute = MazeTileAttributes[i] as ITransformable;
+            if (attribute != null)
+            {
+                attribute.TriggerTransformation();
+            }
+        }
+
+        for (int j = 0; j < MazeTileBackgrounds.Count; j++)
+        {
+            ITransformable background = MazeTileBackgrounds[j] as ITransformable;
+            if (background != null)
+            {
+                background.TriggerTransformation();
+            }
+        }
+
+        TransformationState = TransformationState.Colourful;
     }
 }
