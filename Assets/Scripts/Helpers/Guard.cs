@@ -7,27 +7,27 @@ public class Guard
     public static void CheckIsNull(GameObject gameObject)
     {
         if (gameObject == null)
-            Logger.Error("Cannot find {0}", gameObject.name);
+            Logger.Error($"Cannot find {gameObject.name}");
     }
 
     public static void CheckIsNull(GameObject gameObject, string name)
     {
         if (gameObject == null)
-            Logger.Error("Cannot find {0}", name);
+            Logger.Error($"Cannot find {name}");
     }
 
     public static void CheckIsNull<T>(T component, string name)
     {
         Type typeParameterType = typeof(T);
         if (component == null)
-            Logger.Error("Cannot find {0} {1}", typeParameterType, name);
+            Logger.Error($"Cannot find {typeParameterType} {name}");
     }
 
     public static void CheckIsNull<T>(T component, string name, GameObject parent)
     {
         Type typeParameterType = typeof(T);
         if (component == null)
-            Logger.Error("Cannot find {0} {1} on {2}", typeParameterType, name, parent.name);
+            Logger.Error($"Cannot find {typeParameterType} {name} on {parent.name}");
     }
 
     //public static void CheckIsNull(SpriteRenderer spriteRenderer, string name)
@@ -52,5 +52,11 @@ public class Guard
     {
         if(content == "")
             Logger.Error("{0} cannot be an empty string", name);
+    }
+
+    public static void CheckLength(Sprite[] sprite, string name)
+    {
+        if(sprite.Length == 0)
+            Logger.Error($"the array {name} should not have a length of 0");
     }
 }

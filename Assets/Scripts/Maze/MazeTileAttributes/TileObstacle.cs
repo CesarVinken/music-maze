@@ -36,7 +36,7 @@ public class TileObstacle : MonoBehaviour, IMazeTileAttribute, ITileConnectable,
     {
         if (ObstacleType == ObstacleType.Bush)
         {
-            _spriteRenderer.sprite = SpriteManager.Instance.DefaultWallTransformed[SpriteNumber - 1];
+            _spriteRenderer.sprite = SpriteManager.Instance.DefaultWallColourful[SpriteNumber - 1];
         }
     }
 
