@@ -9,9 +9,9 @@
 
         if (newIndex < 0)
         {
-            // switch from backgrounds to last TileAttribute, because TileAttributes come before Backgrounds
-            EditorSelectedModifierContainer.Instance.SetSelectedMazeTileModifierType(EditorMazeTileModifierType.Attribute);
-            EditorSelectedModifierContainer.Instance.SetSelectedMazeTileModifier(EditorSelectedModifierContainer.Instance.EditorMazeTileAttributes.Count - 1);
+            // switch from backgrounds to last TransformTriggerer, because TransformTriggerer come before Backgrounds
+            EditorSelectedModifierContainer.Instance.SetSelectedMazeTileModifierType(EditorMazeTileModifierType.TransformationTriggerer);
+            EditorSelectedModifierContainer.Instance.SetSelectedMazeTileModifier(EditorSelectedModifierContainer.Instance.EditorMazeTileTransformationTriggerers.Count - 1);
         }
         else if (newIndex >= _editorSelectedModifierContainer.EditorMazeTileBackgrounds.Count)
         {
@@ -23,7 +23,6 @@
         {
             SetSelectedModifier(newIndex);
         }
-
     }
 
     public override void SetSelectedModifier(int modifierIndex)

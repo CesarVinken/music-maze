@@ -14,11 +14,13 @@ public class EditorSelectedModifierContainer : MonoBehaviour
 
     public List<IEditorMazeTileAttribute> EditorMazeTileAttributes = new List<IEditorMazeTileAttribute>();
     public List<IEditorMazeTileBackground> EditorMazeTileBackgrounds = new List<IEditorMazeTileBackground>();
+    public List<IEditorMazeTileTransformationTriggerer> EditorMazeTileTransformationTriggerers = new List<IEditorMazeTileTransformationTriggerer>();
 
     public Dictionary<EditorMazeTileModifierType, EditorMazeTileModifierSelector> ModifierSelectorsByType = new Dictionary<EditorMazeTileModifierType, EditorMazeTileModifierSelector>();
 
     private EditorMazeTileAttributeSelector _editorMazeTileAttributeSelector;
     private EditorMazeTileBackgroundSelector _editorMazeTileBackgroundSelector;
+    private EditorMazeTileTransformationTriggererSelector _editorMazeTileTransformationTriggererSelector;
 
     void Awake()
     {
@@ -31,6 +33,7 @@ public class EditorSelectedModifierContainer : MonoBehaviour
 
         _editorMazeTileAttributeSelector = new EditorMazeTileAttributeSelector(this);
         _editorMazeTileBackgroundSelector = new EditorMazeTileBackgroundSelector(this);
+        _editorMazeTileTransformationTriggererSelector = new EditorMazeTileTransformationTriggererSelector(this);
 
         EditorMazeTileAttributes.Clear();
 
@@ -47,6 +50,12 @@ public class EditorSelectedModifierContainer : MonoBehaviour
         EditorMazeTileBackgrounds.Add(new EditorMazeTilePath());
 
         _editorMazeTileBackgroundSelector.SetSelectedModifier(0);
+
+        EditorMazeTileTransformationTriggerers.Clear();
+
+        EditorMazeTileTransformationTriggerers.Add(new EditorMazeTileTransformationTriggerer());
+
+        _editorMazeTileTransformationTriggererSelector.SetSelectedModifier(0);
 
         ModifierSelectorsByType.Add(EditorMazeTileModifierType.Attribute, _editorMazeTileAttributeSelector);
         ModifierSelectorsByType.Add(EditorMazeTileModifierType.Background, _editorMazeTileBackgroundSelector);
@@ -72,6 +81,10 @@ public class EditorSelectedModifierContainer : MonoBehaviour
             {
                 _editorMazeTileAttributeSelector.SwitchSelectedModifier(1);
             }
+            else if (EditorManager.SelectedMazeTileModifierType == EditorMazeTileModifierType.TransformationTriggerer)
+            {
+                _editorMazeTileTransformationTriggererSelector.SwitchSelectedModifier(1);
+            }
             else
             {
                 // Not known type
@@ -88,6 +101,10 @@ public class EditorSelectedModifierContainer : MonoBehaviour
             {
                 _editorMazeTileAttributeSelector.SwitchSelectedModifier(-1);
             }
+            else if (EditorManager.SelectedMazeTileModifierType == EditorMazeTileModifierType.TransformationTriggerer)
+            {
+                _editorMazeTileTransformationTriggererSelector.SwitchSelectedModifier(-1);
+            }
             else
             {
                 // Not known type
@@ -96,7 +113,7 @@ public class EditorSelectedModifierContainer : MonoBehaviour
         }
     }
 
-    // background or attribute
+    // background, attribute, transformationTrigger
     public void SetSelectedMazeTileModifierType(EditorMazeTileModifierType editorMazeTileModifierType)
     {   
         if (editorMazeTileModifierType == EditorMazeTileModifierType.Attribute)
@@ -106,6 +123,10 @@ public class EditorSelectedModifierContainer : MonoBehaviour
         else if (editorMazeTileModifierType == EditorMazeTileModifierType.Background)
         {
             EditorModifierTypeSelectionContainer.Instance.EnableBackgroundsSelectionImage();
+        }
+        else if (editorMazeTileModifierType == EditorMazeTileModifierType.TransformationTriggerer)
+        {
+            EditorModifierTypeSelectionContainer.Instance.EnableTransformationTriggererSelectionImage();
         }
         else
         {
@@ -124,6 +145,10 @@ public class EditorSelectedModifierContainer : MonoBehaviour
         else if (EditorManager.SelectedMazeTileModifierType == EditorMazeTileModifierType.Background)
         {
             _editorMazeTileBackgroundSelector.SetSelectedModifier(modifierIndex);
+        }
+        else if (EditorManager.SelectedMazeTileModifierType == EditorMazeTileModifierType.TransformationTriggerer)
+        {
+            _editorMazeTileTransformationTriggererSelector.SetSelectedModifier(modifierIndex);
         }
         else
         {

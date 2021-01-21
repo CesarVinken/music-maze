@@ -1,5 +1,6 @@
 ﻿public enum EditorMazeTileModifierType
 {
     Attribute,
-    Background
+    Background,
+    TransformationTriggerer
 }

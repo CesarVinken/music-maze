@@ -17,6 +17,7 @@ public static class EditorManager
 
     public static int SelectedMazeTileAttributeModifierIndex;
     public static int SelectedMazeTileBackgroundModifierIndex;
+    public static int SelectedMazeTileTransformationTriggererIndex;
 
     public static void ToggleEditorMode()
     {

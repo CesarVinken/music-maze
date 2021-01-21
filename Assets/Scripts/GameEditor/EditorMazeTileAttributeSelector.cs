@@ -15,8 +15,8 @@
         }
         else if (newIndex >= _editorSelectedModifierContainer.EditorMazeTileAttributes.Count)
         {
-            // switch from attributes to first Background, because Backgrounds come after TileAttributes
-            EditorSelectedModifierContainer.Instance.SetSelectedMazeTileModifierType(EditorMazeTileModifierType.Background);
+            // switch from attributes to TransformTriggerer, because Transform Triggerer come after TileAttributes
+            EditorSelectedModifierContainer.Instance.SetSelectedMazeTileModifierType(EditorMazeTileModifierType.TransformationTriggerer);
             EditorSelectedModifierContainer.Instance.SetSelectedMazeTileModifier(0);
         }
         else

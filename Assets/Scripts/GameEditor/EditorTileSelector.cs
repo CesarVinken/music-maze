@@ -63,7 +63,7 @@ public class EditorTileSelector : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Return))
         {
             Logger.Log("Do something to tile {0}, {1}", CurrentSelectedLocation.X, CurrentSelectedLocation.Y);
-            if (Input.GetKey(KeyCode.LeftShift))
+            if (Input.GetKey(KeyCode.LeftShift) || Input.GetKey(KeyCode.RightShift))
             {
                 PlaceMazeTileModifierVariation();
             }

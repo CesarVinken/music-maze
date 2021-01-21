@@ -6,6 +6,7 @@ public class EditorModifierTypeSelectionContainer : MonoBehaviour
 
     [SerializeField] private GameObject _attributesSelectionImage;
     [SerializeField] private GameObject _backgroundsSelectionImage;
+    [SerializeField] private GameObject _transformationTriggererSelectionImage;
 
     public void Awake()
     {
@@ -13,12 +14,14 @@ public class EditorModifierTypeSelectionContainer : MonoBehaviour
 
         Guard.CheckIsNull(_attributesSelectionImage, "_attributesSelectionImage", gameObject);
         Guard.CheckIsNull(_backgroundsSelectionImage, "_backgroundsSelectionImage", gameObject);
+        Guard.CheckIsNull(_transformationTriggererSelectionImage, "_transformationTriggererSelectionImage", gameObject);
     }
 
     public void OnDisable()
     {
         _attributesSelectionImage.SetActive(false);
         _backgroundsSelectionImage.SetActive(false);
+        _transformationTriggererSelectionImage.SetActive(false);
     }
 
     public void OnEnable()
@@ -30,6 +33,10 @@ public class EditorModifierTypeSelectionContainer : MonoBehaviour
         else if (EditorManager.SelectedMazeTileModifierType == EditorMazeTileModifierType.Background)
         {
             EnableBackgroundsSelectionImage();
+        }
+        else if (EditorManager.SelectedMazeTileModifierType == EditorMazeTileModifierType.TransformationTriggerer)
+        {
+            EnableTransformationTriggererSelectionImage();
         }
         else
         {
@@ -53,15 +60,32 @@ public class EditorModifierTypeSelectionContainer : MonoBehaviour
         EditorSelectedModifierContainer.Instance.SetSelectedMazeTileModifier(index);
     }
 
+    public void SelectTileTransformationTriggerer()
+    {
+        EditorSelectedModifierContainer.Instance.SetSelectedMazeTileModifierType(EditorMazeTileModifierType.TransformationTriggerer);
+
+        int index = EditorManager.SelectedMazeTileBackgroundModifierIndex;
+        EditorSelectedModifierContainer.Instance.SetSelectedMazeTileModifier(index);
+    }
+
     public void EnableBackgroundsSelectionImage()
     {
-        _backgroundsSelectionImage.SetActive(true);
         _attributesSelectionImage.SetActive(false);
+        _backgroundsSelectionImage.SetActive(true);
+        _transformationTriggererSelectionImage.SetActive(false);
     }
 
     public void EnableAttributesSelectionImage()
     {
         _attributesSelectionImage.SetActive(true);
         _backgroundsSelectionImage.SetActive(false);
+        _transformationTriggererSelectionImage.SetActive(false);
+    }
+
+    public void EnableTransformationTriggererSelectionImage()
+    {
+        _attributesSelectionImage.SetActive(false);
+        _backgroundsSelectionImage.SetActive(false);
+        _transformationTriggererSelectionImage.SetActive(true);
     }
 }

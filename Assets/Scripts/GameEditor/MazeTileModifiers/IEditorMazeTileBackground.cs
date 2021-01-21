@@ -1,6 +1,4 @@
-﻿using UnityEngine;
-
-public interface IEditorMazeTileBackground : IEditorMazeTileModifierType
+﻿public interface IEditorMazeTileBackground : IEditorMazeTileModifierType
 {
     string Name { get; }
 
