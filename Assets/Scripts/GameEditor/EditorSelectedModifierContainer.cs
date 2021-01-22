@@ -126,6 +126,7 @@ public class EditorSelectedModifierContainer : MonoBehaviour
         }
         else if (editorMazeTileModifierType == EditorMazeTileModifierType.TransformationTriggerer)
         {
+            
             EditorModifierTypeSelectionContainer.Instance.EnableTransformationTriggererSelectionImage();
         }
         else
@@ -149,6 +150,9 @@ public class EditorSelectedModifierContainer : MonoBehaviour
         else if (EditorManager.SelectedMazeTileModifierType == EditorMazeTileModifierType.TransformationTriggerer)
         {
             _editorMazeTileTransformationTriggererSelector.SetSelectedModifier(modifierIndex);
+
+            EditorMazeTileTransformationTriggerer editorMazeTileTransformationTriggerer = EditorMazeTileTransformationTriggerers[modifierIndex] as EditorMazeTileTransformationTriggerer;
+            editorMazeTileTransformationTriggerer.UnsetSelectedTile();
         }
         else
         {

@@ -34,4 +34,5 @@ public class EditorMazeTileTransformationTriggererSelector : EditorMazeTileModif
         _editorSelectedModifierContainer.SelectedModifierSprite.sprite = transformationTrigger.GetSprite();
         EditorManager.SelectedMazeTileTransformationTriggererIndex = modifierIndex;
     }
+
 }

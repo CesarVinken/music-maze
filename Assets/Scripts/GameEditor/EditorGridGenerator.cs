@@ -153,7 +153,7 @@ public class EditorGridGenerator : MonoBehaviour
             return;
         }
 
-        if (MazeLevelManager.Instance.Level == null)
+        if (MazeLevelManager.Instance.EditorLevel == null)
         {
             Logger.Warning(Logger.Datawriting, "Please first generate a level before saving.");
             return;
@@ -173,7 +173,7 @@ public class EditorGridGenerator : MonoBehaviour
 
     private void SaveMazeLevelData()
     {
-        MazeLevelData mazeLevelData = new MazeLevelData(MazeLevelManager.Instance.Level).WithName(_mazeName);
+        MazeLevelData mazeLevelData = new MazeLevelData(MazeLevelManager.Instance.EditorLevel).WithName(_mazeName);
         JsonMazeLevelFileWriter fileWriter = new JsonMazeLevelFileWriter();
         fileWriter.SerialiseData(mazeLevelData);
     }

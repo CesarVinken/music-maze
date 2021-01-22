@@ -10,12 +10,14 @@ using UnityEngine;
 public class MazeLevelManager : MonoBehaviour, IOnEventCallback
 {
     public static MazeLevelManager Instance;
-    public MazeLevel Level;
+    public InGameMazeLevel Level;
+    public EditorMazeLevel EditorLevel;
 
     public List<CharacterSpawnpoint> PlayerCharacterSpawnpoints = new List<CharacterSpawnpoint>();
     public List<CharacterSpawnpoint> EnemyCharacterSpawnpoints = new List<CharacterSpawnpoint>();
-    
-    public GameObject TilePrefab;
+
+    public GameObject EditorTilePrefab;
+    public GameObject InGameTilePrefab;
     public GameObject TileBaseBackgroundPrefab;
     public GameObject TilePathPrefab;
     public GameObject TileObstaclePrefab;
@@ -50,7 +52,8 @@ public class MazeLevelManager : MonoBehaviour, IOnEventCallback
 
     public void Awake()
     {
-        Guard.CheckIsNull(TilePrefab, "TilePrefab", gameObject);
+        Guard.CheckIsNull(EditorTilePrefab, "EditorTilePrefab", gameObject);
+        Guard.CheckIsNull(InGameTilePrefab, "InGameTilePrefab", gameObject);
         Guard.CheckIsNull(TileBaseBackgroundPrefab, "TileBaseBackgroundPrefab", gameObject);
         Guard.CheckIsNull(TilePathPrefab, "TilePathPrefab", gameObject);
         Guard.CheckIsNull(TileObstaclePrefab, "TileObstaclePrefab", gameObject);
@@ -74,7 +77,7 @@ public class MazeLevelManager : MonoBehaviour, IOnEventCallback
 
     public void SetupLevel(MazeLevelData mazeLevelData)
     {
-        Level = MazeLevel.Create(mazeLevelData);
+        Level = InGameMazeLevel.Create(mazeLevelData);
 
         InitialiseTileAttributes();
 
@@ -86,14 +89,14 @@ public class MazeLevelManager : MonoBehaviour, IOnEventCallback
 
     public void SetupLevelForEditor(MazeLevelData mazeLevelData)
     {
-        Level = MazeLevel.Create(mazeLevelData);
+        EditorLevel = EditorMazeLevel.Create(mazeLevelData);
 
-        InitialiseTileBackgrounds();
-        InitialiseTileAttributes();
+        InitialiseEditorTileBackgrounds();
+        InitialiseEditorTileAttributes();
 
         MainCanvas.Instance.BlackOutSquare.ResetToDefault();
         CameraController.Instance.ResetCamera();
-        CameraController.Instance.SetPanLimits(MazeLevelManager.Instance.Level.LevelBounds);
+        CameraController.Instance.SetPanLimits(MazeLevelManager.Instance.EditorLevel.LevelBounds);
     }
 
     public IEnumerator ScanCoroutine()
@@ -134,20 +137,29 @@ public class MazeLevelManager : MonoBehaviour, IOnEventCallback
         NumberOfUnmarkedTiles = -1;
     }
 
-    public void InitialiseTileAttributes()
+    private void InitialiseTileAttributes()
     {
         for (int i = 0; i < Level.Tiles.Count; i++)
         {
-            Tile tile = Level.Tiles[i];
+            InGameTile tile = Level.Tiles[i];
             tile.InitialiseTileAttributes();
-        }    
+        }
     }
 
-    public void InitialiseTileBackgrounds()
+    private void InitialiseEditorTileAttributes()
     {
-        for (int i = 0; i < Level.Tiles.Count; i++)
+        for (int i = 0; i < EditorLevel.Tiles.Count; i++)
         {
-            Tile tile = Level.Tiles[i];
+            EditorTile tile = EditorLevel.Tiles[i];
+            tile.InitialiseTileAttributes();
+        }
+    }
+
+    private void InitialiseEditorTileBackgrounds()
+    {
+        for (int i = 0; i < EditorLevel.Tiles.Count; i++)
+        {
+            EditorTile tile = EditorLevel.Tiles[i];
             tile.InitialiseTileBackgrounds();
         }
     }
@@ -155,7 +167,7 @@ public class MazeLevelManager : MonoBehaviour, IOnEventCallback
     // Previously tried solution with collision detection on all separate clients for all players(instead of events). 
     // But the result was that some tile marking got skipped if the clients skipped walking over them because of a bad connection.
     // This way we can be sure all tiles are getting marked.
-    public void SetTileMarker(Tile tile, PlayerCharacter player)
+    public void SetTileMarker(InGameTile tile, PlayerCharacter player)
     {
         if (GameManager.Instance.GameType == GameType.SinglePlayer)
         {
@@ -214,7 +226,7 @@ public class MazeLevelManager : MonoBehaviour, IOnEventCallback
             GridLocation tileLocation = new GridLocation((int)data[0], (int)data[1]);
             PlayerNumber playerNumber = (PlayerNumber)data[2];
 
-            Tile tile = Level.TilesByLocation[tileLocation];
+            InGameTile tile = Level.TilesByLocation[tileLocation] as InGameTile;
 
             MazeTilePath mazeTilePath = (MazeTilePath)tile.MazeTileBackgrounds.FirstOrDefault(background => background is MazeTilePath);
             if (mazeTilePath == null) return;

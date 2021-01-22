@@ -13,7 +13,7 @@ public class MazeLevelData
 
     }
 
-    public MazeLevelData(MazeLevel level)
+    public MazeLevelData(EditorMazeLevel level)
     {
         for (int i = 0; i < level.Tiles.Count; i++)
         {

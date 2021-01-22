@@ -38,7 +38,7 @@ public class EditorTileSelector : MonoBehaviour
 
         if (PlayableLevelsPanel.IsOpen) return;
 
-        if (MazeLevelManager.Instance.Level == null) return;
+        if (MazeLevelManager.Instance.EditorLevel == null) return;
 
         if (Input.GetKeyDown(KeyCode.Mouse0))
         {
@@ -105,10 +105,10 @@ public class EditorTileSelector : MonoBehaviour
     private bool IsValidGridLocationToSelect(GridLocation selectedTileLocation)
     {
         if (selectedTileLocation.X < 0) return false;
-        if (selectedTileLocation.X > MazeLevelManager.Instance.Level.LevelBounds.X) return false;
+        if (selectedTileLocation.X > MazeLevelManager.Instance.EditorLevel.LevelBounds.X) return false;
 
         if (selectedTileLocation.Y < 0) return false;
-        if (selectedTileLocation.Y > MazeLevelManager.Instance.Level.LevelBounds.Y) return false;
+        if (selectedTileLocation.Y > MazeLevelManager.Instance.EditorLevel.LevelBounds.Y) return false;
 
         return true;
     }
@@ -122,10 +122,19 @@ public class EditorTileSelector : MonoBehaviour
             IEditorMazeTileAttribute attribute = EditorSelectedModifierContainer.Instance.EditorMazeTileAttributes[EditorManager.SelectedMazeTileAttributeModifierIndex];
             PlaceMazeTileAttribute(CurrentSelectedLocation, attribute);
         }
-        else
+        else if (editorMazeTileModifierType == EditorMazeTileModifierType.Background)
         {
             IEditorMazeTileBackground background = EditorSelectedModifierContainer.Instance.EditorMazeTileBackgrounds[EditorManager.SelectedMazeTileBackgroundModifierIndex];
             PlaceMazeTileBackground(CurrentSelectedLocation, background);
+        }
+        else if (editorMazeTileModifierType == EditorMazeTileModifierType.TransformationTriggerer)
+        {
+            IEditorMazeTileTransformationTriggerer transformationTriggerer = EditorSelectedModifierContainer.Instance.EditorMazeTileTransformationTriggerers[EditorManager.SelectedMazeTileTransformationTriggererIndex];
+            PlaceTransformationTriggerer(CurrentSelectedLocation, transformationTriggerer);
+        }
+        else
+        {
+            Logger.Error("EditorMazeTileModifierType not yet implemented");
         }
     }
 
@@ -139,7 +148,7 @@ public class EditorTileSelector : MonoBehaviour
             IEditorMazeTileAttribute attribute = EditorSelectedModifierContainer.Instance.EditorMazeTileAttributes[EditorManager.SelectedMazeTileAttributeModifierIndex];
             PlaceMazeTileAttributeVariation(CurrentSelectedLocation, attribute);
         }
-        else
+        else if (editorMazeTileModifierType == EditorMazeTileModifierType.Background)
         {
             IEditorMazeTileBackground background = EditorSelectedModifierContainer.Instance.EditorMazeTileBackgrounds[EditorManager.SelectedMazeTileBackgroundModifierIndex];
             PlaceMazeTileBackgroundVariation(CurrentSelectedLocation, background);
@@ -150,7 +159,7 @@ public class EditorTileSelector : MonoBehaviour
     {
         if (attribute == null) Logger.Error($"Could not find the attribute type {attribute.GetType()}");
 
-        MazeLevelManager.Instance.Level.TilesByLocation.TryGetValue(gridLocation, out Tile tile);
+        MazeLevelManager.Instance.EditorLevel.TilesByLocation.TryGetValue(gridLocation, out EditorTile tile);
         attribute.PlaceAttribute(tile);
     }
 
@@ -158,23 +167,31 @@ public class EditorTileSelector : MonoBehaviour
     {
         if (background == null) Logger.Error($"Could not find the background type {background.GetType()}");
 
-        MazeLevelManager.Instance.Level.TilesByLocation.TryGetValue(gridLocation, out Tile tile);
+        MazeLevelManager.Instance.EditorLevel.TilesByLocation.TryGetValue(gridLocation, out EditorTile tile);
         background.PlaceBackground(tile);
+    }
+
+    private void PlaceMazeTileAttributeVariation(GridLocation gridLocation, IEditorMazeTileAttribute attribute)
+    {
+        if (attribute == null) Logger.Error($"Could not find the attribute type {attribute.GetType()}");
+
+        MazeLevelManager.Instance.EditorLevel.TilesByLocation.TryGetValue(gridLocation, out EditorTile tile);
+        attribute.PlaceAttributeVariation(tile);
     }
 
     private void PlaceMazeTileBackgroundVariation(GridLocation gridLocation, IEditorMazeTileBackground background)
     {
         if (background == null) Logger.Error($"Could not find the background type {background.GetType()}");
 
-        MazeLevelManager.Instance.Level.TilesByLocation.TryGetValue(gridLocation, out Tile tile);
+        MazeLevelManager.Instance.EditorLevel.TilesByLocation.TryGetValue(gridLocation, out EditorTile tile);
         background.PlaceBackgroundVariation(tile);
     }
 
-    private void PlaceMazeTileAttributeVariation(GridLocation gridLocation, IEditorMazeTileAttribute attribute)
+    private void PlaceTransformationTriggerer(GridLocation gridLocation, IEditorMazeTileTransformationTriggerer transformationTriggerer)
     {
-        if (attribute == null) Logger.Error($"Could not find the background type {attribute.GetType()}");
+        if (transformationTriggerer == null) Logger.Error($"Could not find the transformationTriggerer type {transformationTriggerer.GetType()}");
 
-        MazeLevelManager.Instance.Level.TilesByLocation.TryGetValue(gridLocation, out Tile tile);
-        attribute.PlaceAttributeVariation(tile);
+        MazeLevelManager.Instance.EditorLevel.TilesByLocation.TryGetValue(gridLocation, out EditorTile tile);
+        transformationTriggerer.HandleTransformationTriggerPlacement(tile);
     }
 }

@@ -123,7 +123,7 @@ public class Character : MonoBehaviour
 
     public Tile GetRandomTileTarget()
     {
-        List<Tile> walkableTiles = MazeLevelManager.Instance.Level.Tiles.Where(tile => tile.Walkable).ToList(); // to do keep central list in Tilemanager
+        List<InGameTile> walkableTiles = MazeLevelManager.Instance.Level.Tiles.Where(tile => tile.Walkable).ToList(); // to do keep central list in Tilemanager
         //TODO remove current tile from walkable tiles
         //TODO pick random
         int random = UnityEngine.Random.Range(0, walkableTiles.Count);
@@ -134,7 +134,7 @@ public class Character : MonoBehaviour
 
     public bool ValidateTarget(GridLocation targetGridLocation)
     {
-        if (MazeLevelManager.Instance.Level.TilesByLocation.TryGetValue(targetGridLocation, out Tile tile))
+        if (MazeLevelManager.Instance.Level.TilesByLocation.TryGetValue(targetGridLocation, out InGameTile tile))
         {
             if (tile.Walkable)
                 return true;

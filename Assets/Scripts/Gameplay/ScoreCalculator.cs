@@ -69,7 +69,7 @@ public class ScoreCalculator
 
         int playerMarkScorePlayer1 = 0;
         int playerMarkScorePlayer2 = 0;
-        List<Tile> markedTiles = MazeLevelManager.Instance.Level.Tiles.Where(t => t.PlayerMark != null).ToList();
+        List<InGameTile> markedTiles = MazeLevelManager.Instance.Level.Tiles.Where(t => t.PlayerMark != null).ToList();
         for (int i = 0; i < markedTiles.Count; i++)
         {
             PlayerMark playerMark = markedTiles[i].PlayerMark;

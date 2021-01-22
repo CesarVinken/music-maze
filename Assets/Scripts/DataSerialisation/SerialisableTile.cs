@@ -11,7 +11,7 @@ public class SerialisableTile
     public int GridLocationX;
     public int GridLocationY;
 
-    public SerialisableTile(Tile tile)
+    public SerialisableTile(EditorTile tile)
     {
         Id = tile.TileId;
         TileAttributes = SerialiseTileAttributes(tile);
@@ -29,7 +29,7 @@ public class SerialisableTile
         GridLocationY = gridLocationY;
     }
 
-    private List<SerialisableTileAttribute> SerialiseTileAttributes(Tile tile)
+    private List<SerialisableTileAttribute> SerialiseTileAttributes(EditorTile tile)
     {
         List<SerialisableTileAttribute> tileAttributes = new List<SerialisableTileAttribute>();
 
@@ -74,7 +74,7 @@ public class SerialisableTile
         return tileAttributes;
     }
 
-    private List<SerialisableTileBackground> SerialiseTileBackgrounds(Tile tile)
+    private List<SerialisableTileBackground> SerialiseTileBackgrounds(EditorTile tile)
     {
         List<SerialisableTileBackground> tilebackgrounds = new List<SerialisableTileBackground>();
 
