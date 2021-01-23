@@ -3,6 +3,8 @@ using UnityEngine;
 
 public class InGameTile : Tile
 {
+    [SerializeField] private List<InGameTile> _tilesToTransform = new List<InGameTile>();
+
     public void OnCollisionEnter2D(Collision2D collision)
     {
         if (!Walkable) return;
@@ -21,6 +23,11 @@ public class InGameTile : Tile
 
             MazeLevelManager.Instance.SetTileMarker(this, player);
         }
+    }
+
+    public void AddTilesToTransform(List<InGameTile> tilesToTransform)
+    {
+        _tilesToTransform = tilesToTransform;
     }
 
     public void AddNeighbours(InGameMazeLevel level)
@@ -56,9 +63,9 @@ public class InGameTile : Tile
         if (TransformationState == TransformationState.Bleak)
             TriggerTransformationOnSelf();
 
-        for (int i = 0; i < RegisteredTilesToTransform.Count; i++)
+        for (int i = 0; i < _tilesToTransform.Count; i++)
         {
-            InGameTile tileToTransform = RegisteredTilesToTransform[i] as InGameTile;
+            InGameTile tileToTransform = _tilesToTransform[i] as InGameTile;
 
             if (TransformationState == TransformationState.Bleak)
                 continue;

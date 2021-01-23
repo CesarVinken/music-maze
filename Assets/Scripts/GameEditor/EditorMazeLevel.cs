@@ -44,7 +44,7 @@ public class EditorMazeLevel : MazeLevel
             GameObject tileGO = GameObject.Instantiate(MazeLevelManager.Instance.EditorTilePrefab, _mazeContainer.transform);
 
             EditorTile tile = tileGO.GetComponent<EditorTile>();
-            tile.SetGridLocation(serialisableTile.GridLocationX, serialisableTile.GridLocationY);
+            tile.SetGridLocation(serialisableTile.GridLocation.X, serialisableTile.GridLocation.Y);
             tile.SetId(serialisableTile.Id);
 
             tileGO.name = "Tile" + tile.GridLocation.X + ", " + tile.GridLocation.Y;
@@ -122,5 +122,20 @@ public class EditorMazeLevel : MazeLevel
                 Logger.Error($"Unknown TileBackgroundId {serialisableTileBackground.TileBackgroundId}");
             }
         }
+    }
+
+    public List<EditorTile> FindTilesToTransform(EditorTile transformationTriggererTile)
+    {
+        List<EditorTile> tilesToTransform = new List<EditorTile>();
+
+        for (int i = 0; i < Tiles.Count; i++)
+        {
+            if (Tiles[i].TransformationTriggerers.Contains(transformationTriggererTile))
+            {
+                tilesToTransform.Add(Tiles[i]);
+            }
+        }
+
+        return tilesToTransform;
     }
 }

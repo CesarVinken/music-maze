@@ -81,8 +81,8 @@ public class MazeLevelInfo : IInfoCommand
         for (int i = 0; i < mazeLevelData.Tiles.Count; i++)
         {
             SerialisableTile tile = mazeLevelData.Tiles[i];
-            if (tile.GridLocationX > furthestBounds.X) furthestBounds.X = tile.GridLocationX;
-            if (tile.GridLocationY > furthestBounds.Y) furthestBounds.Y = tile.GridLocationY;
+            if (tile.GridLocation.X > furthestBounds.X) furthestBounds.X = tile.GridLocation.X;
+            if (tile.GridLocation.Y > furthestBounds.Y) furthestBounds.Y = tile.GridLocation.Y;
         }
 
         return furthestBounds;

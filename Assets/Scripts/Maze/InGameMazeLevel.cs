@@ -38,14 +38,17 @@ public class InGameMazeLevel : MazeLevel
 
     public void BuildTiles(MazeLevelData mazeLevelData)
     {
+        Dictionary<InGameTile, List<SerialisableGridLocation>> TileTransformationGridLocationByTile = new Dictionary<InGameTile, List<SerialisableGridLocation>>();
+
         for (int i = 0; i < mazeLevelData.Tiles.Count; i++)
         {
             SerialisableTile serialisableTile = mazeLevelData.Tiles[i];
             GameObject tileGO = GameObject.Instantiate(MazeLevelManager.Instance.InGameTilePrefab, _mazeContainer.transform);
-            Logger.Log("tileGO is null??? " + tileGO.name);
+
             InGameTile tile = tileGO.GetComponent<InGameTile>();
-            Logger.Log("InGameTile is null??? " + tile == null);
-            tile.SetGridLocation(serialisableTile.GridLocationX, serialisableTile.GridLocationY);
+            tileGO.name = "serialisableTile" + serialisableTile.GridLocation.X + ", " + serialisableTile.GridLocation.Y;
+
+            tile.SetGridLocation(serialisableTile.GridLocation.X, serialisableTile.GridLocation.Y);
             tile.SetId(serialisableTile.Id);
 
             tileGO.name = "Tile" + tile.GridLocation.X + ", " + tile.GridLocation.Y;
@@ -61,11 +64,33 @@ public class InGameMazeLevel : MazeLevel
             GridLocation furthestBounds = LevelBounds;
             if (tile.GridLocation.X > furthestBounds.X) LevelBounds.X = tile.GridLocation.X;
             if (tile.GridLocation.Y > furthestBounds.Y) LevelBounds.Y = tile.GridLocation.Y;
+
+            TileTransformationGridLocationByTile.Add(tile, serialisableTile.TilesToTransform);
         }
 
-        for (int j = 0; j < Tiles.Count; j++)
+        foreach (KeyValuePair<InGameTile, List<SerialisableGridLocation>> item in TileTransformationGridLocationByTile)
         {
-            InGameTile tile = Tiles[j];
+            List<InGameTile> tilesToTransform = new List<InGameTile>();
+            
+            for (int i = 0; i < item.Value.Count; i++)
+            {
+                for (int j = 0; j < Tiles.Count; j++)
+                {
+                    InGameTile tile = Tiles[j];
+                    if (item.Value[i].X == tile.GridLocation.X && item.Value[i].Y == tile.GridLocation.Y)
+                    {
+                        tilesToTransform.Add(tile);
+                        break;
+                    }
+                }
+            }
+
+            item.Key.AddTilesToTransform(tilesToTransform);
+        }
+
+        for (int k = 0; k < Tiles.Count; k++)
+        {
+            InGameTile tile = Tiles[k];
             tile.AddNeighbours(this);
         }
     }

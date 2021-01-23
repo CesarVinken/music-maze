@@ -20,8 +20,6 @@ public class Tile : MonoBehaviour
     [SerializeField] public List<IMazeTileAttribute> MazeTileAttributes = new List<IMazeTileAttribute>();
     public Dictionary<ObjectDirection, Tile> Neighbours = new Dictionary<ObjectDirection, Tile>();
 
-    public List<Tile> RegisteredTilesToTransform = new List<Tile>(); // used in game mode to trigger transformations in the listed tiles
-
     public void Awake()
     {
         Guard.CheckIsNull(BackgroundsContainer, "BackgroundsContainer", gameObject);

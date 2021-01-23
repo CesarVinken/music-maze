@@ -8,16 +8,20 @@ public class SerialisableTile
     public List<SerialisableTileAttribute> TileAttributes;
     public List<SerialisableTileBackground> TileBackgrounds;
 
-    public int GridLocationX;
-    public int GridLocationY;
+    public SerialisableGridLocation GridLocation;
+
+    public List<SerialisableGridLocation> TilesToTransform;
 
     public SerialisableTile(EditorTile tile)
     {
         Id = tile.TileId;
         TileAttributes = SerialiseTileAttributes(tile);
         TileBackgrounds = SerialiseTileBackgrounds(tile);
-        GridLocationX = tile.GridLocation.X;
-        GridLocationY = tile.GridLocation.Y;
+
+        GridLocation = new SerialisableGridLocation(tile.GridLocation.X, tile.GridLocation.Y);
+
+        List<EditorTile> tilesToTransform = MazeLevelManager.Instance.EditorLevel.FindTilesToTransform(tile);
+        TilesToTransform = SerialiseTilesToTransform(tilesToTransform);
     }
 
     public SerialisableTile(string id, List<SerialisableTileAttribute> tileAttributes, List<SerialisableTileBackground> tileBackgrounds, int gridLocationX, int gridLocationY)
@@ -25,8 +29,7 @@ public class SerialisableTile
         Id = id;
         TileAttributes = tileAttributes;
         TileBackgrounds = tileBackgrounds;
-        GridLocationX = gridLocationX;
-        GridLocationY = gridLocationY;
+        GridLocation = new SerialisableGridLocation(gridLocationX, gridLocationY);
     }
 
     private List<SerialisableTileAttribute> SerialiseTileAttributes(EditorTile tile)
@@ -101,5 +104,17 @@ public class SerialisableTile
         }
 
         return tilebackgrounds;
+    }
+
+    private List<SerialisableGridLocation> SerialiseTilesToTransform(List<EditorTile> tilesToTransform)
+    {
+        List<SerialisableGridLocation> serialisableTilesToTransform = new List<SerialisableGridLocation>();
+
+        for (int i = 0; i < tilesToTransform.Count; i++)
+        {
+            serialisableTilesToTransform.Add(new SerialisableGridLocation(tilesToTransform[i].GridLocation.X, tilesToTransform[i].GridLocation.Y));
+        }
+
+        return serialisableTilesToTransform;
     }
 }
