@@ -5,9 +5,9 @@ public class EditorPlayerExitTileAttribute : EditorMazeTileAttributeModifier
 {
     public override string Name { get => "Player Exit"; }
 
-    public override void PlaceAttribute(Tile tile)
+    public override void PlaceAttribute(EditorTile tile)
     {
-        TileAttributePlacer tileAttributePlacer = new TileAttributePlacer(tile);
+        EditorTileAttributePlacer tileAttributePlacer = new EditorTileAttributePlacer(tile);
         TileAttributeRemover tileAttributeRemover = new TileAttributeRemover(tile);
 
         IMazeTileAttribute playerExit = (PlayerExit)tile.MazeTileAttributes.FirstOrDefault(attribute => attribute is PlayerExit);
@@ -19,7 +19,7 @@ public class EditorPlayerExitTileAttribute : EditorMazeTileAttributeModifier
             tileAttributeRemover.RemoveTileObstacle();
 
             Logger.Warning($"Now place player exit at {tile.GridLocation.X}, {tile.GridLocation.Y}");
-            tileAttributePlacer.PlacePlayerExit(ObstacleType.Bush); 
+            tileAttributePlacer.CreatePlayerExit(ObstacleType.Bush); 
             return;
         }
 

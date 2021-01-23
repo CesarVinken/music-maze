@@ -71,14 +71,14 @@ public class EditorMazeLevel : MazeLevel
 
     public void AddTileAttributes(SerialisableTile serialisableTile, EditorTile tile)
     {
-        TileAttributePlacer tileAttributePlacer = new TileAttributePlacer(tile);
+        EditorTileAttributePlacer tileAttributePlacer = new EditorTileAttributePlacer(tile);
 
         foreach (SerialisableTileAttribute serialisableTileAttribute in serialisableTile.TileAttributes)
         {
             int tileAttributeId = serialisableTileAttribute.TileAttributeId;
             if (tileAttributeId == SerialisableTileAttribute.ObstacleAttributeCode)
             {
-                tileAttributePlacer.PlaceTileObstacle(ObstacleType.Bush, new TileConnectionScoreInfo(serialisableTileAttribute.ObstacleConnectionScore, serialisableTileAttribute.SpriteNumber)); //TODO, find a way to use polymorphism so we can cast as SerialisableTileObstacleAttribute instead of a general SerialisableTileAttribute
+                tileAttributePlacer.PlaceTileObstacle(ObstacleType.Bush, new TileConnectionScoreInfo(serialisableTileAttribute.ObstacleConnectionScore, serialisableTileAttribute.SpriteNumber)); //TODO, find a way to use polymorphism so we can cast as SerialisableTileObstacleAttribute instead of a general 
             }
             else if (tileAttributeId == SerialisableTileAttribute.PlayerExitCode)
             {

@@ -2,6 +2,6 @@
 {
     string Name { get; }
 
-    void PlaceAttribute(Tile tile);
-    void PlaceAttributeVariation(Tile tile);
+    void PlaceAttribute(EditorTile tile);
+    void PlaceAttributeVariation(EditorTile tile);
 }

@@ -5,9 +5,9 @@ public class EditorObstacleTileAttribute : EditorMazeTileAttributeModifier
 {
     public override string Name { get => "Obstacle"; }
 
-    public override void PlaceAttribute(Tile tile)
+    public override void PlaceAttribute(EditorTile tile)
     {
-        TileAttributePlacer tileAttributePlacer = new TileAttributePlacer(tile);
+        EditorTileAttributePlacer tileAttributePlacer = new EditorTileAttributePlacer(tile);
         TileAttributeRemover tileAttributeRemover = new TileAttributeRemover(tile);
 
         IMazeTileAttribute tileObstacle = (TileObstacle)tile.MazeTileAttributes.FirstOrDefault(attribute => attribute is TileObstacle);
@@ -21,7 +21,7 @@ public class EditorObstacleTileAttribute : EditorMazeTileAttributeModifier
             TileBackgroundRemover tileBackgroundRemover = new TileBackgroundRemover(tile);
             tileBackgroundRemover.RemovePath();
 
-            tileAttributePlacer.PlaceTileObstacle(ObstacleType.Bush);
+            tileAttributePlacer.CreateTileObstacle(ObstacleType.Bush);
             return;
         }
 
@@ -29,13 +29,13 @@ public class EditorObstacleTileAttribute : EditorMazeTileAttributeModifier
         tileAttributeRemover.RemoveTileObstacle();
     }
 
-    public override void PlaceAttributeVariation(Tile tile)
+    public override void PlaceAttributeVariation(EditorTile tile)
     {
         IMazeTileAttribute tileObstacle = (TileObstacle)tile.MazeTileAttributes.FirstOrDefault(attribute => attribute is TileObstacle);
 
         if (tileObstacle == null) return; // only place variation if there is already an obstacle
 
-        TileAttributePlacer tileAttributePlacer = new TileAttributePlacer(tile);
+        EditorTileAttributePlacer tileAttributePlacer = new EditorTileAttributePlacer(tile);
         tileAttributePlacer.PlaceTileObstacleVariation((TileObstacle)tileObstacle);
     }
 

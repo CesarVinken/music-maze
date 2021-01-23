@@ -36,9 +36,25 @@ public class EditorTile : Tile
         }
     }
 
+    public void RemoveTileAsTransformationTrigger()
+    {
+        for (int i = 0; i < MazeLevelManager.Instance.EditorLevel.Tiles.Count; i++)
+        {
+            EditorTile tile = MazeLevelManager.Instance.EditorLevel.Tiles[i];
+            if (tile.TransformationTriggerers.Contains(this))
+            {
+                tile.TransformationTriggerers.Remove(this);
+            }
+        }
+    }
+
+    public void RemoveTransformationTriggerers()
+    {
+        TransformationTriggerers.Clear();
+    }
+
     public void SetTileOverlayImage(TileOverlayMode tileOverlayMode)
     {
-        Logger.Log($"Turn it {tileOverlayMode}");
         switch (tileOverlayMode)
         {
             case TileOverlayMode.Empty:

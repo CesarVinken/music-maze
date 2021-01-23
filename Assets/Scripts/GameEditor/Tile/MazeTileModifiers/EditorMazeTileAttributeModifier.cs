@@ -6,12 +6,12 @@ public abstract class EditorMazeTileAttributeModifier : IEditorMazeTileAttribute
 
     public Sprite Sprite => null;
 
-    public virtual void PlaceAttribute(Tile tile)
+    public virtual void PlaceAttribute(EditorTile tile)
     {
         throw new System.NotImplementedException();
     }
 
-    public virtual void PlaceAttributeVariation(Tile tile)
+    public virtual void PlaceAttributeVariation(EditorTile tile)
     {
         Logger.Log("There are no attribute variations implemented for this attribute type");
     }

@@ -12,8 +12,6 @@ public class TileAttributeRemover
 
     public void RemovePlayerExit()
     {
-        //RemoveTileObstacle();
-
         _tile.Walkable = true;
         PlayerExit playerExit = (PlayerExit)_tile.MazeTileAttributes.FirstOrDefault(attribute => attribute is PlayerExit);
         if (playerExit == null) return;

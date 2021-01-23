@@ -95,9 +95,9 @@ public class InGameMazeLevel : MazeLevel
         }
     }
 
-    public void AddTileAttributes(SerialisableTile serialisableTile, Tile tile)
+    public void AddTileAttributes(SerialisableTile serialisableTile, InGameTile tile)
     {
-        TileAttributePlacer tileAttributePlacer = new TileAttributePlacer(tile);
+        InGameTileAttributePlacer tileAttributePlacer = new InGameTileAttributePlacer(tile);
 
         foreach (SerialisableTileAttribute serialisableTileAttribute in serialisableTile.TileAttributes)
         {
