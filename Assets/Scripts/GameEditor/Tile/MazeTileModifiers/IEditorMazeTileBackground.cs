@@ -2,6 +2,6 @@
 {
     string Name { get; }
 
-    void PlaceBackground(Tile tile);
-    void PlaceBackgroundVariation(Tile tile);
+    void PlaceBackground(EditorTile tile);
+    void PlaceBackgroundVariation(EditorTile tile);
 }

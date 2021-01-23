@@ -3,9 +3,9 @@ using System.Linq;
 
 public class TileBackgroundRemover
 {
-    private Tile _tile;
+    private EditorTile _tile;
 
-    public TileBackgroundRemover(Tile tile)
+    public TileBackgroundRemover(EditorTile tile)
     {
         _tile = tile;
     }
@@ -21,7 +21,7 @@ public class TileBackgroundRemover
         // If needed, place a background in the gap that the removed path left
         if (oldConnectionScore == NeighbourTileCalculator.ConnectionOnAllSidesScore)
         {
-            TileBackgroundPlacer tileBackgroundPlacer = new TileBackgroundPlacer(_tile);
+            EditorTileBackgroundPlacer tileBackgroundPlacer = new EditorTileBackgroundPlacer(_tile);
             tileBackgroundPlacer.PlaceBaseBackground(MazeTileBaseBackgroundType.DefaultGrass);
         }
 
@@ -50,7 +50,7 @@ public class TileBackgroundRemover
             //Add background where needed
             if (oldConnectionScoreOnNeighbour == NeighbourTileCalculator.ConnectionOnAllSidesScore && mazeTilePathConnectionScoreOnNeighbourInfo.RawConnectionScore != NeighbourTileCalculator.ConnectionOnAllSidesScore)
             {
-                TileBackgroundPlacer tileBackgroundPlacer = new TileBackgroundPlacer(neighbour.Value);
+                EditorTileBackgroundPlacer tileBackgroundPlacer = new EditorTileBackgroundPlacer(neighbour.Value as EditorTile);
                 tileBackgroundPlacer.PlaceBaseBackground(MazeTileBaseBackgroundType.DefaultGrass);
             }
         }

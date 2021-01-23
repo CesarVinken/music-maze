@@ -105,7 +105,7 @@ public class EditorMazeLevel : MazeLevel
 
     public void AddBackgroundSprites(SerialisableTile serialisableTile, EditorTile tile)
     {
-        TileBackgroundPlacer tileBackgroundPlacer = new TileBackgroundPlacer(tile);
+        EditorTileBackgroundPlacer tileBackgroundPlacer = new EditorTileBackgroundPlacer(tile);
 
         foreach (SerialisableTileBackground serialisableTileBackground in serialisableTile.TileBackgrounds)
         {

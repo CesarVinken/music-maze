@@ -129,9 +129,9 @@ public class InGameMazeLevel : MazeLevel
         }
     }
 
-    public void AddBackgroundSprites(SerialisableTile serialisableTile, Tile tile)
+    public void AddBackgroundSprites(SerialisableTile serialisableTile, InGameTile tile)
     {
-        TileBackgroundPlacer tileBackgroundPlacer = new TileBackgroundPlacer(tile);
+        InGameTileBackgroundPlacer tileBackgroundPlacer = new InGameTileBackgroundPlacer(tile);
 
         foreach (SerialisableTileBackground serialisableTileBackground in serialisableTile.TileBackgrounds)
         {

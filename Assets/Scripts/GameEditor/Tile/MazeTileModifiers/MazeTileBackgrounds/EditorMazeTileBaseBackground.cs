@@ -5,9 +5,9 @@ public class EditorMazeTileBaseBackground : EditorMazeTileBackgroundModifier
 {
     public override string Name => "Grass";
 
-    public override void PlaceBackground(Tile tile)
+    public override void PlaceBackground(EditorTile tile)
     {
-        TileBackgroundPlacer tileBackgroundPlacer = new TileBackgroundPlacer(tile);
+        EditorTileBackgroundPlacer tileBackgroundPlacer = new EditorTileBackgroundPlacer(tile);
         TileBackgroundRemover tileBackgroundRemover = new TileBackgroundRemover(tile);
 
         IMazeTileBackground mazeTileBaseBackground = (MazeTileBaseBackground)tile.MazeTileBackgrounds.FirstOrDefault(background => background is MazeTileBaseBackground);
@@ -19,7 +19,7 @@ public class EditorMazeTileBaseBackground : EditorMazeTileBackgroundModifier
         tileBackgroundRemover.RemoveBaseBackground(MazeTileBaseBackgroundType.DefaultGrass);
     }
 
-    public override void PlaceBackgroundVariation(Tile tile)
+    public override void PlaceBackgroundVariation(EditorTile tile)
     {
         Logger.Log("Background variations be implemented");
     }

@@ -3,9 +3,9 @@ using System.Linq;
 
 public class TileAttributeRemover
 {
-    private Tile _tile;
+    private EditorTile _tile;
 
-    public TileAttributeRemover(Tile tile)
+    public TileAttributeRemover(EditorTile tile)
     {
         _tile = tile;
     }
@@ -38,7 +38,7 @@ public class TileAttributeRemover
         // OPTIMISATION: Currently only looking at connection score from obstacles, but should also take eg. door attributes into account.
         if (oldConnectionScore == NeighbourTileCalculator.ConnectionOnAllSidesScore)
         {
-            TileBackgroundPlacer tileBackgroundPlacer = new TileBackgroundPlacer(_tile);
+            EditorTileBackgroundPlacer tileBackgroundPlacer = new EditorTileBackgroundPlacer(_tile);
             tileBackgroundPlacer.PlaceBaseBackground(MazeTileBaseBackgroundType.DefaultGrass);
         }
 
@@ -90,7 +90,7 @@ public class TileAttributeRemover
             // If needed, place a background
             if (obstacleConnectionScoreOnNeighbour.RawConnectionScore != NeighbourTileCalculator.ConnectionOnAllSidesScore)
             {
-                TileBackgroundPlacer tileBackgroundPlacer = new TileBackgroundPlacer(neighbour.Value);
+                EditorTileBackgroundPlacer tileBackgroundPlacer = new EditorTileBackgroundPlacer(neighbour.Value as EditorTile);
                 tileBackgroundPlacer.PlaceBaseBackground(MazeTileBaseBackgroundType.DefaultGrass);
             }
         }

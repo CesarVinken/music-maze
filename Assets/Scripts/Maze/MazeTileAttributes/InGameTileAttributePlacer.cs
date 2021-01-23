@@ -1,4 +1,6 @@
-﻿public class InGameTileAttributePlacer : TileAttributePlacer<InGameTile>
+﻿using UnityEngine;
+
+public class InGameTileAttributePlacer : TileAttributePlacer<InGameTile>
 {
     private InGameTile _tile;
 

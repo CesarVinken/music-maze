@@ -5,9 +5,9 @@ public class EditorMazeTilePath : EditorMazeTileBackgroundModifier
 {
     public override string Name => "Path";
 
-    public override void PlaceBackground(Tile tile)
+    public override void PlaceBackground(EditorTile tile)
     {
-        TileBackgroundPlacer tileBackgroundPlacer = new TileBackgroundPlacer(tile);
+        EditorTileBackgroundPlacer tileBackgroundPlacer = new EditorTileBackgroundPlacer(tile);
         TileBackgroundRemover tileBackgroundRemover = new TileBackgroundRemover(tile);
 
         IMazeTileBackground mazeTilePath = (MazeTilePath)tile.MazeTileBackgrounds.FirstOrDefault(background => background is MazeTilePath);
@@ -24,13 +24,13 @@ public class EditorMazeTilePath : EditorMazeTileBackgroundModifier
         tileBackgroundRemover.RemovePath();
     }
 
-    public override void PlaceBackgroundVariation(Tile tile)
+    public override void PlaceBackgroundVariation(EditorTile tile)
     {
         IMazeTileBackground mazeTilePath = (MazeTilePath)tile.MazeTileBackgrounds.FirstOrDefault(background => background is MazeTilePath);
         
         if (mazeTilePath == null) return; // only place variation if there is already a path
 
-        TileBackgroundPlacer tileBackgroundPlacer = new TileBackgroundPlacer(tile);
+        EditorTileBackgroundPlacer tileBackgroundPlacer = new EditorTileBackgroundPlacer(tile);
         tileBackgroundPlacer.PlacePathVariation((MazeTilePath)mazeTilePath);
     }
 

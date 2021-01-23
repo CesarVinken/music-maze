@@ -88,7 +88,7 @@ public class EditorTileAttributePlacer : TileAttributePlacer<EditorTile>
             if (obstacleConnectionScoreOnNeighbour.RawConnectionScore == NeighbourTileCalculator.ConnectionOnAllSidesScore)
             {
                 Logger.Log($"Remove the background on tile {neighbour.Value.GridLocation.X}, {neighbour.Value.GridLocation.Y}");
-                TileBackgroundRemover tileBackgroundRemover = new TileBackgroundRemover(neighbour.Value);
+                TileBackgroundRemover tileBackgroundRemover = new TileBackgroundRemover(neighbour.Value as EditorTile);
 
                 tileBackgroundRemover.RemoveBaseBackground(MazeTileBaseBackgroundType.DefaultGrass);
             }
