@@ -54,6 +54,8 @@ public class TileBackgroundRemover
                 tileBackgroundPlacer.PlaceBaseBackground(MazeTileBaseBackgroundType.DefaultGrass);
             }
         }
+
+        _tile.RemoveTileAsTransformationTrigger();
     }
 
     public void RemoveBaseBackground(MazeTileBaseBackgroundType mazeTileBaseBackgroundType)

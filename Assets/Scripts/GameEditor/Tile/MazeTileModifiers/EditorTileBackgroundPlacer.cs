@@ -24,6 +24,7 @@ public class EditorTileBackgroundPlacer : TileBackgroundPlacer<EditorTile>
         mazeTilePath.WithPathType(MazeTilePathType.Default);
         mazeTilePath.WithConnectionScoreInfo(pathConnectionScore);
         Tile.MazeTileBackgrounds.Add(mazeTilePath as IMazeTileBackground);
+        Tile.TryMakeMarkable(true);
 
         // Update pathConnections for neighbouring tiles
         foreach (KeyValuePair<ObjectDirection, Tile> neighbour in Tile.Neighbours)
@@ -45,5 +46,7 @@ public class EditorTileBackgroundPlacer : TileBackgroundPlacer<EditorTile>
                 PlaceBaseBackground(MazeTileBaseBackgroundType.DefaultGrass);
             }
         }
+
+        Tile.RemoveTransformationTriggerers();
     }
 }
