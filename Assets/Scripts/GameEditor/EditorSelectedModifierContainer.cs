@@ -125,13 +125,18 @@ public class EditorSelectedModifierContainer : MonoBehaviour
             EditorModifierTypeSelectionContainer.Instance.EnableBackgroundsSelectionImage();
         }
         else if (editorMazeTileModifierType == EditorMazeTileModifierType.TransformationTriggerer)
-        {
-            
+        {    
             EditorModifierTypeSelectionContainer.Instance.EnableTransformationTriggererSelectionImage();
         }
         else
         {
             Logger.Error("Unknown modifier type");
+        }
+
+        if (EditorManager.SelectedMazeTileModifierType == EditorMazeTileModifierType.TransformationTriggerer)
+        {
+            EditorMazeTileTransformationTriggerer editorMazeTileTransformationTriggerer = EditorMazeTileTransformationTriggerers[EditorManager.SelectedMazeTileTransformationTriggererIndex] as EditorMazeTileTransformationTriggerer;
+            editorMazeTileTransformationTriggerer.UnsetSelectedTile();
         }
 
         EditorManager.SelectedMazeTileModifierType = editorMazeTileModifierType;
@@ -150,9 +155,6 @@ public class EditorSelectedModifierContainer : MonoBehaviour
         else if (EditorManager.SelectedMazeTileModifierType == EditorMazeTileModifierType.TransformationTriggerer)
         {
             _editorMazeTileTransformationTriggererSelector.SetSelectedModifier(modifierIndex);
-
-            EditorMazeTileTransformationTriggerer editorMazeTileTransformationTriggerer = EditorMazeTileTransformationTriggerers[modifierIndex] as EditorMazeTileTransformationTriggerer;
-            editorMazeTileTransformationTriggerer.UnsetSelectedTile();
         }
         else
         {

@@ -42,10 +42,13 @@ public class EditorMazeTileTransformationTriggerer : IEditorMazeTileTransformati
 
     public void UnsetSelectedTile()
     {
-        Logger.Log("unset selected tile");
         if (SelectedTile != null)
         {
             SelectedTile.SetTileOverlayImage(TileOverlayMode.Empty);
+            for (int i = 0; i < SelectedTile.TransformationTriggerers.Count; i++)
+            {
+                SelectedTile.TransformationTriggerers[i].SetTileOverlayImage(TileOverlayMode.Empty);
+            }
         }
         SelectedTile = null;
     }
@@ -57,7 +60,6 @@ public class EditorMazeTileTransformationTriggerer : IEditorMazeTileTransformati
             // if we have a tile selected, add the markable tile as triggerer
             if(SelectedTile != null)
             {
-                Logger.Log($"TODO: add markable tile as registered transformation triggerer for tile at {SelectedTile.GridLocation.X},{SelectedTile.GridLocation.Y}");
                 if (SelectedTile.TransformationTriggerers.Contains(tile))
                 {
                     tile.SetTileOverlayImage(TileOverlayMode.Empty);
