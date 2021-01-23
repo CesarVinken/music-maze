@@ -1,7 +1,12 @@
 ﻿using System.Collections.Generic;
+using UnityEngine;
 
 public class EditorTile : Tile
 {
+    [Header("Editor")]
+
+    [SerializeField] private SpriteRenderer _overlaySpriteRenderer;
+
     public List<EditorTile> TransformationTriggerers = new List<EditorTile>(); // used in the editor for non-markable tiles and lists their triggerer.
 
     public void AddNeighbours(EditorMazeLevel level)
@@ -28,6 +33,29 @@ public class EditorTile : Tile
         if (GridLocation.Y < level.LevelBounds.Y)
         {
             Neighbours.Add(ObjectDirection.Up, level.TilesByLocation[new GridLocation(GridLocation.X, GridLocation.Y + 1)]);
+        }
+    }
+
+    public void SetTileOverlayImage(TileOverlayMode tileOverlayMode)
+    {
+        Logger.Log($"Turn it {tileOverlayMode}");
+        switch (tileOverlayMode)
+        {
+            case TileOverlayMode.Empty:
+                _overlaySpriteRenderer.color = new Color(0, 0, 0, 0);
+                break;
+            case TileOverlayMode.Blue:
+                _overlaySpriteRenderer.color = new Color(0, 0, 1, 0.5f);
+                break;
+            case TileOverlayMode.Green:
+                _overlaySpriteRenderer.color = new Color(0, 1, 0, 0.5f);
+                break;
+            case TileOverlayMode.Yellow:
+                _overlaySpriteRenderer.color = new Color(0, 1, 1, 0.5f);
+                break;
+            default:
+                Logger.Error($"Tile overlay mode {tileOverlayMode} was not yet implemented");
+                break;
         }
     }
 }

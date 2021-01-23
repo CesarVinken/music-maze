@@ -15,12 +15,38 @@ public class EditorMazeTileTransformationTriggerer : IEditorMazeTileTransformati
 
     public void SetSelectedTile(EditorTile tile)
     {
+        if(SelectedTile != null)
+        {
+
+            SelectedTile.SetTileOverlayImage(TileOverlayMode.Empty);
+            for (int i = 0; i < SelectedTile.TransformationTriggerers.Count; i++)
+            {
+                SelectedTile.TransformationTriggerers[i].SetTileOverlayImage(TileOverlayMode.Empty);
+            }
+
+            if (SelectedTile == tile)
+            {
+                SelectedTile = null;
+                return;
+            }
+        }
+        
+        tile.SetTileOverlayImage(TileOverlayMode.Yellow);
+
         SelectedTile = tile;
+        for (int i = 0; i < SelectedTile.TransformationTriggerers.Count; i++)
+        {
+            SelectedTile.TransformationTriggerers[i].SetTileOverlayImage(TileOverlayMode.Blue);
+        }
     }
 
     public void UnsetSelectedTile()
     {
         Logger.Log("unset selected tile");
+        if (SelectedTile != null)
+        {
+            SelectedTile.SetTileOverlayImage(TileOverlayMode.Empty);
+        }
         SelectedTile = null;
     }
 
@@ -34,13 +60,14 @@ public class EditorMazeTileTransformationTriggerer : IEditorMazeTileTransformati
                 Logger.Log($"TODO: add markable tile as registered transformation triggerer for tile at {SelectedTile.GridLocation.X},{SelectedTile.GridLocation.Y}");
                 if (SelectedTile.TransformationTriggerers.Contains(tile))
                 {
+                    tile.SetTileOverlayImage(TileOverlayMode.Empty);
                     SelectedTile.TransformationTriggerers.Remove(tile);
                 }
                 else
                 {
+                    tile.SetTileOverlayImage(TileOverlayMode.Blue); // blue = triggerer
                     SelectedTile.TransformationTriggerers.Add(tile);
                 }
-                //TODO paint tile to indicate that it is a triggerer for the selected tile
             }
         }
         else 
