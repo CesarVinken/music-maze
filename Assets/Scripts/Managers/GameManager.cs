@@ -60,7 +60,6 @@ public class GameManager : MonoBehaviourPunCallbacks
         Instantiate(MazeLevelManagerPrefab, transform);
         Instantiate(CharacterManagerPrefab, transform);
         Instantiate(SpriteManagerPrefab, transform);
-
     }
 
     public void Start()

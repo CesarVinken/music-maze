@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System.Linq;
+using UnityEngine;
 
 public class EditorMazeTileTransformationTriggerer : IEditorMazeTileTransformationTriggerer
 {
@@ -55,7 +56,7 @@ public class EditorMazeTileTransformationTriggerer : IEditorMazeTileTransformati
 
     public void HandleTransformationTriggerPlacement(EditorTile tile)
     {
-        if(tile.Markable)
+        if(tile.Markable || tile.MazeTileAttributes.OfType<PlayerSpawnpoint>().Any())
         {
             // if we have a tile selected, add the markable tile as triggerer
             if(SelectedTile != null)

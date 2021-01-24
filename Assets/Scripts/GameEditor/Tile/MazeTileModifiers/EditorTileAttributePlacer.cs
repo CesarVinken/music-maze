@@ -94,4 +94,15 @@ public class EditorTileAttributePlacer : TileAttributePlacer<EditorTile>
             }
         }
     }
+
+    public void PlacePlayerSpawnpoint()
+    {
+        PlayerSpawnpoint playerSpawnpoint = (PlayerSpawnpoint)InstantiateTileAttributeGO<PlayerSpawnpoint>();
+
+        Tile.Walkable = true;
+        Tile.TryMakeMarkable(false);
+
+        Tile.MazeTileAttributes.Add(playerSpawnpoint);
+    }
+
 }

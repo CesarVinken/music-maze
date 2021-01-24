@@ -8,7 +8,7 @@ public class MazeLevel
 
     public List<PlayerExit> MazeExits = new List<PlayerExit>();
 
-    public List<CharacterSpawnpoint> PlayerCharacterSpawnpoints = new List<CharacterSpawnpoint>();
+    public Dictionary<PlayerNumber, CharacterSpawnpoint> PlayerCharacterSpawnpoints = new Dictionary<PlayerNumber, CharacterSpawnpoint>();
     public List<CharacterSpawnpoint> EnemyCharacterSpawnpoints = new List<CharacterSpawnpoint>();
 
     protected GameObject _mazeContainer;

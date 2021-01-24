@@ -30,16 +30,6 @@ public abstract class TileAttributePlacer<T> where T : Tile
         Tile.MazeTileAttributes.Add(tileObstacle);
     }
 
-    public void PlacePlayerSpawnpoint()
-    {
-        PlayerSpawnpoint playerSpawnpoint = (PlayerSpawnpoint)InstantiateTileAttributeGO<PlayerSpawnpoint>();
-
-        Tile.Walkable = true;
-        Tile.TryMakeMarkable(false);
-
-        Tile.MazeTileAttributes.Add(playerSpawnpoint);
-    }
-
     public void PlaceEnemySpawnpoint()
     {
         EnemySpawnpoint enemySpawnpoint = (EnemySpawnpoint)InstantiateTileAttributeGO<EnemySpawnpoint>();

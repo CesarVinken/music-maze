@@ -114,11 +114,11 @@ public class Tile : MonoBehaviour
 
         for (int i = 0; i < MazeTileAttributes.Count; i++)
         {
-            if (MazeTileAttributes[i] is PlayerSpawnpoint)
-            {
-                Markable = false;
-                return;
-            }
+            //if (MazeTileAttributes[i] is PlayerSpawnpoint)
+            //{
+            //    Markable = false;
+            //    return;
+            //}
 
             if (MazeTileAttributes[i] is PlayerExit)
             {

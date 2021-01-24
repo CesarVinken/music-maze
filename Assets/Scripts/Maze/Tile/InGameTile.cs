@@ -62,12 +62,12 @@ public class InGameTile : Tile
     {
         if (TransformationState == TransformationState.Bleak)
             TriggerTransformationOnSelf();
-
+        Logger.Log($"_tilesToTransform: {_tilesToTransform.Count}");
         for (int i = 0; i < _tilesToTransform.Count; i++)
         {
-            InGameTile tileToTransform = _tilesToTransform[i] as InGameTile;
+            InGameTile tileToTransform = _tilesToTransform[i];
 
-            if (TransformationState == TransformationState.Bleak)
+            if (tileToTransform.TransformationState == TransformationState.Colourful)
                 continue;
 
             tileToTransform.TriggerTransformationOnSelf();

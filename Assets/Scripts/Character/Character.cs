@@ -74,7 +74,6 @@ public class Character : MonoBehaviour
         _animationHandler.SetAnimationControllerForCharacterType(_characterType);
     }
 
-
     public void SetStartingPosition(Character character, GridLocation gridLocation)
     {
         character.StartingPosition = gridLocation;
@@ -119,7 +118,6 @@ public class Character : MonoBehaviour
         //Logger.Log("Set new target for enemy: {0},{1}", randomGridVectorLocation.x, randomGridVectorLocation.y);
         _seeker.StartPath(transform.position, randomGridVectorLocation, _characterPath.OnPathCalculated);
     }
-
 
     public Tile GetRandomTileTarget()
     {

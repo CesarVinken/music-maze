@@ -16,4 +16,15 @@ public class InGameTileAttributePlacer : TileAttributePlacer<InGameTile>
         GameObject tileAttributeGO = GameObject.Instantiate(MazeLevelManager.Instance.GetTileAttributePrefab<U>(), Tile.transform);
         return tileAttributeGO.GetComponent<U>();
     }
+
+    public void PlacePlayerSpawnpoint()
+    {
+        Logger.Log("TODO: only make not markable if there is a player for the spawnpoint");
+        PlayerSpawnpoint playerSpawnpoint = (PlayerSpawnpoint)InstantiateTileAttributeGO<PlayerSpawnpoint>();
+
+        Tile.Walkable = true;
+        //Tile.TryMakeMarkable(false);
+
+        Tile.MazeTileAttributes.Add(playerSpawnpoint);
+    }
 }

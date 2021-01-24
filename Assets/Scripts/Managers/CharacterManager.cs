@@ -66,7 +66,7 @@ public class CharacterManager : MonoBehaviourPunCallbacks
         {
             Debug.Log("Instantiating Player 1");
 
-            CharacterBundle PlayerBundle = SpawnCharacter(level.PlayerCharacterSpawnpoints[0].CharacterBlueprint, level.PlayerCharacterSpawnpoints[0].GridLocation);
+            CharacterBundle PlayerBundle = SpawnCharacter(level.PlayerCharacterSpawnpoints[PlayerNumber.Player1].CharacterBlueprint, level.PlayerCharacterSpawnpoints[PlayerNumber.Player1].GridLocation);
             Player1GO = PlayerBundle.CharacterGO;
             PlayerCharacter player = PlayerBundle.Character as PlayerCharacter;
             SpawnEnemies();
@@ -75,7 +75,7 @@ public class CharacterManager : MonoBehaviourPunCallbacks
         {
             Debug.Log("Instantiating Player 2");
 
-            CharacterBundle PlayerBundle = SpawnCharacter(level.PlayerCharacterSpawnpoints[1].CharacterBlueprint, level.PlayerCharacterSpawnpoints[1].GridLocation);
+            CharacterBundle PlayerBundle = SpawnCharacter(level.PlayerCharacterSpawnpoints[PlayerNumber.Player2].CharacterBlueprint, level.PlayerCharacterSpawnpoints[PlayerNumber.Player2].GridLocation);
             Player2GO = PlayerBundle.CharacterGO;
             PlayerCharacter player = PlayerBundle.Character as PlayerCharacter;
         }

@@ -112,6 +112,8 @@ public class MazeLevelManager : MonoBehaviour, IOnEventCallback
 
         // start movement of all actors that depend on the updated pathfinding only after the scan.
         CharacterManager.Instance.UnfreezeCharacters();
+
+        HandleSpawnpointMarkability();
     }
 
     public void UnloadLevel()
@@ -327,6 +329,18 @@ public class MazeLevelManager : MonoBehaviour, IOnEventCallback
 
             TileConnectionScoreInfo neighbourConnectionScoreInfo = NeighbourTileCalculator.MapNeighbourPlayerMarkEndsOfTile(neighbour);
             neighbour.PlayerMarkEndsRenderer.sprite = SpriteManager.Instance.PlayerTileMarkerEdge[neighbourConnectionScoreInfo.SpriteNumber - 1];
+        }
+    }
+
+    private void HandleSpawnpointMarkability()
+    {
+        if(CharacterManager.Instance.MazePlayers.Count < 2)
+        {
+            Tile spawnpoint1Tile = Level.PlayerCharacterSpawnpoints[PlayerNumber.Player1].Tile;
+            spawnpoint1Tile.TryMakeMarkable(false);
+
+            Tile spawnpoint2Tile = Level.PlayerCharacterSpawnpoints[PlayerNumber.Player2].Tile;
+            spawnpoint2Tile.TryMakeMarkable(true);
         }
     }
 }

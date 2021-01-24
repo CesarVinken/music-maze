@@ -85,6 +85,10 @@ public class PlayerCharacter : Character
 
             SceneObjectManager.Instance.SceneObjects.Add(_selectionIndicatorGO);
         }
+
+        //transform the player's starting tile and surrounding tiles
+        InGameTile currentTile = MazeLevelManager.Instance.Level.TilesByLocation[StartingPosition];
+        currentTile.TriggerTransformations();
     }
 
     public void OnCollisionEnter2D(Collision2D collision)
