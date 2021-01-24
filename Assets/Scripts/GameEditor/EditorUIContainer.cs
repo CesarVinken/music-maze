@@ -29,8 +29,6 @@ public class EditorUIContainer : MonoBehaviour
         EditorModeStatusTextGO.SetActive(true);
         EditorUIGO.SetActive(true);
 
-        // TODO: transform current level into an editor level so that the player can continue editing the current level
-
         EditorWorldContainer.Instance.ShowTileSelector();
     }
 

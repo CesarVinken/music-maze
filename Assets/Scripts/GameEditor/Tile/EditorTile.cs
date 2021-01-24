@@ -67,7 +67,7 @@ public class EditorTile : Tile
                 _overlaySpriteRenderer.color = new Color(0, 1, 0, 0.5f);
                 break;
             case TileOverlayMode.Yellow:
-                _overlaySpriteRenderer.color = new Color(0, 1, 1, 0.5f);
+                _overlaySpriteRenderer.color = new Color(1, 1, 0, 0.5f);
                 break;
             default:
                 Logger.Error($"Tile overlay mode {tileOverlayMode} was not yet implemented");

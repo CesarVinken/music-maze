@@ -38,6 +38,8 @@ public class EditorMazeLevel : MazeLevel
 
     public void BuildTiles(MazeLevelData mazeLevelData)
     {
+        Dictionary<SerialisableGridLocation, List<EditorTile>> TileTransformationTriggererByGridLocation = new Dictionary<SerialisableGridLocation, List<EditorTile>>();
+
         for (int i = 0; i < mazeLevelData.Tiles.Count; i++)
         {
             SerialisableTile serialisableTile = mazeLevelData.Tiles[i];
@@ -46,6 +48,7 @@ public class EditorMazeLevel : MazeLevel
             EditorTile tile = tileGO.GetComponent<EditorTile>();
             tile.SetGridLocation(serialisableTile.GridLocation.X, serialisableTile.GridLocation.Y);
             tile.SetId(serialisableTile.Id);
+            
 
             tileGO.name = "Tile" + tile.GridLocation.X + ", " + tile.GridLocation.Y;
             tileGO.transform.position = GridLocation.GridToVector(tile.GridLocation);
@@ -60,11 +63,41 @@ public class EditorMazeLevel : MazeLevel
             GridLocation furthestBounds = LevelBounds;
             if (tile.GridLocation.X > furthestBounds.X) LevelBounds.X = tile.GridLocation.X;
             if (tile.GridLocation.Y > furthestBounds.Y) LevelBounds.Y = tile.GridLocation.Y;
+
+            if (serialisableTile.TilesToTransform != null)
+            {
+                for (int j = 0; j < serialisableTile.TilesToTransform.Count; j++)
+                {
+                    if (TileTransformationTriggererByGridLocation.ContainsKey(serialisableTile.TilesToTransform[j]))
+                    {
+                        List<EditorTile> transformationTriggerers = TileTransformationTriggererByGridLocation[serialisableTile.TilesToTransform[j]];
+                        transformationTriggerers.Add(tile);
+                    }
+                    else
+                    {
+                        List<EditorTile> transformationTriggerers = new List<EditorTile>();
+                        transformationTriggerers.Add(tile);
+                        TileTransformationTriggererByGridLocation.Add(serialisableTile.TilesToTransform[j], transformationTriggerers);
+                    }
+                }
+            }
         }
 
-        for (int j = 0; j < Tiles.Count; j++)
+        foreach (KeyValuePair<SerialisableGridLocation, List<EditorTile>> item in TileTransformationTriggererByGridLocation)
         {
-            EditorTile tile = Tiles[j];
+            for (int i = 0; i < Tiles.Count; i++)
+            {
+                EditorTile tile = Tiles[i];
+                if(item.Key.X == tile.GridLocation.X && item.Key.Y == tile.GridLocation.Y)
+                {
+                    tile.TransformationTriggerers = item.Value;
+                }
+            }
+        }
+
+        for (int k = 0; k < Tiles.Count; k++)
+        {
+            EditorTile tile = Tiles[k];
             tile.AddNeighbours(this);
         }
     }

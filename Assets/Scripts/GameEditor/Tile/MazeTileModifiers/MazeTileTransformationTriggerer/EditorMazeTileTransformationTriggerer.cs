@@ -32,7 +32,7 @@ public class EditorMazeTileTransformationTriggerer : IEditorMazeTileTransformati
             }
         }
         
-        tile.SetTileOverlayImage(TileOverlayMode.Yellow);
+        tile.SetTileOverlayImage(TileOverlayMode.Green);
 
         SelectedTile = tile;
         for (int i = 0; i < SelectedTile.TransformationTriggerers.Count; i++)
