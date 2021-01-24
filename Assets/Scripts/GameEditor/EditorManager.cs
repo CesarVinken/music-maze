@@ -34,6 +34,8 @@ public static class EditorManager
         _inEditor = true;
         EditorUIContainer.Instance.InitialiseEditor();
         EditorWorldContainer.Instance.InitialiseEditor();
+
+        EditorUIContainer.Instance.GridGenerator.GenerateTiles();
     }
 
     public static void CloseEditor()

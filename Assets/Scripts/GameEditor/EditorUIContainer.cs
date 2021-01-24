@@ -11,6 +11,8 @@ public class EditorUIContainer : MonoBehaviour
     public Sprite DefaultIcon;
     public Sprite[] TileAttributeIcons;
 
+    public EditorGridGenerator GridGenerator;
+
     public void Awake()
     {
         Instance = this;
@@ -18,6 +20,8 @@ public class EditorUIContainer : MonoBehaviour
         Guard.CheckIsNull(EditorModeStatusTextGO, "EditorModeStatusTextGO", gameObject);
         Guard.CheckIsNull(EditorUIGO, "EditorUIGO", gameObject);
         Guard.CheckIsNull(PlayableLevelsPanelGO, "PlayableLevelsPanelGO", gameObject);
+
+        Guard.CheckIsNull(GridGenerator, "GridGenerator", gameObject);
     }
 
     public void InitialiseEditor()
