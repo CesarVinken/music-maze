@@ -134,5 +134,4 @@ public class Tile : MonoBehaviour
         PlayerMarkEndsRenderer.sprite = null;
     }
 
-    
 }

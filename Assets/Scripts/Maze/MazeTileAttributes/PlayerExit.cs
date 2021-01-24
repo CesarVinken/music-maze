@@ -48,6 +48,14 @@ public class PlayerExit : TileObstacle, IMazeTileAttribute, ITileConnectable
         }
     }
 
+    public override void TriggerTransformation()
+    {
+        if (ObstacleType == ObstacleType.Bush)
+        {
+            _spriteRenderer.sprite = SpriteManager.Instance.DefaultDoorColourful[SpriteNumber - 1];
+        }
+    }
+
     public void OpenExit()
     {
         Tile.Walkable = true;
