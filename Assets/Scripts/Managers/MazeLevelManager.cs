@@ -284,7 +284,6 @@ public class MazeLevelManager : MonoBehaviour, IOnEventCallback
         {
             PlayerExit exit = Level.MazeExits[i];
             exit.OpenExit();
-            // open exit
         }
     }
 

@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-public class MazeTileBaseBackground : MonoBehaviour, IMazeTileBackground
+public class MazeTileBaseBackground : MonoBehaviour, IMazeTileBackground, ITransformable
 {
     public Tile Tile;
     public string ParentId;
@@ -27,5 +27,10 @@ public class MazeTileBaseBackground : MonoBehaviour, IMazeTileBackground
     {
         Destroy(this);
         Destroy(gameObject);
+    }
+
+    public void TriggerTransformation()
+    {
+        _spriteRenderer.sprite = SpriteManager.Instance.DefaultMazeTileBackgroundColourful[0];
     }
 }

@@ -1,7 +1,7 @@
 ﻿using System;
 using UnityEngine;
 
-public class PlayerOnly : MonoBehaviour, IMazeTileAttribute
+public class PlayerOnly : MonoBehaviour, IMazeTileAttribute, ITransformable
 {
     public Tile Tile;
     public string ParentId; 
@@ -46,4 +46,15 @@ public class PlayerOnly : MonoBehaviour, IMazeTileAttribute
         ParentId = tile.TileId;
     }
 
+    public void TriggerTransformation()
+    {
+        if (PlayerOnlyType == PlayerOnlyType.Bush)
+        {
+            _spriteRenderer.sprite = SpriteManager.Instance.BushColourful[0];
+        }
+        else
+        {
+            Logger.Error($"Colourful mode not implemented for PlayerOnlyType {PlayerOnlyType}");
+        }
+    }
 }

@@ -50,20 +50,27 @@ public class PlayerExit : TileObstacle, IMazeTileAttribute, ITileConnectable
 
     public override void TriggerTransformation()
     {
-        if (ObstacleType == ObstacleType.Bush)
+        if (ObstacleType == ObstacleType.Bush && !IsOpen)
         {
             _spriteRenderer.sprite = SpriteManager.Instance.DefaultDoorColourful[SpriteNumber - 1];
+            _secondarySpriteRenderer.sprite = SpriteManager.Instance.DefaultDoorColourful[_secondarySpriteNumber - 1];
         }
+        else
+        {
+            _spriteRenderer.sprite = SpriteManager.Instance.DefaultDoorColourful[SpriteNumber - 1 + 3]; // + 3 to get to the 'open' version of the sprite
+            _secondarySpriteRenderer.sprite = SpriteManager.Instance.DefaultDoorColourful[_secondarySpriteNumber - 1 + 3];
+        }
+
     }
 
     public void OpenExit()
     {
         Tile.Walkable = true;
         IsOpen = true;
-        
-        _spriteRenderer.sprite = SpriteManager.Instance.DefaultDoor[SpriteNumber - 1 + 3]; // + 3 to get to the 'open' version of the sprite
-        _secondarySpriteRenderer.sprite = SpriteManager.Instance.DefaultDoor[_secondarySpriteNumber - 1 + 3];
 
+        _spriteRenderer.sprite = SpriteManager.Instance.DefaultDoorColourful[SpriteNumber - 1 + 3]; // + 3 to get to the 'open' version of the sprite
+        _secondarySpriteRenderer.sprite = SpriteManager.Instance.DefaultDoorColourful[_secondarySpriteNumber - 1 + 3];
+        
         gameObject.layer = 9; // set layer to PlayerOnly, which is layer 9. Should not be hardcoded
         _spriteRenderer.gameObject.layer = 9;
 
@@ -73,6 +80,7 @@ public class PlayerExit : TileObstacle, IMazeTileAttribute, ITileConnectable
 
     public void CloseExit()
     {
+        Logger.Warning("CLOSE");
         Tile.Walkable = false;
         IsOpen = false;
 

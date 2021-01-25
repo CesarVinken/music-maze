@@ -38,6 +38,10 @@ public class TileObstacle : MonoBehaviour, IMazeTileAttribute, ITileConnectable,
         {
             _spriteRenderer.sprite = SpriteManager.Instance.DefaultWallColourful[SpriteNumber - 1];
         }
+        else
+        {
+            Logger.Error($"Colourful mode not implemented for ObstacleType {ObstacleType}");
+        }
     }
 
     public virtual void WithConnectionScoreInfo(TileConnectionScoreInfo obstacleConnectionScoreInfo)
