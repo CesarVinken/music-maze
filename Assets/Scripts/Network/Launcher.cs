@@ -212,5 +212,15 @@ namespace Photon.Pun.Demo.PunBasics
         {
             _errorText.text = errorText;
         }
+
+        public void LaunchSinglePlayerGame()
+        {
+            if (PhotonNetwork.CurrentRoom != null && PhotonNetwork.CurrentRoom.PlayerCount > 1)
+            {
+                Logger.Log("Cannot play single player because there are already multiple players in this room.");
+                return;
+            }
+            PhotonNetwork.LoadLevel("SampleScene");
+        }
     }
 }
