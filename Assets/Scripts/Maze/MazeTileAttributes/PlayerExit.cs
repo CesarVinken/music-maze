@@ -1,20 +1,23 @@
-﻿using UnityEngine;
+﻿using System.Collections;
+using UnityEngine;
 
 public class PlayerExit : TileObstacle, IMazeTileAttribute, ITileConnectable
 {
     public bool IsOpen;
 
-    [SerializeField] private SpriteRenderer _secondarySpriteRenderer; // this sprite always comes in front of things, such as the lower half of a door that is viewed from the side.
+    [SerializeField] private TileSpriteContainer _secondaryTileSpriteContainer; // this sprite always comes in front of things, such as the lower half of a door that is viewed from the side.
 
     private int _secondarySpriteNumber;
     private int _secondaryGateSpriteSortingOrderBase = 501; // should be in front of tile marker and path layers
     private const float _secondaryGateSpriteSortingOrderCalculationOffset = .5f;
+    private int _secondarySpriteSortingOrder;
 
     public int SecondaryGateSpriteSortingOrderBase { get => _secondaryGateSpriteSortingOrderBase; set => _secondaryGateSpriteSortingOrderBase = value; }
+
     public override void Awake()
     {
-        Guard.CheckIsNull(_spriteRenderer, "_spriteRenderer", gameObject);
-        Guard.CheckIsNull(_secondarySpriteRenderer, "_spriteRendererForInFrontOfThings", gameObject);
+        Guard.CheckIsNull(_secondaryTileSpriteContainer, "TileSpriteContainer", gameObject);
+
         base.Awake();
     }
 
@@ -39,12 +42,25 @@ public class PlayerExit : TileObstacle, IMazeTileAttribute, ITileConnectable
         SpriteNumber = spriteNumbers[0];
         _secondarySpriteNumber = spriteNumbers[1];
 
-        _spriteRenderer.sprite = SpriteManager.Instance.DefaultDoor[SpriteNumber - 1];
-        _secondarySpriteRenderer.sprite = SpriteManager.Instance.DefaultDoor[_secondarySpriteNumber - 1];
+        Sprite primarySprite = SpriteManager.Instance.DefaultDoor[SpriteNumber - 1];
+        Sprite secondarySprite = SpriteManager.Instance.DefaultDoor[_secondarySpriteNumber - 1];
+        _tileSpriteContainer.SetSprite(primarySprite);
+        _secondaryTileSpriteContainer.SetSprite(secondarySprite);
 
-        if (_secondarySpriteRenderer.sprite)
+        if (_secondaryTileSpriteContainer.SpriteRenderer.sprite)
         {
-            _secondarySpriteRenderer.sortingOrder = (int)(_secondaryGateSpriteSortingOrderBase - transform.position.y - _secondaryGateSpriteSortingOrderCalculationOffset) * 10;
+            _secondarySpriteSortingOrder = (int)(_secondaryGateSpriteSortingOrderBase - transform.position.y - _secondaryGateSpriteSortingOrderCalculationOffset) * 10;
+            _secondaryTileSpriteContainer.SetSortingOrder(_secondarySpriteSortingOrder);
+        }
+    }
+
+    public void OnCollisionEnter2D(Collision2D collision)
+    {
+        PlayerCharacter player = collision.gameObject.GetComponent<PlayerCharacter>();
+        if (player != null)
+        {
+            Logger.Log("{0} reached the exit! {1},{2}", player.name, Tile.GridLocation.X, Tile.GridLocation.Y);
+            CharacterManager.Instance.CharacterExit(player);
         }
     }
 
@@ -52,13 +68,19 @@ public class PlayerExit : TileObstacle, IMazeTileAttribute, ITileConnectable
     {
         if (ObstacleType == ObstacleType.Bush && !IsOpen)
         {
-            _spriteRenderer.sprite = SpriteManager.Instance.DefaultDoorColourful[SpriteNumber - 1];
-            _secondarySpriteRenderer.sprite = SpriteManager.Instance.DefaultDoorColourful[_secondarySpriteNumber - 1];
+            Sprite primarySprite = SpriteManager.Instance.DefaultDoorColourful[SpriteNumber - 1];
+            Sprite secondarySprite = SpriteManager.Instance.DefaultDoorColourful[_secondarySpriteNumber - 1];
+
+            IEnumerator transformToColourful = TransformToColourful(primarySprite, secondarySprite);
+            StartCoroutine(transformToColourful);
         }
         else
         {
-            _spriteRenderer.sprite = SpriteManager.Instance.DefaultDoorColourful[SpriteNumber - 1 + 3]; // + 3 to get to the 'open' version of the sprite
-            _secondarySpriteRenderer.sprite = SpriteManager.Instance.DefaultDoorColourful[_secondarySpriteNumber - 1 + 3];
+            Sprite primarySprite = SpriteManager.Instance.DefaultDoorColourful[SpriteNumber - 1 + 3]; // + 3 to get to the 'open' version of the sprite
+            Sprite secondarySprite = SpriteManager.Instance.DefaultDoorColourful[_secondarySpriteNumber - 1 + 3];
+
+            IEnumerator transformToColourful = TransformToColourful(primarySprite, secondarySprite);
+            StartCoroutine(transformToColourful);
         }
 
     }
@@ -68,11 +90,11 @@ public class PlayerExit : TileObstacle, IMazeTileAttribute, ITileConnectable
         Tile.Walkable = true;
         IsOpen = true;
 
-        _spriteRenderer.sprite = SpriteManager.Instance.DefaultDoorColourful[SpriteNumber - 1 + 3]; // + 3 to get to the 'open' version of the sprite
-        _secondarySpriteRenderer.sprite = SpriteManager.Instance.DefaultDoorColourful[_secondarySpriteNumber - 1 + 3];
+        _tileSpriteContainer.SetSprite(SpriteManager.Instance.DefaultDoorColourful[SpriteNumber - 1 + 3]); // + 3 to get to the 'open' version of the sprite
+        _secondaryTileSpriteContainer.SetSprite(SpriteManager.Instance.DefaultDoorColourful[_secondarySpriteNumber - 1 + 3]);
         
         gameObject.layer = 9; // set layer to PlayerOnly, which is layer 9. Should not be hardcoded
-        _spriteRenderer.gameObject.layer = 9;
+        _tileSpriteContainer.gameObject.layer = 9;
 
         // Refresh pathfinding. TODO: only refresh tile for pathfinding and not the whole graph.
         AstarPath.active.Scan();
@@ -84,23 +106,56 @@ public class PlayerExit : TileObstacle, IMazeTileAttribute, ITileConnectable
         Tile.Walkable = false;
         IsOpen = false;
 
-        _spriteRenderer.sprite = SpriteManager.Instance.DefaultDoor[SpriteNumber - 1];
-        _secondarySpriteRenderer.sprite = SpriteManager.Instance.DefaultDoor[_secondarySpriteNumber - 1];
+        _tileSpriteContainer.SetSprite(SpriteManager.Instance.DefaultDoor[SpriteNumber - 1]);
+        _secondaryTileSpriteContainer.SetSprite(SpriteManager.Instance.DefaultDoor[_secondarySpriteNumber - 1]);
 
         gameObject.layer = 8; // set layer to Unwalkable, which is layer 8. Should not be hardcoded
-        _spriteRenderer.gameObject.layer = 8;
+        _tileSpriteContainer.gameObject.layer = 8;
 
         // Refresh pathfinding. TODO: only refresh tile for pathfinding and not the whole graph.
         AstarPath.active.Scan();
-    }
+    }  
 
-    public void OnCollisionEnter2D(Collision2D collision)
+    public IEnumerator TransformToColourful(Sprite colourfulSprite, Sprite secondaryColourfulSprite)
     {
-        PlayerCharacter player = collision.gameObject.GetComponent<PlayerCharacter>();
-        if (player != null)
+        TileSpriteContainer transformedPrimarySpriteContainer = TileSpriteContainerPool.Instance.Get();
+        transformedPrimarySpriteContainer.transform.SetParent(transform);
+        transformedPrimarySpriteContainer.SetSprite(colourfulSprite);
+        transformedPrimarySpriteContainer.SetSortingOrder(_sortingOrder);
+        transformedPrimarySpriteContainer.gameObject.SetActive(true);
+        transformedPrimarySpriteContainer.gameObject.layer = _tileSpriteContainer.gameObject.layer;
+        transformedPrimarySpriteContainer.transform.position = transform.position;
+
+        TileSpriteContainer transformedSecondarySpriteContainer = TileSpriteContainerPool.Instance.Get();
+        transformedSecondarySpriteContainer.transform.SetParent(transform);
+        transformedSecondarySpriteContainer.SetSprite(secondaryColourfulSprite);
+        transformedSecondarySpriteContainer.SetSortingOrder(_sortingOrder);
+        transformedSecondarySpriteContainer.gameObject.SetActive(true);
+        transformedSecondarySpriteContainer.gameObject.layer = _secondaryTileSpriteContainer.gameObject.layer;
+        transformedSecondarySpriteContainer.transform.position = transform.position;
+
+        _tileSpriteContainer.SetSortingOrder(_sortingOrder - 1);
+        _secondaryTileSpriteContainer.SetSortingOrder(_sortingOrder - 1);
+
+        float fadeSpeed = 1f;
+        float alphaAmount = 0;
+
+        while (alphaAmount < 1)
         {
-            Logger.Log("{0} reached the exit! {1},{2}", player.name, Tile.GridLocation.X, Tile.GridLocation.Y);
-            CharacterManager.Instance.CharacterExit(player);
+            alphaAmount = alphaAmount + (fadeSpeed * Time.deltaTime);
+            transformedPrimarySpriteContainer.SetRendererAlpha(alphaAmount);
+            transformedSecondarySpriteContainer.SetRendererAlpha(alphaAmount);
+
+            yield return null;
         }
+
+        _tileSpriteContainer.gameObject.layer = 0;
+        _secondaryTileSpriteContainer.gameObject.layer = 0;
+
+        TileSpriteContainerPool.Instance.ReturnToPool(_tileSpriteContainer);
+        TileSpriteContainerPool.Instance.ReturnToPool(_secondaryTileSpriteContainer);
+
+        _tileSpriteContainer = transformedPrimarySpriteContainer;
+        _secondaryTileSpriteContainer = transformedSecondarySpriteContainer;
     }
 }

@@ -1,12 +1,14 @@
-﻿using UnityEngine;
+﻿using System.Collections;
+using UnityEngine;
 
 public class MazeTileBaseBackground : MonoBehaviour, IMazeTileBackground, ITransformable
 {
     public Tile Tile;
     public string ParentId;
 
-    [SerializeField] private Sprite _sprite;
-    [SerializeField] private SpriteRenderer _spriteRenderer;
+    [SerializeField] private TileSpriteContainer _tileSpriteContainer;
+
+    private int _sortingOrder;
 
     public void SetTile(Tile tile)
     {
@@ -14,13 +16,15 @@ public class MazeTileBaseBackground : MonoBehaviour, IMazeTileBackground, ITrans
 
         Tile = tile;
         ParentId = tile.TileId;
-        _spriteRenderer.sortingOrder = SpriteManager.BaseBackgroundSortingOrder;
+
+        _sortingOrder = SpriteManager.BaseBackgroundSortingOrder;
+        _tileSpriteContainer.SetSortingOrder(_sortingOrder);
     }
 
     public void WithPathConnectionScore(int score)
     {
-        _sprite = SpriteManager.Instance.DefaultMazeTileBackground[0];
-        _spriteRenderer.sprite = _sprite;
+        Sprite sprite = SpriteManager.Instance.DefaultMazeTileBackground[0];
+        _tileSpriteContainer.SetSprite(sprite);
     }
 
     public void Remove()
@@ -31,6 +35,35 @@ public class MazeTileBaseBackground : MonoBehaviour, IMazeTileBackground, ITrans
 
     public void TriggerTransformation()
     {
-        _spriteRenderer.sprite = SpriteManager.Instance.DefaultMazeTileBackgroundColourful[0];
+        IEnumerator transformToColourful = TransformToColourful();
+        StartCoroutine(transformToColourful);
+    }
+
+    public IEnumerator TransformToColourful()
+    {
+        Sprite colourfulSprite = SpriteManager.Instance.DefaultMazeTileBackgroundColourful[0];
+
+        TileSpriteContainer transformedSpriteContainer = TileSpriteContainerPool.Instance.Get();
+        transformedSpriteContainer.transform.SetParent(transform);
+        transformedSpriteContainer.SetSprite(colourfulSprite);
+        transformedSpriteContainer.SetSortingOrder(_sortingOrder);
+        transformedSpriteContainer.gameObject.SetActive(true);
+        transformedSpriteContainer.transform.position = transform.position;
+
+        _tileSpriteContainer.SetSortingOrder(_sortingOrder - 1);
+
+        float fadeSpeed = 1f;
+        float alphaAmount = 0;
+        
+        while (alphaAmount < 1)
+        {
+            alphaAmount = alphaAmount + (fadeSpeed * Time.deltaTime);
+            transformedSpriteContainer.SetRendererAlpha(alphaAmount);
+
+            yield return null;
+        }
+
+        TileSpriteContainerPool.Instance.ReturnToPool(_tileSpriteContainer);
+        _tileSpriteContainer = transformedSpriteContainer;
     }
 }

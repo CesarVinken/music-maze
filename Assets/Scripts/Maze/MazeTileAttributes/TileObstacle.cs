@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System.Collections;
+using UnityEngine;
 
 public class TileObstacle : MonoBehaviour, IMazeTileAttribute, ITileConnectable, ITransformable
 {
@@ -7,13 +8,15 @@ public class TileObstacle : MonoBehaviour, IMazeTileAttribute, ITileConnectable,
     
     public ObstacleType ObstacleType;
 
-    [SerializeField] protected SpriteRenderer _spriteRenderer;
+    //[SerializeField] protected SpriteRenderer _spriteRenderer;
+    [SerializeField] protected TileSpriteContainer _tileSpriteContainer;
 
     private int _connectionScore = -1;
     private int _spriteNumber = -1;
 
     private int _sortingOrderBase = 500;
     private const float _sortingOrderCalculationOffset = 1.5f;
+    protected int _sortingOrder;
 
     public int SortingOrderBase { get => _sortingOrderBase; set => _sortingOrderBase = value; }
 
@@ -22,26 +25,15 @@ public class TileObstacle : MonoBehaviour, IMazeTileAttribute, ITileConnectable,
 
     public virtual void Awake()
     {
-        Guard.CheckIsNull(_spriteRenderer, "_spriteRenderer", gameObject);
+        Guard.CheckIsNull(_tileSpriteContainer, "_tileSpriteContainer", gameObject);
 
         if(ObstacleType == ObstacleType.Bush)
         {
-            _spriteRenderer.sprite = SpriteManager.Instance.DefaultWall[0];
+            _tileSpriteContainer.SetSprite(SpriteManager.Instance.DefaultWall[0]);
         }
 
-        _spriteRenderer.sortingOrder = (int)(_sortingOrderBase - transform.position.y - _sortingOrderCalculationOffset) * 10;
-    }
-
-    public virtual void TriggerTransformation()
-    {
-        if (ObstacleType == ObstacleType.Bush)
-        {
-            _spriteRenderer.sprite = SpriteManager.Instance.DefaultWallColourful[SpriteNumber - 1];
-        }
-        else
-        {
-            Logger.Error($"Colourful mode not implemented for ObstacleType {ObstacleType}");
-        }
+        _sortingOrder = (int)(_sortingOrderBase - transform.position.y - _sortingOrderCalculationOffset) * 10;
+        _tileSpriteContainer.SetSortingOrder(_sortingOrder);
     }
 
     public virtual void WithConnectionScoreInfo(TileConnectionScoreInfo obstacleConnectionScoreInfo)
@@ -49,7 +41,7 @@ public class TileObstacle : MonoBehaviour, IMazeTileAttribute, ITileConnectable,
         ConnectionScore = obstacleConnectionScoreInfo.RawConnectionScore;
         SpriteNumber = obstacleConnectionScoreInfo.SpriteNumber;
 
-        _spriteRenderer.sprite = SpriteManager.Instance.DefaultWall[SpriteNumber - 1];
+        _tileSpriteContainer.SetSprite(SpriteManager.Instance.DefaultWall[SpriteNumber - 1]);
     }
 
     public void WithObstacleType(ObstacleType obstacleType)
@@ -74,5 +66,46 @@ public class TileObstacle : MonoBehaviour, IMazeTileAttribute, ITileConnectable,
     public string GetSubtypeAsString()
     {
         return ObstacleType.ToString();
+    }
+
+    public virtual void TriggerTransformation()
+    {
+
+        if (ObstacleType == ObstacleType.Bush)
+        {
+            Sprite colourfulSprite = SpriteManager.Instance.DefaultWallColourful[SpriteNumber - 1];
+            IEnumerator transformToColourful = TransformToColourful(colourfulSprite);
+            StartCoroutine(transformToColourful);
+        }
+        else
+        {
+            Logger.Error($"Colourful mode not implemented for ObstacleType {ObstacleType}");
+        }
+    }
+
+    public virtual IEnumerator TransformToColourful(Sprite colourfulSprite)
+    {
+        TileSpriteContainer transformedSpriteContainer = TileSpriteContainerPool.Instance.Get();
+        transformedSpriteContainer.transform.SetParent(transform);
+        transformedSpriteContainer.SetSprite(colourfulSprite);
+        transformedSpriteContainer.SetSortingOrder(_sortingOrder);
+        transformedSpriteContainer.gameObject.SetActive(true);
+        transformedSpriteContainer.transform.position = transform.position;
+
+        _tileSpriteContainer.SetSortingOrder(_sortingOrder - 1);
+
+        float fadeSpeed = 1f;
+        float alphaAmount = 0;
+
+        while (alphaAmount < 1)
+        {
+            alphaAmount = alphaAmount + (fadeSpeed * Time.deltaTime);
+            transformedSpriteContainer.SetRendererAlpha(alphaAmount);
+
+            yield return null;
+        }
+
+        TileSpriteContainerPool.Instance.ReturnToPool(_tileSpriteContainer);
+        _tileSpriteContainer = transformedSpriteContainer;
     }
 }

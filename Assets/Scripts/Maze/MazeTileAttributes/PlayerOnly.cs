@@ -1,4 +1,4 @@
-﻿using System;
+﻿using System.Collections;
 using UnityEngine;
 
 public class PlayerOnly : MonoBehaviour, IMazeTileAttribute, ITransformable
@@ -8,23 +8,25 @@ public class PlayerOnly : MonoBehaviour, IMazeTileAttribute, ITransformable
     
     public PlayerOnlyType PlayerOnlyType;
 
-    [SerializeField] private SpriteRenderer _spriteRenderer;
+    [SerializeField] private TileSpriteContainer _tileSpriteContainer;
 
     private int _sortingOrderBase = 500; // MAKE SURE that tile should be in front of tile marker and path layers AND player
     private const float _sortingOrderCalculationOffset = .5f;
-
+    private int _sortingOrder;
     public int SortingOrderBase { get => _sortingOrderBase; set => _sortingOrderBase = value; }
 
     public void Awake()
     {
-        Guard.CheckIsNull(_spriteRenderer, "_spriteRenderer", gameObject);
+        Guard.CheckIsNull(_tileSpriteContainer, "_tileSpriteContainer", gameObject);
 
         if (PlayerOnlyType == PlayerOnlyType.Bush)
         {
-            _spriteRenderer.sprite = SpriteManager.Instance.Bush[0];
+            _tileSpriteContainer.SetSprite(SpriteManager.Instance.Bush[0]);
         }
 
-        _spriteRenderer.sortingOrder = (int)(_sortingOrderBase - transform.position.y - _sortingOrderCalculationOffset) * 10 + 1; // plus 1 should place it before a character when it is on the same y as the character
+        _sortingOrder = (int)(_sortingOrderBase - transform.position.y - _sortingOrderCalculationOffset) * 10 + 1;
+        _tileSpriteContainer.SetSortingOrder(_sortingOrder); // plus 1 should place it before a character when it is on the same y as the character
+
     }
 
     public void WithPlayerOnlyType(PlayerOnlyType playerOnlyType)
@@ -48,13 +50,42 @@ public class PlayerOnly : MonoBehaviour, IMazeTileAttribute, ITransformable
 
     public void TriggerTransformation()
     {
+
         if (PlayerOnlyType == PlayerOnlyType.Bush)
         {
-            _spriteRenderer.sprite = SpriteManager.Instance.BushColourful[0];
+            Sprite colourfulSprite = SpriteManager.Instance.BushColourful[0];
+            IEnumerator transformToColourful = TransformToColourful(colourfulSprite);
+            StartCoroutine(transformToColourful);
         }
         else
         {
             Logger.Error($"Colourful mode not implemented for PlayerOnlyType {PlayerOnlyType}");
         }
+    }
+
+    public IEnumerator TransformToColourful(Sprite colourfulSprite)
+    {
+        TileSpriteContainer transformedSpriteContainer = TileSpriteContainerPool.Instance.Get();
+        transformedSpriteContainer.transform.SetParent(transform);
+        transformedSpriteContainer.SetSprite(colourfulSprite);
+        transformedSpriteContainer.SetSortingOrder(_sortingOrder);
+        transformedSpriteContainer.gameObject.SetActive(true);
+        transformedSpriteContainer.transform.position = transform.position;
+
+        _tileSpriteContainer.SetSortingOrder(_sortingOrder - 1);
+
+        float fadeSpeed = 1f;
+        float alphaAmount = 0;
+
+        while (alphaAmount < 1)
+        {
+            alphaAmount = alphaAmount + (fadeSpeed * Time.deltaTime);
+            transformedSpriteContainer.SetRendererAlpha(alphaAmount);
+
+            yield return null;
+        }
+
+        TileSpriteContainerPool.Instance.ReturnToPool(_tileSpriteContainer);
+        _tileSpriteContainer = transformedSpriteContainer;
     }
 }
