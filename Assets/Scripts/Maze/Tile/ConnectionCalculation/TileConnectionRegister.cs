@@ -141,7 +141,7 @@ public static class TileConnectionRegister
             {
                 if (left.HasConnection)
                 {
-                    // narrow
+                    // left = narrow
                     if (left.TileModifier.ConnectionScore == 1 || left.TileModifier.ConnectionScore == 2 || left.TileModifier.ConnectionScore == 3 || left.TileModifier.ConnectionScore == 4 || left.TileModifier.ConnectionScore == 5 || left.TileModifier.ConnectionScore == 6 || left.TileModifier.ConnectionScore == 7 || left.TileModifier.ConnectionScore == 8 || left.TileModifier.ConnectionScore == 9 || left.TileModifier.ConnectionScore == 10 || left.TileModifier.ConnectionScore == 11 || left.TileModifier.ConnectionScore == 12 || left.TileModifier.ConnectionScore == 13 || left.TileModifier.ConnectionScore == 14 || left.TileModifier.ConnectionScore == 18 || left.TileModifier.ConnectionScore == 19 || left.TileModifier.ConnectionScore == 20 || left.TileModifier.ConnectionScore == 29)
                     {
                         if (up.HasConnection)
@@ -155,7 +155,11 @@ public static class TileConnectionRegister
                         }
                         return new TileConnectionScoreInfo(9);
                     }
-                    //wide
+                    // left = wide
+                    if (up.HasConnection)
+                    {
+                        return new TileConnectionScoreInfo(15);
+                    }
                     return new TileConnectionScoreInfo(25);
                 }
                 if (up.HasConnection)
