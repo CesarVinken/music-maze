@@ -6354,12 +6354,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1679013102}
   m_CullTransparentMesh: 0
---- !u!212 &1687732964 stripped
-SpriteRenderer:
-  m_CorrespondingSourceObject: {fileID: 1248300263685374112, guid: 1ca70c908678e6043acb34630dac0920,
-    type: 3}
-  m_PrefabInstance: {fileID: 7834736021629834280}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1689195727
 GameObject:
   m_ObjectHideFlags: 0
@@ -8293,76 +8287,3 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2134726158}
   m_CullTransparentMesh: 0
---- !u!1001 &7834736021629834280
-PrefabInstance:
-  m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    m_TransformParent: {fileID: 0}
-    m_Modifications:
-    - target: {fileID: 1687732966, guid: 1ca70c908678e6043acb34630dac0920, type: 3}
-      propertyPath: SpriteRenderer
-      value: 
-      objectReference: {fileID: 1687732964}
-    - target: {fileID: 3248984553077041403, guid: 1ca70c908678e6043acb34630dac0920,
-        type: 3}
-      propertyPath: m_RootOrder
-      value: 9
-      objectReference: {fileID: 0}
-    - target: {fileID: 3248984553077041403, guid: 1ca70c908678e6043acb34630dac0920,
-        type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3248984553077041403, guid: 1ca70c908678e6043acb34630dac0920,
-        type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3248984553077041403, guid: 1ca70c908678e6043acb34630dac0920,
-        type: 3}
-      propertyPath: m_LocalPosition.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3248984553077041403, guid: 1ca70c908678e6043acb34630dac0920,
-        type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 3248984553077041403, guid: 1ca70c908678e6043acb34630dac0920,
-        type: 3}
-      propertyPath: m_LocalRotation.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3248984553077041403, guid: 1ca70c908678e6043acb34630dac0920,
-        type: 3}
-      propertyPath: m_LocalRotation.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3248984553077041403, guid: 1ca70c908678e6043acb34630dac0920,
-        type: 3}
-      propertyPath: m_LocalRotation.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3248984553077041403, guid: 1ca70c908678e6043acb34630dac0920,
-        type: 3}
-      propertyPath: m_LocalEulerAnglesHint.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3248984553077041403, guid: 1ca70c908678e6043acb34630dac0920,
-        type: 3}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3248984553077041403, guid: 1ca70c908678e6043acb34630dac0920,
-        type: 3}
-      propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7432578627350190631, guid: 1ca70c908678e6043acb34630dac0920,
-        type: 3}
-      propertyPath: m_Name
-      value: TileBaseBackground
-      objectReference: {fileID: 0}
-    m_RemovedComponents: []
-  m_SourcePrefab: {fileID: 100100000, guid: 1ca70c908678e6043acb34630dac0920, type: 3}

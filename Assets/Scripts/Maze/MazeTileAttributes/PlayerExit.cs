@@ -43,15 +43,19 @@ public class PlayerExit : TileObstacle, IMazeTileAttribute, ITileConnectable
         _secondarySpriteNumber = spriteNumbers[1];
 
         Sprite primarySprite = SpriteManager.Instance.DefaultDoor[SpriteNumber - 1];
-        Sprite secondarySprite = SpriteManager.Instance.DefaultDoor[_secondarySpriteNumber - 1];
         _tileSpriteContainer.SetSprite(primarySprite);
+        _tileSpriteContainer.SetRendererAlpha(1);
+
+        Sprite secondarySprite = SpriteManager.Instance.DefaultDoor[_secondarySpriteNumber - 1];
         _secondaryTileSpriteContainer.SetSprite(secondarySprite);
+        _secondaryTileSpriteContainer.SetRendererAlpha(1);
 
         if (_secondaryTileSpriteContainer.SpriteRenderer.sprite)
         {
             _secondarySpriteSortingOrder = (int)(_secondaryGateSpriteSortingOrderBase - transform.position.y - _secondaryGateSpriteSortingOrderCalculationOffset) * 10;
             _secondaryTileSpriteContainer.SetSortingOrder(_secondarySpriteSortingOrder);
         }
+
     }
 
     public void OnCollisionEnter2D(Collision2D collision)
