@@ -5,4 +5,7 @@ public interface IEditorMazeTileModifierType // includes all background and attr
     Sprite Sprite { get; }
 
     Sprite GetSprite();
+
+    void InstantiateModifierActions();
+    void DestroyModifierActions();
 }

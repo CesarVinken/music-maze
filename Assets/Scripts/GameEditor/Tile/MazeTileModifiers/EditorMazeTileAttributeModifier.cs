@@ -20,4 +20,12 @@ public abstract class EditorMazeTileAttributeModifier : IEditorMazeTileAttribute
     {
         return EditorUIContainer.Instance.DefaultIcon;
     }
+
+    public void InstantiateModifierActions()
+    {
+    }
+
+    public void DestroyModifierActions()
+    {
+    }
 }

@@ -115,21 +115,21 @@ public class EditorTileSelector : MonoBehaviour
 
     private void PlaceMazeTileModifier()
     {
-        EditorMazeTileModifierType editorMazeTileModifierType = EditorManager.SelectedMazeTileModifierType;
+        EditorMazeTileModifierType editorMazeTileModifierType = EditorManager.SelectedMazeTileModifierCategory;
 
         if(editorMazeTileModifierType == EditorMazeTileModifierType.Attribute)
         {
-            IEditorMazeTileAttribute attribute = EditorSelectedModifierContainer.Instance.EditorMazeTileAttributes[EditorManager.SelectedMazeTileAttributeModifierIndex];
+            IEditorMazeTileAttribute attribute = EditorSelectedTileModifierContainer.Instance.EditorMazeTileAttributes[EditorManager.SelectedMazeTileAttributeModifierIndex];
             PlaceMazeTileAttribute(CurrentSelectedLocation, attribute);
         }
         else if (editorMazeTileModifierType == EditorMazeTileModifierType.Background)
         {
-            IEditorMazeTileBackground background = EditorSelectedModifierContainer.Instance.EditorMazeTileBackgrounds[EditorManager.SelectedMazeTileBackgroundModifierIndex];
+            IEditorMazeTileBackground background = EditorSelectedTileModifierContainer.Instance.EditorMazeTileBackgrounds[EditorManager.SelectedMazeTileBackgroundModifierIndex];
             PlaceMazeTileBackground(CurrentSelectedLocation, background);
         }
         else if (editorMazeTileModifierType == EditorMazeTileModifierType.TransformationTriggerer)
         {
-            IEditorMazeTileTransformationTriggerer transformationTriggerer = EditorSelectedModifierContainer.Instance.EditorMazeTileTransformationTriggerers[EditorManager.SelectedMazeTileTransformationTriggererIndex];
+            IEditorMazeTileTransformationTriggerer transformationTriggerer = EditorSelectedTileModifierContainer.Instance.EditorMazeTileTransformationTriggerers[EditorManager.SelectedMazeTileTransformationTriggererIndex];
             PlaceTransformationTriggerer(CurrentSelectedLocation, transformationTriggerer);
         }
         else
@@ -141,16 +141,16 @@ public class EditorTileSelector : MonoBehaviour
     private void PlaceMazeTileModifierVariation()
     {
         Logger.Log("place a variation");
-        EditorMazeTileModifierType editorMazeTileModifierType = EditorManager.SelectedMazeTileModifierType;
+        EditorMazeTileModifierType editorMazeTileModifierCategory = EditorManager.SelectedMazeTileModifierCategory;
 
-        if (editorMazeTileModifierType == EditorMazeTileModifierType.Attribute)
+        if (editorMazeTileModifierCategory == EditorMazeTileModifierType.Attribute)
         {
-            IEditorMazeTileAttribute attribute = EditorSelectedModifierContainer.Instance.EditorMazeTileAttributes[EditorManager.SelectedMazeTileAttributeModifierIndex];
+            IEditorMazeTileAttribute attribute = EditorSelectedTileModifierContainer.Instance.EditorMazeTileAttributes[EditorManager.SelectedMazeTileAttributeModifierIndex];
             PlaceMazeTileAttributeVariation(CurrentSelectedLocation, attribute);
         }
-        else if (editorMazeTileModifierType == EditorMazeTileModifierType.Background)
+        else if (editorMazeTileModifierCategory == EditorMazeTileModifierType.Background)
         {
-            IEditorMazeTileBackground background = EditorSelectedModifierContainer.Instance.EditorMazeTileBackgrounds[EditorManager.SelectedMazeTileBackgroundModifierIndex];
+            IEditorMazeTileBackground background = EditorSelectedTileModifierContainer.Instance.EditorMazeTileBackgrounds[EditorManager.SelectedMazeTileBackgroundModifierIndex];
             PlaceMazeTileBackgroundVariation(CurrentSelectedLocation, background);
         }
     }

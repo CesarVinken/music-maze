@@ -1,6 +1,6 @@
 ﻿public class EditorMazeTileAttributeSelector : EditorMazeTileModifierSelector
 {
-    public EditorMazeTileAttributeSelector(EditorSelectedModifierContainer editorSelectedModifierContainer) : base(editorSelectedModifierContainer) { }
+    public EditorMazeTileAttributeSelector(EditorSelectedTileModifierContainer editorSelectedModifierContainer) : base(editorSelectedModifierContainer) { }
 
     public override void SwitchSelectedModifier(int newValue)
     {
@@ -10,14 +10,14 @@
         if (newIndex < 0)
         {
             // switch from attributes to last Background, because Backgrounds come before TileAttributes
-            EditorSelectedModifierContainer.Instance.SetSelectedMazeTileModifierType(EditorMazeTileModifierType.Background);
-            EditorSelectedModifierContainer.Instance.SetSelectedMazeTileModifier(EditorSelectedModifierContainer.Instance.EditorMazeTileBackgrounds.Count - 1);
+            EditorSelectedTileModifierContainer.Instance.SetSelectedMazeTileModifierCategory(EditorMazeTileModifierType.Background);
+            EditorSelectedTileModifierContainer.Instance.SetSelectedMazeTileModifier(EditorSelectedTileModifierContainer.Instance.EditorMazeTileBackgrounds.Count - 1);
         }
         else if (newIndex >= _editorSelectedModifierContainer.EditorMazeTileAttributes.Count)
         {
             // switch from attributes to TransformTriggerer, because Transform Triggerer come after TileAttributes
-            EditorSelectedModifierContainer.Instance.SetSelectedMazeTileModifierType(EditorMazeTileModifierType.TransformationTriggerer);
-            EditorSelectedModifierContainer.Instance.SetSelectedMazeTileModifier(0);
+            EditorSelectedTileModifierContainer.Instance.SetSelectedMazeTileModifierCategory(EditorMazeTileModifierType.TransformationTriggerer);
+            EditorSelectedTileModifierContainer.Instance.SetSelectedMazeTileModifier(0);
         }
         else
         {

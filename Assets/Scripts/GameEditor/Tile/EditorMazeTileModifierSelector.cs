@@ -1,8 +1,8 @@
 ﻿public abstract class EditorMazeTileModifierSelector
 {
-    protected EditorSelectedModifierContainer _editorSelectedModifierContainer;
+    protected EditorSelectedTileModifierContainer _editorSelectedModifierContainer;
 
-    protected EditorMazeTileModifierSelector(EditorSelectedModifierContainer editorSelectedModifierContainer)
+    protected EditorMazeTileModifierSelector(EditorSelectedTileModifierContainer editorSelectedModifierContainer)
     {
         _editorSelectedModifierContainer = editorSelectedModifierContainer;
     }

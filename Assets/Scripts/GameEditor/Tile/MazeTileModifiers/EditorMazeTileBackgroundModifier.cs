@@ -20,4 +20,12 @@ public abstract class EditorMazeTileBackgroundModifier : IEditorMazeTileBackgrou
     {
         return EditorUIContainer.Instance.DefaultIcon;
     }
+
+    public void InstantiateModifierActions()
+    {
+    }
+
+    public void DestroyModifierActions()
+    {
+    }
 }

@@ -12,7 +12,7 @@ public static class EditorManager
         }
     }
 
-    public static EditorMazeTileModifierType SelectedMazeTileModifierType; // Are we selecting an Attribute or a Background?
+    public static EditorMazeTileModifierType SelectedMazeTileModifierCategory;
     public static IEditorMazeTileModifierType SelectedMazeTileModifier;
 
     public static int SelectedMazeTileAttributeModifierIndex;

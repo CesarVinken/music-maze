@@ -4,7 +4,7 @@ using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class EditorGridGenerator : MonoBehaviour
+public class EditorLevelModificationPanel : MonoBehaviour, IEditorModificationPanel
 {
     public InputField WidthInputField;
     public InputField HeightInputField;
@@ -15,17 +15,11 @@ public class EditorGridGenerator : MonoBehaviour
 
     private string _mazeName = "";
 
-    [SerializeField] private GameObject EmptyTilePrefab;
-    [SerializeField] private GameObject TileObstaclePrefab;
-
     public void Awake()
     {
         Guard.CheckIsNull(HeightInputField, "HeightInputField", gameObject);
         Guard.CheckIsNull(WidthInputField, "WidthInputField", gameObject);
         Guard.CheckIsNull(MazeNameInputField, "MazeNameInputField", gameObject);
-
-        Guard.CheckIsNull(TileObstaclePrefab, "TileObstaclePrefab", gameObject);
-        Guard.CheckIsNull(EmptyTilePrefab, "EmptyTilePrefab", gameObject);
     }
 
     public void SetWidth(string input)
@@ -356,5 +350,15 @@ public class EditorGridGenerator : MonoBehaviour
                 Logger.Warning($"No transformation triggerer was set up for the tile at {tile.GridLocation.X},{tile.GridLocation.Y}");
             }
         }
+    }
+
+    public void Open()
+    {
+        gameObject.SetActive(true);
+    }
+
+    public void Close()
+    {
+        gameObject.SetActive(false);
     }
 }
