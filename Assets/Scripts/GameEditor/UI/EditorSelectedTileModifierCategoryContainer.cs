@@ -30,6 +30,8 @@ public class EditorSelectedTileModifierCategoryContainer : MonoBehaviour
 
     public void SelectPreviousModifierCategory()
     {
+        EditorTileModificationPanel.Instance.DestroyModifierActions();
+
         if (EditorManager.SelectedMazeTileModifierCategory == EditorMazeTileModifierType.Attribute)
         {
             SelectBackgrounds();
@@ -50,6 +52,8 @@ public class EditorSelectedTileModifierCategoryContainer : MonoBehaviour
 
     public void SelectNextModifierCategory()
     {
+        EditorTileModificationPanel.Instance.DestroyModifierActions();
+
         if (EditorManager.SelectedMazeTileModifierCategory == EditorMazeTileModifierType.Attribute)
         {
             SelectTileTransformationTriggerer();

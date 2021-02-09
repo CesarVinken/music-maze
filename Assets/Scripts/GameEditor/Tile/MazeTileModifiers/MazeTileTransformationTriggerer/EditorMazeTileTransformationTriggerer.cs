@@ -84,13 +84,4 @@ public class EditorMazeTileTransformationTriggerer : IEditorMazeTileTransformati
         Logger.Log("Load actions for triggerer");
         GameObject.Instantiate(EditorUIContainer.Instance.GenerateTileTransformationMapPrefab, EditorTileModificationPanel.Instance.TileModifierActionsContainer);
     }
-
-    public void DestroyModifierActions()
-    {
-        Logger.Log("Destroy actions for triggerer");
-        foreach (Transform action in EditorTileModificationPanel.Instance.TileModifierActionsContainer)
-        {
-            GameObject.Destroy(action.gameObject);
-        }
-    }
 }

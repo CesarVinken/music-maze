@@ -23,4 +23,13 @@ public class EditorTileModificationPanel : MonoBehaviour, IEditorModificationPan
         gameObject.SetActive(false);
     }
 
+    public void DestroyModifierActions()
+    {
+        Logger.Log("Destroy actions for triggerer");
+        foreach (Transform action in TileModifierActionsContainer)
+        {
+            GameObject.Destroy(action.gameObject);
+        }
+    }
+
 }

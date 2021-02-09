@@ -6,7 +6,7 @@ public class EditorMazeTileTransformationTriggererSelector : EditorMazeTileModif
 
     public override void SwitchSelectedModifier(int newValue)
     {
-        IEditorMazeTileTransformationTriggerer currentMazeTileModifier = _editorSelectedModifierContainer.EditorMazeTileTransformationTriggerers[EditorManager.SelectedMazeTileTransformationTriggererIndex];
+        //IEditorMazeTileTransformationTriggerer currentMazeTileModifier = _editorSelectedModifierContainer.EditorMazeTileTransformationTriggerers[EditorManager.SelectedMazeTileTransformationTriggererIndex];
 
         int selectedBackgroundIndex = EditorManager.SelectedMazeTileBackgroundModifierIndex;
         int newIndex = selectedBackgroundIndex + newValue;
@@ -17,7 +17,8 @@ public class EditorMazeTileTransformationTriggererSelector : EditorMazeTileModif
             EditorSelectedTileModifierContainer.Instance.SetSelectedMazeTileModifierCategory(EditorMazeTileModifierType.Attribute);
             EditorSelectedTileModifierContainer.Instance.SetSelectedMazeTileModifier(EditorSelectedTileModifierContainer.Instance.EditorMazeTileAttributes.Count - 1); //  There is only one type of TransformationTriggerer
 
-            currentMazeTileModifier.DestroyModifierActions();
+            EditorTileModificationPanel.Instance.DestroyModifierActions();
+            //currentMazeTileModifier.DestroyModifierActions();
         }
         else if (newIndex >= _editorSelectedModifierContainer.EditorMazeTileBackgrounds.Count)
         {
@@ -25,7 +26,8 @@ public class EditorMazeTileTransformationTriggererSelector : EditorMazeTileModif
             EditorSelectedTileModifierContainer.Instance.SetSelectedMazeTileModifierCategory(EditorMazeTileModifierType.Background);
             EditorSelectedTileModifierContainer.Instance.SetSelectedMazeTileModifier(0);
 
-            currentMazeTileModifier.DestroyModifierActions();
+            EditorTileModificationPanel.Instance.DestroyModifierActions();
+            //currentMazeTileModifier.DestroyModifierActions();
         }
         else
         {
