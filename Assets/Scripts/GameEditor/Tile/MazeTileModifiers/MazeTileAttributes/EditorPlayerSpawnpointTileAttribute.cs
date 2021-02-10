@@ -27,6 +27,6 @@ public class EditorPlayerSpawnpointTileAttribute : EditorMazeTileAttributeModifi
 
     public override Sprite GetSprite()
     {
-        return EditorUIContainer.Instance.TileAttributeIcons[2];
+        return EditorCanvasUI.Instance.TileAttributeIcons[2];
     }
 }

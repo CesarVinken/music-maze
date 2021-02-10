@@ -41,6 +41,6 @@ public class EditorObstacleTileAttribute : EditorMazeTileAttributeModifier
 
     public override Sprite GetSprite()
     {
-        return EditorUIContainer.Instance.TileAttributeIcons[0];
+        return EditorCanvasUI.Instance.TileAttributeIcons[0];
     }
 }

@@ -18,7 +18,7 @@ public abstract class EditorMazeTileBackgroundModifier : IEditorMazeTileBackgrou
 
     public virtual Sprite GetSprite()
     {
-        return EditorUIContainer.Instance.DefaultIcon;
+        return EditorCanvasUI.Instance.DefaultIcon;
     }
 
     public void InstantiateModifierActions()

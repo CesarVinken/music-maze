@@ -4,7 +4,7 @@ using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class EditorLevelModificationPanel : MonoBehaviour, IEditorModificationPanel
+public class EditorMazeModificationPanel : MonoBehaviour, IEditorModificationPanel
 {
     public InputField WidthInputField;
     public InputField HeightInputField;
@@ -201,13 +201,13 @@ public class EditorLevelModificationPanel : MonoBehaviour, IEditorModificationPa
 
     public void TogglePlayableLevelsPanel()
     {
-        if (EditorUIContainer.Instance.PlayableLevelsPanelGO.activeSelf)
+        if (EditorCanvasUI.Instance.PlayableLevelsPanelGO.activeSelf)
         {
-            EditorUIContainer.Instance.PlayableLevelsPanelGO.SetActive(false);
+            EditorCanvasUI.Instance.PlayableLevelsPanelGO.SetActive(false);
         }
         else
         {
-            EditorUIContainer.Instance.PlayableLevelsPanelGO.SetActive(true);
+            EditorCanvasUI.Instance.PlayableLevelsPanelGO.SetActive(true);
         }
     }
 

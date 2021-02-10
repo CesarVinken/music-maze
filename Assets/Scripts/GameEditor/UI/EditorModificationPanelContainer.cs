@@ -6,7 +6,7 @@ public class EditorModificationPanelContainer : MonoBehaviour
 
     public IEditorModificationPanel SelectedPanel;
 
-    [SerializeField] private EditorLevelModificationPanel _levelModificationPanel;
+    [SerializeField] private EditorMazeModificationPanel _levelModificationPanel;
     [SerializeField] private EditorTileModificationPanel _tileModificationPanel;
 
     public void Awake()

@@ -8,6 +8,8 @@ public class MainCanvas : MonoBehaviour
     public GameObject ConsoleContainer;
     public GameObject ConsoleButton;
 
+    public GameObject GameEditorUIPrefab;
+
     public BlackOutSquare BlackOutSquare;
 
     public void Awake()
@@ -17,11 +19,19 @@ public class MainCanvas : MonoBehaviour
         Guard.CheckIsNull(ConsoleContainer, "ConsoleContainer", gameObject);
         Guard.CheckIsNull(ConsoleButton, "ConsoleButton", gameObject);
 
+        Guard.CheckIsNull(GameEditorUIPrefab, "GameEditorUIPrefab", gameObject);
+
         Guard.CheckIsNull(BlackOutSquare, "BlackOutSquare", gameObject);
 
         if (_gameManager.CurrentPlatform == Platform.Android)
         {
             ConsoleButton.SetActive(true);
+        }
+
+        if (EditorCanvasUI.Instance == null)
+        {
+            GameObject editorUI = Instantiate(GameEditorUIPrefab, transform);
+            editorUI.SetActive(false);
         }
     }
 }

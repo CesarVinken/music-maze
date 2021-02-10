@@ -32,16 +32,16 @@ public static class EditorManager
     public static void OpenEditor()
     {
         _inEditor = true;
-        EditorUIContainer.Instance.InitialiseEditor();
+        EditorCanvasUI.Instance.InitialiseEditor();
         EditorWorldContainer.Instance.InitialiseEditor();
 
-        EditorUIContainer.Instance.GridGenerator.GenerateTiles();
+        EditorCanvasUI.Instance.GridGenerator.GenerateTiles();
     }
 
     public static void CloseEditor()
     {
         _inEditor = false;
-        EditorUIContainer.Instance.CloseEditor();
+        EditorCanvasUI.Instance.CloseEditor();
         EditorWorldContainer.Instance.CloseEditor();
     }
 }

@@ -1,17 +1,17 @@
 ﻿using UnityEngine;
+using UnityEngine.SceneManagement;
 
-public class EditorUIContainer : MonoBehaviour
+public class EditorCanvasUI : MonoBehaviour
 {
-    public static EditorUIContainer Instance;
+    public static EditorCanvasUI Instance;
 
     public GameObject EditorModeStatusTextGO;
-    public GameObject EditorUIGO;
     public GameObject PlayableLevelsPanelGO;
 
     public Sprite DefaultIcon;
     public Sprite[] TileAttributeIcons;
 
-    public EditorLevelModificationPanel GridGenerator;
+    public EditorMazeModificationPanel GridGenerator;
 
     [Space(10)]
     [Header("Tile Modifier Actions")]
@@ -22,18 +22,19 @@ public class EditorUIContainer : MonoBehaviour
         Instance = this;
 
         Guard.CheckIsNull(EditorModeStatusTextGO, "EditorModeStatusTextGO", gameObject);
-        Guard.CheckIsNull(EditorUIGO, "EditorUIGO", gameObject);
         Guard.CheckIsNull(PlayableLevelsPanelGO, "PlayableLevelsPanelGO", gameObject);
 
         Guard.CheckIsNull(GridGenerator, "GridGenerator", gameObject);
 
         Guard.CheckIsNull(GenerateTileTransformationMapPrefab, "GenerateTileTransformationMapPrefab");
+
+        GameObject.DontDestroyOnLoad(gameObject);
     }
 
     public void InitialiseEditor()
     {
         EditorModeStatusTextGO.SetActive(true);
-        EditorUIGO.SetActive(true);
+        gameObject.SetActive(true);
 
         EditorWorldContainer.Instance.ShowTileSelector();
     }
@@ -41,6 +42,16 @@ public class EditorUIContainer : MonoBehaviour
     public void CloseEditor()
     {
         EditorModeStatusTextGO.SetActive(false);
-        EditorUIGO.SetActive(false);
+        gameObject.SetActive(false);
+    }
+
+    public void LoadOverworldEditor()
+    {
+        SceneManager.LoadScene("Overworld");
+    }
+
+    public void LoadMazeEditor()
+    {
+        SceneManager.LoadScene("Maze");
     }
 }
