@@ -13,6 +13,8 @@ public class EditorWorldContainer : MonoBehaviour
 
         Guard.CheckIsNull(_editorTileSelector, "EditorTileSelector", gameObject);
         Guard.CheckIsNull(_editorTileSelectorGO, "EditorTileSelectorGO", gameObject);
+
+        GameObject.DontDestroyOnLoad(gameObject);
     }
 
     public void InitialiseEditor()

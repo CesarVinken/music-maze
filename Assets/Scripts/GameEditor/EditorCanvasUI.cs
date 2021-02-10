@@ -8,6 +8,8 @@ public class EditorCanvasUI : MonoBehaviour
     public GameObject EditorModeStatusTextGO;
     public GameObject PlayableLevelsPanelGO;
 
+    [SerializeField] private GameObject _gameEditorWorldPrefab;
+
     public Sprite DefaultIcon;
     public Sprite[] TileAttributeIcons;
 
@@ -24,11 +26,18 @@ public class EditorCanvasUI : MonoBehaviour
         Guard.CheckIsNull(EditorModeStatusTextGO, "EditorModeStatusTextGO", gameObject);
         Guard.CheckIsNull(PlayableLevelsPanelGO, "PlayableLevelsPanelGO", gameObject);
 
+        Guard.CheckIsNull(_gameEditorWorldPrefab, "_gameEditorWorldPrefab");
+
         Guard.CheckIsNull(GridGenerator, "GridGenerator", gameObject);
 
         Guard.CheckIsNull(GenerateTileTransformationMapPrefab, "GenerateTileTransformationMapPrefab");
 
         GameObject.DontDestroyOnLoad(gameObject);
+
+        if(EditorWorldContainer.Instance == null)
+        {
+            GameObject editorUI = Instantiate(_gameEditorWorldPrefab);
+        }
     }
 
     public void InitialiseEditor()

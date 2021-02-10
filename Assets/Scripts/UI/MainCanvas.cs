@@ -8,7 +8,7 @@ public class MainCanvas : MonoBehaviour
     public GameObject ConsoleContainer;
     public GameObject ConsoleButton;
 
-    public GameObject GameEditorUIPrefab;
+    [SerializeField] private GameObject _gameEditorUIPrefab;
 
     public BlackOutSquare BlackOutSquare;
 
@@ -19,7 +19,7 @@ public class MainCanvas : MonoBehaviour
         Guard.CheckIsNull(ConsoleContainer, "ConsoleContainer", gameObject);
         Guard.CheckIsNull(ConsoleButton, "ConsoleButton", gameObject);
 
-        Guard.CheckIsNull(GameEditorUIPrefab, "GameEditorUIPrefab", gameObject);
+        Guard.CheckIsNull(_gameEditorUIPrefab, "GameEditorUIPrefab", gameObject);
 
         Guard.CheckIsNull(BlackOutSquare, "BlackOutSquare", gameObject);
 
@@ -30,7 +30,7 @@ public class MainCanvas : MonoBehaviour
 
         if (EditorCanvasUI.Instance == null)
         {
-            GameObject editorUI = Instantiate(GameEditorUIPrefab, transform);
+            GameObject editorUI = Instantiate(_gameEditorUIPrefab, transform);
             editorUI.SetActive(false);
         }
     }
