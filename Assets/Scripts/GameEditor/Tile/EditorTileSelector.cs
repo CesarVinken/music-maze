@@ -38,7 +38,15 @@ public class EditorTileSelector : MonoBehaviour
 
         if (PlayableLevelsPanel.IsOpen) return;
 
-        if (MazeLevelManager.Instance.EditorLevel == null) return;
+        if(GameManager.CurrentSceneType == SceneType.Maze)
+        {
+            if (MazeLevelManager.Instance.EditorLevel == null) return;
+        }
+        else
+        {
+            // TODO: if (OverworldLevelManager.Instance.EditorLevel == null) return;
+            return;
+        }
 
         if (Input.GetKeyDown(KeyCode.Mouse0))
         {

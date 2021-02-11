@@ -32,4 +32,9 @@ public class EditorWorldContainer : MonoBehaviour
         _editorTileSelector.CurrentSelectedLocation = new GridLocation(0, 0);
         _editorTileSelectorGO.SetActive(true);
     }
+
+    public void HideTileSelector()
+    {
+        _editorTileSelectorGO.SetActive(false);
+    }
 }

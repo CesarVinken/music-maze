@@ -3,6 +3,12 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 
+public enum SceneLoadOrigin
+{
+    Gameplay,
+    Editor
+}
+
 public class GameManager : MonoBehaviourPunCallbacks
 {
     public static GameManager Instance;
@@ -10,6 +16,7 @@ public class GameManager : MonoBehaviourPunCallbacks
     public static Platform CurrentPlatform;
     public static SceneType CurrentSceneType;
     public static GameType GameType;
+    public static SceneLoadOrigin SceneLoadOrigin = SceneLoadOrigin.Gameplay;
 
     public IPlatformConfiguration Configuration;
     public KeyboardConfiguration KeyboardConfiguration;
@@ -40,7 +47,7 @@ public class GameManager : MonoBehaviourPunCallbacks
 
         GameType = PhotonNetwork.PlayerList.Length == 0 ? GameType.SinglePlayer : GameType.Multiplayer;
         CurrentSceneType = _thisSceneType;
-        Logger.Warning($"We set the game type to {GameType} in a {CurrentSceneType} scene.");
+        Logger.Warning($"We set the game type to {GameType} in a {CurrentSceneType} scene. The scene loading origin is {SceneLoadOrigin}");
 
         if (Application.isMobilePlatform)
         {
@@ -81,23 +88,32 @@ public class GameManager : MonoBehaviourPunCallbacks
                 Logger.Log("instantiate overworld sprites, tiles and characters");
                 break;
             case SceneType.Maze:
-                MazeLevelData startUpMazeLevelData = MazeLevelLoader.LoadMazeLevelData("default");
-
-                if (startUpMazeLevelData == null)
+                // We loaded a maze scene through the game. Set up the maze level
+                if(SceneLoadOrigin == SceneLoadOrigin.Gameplay)
                 {
-                    Logger.Error("Could not find the default level for startup");
-                }
+                    MazeLevelData startUpMazeLevelData = MazeLevelLoader.LoadMazeLevelData("default");
 
-                MazeLevelLoader.LoadMazeLevel(startUpMazeLevelData);
+                    if (startUpMazeLevelData == null)
+                    {
+                        Logger.Error("Could not find the default level for startup");
+                    }
 
-                if (MazeLevelManager.Instance.Level == null)
+                    MazeLevelLoader.LoadMazeLevel(startUpMazeLevelData);
+
+                    if (MazeLevelManager.Instance.Level == null)
+                    {
+                        Logger.Log(Logger.Initialisation, "No level loaded on startup. Returning");
+                        return;
+                    }
+                    if (MazeLevelManager.Instance.Level.PlayerCharacterSpawnpoints.Count == 0) return;
+
+                    PlayableLevelNames = MazeLevelLoader.GetAllPlayableLevelNames();
+                } // We loaded a maze scene through the editor. Set up an empty grid for in the editor
+                else
                 {
-                    Logger.Log(Logger.Initialisation, "No level loaded on startup. Returning");
-                    return;
+                    Logger.Log("create empty grid");
+                    EditorCanvasUI.Instance.MazeModificationPanel.GenerateTiles();
                 }
-                if (MazeLevelManager.Instance.Level.PlayerCharacterSpawnpoints.Count == 0) return;
-
-                PlayableLevelNames = MazeLevelLoader.GetAllPlayableLevelNames();
                 break;
             default:
                 Logger.Error($"Scenetype {CurrentSceneType} is not implemented yet");

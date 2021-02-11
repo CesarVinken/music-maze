@@ -40,6 +40,11 @@ public class EditorCanvasUI : MonoBehaviour
         }
     }
 
+    public void UpdateCanvasForSceneChange()
+    {
+        SwitchEditorButton.Instance.SetButtonLabel();
+    }
+
     public void InitialiseEditor()
     {
         EditorModeStatusTextGO.SetActive(true);
@@ -52,15 +57,19 @@ public class EditorCanvasUI : MonoBehaviour
     {
         EditorModeStatusTextGO.SetActive(false);
         gameObject.SetActive(false);
+
+        EditorWorldContainer.Instance.HideTileSelector();
     }
 
     public void LoadOverworldEditor()
     {
+        GameManager.SceneLoadOrigin = SceneLoadOrigin.Editor;
         SceneManager.LoadScene("Overworld");
     }
 
     public void LoadMazeEditor()
     {
+        GameManager.SceneLoadOrigin = SceneLoadOrigin.Editor;
         SceneManager.LoadScene("Maze");
     }
 }

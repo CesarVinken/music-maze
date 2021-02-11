@@ -26,11 +26,18 @@ public class MainCanvas : MonoBehaviour
         {
             ConsoleButton.SetActive(true);
         }
+    }
 
+    public void Start()
+    {
         if (EditorCanvasUI.Instance == null)
         {
             GameObject editorUI = Instantiate(_gameEditorUIPrefab);
             editorUI.SetActive(false);
+        }
+        else
+        {
+            EditorCanvasUI.Instance.UpdateCanvasForSceneChange();
         }
     }
 }
