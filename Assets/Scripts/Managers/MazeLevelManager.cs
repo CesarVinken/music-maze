@@ -171,7 +171,7 @@ public class MazeLevelManager : MonoBehaviour, IOnEventCallback
     // This way we can be sure all tiles are getting marked.
     public void SetTileMarker(InGameTile tile, PlayerCharacter player)
     {
-        if (GameManager.Instance.GameType == GameType.SinglePlayer)
+        if (GameManager.GameType == GameType.SinglePlayer)
         {
             player.LastTile = tile;
 
@@ -197,7 +197,7 @@ public class MazeLevelManager : MonoBehaviour, IOnEventCallback
 
     public void LoadNextLevel(string pickedLevel)
     {
-        if (GameManager.Instance.GameType == GameType.SinglePlayer)
+        if (GameManager.GameType == GameType.SinglePlayer)
         {
             JsonMazeLevelFileReader levelReader = new JsonMazeLevelFileReader();
             MazeLevelData levelData = levelReader.ReadLevelData(pickedLevel);

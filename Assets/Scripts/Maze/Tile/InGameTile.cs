@@ -13,7 +13,7 @@ public class InGameTile : Tile
         if (player != null)
         {
             //Logger.Log("{0} entered tile {1},{2}", player.name, GridLocation.X, GridLocation.Y);
-            if (GameManager.Instance.GameType == GameType.Multiplayer && !player.PhotonView.IsMine) return;
+            if (GameManager.GameType == GameType.Multiplayer && !player.PhotonView.IsMine) return;
 
             player.UpdateCurrentGridLocation(GridLocation);
 

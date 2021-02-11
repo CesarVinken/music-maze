@@ -3,27 +3,24 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 
-public enum GameType
-{
-    SinglePlayer,
-    Multiplayer
-}
-
 public class GameManager : MonoBehaviourPunCallbacks
 {
     public static GameManager Instance;
 
-    public Platform CurrentPlatform;
+    public static Platform CurrentPlatform;
+    public static SceneType CurrentSceneType;
+    public static GameType GameType;
+
     public IPlatformConfiguration Configuration;
     public KeyboardConfiguration KeyboardConfiguration;
-    public GameType GameType;
 
     public GameObject GridGO;
-    public GameObject AstarGO;
     
-    public GameObject MazeLevelManagerPrefab;
-    public GameObject CharacterManagerPrefab;
-    public GameObject SpriteManagerPrefab;
+    [SerializeField] private GameObject _mazeLevelManagerPrefab;
+    [SerializeField] private GameObject _characterManagerPrefab;
+    [SerializeField] private GameObject _spriteManagerPrefab;
+
+    [SerializeField] private SceneType _thisSceneType;
 
     public event Action CompleteMazeLevelEvent;
 
@@ -34,16 +31,17 @@ public class GameManager : MonoBehaviourPunCallbacks
         Instance = this;
 
         Guard.CheckIsNull(GridGO, "GridGO", gameObject);
-        Guard.CheckIsNull(AstarGO, "AstarGO", gameObject);
 
-        Guard.CheckIsNull(MazeLevelManagerPrefab, "MazeLevelManagerPrefab", gameObject);
-        Guard.CheckIsNull(CharacterManagerPrefab, "CharacterManagerPrefab", gameObject);
-        Guard.CheckIsNull(SpriteManagerPrefab, "SpriteManagerPrefab", gameObject);
+        Guard.CheckIsNull(_mazeLevelManagerPrefab, "MazeLevelManagerPrefab", gameObject);
+        Guard.CheckIsNull(_characterManagerPrefab, "CharacterManagerPrefab", gameObject);
+        Guard.CheckIsNull(_spriteManagerPrefab, "SpriteManagerPrefab", gameObject);
 
         InitialiseLoggers();
 
         GameType = PhotonNetwork.PlayerList.Length == 0 ? GameType.SinglePlayer : GameType.Multiplayer;
-        Logger.Warning("We set the game type to " + GameType);
+        CurrentSceneType = _thisSceneType;
+        Logger.Warning($"We set the game type to {GameType} in a {CurrentSceneType} scene.");
+
         if (Application.isMobilePlatform)
         {
             CurrentPlatform = Platform.Android;
@@ -57,36 +55,54 @@ public class GameManager : MonoBehaviourPunCallbacks
 
         KeyboardConfiguration = new KeyboardConfiguration();
 
-        Instantiate(MazeLevelManagerPrefab, transform);
-        Instantiate(CharacterManagerPrefab, transform);
-        Instantiate(SpriteManagerPrefab, transform);
+        switch (CurrentSceneType)
+        {
+            case SceneType.Overworld:
+                Logger.Log("instantiate overworld managers");
+                break;
+            case SceneType.Maze:
+                Instantiate(_mazeLevelManagerPrefab, transform);
+                Instantiate(_characterManagerPrefab, transform);
+                Instantiate(_spriteManagerPrefab, transform);
+                break;
+            default:
+                Logger.Error($"Scenetype {CurrentSceneType} is not implemented yet");
+                break;
+        }  
     }
 
     public void Start()
     {
         CameraController.Instance.SetZoomLevel(Configuration.CameraZoomLevel);
 
-        MazeLevelData startUpMazeLevelData = MazeLevelLoader.LoadMazeLevelData("default");
-
-        if (startUpMazeLevelData == null)
+        switch (CurrentSceneType)
         {
-            Logger.Error("Could not find the default level for startup");
-        }
-        MazeLevelLoader.LoadMazeLevel(startUpMazeLevelData);
-        // Temporarily turned off for testing purposes
-        //if (!PhotonNetwork.IsConnected)
-        //{
-        //    SceneManager.LoadScene("Launcher");
-        //    return;
-        //}
-        if (MazeLevelManager.Instance.Level == null)
-        {
-            Logger.Log(Logger.Initialisation, "No level loaded on startup. Returning");
-            return;
-        }
-        if (MazeLevelManager.Instance.Level.PlayerCharacterSpawnpoints.Count == 0) return;
+            case SceneType.Overworld:
+                Logger.Log("instantiate overworld sprites, tiles and characters");
+                break;
+            case SceneType.Maze:
+                MazeLevelData startUpMazeLevelData = MazeLevelLoader.LoadMazeLevelData("default");
 
-        PlayableLevelNames = MazeLevelLoader.GetAllPlayableLevelNames();
+                if (startUpMazeLevelData == null)
+                {
+                    Logger.Error("Could not find the default level for startup");
+                }
+
+                MazeLevelLoader.LoadMazeLevel(startUpMazeLevelData);
+
+                if (MazeLevelManager.Instance.Level == null)
+                {
+                    Logger.Log(Logger.Initialisation, "No level loaded on startup. Returning");
+                    return;
+                }
+                if (MazeLevelManager.Instance.Level.PlayerCharacterSpawnpoints.Count == 0) return;
+
+                PlayableLevelNames = MazeLevelLoader.GetAllPlayableLevelNames();
+                break;
+            default:
+                Logger.Error($"Scenetype {CurrentSceneType} is not implemented yet");
+                break;
+        }
     }
 
     public void Update()

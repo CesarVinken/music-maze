@@ -87,7 +87,7 @@ public class CameraController : MonoBehaviour
 
         PlayerCharacter player = null;
 
-        if (GameManager.Instance.GameType == GameType.SinglePlayer)
+        if (GameManager.GameType == GameType.SinglePlayer)
             player = CharacterManager.Instance.MazePlayers[PlayerNumber.Player1];
         else
         {

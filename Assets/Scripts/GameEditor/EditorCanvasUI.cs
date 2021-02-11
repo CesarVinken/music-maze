@@ -13,7 +13,7 @@ public class EditorCanvasUI : MonoBehaviour
     public Sprite DefaultIcon;
     public Sprite[] TileAttributeIcons;
 
-    public EditorMazeModificationPanel GridGenerator;
+    public EditorMazeModificationPanel MazeModificationPanel;
 
     [Space(10)]
     [Header("Tile Modifier Actions")]
@@ -28,7 +28,7 @@ public class EditorCanvasUI : MonoBehaviour
 
         Guard.CheckIsNull(_gameEditorWorldPrefab, "_gameEditorWorldPrefab");
 
-        Guard.CheckIsNull(GridGenerator, "GridGenerator", gameObject);
+        Guard.CheckIsNull(MazeModificationPanel, "MazeModificationPanel", gameObject);
 
         Guard.CheckIsNull(GenerateTileTransformationMapPrefab, "GenerateTileTransformationMapPrefab");
 

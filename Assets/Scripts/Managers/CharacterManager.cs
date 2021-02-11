@@ -62,7 +62,7 @@ public class CharacterManager : MonoBehaviourPunCallbacks
             Logger.Error("Did not find 2, but {0} character startlocations for level", level.PlayerCharacterSpawnpoints.Count);
         }
             
-        if (PhotonNetwork.IsMasterClient || GameManager.Instance.GameType == GameType.SinglePlayer)
+        if (PhotonNetwork.IsMasterClient || GameManager.GameType == GameType.SinglePlayer)
         {
             Debug.Log("Instantiating Player 1");
 
@@ -105,7 +105,7 @@ public class CharacterManager : MonoBehaviourPunCallbacks
             playerCharacter.FreezeCharacter();
             playerCharacter.SetStartingPosition(playerCharacter, gridLocation);
 
-            if(GameManager.Instance.CurrentPlatform == Platform.PC)
+            if(GameManager.CurrentPlatform == Platform.PC)
             {
                 if (MazePlayers.Count == 0)
                 {

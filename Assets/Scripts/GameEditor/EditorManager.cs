@@ -35,7 +35,7 @@ public static class EditorManager
         EditorCanvasUI.Instance.InitialiseEditor();
         EditorWorldContainer.Instance.InitialiseEditor();
 
-        EditorCanvasUI.Instance.GridGenerator.GenerateTiles();
+        EditorCanvasUI.Instance.MazeModificationPanel.GenerateTiles();
     }
 
     public static void CloseEditor()

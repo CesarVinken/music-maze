@@ -19,11 +19,12 @@ public class EditorWorldContainer : MonoBehaviour
 
     public void InitialiseEditor()
     {
+        gameObject.SetActive(true);
     }
 
     public void CloseEditor()
     {
-        _editorTileSelectorGO.SetActive(false);
+        gameObject.SetActive(false);
     }
 
     public void ShowTileSelector()

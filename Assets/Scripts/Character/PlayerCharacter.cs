@@ -35,7 +35,7 @@ public class PlayerCharacter : Character
 
         gameObject.name = PhotonView.Owner == null ? "Player 1" : PhotonView.Owner?.NickName;
 
-        if (GameManager.Instance.GameType == GameType.Multiplayer)
+        if (GameManager.GameType == GameType.Multiplayer)
         {
             if (PhotonNetwork.IsMasterClient)
             {
@@ -75,7 +75,7 @@ public class PlayerCharacter : Character
         PlayerExitsEvent += OnPlayerExit;
         PlayerCaughtEvent += OnPlayerCaught;
 
-        if (GameManager.Instance.GameType == GameType.SinglePlayer
+        if (GameManager.GameType == GameType.SinglePlayer
             || PhotonView.IsMine)
         {
             _selectionIndicatorGO = Instantiate(_selectionIndicatorPrefab, SceneObjectManager.Instance.CharactersGO);
@@ -93,7 +93,7 @@ public class PlayerCharacter : Character
 
     public void OnCollisionEnter2D(Collision2D collision)
     {
-        if (GameManager.Instance.GameType == GameType.Multiplayer && !PhotonView.IsMine) return;
+        if (GameManager.GameType == GameType.Multiplayer && !PhotonView.IsMine) return;
 
         EnemyCharacter enemy = collision.gameObject.GetComponent<EnemyCharacter>();
         if (enemy != null)
@@ -111,10 +111,10 @@ public class PlayerCharacter : Character
         if (Console.Instance && Console.Instance.ConsoleState != ConsoleState.Closed)
             return;
 
-        if (GameManager.Instance.GameType == GameType.SinglePlayer
+        if (GameManager.GameType == GameType.SinglePlayer
             || PhotonView.IsMine)
         {
-            if (GameManager.Instance.CurrentPlatform == Platform.PC)
+            if (GameManager.CurrentPlatform == Platform.PC)
                 HandleKeyboardInput();
 
             if (Input.GetMouseButtonUp(0))
@@ -396,7 +396,7 @@ public class PlayerCharacter : Character
 
     public void OnPlayerCaught()
     {
-        if (GameManager.Instance.GameType == GameType.SinglePlayer)
+        if (GameManager.GameType == GameType.SinglePlayer)
         {
             PunRPCCaughtByEnemy();
         }

@@ -4,7 +4,6 @@ public class MainCanvas : MonoBehaviour
 {
     public static MainCanvas Instance;
 
-    [SerializeField] private GameManager _gameManager = null;
     public GameObject ConsoleContainer;
     public GameObject ConsoleButton;
 
@@ -23,14 +22,14 @@ public class MainCanvas : MonoBehaviour
 
         Guard.CheckIsNull(BlackOutSquare, "BlackOutSquare", gameObject);
 
-        if (_gameManager.CurrentPlatform == Platform.Android)
+        if (GameManager.CurrentPlatform == Platform.Android)
         {
             ConsoleButton.SetActive(true);
         }
 
         if (EditorCanvasUI.Instance == null)
         {
-            GameObject editorUI = Instantiate(_gameEditorUIPrefab, transform);
+            GameObject editorUI = Instantiate(_gameEditorUIPrefab);
             editorUI.SetActive(false);
         }
     }
