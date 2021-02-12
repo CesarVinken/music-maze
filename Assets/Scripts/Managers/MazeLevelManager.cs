@@ -246,8 +246,7 @@ public class MazeLevelManager : MonoBehaviour, IOnEventCallback
         {
             object[] data = (object[])photonEvent.CustomData;
             string pickedLevel = (string)data[0];
-
-            
+   
             MazeLevelData mazeLevelData = MazeLevelLoader.LoadMazeLevelData(pickedLevel);
 
             if (mazeLevelData == null)

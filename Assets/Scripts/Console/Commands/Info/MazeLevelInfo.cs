@@ -56,7 +56,7 @@ public class MazeLevelInfo : IInfoCommand
 
     private MazeLevelNameData GetMazeLevelNameData(string sanatisedLevelName)
     {
-        MazeLevelNamesData mazeLevelNamesData = MazeLevelLoader.GetAllLevelNamesData();
+        MazeLevelNamesData mazeLevelNamesData = MazeLevelLoader.GetAllMazeLevelNamesData();
         MazeLevelNameData mazeLevelName = mazeLevelNamesData.LevelNames.FirstOrDefault(level => level.LevelName == sanatisedLevelName);
 
         if (mazeLevelName == null)

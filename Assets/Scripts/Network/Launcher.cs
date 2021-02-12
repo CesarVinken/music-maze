@@ -144,7 +144,8 @@ namespace Photon.Pun.Demo.PunBasics
             
             if (PhotonNetwork.CurrentRoom.PlayerCount > 1)
             {
-                PhotonNetwork.LoadLevel("SampleScene");
+                // TODO: depending on game play mode, pick either overworld or a randomly selected maze level
+                PhotonNetwork.LoadLevel("Overworld");
             }
             else
             {

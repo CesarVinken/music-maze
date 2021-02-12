@@ -21,6 +21,12 @@ public static class MazeLevelLoader
             EditorManager.CloseEditor();
         }
 
+        if(GameManager.CurrentSceneType == SceneType.Overworld)
+        {
+            Logger.Warning("We are currently in the overworld scene.");
+            return;
+        }
+
         // Make checks such as if there are starting locations for the players
         MazeLevelManager.Instance.UnloadLevel();
         MazeLevelManager.Instance.SetupLevel(mazeLevelData); // sets new Level in MazeLevelManager
@@ -41,14 +47,14 @@ public static class MazeLevelLoader
         if (!File.Exists(filePath))
         {
             Logger.Warning(Logger.Datawriting, $"Looked for the maze level '{sanatisedMazeName}' but could not find it");
-            Logger.Log($"The available levels are: {GetAllLevelNamesForPrint()}");
+            Logger.Log($"The available levels are: {GetAllMazeLevelNamesForPrint()}");
             return false;
         }
 
         return true;
     }
 
-    public static string GetAllLevelNamesForPrint(string printLine = "")
+    public static string GetAllMazeLevelNamesForPrint(string printLine = "")
     {
         foreach (string mazeName in Directory.GetFiles(Application.streamingAssetsPath, "*.json"))
         {
@@ -60,7 +66,7 @@ public static class MazeLevelLoader
         return printLine;
     }
 
-    public static MazeLevelNamesData GetAllLevelNamesData()
+    public static MazeLevelNamesData GetAllMazeLevelNamesData()
     {
         JsonMazeLevelListFileReader jsonMazeLevelListFileReader = new JsonMazeLevelListFileReader();
         MazeLevelNamesData levelNamesData = jsonMazeLevelListFileReader.ReadMazeLevelList();
