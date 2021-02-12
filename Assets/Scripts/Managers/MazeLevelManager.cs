@@ -6,6 +6,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class MazeLevelManager : MonoBehaviour, IOnEventCallback
 {
@@ -192,6 +193,19 @@ public class MazeLevelManager : MonoBehaviour, IOnEventCallback
         {
             PlayerMarksTileEvent playerMarksTileEvent = new PlayerMarksTileEvent();
             playerMarksTileEvent.SendPlayerMarksTileEvent(tile.GridLocation, player);
+        }
+    }
+
+    public void LoadOverworld()
+    {
+        if (GameManager.GameType == GameType.SinglePlayer)
+        {
+            SceneManager.LoadScene("Overworld");
+        }
+        else
+        {
+            //LoadOverworldEvent loadOverworldEvent = new LoadOverworldEvent();
+            //loadOverworldEvent.SendLoadOverworldEvent();
         }
     }
 

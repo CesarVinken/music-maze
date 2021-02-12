@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public enum SceneLoadOrigin
 {
@@ -26,6 +27,7 @@ public class GameManager : MonoBehaviourPunCallbacks
     [SerializeField] private GameObject _mazeLevelManagerPrefab;
     [SerializeField] private GameObject _characterManagerPrefab;
     [SerializeField] private GameObject _spriteManagerPrefab;
+    [SerializeField] private GameObject _overworldManagerPrefab;
 
     [SerializeField] private SceneType _thisSceneType;
 
@@ -42,6 +44,7 @@ public class GameManager : MonoBehaviourPunCallbacks
         Guard.CheckIsNull(_mazeLevelManagerPrefab, "MazeLevelManagerPrefab", gameObject);
         Guard.CheckIsNull(_characterManagerPrefab, "CharacterManagerPrefab", gameObject);
         Guard.CheckIsNull(_spriteManagerPrefab, "SpriteManagerPrefab", gameObject);
+        Guard.CheckIsNull(_overworldManagerPrefab, "OverworldManagerPrefab", gameObject);
 
         InitialiseLoggers();
 
@@ -66,6 +69,7 @@ public class GameManager : MonoBehaviourPunCallbacks
         {
             case SceneType.Overworld:
                 Logger.Log("instantiate overworld managers");
+                Instantiate(_overworldManagerPrefab, transform);
                 break;
             case SceneType.Maze:
                 Instantiate(_mazeLevelManagerPrefab, transform);
@@ -147,5 +151,19 @@ public class GameManager : MonoBehaviourPunCallbacks
     public void CompleteMazeLevel()
     {
         CompleteMazeLevelEvent.Invoke();
+    }
+
+    // THIS FUNCTION IS TEMPORARY
+    public void ToMazeFromOverworld()
+    {
+        if (GameManager.GameType == GameType.SinglePlayer)
+        {
+            SceneManager.LoadScene("Maze");
+        }
+        else
+        {
+            LoadNextMazeLevelEvent loadNextLevelEvent = new LoadNextMazeLevelEvent();
+            loadNextLevelEvent.SendLoadNextMazeLevelEvent("default");
+        }
     }
 }

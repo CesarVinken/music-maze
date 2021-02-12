@@ -141,7 +141,12 @@ public class ScoreScreenContainer : MonoBehaviour
         OpenScoreScreenPanel();
     }
 
-    public void NextLevel()
+    public void ToOverworld()
+    {
+        MazeLevelManager.Instance.LoadOverworld();
+    }
+
+    public void ToNextLevel()
     {
         // pick a random level from the list of playable levels
         if(GameManager.Instance.PlayableLevelNames.Count == 0) // there are no levels left to choose from, reload all random levels.
