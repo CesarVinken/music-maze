@@ -43,6 +43,7 @@ public class EditorCanvasUI : MonoBehaviour
     public void UpdateCanvasForSceneChange()
     {
         SwitchEditorButton.Instance.SetButtonLabel();
+        EditorModificationPanelContainer.Instance.UpdateForSceneChange();
     }
 
     public void InitialiseEditor()

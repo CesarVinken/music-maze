@@ -30,7 +30,7 @@ public class EditorSelectedTileModifierCategoryContainer : MonoBehaviour
 
     public void SelectPreviousModifierCategory()
     {
-        EditorTileModificationPanel.Instance.DestroyModifierActions();
+        EditorMazeTileModificationPanel.Instance.DestroyModifierActions();
 
         if (EditorManager.SelectedMazeTileModifierCategory == EditorMazeTileModifierType.Attribute)
         {
@@ -52,7 +52,7 @@ public class EditorSelectedTileModifierCategoryContainer : MonoBehaviour
 
     public void SelectNextModifierCategory()
     {
-        EditorTileModificationPanel.Instance.DestroyModifierActions();
+        EditorMazeTileModificationPanel.Instance.DestroyModifierActions();
 
         if (EditorManager.SelectedMazeTileModifierCategory == EditorMazeTileModifierType.Attribute)
         {

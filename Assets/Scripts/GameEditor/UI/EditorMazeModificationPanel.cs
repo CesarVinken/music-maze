@@ -4,62 +4,28 @@ using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class EditorMazeModificationPanel : MonoBehaviour, IEditorModificationPanel
+public class EditorMazeModificationPanel : EditorGridModicationPanel
 {
-    public InputField WidthInputField;
-    public InputField HeightInputField;
-    public InputField MazeNameInputField;
-
-    private int _gridWidth = 8;
-    private int _gridHeight = 8;
-
     private string _mazeName = "";
 
-    public void Awake()
+    [SerializeField] private InputField _mazeNameInputField;
+
+    public new void Awake()
     {
-        Guard.CheckIsNull(HeightInputField, "HeightInputField", gameObject);
-        Guard.CheckIsNull(WidthInputField, "WidthInputField", gameObject);
-        Guard.CheckIsNull(MazeNameInputField, "MazeNameInputField", gameObject);
-    }
+        base.Awake();
 
-    public void SetWidth(string input)
-    {
-        if (!ValidateNumericInput(input)) {
-            WidthInputField.text = _gridWidth.ToString();
-            return;
-        }
-
-        _gridWidth = int.Parse(input);
-    }
-
-    public void SetHeight(string input)
-    {
-        if (!ValidateNumericInput(input))
-        {
-            HeightInputField.text = _gridHeight.ToString();
-            return;
-        }
-
-        _gridHeight = int.Parse(input);
+        Guard.CheckIsNull(_mazeNameInputField, "MazeNameInputField", gameObject);
     }
 
     public void SetMazeName(string input)
     {
         if (string.IsNullOrEmpty(input))
         {
-            MazeNameInputField.text = "";
+            _mazeNameInputField.text = "";
             return;
         }
 
         _mazeName = input;
-    }
-
-    public bool ValidateNumericInput(string input)
-    {
-        if (int.TryParse(input, out int result)) return true;
-
-        Logger.Warning("Could not parse the input {0}. Make sure to only give numeric values.", input);
-        return false;
     }
 
     public void GenerateTiles()
@@ -162,7 +128,7 @@ public class EditorMazeModificationPanel : MonoBehaviour, IEditorModificationPan
         CheckForTilesWithoutTransformationTriggerers();
 
         SaveMazeLevelData();
-        AddMazeLevelToLevelList();
+        AddMazeToMazeList();
 
         Logger.Log(Logger.Datawriting, "Level {0} Saved.", _mazeName);
     }
@@ -191,7 +157,7 @@ public class EditorMazeModificationPanel : MonoBehaviour, IEditorModificationPan
         }
     }
 
-    private void AddMazeLevelToLevelList()
+    private void AddMazeToMazeList()
     {
         MazeLevelNamesData levelData = new MazeLevelNamesData(_mazeName).AddLevelName(_mazeName);
 
@@ -199,7 +165,7 @@ public class EditorMazeModificationPanel : MonoBehaviour, IEditorModificationPan
         fileWriter.SerialiseData(levelData);
     }
 
-    public void TogglePlayableLevelsPanel()
+    public void TogglePlayableMazesPanel()
     {
         if (EditorCanvasUI.Instance.PlayableLevelsPanelGO.activeSelf)
         {
@@ -350,15 +316,5 @@ public class EditorMazeModificationPanel : MonoBehaviour, IEditorModificationPan
                 Logger.Warning($"No transformation triggerer was set up for the tile at {tile.GridLocation.X},{tile.GridLocation.Y}");
             }
         }
-    }
-
-    public void Open()
-    {
-        gameObject.SetActive(true);
-    }
-
-    public void Close()
-    {
-        gameObject.SetActive(false);
     }
 }

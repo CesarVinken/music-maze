@@ -1,8 +1,8 @@
 ﻿using UnityEngine;
 
-public class EditorTileModificationPanel : MonoBehaviour, IEditorModificationPanel
+public class EditorMazeTileModificationPanel : MonoBehaviour, IEditorModificationPanel
 {
-    public static EditorTileModificationPanel Instance;
+    public static EditorMazeTileModificationPanel Instance;
 
     public Transform TileModifierActionsContainer;
 
