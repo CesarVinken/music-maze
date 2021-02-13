@@ -1,4 +1,4 @@
-﻿public interface IEditorMazeTileTransformationTriggerer : IEditorMazeTileModifierType
+﻿public interface IEditorTileTransformationTriggerer : IEditorTileModifierType
 {
     string Name { get; }
 

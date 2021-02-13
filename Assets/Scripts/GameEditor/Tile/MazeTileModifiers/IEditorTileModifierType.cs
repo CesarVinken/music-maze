@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-public interface IEditorMazeTileModifierType // includes all background and attribute classes
+public interface IEditorTileModifierType // includes all background and attribute classes
 {
     Sprite Sprite { get; }
 

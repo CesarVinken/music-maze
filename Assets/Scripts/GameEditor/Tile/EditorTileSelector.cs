@@ -123,21 +123,21 @@ public class EditorTileSelector : MonoBehaviour
 
     private void PlaceMazeTileModifier()
     {
-        EditorMazeTileModifierType editorMazeTileModifierType = EditorManager.SelectedMazeTileModifierCategory;
+        EditorTileModifierCategory editorMazeTileModifierType = EditorManager.SelectedTileModifierCategory;
 
-        if(editorMazeTileModifierType == EditorMazeTileModifierType.Attribute)
+        if(editorMazeTileModifierType == EditorTileModifierCategory.Attribute)
         {
-            IEditorMazeTileAttribute attribute = EditorSelectedTileModifierContainer.Instance.EditorMazeTileAttributes[EditorManager.SelectedMazeTileAttributeModifierIndex];
+            IEditorTileAttribute attribute = EditorSelectedMazeTileModifierContainer.Instance.EditorTileAttributes[EditorManager.SelectedTileAttributeModifierIndex];
             PlaceMazeTileAttribute(CurrentSelectedLocation, attribute);
         }
-        else if (editorMazeTileModifierType == EditorMazeTileModifierType.Background)
+        else if (editorMazeTileModifierType == EditorTileModifierCategory.Background)
         {
-            IEditorMazeTileBackground background = EditorSelectedTileModifierContainer.Instance.EditorMazeTileBackgrounds[EditorManager.SelectedMazeTileBackgroundModifierIndex];
+            IEditorTileBackground background = EditorSelectedMazeTileModifierContainer.Instance.EditorTileBackgrounds[EditorManager.SelectedTileBackgroundModifierIndex];
             PlaceMazeTileBackground(CurrentSelectedLocation, background);
         }
-        else if (editorMazeTileModifierType == EditorMazeTileModifierType.TransformationTriggerer)
+        else if (editorMazeTileModifierType == EditorTileModifierCategory.TransformationTriggerer)
         {
-            IEditorMazeTileTransformationTriggerer transformationTriggerer = EditorSelectedTileModifierContainer.Instance.EditorMazeTileTransformationTriggerers[EditorManager.SelectedMazeTileTransformationTriggererIndex];
+            IEditorTileTransformationTriggerer transformationTriggerer = EditorSelectedMazeTileModifierContainer.Instance.EditorTileTransformationTriggerers[EditorManager.SelectedTileTransformationTriggererIndex];
             PlaceTransformationTriggerer(CurrentSelectedLocation, transformationTriggerer);
         }
         else
@@ -149,21 +149,21 @@ public class EditorTileSelector : MonoBehaviour
     private void PlaceMazeTileModifierVariation()
     {
         Logger.Log("place a variation");
-        EditorMazeTileModifierType editorMazeTileModifierCategory = EditorManager.SelectedMazeTileModifierCategory;
+        EditorTileModifierCategory editorMazeTileModifierCategory = EditorManager.SelectedTileModifierCategory;
 
-        if (editorMazeTileModifierCategory == EditorMazeTileModifierType.Attribute)
+        if (editorMazeTileModifierCategory == EditorTileModifierCategory.Attribute)
         {
-            IEditorMazeTileAttribute attribute = EditorSelectedTileModifierContainer.Instance.EditorMazeTileAttributes[EditorManager.SelectedMazeTileAttributeModifierIndex];
+            IEditorTileAttribute attribute = EditorSelectedMazeTileModifierContainer.Instance.EditorTileAttributes[EditorManager.SelectedTileAttributeModifierIndex];
             PlaceMazeTileAttributeVariation(CurrentSelectedLocation, attribute);
         }
-        else if (editorMazeTileModifierCategory == EditorMazeTileModifierType.Background)
+        else if (editorMazeTileModifierCategory == EditorTileModifierCategory.Background)
         {
-            IEditorMazeTileBackground background = EditorSelectedTileModifierContainer.Instance.EditorMazeTileBackgrounds[EditorManager.SelectedMazeTileBackgroundModifierIndex];
+            IEditorTileBackground background = EditorSelectedMazeTileModifierContainer.Instance.EditorTileBackgrounds[EditorManager.SelectedTileBackgroundModifierIndex];
             PlaceMazeTileBackgroundVariation(CurrentSelectedLocation, background);
         }
     }
 
-    private void PlaceMazeTileAttribute(GridLocation gridLocation, IEditorMazeTileAttribute attribute)
+    private void PlaceMazeTileAttribute(GridLocation gridLocation, IEditorTileAttribute attribute)
     {
         if (attribute == null) Logger.Error($"Could not find the attribute type {attribute.GetType()}");
 
@@ -171,7 +171,7 @@ public class EditorTileSelector : MonoBehaviour
         attribute.PlaceAttribute(tile);
     }
 
-    private void PlaceMazeTileBackground(GridLocation gridLocation, IEditorMazeTileBackground background)
+    private void PlaceMazeTileBackground(GridLocation gridLocation, IEditorTileBackground background)
     {
         if (background == null) Logger.Error($"Could not find the background type {background.GetType()}");
 
@@ -179,7 +179,7 @@ public class EditorTileSelector : MonoBehaviour
         background.PlaceBackground(tile);
     }
 
-    private void PlaceMazeTileAttributeVariation(GridLocation gridLocation, IEditorMazeTileAttribute attribute)
+    private void PlaceMazeTileAttributeVariation(GridLocation gridLocation, IEditorTileAttribute attribute)
     {
         if (attribute == null) Logger.Error($"Could not find the attribute type {attribute.GetType()}");
 
@@ -187,7 +187,7 @@ public class EditorTileSelector : MonoBehaviour
         attribute.PlaceAttributeVariation(tile);
     }
 
-    private void PlaceMazeTileBackgroundVariation(GridLocation gridLocation, IEditorMazeTileBackground background)
+    private void PlaceMazeTileBackgroundVariation(GridLocation gridLocation, IEditorTileBackground background)
     {
         if (background == null) Logger.Error($"Could not find the background type {background.GetType()}");
 
@@ -195,7 +195,7 @@ public class EditorTileSelector : MonoBehaviour
         background.PlaceBackgroundVariation(tile);
     }
 
-    private void PlaceTransformationTriggerer(GridLocation gridLocation, IEditorMazeTileTransformationTriggerer transformationTriggerer)
+    private void PlaceTransformationTriggerer(GridLocation gridLocation, IEditorTileTransformationTriggerer transformationTriggerer)
     {
         if (transformationTriggerer == null) Logger.Error($"Could not find the transformationTriggerer type {transformationTriggerer.GetType()}");
 

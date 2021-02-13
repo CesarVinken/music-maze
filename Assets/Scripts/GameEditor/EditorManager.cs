@@ -12,12 +12,12 @@ public static class EditorManager
         }
     }
 
-    public static EditorMazeTileModifierType SelectedMazeTileModifierCategory;
-    public static IEditorMazeTileModifierType SelectedMazeTileModifier;
+    public static EditorTileModifierCategory SelectedTileModifierCategory;
+    public static IEditorTileModifierType SelectedTileModifier;
 
-    public static int SelectedMazeTileAttributeModifierIndex;
-    public static int SelectedMazeTileBackgroundModifierIndex;
-    public static int SelectedMazeTileTransformationTriggererIndex;
+    public static int SelectedTileAttributeModifierIndex;
+    public static int SelectedTileBackgroundModifierIndex;
+    public static int SelectedTileTransformationTriggererIndex;
 
     public static void ToggleEditorMode()
     {

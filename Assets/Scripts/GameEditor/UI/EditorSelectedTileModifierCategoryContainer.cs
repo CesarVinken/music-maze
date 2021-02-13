@@ -17,10 +17,10 @@ public class EditorSelectedTileModifierCategoryContainer : MonoBehaviour
 
     public void OnEnable()
     {
-        SetCategoryLabel(EditorManager.SelectedMazeTileModifierCategory);
+        SetCategoryLabel(EditorManager.SelectedTileModifierCategory);
     }
 
-    public void SetCategoryLabel(EditorMazeTileModifierType editorMazeTileModifierType)
+    public void SetCategoryLabel(EditorTileModifierCategory editorMazeTileModifierType)
     {
         string categoryName = editorMazeTileModifierType.ToString();
         categoryName = Regex.Replace(categoryName, "([a-z])([A-Z])", "$1 $2");
@@ -32,15 +32,15 @@ public class EditorSelectedTileModifierCategoryContainer : MonoBehaviour
     {
         EditorMazeTileModificationPanel.Instance.DestroyModifierActions();
 
-        if (EditorManager.SelectedMazeTileModifierCategory == EditorMazeTileModifierType.Attribute)
+        if (EditorManager.SelectedTileModifierCategory == EditorTileModifierCategory.Attribute)
         {
             SelectBackgrounds();
         }
-        else if (EditorManager.SelectedMazeTileModifierCategory == EditorMazeTileModifierType.Background)
+        else if (EditorManager.SelectedTileModifierCategory == EditorTileModifierCategory.Background)
         {
             SelectTileTransformationTriggerer();
         }
-        else if (EditorManager.SelectedMazeTileModifierCategory == EditorMazeTileModifierType.TransformationTriggerer)
+        else if (EditorManager.SelectedTileModifierCategory == EditorTileModifierCategory.TransformationTriggerer)
         {
             SelectAttributes();
         }
@@ -54,15 +54,15 @@ public class EditorSelectedTileModifierCategoryContainer : MonoBehaviour
     {
         EditorMazeTileModificationPanel.Instance.DestroyModifierActions();
 
-        if (EditorManager.SelectedMazeTileModifierCategory == EditorMazeTileModifierType.Attribute)
+        if (EditorManager.SelectedTileModifierCategory == EditorTileModifierCategory.Attribute)
         {
             SelectTileTransformationTriggerer();
         }
-        else if (EditorManager.SelectedMazeTileModifierCategory == EditorMazeTileModifierType.Background)
+        else if (EditorManager.SelectedTileModifierCategory == EditorTileModifierCategory.Background)
         {
             SelectAttributes();
         }
-        else if (EditorManager.SelectedMazeTileModifierCategory == EditorMazeTileModifierType.TransformationTriggerer)
+        else if (EditorManager.SelectedTileModifierCategory == EditorTileModifierCategory.TransformationTriggerer)
         {
             SelectBackgrounds();
         }
@@ -74,25 +74,25 @@ public class EditorSelectedTileModifierCategoryContainer : MonoBehaviour
 
     public void SelectAttributes()
     {
-        EditorSelectedTileModifierContainer.Instance.SetSelectedMazeTileModifierCategory(EditorMazeTileModifierType.Attribute);
+        EditorSelectedMazeTileModifierContainer.Instance.SetSelectedMazeTileModifierCategory(EditorTileModifierCategory.Attribute);
 
-        int index = EditorManager.SelectedMazeTileAttributeModifierIndex;
-        EditorSelectedTileModifierContainer.Instance.SetSelectedMazeTileModifier(index);
+        int index = EditorManager.SelectedTileAttributeModifierIndex;
+        EditorSelectedMazeTileModifierContainer.Instance.SetSelectedMazeTileModifier(index);
     }
 
     public void SelectBackgrounds()
     {
-        EditorSelectedTileModifierContainer.Instance.SetSelectedMazeTileModifierCategory(EditorMazeTileModifierType.Background);
+        EditorSelectedMazeTileModifierContainer.Instance.SetSelectedMazeTileModifierCategory(EditorTileModifierCategory.Background);
 
-        int index = EditorManager.SelectedMazeTileBackgroundModifierIndex;
-        EditorSelectedTileModifierContainer.Instance.SetSelectedMazeTileModifier(index);
+        int index = EditorManager.SelectedTileBackgroundModifierIndex;
+        EditorSelectedMazeTileModifierContainer.Instance.SetSelectedMazeTileModifier(index);
     }
 
     public void SelectTileTransformationTriggerer()
     {
-        EditorSelectedTileModifierContainer.Instance.SetSelectedMazeTileModifierCategory(EditorMazeTileModifierType.TransformationTriggerer);
+        EditorSelectedMazeTileModifierContainer.Instance.SetSelectedMazeTileModifierCategory(EditorTileModifierCategory.TransformationTriggerer);
 
-        int index = EditorManager.SelectedMazeTileBackgroundModifierIndex;
-        EditorSelectedTileModifierContainer.Instance.SetSelectedMazeTileModifier(index);
+        int index = EditorManager.SelectedTileBackgroundModifierIndex;
+        EditorSelectedMazeTileModifierContainer.Instance.SetSelectedMazeTileModifier(index);
     }
 }

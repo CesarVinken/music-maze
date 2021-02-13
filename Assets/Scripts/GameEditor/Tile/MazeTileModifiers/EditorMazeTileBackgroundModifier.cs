@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-public abstract class EditorMazeTileBackgroundModifier : IEditorMazeTileBackground
+public abstract class EditorMazeTileBackgroundModifier : IEditorTileBackground
 {
     public virtual string Name => "";
 

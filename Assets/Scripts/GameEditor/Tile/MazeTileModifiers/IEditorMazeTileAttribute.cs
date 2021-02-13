@@ -1,4 +1,4 @@
-﻿public interface IEditorMazeTileAttribute : IEditorMazeTileModifierType
+﻿public interface IEditorTileAttribute : IEditorTileModifierType
 {
     string Name { get; }
 

@@ -1,7 +1,7 @@
 ﻿using System.Linq;
 using UnityEngine;
 
-public class EditorMazeTileTransformationTriggerer : IEditorMazeTileTransformationTriggerer
+public class EditorMazeTileTransformationTriggerer : IEditorTileTransformationTriggerer
 {
     public string Name { get => "Transformation Triggerer"; }
 

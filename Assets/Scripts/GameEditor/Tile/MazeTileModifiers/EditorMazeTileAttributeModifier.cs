@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-public abstract class EditorMazeTileAttributeModifier : IEditorMazeTileAttribute
+public abstract class EditorMazeTileAttributeModifier : IEditorTileAttribute
 {
     public virtual string Name => "";
 

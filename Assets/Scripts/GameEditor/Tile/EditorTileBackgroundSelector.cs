@@ -1,0 +1,42 @@
+﻿using System.Collections.Generic;
+
+public class EditorTileBackgroundSelector : EditorTileModifierSelector
+{
+    public EditorTileBackgroundSelector(EditorSelectedTileModifierContainer editorSelectedModifierContainer) : base(editorSelectedModifierContainer) { }
+
+    public override void SwitchSelectedModifier(int newValue)
+    {
+        EditorTileModifierCategory currentCategory = EditorTileModifierCategory.Background;
+
+        int selectedBackgroundIndex = EditorManager.SelectedTileBackgroundModifierIndex;
+        int newIndex = selectedBackgroundIndex + newValue;
+
+        if (newIndex < 0)
+        {
+            EditorTileModifierCategory previousEditorTileModifierCategory = PreviousEditorTileModfierCategory(currentCategory);
+            List<IEditorTileModifierType> registeredModifiers = EditorSelectedMazeTileModifierContainer.Instance.ModifiersByCategories[previousEditorTileModifierCategory];
+
+            EditorSelectedMazeTileModifierContainer.Instance.SetSelectedMazeTileModifierCategory(previousEditorTileModifierCategory);
+            EditorSelectedMazeTileModifierContainer.Instance.SetSelectedMazeTileModifier(registeredModifiers.Count - 1);
+        }
+        else if (newIndex >= _editorSelectedModifierContainer.EditorTileBackgrounds.Count)
+        {
+            EditorTileModifierCategory nextEditorTileModifierCategory = NextEditorTileModfierCategory(currentCategory);
+
+            EditorSelectedMazeTileModifierContainer.Instance.SetSelectedMazeTileModifierCategory(nextEditorTileModifierCategory);
+            EditorSelectedMazeTileModifierContainer.Instance.SetSelectedMazeTileModifier(0);
+        }
+        else
+        {
+            SetSelectedModifier(newIndex);
+        }
+    }
+
+    public override void SetSelectedModifier(int modifierIndex)
+    {
+        IEditorTileBackground background = _editorSelectedModifierContainer.EditorTileBackgrounds[modifierIndex];
+        _editorSelectedModifierContainer.SelectedModifierLabel.text = GetSelectedModifierLabel(background.Name);
+        _editorSelectedModifierContainer.SelectedModifierSprite.sprite = background.GetSprite();
+        EditorManager.SelectedTileBackgroundModifierIndex = modifierIndex;
+    }
+}
