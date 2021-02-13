@@ -27,7 +27,6 @@ public class MazeLevelManager : MonoBehaviour, IOnEventCallback
     public GameObject PlayerSpawnpointPrefab;
     public GameObject EnemySpawnpointPrefab;
 
-
     public int NumberOfUnmarkedTiles = -1;
 
     public GameObject GetTileAttributePrefab<T>() where T : IMazeTileAttribute
@@ -204,8 +203,8 @@ public class MazeLevelManager : MonoBehaviour, IOnEventCallback
         }
         else
         {
-            //LoadOverworldEvent loadOverworldEvent = new LoadOverworldEvent();
-            //loadOverworldEvent.SendLoadOverworldEvent();
+            LoadOverworldEvent loadOverworldEvent = new LoadOverworldEvent();
+            loadOverworldEvent.SendLoadOverworldEvent();
         }
     }
 
@@ -271,6 +270,9 @@ public class MazeLevelManager : MonoBehaviour, IOnEventCallback
             MazeLevelLoader.LoadMazeLevel(mazeLevelData);
 
             ScoreScreenContainer.Instance.CloseScoreScreenPanel();
+        } else if (eventCode == LoadOverworldEvent.LoadOverworldEventCode)
+        {
+            SceneManager.LoadScene("Overworld");
         }
     }
 

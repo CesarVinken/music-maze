@@ -1,4 +1,6 @@
-﻿using Photon.Pun;
+﻿using ExitGames.Client.Photon;
+using Photon.Pun;
+using Photon.Realtime;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
@@ -10,7 +12,7 @@ public enum SceneLoadOrigin
     Editor
 }
 
-public class GameManager : MonoBehaviourPunCallbacks
+public class GameManager : MonoBehaviourPunCallbacks, IOnEventCallback
 {
     public static GameManager Instance;
 
@@ -164,6 +166,16 @@ public class GameManager : MonoBehaviourPunCallbacks
         {
             LoadNextMazeLevelEvent loadNextLevelEvent = new LoadNextMazeLevelEvent();
             loadNextLevelEvent.SendLoadNextMazeLevelEvent("default");
+        }
+    }
+
+    public void OnEvent(EventData photonEvent)
+    {
+        byte eventCode = photonEvent.Code;
+
+        if (eventCode == LoadNextMazeLevelEvent.LoadNextMazeLevelEventCode)
+        {
+            SceneManager.LoadScene("Maze");
         }
     }
 }

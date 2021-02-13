@@ -8,6 +8,7 @@ public class LoadNextMazeLevelEvent
 
     public void SendLoadNextMazeLevelEvent(string levelName)
     {
+        Logger.Log("SendLoadNextMazeLevelEvent");
         object[] content = new object[] {
             levelName
         };
