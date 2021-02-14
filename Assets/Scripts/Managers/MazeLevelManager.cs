@@ -96,7 +96,7 @@ public class MazeLevelManager : MonoBehaviour, IOnEventCallback
 
         MainCanvas.Instance.BlackOutSquare.ResetToDefault();
         CameraController.Instance.ResetCamera();
-        CameraController.Instance.SetPanLimits(MazeLevelManager.Instance.EditorLevel.LevelBounds);
+        CameraController.Instance.SetPanLimits(EditorLevel.LevelBounds);
     }
 
     public IEnumerator ScanCoroutine()

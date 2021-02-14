@@ -59,7 +59,6 @@ public class EditorMazeModificationPanel : EditorGridModicationPanel
         // remove everything from the currently loaded level
         MazeLevelManager.Instance.UnloadLevel();
 
-
         // Create a new level from scratch with a obstacle ring at the edges
         List<SerialisableTile> tiles = new List<SerialisableTile>();
 
@@ -102,7 +101,7 @@ public class EditorMazeModificationPanel : EditorGridModicationPanel
         MazeLevelData newMazeLevelData = new MazeLevelData();
         newMazeLevelData.Tiles = tiles;
 
-        MazeLevelLoader.LoadMazelLevelForEditor(newMazeLevelData);
+        MazeLevelLoader.LoadMazeLevelForEditor(newMazeLevelData);
     }
 
     public void SaveMaze()
@@ -153,7 +152,7 @@ public class EditorMazeModificationPanel : EditorGridModicationPanel
         if (mazeLevelNameExists)
         {
             MazeLevelData mazeLevelData = MazeLevelLoader.LoadMazeLevelData(_mazeName);
-            MazeLevelLoader.LoadMazelLevelForEditor(mazeLevelData);
+            MazeLevelLoader.LoadMazeLevelForEditor(mazeLevelData);
         }
     }
 

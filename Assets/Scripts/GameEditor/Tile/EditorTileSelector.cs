@@ -42,11 +42,11 @@ public class EditorTileSelector : MonoBehaviour
         {
             if (MazeLevelManager.Instance.EditorLevel == null) return;
         }
-        else
+        else if(GameManager.CurrentSceneType == SceneType.Overworld)
         {
-            // TODO: if (OverworldLevelManager.Instance.EditorLevel == null) return;
-            return;
+            if (OverworldManager.Instance.EditorOverworld == null) return;
         }
+        
 
         if (Input.GetKeyDown(KeyCode.Mouse0))
         {

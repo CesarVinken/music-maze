@@ -23,7 +23,7 @@ public static class MazeLevelLoader
 
         if(GameManager.CurrentSceneType == SceneType.Overworld)
         {
-            Logger.Warning("We are currently in the overworld scene.");
+            Logger.Warning("We are currently in the overworld scene. Do not load maze but return.");
             return;
         }
 
@@ -32,7 +32,7 @@ public static class MazeLevelLoader
         MazeLevelManager.Instance.SetupLevel(mazeLevelData); // sets new Level in MazeLevelManager
     }
 
-    public static void LoadMazelLevelForEditor(MazeLevelData mazeLevelData)
+    public static void LoadMazeLevelForEditor(MazeLevelData mazeLevelData)
     {
         MazeLevelManager.Instance.UnloadLevel();
         MazeLevelManager.Instance.SetupLevelForEditor(mazeLevelData); // sets up the level without instantiating characters etc.
