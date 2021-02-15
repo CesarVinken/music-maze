@@ -137,11 +137,11 @@ public class InGameMazeLevel : MazeLevel
         {
             if (serialisableTileBackground.TileBackgroundId == SerialisableTileBackground.PathBackgroundCode)
             {
-                tileBackgroundPlacer.PlacePath(new MazeLevelDefaultPathType(), new TileConnectionScoreInfo(serialisableTileBackground.TileConnectionScore)); //TODO, fix path type
+                tileBackgroundPlacer.PlacePath(new MazeLevelDefaultPathType(), new TileConnectionScoreInfo(serialisableTileBackground.TileConnectionScore));
             }
             else if (serialisableTileBackground.TileBackgroundId == SerialisableTileBackground.BaseBackgroundCode)
             {
-                tileBackgroundPlacer.PlaceBaseBackground(new MazeLevelDefaultBaseBackgroundType()); // TODO fix background type
+                tileBackgroundPlacer.PlaceBaseBackground(new MazeLevelDefaultBaseBackgroundType());
             }
             else
             {

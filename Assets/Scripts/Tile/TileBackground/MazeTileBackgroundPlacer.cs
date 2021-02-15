@@ -31,17 +31,17 @@ public class MazeTileBackgroundPlacer<T> : TileBackgroundPlacer<T> where T : Maz
     //    }
     //}
 
-    //public void PlaceBaseBackground(IBaseBackgroundType mazeTileBaseBackgroundType)
-    //{
-    //    MazeTileBaseBackground oldBackground = (MazeTileBaseBackground)Tile.TileBackgrounds.FirstOrDefault(background => background is MazeTileBaseBackground);
-    //    if (oldBackground != null) return;
+    public override void PlaceBaseBackground(IBaseBackgroundType baseBackgroundType)
+    {
+        MazeTileBaseBackground oldBackground = (MazeTileBaseBackground)Tile.TileBackgrounds.FirstOrDefault(background => background is MazeTileBaseBackground);
+        if (oldBackground != null) return;
 
-    //    GameObject mazeTileBaseBackgroundGO = GameObject.Instantiate(MazeLevelManager.Instance.TileBaseBackgroundPrefab, Tile.BackgroundsContainer);
-    //    MazeTileBaseBackground mazeTileBaseBackground = mazeTileBaseBackgroundGO.GetComponent<MazeTileBaseBackground>();
+        GameObject baseBackgroundGO = GameObject.Instantiate(MazeLevelManager.Instance.TileBaseBackgroundPrefab, Tile.BackgroundsContainer);
+        MazeTileBaseBackground baseBackground = baseBackgroundGO.GetComponent<MazeTileBaseBackground>();
 
-    //    int defaultConnectionScore = -1;
-    //    mazeTileBaseBackground.WithPathConnectionScore(defaultConnectionScore);
-    //    mazeTileBaseBackground.SetTile(Tile);
-    //    Tile.TileBackgrounds.Add(mazeTileBaseBackground as ITileBackground);
-    //}
+        int defaultConnectionScore = -1;
+        baseBackground.WithPathConnectionScore(defaultConnectionScore);
+        baseBackground.SetTile(Tile);
+        Tile.TileBackgrounds.Add(baseBackground as ITileBackground);
+    }
 }

@@ -28,7 +28,7 @@ public class TileObstacle : MonoBehaviour, ITileAttribute, ITileConnectable, ITr
 
         if(ObstacleType == ObstacleType.Bush)
         {
-            _tileSpriteContainer.SetSprite(SpriteManager.Instance.DefaultWall[0]);
+            _tileSpriteContainer.SetSprite(MazeSpriteManager.Instance.DefaultWall[0]);
         }
 
         _sortingOrder = (int)(_sortingOrderBase - transform.position.y - _sortingOrderCalculationOffset) * 10;
@@ -40,7 +40,7 @@ public class TileObstacle : MonoBehaviour, ITileAttribute, ITileConnectable, ITr
         ConnectionScore = obstacleConnectionScoreInfo.RawConnectionScore;
         SpriteNumber = obstacleConnectionScoreInfo.SpriteNumber;
 
-        _tileSpriteContainer.SetSprite(SpriteManager.Instance.DefaultWall[SpriteNumber - 1]);
+        _tileSpriteContainer.SetSprite(MazeSpriteManager.Instance.DefaultWall[SpriteNumber - 1]);
     }
 
     public void WithObstacleType(ObstacleType obstacleType)
@@ -72,7 +72,7 @@ public class TileObstacle : MonoBehaviour, ITileAttribute, ITileConnectable, ITr
 
         if (ObstacleType == ObstacleType.Bush)
         {
-            Sprite colourfulSprite = SpriteManager.Instance.DefaultWallColourful[SpriteNumber - 1];
+            Sprite colourfulSprite = MazeSpriteManager.Instance.DefaultWallColourful[SpriteNumber - 1];
             IEnumerator transformToColourful = TransformToColourful(colourfulSprite);
             StartCoroutine(transformToColourful);
         }

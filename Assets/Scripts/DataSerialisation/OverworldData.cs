@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 
-public class OverworldData : MonoBehaviour
+public class OverworldData
 {
     public string Name = "Overworld";
 

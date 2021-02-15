@@ -36,6 +36,6 @@ public class EditorMazeTilePath : EditorMazeTileBackgroundModifier
 
     public override Sprite GetSprite()
     {
-        return SpriteManager.Instance.DefaultPath[15];
+        return MazeSpriteManager.Instance.DefaultPath[15];
     }
 }

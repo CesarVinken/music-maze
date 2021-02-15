@@ -28,7 +28,8 @@ public class GameManager : MonoBehaviourPunCallbacks, IOnEventCallback
     
     [SerializeField] private GameObject _mazeLevelManagerPrefab;
     [SerializeField] private GameObject _characterManagerPrefab;
-    [SerializeField] private GameObject _spriteManagerPrefab;
+    [SerializeField] private GameObject _mazeLevelSpriteManagerPrefab;
+    [SerializeField] private GameObject _overworldSpriteManagerPrefab;
     [SerializeField] private GameObject _overworldManagerPrefab;
 
     [SerializeField] private SceneType _thisSceneType;
@@ -45,7 +46,8 @@ public class GameManager : MonoBehaviourPunCallbacks, IOnEventCallback
 
         Guard.CheckIsNull(_mazeLevelManagerPrefab, "MazeLevelManagerPrefab", gameObject);
         Guard.CheckIsNull(_characterManagerPrefab, "CharacterManagerPrefab", gameObject);
-        Guard.CheckIsNull(_spriteManagerPrefab, "SpriteManagerPrefab", gameObject);
+        Guard.CheckIsNull(_mazeLevelSpriteManagerPrefab, "MazeLevelSpriteManagerPrefab", gameObject);
+        Guard.CheckIsNull(_overworldSpriteManagerPrefab, "_overworldSpriteManagerPrefab", gameObject);
         Guard.CheckIsNull(_overworldManagerPrefab, "OverworldManagerPrefab", gameObject);
 
         InitialiseLoggers();
@@ -70,13 +72,13 @@ public class GameManager : MonoBehaviourPunCallbacks, IOnEventCallback
         switch (CurrentSceneType)
         {
             case SceneType.Overworld:
-                Logger.Log("instantiate overworld managers");
                 Instantiate(_overworldManagerPrefab, transform);
+                Instantiate(_overworldSpriteManagerPrefab, transform);
                 break;
             case SceneType.Maze:
                 Instantiate(_mazeLevelManagerPrefab, transform);
                 Instantiate(_characterManagerPrefab, transform);
-                Instantiate(_spriteManagerPrefab, transform);
+                Instantiate(_mazeLevelSpriteManagerPrefab, transform);
                 break;
             default:
                 Logger.Error($"Scenetype {CurrentSceneType} is not implemented yet");

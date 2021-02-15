@@ -307,13 +307,13 @@ public class MazeLevelManager : MonoBehaviour, IOnEventCallback
         if (playerNumber == PlayerNumber.Player1)
         {
             playerMark.SetOwner(PlayerMarkOwner.Player1);
-            tile.PlayerMarkRenderer.sprite = SpriteManager.Instance.Player1TileMarker[playerMark.ConnectionScore - 1];
+            tile.PlayerMarkRenderer.sprite = MazeSpriteManager.Instance.Player1TileMarker[playerMark.ConnectionScore - 1];
             tile.PlayerMark = playerMark;
         }
         else
         {
             playerMark.SetOwner(PlayerMarkOwner.Player2);
-            tile.PlayerMarkRenderer.sprite = SpriteManager.Instance.Player2TileMarker[playerMark.ConnectionScore - 1];
+            tile.PlayerMarkRenderer.sprite = MazeSpriteManager.Instance.Player2TileMarker[playerMark.ConnectionScore - 1];
             tile.PlayerMark = playerMark;
         }
     }
@@ -342,7 +342,7 @@ public class MazeLevelManager : MonoBehaviour, IOnEventCallback
             if (neighbour.PlayerMark != null && neighbour.PlayerMark.Owner != PlayerMarkOwner.None) continue;
 
             TileConnectionScoreInfo neighbourConnectionScoreInfo = NeighbourTileCalculator.MapNeighbourPlayerMarkEndsOfTile(neighbour);
-            neighbour.PlayerMarkEndsRenderer.sprite = SpriteManager.Instance.PlayerTileMarkerEdge[neighbourConnectionScoreInfo.SpriteNumber - 1];
+            neighbour.PlayerMarkEndsRenderer.sprite = MazeSpriteManager.Instance.PlayerTileMarkerEdge[neighbourConnectionScoreInfo.SpriteNumber - 1];
         }
     }
 

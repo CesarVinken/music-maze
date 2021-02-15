@@ -72,18 +72,18 @@ public class EditorOverworld : Overworld
 
         foreach (SerialisableTileBackground serialisableTileBackground in serialisableTile.TileBackgrounds)
         {
-            //if (serialisableTileBackground.TileBackgroundId == SerialisableTileBackground.PathBackgroundCode)
-            //{
-            //    tileBackgroundPlacer.PlacePath(MazeTilePathType.Default, new TileConnectionScoreInfo(serialisableTileBackground.TileConnectionScore)); //TODO, fix path type
-            //}
-            //else if (serialisableTileBackground.TileBackgroundId == SerialisableTileBackground.BaseBackgroundCode)
-            //{
-            //    tileBackgroundPlacer.PlaceBaseBackground(MazeTileBaseBackgroundType.DefaultGrass);
-            //}
-            //else
-            //{
+            if (serialisableTileBackground.TileBackgroundId == SerialisableTileBackground.PathBackgroundCode)
+            {
+                tileBackgroundPlacer.PlacePath(new OverworldDefaultPathType(), new TileConnectionScoreInfo(serialisableTileBackground.TileConnectionScore));
+            }
+            else if (serialisableTileBackground.TileBackgroundId == SerialisableTileBackground.BaseBackgroundCode)
+            {
+                tileBackgroundPlacer.PlaceBaseBackground(new OverworldDefaultBaseBackgroundType());
+            }
+            else
+            {
                 Logger.Error($"Unknown TileBackgroundId {serialisableTileBackground.TileBackgroundId}");
-            //}
+            }
         }
     }
 }

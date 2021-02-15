@@ -26,7 +26,7 @@ public class TilePath : MonoBehaviour, ITileBackground, ITileConnectable
         ConnectionScore = connectionScoreInfo.RawConnectionScore;
         SpriteNumber = connectionScoreInfo.SpriteNumber;
 
-        _sprite = SpriteManager.Instance.DefaultPath[SpriteNumber - 1];
+        _sprite = MazeSpriteManager.Instance.DefaultPath[SpriteNumber - 1];
         _spriteRenderer.sprite = _sprite;
     }
 
@@ -36,7 +36,7 @@ public class TilePath : MonoBehaviour, ITileBackground, ITileConnectable
 
         Tile = tile;
         ParentId = tile.TileId;
-        _spriteRenderer.sortingOrder = SpriteManager.PathSortingOrder;
+        _spriteRenderer.sortingOrder = MazeSpriteManager.PathSortingOrder;
     }
 
     public void Remove()

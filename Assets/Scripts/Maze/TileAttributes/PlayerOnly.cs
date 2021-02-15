@@ -21,7 +21,7 @@ public class PlayerOnly : MonoBehaviour, ITileAttribute, ITransformable
 
         if (PlayerOnlyType == PlayerOnlyType.Bush)
         {
-            _tileSpriteContainer.SetSprite(SpriteManager.Instance.Bush[0]);
+            _tileSpriteContainer.SetSprite(MazeSpriteManager.Instance.Bush[0]);
         }
 
         _sortingOrder = (int)(_sortingOrderBase - transform.position.y - _sortingOrderCalculationOffset) * 10 + 1;
@@ -53,7 +53,7 @@ public class PlayerOnly : MonoBehaviour, ITileAttribute, ITransformable
 
         if (PlayerOnlyType == PlayerOnlyType.Bush)
         {
-            Sprite colourfulSprite = SpriteManager.Instance.BushColourful[0];
+            Sprite colourfulSprite = MazeSpriteManager.Instance.BushColourful[0];
             IEnumerator transformToColourful = TransformToColourful(colourfulSprite);
             StartCoroutine(transformToColourful);
         }

@@ -1,8 +1,8 @@
 ﻿using UnityEngine;
 
-public class SpriteManager : MonoBehaviour
+public class MazeSpriteManager : SpriteManager
 {
-    public static SpriteManager Instance;
+    public static MazeSpriteManager Instance;
 
     public Sprite[] DefaultDoor;
     public Sprite[] DefaultDoorColourful;
@@ -19,9 +19,6 @@ public class SpriteManager : MonoBehaviour
     public Sprite[] Player1TileMarker;
     public Sprite[] Player2TileMarker;
     public Sprite[] PlayerTileMarkerEdge;
-
-    public const int BaseBackgroundSortingOrder = -20;
-    public const int PathSortingOrder = -10;
 
     public void Awake()
     {

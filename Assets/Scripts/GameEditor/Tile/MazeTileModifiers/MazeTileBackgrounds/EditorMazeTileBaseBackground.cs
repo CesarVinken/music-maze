@@ -26,6 +26,6 @@ public class EditorMazeTileBaseBackground : EditorMazeTileBackgroundModifier
 
     public override Sprite GetSprite()
     {
-        return SpriteManager.Instance.DefaultMazeTileBackground[0];
+        return MazeSpriteManager.Instance.DefaultMazeTileBackground[0];
     }
 }

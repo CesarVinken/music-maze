@@ -17,13 +17,13 @@ public class MazeTileBaseBackground : MonoBehaviour, ITileBackground, ITransform
         Tile = tile;
         ParentId = tile.TileId;
 
-        _sortingOrder = SpriteManager.BaseBackgroundSortingOrder;
+        _sortingOrder = MazeSpriteManager.BaseBackgroundSortingOrder;
         _tileSpriteContainer.SetSortingOrder(_sortingOrder);
     }
 
     public void WithPathConnectionScore(int score)
     {
-        Sprite sprite = SpriteManager.Instance.DefaultMazeTileBackground[0];
+        Sprite sprite = MazeSpriteManager.Instance.DefaultMazeTileBackground[0];
         _tileSpriteContainer.SetSprite(sprite);
     }
 
@@ -41,7 +41,7 @@ public class MazeTileBaseBackground : MonoBehaviour, ITileBackground, ITransform
 
     public IEnumerator TransformToColourful()
     {
-        Sprite colourfulSprite = SpriteManager.Instance.DefaultMazeTileBackgroundColourful[0];
+        Sprite colourfulSprite = MazeSpriteManager.Instance.DefaultMazeTileBackgroundColourful[0];
 
         TileSpriteContainer transformedSpriteContainer = TileSpriteContainerPool.Instance.Get();
         transformedSpriteContainer.transform.SetParent(transform);

@@ -45,8 +45,7 @@ public class EditorTileSelector : MonoBehaviour
         else if(GameManager.CurrentSceneType == SceneType.Overworld)
         {
             if (OverworldManager.Instance.EditorOverworld == null) return;
-        }
-        
+        }    
 
         if (Input.GetKeyDown(KeyCode.Mouse0))
         {
@@ -112,11 +111,22 @@ public class EditorTileSelector : MonoBehaviour
 
     private bool IsValidGridLocationToSelect(GridLocation selectedTileLocation)
     {
-        if (selectedTileLocation.X < 0) return false;
-        if (selectedTileLocation.X > MazeLevelManager.Instance.EditorLevel.LevelBounds.X) return false;
+        if (GameManager.CurrentSceneType == SceneType.Maze)
+        {
+            if (selectedTileLocation.X < 0) return false;
+            if (selectedTileLocation.X > MazeLevelManager.Instance.EditorLevel.LevelBounds.X) return false;
 
-        if (selectedTileLocation.Y < 0) return false;
-        if (selectedTileLocation.Y > MazeLevelManager.Instance.EditorLevel.LevelBounds.Y) return false;
+            if (selectedTileLocation.Y < 0) return false;
+            if (selectedTileLocation.Y > MazeLevelManager.Instance.EditorLevel.LevelBounds.Y) return false;
+        }
+        else if (GameManager.CurrentSceneType == SceneType.Overworld)
+        {
+            if (selectedTileLocation.X < 0) return false;
+            if (selectedTileLocation.X > OverworldManager.Instance.EditorOverworld.OverworldBounds.X) return false;
+
+            if (selectedTileLocation.Y < 0) return false;
+            if (selectedTileLocation.Y > OverworldManager.Instance.EditorOverworld.OverworldBounds.Y) return false;
+        }
 
         return true;
     }

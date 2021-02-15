@@ -11,7 +11,7 @@ public class EditorMazeTileTransformationTriggerer : IEditorTileTransformationTr
 
     public Sprite GetSprite()
     {
-        return SpriteManager.Instance.DefaultDoor[0];
+        return MazeSpriteManager.Instance.DefaultDoor[0];
     }
 
     public void SetSelectedTile(EditorMazeTile tile)

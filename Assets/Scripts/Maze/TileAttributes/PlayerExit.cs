@@ -42,11 +42,11 @@ public class PlayerExit : TileObstacle, ITileAttribute, ITileConnectable
         SpriteNumber = spriteNumbers[0];
         _secondarySpriteNumber = spriteNumbers[1];
 
-        Sprite primarySprite = SpriteManager.Instance.DefaultDoor[SpriteNumber - 1];
+        Sprite primarySprite = MazeSpriteManager.Instance.DefaultDoor[SpriteNumber - 1];
         _tileSpriteContainer.SetSprite(primarySprite);
         _tileSpriteContainer.SetRendererAlpha(1);
 
-        Sprite secondarySprite = SpriteManager.Instance.DefaultDoor[_secondarySpriteNumber - 1];
+        Sprite secondarySprite = MazeSpriteManager.Instance.DefaultDoor[_secondarySpriteNumber - 1];
         _secondaryTileSpriteContainer.SetSprite(secondarySprite);
         _secondaryTileSpriteContainer.SetRendererAlpha(1);
 
@@ -72,16 +72,16 @@ public class PlayerExit : TileObstacle, ITileAttribute, ITileConnectable
     {
         if (ObstacleType == ObstacleType.Bush && !IsOpen)
         {
-            Sprite primarySprite = SpriteManager.Instance.DefaultDoorColourful[SpriteNumber - 1];
-            Sprite secondarySprite = SpriteManager.Instance.DefaultDoorColourful[_secondarySpriteNumber - 1];
+            Sprite primarySprite = MazeSpriteManager.Instance.DefaultDoorColourful[SpriteNumber - 1];
+            Sprite secondarySprite = MazeSpriteManager.Instance.DefaultDoorColourful[_secondarySpriteNumber - 1];
 
             IEnumerator transformToColourful = TransformToColourful(primarySprite, secondarySprite);
             StartCoroutine(transformToColourful);
         }
         else
         {
-            Sprite primarySprite = SpriteManager.Instance.DefaultDoorColourful[SpriteNumber - 1 + 3]; // + 3 to get to the 'open' version of the sprite
-            Sprite secondarySprite = SpriteManager.Instance.DefaultDoorColourful[_secondarySpriteNumber - 1 + 3];
+            Sprite primarySprite = MazeSpriteManager.Instance.DefaultDoorColourful[SpriteNumber - 1 + 3]; // + 3 to get to the 'open' version of the sprite
+            Sprite secondarySprite = MazeSpriteManager.Instance.DefaultDoorColourful[_secondarySpriteNumber - 1 + 3];
 
             IEnumerator transformToColourful = TransformToColourful(primarySprite, secondarySprite);
             StartCoroutine(transformToColourful);
@@ -94,8 +94,8 @@ public class PlayerExit : TileObstacle, ITileAttribute, ITileConnectable
         tile.Walkable = true;
         IsOpen = true;
 
-        _tileSpriteContainer.SetSprite(SpriteManager.Instance.DefaultDoorColourful[SpriteNumber - 1 + 3]); // + 3 to get to the 'open' version of the sprite
-        _secondaryTileSpriteContainer.SetSprite(SpriteManager.Instance.DefaultDoorColourful[_secondarySpriteNumber - 1 + 3]);
+        _tileSpriteContainer.SetSprite(MazeSpriteManager.Instance.DefaultDoorColourful[SpriteNumber - 1 + 3]); // + 3 to get to the 'open' version of the sprite
+        _secondaryTileSpriteContainer.SetSprite(MazeSpriteManager.Instance.DefaultDoorColourful[_secondarySpriteNumber - 1 + 3]);
         
         gameObject.layer = 9; // set layer to PlayerOnly, which is layer 9. Should not be hardcoded
         _tileSpriteContainer.gameObject.layer = 9;
@@ -110,8 +110,8 @@ public class PlayerExit : TileObstacle, ITileAttribute, ITileConnectable
         tile.Walkable = false;
         IsOpen = false;
 
-        _tileSpriteContainer.SetSprite(SpriteManager.Instance.DefaultDoor[SpriteNumber - 1]);
-        _secondaryTileSpriteContainer.SetSprite(SpriteManager.Instance.DefaultDoor[_secondarySpriteNumber - 1]);
+        _tileSpriteContainer.SetSprite(MazeSpriteManager.Instance.DefaultDoor[SpriteNumber - 1]);
+        _secondaryTileSpriteContainer.SetSprite(MazeSpriteManager.Instance.DefaultDoor[_secondarySpriteNumber - 1]);
 
         gameObject.layer = 8; // set layer to Unwalkable, which is layer 8. Should not be hardcoded
         _tileSpriteContainer.gameObject.layer = 8;
