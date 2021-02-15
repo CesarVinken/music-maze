@@ -15,14 +15,15 @@ public class TileBackgroundRemover
         MazeTilePath mazeTilePath = (MazeTilePath)_tile.MazeTileBackgrounds.FirstOrDefault(background => background is MazeTilePath);
         if (mazeTilePath == null) return;
 
-        MazeTilePathType mazeTilePathType = mazeTilePath.MazeTilePathType;
+        Logger.Log(mazeTilePath.MazeTilePathType);
+        IPathType mazeTilePathType = mazeTilePath.MazeTilePathType;
         int oldConnectionScore = mazeTilePath.ConnectionScore;
 
         // If needed, place a background in the gap that the removed path left
         if (oldConnectionScore == NeighbourTileCalculator.ConnectionOnAllSidesScore)
         {
             EditorTileBackgroundPlacer tileBackgroundPlacer = new EditorTileBackgroundPlacer(_tile);
-            tileBackgroundPlacer.PlaceBaseBackground(MazeTileBaseBackgroundType.DefaultGrass);
+            tileBackgroundPlacer.PlaceBaseBackground(new MazeLevelDefaultBaseBackgroundType());
         }
 
         _tile.MazeTileBackgrounds.Remove(mazeTilePath);
@@ -40,7 +41,7 @@ public class TileBackgroundRemover
 
             int oldConnectionScoreOnNeighbour = mazeTilePathOnNeighbour.ConnectionScore;
 
-            Logger.Log($"We will look for connections for neighbour {neighbour.Value.GridLocation.X},{neighbour.Value.GridLocation.Y}, which is {neighbour.Key} of {_tile.GridLocation.X},{_tile.GridLocation.Y}");
+            Logger.Warning($"We will now look for connections for neighbour {neighbour.Value.GridLocation.X},{neighbour.Value.GridLocation.Y}, which is {neighbour.Key} of {_tile.GridLocation.X},{_tile.GridLocation.Y}");
             TileConnectionScoreInfo mazeTilePathConnectionScoreOnNeighbourInfo = NeighbourTileCalculator.MapNeighbourPathsOfTile(neighbour.Value, mazeTilePathType);
             Logger.Log($"We calculated an path connection type score of {mazeTilePathConnectionScoreOnNeighbourInfo.RawConnectionScore} for location {neighbour.Value.GridLocation.X}, {neighbour.Value.GridLocation.Y}");
 
@@ -51,14 +52,14 @@ public class TileBackgroundRemover
             if (oldConnectionScoreOnNeighbour == NeighbourTileCalculator.ConnectionOnAllSidesScore && mazeTilePathConnectionScoreOnNeighbourInfo.RawConnectionScore != NeighbourTileCalculator.ConnectionOnAllSidesScore)
             {
                 EditorTileBackgroundPlacer tileBackgroundPlacer = new EditorTileBackgroundPlacer(neighbour.Value as EditorTile);
-                tileBackgroundPlacer.PlaceBaseBackground(MazeTileBaseBackgroundType.DefaultGrass);
+                tileBackgroundPlacer.PlaceBaseBackground(new MazeLevelDefaultBaseBackgroundType());
             }
         }
 
         _tile.RemoveTileAsTransformationTrigger();
     }
 
-    public void RemoveBaseBackground(MazeTileBaseBackgroundType mazeTileBaseBackgroundType)
+    public void RemoveBaseBackground(IBaseBackgroundType mazeTileBaseBackgroundType)
     {
         MazeTileBaseBackground mazeTileBaseBackground = (MazeTileBaseBackground)_tile.MazeTileBackgrounds.FirstOrDefault(background => background is MazeTileBaseBackground);
 

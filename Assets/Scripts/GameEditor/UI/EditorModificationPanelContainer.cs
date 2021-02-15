@@ -31,11 +31,6 @@ public class EditorModificationPanelContainer : MonoBehaviour
         Instance = this;
     }
 
-    public void Start()
-    {
-        SelectMazeLevelModificationPanel();
-    }
-
     public void OnEnable()
     {
         UpdateForSceneChange();

@@ -52,7 +52,7 @@ public class NeighbourTileCalculator
         return Calculate16TileMapConnectionScore(hasMarkRight, hasMarkDown, hasMarkLeft, hasMarkUp);
     }
 
-    public static TileConnectionScoreInfo MapNeighbourPathsOfTile(Tile tile, MazeTilePathType pathType)
+    public static TileConnectionScoreInfo MapNeighbourPathsOfTile(Tile tile, IPathType pathType)
     {
         Logger.Log($"---------Map neighbours of {tile.GridLocation.X},{tile.GridLocation.Y}--------");
         TileModifierConnectionInfo<MazeTilePath> pathRight = new TileModifierConnectionInfo<MazeTilePath>(Direction.Right);
@@ -72,7 +72,7 @@ public class NeighbourTileCalculator
             
             MazeTilePath tilePath = neighbour.Value.TryGetTilePath();
 
-            if (tilePath == null || tilePath.MazeTilePathType != pathType)
+            if (tilePath == null || tilePath.MazeTilePathType.GetType() != pathType.GetType())
             {
                 continue;
             }

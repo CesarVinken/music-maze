@@ -13,7 +13,7 @@ public class EditorTileBackgroundPlacer : TileBackgroundPlacer<EditorTile>
     }
 
     // Called in the editor, when we need to update the connection score
-    public void PlacePath(MazeTilePathType mazeTilePathType)
+    public void PlacePath(IPathType mazeTilePathType)
     {
         Logger.Warning("Start placing path.....");
 
@@ -21,7 +21,7 @@ public class EditorTileBackgroundPlacer : TileBackgroundPlacer<EditorTile>
         Logger.Log($"Found a score of {pathConnectionScore.RawConnectionScore}");
         GameObject mazeTilePathGO = GameObject.Instantiate(MazeLevelManager.Instance.TilePathPrefab, Tile.BackgroundsContainer);
         MazeTilePath mazeTilePath = mazeTilePathGO.GetComponent<MazeTilePath>();
-        mazeTilePath.WithPathType(MazeTilePathType.Default);
+        mazeTilePath.WithPathType(mazeTilePathType);
         mazeTilePath.WithConnectionScoreInfo(pathConnectionScore);
         Tile.MazeTileBackgrounds.Add(mazeTilePath as IMazeTileBackground);
         Tile.TryMakeMarkable(true);
@@ -43,7 +43,7 @@ public class EditorTileBackgroundPlacer : TileBackgroundPlacer<EditorTile>
 
             if (oldConnectionScoreOnNeighbour == 16 && mazeTilePathConnectionScoreOnNeighbourInfo.RawConnectionScore != 16)
             {
-                PlaceBaseBackground(MazeTileBaseBackgroundType.DefaultGrass);
+                PlaceBaseBackground(new MazeLevelDefaultBaseBackgroundType());
             }
         }
 

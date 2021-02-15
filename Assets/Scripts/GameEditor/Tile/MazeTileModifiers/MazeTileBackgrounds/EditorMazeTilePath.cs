@@ -16,7 +16,7 @@ public class EditorMazeTilePath : EditorMazeTileBackgroundModifier
             TileAttributeRemover tileAttributeRemover = new TileAttributeRemover(tile);
             tileAttributeRemover.RemoveTileObstacle();
 
-            tileBackgroundPlacer.PlacePath(MazeTilePathType.Default);
+            tileBackgroundPlacer.PlacePath(new MazeLevelDefaultPathType());
             return;
         }
 

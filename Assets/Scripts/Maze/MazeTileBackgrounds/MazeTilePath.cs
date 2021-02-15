@@ -8,7 +8,7 @@ public class MazeTilePath : MonoBehaviour, IMazeTileBackground, ITileConnectable
     [SerializeField] private Sprite _sprite;
     [SerializeField] private SpriteRenderer _spriteRenderer;
 
-    public MazeTilePathType MazeTilePathType;
+    public IPathType MazeTilePathType;
 
     private int _connectionScore = -1;
     private int _spriteNumber = -1;
@@ -16,7 +16,7 @@ public class MazeTilePath : MonoBehaviour, IMazeTileBackground, ITileConnectable
     public int ConnectionScore { get => _connectionScore; set => _connectionScore = value; }
     public int SpriteNumber { get => _spriteNumber; set => _spriteNumber = value; }
 
-    public void WithPathType(MazeTilePathType mazeTilePathType)
+    public void WithPathType(IPathType mazeTilePathType)
     {
         MazeTilePathType = mazeTilePathType;
     }
@@ -47,6 +47,6 @@ public class MazeTilePath : MonoBehaviour, IMazeTileBackground, ITileConnectable
 
     public string GetSubtypeAsString()
     {
-        return MazeTilePathType.ToString();
+        return MazeTilePathType.Name;
     }
 }

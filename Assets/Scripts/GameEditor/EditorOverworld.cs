@@ -57,13 +57,34 @@ public class EditorOverworld : Overworld
             Tiles.Add(tile);
 
             //AddTileAttributes(serialisableTile, tile);
-            //AddBackgroundSprites(serialisableTile, tile);
+            AddBackgroundSprites(serialisableTile, tile);
 
             TilesByLocation.Add(tile.GridLocation, tile);
 
             GridLocation furthestBounds = OverworldBounds;
             if (tile.GridLocation.X > furthestBounds.X) OverworldBounds.X = tile.GridLocation.X;
             if (tile.GridLocation.Y > furthestBounds.Y) OverworldBounds.Y = tile.GridLocation.Y;
+        }
+    }
+
+    public void AddBackgroundSprites(SerialisableTile serialisableTile, EditorTile tile)
+    {
+        EditorTileBackgroundPlacer tileBackgroundPlacer = new EditorTileBackgroundPlacer(tile);
+
+        foreach (SerialisableTileBackground serialisableTileBackground in serialisableTile.TileBackgrounds)
+        {
+            //if (serialisableTileBackground.TileBackgroundId == SerialisableTileBackground.PathBackgroundCode)
+            //{
+            //    tileBackgroundPlacer.PlacePath(MazeTilePathType.Default, new TileConnectionScoreInfo(serialisableTileBackground.TileConnectionScore)); //TODO, fix path type
+            //}
+            //else if (serialisableTileBackground.TileBackgroundId == SerialisableTileBackground.BaseBackgroundCode)
+            //{
+            //    tileBackgroundPlacer.PlaceBaseBackground(MazeTileBaseBackgroundType.DefaultGrass);
+            //}
+            //else
+            //{
+                Logger.Error($"Unknown TileBackgroundId {serialisableTileBackground.TileBackgroundId}");
+            //}
         }
     }
 }

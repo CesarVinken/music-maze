@@ -1,4 +1,4 @@
-﻿public enum MazeTileBaseBackgroundType
-{
-    DefaultGrass
-}
+﻿//public enum MazeTileBaseBackgroundType
+//{
+//    DefaultGrass
+//}

@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class EditorMazeTileBaseBackground : EditorMazeTileBackgroundModifier
 {
-    public override string Name => "Grass";
+    public override string Name => "Base Background";
 
     public override void PlaceBackground(EditorTile tile)
     {
@@ -13,10 +13,10 @@ public class EditorMazeTileBaseBackground : EditorMazeTileBackgroundModifier
         IMazeTileBackground mazeTileBaseBackground = (MazeTileBaseBackground)tile.MazeTileBackgrounds.FirstOrDefault(background => background is MazeTileBaseBackground);
         if (mazeTileBaseBackground == null)
         {
-            tileBackgroundPlacer.PlaceBaseBackground(MazeTileBaseBackgroundType.DefaultGrass);
+            tileBackgroundPlacer.PlaceBaseBackground(new MazeLevelDefaultBaseBackgroundType());
         }
 
-        tileBackgroundRemover.RemoveBaseBackground(MazeTileBaseBackgroundType.DefaultGrass);
+        tileBackgroundRemover.RemoveBaseBackground(new MazeLevelDefaultBaseBackgroundType());
     }
 
     public override void PlaceBackgroundVariation(EditorTile tile)
