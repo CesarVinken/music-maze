@@ -1,7 +1,7 @@
 ﻿using System.Collections;
 using UnityEngine;
 
-public class MazeTileBaseBackground : MonoBehaviour, IMazeTileBackground, ITransformable
+public class MazeTileBaseBackground : MonoBehaviour, ITileBackground, ITransformable
 {
     public Tile Tile;
     public string ParentId;

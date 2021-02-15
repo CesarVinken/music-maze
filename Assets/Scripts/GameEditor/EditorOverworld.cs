@@ -1,11 +1,10 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 
 public class EditorOverworld : Overworld
 {
-    public List<EditorTile> Tiles = new List<EditorTile>();
-    public Dictionary<GridLocation, EditorTile> TilesByLocation = new Dictionary<GridLocation, EditorTile>();
+    public List<EditorOverworldTile> Tiles = new List<EditorOverworldTile>();
+    public Dictionary<GridLocation, EditorOverworldTile> TilesByLocation = new Dictionary<GridLocation, EditorOverworldTile>();
 
     public EditorOverworld()
     {
@@ -46,7 +45,7 @@ public class EditorOverworld : Overworld
             SerialisableTile serialisableTile = overworldData.Tiles[i];
             GameObject tileGO = GameObject.Instantiate(OverworldManager.Instance.EditorTilePrefab, _overworldContainer.transform);
 
-            EditorTile tile = tileGO.GetComponent<EditorTile>();
+            EditorOverworldTile tile = tileGO.GetComponent<EditorOverworldTile>();
             tile.SetGridLocation(serialisableTile.GridLocation.X, serialisableTile.GridLocation.Y);
             tile.SetId(serialisableTile.Id);
 
@@ -67,9 +66,9 @@ public class EditorOverworld : Overworld
         }
     }
 
-    public void AddBackgroundSprites(SerialisableTile serialisableTile, EditorTile tile)
+    public void AddBackgroundSprites(SerialisableTile serialisableTile, EditorOverworldTile tile)
     {
-        EditorTileBackgroundPlacer tileBackgroundPlacer = new EditorTileBackgroundPlacer(tile);
+        EditorOverworldTileBackgroundPlacer tileBackgroundPlacer = new EditorOverworldTileBackgroundPlacer(tile);
 
         foreach (SerialisableTileBackground serialisableTileBackground in serialisableTile.TileBackgrounds)
         {

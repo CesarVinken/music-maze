@@ -3,8 +3,8 @@ using UnityEngine;
 
 public class InGameOverworld : Overworld
 {
-    public List<InGameTile> Tiles = new List<InGameTile>();
-    public Dictionary<GridLocation, InGameTile> TilesByLocation = new Dictionary<GridLocation, InGameTile>();
+    public List<InGameOverworldTile> Tiles = new List<InGameOverworldTile>();
+    public Dictionary<GridLocation, InGameOverworldTile> TilesByLocation = new Dictionary<GridLocation, InGameOverworldTile>();
 
     public InGameOverworld()
     {

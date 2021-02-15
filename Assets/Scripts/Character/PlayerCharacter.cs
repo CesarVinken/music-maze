@@ -87,7 +87,7 @@ public class PlayerCharacter : Character
         }
 
         //transform the player's starting tile and surrounding tiles
-        InGameTile currentTile = MazeLevelManager.Instance.Level.TilesByLocation[StartingPosition];
+        InGameMazeTile currentTile = MazeLevelManager.Instance.Level.TilesByLocation[StartingPosition];
         currentTile.TriggerTransformations();
     }
 

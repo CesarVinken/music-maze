@@ -1,10 +1,16 @@
 ﻿using System.Collections.Generic;
+using UnityEngine;
 
-public abstract class TileAttributePlacer<T> where T : Tile
+public class MazeTileAttributePlacer<T> : TileAttributePlacer<T> where T : MazeTile
 {
-    public abstract T Tile { get; set; }
+    public override T Tile { get; set; }
+    //public ITileAttribute InstantiateTileAttributeGO<U>() where U : ITileAttribute;
 
-    public abstract IMazeTileAttribute InstantiateTileAttributeGO<U>() where U : IMazeTileAttribute;
+    public override ITileAttribute InstantiateTileAttributeGO<U>()
+    {
+        GameObject tileAttributeGO = GameObject.Instantiate(MazeLevelManager.Instance.GetTileAttributePrefab<U>(), Tile.transform);
+        return tileAttributeGO.GetComponent<U>();
+    }
 
     // Loading a player exit for a tile, not creating a new one. We already have the connection score
     public void PlacePlayerExit(ObstacleType obstacleType, TileConnectionScoreInfo obstacleConnectionScoreInfo)
@@ -15,7 +21,7 @@ public abstract class TileAttributePlacer<T> where T : Tile
 
         Tile.Walkable = false;
         Tile.TryMakeMarkable(false);
-        Tile.MazeTileAttributes.Add(playerExit);
+        Tile.TileAttributes.Add(playerExit);
     }
 
     // Loading a tile obstacle for a tile, not creating a new one. We already have the connection score
@@ -27,7 +33,7 @@ public abstract class TileAttributePlacer<T> where T : Tile
 
         Tile.Walkable = false;
         Tile.TryMakeMarkable(false);
-        Tile.MazeTileAttributes.Add(tileObstacle);
+        Tile.TileAttributes.Add(tileObstacle);
     }
 
     public void PlaceEnemySpawnpoint()
@@ -36,7 +42,7 @@ public abstract class TileAttributePlacer<T> where T : Tile
 
         Tile.Walkable = true;
         Tile.TryMakeMarkable(true);
-        Tile.MazeTileAttributes.Add(enemySpawnpoint);
+        Tile.TileAttributes.Add(enemySpawnpoint);
     }
 
     public void PlacePlayerOnlyAttribute(PlayerOnlyType playerOnlyType)
@@ -44,7 +50,7 @@ public abstract class TileAttributePlacer<T> where T : Tile
         PlayerOnly playerOnly = (PlayerOnly)InstantiateTileAttributeGO<PlayerOnly>();
 
         Tile.Walkable = true;
-        Tile.MazeTileAttributes.Add(playerOnly);
+        Tile.TileAttributes.Add(playerOnly);
     }
 
     public void PlaceTileObstacleVariation(TileObstacle tileObstacle)
@@ -58,4 +64,5 @@ public abstract class TileAttributePlacer<T> where T : Tile
             updatedObstacleConnections[i].WithConnectionScoreInfo(new TileConnectionScoreInfo(updatedObstacleConnections[i].ConnectionScore, updatedObstacleConnections[i].SpriteNumber));
         }
     }
+
 }

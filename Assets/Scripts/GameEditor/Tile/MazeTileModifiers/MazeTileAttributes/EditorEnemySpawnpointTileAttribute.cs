@@ -5,12 +5,12 @@ public class EditorEnemySpawnpointTileAttribute : EditorMazeTileAttributeModifie
 {
     public override string Name { get => "Enemy Spawnpoint"; }
 
-    public override void PlaceAttribute(EditorTile tile)
+    public override void PlaceAttribute(EditorMazeTile tile)
     {
         EditorTileAttributePlacer tileAttributePlacer = new EditorTileAttributePlacer(tile);
         TileAttributeRemover tileAttributeRemover = new TileAttributeRemover(tile);
 
-        IMazeTileAttribute enemySpawnpoint = (EnemySpawnpoint)tile.MazeTileAttributes.FirstOrDefault(attribute => attribute is EnemySpawnpoint);
+        ITileAttribute enemySpawnpoint = (EnemySpawnpoint)tile.TileAttributes.FirstOrDefault(attribute => attribute is EnemySpawnpoint);
         if (enemySpawnpoint == null)
         {
             tileAttributeRemover.RemovePlayerExit();

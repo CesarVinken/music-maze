@@ -1,9 +1,9 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 
-public class InGameTile : Tile
+public class InGameMazeTile : MazeTile
 {
-    [SerializeField] private List<InGameTile> _tilesToTransform = new List<InGameTile>();
+    [SerializeField] private List<InGameMazeTile> _tilesToTransform = new List<InGameMazeTile>();
 
     public void OnCollisionEnter2D(Collision2D collision)
     {
@@ -25,7 +25,7 @@ public class InGameTile : Tile
         }
     }
 
-    public void AddTilesToTransform(List<InGameTile> tilesToTransform)
+    public void AddTilesToTransform(List<InGameMazeTile> tilesToTransform)
     {
         _tilesToTransform = tilesToTransform;
     }
@@ -65,7 +65,7 @@ public class InGameTile : Tile
 
         for (int i = 0; i < _tilesToTransform.Count; i++)
         {
-            InGameTile tileToTransform = _tilesToTransform[i];
+            InGameMazeTile tileToTransform = _tilesToTransform[i];
 
             if (tileToTransform.TransformationState == TransformationState.Colourful)
                 continue;
@@ -76,18 +76,18 @@ public class InGameTile : Tile
 
     public void TriggerTransformationOnSelf()
     {
-        for (int i = 0; i < MazeTileAttributes.Count; i++)
+        for (int i = 0; i < TileAttributes.Count; i++)
         {
-            ITransformable attribute = MazeTileAttributes[i] as ITransformable;
+            ITransformable attribute = TileAttributes[i] as ITransformable;
             if (attribute != null)
             {
                 attribute.TriggerTransformation();
             }
         }
 
-        for (int j = 0; j < MazeTileBackgrounds.Count; j++)
+        for (int j = 0; j < TileBackgrounds.Count; j++)
         {
-            ITransformable background = MazeTileBackgrounds[j] as ITransformable;
+            ITransformable background = TileBackgrounds[j] as ITransformable;
             if (background != null)
             {
                 background.TriggerTransformation();

@@ -3,8 +3,8 @@ using UnityEngine;
 
 public class InGameMazeLevel : MazeLevel
 {
-    public List<InGameTile> Tiles = new List<InGameTile>();
-    public Dictionary<GridLocation, InGameTile> TilesByLocation = new Dictionary<GridLocation, InGameTile>();
+    public List<InGameMazeTile> Tiles = new List<InGameMazeTile>();
+    public Dictionary<GridLocation, InGameMazeTile> TilesByLocation = new Dictionary<GridLocation, InGameMazeTile>();
 
     public InGameMazeLevel()
     {
@@ -38,14 +38,14 @@ public class InGameMazeLevel : MazeLevel
 
     public void BuildTiles(MazeLevelData mazeLevelData)
     {
-        Dictionary<InGameTile, List<SerialisableGridLocation>> TileTransformationGridLocationByTile = new Dictionary<InGameTile, List<SerialisableGridLocation>>();
+        Dictionary<InGameMazeTile, List<SerialisableGridLocation>> TileTransformationGridLocationByTile = new Dictionary<InGameMazeTile, List<SerialisableGridLocation>>();
 
         for (int i = 0; i < mazeLevelData.Tiles.Count; i++)
         {
             SerialisableTile serialisableTile = mazeLevelData.Tiles[i];
             GameObject tileGO = GameObject.Instantiate(MazeLevelManager.Instance.InGameTilePrefab, _mazeContainer.transform);
 
-            InGameTile tile = tileGO.GetComponent<InGameTile>();
+            InGameMazeTile tile = tileGO.GetComponent<InGameMazeTile>();
             tileGO.name = "serialisableTile" + serialisableTile.GridLocation.X + ", " + serialisableTile.GridLocation.Y;
 
             tile.SetGridLocation(serialisableTile.GridLocation.X, serialisableTile.GridLocation.Y);
@@ -68,15 +68,15 @@ public class InGameMazeLevel : MazeLevel
             TileTransformationGridLocationByTile.Add(tile, serialisableTile.TilesToTransform);
         }
 
-        foreach (KeyValuePair<InGameTile, List<SerialisableGridLocation>> item in TileTransformationGridLocationByTile)
+        foreach (KeyValuePair<InGameMazeTile, List<SerialisableGridLocation>> item in TileTransformationGridLocationByTile)
         {
-            List<InGameTile> tilesToTransform = new List<InGameTile>();
+            List<InGameMazeTile> tilesToTransform = new List<InGameMazeTile>();
             
             for (int i = 0; i < item.Value.Count; i++)
             {
                 for (int j = 0; j < Tiles.Count; j++)
                 {
-                    InGameTile tile = Tiles[j];
+                    InGameMazeTile tile = Tiles[j];
                     if (item.Value[i].X == tile.GridLocation.X && item.Value[i].Y == tile.GridLocation.Y)
                     {
                         tilesToTransform.Add(tile);
@@ -90,14 +90,14 @@ public class InGameMazeLevel : MazeLevel
 
         for (int k = 0; k < Tiles.Count; k++)
         {
-            InGameTile tile = Tiles[k];
+            InGameMazeTile tile = Tiles[k];
             tile.AddNeighbours(this);
         }
     }
 
-    public void AddTileAttributes(SerialisableTile serialisableTile, InGameTile tile)
+    public void AddTileAttributes(SerialisableTile serialisableTile, InGameMazeTile tile)
     {
-        InGameTileAttributePlacer tileAttributePlacer = new InGameTileAttributePlacer(tile);
+        InGameMazeTileAttributePlacer tileAttributePlacer = new InGameMazeTileAttributePlacer(tile);
 
         foreach (SerialisableTileAttribute serialisableTileAttribute in serialisableTile.TileAttributes)
         {
@@ -129,9 +129,9 @@ public class InGameMazeLevel : MazeLevel
         }
     }
 
-    public void AddBackgroundSprites(SerialisableTile serialisableTile, InGameTile tile)
+    public void AddBackgroundSprites(SerialisableTile serialisableTile, InGameMazeTile tile)
     {
-        InGameTileBackgroundPlacer tileBackgroundPlacer = new InGameTileBackgroundPlacer(tile);
+        InGameMazeTileBackgroundPlacer tileBackgroundPlacer = new InGameMazeTileBackgroundPlacer(tile);
 
         foreach (SerialisableTileBackground serialisableTileBackground in serialisableTile.TileBackgrounds)
         {

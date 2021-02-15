@@ -3,8 +3,8 @@ using UnityEngine;
 
 public class EditorMazeLevel : MazeLevel
 {
-    public List<EditorTile> Tiles = new List<EditorTile>();
-    public Dictionary<GridLocation, EditorTile> TilesByLocation = new Dictionary<GridLocation, EditorTile>();
+    public List<EditorMazeTile> Tiles = new List<EditorMazeTile>();
+    public Dictionary<GridLocation, EditorMazeTile> TilesByLocation = new Dictionary<GridLocation, EditorMazeTile>();
 
     public EditorMazeLevel()
     {
@@ -38,14 +38,14 @@ public class EditorMazeLevel : MazeLevel
 
     public void BuildTiles(MazeLevelData mazeLevelData)
     {
-        Dictionary<SerialisableGridLocation, List<EditorTile>> TileTransformationTriggererByGridLocation = new Dictionary<SerialisableGridLocation, List<EditorTile>>();
+        Dictionary<SerialisableGridLocation, List<EditorMazeTile>> TileTransformationTriggererByGridLocation = new Dictionary<SerialisableGridLocation, List<EditorMazeTile>>();
 
         for (int i = 0; i < mazeLevelData.Tiles.Count; i++)
         {
             SerialisableTile serialisableTile = mazeLevelData.Tiles[i];
             GameObject tileGO = GameObject.Instantiate(MazeLevelManager.Instance.EditorTilePrefab, _mazeContainer.transform);
 
-            EditorTile tile = tileGO.GetComponent<EditorTile>();
+            EditorMazeTile tile = tileGO.GetComponent<EditorMazeTile>();
             tile.SetGridLocation(serialisableTile.GridLocation.X, serialisableTile.GridLocation.Y);
             tile.SetId(serialisableTile.Id);
             
@@ -70,12 +70,12 @@ public class EditorMazeLevel : MazeLevel
                 {
                     if (TileTransformationTriggererByGridLocation.ContainsKey(serialisableTile.TilesToTransform[j]))
                     {
-                        List<EditorTile> transformationTriggerers = TileTransformationTriggererByGridLocation[serialisableTile.TilesToTransform[j]];
+                        List<EditorMazeTile> transformationTriggerers = TileTransformationTriggererByGridLocation[serialisableTile.TilesToTransform[j]];
                         transformationTriggerers.Add(tile);
                     }
                     else
                     {
-                        List<EditorTile> transformationTriggerers = new List<EditorTile>();
+                        List<EditorMazeTile> transformationTriggerers = new List<EditorMazeTile>();
                         transformationTriggerers.Add(tile);
                         TileTransformationTriggererByGridLocation.Add(serialisableTile.TilesToTransform[j], transformationTriggerers);
                     }
@@ -83,11 +83,11 @@ public class EditorMazeLevel : MazeLevel
             }
         }
 
-        foreach (KeyValuePair<SerialisableGridLocation, List<EditorTile>> item in TileTransformationTriggererByGridLocation)
+        foreach (KeyValuePair<SerialisableGridLocation, List<EditorMazeTile>> item in TileTransformationTriggererByGridLocation)
         {
             for (int i = 0; i < Tiles.Count; i++)
             {
-                EditorTile tile = Tiles[i];
+                EditorMazeTile tile = Tiles[i];
                 if(item.Key.X == tile.GridLocation.X && item.Key.Y == tile.GridLocation.Y)
                 {
                     tile.TransformationTriggerers = item.Value;
@@ -97,12 +97,12 @@ public class EditorMazeLevel : MazeLevel
 
         for (int k = 0; k < Tiles.Count; k++)
         {
-            EditorTile tile = Tiles[k];
+            EditorMazeTile tile = Tiles[k];
             tile.AddNeighbours(this);
         }
     }
 
-    public void AddTileAttributes(SerialisableTile serialisableTile, EditorTile tile)
+    public void AddTileAttributes(SerialisableTile serialisableTile, EditorMazeTile tile)
     {
         EditorTileAttributePlacer tileAttributePlacer = new EditorTileAttributePlacer(tile);
 
@@ -136,9 +136,9 @@ public class EditorMazeLevel : MazeLevel
         }
     }
 
-    public void AddBackgroundSprites(SerialisableTile serialisableTile, EditorTile tile)
+    public void AddBackgroundSprites(SerialisableTile serialisableTile, EditorMazeTile tile)
     {
-        EditorTileBackgroundPlacer tileBackgroundPlacer = new EditorTileBackgroundPlacer(tile);
+        EditorMazeTileBackgroundPlacer tileBackgroundPlacer = new EditorMazeTileBackgroundPlacer(tile);
 
         foreach (SerialisableTileBackground serialisableTileBackground in serialisableTile.TileBackgrounds)
         {
@@ -157,9 +157,9 @@ public class EditorMazeLevel : MazeLevel
         }
     }
 
-    public List<EditorTile> FindTilesToTransform(EditorTile transformationTriggererTile)
+    public List<EditorMazeTile> FindTilesToTransform(EditorMazeTile transformationTriggererTile)
     {
-        List<EditorTile> tilesToTransform = new List<EditorTile>();
+        List<EditorMazeTile> tilesToTransform = new List<EditorMazeTile>();
 
         for (int i = 0; i < Tiles.Count; i++)
         {

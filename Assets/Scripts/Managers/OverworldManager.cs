@@ -69,7 +69,7 @@ public class OverworldManager : MonoBehaviour
     {
         for (int i = 0; i < Overworld.Tiles.Count; i++)
         {
-            InGameTile tile = Overworld.Tiles[i];
+            InGameOverworldTile tile = Overworld.Tiles[i];
             tile.InitialiseTileAttributes();
         }
     }
@@ -78,7 +78,7 @@ public class OverworldManager : MonoBehaviour
     {
         for (int i = 0; i < EditorOverworld.Tiles.Count; i++)
         {
-            EditorTile tile = EditorOverworld.Tiles[i];
+            EditorOverworldTile tile = EditorOverworld.Tiles[i];
             tile.InitialiseTileAttributes();
         }
     }
@@ -87,7 +87,7 @@ public class OverworldManager : MonoBehaviour
     {
         for (int i = 0; i < EditorOverworld.Tiles.Count; i++)
         {
-            EditorTile tile = EditorOverworld.Tiles[i];
+            EditorOverworldTile tile = EditorOverworld.Tiles[i];
             tile.InitialiseTileBackgrounds();
         }
     }

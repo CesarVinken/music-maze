@@ -7,14 +7,14 @@ public class EditorMazeTileTransformationTriggerer : IEditorTileTransformationTr
 
     public Sprite Sprite => throw new System.NotImplementedException();
 
-    public EditorTile SelectedTile;
+    public EditorMazeTile SelectedTile;
 
     public Sprite GetSprite()
     {
         return SpriteManager.Instance.DefaultDoor[0];
     }
 
-    public void SetSelectedTile(EditorTile tile)
+    public void SetSelectedTile(EditorMazeTile tile)
     {
         if(SelectedTile != null)
         {
@@ -54,9 +54,9 @@ public class EditorMazeTileTransformationTriggerer : IEditorTileTransformationTr
         SelectedTile = null;
     }
 
-    public void HandleTransformationTriggerPlacement(EditorTile tile)
+    public void HandleTransformationTriggerPlacement(EditorMazeTile tile)
     {
-        if(tile.Markable || tile.MazeTileAttributes.OfType<PlayerSpawnpoint>().Any())
+        if(tile.Markable || tile.TileAttributes.OfType<PlayerSpawnpoint>().Any())
         {
             // if we have a tile selected, add the markable tile as triggerer
             if(SelectedTile != null)

@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-public class CharacterSpawnpoint : MonoBehaviour, IMazeTileAttribute
+public class CharacterSpawnpoint : MonoBehaviour, ITileAttribute
 {
     public CharacterType CharacterType;
     public CharacterBlueprint CharacterBlueprint;

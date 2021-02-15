@@ -6,12 +6,12 @@ public abstract class EditorMazeTileBackgroundModifier : IEditorTileBackground
 
     public Sprite Sprite => null;
 
-    public virtual void PlaceBackground(EditorTile tile)
+    public virtual void PlaceBackground(EditorMazeTile tile)
     {
         throw new System.NotImplementedException();
     }
 
-    public virtual void PlaceBackgroundVariation(EditorTile tile)
+    public virtual void PlaceBackgroundVariation(EditorMazeTile tile)
     {
         throw new System.NotImplementedException();
     }

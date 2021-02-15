@@ -1,4 +1,4 @@
-﻿public interface IMazeTileAttribute
+﻿public interface ITileAttribute
 {
     int SortingOrderBase { get; set; }
 

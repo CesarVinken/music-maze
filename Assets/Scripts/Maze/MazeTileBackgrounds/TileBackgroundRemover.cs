@@ -3,16 +3,16 @@ using System.Linq;
 
 public class TileBackgroundRemover
 {
-    private EditorTile _tile;
+    private EditorMazeTile _tile;
 
-    public TileBackgroundRemover(EditorTile tile)
+    public TileBackgroundRemover(EditorMazeTile tile)
     {
         _tile = tile;
     }
 
     public void RemovePath()
     {
-        MazeTilePath mazeTilePath = (MazeTilePath)_tile.MazeTileBackgrounds.FirstOrDefault(background => background is MazeTilePath);
+        MazeTilePath mazeTilePath = (MazeTilePath)_tile.TileBackgrounds.FirstOrDefault(background => background is MazeTilePath);
         if (mazeTilePath == null) return;
 
         Logger.Log(mazeTilePath.MazeTilePathType);
@@ -22,11 +22,11 @@ public class TileBackgroundRemover
         // If needed, place a background in the gap that the removed path left
         if (oldConnectionScore == NeighbourTileCalculator.ConnectionOnAllSidesScore)
         {
-            EditorTileBackgroundPlacer tileBackgroundPlacer = new EditorTileBackgroundPlacer(_tile);
+            EditorMazeTileBackgroundPlacer tileBackgroundPlacer = new EditorMazeTileBackgroundPlacer(_tile);
             tileBackgroundPlacer.PlaceBaseBackground(new MazeLevelDefaultBaseBackgroundType());
         }
 
-        _tile.MazeTileBackgrounds.Remove(mazeTilePath);
+        _tile.TileBackgrounds.Remove(mazeTilePath);
         mazeTilePath.Remove();
 
         TrySetTileNotMarkable();
@@ -35,7 +35,7 @@ public class TileBackgroundRemover
         //After removing tile, check with neighbour tiles if wall connections should be updated
         foreach (KeyValuePair<ObjectDirection, Tile> neighbour in _tile.Neighbours)
         {
-            MazeTilePath mazeTilePathOnNeighbour = neighbour.Value.TryGetTilePath();
+            TilePath mazeTilePathOnNeighbour = neighbour.Value.TryGetTilePath();
 
             if (mazeTilePathOnNeighbour == null) continue;
 
@@ -51,7 +51,7 @@ public class TileBackgroundRemover
             //Add background where needed
             if (oldConnectionScoreOnNeighbour == NeighbourTileCalculator.ConnectionOnAllSidesScore && mazeTilePathConnectionScoreOnNeighbourInfo.RawConnectionScore != NeighbourTileCalculator.ConnectionOnAllSidesScore)
             {
-                EditorTileBackgroundPlacer tileBackgroundPlacer = new EditorTileBackgroundPlacer(neighbour.Value as EditorTile);
+                EditorMazeTileBackgroundPlacer tileBackgroundPlacer = new EditorMazeTileBackgroundPlacer(neighbour.Value as EditorMazeTile);
                 tileBackgroundPlacer.PlaceBaseBackground(new MazeLevelDefaultBaseBackgroundType());
             }
         }
@@ -61,17 +61,17 @@ public class TileBackgroundRemover
 
     public void RemoveBaseBackground(IBaseBackgroundType mazeTileBaseBackgroundType)
     {
-        MazeTileBaseBackground mazeTileBaseBackground = (MazeTileBaseBackground)_tile.MazeTileBackgrounds.FirstOrDefault(background => background is MazeTileBaseBackground);
+        MazeTileBaseBackground mazeTileBaseBackground = (MazeTileBaseBackground)_tile.TileBackgrounds.FirstOrDefault(background => background is MazeTileBaseBackground);
 
         if (mazeTileBaseBackground == null) return;
 
-        _tile.MazeTileBackgrounds.Remove(mazeTileBaseBackground);
+        _tile.TileBackgrounds.Remove(mazeTileBaseBackground);
         mazeTileBaseBackground.Remove();
     }
 
     private void TrySetTileNotMarkable()
     {
-        MazeTilePath mazeTilePath = (MazeTilePath)_tile.MazeTileBackgrounds.FirstOrDefault(background => background is MazeTilePath);
+        MazeTilePath mazeTilePath = (MazeTilePath)_tile.TileBackgrounds.FirstOrDefault(background => background is MazeTilePath);
 
         if (mazeTilePath == null)
         {

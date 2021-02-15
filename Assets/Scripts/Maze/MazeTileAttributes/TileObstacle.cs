@@ -1,14 +1,13 @@
 ﻿using System.Collections;
 using UnityEngine;
 
-public class TileObstacle : MonoBehaviour, IMazeTileAttribute, ITileConnectable, ITransformable
+public class TileObstacle : MonoBehaviour, ITileAttribute, ITileConnectable, ITransformable
 {
     public Tile Tile;
     public string ParentId;
     
     public ObstacleType ObstacleType;
 
-    //[SerializeField] protected SpriteRenderer _spriteRenderer;
     [SerializeField] protected TileSpriteContainer _tileSpriteContainer;
 
     private int _connectionScore = -1;

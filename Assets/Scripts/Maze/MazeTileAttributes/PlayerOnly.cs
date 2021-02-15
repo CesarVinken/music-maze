@@ -1,7 +1,7 @@
 ﻿using System.Collections;
 using UnityEngine;
 
-public class PlayerOnly : MonoBehaviour, IMazeTileAttribute, ITransformable
+public class PlayerOnly : MonoBehaviour, ITileAttribute, ITransformable
 {
     public Tile Tile;
     public string ParentId; 

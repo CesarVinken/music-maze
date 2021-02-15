@@ -29,7 +29,7 @@ public class MazeLevelManager : MonoBehaviour, IOnEventCallback
 
     public int NumberOfUnmarkedTiles = -1;
 
-    public GameObject GetTileAttributePrefab<T>() where T : IMazeTileAttribute
+    public GameObject GetTileAttributePrefab<T>() where T : ITileAttribute
     {
         switch (typeof(T))
         {
@@ -143,7 +143,7 @@ public class MazeLevelManager : MonoBehaviour, IOnEventCallback
     {
         for (int i = 0; i < Level.Tiles.Count; i++)
         {
-            InGameTile tile = Level.Tiles[i];
+            InGameMazeTile tile = Level.Tiles[i];
             tile.InitialiseTileAttributes();
         }
     }
@@ -152,7 +152,7 @@ public class MazeLevelManager : MonoBehaviour, IOnEventCallback
     {
         for (int i = 0; i < EditorLevel.Tiles.Count; i++)
         {
-            EditorTile tile = EditorLevel.Tiles[i];
+            EditorMazeTile tile = EditorLevel.Tiles[i];
             tile.InitialiseTileAttributes();
         }
     }
@@ -161,7 +161,7 @@ public class MazeLevelManager : MonoBehaviour, IOnEventCallback
     {
         for (int i = 0; i < EditorLevel.Tiles.Count; i++)
         {
-            EditorTile tile = EditorLevel.Tiles[i];
+            EditorMazeTile tile = EditorLevel.Tiles[i];
             tile.InitialiseTileBackgrounds();
         }
     }
@@ -169,13 +169,13 @@ public class MazeLevelManager : MonoBehaviour, IOnEventCallback
     // Previously tried solution with collision detection on all separate clients for all players(instead of events). 
     // But the result was that some tile marking got skipped if the clients skipped walking over them because of a bad connection.
     // This way we can be sure all tiles are getting marked.
-    public void SetTileMarker(InGameTile tile, PlayerCharacter player)
+    public void SetTileMarker(InGameMazeTile tile, PlayerCharacter player)
     {
         if (GameManager.GameType == GameType.SinglePlayer)
         {
             player.LastTile = tile;
 
-            MazeTilePath mazeTilePath = (MazeTilePath)tile.MazeTileBackgrounds.FirstOrDefault(background => background is MazeTilePath);
+            MazeTilePath mazeTilePath = (MazeTilePath)tile.TileBackgrounds.FirstOrDefault(background => background is MazeTilePath);
             if (mazeTilePath == null) return;
 
             PlayerMark playerMark = new PlayerMark(mazeTilePath.ConnectionScore);
@@ -241,9 +241,9 @@ public class MazeLevelManager : MonoBehaviour, IOnEventCallback
             GridLocation tileLocation = new GridLocation((int)data[0], (int)data[1]);
             PlayerNumber playerNumber = (PlayerNumber)data[2];
 
-            InGameTile tile = Level.TilesByLocation[tileLocation] as InGameTile;
+            InGameMazeTile tile = Level.TilesByLocation[tileLocation] as InGameMazeTile;
 
-            MazeTilePath mazeTilePath = (MazeTilePath)tile.MazeTileBackgrounds.FirstOrDefault(background => background is MazeTilePath);
+            MazeTilePath mazeTilePath = (MazeTilePath)tile.TileBackgrounds.FirstOrDefault(background => background is MazeTilePath);
             if (mazeTilePath == null) return;
 
             PlayerMark playerMark = new PlayerMark(mazeTilePath.ConnectionScore);
@@ -302,7 +302,7 @@ public class MazeLevelManager : MonoBehaviour, IOnEventCallback
         }
     }
 
-    private void HandlePlayerMarkerSprite(Tile tile, PlayerNumber playerNumber, PlayerMark playerMark)
+    private void HandlePlayerMarkerSprite(MazeTile tile, PlayerNumber playerNumber, PlayerMark playerMark)
     {
         if (playerNumber == PlayerNumber.Player1)
         {
@@ -330,13 +330,13 @@ public class MazeLevelManager : MonoBehaviour, IOnEventCallback
         }
     }
 
-    private void HandlePlayerTileMarkerEnds(Tile tile)
+    private void HandlePlayerTileMarkerEnds(MazeTile tile)
     {
         foreach (KeyValuePair<ObjectDirection, Tile> item in tile.Neighbours)
         {
-            Tile neighbour = item.Value;
+            MazeTile neighbour = item.Value as MazeTile;
 
-            MazeTilePath mazeTilePath = (MazeTilePath)neighbour.MazeTileBackgrounds.FirstOrDefault(background => background is MazeTilePath);
+            MazeTilePath mazeTilePath = (MazeTilePath)neighbour.TileBackgrounds.FirstOrDefault(background => background is MazeTilePath);
             if (mazeTilePath == null) continue;
             
             if (neighbour.PlayerMark != null && neighbour.PlayerMark.Owner != PlayerMarkOwner.None) continue;
@@ -350,10 +350,10 @@ public class MazeLevelManager : MonoBehaviour, IOnEventCallback
     {
         if(CharacterManager.Instance.MazePlayers.Count < 2)
         {
-            Tile spawnpoint1Tile = Level.PlayerCharacterSpawnpoints[PlayerNumber.Player1].Tile;
+            MazeTile spawnpoint1Tile = Level.PlayerCharacterSpawnpoints[PlayerNumber.Player1].Tile as MazeTile;
             spawnpoint1Tile.TryMakeMarkable(false);
 
-            Tile spawnpoint2Tile = Level.PlayerCharacterSpawnpoints[PlayerNumber.Player2].Tile;
+            MazeTile spawnpoint2Tile = Level.PlayerCharacterSpawnpoints[PlayerNumber.Player2].Tile as MazeTile;
             spawnpoint2Tile.TryMakeMarkable(true);
         }
     }

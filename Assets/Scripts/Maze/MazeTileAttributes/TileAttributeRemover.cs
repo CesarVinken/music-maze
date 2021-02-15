@@ -3,9 +3,9 @@ using System.Linq;
 
 public class TileAttributeRemover
 {
-    private EditorTile _tile;
+    private EditorMazeTile _tile;
 
-    public TileAttributeRemover(EditorTile tile)
+    public TileAttributeRemover(EditorMazeTile tile)
     {
         _tile = tile;
     }
@@ -13,12 +13,12 @@ public class TileAttributeRemover
     public void RemovePlayerExit()
     {
         _tile.Walkable = true;
-        PlayerExit playerExit = (PlayerExit)_tile.MazeTileAttributes.FirstOrDefault(attribute => attribute is PlayerExit);
+        PlayerExit playerExit = (PlayerExit)_tile.TileAttributes.FirstOrDefault(attribute => attribute is PlayerExit);
         if (playerExit == null) return;
 
         ObstacleType obstacleType = playerExit.ObstacleType;
 
-        _tile.MazeTileAttributes.Remove(playerExit);
+        _tile.TileAttributes.Remove(playerExit);
         playerExit.Remove();
 
         UpdateNeighboursForRemovedObstacle(obstacleType);
@@ -27,7 +27,7 @@ public class TileAttributeRemover
     public void RemoveTileObstacle()
     {
         _tile.Walkable = true;
-        TileObstacle tileObstacle = (TileObstacle)_tile.MazeTileAttributes.FirstOrDefault(attribute => attribute is TileObstacle);
+        TileObstacle tileObstacle = (TileObstacle)_tile.TileAttributes.FirstOrDefault(attribute => attribute is TileObstacle);
         if (tileObstacle == null) return;
         if (tileObstacle is PlayerExit) return;
 
@@ -38,11 +38,11 @@ public class TileAttributeRemover
         // OPTIMISATION: Currently only looking at connection score from obstacles, but should also take eg. door attributes into account.
         if (oldConnectionScore == NeighbourTileCalculator.ConnectionOnAllSidesScore)
         {
-            EditorTileBackgroundPlacer tileBackgroundPlacer = new EditorTileBackgroundPlacer(_tile);
+            EditorMazeTileBackgroundPlacer tileBackgroundPlacer = new EditorMazeTileBackgroundPlacer(_tile);
             tileBackgroundPlacer.PlaceBaseBackground(new MazeLevelDefaultBaseBackgroundType());
         }
 
-        _tile.MazeTileAttributes.Remove(tileObstacle);
+        _tile.TileAttributes.Remove(tileObstacle);
         tileObstacle.Remove();
 
         //After removing tile, check with neighbour tiles if wall connections should be updated
@@ -51,25 +51,25 @@ public class TileAttributeRemover
 
     public void RemovePlayerSpawnpoint()
     {
-        IMazeTileAttribute playerSpawnpoint = (PlayerSpawnpoint)_tile.MazeTileAttributes.FirstOrDefault(attribute => attribute is PlayerSpawnpoint);
+        ITileAttribute playerSpawnpoint = (PlayerSpawnpoint)_tile.TileAttributes.FirstOrDefault(attribute => attribute is PlayerSpawnpoint);
         if (playerSpawnpoint == null) return;
-        _tile.MazeTileAttributes.Remove(playerSpawnpoint);
+        _tile.TileAttributes.Remove(playerSpawnpoint);
         playerSpawnpoint.Remove();
     }
 
     public void RemoveEnemySpawnpoint()
     {
-        IMazeTileAttribute enemySpawnpoint = (EnemySpawnpoint)_tile.MazeTileAttributes.FirstOrDefault(attribute => attribute is EnemySpawnpoint);
+        ITileAttribute enemySpawnpoint = (EnemySpawnpoint)_tile.TileAttributes.FirstOrDefault(attribute => attribute is EnemySpawnpoint);
         if (enemySpawnpoint == null) return;
-        _tile.MazeTileAttributes.Remove(enemySpawnpoint);
+        _tile.TileAttributes.Remove(enemySpawnpoint);
         enemySpawnpoint.Remove();
     }
 
     public void RemovePlayerOnlyAttribute()
     {
-        IMazeTileAttribute playerOnlyAttribute = (PlayerOnly)_tile.MazeTileAttributes.FirstOrDefault(attribute => attribute is PlayerOnly);
+        ITileAttribute playerOnlyAttribute = (PlayerOnly)_tile.TileAttributes.FirstOrDefault(attribute => attribute is PlayerOnly);
         if (playerOnlyAttribute == null) return;
-        _tile.MazeTileAttributes.Remove(playerOnlyAttribute);
+        _tile.TileAttributes.Remove(playerOnlyAttribute);
         playerOnlyAttribute.Remove();
     }
 
@@ -90,7 +90,7 @@ public class TileAttributeRemover
             // If needed, place a background
             if (obstacleConnectionScoreOnNeighbour.RawConnectionScore != NeighbourTileCalculator.ConnectionOnAllSidesScore)
             {
-                EditorTileBackgroundPlacer tileBackgroundPlacer = new EditorTileBackgroundPlacer(neighbour.Value as EditorTile);
+                EditorMazeTileBackgroundPlacer tileBackgroundPlacer = new EditorMazeTileBackgroundPlacer(neighbour.Value as EditorMazeTile);
                 tileBackgroundPlacer.PlaceBaseBackground(new MazeLevelDefaultBaseBackgroundType());
             }
         }

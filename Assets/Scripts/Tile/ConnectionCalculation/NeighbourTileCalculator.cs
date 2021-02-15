@@ -21,30 +21,31 @@ public class NeighbourTileCalculator
 {
     public static readonly int ConnectionOnAllSidesScore = 16;
 
-    public static TileConnectionScoreInfo MapNeighbourPlayerMarkEndsOfTile(Tile tile)
+    public static TileConnectionScoreInfo MapNeighbourPlayerMarkEndsOfTile(MazeTile tile)
     {
         bool hasMarkRight = false;
         bool hasMarkDown = false;
         bool hasMarkLeft = false;
         bool hasMarkUp = false;
 
-        foreach (KeyValuePair<ObjectDirection, Tile> neighbour in tile.Neighbours)
+        foreach (KeyValuePair<ObjectDirection, Tile> item in tile.Neighbours)
         {
-            if (neighbour.Value.PlayerMark == null || neighbour.Value.PlayerMark.Owner == PlayerMarkOwner.None) continue;
+            MazeTile neighbour = item.Value as MazeTile;
+            if (neighbour.PlayerMark == null || neighbour.PlayerMark.Owner == PlayerMarkOwner.None) continue;
 
-            if (neighbour.Key == ObjectDirection.Right)
+            if (item.Key == ObjectDirection.Right)
             {
                 hasMarkRight = true;
             }
-            else if (neighbour.Key == ObjectDirection.Down)
+            else if (item.Key == ObjectDirection.Down)
             {
                 hasMarkDown = true;
             }
-            else if (neighbour.Key == ObjectDirection.Left)
+            else if (item.Key == ObjectDirection.Left)
             {
                 hasMarkLeft = true;
             }
-            else if (neighbour.Key == ObjectDirection.Up)
+            else if (item.Key == ObjectDirection.Up)
             {
                 hasMarkUp = true;
             }
@@ -55,10 +56,10 @@ public class NeighbourTileCalculator
     public static TileConnectionScoreInfo MapNeighbourPathsOfTile(Tile tile, IPathType pathType)
     {
         Logger.Log($"---------Map neighbours of {tile.GridLocation.X},{tile.GridLocation.Y}--------");
-        TileModifierConnectionInfo<MazeTilePath> pathRight = new TileModifierConnectionInfo<MazeTilePath>(Direction.Right);
-        TileModifierConnectionInfo<MazeTilePath> pathDown = new TileModifierConnectionInfo<MazeTilePath>(Direction.Down);
-        TileModifierConnectionInfo<MazeTilePath> pathLeft = new TileModifierConnectionInfo<MazeTilePath>(Direction.Left);
-        TileModifierConnectionInfo<MazeTilePath> pathUp = new TileModifierConnectionInfo<MazeTilePath>(Direction.Up);
+        TileModifierConnectionInfo<TilePath> pathRight = new TileModifierConnectionInfo<TilePath>(Direction.Right);
+        TileModifierConnectionInfo<TilePath> pathDown = new TileModifierConnectionInfo<TilePath>(Direction.Down);
+        TileModifierConnectionInfo<TilePath> pathLeft = new TileModifierConnectionInfo<TilePath>(Direction.Left);
+        TileModifierConnectionInfo<TilePath> pathUp = new TileModifierConnectionInfo<TilePath>(Direction.Up);
 
         if (!EditorManager.InEditor)
         {
@@ -70,7 +71,7 @@ public class NeighbourTileCalculator
         {
             Logger.Warning($"Neighbour at {neighbour.Value.GridLocation.X},{neighbour.Value.GridLocation.Y} is {neighbour.Key} of {tile.GridLocation.X},{tile.GridLocation.Y}");
             
-            MazeTilePath tilePath = neighbour.Value.TryGetTilePath();
+            TilePath tilePath = neighbour.Value.TryGetTilePath();
 
             if (tilePath == null || tilePath.MazeTilePathType.GetType() != pathType.GetType())
             {
@@ -166,13 +167,13 @@ public class NeighbourTileCalculator
 
             T connectedModifier;
 
-            if (typeof(IMazeTileAttribute).IsAssignableFrom(typeof(T)))
+            if (typeof(ITileAttribute).IsAssignableFrom(typeof(T)))
             {
-                connectedModifier = (T)neighbour.Value.MazeTileAttributes.FirstOrDefault(attribute => attribute is T);
+                connectedModifier = (T)neighbour.Value.TileAttributes.FirstOrDefault(attribute => attribute is T);
             } 
             else
             {
-                connectedModifier = (T)neighbour.Value.MazeTileBackgrounds.FirstOrDefault(background => background is T);
+                connectedModifier = (T)neighbour.Value.TileBackgrounds.FirstOrDefault(background => background is T);
             }
 
             if (connectedModifier == null || connectedModifier.GetSubtypeAsString() != modifierSubtype)

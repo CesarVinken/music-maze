@@ -1,7 +1,7 @@
 ﻿using System.Collections;
 using UnityEngine;
 
-public class PlayerExit : TileObstacle, IMazeTileAttribute, ITileConnectable
+public class PlayerExit : TileObstacle, ITileAttribute, ITileConnectable
 {
     public bool IsOpen;
 
@@ -86,12 +86,12 @@ public class PlayerExit : TileObstacle, IMazeTileAttribute, ITileConnectable
             IEnumerator transformToColourful = TransformToColourful(primarySprite, secondarySprite);
             StartCoroutine(transformToColourful);
         }
-
     }
 
     public void OpenExit()
     {
-        Tile.Walkable = true;
+        MazeTile tile = Tile as MazeTile;
+        tile.Walkable = true;
         IsOpen = true;
 
         _tileSpriteContainer.SetSprite(SpriteManager.Instance.DefaultDoorColourful[SpriteNumber - 1 + 3]); // + 3 to get to the 'open' version of the sprite
@@ -106,8 +106,8 @@ public class PlayerExit : TileObstacle, IMazeTileAttribute, ITileConnectable
 
     public void CloseExit()
     {
-        Logger.Warning("CLOSE");
-        Tile.Walkable = false;
+        MazeTile tile = Tile as MazeTile;
+        tile.Walkable = false;
         IsOpen = false;
 
         _tileSpriteContainer.SetSprite(SpriteManager.Instance.DefaultDoor[SpriteNumber - 1]);

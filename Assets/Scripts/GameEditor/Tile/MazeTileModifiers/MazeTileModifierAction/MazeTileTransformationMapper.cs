@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class MazeTileTransformationMapper : MonoBehaviour
 {
-    private static List<EditorTile> _checkedNeighbours = new List<EditorTile>();
+    private static List<EditorMazeTile> _checkedNeighbours = new List<EditorMazeTile>();
 
     public static void GenerateTileTransformationMap()
     {
@@ -13,8 +13,8 @@ public class MazeTileTransformationMapper : MonoBehaviour
 
         for (int i = 0; i < MazeLevelManager.Instance.EditorLevel.Tiles.Count; i++)
         {
-            EditorTile tile = MazeLevelManager.Instance.EditorLevel.Tiles[i];
-            if (tile.Markable || tile.MazeTileAttributes.OfType<PlayerSpawnpoint>().Any()) continue;
+            EditorMazeTile tile = MazeLevelManager.Instance.EditorLevel.Tiles[i];
+            if (tile.Markable || tile.TileAttributes.OfType<PlayerSpawnpoint>().Any()) continue;
 
             tile.TransformationTriggerers.Clear();
             _checkedNeighbours.Clear();
@@ -23,11 +23,11 @@ public class MazeTileTransformationMapper : MonoBehaviour
         }
     }
 
-    private static List<EditorTile> FindAllMarkableNeighbours(EditorTile tile, int iteration, List<EditorTile> foundSoFar = null)
+    private static List<EditorMazeTile> FindAllMarkableNeighbours(EditorMazeTile tile, int iteration, List<EditorMazeTile> foundSoFar = null)
     {
         if (foundSoFar == null)
         {
-            foundSoFar = new List<EditorTile>();
+            foundSoFar = new List<EditorMazeTile>();
         }
 
         if (iteration >= 4)
@@ -35,12 +35,12 @@ public class MazeTileTransformationMapper : MonoBehaviour
             return foundSoFar;
         }
 
-        List<EditorTile> newNeighbouringTiles = new List<EditorTile>();
+        List<EditorMazeTile> newNeighbouringTiles = new List<EditorMazeTile>();
 
         foreach (KeyValuePair<ObjectDirection, Tile> item in tile.Neighbours)
         {
-            EditorTile neighbourTile = item.Value as EditorTile;
-            if (!foundSoFar.Contains(neighbourTile as EditorTile))
+            EditorMazeTile neighbourTile = item.Value as EditorMazeTile;
+            if (!foundSoFar.Contains(neighbourTile as EditorMazeTile))
             {
                 if (neighbourTile.Markable)
                 {
@@ -57,13 +57,13 @@ public class MazeTileTransformationMapper : MonoBehaviour
             return foundSoFar;
 
         // Recursion starts here.
-        foreach (EditorTile editorTile in newNeighbouringTiles)
+        foreach (EditorMazeTile editorTile in newNeighbouringTiles)
         {
-            List<EditorTile> markableNeighbours = FindAllMarkableNeighbours(editorTile, iteration + 1, foundSoFar);
+            List<EditorMazeTile> markableNeighbours = FindAllMarkableNeighbours(editorTile, iteration + 1, foundSoFar);
 
             for (int k = 0; k < markableNeighbours.Count; k++)
             {
-                if (!foundSoFar.Contains(markableNeighbours[k] as EditorTile))
+                if (!foundSoFar.Contains(markableNeighbours[k] as EditorMazeTile))
                 {
                     foundSoFar.Add(markableNeighbours[k]);
                 }

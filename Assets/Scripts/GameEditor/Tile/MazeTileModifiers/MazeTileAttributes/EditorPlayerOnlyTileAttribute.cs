@@ -5,12 +5,12 @@ public class EditorPlayerOnlyTileAttribute : EditorMazeTileAttributeModifier
 {
     public override string Name { get => "Player Only"; }
 
-    public override void PlaceAttribute(EditorTile tile)
+    public override void PlaceAttribute(EditorMazeTile tile)
     {
         EditorTileAttributePlacer tileAttributePlacer = new EditorTileAttributePlacer(tile);
         TileAttributeRemover tileAttributeRemover = new TileAttributeRemover(tile);
 
-        IMazeTileAttribute playerOnlyAttribute = (PlayerOnly)tile.MazeTileAttributes.FirstOrDefault(attribute => attribute is PlayerOnly);
+        ITileAttribute playerOnlyAttribute = (PlayerOnly)tile.TileAttributes.FirstOrDefault(attribute => attribute is PlayerOnly);
         if (playerOnlyAttribute == null)
         {
             tileAttributeRemover.RemoveTileObstacle();

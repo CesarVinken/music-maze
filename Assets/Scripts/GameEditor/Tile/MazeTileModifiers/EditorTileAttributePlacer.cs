@@ -1,18 +1,18 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 
-public class EditorTileAttributePlacer : TileAttributePlacer<EditorTile>
+public class EditorTileAttributePlacer : MazeTileAttributePlacer<EditorMazeTile>
 {
-    private EditorTile _tile;
+    private EditorMazeTile _tile;
 
-    public override EditorTile Tile { get => _tile; set => _tile = value; }
+    public override EditorMazeTile Tile { get => _tile; set => _tile = value; }
 
-    public EditorTileAttributePlacer(EditorTile tile)
+    public EditorTileAttributePlacer(EditorMazeTile tile)
     {
         Tile = tile;
     }
 
-    public override IMazeTileAttribute InstantiateTileAttributeGO<U>()
+    public override ITileAttribute InstantiateTileAttributeGO<U>()
     {
         GameObject tileAttributeGO = GameObject.Instantiate(MazeLevelManager.Instance.GetTileAttributePrefab<U>(), Tile.transform);
         return tileAttributeGO.GetComponent<U>();
@@ -31,7 +31,7 @@ public class EditorTileAttributePlacer : TileAttributePlacer<EditorTile>
         Tile.TryMakeMarkable(false);
 
         Logger.Log("Add player exit to maze tile attribute list");
-        Tile.MazeTileAttributes.Add(playerExit);
+        Tile.TileAttributes.Add(playerExit);
 
         // after adding obstacle to this tile, update connections of neighbours
         foreach (KeyValuePair<ObjectDirection, Tile> neighbour in Tile.Neighbours)
@@ -61,7 +61,7 @@ public class EditorTileAttributePlacer : TileAttributePlacer<EditorTile>
 
         Tile.Walkable = false;
         Tile.TryMakeMarkable(false);
-        Tile.MazeTileAttributes.Add(tileObstacle);
+        Tile.TileAttributes.Add(tileObstacle);
 
         // If we now have obstacle connections on all sides, remove the backgrounds
         if (obstacleConnectionScore.RawConnectionScore == NeighbourTileCalculator.ConnectionOnAllSidesScore)
@@ -88,7 +88,7 @@ public class EditorTileAttributePlacer : TileAttributePlacer<EditorTile>
             if (obstacleConnectionScoreOnNeighbour.RawConnectionScore == NeighbourTileCalculator.ConnectionOnAllSidesScore)
             {
                 Logger.Log($"Remove the background on tile {neighbour.Value.GridLocation.X}, {neighbour.Value.GridLocation.Y}");
-                TileBackgroundRemover tileBackgroundRemover = new TileBackgroundRemover(neighbour.Value as EditorTile);
+                TileBackgroundRemover tileBackgroundRemover = new TileBackgroundRemover(neighbour.Value as EditorMazeTile);
 
                 tileBackgroundRemover.RemoveBaseBackground(new MazeLevelDefaultBaseBackgroundType());
             }
@@ -102,7 +102,7 @@ public class EditorTileAttributePlacer : TileAttributePlacer<EditorTile>
         Tile.Walkable = true;
         Tile.TryMakeMarkable(false);
 
-        Tile.MazeTileAttributes.Add(playerSpawnpoint);
+        Tile.TileAttributes.Add(playerSpawnpoint);
     }
 
 }

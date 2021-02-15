@@ -12,7 +12,7 @@ public class SerialisableTile
 
     public List<SerialisableGridLocation> TilesToTransform;
 
-    public SerialisableTile(EditorTile tile)
+    public SerialisableTile(EditorMazeTile tile)
     {
         Id = tile.TileId;
         TileAttributes = SerialiseTileAttributes(tile);
@@ -20,7 +20,7 @@ public class SerialisableTile
 
         GridLocation = new SerialisableGridLocation(tile.GridLocation.X, tile.GridLocation.Y);
 
-        List<EditorTile> tilesToTransform = MazeLevelManager.Instance.EditorLevel.FindTilesToTransform(tile);
+        List<EditorMazeTile> tilesToTransform = MazeLevelManager.Instance.EditorLevel.FindTilesToTransform(tile);
         TilesToTransform = SerialiseTilesToTransform(tilesToTransform);
     }
 
@@ -32,11 +32,11 @@ public class SerialisableTile
         GridLocation = new SerialisableGridLocation(gridLocationX, gridLocationY);
     }
 
-    private List<SerialisableTileAttribute> SerialiseTileAttributes(EditorTile tile)
+    private List<SerialisableTileAttribute> SerialiseTileAttributes(EditorMazeTile tile)
     {
         List<SerialisableTileAttribute> tileAttributes = new List<SerialisableTileAttribute>();
 
-        foreach (IMazeTileAttribute tileAttribute in tile.MazeTileAttributes)
+        foreach (ITileAttribute tileAttribute in tile.TileAttributes)
         {
             if (tileAttribute.GetType() == typeof(TileObstacle))
             {
@@ -77,11 +77,11 @@ public class SerialisableTile
         return tileAttributes;
     }
 
-    private List<SerialisableTileBackground> SerialiseTileBackgrounds(EditorTile tile)
+    private List<SerialisableTileBackground> SerialiseTileBackgrounds(EditorMazeTile tile)
     {
         List<SerialisableTileBackground> tilebackgrounds = new List<SerialisableTileBackground>();
 
-        foreach (IMazeTileBackground tileBackground in tile.MazeTileBackgrounds)
+        foreach (ITileBackground tileBackground in tile.TileBackgrounds)
         {
             if (tileBackground.GetType() == typeof(MazeTilePath))
             {
@@ -106,7 +106,7 @@ public class SerialisableTile
         return tilebackgrounds;
     }
 
-    private List<SerialisableGridLocation> SerialiseTilesToTransform(List<EditorTile> tilesToTransform)
+    private List<SerialisableGridLocation> SerialiseTilesToTransform(List<EditorMazeTile> tilesToTransform)
     {
         List<SerialisableGridLocation> serialisableTilesToTransform = new List<SerialisableGridLocation>();
 

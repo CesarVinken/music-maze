@@ -1,13 +1,13 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 
-public class EditorTile : Tile
+public class EditorMazeTile : MazeTile
 {
     [Header("Editor")]
 
     [SerializeField] private SpriteRenderer _overlaySpriteRenderer;
 
-    public List<EditorTile> TransformationTriggerers = new List<EditorTile>(); // used in the editor for non-markable tiles and lists their triggerer.
+    public List<EditorMazeTile> TransformationTriggerers = new List<EditorMazeTile>(); // used in the editor for non-markable tiles and lists their triggerer.
 
     public void AddNeighbours(EditorMazeLevel level)
     {
@@ -40,7 +40,7 @@ public class EditorTile : Tile
     {
         for (int i = 0; i < MazeLevelManager.Instance.EditorLevel.Tiles.Count; i++)
         {
-            EditorTile tile = MazeLevelManager.Instance.EditorLevel.Tiles[i];
+            EditorMazeTile tile = MazeLevelManager.Instance.EditorLevel.Tiles[i];
             if (tile.TransformationTriggerers.Contains(this))
             {
                 tile.TransformationTriggerers.Remove(this);

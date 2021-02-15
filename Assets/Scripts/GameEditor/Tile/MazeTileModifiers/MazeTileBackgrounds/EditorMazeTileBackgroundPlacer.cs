@@ -1,13 +1,13 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 
-public class EditorTileBackgroundPlacer : TileBackgroundPlacer<EditorTile>
+public class EditorMazeTileBackgroundPlacer : MazeTileBackgroundPlacer<EditorMazeTile>
 {
-    private EditorTile _tile;
+    private EditorMazeTile _tile;
 
-    public override EditorTile Tile { get => _tile; set => _tile = value; }
+    public override EditorMazeTile Tile { get => _tile; set => _tile = value; }
 
-    public EditorTileBackgroundPlacer(EditorTile tile)
+    public EditorMazeTileBackgroundPlacer(EditorMazeTile tile)
     {
         Tile = tile;
     }
@@ -23,13 +23,13 @@ public class EditorTileBackgroundPlacer : TileBackgroundPlacer<EditorTile>
         MazeTilePath mazeTilePath = mazeTilePathGO.GetComponent<MazeTilePath>();
         mazeTilePath.WithPathType(mazeTilePathType);
         mazeTilePath.WithConnectionScoreInfo(pathConnectionScore);
-        Tile.MazeTileBackgrounds.Add(mazeTilePath as IMazeTileBackground);
+        Tile.TileBackgrounds.Add(mazeTilePath as ITileBackground);
         Tile.TryMakeMarkable(true);
 
         // Update pathConnections for neighbouring tiles
         foreach (KeyValuePair<ObjectDirection, Tile> neighbour in Tile.Neighbours)
         {
-            MazeTilePath tilePathOnNeighbour = neighbour.Value.TryGetTilePath();
+            TilePath tilePathOnNeighbour = neighbour.Value.TryGetTilePath();
 
             if (tilePathOnNeighbour == null) continue;
             int oldConnectionScoreOnNeighbour = tilePathOnNeighbour.ConnectionScore;

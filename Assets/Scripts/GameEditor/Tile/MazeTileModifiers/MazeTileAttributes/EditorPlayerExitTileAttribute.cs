@@ -5,12 +5,12 @@ public class EditorPlayerExitTileAttribute : EditorMazeTileAttributeModifier
 {
     public override string Name { get => "Player Exit"; }
 
-    public override void PlaceAttribute(EditorTile tile)
+    public override void PlaceAttribute(EditorMazeTile tile)
     {
         EditorTileAttributePlacer tileAttributePlacer = new EditorTileAttributePlacer(tile);
         TileAttributeRemover tileAttributeRemover = new TileAttributeRemover(tile);
 
-        IMazeTileAttribute playerExit = (PlayerExit)tile.MazeTileAttributes.FirstOrDefault(attribute => attribute is PlayerExit);
+        ITileAttribute playerExit = (PlayerExit)tile.TileAttributes.FirstOrDefault(attribute => attribute is PlayerExit);
         if (playerExit == null)
         {
             tileAttributeRemover.RemoveEnemySpawnpoint();

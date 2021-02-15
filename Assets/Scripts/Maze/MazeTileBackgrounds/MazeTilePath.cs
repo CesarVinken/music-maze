@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-public class MazeTilePath : MonoBehaviour, IMazeTileBackground, ITileConnectable
+public class TilePath : MonoBehaviour, ITileBackground, ITileConnectable
 {
     public Tile Tile;
     public string ParentId;
@@ -49,4 +49,8 @@ public class MazeTilePath : MonoBehaviour, IMazeTileBackground, ITileConnectable
     {
         return MazeTilePathType.Name;
     }
+}
+public class MazeTilePath : TilePath
+{
+    
 }

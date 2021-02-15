@@ -2,5 +2,5 @@
 {
     string Name { get; }
 
-    void HandleTransformationTriggerPlacement(EditorTile tile);
+    void HandleTransformationTriggerPlacement(EditorMazeTile tile);
 }
