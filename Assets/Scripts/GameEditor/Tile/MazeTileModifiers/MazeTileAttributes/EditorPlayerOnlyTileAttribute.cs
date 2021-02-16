@@ -8,7 +8,7 @@ public class EditorPlayerOnlyTileAttribute : EditorMazeTileAttributeModifier
     public override void PlaceAttribute(EditorMazeTile tile)
     {
         EditorTileAttributePlacer tileAttributePlacer = new EditorTileAttributePlacer(tile);
-        TileAttributeRemover tileAttributeRemover = new TileAttributeRemover(tile);
+        MazeTileAttributeRemover tileAttributeRemover = new MazeTileAttributeRemover(tile);
 
         ITileAttribute playerOnlyAttribute = (PlayerOnly)tile.TileAttributes.FirstOrDefault(attribute => attribute is PlayerOnly);
         if (playerOnlyAttribute == null)

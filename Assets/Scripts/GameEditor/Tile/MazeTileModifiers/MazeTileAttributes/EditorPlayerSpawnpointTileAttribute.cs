@@ -8,7 +8,7 @@ public class EditorPlayerSpawnpointTileAttribute : EditorMazeTileAttributeModifi
     public override void PlaceAttribute(EditorMazeTile tile)
     {
         EditorTileAttributePlacer tileAttributePlacer = new EditorTileAttributePlacer(tile);
-        TileAttributeRemover tileAttributeRemover = new TileAttributeRemover(tile);
+        MazeTileAttributeRemover tileAttributeRemover = new MazeTileAttributeRemover(tile);
 
         ITileAttribute playerSpawnpoint = (PlayerSpawnpoint)tile.TileAttributes.FirstOrDefault(attribute => attribute is PlayerSpawnpoint);
         if (playerSpawnpoint == null)

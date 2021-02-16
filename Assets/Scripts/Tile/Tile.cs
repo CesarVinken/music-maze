@@ -3,6 +3,7 @@ using UnityEngine;
 
 public abstract class Tile : MonoBehaviour
 {
+    public bool Walkable = true;
     public Transform BackgroundsContainer;
     public string TileId;
 

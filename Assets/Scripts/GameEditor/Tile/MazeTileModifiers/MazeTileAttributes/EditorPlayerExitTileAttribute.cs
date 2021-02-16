@@ -8,7 +8,7 @@ public class EditorPlayerExitTileAttribute : EditorMazeTileAttributeModifier
     public override void PlaceAttribute(EditorMazeTile tile)
     {
         EditorTileAttributePlacer tileAttributePlacer = new EditorTileAttributePlacer(tile);
-        TileAttributeRemover tileAttributeRemover = new TileAttributeRemover(tile);
+        MazeTileAttributeRemover tileAttributeRemover = new MazeTileAttributeRemover(tile);
 
         ITileAttribute playerExit = (PlayerExit)tile.TileAttributes.FirstOrDefault(attribute => attribute is PlayerExit);
         if (playerExit == null)

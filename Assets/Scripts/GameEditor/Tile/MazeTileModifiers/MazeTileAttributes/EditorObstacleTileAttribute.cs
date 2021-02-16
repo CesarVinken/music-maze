@@ -8,7 +8,7 @@ public class EditorObstacleTileAttribute : EditorMazeTileAttributeModifier
     public override void PlaceAttribute(EditorMazeTile tile)
     {
         EditorTileAttributePlacer tileAttributePlacer = new EditorTileAttributePlacer(tile);
-        TileAttributeRemover tileAttributeRemover = new TileAttributeRemover(tile);
+        MazeTileAttributeRemover tileAttributeRemover = new MazeTileAttributeRemover(tile);
 
         ITileAttribute tileObstacle = (TileObstacle)tile.TileAttributes.FirstOrDefault(attribute => (attribute is TileObstacle && !(attribute is PlayerExit)));
         if (tileObstacle == null)
@@ -18,7 +18,7 @@ public class EditorObstacleTileAttribute : EditorMazeTileAttributeModifier
             tileAttributeRemover.RemovePlayerOnlyAttribute();
             tileAttributeRemover.RemovePlayerSpawnpoint();
 
-            TileBackgroundRemover tileBackgroundRemover = new TileBackgroundRemover(tile);
+            MazeTileBackgroundRemover tileBackgroundRemover = new MazeTileBackgroundRemover(tile);
             tileBackgroundRemover.RemovePath();
 
             tileAttributePlacer.CreateTileObstacle(ObstacleType.Bush);

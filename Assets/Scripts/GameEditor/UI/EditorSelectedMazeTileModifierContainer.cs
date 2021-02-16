@@ -33,8 +33,7 @@ public class EditorSelectedMazeTileModifierContainer : EditorSelectedTileModifie
 
         EditorManager.SelectedTileAttributeModifierIndex = 0;
 
-
-        EditorTileBackgrounds.Add(new EditorMazeTilePath());
+        EditorTileBackgrounds.Add(new EditorMazeTilePath() as IEditorTileBackground<Tile>);
         EditorManager.SelectedTileBackgroundModifierIndex = 0;
 
 

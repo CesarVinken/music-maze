@@ -1,7 +1,7 @@
-﻿public interface IEditorTileBackground : IEditorTileModifierType
+﻿public interface IEditorTileBackground<T> : IEditorTileModifierType where T : Tile
 {
     string Name { get; }
 
-    void PlaceBackground(EditorMazeTile tile);
-    void PlaceBackgroundVariation(EditorMazeTile tile);
+    void PlaceBackground(T tile);
+    void PlaceBackgroundVariation(T tile);
 }

@@ -35,7 +35,7 @@ public class EditorSelectedOverworldTileModifierContainer : EditorSelectedTileMo
 
         EditorTileBackgrounds.Clear();
 
-        //EditorTileBackgrounds.Add(new EditorMazeTilePath());
+        EditorTileBackgrounds.Add(new EditorOverworldTilePath() as IEditorTileBackground<Tile>);
         EditorManager.SelectedTileBackgroundModifierIndex = 0;
 
         EditorTileTransformationTriggerers.Clear();

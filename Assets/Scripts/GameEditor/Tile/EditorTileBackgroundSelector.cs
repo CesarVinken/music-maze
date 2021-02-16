@@ -34,7 +34,7 @@ public class EditorTileBackgroundSelector : EditorTileModifierSelector
 
     public override void SetSelectedModifier(int modifierIndex)
     {
-        IEditorTileBackground background = _editorSelectedModifierContainer.EditorTileBackgrounds[modifierIndex];
+        IEditorTileBackground<Tile> background = _editorSelectedModifierContainer.EditorTileBackgrounds[modifierIndex];
         _editorSelectedModifierContainer.SelectedModifierLabel.text = GetSelectedModifierLabel(background.Name);
         _editorSelectedModifierContainer.SelectedModifierSprite.sprite = background.GetSprite();
         EditorManager.SelectedTileBackgroundModifierIndex = modifierIndex;

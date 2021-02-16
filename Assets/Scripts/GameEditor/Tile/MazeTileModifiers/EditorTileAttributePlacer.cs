@@ -66,7 +66,7 @@ public class EditorTileAttributePlacer : MazeTileAttributePlacer<EditorMazeTile>
         // If we now have obstacle connections on all sides, remove the backgrounds
         if (obstacleConnectionScore.RawConnectionScore == NeighbourTileCalculator.ConnectionOnAllSidesScore)
         {
-            TileBackgroundRemover tileBackgroundRemover = new TileBackgroundRemover(Tile);
+            MazeTileBackgroundRemover tileBackgroundRemover = new MazeTileBackgroundRemover(Tile);
             tileBackgroundRemover.RemoveBaseBackground(new MazeLevelDefaultBaseBackgroundType());
         }
 
@@ -88,7 +88,7 @@ public class EditorTileAttributePlacer : MazeTileAttributePlacer<EditorMazeTile>
             if (obstacleConnectionScoreOnNeighbour.RawConnectionScore == NeighbourTileCalculator.ConnectionOnAllSidesScore)
             {
                 Logger.Log($"Remove the background on tile {neighbour.Value.GridLocation.X}, {neighbour.Value.GridLocation.Y}");
-                TileBackgroundRemover tileBackgroundRemover = new TileBackgroundRemover(neighbour.Value as EditorMazeTile);
+                MazeTileBackgroundRemover tileBackgroundRemover = new MazeTileBackgroundRemover(neighbour.Value as EditorMazeTile);
 
                 tileBackgroundRemover.RemoveBaseBackground(new MazeLevelDefaultBaseBackgroundType());
             }

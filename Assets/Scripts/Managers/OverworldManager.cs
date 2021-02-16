@@ -10,6 +10,7 @@ public class OverworldManager : MonoBehaviour
     public GameObject EditorTilePrefab;
     public GameObject InGameTilePrefab;
     public GameObject TileBaseBackgroundPrefab;
+    public GameObject TilePathPrefab;
 
     public void Awake()
     {
@@ -18,6 +19,7 @@ public class OverworldManager : MonoBehaviour
         Guard.CheckIsNull(EditorTilePrefab, "EditorTilePrefab", gameObject);
         Guard.CheckIsNull(InGameTilePrefab, "InGameTilePrefab", gameObject);
         Guard.CheckIsNull(TileBaseBackgroundPrefab, "TileBaseBackgroundPrefab", gameObject);
+        Guard.CheckIsNull(TilePathPrefab, "TilePathPrefab", gameObject);
     }
 
     public void UnloadOverworld()

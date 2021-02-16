@@ -1,22 +1,22 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 
-public class TileBackgroundRemover
+public class MazeTileBackgroundRemover : TileBackgroundRemover
 {
     private EditorMazeTile _tile;
 
-    public TileBackgroundRemover(EditorMazeTile tile)
+    public MazeTileBackgroundRemover(EditorMazeTile tile)
     {
         _tile = tile;
     }
 
-    public void RemovePath()
+    public override void RemovePath()
     {
         MazeTilePath mazeTilePath = (MazeTilePath)_tile.TileBackgrounds.FirstOrDefault(background => background is MazeTilePath);
         if (mazeTilePath == null) return;
 
-        Logger.Log(mazeTilePath.MazeTilePathType);
-        IPathType mazeTilePathType = mazeTilePath.MazeTilePathType;
+        Logger.Log(mazeTilePath.TilePathType);
+        IPathType mazeTilePathType = mazeTilePath.TilePathType;
         int oldConnectionScore = mazeTilePath.ConnectionScore;
 
         // If needed, place a background in the gap that the removed path left
@@ -59,7 +59,7 @@ public class TileBackgroundRemover
         _tile.RemoveTileAsTransformationTrigger();
     }
 
-    public void RemoveBaseBackground(IBaseBackgroundType mazeTileBaseBackgroundType)
+    public override void RemoveBaseBackground(IBaseBackgroundType mazeTileBaseBackgroundType)
     {
         MazeTileBaseBackground mazeTileBaseBackground = (MazeTileBaseBackground)_tile.TileBackgrounds.FirstOrDefault(background => background is MazeTileBaseBackground);
 

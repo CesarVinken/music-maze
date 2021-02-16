@@ -1,19 +1,19 @@
 ﻿using System.Linq;
 using UnityEngine;
 
-public class EditorMazeTilePath : EditorMazeTileBackgroundModifier
+public class EditorMazeTilePath : EditorMazeTileBackgroundModifier<EditorMazeTile>
 {
     public override string Name => "Path";
 
     public override void PlaceBackground(EditorMazeTile tile)
     {
         EditorMazeTileBackgroundPlacer tileBackgroundPlacer = new EditorMazeTileBackgroundPlacer(tile);
-        TileBackgroundRemover tileBackgroundRemover = new TileBackgroundRemover(tile);
+        MazeTileBackgroundRemover tileBackgroundRemover = new MazeTileBackgroundRemover(tile);
 
         ITileBackground mazeTilePath = (MazeTilePath)tile.TileBackgrounds.FirstOrDefault(background => background is MazeTilePath);
         if (mazeTilePath == null)
         {
-            TileAttributeRemover tileAttributeRemover = new TileAttributeRemover(tile);
+            MazeTileAttributeRemover tileAttributeRemover = new MazeTileAttributeRemover(tile);
             tileAttributeRemover.RemoveTileObstacle();
 
             tileBackgroundPlacer.PlacePath(new MazeLevelDefaultPathType());

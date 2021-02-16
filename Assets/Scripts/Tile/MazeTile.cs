@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using UnityEngine;
 
 public class MazeTile : Tile
@@ -8,7 +6,6 @@ public class MazeTile : Tile
     public SpriteRenderer PlayerMarkRenderer;
     public SpriteRenderer PlayerMarkEndsRenderer;
 
-    public bool Walkable = true;
     public bool Markable = false;
     public TransformationState TransformationState = TransformationState.Bleak;
 
@@ -84,7 +81,7 @@ public class MazeTile : Tile
             Logger.Log($"did NOT find a maze tile path on {GridLocation.X},{GridLocation.Y}");
             return null;
         }
-        Logger.Log($"found maze tile path {mazeTilePath.MazeTilePathType} on {GridLocation.X},{GridLocation.Y} with score {mazeTilePath.ConnectionScore}");
+        Logger.Log($"found maze tile path {mazeTilePath.TilePathType} on {GridLocation.X},{GridLocation.Y} with score {mazeTilePath.ConnectionScore}");
         return mazeTilePath;
     }
 

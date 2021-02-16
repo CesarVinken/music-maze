@@ -147,7 +147,7 @@ public class EditorTileSelector : MonoBehaviour
         }
         else if (editorMazeTileModifierType == EditorTileModifierCategory.Background)
         {
-            IEditorTileBackground background = EditorSelectedMazeTileModifierContainer.Instance.EditorTileBackgrounds[EditorManager.SelectedTileBackgroundModifierIndex];
+            IEditorTileBackground<Tile> background = EditorSelectedMazeTileModifierContainer.Instance.EditorTileBackgrounds[EditorManager.SelectedTileBackgroundModifierIndex];
             PlaceMazeTileBackground(CurrentSelectedLocation, background);
         }
         else if (editorMazeTileModifierType == EditorTileModifierCategory.TransformationTriggerer)
@@ -177,7 +177,7 @@ public class EditorTileSelector : MonoBehaviour
         }
         else if (editorMazeTileModifierCategory == EditorTileModifierCategory.Background)
         {
-            IEditorTileBackground background = EditorSelectedMazeTileModifierContainer.Instance.EditorTileBackgrounds[EditorManager.SelectedTileBackgroundModifierIndex];
+            IEditorTileBackground<Tile> background = EditorSelectedMazeTileModifierContainer.Instance.EditorTileBackgrounds[EditorManager.SelectedTileBackgroundModifierIndex];
             PlaceMazeTileBackgroundVariation(CurrentSelectedLocation, background);
         }
     }
@@ -190,7 +190,7 @@ public class EditorTileSelector : MonoBehaviour
         attribute.PlaceAttribute(tile);
     }
 
-    private void PlaceMazeTileBackground(GridLocation gridLocation, IEditorTileBackground background)
+    private void PlaceMazeTileBackground(GridLocation gridLocation, IEditorTileBackground<Tile> background)
     {
         if (background == null) Logger.Error($"Could not find the background type {background.GetType()}");
 
@@ -206,7 +206,7 @@ public class EditorTileSelector : MonoBehaviour
         attribute.PlaceAttributeVariation(tile);
     }
 
-    private void PlaceMazeTileBackgroundVariation(GridLocation gridLocation, IEditorTileBackground background)
+    private void PlaceMazeTileBackgroundVariation(GridLocation gridLocation, IEditorTileBackground<Tile> background)
     {
         if (background == null) Logger.Error($"Could not find the background type {background.GetType()}");
 

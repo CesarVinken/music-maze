@@ -23,7 +23,7 @@ public class OverworldTileBaseBackground : MonoBehaviour, ITileBackground
 
     public void WithPathConnectionScore(int score)
     {
-        Sprite sprite = OverworldSpriteManager.Instance.DefaultMazeTileBackground[0];
+        Sprite sprite = OverworldSpriteManager.Instance.DefaultOverworldTileBackground[0];
         _tileSpriteContainer.SetSprite(sprite);
     }
 

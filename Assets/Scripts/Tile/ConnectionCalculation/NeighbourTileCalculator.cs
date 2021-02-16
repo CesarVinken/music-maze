@@ -73,7 +73,7 @@ public class NeighbourTileCalculator
             
             TilePath tilePath = neighbour.Value.TryGetTilePath();
 
-            if (tilePath == null || tilePath.MazeTilePathType.GetType() != pathType.GetType())
+            if (tilePath == null || tilePath.TilePathType.GetType() != pathType.GetType())
             {
                 continue;
             }

@@ -1,11 +1,11 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 
-public class TileAttributeRemover
+public class MazeTileAttributeRemover : TileAttributeRemover
 {
     private EditorMazeTile _tile;
 
-    public TileAttributeRemover(EditorMazeTile tile)
+    public MazeTileAttributeRemover(EditorMazeTile tile)
     {
         _tile = tile;
     }
@@ -24,7 +24,7 @@ public class TileAttributeRemover
         UpdateNeighboursForRemovedObstacle(obstacleType);
     }
 
-    public void RemoveTileObstacle()
+    public override void RemoveTileObstacle()
     {
         _tile.Walkable = true;
         TileObstacle tileObstacle = (TileObstacle)_tile.TileAttributes.FirstOrDefault(attribute => attribute is TileObstacle);
@@ -49,7 +49,7 @@ public class TileAttributeRemover
         UpdateNeighboursForRemovedObstacle(obstacleType);
     }
 
-    public void RemovePlayerSpawnpoint()
+    public override void RemovePlayerSpawnpoint()
     {
         ITileAttribute playerSpawnpoint = (PlayerSpawnpoint)_tile.TileAttributes.FirstOrDefault(attribute => attribute is PlayerSpawnpoint);
         if (playerSpawnpoint == null) return;
