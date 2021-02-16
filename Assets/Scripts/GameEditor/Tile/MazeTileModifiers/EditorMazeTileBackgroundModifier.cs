@@ -1,10 +1,22 @@
 ﻿using UnityEngine;
 
-public abstract class EditorMazeTileBackgroundModifier<T> : IEditorTileBackground<T> where T : EditorMazeTile
+public abstract class EditorTileBackgroundModifier
 {
     public virtual string Name => "";
 
     public Sprite Sprite => null;
+
+    public virtual Sprite GetSprite()
+    {
+        return EditorCanvasUI.Instance.DefaultIcon;
+    }
+}
+
+public abstract class EditorMazeTileBackgroundModifier<T> : EditorTileBackgroundModifier, IEditorTileBackground<T> where T : EditorMazeTile
+{
+    //public virtual string Name => "";
+
+    //public Sprite Sprite => null;
 
     public virtual void PlaceBackground(T tile)
     {
@@ -16,10 +28,10 @@ public abstract class EditorMazeTileBackgroundModifier<T> : IEditorTileBackgroun
         throw new System.NotImplementedException();
     }
 
-    public virtual Sprite GetSprite()
-    {
-        return EditorCanvasUI.Instance.DefaultIcon;
-    }
+    //public virtual Sprite GetSprite()
+    //{
+    //    return EditorCanvasUI.Instance.DefaultIcon;
+    //}
 
     public void InstantiateModifierActions()
     {

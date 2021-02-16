@@ -137,7 +137,7 @@ public class EditorTileSelector : MonoBehaviour
         }
         else if (editorMazeTileModifierType == EditorTileModifierCategory.Background)
         {
-            IEditorTileBackground<Tile> background = selectedTileModifierContainer.EditorTileBackgrounds[EditorManager.SelectedTileBackgroundModifierIndex];
+            EditorTileBackgroundModifier background = selectedTileModifierContainer.EditorTileBackgrounds[EditorManager.SelectedTileBackgroundModifierIndex];
             PlaceTileBackground(CurrentSelectedLocation, background);
         }
         else if (editorMazeTileModifierType == EditorTileModifierCategory.TransformationTriggerer)
@@ -174,7 +174,7 @@ public class EditorTileSelector : MonoBehaviour
         }
         else if (editorMazeTileModifierCategory == EditorTileModifierCategory.Background)
         {
-            IEditorTileBackground<Tile> background = EditorCanvasUI.Instance.SelectedTileModifierContainer.EditorTileBackgrounds[EditorManager.SelectedTileBackgroundModifierIndex];
+            EditorTileBackgroundModifier background = EditorCanvasUI.Instance.SelectedTileModifierContainer.EditorTileBackgrounds[EditorManager.SelectedTileBackgroundModifierIndex];
             PlaceMazeTileBackgroundVariation(CurrentSelectedLocation, background);
         }
     }
@@ -187,7 +187,7 @@ public class EditorTileSelector : MonoBehaviour
         attribute.PlaceAttribute(tile);
     }
 
-    private void PlaceTileBackground(GridLocation gridLocation, IEditorTileBackground<Tile> background)
+    private void PlaceTileBackground(GridLocation gridLocation, EditorTileBackgroundModifier background)
     {
         if (background == null) Logger.Error($"Could not find the background type {background.GetType()}");
 
@@ -203,7 +203,7 @@ public class EditorTileSelector : MonoBehaviour
         attribute.PlaceAttributeVariation(tile);
     }
 
-    private void PlaceMazeTileBackgroundVariation(GridLocation gridLocation, IEditorTileBackground<Tile> background)
+    private void PlaceMazeTileBackgroundVariation(GridLocation gridLocation, EditorTileBackgroundModifier background)
     {
         if (background == null) Logger.Error($"Could not find the background type {background.GetType()}");
 

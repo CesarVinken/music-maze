@@ -5,7 +5,7 @@ using UnityEngine.UI;
 public abstract class EditorSelectedTileModifierContainer : MonoBehaviour
 {
     public List<IEditorTileAttribute<Tile>> EditorTileAttributes = new List<IEditorTileAttribute<Tile>>();
-    public List<IEditorTileBackground<Tile>> EditorTileBackgrounds = new List<IEditorTileBackground<Tile>>();
+    public List<EditorTileBackgroundModifier> EditorTileBackgrounds = new List<EditorTileBackgroundModifier>();
     public List<IEditorTileTransformationTriggerer<Tile>> EditorTileTransformationTriggerers = new List<IEditorTileTransformationTriggerer<Tile>>();
 
     public List<EditorTileModifierCategory> UsedTileModifierCategories = new List<EditorTileModifierCategory>();

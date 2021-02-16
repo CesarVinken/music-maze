@@ -4,8 +4,6 @@ using UnityEngine;
 
 public class EditorSelectedMazeTileModifierContainer : EditorSelectedTileModifierContainer
 {
-    //public static EditorSelectedMazeTileModifierContainer Instance;
-
     private EditorTileAttributeSelector _editorMazeTileAttributeSelector;
     private EditorTileBackgroundSelector _editorMazeTileBackgroundSelector;
     private EditorTileTransformationTriggererSelector _editorMazeTileTransformationTriggererSelector;
@@ -17,7 +15,7 @@ public class EditorSelectedMazeTileModifierContainer : EditorSelectedTileModifie
         Guard.CheckIsNull(SelectedModifierLabel, "SelectedModifierLabel", gameObject);
         Guard.CheckIsNull(SelectedModifierSprite, "SelectedModifierSprite", gameObject);
         Logger.Warning("BABABA");
-        //Instance = this;
+
         EditorCanvasUI.Instance.SelectedTileModifierContainer = this;
 
         Reset();
@@ -32,11 +30,16 @@ public class EditorSelectedMazeTileModifierContainer : EditorSelectedTileModifie
         EditorTileAttributes.Add(new EditorPlayerOnlyTileAttribute() as IEditorTileAttribute<Tile>);
         EditorTileAttributes.Add(new EditorEnemySpawnpointTileAttribute() as IEditorTileAttribute<Tile>);
 
+
         EditorManager.SelectedTileAttributeModifierIndex = 0;
 
-        EditorTileBackgrounds.Add(new EditorMazeTilePath() as IEditorTileBackground<Tile>);
+        EditorTileBackgrounds.Add(new EditorMazeTilePath());
         EditorManager.SelectedTileBackgroundModifierIndex = 0;
-
+        Logger.Warning("We are failing to add the tile backgrounds to the list");
+        for (int i = 0; i < EditorTileBackgrounds.Count; i++)
+        {
+            Logger.Log(EditorTileBackgrounds[i].Name);
+        }
 
         EditorTileTransformationTriggerers.Add(new EditorMazeTileBeautificationTriggerer() as IEditorTileTransformationTriggerer<Tile>);
         EditorManager.SelectedTileTransformationTriggererIndex = 0;
