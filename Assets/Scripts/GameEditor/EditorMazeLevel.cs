@@ -1,10 +1,20 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 
-public class EditorMazeLevel : MazeLevel
+public interface IEditorLevel
 {
+    Dictionary<GridLocation, Tile> TilesByLocation { get; set; }
+     GridLocation LevelBounds { get; set; }
+}
+
+public class EditorMazeLevel : MazeLevel, IEditorLevel
+{
+    private Dictionary<GridLocation, Tile> _tilesByLocation = new Dictionary<GridLocation, Tile>();
+
     public List<EditorMazeTile> Tiles = new List<EditorMazeTile>();
-    public Dictionary<GridLocation, EditorMazeTile> TilesByLocation = new Dictionary<GridLocation, EditorMazeTile>();
+
+    public Dictionary<GridLocation, Tile> TilesByLocation { get => _tilesByLocation; set => _tilesByLocation = value; }
+
 
     public EditorMazeLevel()
     {
@@ -13,6 +23,8 @@ public class EditorMazeLevel : MazeLevel
 
     public EditorMazeLevel(MazeLevelData mazeLevelData)
     {
+        GameManager.Instance.CurrentEditorLevel = this;
+        
         MazeName = mazeLevelData.Name;
 
         if (TilesContainer.Instance != null)
@@ -61,8 +73,8 @@ public class EditorMazeLevel : MazeLevel
             TilesByLocation.Add(tile.GridLocation, tile);
 
             GridLocation furthestBounds = LevelBounds;
-            if (tile.GridLocation.X > furthestBounds.X) LevelBounds.X = tile.GridLocation.X;
-            if (tile.GridLocation.Y > furthestBounds.Y) LevelBounds.Y = tile.GridLocation.Y;
+            if (tile.GridLocation.X > furthestBounds.X) _levelBounds.X = tile.GridLocation.X;
+            if (tile.GridLocation.Y > furthestBounds.Y) _levelBounds.Y = tile.GridLocation.Y;
 
             if (serialisableTile.TilesToTransform != null)
             {
@@ -90,7 +102,7 @@ public class EditorMazeLevel : MazeLevel
                 EditorMazeTile tile = Tiles[i];
                 if(item.Key.X == tile.GridLocation.X && item.Key.Y == tile.GridLocation.Y)
                 {
-                    tile.TransformationTriggerers = item.Value;
+                    tile.BeautificationTriggerers = item.Value;
                 }
             }
         }
@@ -163,7 +175,7 @@ public class EditorMazeLevel : MazeLevel
 
         for (int i = 0; i < Tiles.Count; i++)
         {
-            if (Tiles[i].TransformationTriggerers.Contains(transformationTriggererTile))
+            if (Tiles[i].BeautificationTriggerers.Contains(transformationTriggererTile))
             {
                 tilesToTransform.Add(Tiles[i]);
             }

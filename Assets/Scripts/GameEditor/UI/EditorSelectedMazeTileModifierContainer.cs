@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class EditorSelectedMazeTileModifierContainer : EditorSelectedTileModifierContainer
 {
-    public static EditorSelectedMazeTileModifierContainer Instance;
+    //public static EditorSelectedMazeTileModifierContainer Instance;
 
     private EditorTileAttributeSelector _editorMazeTileAttributeSelector;
     private EditorTileBackgroundSelector _editorMazeTileBackgroundSelector;
@@ -16,8 +16,9 @@ public class EditorSelectedMazeTileModifierContainer : EditorSelectedTileModifie
         Guard.CheckIsNull(SelectedModifierSpriteGO, "SelectedModifierSpriteGO", gameObject);
         Guard.CheckIsNull(SelectedModifierLabel, "SelectedModifierLabel", gameObject);
         Guard.CheckIsNull(SelectedModifierSprite, "SelectedModifierSprite", gameObject);
-
-        Instance = this;
+        Logger.Warning("BABABA");
+        //Instance = this;
+        EditorCanvasUI.Instance.SelectedTileModifierContainer = this;
 
         Reset();
 
@@ -25,11 +26,11 @@ public class EditorSelectedMazeTileModifierContainer : EditorSelectedTileModifie
         _editorMazeTileBackgroundSelector = new EditorTileBackgroundSelector(this);
         _editorMazeTileTransformationTriggererSelector = new EditorTileTransformationTriggererSelector(this);
 
-        EditorTileAttributes.Add(new EditorObstacleTileAttribute());
-        EditorTileAttributes.Add(new EditorPlayerExitTileAttribute());
-        EditorTileAttributes.Add(new EditorPlayerSpawnpointTileAttribute());
-        EditorTileAttributes.Add(new EditorPlayerOnlyTileAttribute());
-        EditorTileAttributes.Add(new EditorEnemySpawnpointTileAttribute());
+        EditorTileAttributes.Add(new EditorObstacleTileAttribute() as IEditorTileAttribute<Tile>);
+        EditorTileAttributes.Add(new EditorPlayerExitTileAttribute() as IEditorTileAttribute<Tile>);
+        EditorTileAttributes.Add(new EditorPlayerSpawnpointTileAttribute() as IEditorTileAttribute<Tile>);
+        EditorTileAttributes.Add(new EditorPlayerOnlyTileAttribute() as IEditorTileAttribute<Tile>);
+        EditorTileAttributes.Add(new EditorEnemySpawnpointTileAttribute() as IEditorTileAttribute<Tile>);
 
         EditorManager.SelectedTileAttributeModifierIndex = 0;
 
@@ -37,7 +38,7 @@ public class EditorSelectedMazeTileModifierContainer : EditorSelectedTileModifie
         EditorManager.SelectedTileBackgroundModifierIndex = 0;
 
 
-        EditorTileTransformationTriggerers.Add(new EditorMazeTileTransformationTriggerer());
+        EditorTileTransformationTriggerers.Add(new EditorMazeTileBeautificationTriggerer() as IEditorTileTransformationTriggerer<Tile>);
         EditorManager.SelectedTileTransformationTriggererIndex = 0;
 
         UsedTileModifierCategories.Add(EditorTileModifierCategory.Background);
@@ -55,7 +56,7 @@ public class EditorSelectedMazeTileModifierContainer : EditorSelectedTileModifie
 
     public void Start()
     {
-        SetSelectedMazeTileModifierCategory(EditorTileModifierCategory.Attribute);
+        SetSelectedMazeTileModifierCategory(EditorTileModifierCategory.Background);
         SetSelectedMazeTileModifier(0);//Set selected modifier to Background -> Path 
     }
 
@@ -115,11 +116,11 @@ public class EditorSelectedMazeTileModifierContainer : EditorSelectedTileModifie
         }
     }
 
-    public void SetSelectedMazeTileModifierCategory(EditorTileModifierCategory editorMazeTileModifierCategory)
+    public override void SetSelectedMazeTileModifierCategory(EditorTileModifierCategory editorMazeTileModifierCategory)
     {
         if (EditorManager.SelectedTileModifierCategory == EditorTileModifierCategory.TransformationTriggerer)
         {
-            EditorMazeTileTransformationTriggerer editorMazeTileTransformationTriggerer = EditorTileTransformationTriggerers[EditorManager.SelectedTileTransformationTriggererIndex] as EditorMazeTileTransformationTriggerer;
+            EditorMazeTileBeautificationTriggerer editorMazeTileTransformationTriggerer = EditorTileTransformationTriggerers[EditorManager.SelectedTileTransformationTriggererIndex] as EditorMazeTileBeautificationTriggerer;
             editorMazeTileTransformationTriggerer.UnsetSelectedTile();
         }
 
@@ -127,7 +128,7 @@ public class EditorSelectedMazeTileModifierContainer : EditorSelectedTileModifie
         EditorSelectedTileModifierCategoryContainer.Instance.SetCategoryLabel(EditorManager.SelectedTileModifierCategory);
     }
 
-    public void SetSelectedMazeTileModifier(int modifierIndex)
+    public override void SetSelectedMazeTileModifier(int modifierIndex)
     {
         if (EditorManager.SelectedTileModifierCategory == EditorTileModifierCategory.Attribute)
         {

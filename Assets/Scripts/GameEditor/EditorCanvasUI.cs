@@ -14,6 +14,7 @@ public class EditorCanvasUI : MonoBehaviour
     public Sprite[] TileAttributeIcons;
 
     public EditorMazeModificationPanel MazeModificationPanel;
+    public EditorSelectedTileModifierContainer SelectedTileModifierContainer;
 
     [Space(10)]
     [Header("Tile Modifier Actions")]

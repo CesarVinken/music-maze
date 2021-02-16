@@ -309,7 +309,7 @@ public class EditorMazeModificationPanel : EditorGridModicationPanel
         {
             EditorMazeTile tile = MazeLevelManager.Instance.EditorLevel.Tiles[i];
 
-            if(!tile.Markable && tile.TransformationTriggerers.Count == 0)
+            if(!tile.Markable && tile.BeautificationTriggerers.Count == 0)
             {
                 tile.SetTileOverlayImage(TileOverlayMode.Yellow);
                 Logger.Warning($"No transformation triggerer was set up for the tile at {tile.GridLocation.X},{tile.GridLocation.Y}");

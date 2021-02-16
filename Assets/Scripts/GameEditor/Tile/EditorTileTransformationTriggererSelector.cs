@@ -7,6 +7,7 @@ public class EditorTileTransformationTriggererSelector : EditorTileModifierSelec
     public override void SwitchSelectedModifier(int newValue)
     {
         EditorTileModifierCategory currentCategory = EditorTileModifierCategory.TransformationTriggerer;
+        EditorSelectedTileModifierContainer selectedTileModifierContainer = EditorCanvasUI.Instance.SelectedTileModifierContainer;
 
         int selectedBackgroundIndex = EditorManager.SelectedTileBackgroundModifierIndex;
         int newIndex = selectedBackgroundIndex + newValue;
@@ -14,10 +15,10 @@ public class EditorTileTransformationTriggererSelector : EditorTileModifierSelec
         if (newIndex < 0)
         {
             EditorTileModifierCategory previousEditorTileModifierCategory = PreviousEditorTileModfierCategory(currentCategory);
-            List<IEditorTileModifierType> registeredModifiers = EditorSelectedMazeTileModifierContainer.Instance.ModifiersByCategories[previousEditorTileModifierCategory];
+            List<IEditorTileModifierType> registeredModifiers = selectedTileModifierContainer.ModifiersByCategories[previousEditorTileModifierCategory];
 
-            EditorSelectedMazeTileModifierContainer.Instance.SetSelectedMazeTileModifierCategory(previousEditorTileModifierCategory);
-            EditorSelectedMazeTileModifierContainer.Instance.SetSelectedMazeTileModifier(registeredModifiers.Count - 1);
+            selectedTileModifierContainer.SetSelectedMazeTileModifierCategory(previousEditorTileModifierCategory);
+            selectedTileModifierContainer.SetSelectedMazeTileModifier(registeredModifiers.Count - 1);
 
             EditorMazeTileModificationPanel.Instance.DestroyModifierActions();
         }
@@ -25,8 +26,8 @@ public class EditorTileTransformationTriggererSelector : EditorTileModifierSelec
         {
             EditorTileModifierCategory nextEditorTileModifierCategory = NextEditorTileModfierCategory(currentCategory);
 
-            EditorSelectedMazeTileModifierContainer.Instance.SetSelectedMazeTileModifierCategory(nextEditorTileModifierCategory);
-            EditorSelectedMazeTileModifierContainer.Instance.SetSelectedMazeTileModifier(0);
+            selectedTileModifierContainer.SetSelectedMazeTileModifierCategory(nextEditorTileModifierCategory);
+            selectedTileModifierContainer.SetSelectedMazeTileModifier(0);
 
             EditorMazeTileModificationPanel.Instance.DestroyModifierActions();
         }
@@ -38,7 +39,7 @@ public class EditorTileTransformationTriggererSelector : EditorTileModifierSelec
 
     public override void SetSelectedModifier(int modifierIndex)
     {
-        IEditorTileTransformationTriggerer transformationTrigger = _editorSelectedModifierContainer.EditorTileTransformationTriggerers[modifierIndex];
+        IEditorTileTransformationTriggerer<Tile> transformationTrigger = _editorSelectedModifierContainer.EditorTileTransformationTriggerers[modifierIndex];
         _editorSelectedModifierContainer.SelectedModifierLabel.text = GetSelectedModifierLabel(transformationTrigger.Name);
         _editorSelectedModifierContainer.SelectedModifierSprite.sprite = transformationTrigger.GetSprite();
         EditorManager.SelectedTileTransformationTriggererIndex = modifierIndex;

@@ -38,14 +38,7 @@ public class EditorTileSelector : MonoBehaviour
 
         if (PlayableLevelsPanel.IsOpen) return;
 
-        if(GameManager.CurrentSceneType == SceneType.Maze)
-        {
-            if (MazeLevelManager.Instance.EditorLevel == null) return;
-        }
-        else if(GameManager.CurrentSceneType == SceneType.Overworld)
-        {
-            if (OverworldManager.Instance.EditorOverworld == null) return;
-        }    
+        if (GameManager.Instance.CurrentEditorLevel == null) return;
 
         if (Input.GetKeyDown(KeyCode.Mouse0))
         {
@@ -72,11 +65,11 @@ public class EditorTileSelector : MonoBehaviour
             Logger.Log("Do something to tile {0}, {1}", CurrentSelectedLocation.X, CurrentSelectedLocation.Y);
             if (Input.GetKey(KeyCode.LeftShift) || Input.GetKey(KeyCode.RightShift))
             {
-                PlaceMazeTileModifierVariation();
+                PlaceTileModifierVariation();
             }
             else
             {
-                PlaceMazeTileModifier();
+                PlaceTileModifier();
             }
         }
     }
@@ -110,49 +103,46 @@ public class EditorTileSelector : MonoBehaviour
     }
 
     private bool IsValidGridLocationToSelect(GridLocation selectedTileLocation)
-    {
-        if (GameManager.CurrentSceneType == SceneType.Maze)
-        {
-            if (selectedTileLocation.X < 0) return false;
-            if (selectedTileLocation.X > MazeLevelManager.Instance.EditorLevel.LevelBounds.X) return false;
+    {   
+        if (selectedTileLocation.X < 0) return false;
+        if (selectedTileLocation.X > GameManager.Instance.CurrentEditorLevel.LevelBounds.X) return false;
 
-            if (selectedTileLocation.Y < 0) return false;
-            if (selectedTileLocation.Y > MazeLevelManager.Instance.EditorLevel.LevelBounds.Y) return false;
-        }
-        else if (GameManager.CurrentSceneType == SceneType.Overworld)
-        {
-            if (selectedTileLocation.X < 0) return false;
-            if (selectedTileLocation.X > OverworldManager.Instance.EditorOverworld.OverworldBounds.X) return false;
-
-            if (selectedTileLocation.Y < 0) return false;
-            if (selectedTileLocation.Y > OverworldManager.Instance.EditorOverworld.OverworldBounds.Y) return false;
-        }
+        if (selectedTileLocation.Y < 0) return false;
+        if (selectedTileLocation.Y > GameManager.Instance.CurrentEditorLevel.LevelBounds.Y) return false;
 
         return true;
     }
 
-    private void PlaceMazeTileModifier()
+    private void PlaceTileModifier()
     {
-        if (EditorSelectedMazeTileModifierContainer.Instance == null)
+        if (EditorCanvasUI.Instance.SelectedTileModifierContainer == null)
         {
-            EditorModificationPanelContainer.Instance.SelectMazeTileModificationPanel();
+            if(GameManager.CurrentSceneType == SceneType.Maze)
+            {
+                EditorModificationPanelContainer.Instance.SelectMazeTileModificationPanel();
+            } else
+            {
+                EditorModificationPanelContainer.Instance.SelectOverworldTileModificationPanel();
+            }
         }
 
         EditorTileModifierCategory editorMazeTileModifierType = EditorManager.SelectedTileModifierCategory;
 
-        if(editorMazeTileModifierType == EditorTileModifierCategory.Attribute)
+        EditorSelectedTileModifierContainer selectedTileModifierContainer = EditorCanvasUI.Instance.SelectedTileModifierContainer;
+
+        if (editorMazeTileModifierType == EditorTileModifierCategory.Attribute)
         {
-            IEditorTileAttribute attribute = EditorSelectedMazeTileModifierContainer.Instance.EditorTileAttributes[EditorManager.SelectedTileAttributeModifierIndex];
-            PlaceMazeTileAttribute(CurrentSelectedLocation, attribute);
+            IEditorTileAttribute<Tile> attribute = selectedTileModifierContainer.EditorTileAttributes[EditorManager.SelectedTileAttributeModifierIndex];
+            PlaceTileAttribute(CurrentSelectedLocation, attribute);
         }
         else if (editorMazeTileModifierType == EditorTileModifierCategory.Background)
         {
-            IEditorTileBackground<Tile> background = EditorSelectedMazeTileModifierContainer.Instance.EditorTileBackgrounds[EditorManager.SelectedTileBackgroundModifierIndex];
-            PlaceMazeTileBackground(CurrentSelectedLocation, background);
+            IEditorTileBackground<Tile> background = selectedTileModifierContainer.EditorTileBackgrounds[EditorManager.SelectedTileBackgroundModifierIndex];
+            PlaceTileBackground(CurrentSelectedLocation, background);
         }
         else if (editorMazeTileModifierType == EditorTileModifierCategory.TransformationTriggerer)
         {
-            IEditorTileTransformationTriggerer transformationTriggerer = EditorSelectedMazeTileModifierContainer.Instance.EditorTileTransformationTriggerers[EditorManager.SelectedTileTransformationTriggererIndex];
+            IEditorTileTransformationTriggerer<Tile> transformationTriggerer = selectedTileModifierContainer.EditorTileTransformationTriggerers[EditorManager.SelectedTileTransformationTriggererIndex];
             PlaceTransformationTriggerer(CurrentSelectedLocation, transformationTriggerer);
         }
         else
@@ -161,48 +151,55 @@ public class EditorTileSelector : MonoBehaviour
         }
     }
 
-    private void PlaceMazeTileModifierVariation()
+    private void PlaceTileModifierVariation()
     {
-        if (EditorSelectedMazeTileModifierContainer.Instance == null)
+        if (EditorCanvasUI.Instance.SelectedTileModifierContainer == null)
         {
-            EditorModificationPanelContainer.Instance.SelectMazeTileModificationPanel();
+            if (GameManager.CurrentSceneType == SceneType.Maze)
+            {
+                EditorModificationPanelContainer.Instance.SelectMazeTileModificationPanel();
+            }
+            else
+            {
+                EditorModificationPanelContainer.Instance.SelectOverworldTileModificationPanel();
+            }
         }
 
         EditorTileModifierCategory editorMazeTileModifierCategory = EditorManager.SelectedTileModifierCategory;
 
         if (editorMazeTileModifierCategory == EditorTileModifierCategory.Attribute)
         {
-            IEditorTileAttribute attribute = EditorSelectedMazeTileModifierContainer.Instance.EditorTileAttributes[EditorManager.SelectedTileAttributeModifierIndex];
-            PlaceMazeTileAttributeVariation(CurrentSelectedLocation, attribute);
+            IEditorTileAttribute<Tile> attribute = EditorCanvasUI.Instance.SelectedTileModifierContainer.EditorTileAttributes[EditorManager.SelectedTileAttributeModifierIndex];
+            PlaceTileAttributeVariation(CurrentSelectedLocation, attribute);
         }
         else if (editorMazeTileModifierCategory == EditorTileModifierCategory.Background)
         {
-            IEditorTileBackground<Tile> background = EditorSelectedMazeTileModifierContainer.Instance.EditorTileBackgrounds[EditorManager.SelectedTileBackgroundModifierIndex];
+            IEditorTileBackground<Tile> background = EditorCanvasUI.Instance.SelectedTileModifierContainer.EditorTileBackgrounds[EditorManager.SelectedTileBackgroundModifierIndex];
             PlaceMazeTileBackgroundVariation(CurrentSelectedLocation, background);
         }
     }
 
-    private void PlaceMazeTileAttribute(GridLocation gridLocation, IEditorTileAttribute attribute)
+    private void PlaceTileAttribute(GridLocation gridLocation, IEditorTileAttribute<Tile> attribute)
     {
         if (attribute == null) Logger.Error($"Could not find the attribute type {attribute.GetType()}");
 
-        MazeLevelManager.Instance.EditorLevel.TilesByLocation.TryGetValue(gridLocation, out EditorMazeTile tile);
+        GameManager.Instance.CurrentEditorLevel.TilesByLocation.TryGetValue(gridLocation, out Tile tile);
         attribute.PlaceAttribute(tile);
     }
 
-    private void PlaceMazeTileBackground(GridLocation gridLocation, IEditorTileBackground<Tile> background)
+    private void PlaceTileBackground(GridLocation gridLocation, IEditorTileBackground<Tile> background)
     {
         if (background == null) Logger.Error($"Could not find the background type {background.GetType()}");
 
-        MazeLevelManager.Instance.EditorLevel.TilesByLocation.TryGetValue(gridLocation, out EditorMazeTile tile);
+        GameManager.Instance.CurrentEditorLevel.TilesByLocation.TryGetValue(gridLocation, out Tile tile);
         background.PlaceBackground(tile);
     }
 
-    private void PlaceMazeTileAttributeVariation(GridLocation gridLocation, IEditorTileAttribute attribute)
+    private void PlaceTileAttributeVariation(GridLocation gridLocation, IEditorTileAttribute<Tile> attribute)
     {
         if (attribute == null) Logger.Error($"Could not find the attribute type {attribute.GetType()}");
 
-        MazeLevelManager.Instance.EditorLevel.TilesByLocation.TryGetValue(gridLocation, out EditorMazeTile tile);
+        GameManager.Instance.CurrentEditorLevel.TilesByLocation.TryGetValue(gridLocation, out Tile tile);
         attribute.PlaceAttributeVariation(tile);
     }
 
@@ -210,15 +207,15 @@ public class EditorTileSelector : MonoBehaviour
     {
         if (background == null) Logger.Error($"Could not find the background type {background.GetType()}");
 
-        MazeLevelManager.Instance.EditorLevel.TilesByLocation.TryGetValue(gridLocation, out EditorMazeTile tile);
+        GameManager.Instance.CurrentEditorLevel.TilesByLocation.TryGetValue(gridLocation, out Tile tile);
         background.PlaceBackgroundVariation(tile);
     }
 
-    private void PlaceTransformationTriggerer(GridLocation gridLocation, IEditorTileTransformationTriggerer transformationTriggerer)
+    private void PlaceTransformationTriggerer(GridLocation gridLocation, IEditorTileTransformationTriggerer<Tile> transformationTriggerer)
     {
         if (transformationTriggerer == null) Logger.Error($"Could not find the transformationTriggerer type {transformationTriggerer.GetType()}");
 
-        MazeLevelManager.Instance.EditorLevel.TilesByLocation.TryGetValue(gridLocation, out EditorMazeTile tile);
-        transformationTriggerer.HandleTransformationTriggerPlacement(tile);
+        GameManager.Instance.CurrentEditorLevel.TilesByLocation.TryGetValue(gridLocation, out Tile tile);
+        transformationTriggerer.HandleBeautificationTriggerPlacement(tile);
     }
 }

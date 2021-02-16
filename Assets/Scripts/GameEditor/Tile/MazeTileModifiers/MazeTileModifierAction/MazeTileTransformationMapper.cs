@@ -16,10 +16,10 @@ public class MazeTileTransformationMapper : MonoBehaviour
             EditorMazeTile tile = MazeLevelManager.Instance.EditorLevel.Tiles[i];
             if (tile.Markable || tile.TileAttributes.OfType<PlayerSpawnpoint>().Any()) continue;
 
-            tile.TransformationTriggerers.Clear();
+            tile.BeautificationTriggerers.Clear();
             _checkedNeighbours.Clear();
 
-            tile.TransformationTriggerers = FindAllMarkableNeighbours(tile, 0);
+            tile.BeautificationTriggerers = FindAllMarkableNeighbours(tile, 0);
         }
     }
 

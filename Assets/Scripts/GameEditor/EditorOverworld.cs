@@ -1,10 +1,13 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 
-public class EditorOverworld : Overworld
+public class EditorOverworld : Overworld, IEditorLevel
 {
+    private Dictionary<GridLocation, Tile> _tilesByLocation = new Dictionary<GridLocation, Tile>();
+
     public List<EditorOverworldTile> Tiles = new List<EditorOverworldTile>();
-    public Dictionary<GridLocation, EditorOverworldTile> TilesByLocation = new Dictionary<GridLocation, EditorOverworldTile>();
+
+    public Dictionary<GridLocation, Tile> TilesByLocation { get => _tilesByLocation; set => _tilesByLocation = value; }
 
     public EditorOverworld()
     {
@@ -13,6 +16,8 @@ public class EditorOverworld : Overworld
 
     public EditorOverworld(OverworldData overworldData)
     {
+        GameManager.Instance.CurrentEditorLevel = this;
+
         OverworldName = overworldData.Name;
 
         if (TilesContainer.Instance != null)
@@ -38,8 +43,6 @@ public class EditorOverworld : Overworld
 
     public void BuildTiles(OverworldData overworldData)
     {
-        //Dictionary<SerialisableGridLocation, List<EditorTile>> TileTransformationTriggererByGridLocation = new Dictionary<SerialisableGridLocation, List<EditorTile>>();
-
         for (int i = 0; i < overworldData.Tiles.Count; i++)
         {
             SerialisableTile serialisableTile = overworldData.Tiles[i];
@@ -55,14 +58,14 @@ public class EditorOverworld : Overworld
 
             Tiles.Add(tile);
 
-            //AddTileAttributes(serialisableTile, tile);
+            AddTileAttributes(serialisableTile, tile);
             AddBackgroundSprites(serialisableTile, tile);
 
             TilesByLocation.Add(tile.GridLocation, tile);
 
-            GridLocation furthestBounds = OverworldBounds;
-            if (tile.GridLocation.X > furthestBounds.X) OverworldBounds.X = tile.GridLocation.X;
-            if (tile.GridLocation.Y > furthestBounds.Y) OverworldBounds.Y = tile.GridLocation.Y;
+            GridLocation furthestBounds = LevelBounds;
+            if (tile.GridLocation.X > furthestBounds.X) _levelBounds.X = tile.GridLocation.X;
+            if (tile.GridLocation.Y > furthestBounds.Y) _levelBounds.Y = tile.GridLocation.Y;
         }
     }
 
@@ -85,5 +88,10 @@ public class EditorOverworld : Overworld
                 Logger.Error($"Unknown TileBackgroundId {serialisableTileBackground.TileBackgroundId}");
             }
         }
+    }
+
+    public void AddTileAttributes(SerialisableTile serialisableTile, EditorOverworldTile tile)
+    {
+        Logger.Log("To be implemented");
     }
 }

@@ -1,87 +1,24 @@
 ﻿using System.Linq;
 using UnityEngine;
-
-public class EditorMazeTileTransformationTriggerer : IEditorTileTransformationTriggerer
+public abstract class EditorMazeTileTransformationTriggerer<T> : IEditorTileTransformationTriggerer<T> where T : EditorMazeTile
 {
-    public string Name { get => "Transformation Triggerer"; }
+    public virtual string Name => throw new System.NotImplementedException();
 
-    public Sprite Sprite => throw new System.NotImplementedException();
+    public virtual Sprite Sprite => throw new System.NotImplementedException();
 
-    public EditorMazeTile SelectedTile;
-
-    public Sprite GetSprite()
+    public virtual Sprite GetSprite()
     {
-        return MazeSpriteManager.Instance.DefaultDoor[0];
+        throw new System.NotImplementedException();
     }
 
-    public void SetSelectedTile(EditorMazeTile tile)
+    public virtual void HandleBeautificationTriggerPlacement(T tile)
     {
-        if(SelectedTile != null)
-        {
-
-            SelectedTile.SetTileOverlayImage(TileOverlayMode.Empty);
-            for (int i = 0; i < SelectedTile.TransformationTriggerers.Count; i++)
-            {
-                SelectedTile.TransformationTriggerers[i].SetTileOverlayImage(TileOverlayMode.Empty);
-            }
-
-            if (SelectedTile == tile)
-            {
-                SelectedTile = null;
-                return;
-            }
-        }
-        
-        tile.SetTileOverlayImage(TileOverlayMode.Green);
-
-        SelectedTile = tile;
-        for (int i = 0; i < SelectedTile.TransformationTriggerers.Count; i++)
-        {
-            SelectedTile.TransformationTriggerers[i].SetTileOverlayImage(TileOverlayMode.Blue);
-        }
+        throw new System.NotImplementedException();
     }
 
-    public void UnsetSelectedTile()
+    public virtual void InstantiateModifierActions()
     {
-        if (SelectedTile != null)
-        {
-            SelectedTile.SetTileOverlayImage(TileOverlayMode.Empty);
-            for (int i = 0; i < SelectedTile.TransformationTriggerers.Count; i++)
-            {
-                SelectedTile.TransformationTriggerers[i].SetTileOverlayImage(TileOverlayMode.Empty);
-            }
-        }
-        SelectedTile = null;
-    }
-
-    public void HandleTransformationTriggerPlacement(EditorMazeTile tile)
-    {
-        if(tile.Markable || tile.TileAttributes.OfType<PlayerSpawnpoint>().Any())
-        {
-            // if we have a tile selected, add the markable tile as triggerer
-            if(SelectedTile != null)
-            {
-                if (SelectedTile.TransformationTriggerers.Contains(tile))
-                {
-                    tile.SetTileOverlayImage(TileOverlayMode.Empty);
-                    SelectedTile.TransformationTriggerers.Remove(tile);
-                }
-                else
-                {
-                    tile.SetTileOverlayImage(TileOverlayMode.Blue); // blue = triggerer
-                    SelectedTile.TransformationTriggerers.Add(tile);
-                }
-            }
-        }
-        else 
-        {
-            SetSelectedTile(tile);
-        }
-    }
-
-    public void InstantiateModifierActions()
-    {
-        Logger.Log("Load actions for triggerer");
-        GameObject.Instantiate(EditorCanvasUI.Instance.GenerateTileTransformationMapPrefab, EditorMazeTileModificationPanel.Instance.TileModifierActionsContainer);
+        throw new System.NotImplementedException();
     }
 }
+

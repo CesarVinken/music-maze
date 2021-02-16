@@ -1,7 +1,7 @@
 ﻿using System.Linq;
 using UnityEngine;
 
-public class EditorObstacleTileAttribute : EditorMazeTileAttributeModifier
+public class EditorObstacleTileAttribute : EditorMazeTileAttributeModifier<EditorMazeTile>
 {
     public override string Name { get => "Obstacle"; }
 

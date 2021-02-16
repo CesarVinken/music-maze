@@ -62,8 +62,8 @@ public class InGameMazeLevel : MazeLevel
             TilesByLocation.Add(tile.GridLocation, tile);
 
             GridLocation furthestBounds = LevelBounds;
-            if (tile.GridLocation.X > furthestBounds.X) LevelBounds.X = tile.GridLocation.X;
-            if (tile.GridLocation.Y > furthestBounds.Y) LevelBounds.Y = tile.GridLocation.Y;
+            if (tile.GridLocation.X > furthestBounds.X) _levelBounds.X = tile.GridLocation.X;
+            if (tile.GridLocation.Y > furthestBounds.Y) _levelBounds.Y = tile.GridLocation.Y;
 
             TileTransformationGridLocationByTile.Add(tile, serialisableTile.TilesToTransform);
         }

@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class EditorSelectedOverworldTileModifierContainer : EditorSelectedTileModifierContainer
 {
-    public static EditorSelectedOverworldTileModifierContainer Instance;
+    //public static EditorSelectedOverworldTileModifierContainer Instance;
 
     private EditorTileAttributeSelector _editorOverworldTileAttributeSelector;
     private EditorTileBackgroundSelector _editorOverworldTileBackgroundSelector;
@@ -17,7 +17,9 @@ public class EditorSelectedOverworldTileModifierContainer : EditorSelectedTileMo
         Guard.CheckIsNull(SelectedModifierLabel, "SelectedModifierLabel", gameObject);
         Guard.CheckIsNull(SelectedModifierSprite, "SelectedModifierSprite", gameObject);
 
-        Instance = this;
+        //Instance = this;
+        Logger.Warning(" set the selected one!");
+        EditorCanvasUI.Instance.SelectedTileModifierContainer = this;
 
         _editorOverworldTileAttributeSelector = new EditorTileAttributeSelector(this);
         _editorOverworldTileBackgroundSelector = new EditorTileBackgroundSelector(this);
@@ -87,5 +89,15 @@ public class EditorSelectedOverworldTileModifierContainer : EditorSelectedTileMo
             // Not known type
             Logger.Error("Unknown tile modifier type");
         }
+    }
+
+    public override void SetSelectedMazeTileModifierCategory(EditorTileModifierCategory editorTileModifierCategory)
+    {
+        throw new System.NotImplementedException();
+    }
+
+    public override void SetSelectedMazeTileModifier(int index)
+    {
+        throw new System.NotImplementedException();
     }
 }

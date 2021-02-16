@@ -47,6 +47,6 @@ public class EditorMazeTileBackgroundPlacer : MazeTileBackgroundPlacer<EditorMaz
             }
         }
 
-        Tile.RemoveTransformationTriggerers();
+        Tile.RemoveBeautificationTriggerers();
     }
 }

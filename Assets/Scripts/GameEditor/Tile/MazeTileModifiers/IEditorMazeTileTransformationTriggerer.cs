@@ -1,6 +1,7 @@
-﻿public interface IEditorTileTransformationTriggerer : IEditorTileModifierType
+﻿public interface IEditorTileTransformationTriggerer<T> : IEditorTileModifierType where T : Tile
 {
     string Name { get; }
 
-    void HandleTransformationTriggerPlacement(EditorMazeTile tile);
+    void HandleBeautificationTriggerPlacement(T tile);
+
 }

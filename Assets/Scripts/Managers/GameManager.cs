@@ -24,6 +24,8 @@ public class GameManager : MonoBehaviourPunCallbacks, IOnEventCallback
     public IPlatformConfiguration Configuration;
     public KeyboardConfiguration KeyboardConfiguration;
 
+    public IEditorLevel CurrentEditorLevel; // can be any editor or game level 
+
     public GameObject GridGO;
     
     [SerializeField] private GameObject _mazeLevelManagerPrefab;

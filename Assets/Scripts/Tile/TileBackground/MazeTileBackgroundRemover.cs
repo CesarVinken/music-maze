@@ -56,7 +56,7 @@ public class MazeTileBackgroundRemover : TileBackgroundRemover
             }
         }
 
-        _tile.RemoveTileAsTransformationTrigger();
+        _tile.RemoveTileAsBeautificationTrigger();
     }
 
     public override void RemoveBaseBackground(IBaseBackgroundType mazeTileBaseBackgroundType)

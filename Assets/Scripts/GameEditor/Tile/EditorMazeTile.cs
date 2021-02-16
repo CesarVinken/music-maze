@@ -7,7 +7,7 @@ public class EditorMazeTile : MazeTile
 
     [SerializeField] private SpriteRenderer _overlaySpriteRenderer;
 
-    public List<EditorMazeTile> TransformationTriggerers = new List<EditorMazeTile>(); // used in the editor for non-markable tiles and lists their triggerer.
+    public List<EditorMazeTile> BeautificationTriggerers = new List<EditorMazeTile>(); // used in the editor for non-markable tiles and lists their triggerer.
 
     public void AddNeighbours(EditorMazeLevel level)
     {
@@ -36,21 +36,21 @@ public class EditorMazeTile : MazeTile
         }
     }
 
-    public void RemoveTileAsTransformationTrigger()
+    public void RemoveTileAsBeautificationTrigger()
     {
         for (int i = 0; i < MazeLevelManager.Instance.EditorLevel.Tiles.Count; i++)
         {
             EditorMazeTile tile = MazeLevelManager.Instance.EditorLevel.Tiles[i];
-            if (tile.TransformationTriggerers.Contains(this))
+            if (tile.BeautificationTriggerers.Contains(this))
             {
-                tile.TransformationTriggerers.Remove(this);
+                tile.BeautificationTriggerers.Remove(this);
             }
         }
     }
 
-    public void RemoveTransformationTriggerers()
+    public void RemoveBeautificationTriggerers()
     {
-        TransformationTriggerers.Clear();
+        BeautificationTriggerers.Clear();
     }
 
     public void SetTileOverlayImage(TileOverlayMode tileOverlayMode)

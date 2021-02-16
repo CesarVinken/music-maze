@@ -64,7 +64,7 @@ public class OverworldManager : MonoBehaviour
 
         MainCanvas.Instance.BlackOutSquare.ResetToDefault();
         CameraController.Instance.ResetCamera();
-        CameraController.Instance.SetPanLimits(EditorOverworld.OverworldBounds);
+        CameraController.Instance.SetPanLimits(EditorOverworld.LevelBounds);
     }
 
     private void InitialiseTileAttributes()

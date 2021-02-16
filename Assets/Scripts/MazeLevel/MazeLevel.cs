@@ -4,7 +4,9 @@ using UnityEngine;
 public class MazeLevel
 {
     public string MazeName;
-    public GridLocation LevelBounds = new GridLocation(0, 0);
+
+    protected GridLocation _levelBounds = new GridLocation(0, 0);
+    public GridLocation LevelBounds { get => _levelBounds; set => _levelBounds = value; }
 
     public List<PlayerExit> MazeExits = new List<PlayerExit>();
 
