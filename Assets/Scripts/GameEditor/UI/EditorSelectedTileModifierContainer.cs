@@ -9,8 +9,9 @@ public abstract class EditorSelectedTileModifierContainer : MonoBehaviour
     public List<EditorTileTransformationModifier> EditorTileTransformationTriggerers = new List<EditorTileTransformationModifier>();
 
     public List<EditorTileModifierCategory> UsedTileModifierCategories = new List<EditorTileModifierCategory>();
-    public Dictionary<EditorTileModifierCategory, List<EditorTileModifier>> ModifiersByCategories = new Dictionary<EditorTileModifierCategory, List<EditorTileModifier>>();
-
+    //public Dictionary<EditorTileModifierCategory, List<EditorTileModifier>> ModifiersByCategories = new Dictionary<EditorTileModifierCategory, List<EditorTileModifier>>();
+    public Dictionary<EditorTileModifierCategory, int> ModifierCountByCategories = new Dictionary<EditorTileModifierCategory, int>();
+    
     //public Dictionary<EditorTileModifierCategory, EditorTileModifierSelector> ModifierSelectorsByType = new Dictionary<EditorTileModifierCategory, EditorTileModifierSelector>();
 
     public GameObject SelectedModifierLabelGO;

@@ -15,10 +15,10 @@ public class EditorTileTransformationTriggererSelector : EditorTileModifierSelec
         if (newIndex < 0)
         {
             EditorTileModifierCategory previousEditorTileModifierCategory = PreviousEditorTileModfierCategory(currentCategory);
-            List<EditorTileModifier> registeredModifiers = selectedTileModifierContainer.ModifiersByCategories[previousEditorTileModifierCategory];
+            int modifierCount = selectedTileModifierContainer.ModifierCountByCategories[previousEditorTileModifierCategory];
 
             selectedTileModifierContainer.SetSelectedMazeTileModifierCategory(previousEditorTileModifierCategory);
-            selectedTileModifierContainer.SetSelectedMazeTileModifier(registeredModifiers.Count - 1);
+            selectedTileModifierContainer.SetSelectedMazeTileModifier(modifierCount - 1);
 
             EditorMazeTileModificationPanel.Instance.DestroyModifierActions();
         }

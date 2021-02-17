@@ -43,20 +43,19 @@ public class EditorSelectedMazeTileModifierContainer : EditorSelectedTileModifie
         EditorTileTransformationTriggerers.Add(new EditorMazeTileBeautificationTriggerer());
 
         EditorManager.SelectedTileTransformationTriggererIndex = 0;
-        Logger.Warning("We are failing to add the tile EditorTileTransformationTriggerers to the list");
-        for (int i = 0; i < EditorTileTransformationTriggerers.Count; i++)
-        {
-            Logger.Log(EditorTileTransformationTriggerers[i].Name);
-        }
 
         UsedTileModifierCategories.Add(EditorTileModifierCategory.Background);
         UsedTileModifierCategories.Add(EditorTileModifierCategory.Attribute);
         UsedTileModifierCategories.Add(EditorTileModifierCategory.TransformationTriggerer);
 
-        ModifiersByCategories.Add(EditorTileModifierCategory.Background, (EditorTileBackgrounds as IEnumerable<EditorTileModifier>).ToList());
-        ModifiersByCategories.Add(EditorTileModifierCategory.Attribute, (EditorTileAttributes as IEnumerable<EditorTileModifier>).ToList());
-        ModifiersByCategories.Add(EditorTileModifierCategory.TransformationTriggerer, (EditorTileTransformationTriggerers as IEnumerable<EditorTileModifier>).ToList());
+        //ModifiersByCategories.Add(EditorTileModifierCategory.Background, (EditorTileBackgrounds as IEnumerable<EditorTileModifier>).ToList());
+        //ModifiersByCategories.Add(EditorTileModifierCategory.Attribute, (EditorTileAttributes as IEnumerable<EditorTileModifier>).ToList());
+        //ModifiersByCategories.Add(EditorTileModifierCategory.TransformationTriggerer, (EditorTileTransformationTriggerers as IEnumerable<EditorTileModifier>).ToList());
 
+        ModifierCountByCategories.Add(EditorTileModifierCategory.Background, EditorTileBackgrounds.Count);
+        ModifierCountByCategories.Add(EditorTileModifierCategory.Attribute, EditorTileAttributes.Count);
+        ModifierCountByCategories.Add(EditorTileModifierCategory.TransformationTriggerer, EditorTileTransformationTriggerers.Count);
+        
         //ModifierSelectorsByType.Add(EditorTileModifierCategory.Attribute, _editorMazeTileAttributeSelector);
         //ModifierSelectorsByType.Add(EditorTileModifierCategory.Background, _editorMazeTileBackgroundSelector);
         //ModifierSelectorsByType.Add(EditorTileModifierCategory.TransformationTriggerer, _editorMazeTileTransformationTriggererSelector);
@@ -155,4 +154,20 @@ public class EditorSelectedMazeTileModifierContainer : EditorSelectedTileModifie
             Logger.Error("Unknown modifier type");
         }
     }
+
+    //public List<EditorTileModifier> GetModifiersForCategory(EditorTileModifierCategory category)
+    //{
+    //    switch (category)
+    //    {
+    //        case EditorTileModifierCategory.Attribute:
+    //            return EditorTileAttributes;
+    //            break;
+    //        case EditorTileModifierCategory.Background:
+    //            break;
+    //        case EditorTileModifierCategory.TransformationTriggerer:
+    //            break;
+    //        default:
+    //            break;
+    //    }
+    //}
 }

@@ -7,6 +7,7 @@ public class EditorTileBackgroundSelector : EditorTileModifierSelector
     public override void SwitchSelectedModifier(int newValue)
     {
         EditorTileModifierCategory currentCategory = EditorTileModifierCategory.Background;
+        EditorSelectedTileModifierContainer selectedTileModifierContainer = EditorCanvasUI.Instance.SelectedTileModifierContainer;
 
         int selectedBackgroundIndex = EditorManager.SelectedTileBackgroundModifierIndex;
         int newIndex = selectedBackgroundIndex + newValue;
@@ -14,10 +15,10 @@ public class EditorTileBackgroundSelector : EditorTileModifierSelector
         if (newIndex < 0)
         {
             EditorTileModifierCategory previousEditorTileModifierCategory = PreviousEditorTileModfierCategory(currentCategory);
-            List<EditorTileModifier> registeredModifiers = EditorCanvasUI.Instance.SelectedTileModifierContainer.ModifiersByCategories[previousEditorTileModifierCategory];
+            int modifierCount = selectedTileModifierContainer.ModifierCountByCategories[previousEditorTileModifierCategory];
 
             EditorCanvasUI.Instance.SelectedTileModifierContainer.SetSelectedMazeTileModifierCategory(previousEditorTileModifierCategory);
-            EditorCanvasUI.Instance.SelectedTileModifierContainer.SetSelectedMazeTileModifier(registeredModifiers.Count - 1);
+            EditorCanvasUI.Instance.SelectedTileModifierContainer.SetSelectedMazeTileModifier(modifierCount - 1);
         }
         else if (newIndex >= _editorSelectedModifierContainer.EditorTileBackgrounds.Count)
         {

@@ -16,10 +16,10 @@ public class EditorTileAttributeSelector : EditorTileModifierSelector
         {
             EditorTileModifierCategory previousEditorTileModifierCategory = PreviousEditorTileModfierCategory(currentCategory);
             Logger.Log($"The previous category is {previousEditorTileModifierCategory}");
-            List<EditorTileModifier> registeredModifiers = selectedTileModifierContainer.ModifiersByCategories[previousEditorTileModifierCategory];
+            int modifierCount = selectedTileModifierContainer.ModifierCountByCategories[previousEditorTileModifierCategory];
 
             selectedTileModifierContainer.SetSelectedMazeTileModifierCategory(previousEditorTileModifierCategory);
-            selectedTileModifierContainer.SetSelectedMazeTileModifier(registeredModifiers.Count - 1);
+            selectedTileModifierContainer.SetSelectedMazeTileModifier(modifierCount - 1);
         }
         else if (newIndex >= _editorSelectedModifierContainer.EditorTileAttributes.Count)
         {
