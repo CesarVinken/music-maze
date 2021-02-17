@@ -12,4 +12,5 @@ public abstract class EditorTileTransformationModifier
 
     //public abstract void PlaceBackground<T>(T tile) where T : Tile;
     public abstract void HandleBeautificationTriggerPlacement<T>(T tile) where T : Tile;
+    public abstract void UnsetSelectedTile();
 }

@@ -92,6 +92,35 @@ public class EditorOverworld : Overworld, IEditorLevel
 
     public void AddTileAttributes(SerialisableTile serialisableTile, EditorOverworldTile tile)
     {
-        Logger.Log("To be implemented");
+        EditorOverworldTileAttributePlacer tileAttributePlacer = new EditorOverworldTileAttributePlacer(tile);
+
+        foreach (SerialisableTileAttribute serialisableTileAttribute in serialisableTile.TileAttributes)
+        {
+            int tileAttributeId = serialisableTileAttribute.TileAttributeId;
+            //if (tileAttributeId == SerialisableTileAttribute.ObstacleAttributeCode)
+            //{
+            //    tileAttributePlacer.PlaceTileObstacle(ObstacleType.Bush, new TileConnectionScoreInfo(serialisableTileAttribute.ObstacleConnectionScore, serialisableTileAttribute.SpriteNumber)); //TODO, find a way to use polymorphism so we can cast as SerialisableTileObstacleAttribute instead of a general 
+            //}
+            //else if (tileAttributeId == SerialisableTileAttribute.PlayerExitCode)
+            //{
+            //    tileAttributePlacer.PlacePlayerExit(ObstacleType.Bush, new TileConnectionScoreInfo(serialisableTileAttribute.ObstacleConnectionScore, serialisableTileAttribute.SpriteNumber));
+            //}
+            //else if (tileAttributeId == SerialisableTileAttribute.PlayerSpawnpointCode)
+            //{
+            //    tileAttributePlacer.PlacePlayerSpawnpoint();
+            //}
+            //else if (tileAttributeId == SerialisableTileAttribute.PlayerOnlyAttributeCode)
+            //{
+            //    tileAttributePlacer.PlacePlayerOnlyAttribute(PlayerOnlyType.Bush);
+            //}
+            //else if (tileAttributeId == SerialisableTileAttribute.EnemySpawnpointCode)
+            //{
+            //    tileAttributePlacer.PlaceEnemySpawnpoint();
+            //}
+            //else
+            //{
+                Logger.Error($"Unknown tile attribute with tileAttributeId {tileAttributeId}");
+            //}
+        }
     }
 }

@@ -1,10 +1,11 @@
 ﻿using UnityEngine;
 
-public class EditorMazeTileModificationPanel : MonoBehaviour, IEditorModificationPanel
+public class EditorMazeTileModificationPanel : MonoBehaviour, IEditorTileModificationPanel
 {
     public static EditorMazeTileModificationPanel Instance;
 
-    public Transform TileModifierActionsContainer;
+    [SerializeField] private Transform _tileModifierActionsContainer;
+    public Transform TileModifierActionsContainer { get => _tileModifierActionsContainer; set => _tileModifierActionsContainer = value; }
 
     public void Awake()
     {

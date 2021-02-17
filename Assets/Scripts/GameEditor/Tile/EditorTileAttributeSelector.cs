@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-
-public class EditorTileAttributeSelector : EditorTileModifierSelector
+﻿public class EditorTileAttributeSelector : EditorTileModifierSelector
 {
     public EditorTileAttributeSelector(EditorSelectedTileModifierContainer editorSelectedModifierContainer) : base(editorSelectedModifierContainer) { }
 
@@ -9,24 +7,30 @@ public class EditorTileAttributeSelector : EditorTileModifierSelector
         EditorTileModifierCategory currentCategory = EditorTileModifierCategory.Attribute;
         EditorSelectedTileModifierContainer selectedTileModifierContainer = EditorCanvasUI.Instance.SelectedTileModifierContainer;
 
+        if (EditorModificationPanelContainer.Instance.SelectedPanel is IEditorTileModificationPanel)
+        {
+            IEditorTileModificationPanel selectedPanel = EditorModificationPanelContainer.Instance.SelectedPanel as IEditorTileModificationPanel;
+            selectedPanel.DestroyModifierActions();
+        }
+
         int selectedAttributeIndex = EditorManager.SelectedTileAttributeModifierIndex;
         int newIndex = selectedAttributeIndex + newValue;
 
         if (newIndex < 0)
         {
             EditorTileModifierCategory previousEditorTileModifierCategory = PreviousEditorTileModfierCategory(currentCategory);
-            Logger.Log($"The previous category is {previousEditorTileModifierCategory}");
+
             int modifierCount = selectedTileModifierContainer.ModifierCountByCategories[previousEditorTileModifierCategory];
 
-            selectedTileModifierContainer.SetSelectedMazeTileModifierCategory(previousEditorTileModifierCategory);
-            selectedTileModifierContainer.SetSelectedMazeTileModifier(modifierCount - 1);
+            selectedTileModifierContainer.SetSelectedTileModifierCategory(previousEditorTileModifierCategory);
+            selectedTileModifierContainer.SetSelectedTileModifier(modifierCount - 1);
         }
         else if (newIndex >= _editorSelectedModifierContainer.EditorTileAttributes.Count)
         {
             EditorTileModifierCategory nextEditorTileModifierCategory = NextEditorTileModfierCategory(currentCategory);
 
-            selectedTileModifierContainer.SetSelectedMazeTileModifierCategory(nextEditorTileModifierCategory);
-            selectedTileModifierContainer.SetSelectedMazeTileModifier(0);
+            selectedTileModifierContainer.SetSelectedTileModifierCategory(nextEditorTileModifierCategory);
+            selectedTileModifierContainer.SetSelectedTileModifier(0);
         }
         else
         {

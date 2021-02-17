@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 
 public class OverworldManager : MonoBehaviour
 {
@@ -93,4 +94,19 @@ public class OverworldManager : MonoBehaviour
             tile.InitialiseTileBackgrounds();
         }
     }
+
+    public GameObject GetTileAttributePrefab<T>() where T : ITileAttribute
+    {
+        switch (typeof(T))
+        {
+            //case Type tileObstacle when tileObstacle == typeof(TileObstacle):
+            //    return TileObstaclePrefab;
+            //case Type playerSpawnpoint when playerSpawnpoint == typeof(PlayerSpawnpoint):
+            //    return PlayerSpawnpointPrefab;
+            default:
+                Logger.Error($"Could not find a prefab for the tile attribute type of {typeof(T)}");
+                return null;
+        }
+    }
+
 }

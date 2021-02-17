@@ -4,7 +4,7 @@ using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class EditorOverworldModificationPanel : EditorGridModicationPanel
+public class EditorOverworldModificationPanel : EditorGridModificationPanel
 {
     [SerializeField] private InputField _overworldNameInputField;
 

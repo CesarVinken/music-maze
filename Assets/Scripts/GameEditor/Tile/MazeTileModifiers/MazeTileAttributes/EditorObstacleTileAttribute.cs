@@ -7,7 +7,7 @@ public class EditorObstacleTileAttribute : EditorMazeTileAttributeModifier
 
     public override void PlaceAttribute(EditorMazeTile tile)
     {
-        EditorTileAttributePlacer tileAttributePlacer = new EditorTileAttributePlacer(tile);
+        EditorMazeTileAttributePlacer tileAttributePlacer = new EditorMazeTileAttributePlacer(tile);
         MazeTileAttributeRemover tileAttributeRemover = new MazeTileAttributeRemover(tile);
 
         ITileAttribute tileObstacle = (TileObstacle)tile.TileAttributes.FirstOrDefault(attribute => (attribute is TileObstacle && !(attribute is PlayerExit)));
@@ -35,7 +35,7 @@ public class EditorObstacleTileAttribute : EditorMazeTileAttributeModifier
 
         if (tileObstacle == null) return; // only place variation if there is already an obstacle
 
-        EditorTileAttributePlacer tileAttributePlacer = new EditorTileAttributePlacer(tile);
+        EditorMazeTileAttributePlacer tileAttributePlacer = new EditorMazeTileAttributePlacer(tile);
         tileAttributePlacer.PlaceTileObstacleVariation((TileObstacle)tileObstacle);
     }
 

@@ -27,5 +27,10 @@ public class EditorMazeTileTransformationTriggerer : EditorTileTransformationMod
     public override void DestroyModifierActions()
     {
     }
+
+    public override void UnsetSelectedTile()
+    {
+
+    }
 }
 

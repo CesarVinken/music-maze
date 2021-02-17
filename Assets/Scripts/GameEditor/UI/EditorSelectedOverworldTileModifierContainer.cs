@@ -1,13 +1,7 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class EditorSelectedOverworldTileModifierContainer : EditorSelectedTileModifierContainer
 {
-    private EditorTileAttributeSelector _editorOverworldTileAttributeSelector;
-    private EditorTileBackgroundSelector _editorOverworldTileBackgroundSelector;
-    private EditorTileTransformationTriggererSelector _editorOverworldTileTransformationTriggererSelector;
-
     void Awake()
     {
         Guard.CheckIsNull(SelectedModifierLabelGO, "SelectedModifierLabelGO", gameObject);
@@ -15,19 +9,17 @@ public class EditorSelectedOverworldTileModifierContainer : EditorSelectedTileMo
         Guard.CheckIsNull(SelectedModifierLabel, "SelectedModifierLabel", gameObject);
         Guard.CheckIsNull(SelectedModifierSprite, "SelectedModifierSprite", gameObject);
 
-        //Instance = this;
-        Logger.Warning(" set the selected one!");
         EditorCanvasUI.Instance.SelectedTileModifierContainer = this;
 
-        _editorOverworldTileAttributeSelector = new EditorTileAttributeSelector(this);
-        _editorOverworldTileBackgroundSelector = new EditorTileBackgroundSelector(this);
-        _editorOverworldTileTransformationTriggererSelector = new EditorTileTransformationTriggererSelector(this);
+        _editorTileAttributeSelector = new EditorTileAttributeSelector(this);
+        _editorTileBackgroundSelector = new EditorTileBackgroundSelector(this);
+        _editorTileTransformationTriggererSelector = new EditorTileTransformationTriggererSelector(this);
 
         EditorTileAttributes.Clear();
 
         //EditorTileAttributes.Add(new EditorObstacleTileAttribute());
         //EditorTileAttributes.Add(new EditorPlayerExitTileAttribute());
-        //EditorTileAttributes.Add(new EditorPlayerSpawnpointTileAttribute());
+        EditorTileAttributes.Add(new EditorPlayerSpawnpointTileAttribute());
         //EditorTileAttributes.Add(new EditorPlayerOnlyTileAttribute());
         //EditorTileAttributes.Add(new EditorEnemySpawnpointTileAttribute());
 
@@ -48,21 +40,37 @@ public class EditorSelectedOverworldTileModifierContainer : EditorSelectedTileMo
 
         ModifierCountByCategories.Add(EditorTileModifierCategory.Background, EditorTileBackgrounds.Count);
         ModifierCountByCategories.Add(EditorTileModifierCategory.Attribute, EditorTileAttributes.Count);
+    }
 
-        //ModifierSelectorsByType.Add(EditorTileModifierCategory.Attribute, _editorOverworldTileAttributeSelector);
-        //ModifierSelectorsByType.Add(EditorTileModifierCategory.Background, _editorOverworldTileBackgroundSelector);
-        //ModifierSelectorsByType.Add(EditorTileModifierCategory.TransformationTriggerer, _editorOverworldTileTransformationTriggererSelector);
+    public void Start()
+    {
+        SetSelectedTileModifierCategory(EditorTileModifierCategory.Background);
+        SetSelectedTileModifier(0);//Set selected modifier to Background -> Path 
+    }
+
+    private void Update()
+    {
+        if (!EditorManager.InEditor) return;
+
+        if (Input.GetKeyDown(KeyCode.PageDown))
+        {
+            SelectNextTileModifier();
+        }
+        else if (Input.GetKeyDown(KeyCode.PageUp))
+        {
+            SelectPreviousTileModifier();
+        }
     }
 
     public override void SelectPreviousTileModifier()
     {
         if (EditorManager.SelectedTileModifierCategory == EditorTileModifierCategory.Background)
         {
-            _editorOverworldTileBackgroundSelector.SwitchSelectedModifier(-1);
+            _editorTileBackgroundSelector.SwitchSelectedModifier(-1);
         }
         else if (EditorManager.SelectedTileModifierCategory == EditorTileModifierCategory.Attribute)
         {
-            _editorOverworldTileAttributeSelector.SwitchSelectedModifier(-1);
+            _editorTileAttributeSelector.SwitchSelectedModifier(-1);
         }
         else
         {
@@ -75,26 +83,16 @@ public class EditorSelectedOverworldTileModifierContainer : EditorSelectedTileMo
     {
         if (EditorManager.SelectedTileModifierCategory == EditorTileModifierCategory.Background)
         {
-            _editorOverworldTileBackgroundSelector.SwitchSelectedModifier(1);
+            _editorTileBackgroundSelector.SwitchSelectedModifier(1);
         }
         else if (EditorManager.SelectedTileModifierCategory == EditorTileModifierCategory.Attribute)
         {
-            _editorOverworldTileBackgroundSelector.SwitchSelectedModifier(1);
+            _editorTileAttributeSelector.SwitchSelectedModifier(1);
         }
         else
         {
             // Not known type
             Logger.Error("Unknown tile modifier type");
         }
-    }
-
-    public override void SetSelectedMazeTileModifierCategory(EditorTileModifierCategory editorTileModifierCategory)
-    {
-        throw new System.NotImplementedException();
-    }
-
-    public override void SetSelectedMazeTileModifier(int index)
-    {
-        throw new System.NotImplementedException();
     }
 }

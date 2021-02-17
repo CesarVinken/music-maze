@@ -43,7 +43,7 @@ public class EditorMazeTileBeautificationTriggerer : EditorMazeTileTransformatio
         }
     }
 
-    public void UnsetSelectedTile()
+    public override void UnsetSelectedTile()
     {
         if (SelectedTile != null)
         {

@@ -116,7 +116,7 @@ public class EditorMazeLevel : MazeLevel, IEditorLevel
 
     public void AddTileAttributes(SerialisableTile serialisableTile, EditorMazeTile tile)
     {
-        EditorTileAttributePlacer tileAttributePlacer = new EditorTileAttributePlacer(tile);
+        EditorMazeTileAttributePlacer tileAttributePlacer = new EditorMazeTileAttributePlacer(tile);
 
         foreach (SerialisableTileAttribute serialisableTileAttribute in serialisableTile.TileAttributes)
         {

@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 
-public class EditorGridModicationPanel : MonoBehaviour, IEditorModificationPanel
+public class EditorGridModificationPanel : MonoBehaviour, IEditorModificationPanel
 {
     [SerializeField] protected InputField _widthInputField;
     [SerializeField] protected InputField _heightInputField;

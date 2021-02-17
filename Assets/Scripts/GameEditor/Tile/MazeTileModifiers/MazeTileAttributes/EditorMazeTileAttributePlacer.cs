@@ -1,13 +1,13 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 
-public class EditorTileAttributePlacer : MazeTileAttributePlacer<EditorMazeTile>
+public class EditorMazeTileAttributePlacer : MazeTileAttributePlacer<EditorMazeTile>
 {
     private EditorMazeTile _tile;
 
     public override EditorMazeTile Tile { get => _tile; set => _tile = value; }
 
-    public EditorTileAttributePlacer(EditorMazeTile tile)
+    public EditorMazeTileAttributePlacer(EditorMazeTile tile)
     {
         Tile = tile;
     }

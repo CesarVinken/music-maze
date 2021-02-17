@@ -30,69 +30,71 @@ public class EditorSelectedTileModifierCategoryContainer : MonoBehaviour
 
     public void SelectPreviousModifierCategory()
     {
-        EditorMazeTileModificationPanel.Instance.DestroyModifierActions();
+        if (EditorCanvasUI.Instance.SelectedTileModifierContainer.UsedTileModifierCategories.Count == 1)
+        {
+            return;
+        }
 
-        if (EditorManager.SelectedTileModifierCategory == EditorTileModifierCategory.Attribute)
+        EditorTileModifierCategory currentCategory = EditorManager.SelectedTileModifierCategory;
+        EditorSelectedTileModifierContainer selectedTileModifierContainer = EditorCanvasUI.Instance.SelectedTileModifierContainer;
+
+        if (EditorModificationPanelContainer.Instance.SelectedPanel is IEditorTileModificationPanel)
         {
-            SelectBackgrounds();
+            IEditorTileModificationPanel selectedPanel = EditorModificationPanelContainer.Instance.SelectedPanel as IEditorTileModificationPanel;
+            selectedPanel.DestroyModifierActions();
         }
-        else if (EditorManager.SelectedTileModifierCategory == EditorTileModifierCategory.Background)
-        {
-            SelectTileTransformationTriggerer();
-        }
-        else if (EditorManager.SelectedTileModifierCategory == EditorTileModifierCategory.TransformationTriggerer)
-        {
-            SelectAttributes();
-        }
-        else
-        {
-            Logger.Error("Unknown modifier type");
-        }
+
+        EditorTileModifierCategory previousEditorTileModifierCategory = PreviousEditorTileModfierCategory(currentCategory);
+
+        selectedTileModifierContainer.SetSelectedTileModifierCategory(previousEditorTileModifierCategory);
+        selectedTileModifierContainer.SetSelectedTileModifier(0);
     }
 
     public void SelectNextModifierCategory()
     {
-        EditorMazeTileModificationPanel.Instance.DestroyModifierActions();
+        if (EditorCanvasUI.Instance.SelectedTileModifierContainer.UsedTileModifierCategories.Count == 1)
+        {
+            return;
+        }
 
-        if (EditorManager.SelectedTileModifierCategory == EditorTileModifierCategory.Attribute)
+        EditorTileModifierCategory currentCategory = EditorManager.SelectedTileModifierCategory;
+        EditorSelectedTileModifierContainer selectedTileModifierContainer = EditorCanvasUI.Instance.SelectedTileModifierContainer;
+
+        if (EditorModificationPanelContainer.Instance.SelectedPanel is IEditorTileModificationPanel)
         {
-            SelectTileTransformationTriggerer();
+            IEditorTileModificationPanel selectedPanel = EditorModificationPanelContainer.Instance.SelectedPanel as IEditorTileModificationPanel;
+            selectedPanel.DestroyModifierActions();
         }
-        else if (EditorManager.SelectedTileModifierCategory == EditorTileModifierCategory.Background)
-        {
-            SelectAttributes();
-        }
-        else if (EditorManager.SelectedTileModifierCategory == EditorTileModifierCategory.TransformationTriggerer)
-        {
-            SelectBackgrounds();
-        }
-        else
-        {
-            Logger.Error("Unknown modifier type");
-        }
+
+        EditorTileModifierCategory nextEditorTileModifierCategory = NextEditorTileModfierCategory(currentCategory);
+
+        selectedTileModifierContainer.SetSelectedTileModifierCategory(nextEditorTileModifierCategory);
+        selectedTileModifierContainer.SetSelectedTileModifier(0);
     }
 
-    public void SelectAttributes()
+    protected EditorTileModifierCategory PreviousEditorTileModfierCategory(EditorTileModifierCategory currentTileModifierCategory)
     {
-        EditorCanvasUI.Instance.SelectedTileModifierContainer.SetSelectedMazeTileModifierCategory(EditorTileModifierCategory.Attribute);
+        EditorSelectedTileModifierContainer selectedTileModifierContainer = EditorCanvasUI.Instance.SelectedTileModifierContainer;
 
-        int index = EditorManager.SelectedTileAttributeModifierIndex;
-        EditorCanvasUI.Instance.SelectedTileModifierContainer.SetSelectedMazeTileModifier(index);
+        int index = selectedTileModifierContainer.UsedTileModifierCategories.IndexOf(currentTileModifierCategory);
+
+        if (index > 0)
+        {
+            return selectedTileModifierContainer.UsedTileModifierCategories[index - 1];
+        }
+        return selectedTileModifierContainer.UsedTileModifierCategories[selectedTileModifierContainer.UsedTileModifierCategories.Count - 1];
     }
 
-    public void SelectBackgrounds()
+    protected EditorTileModifierCategory NextEditorTileModfierCategory(EditorTileModifierCategory currentTileModifierCategory)
     {
-        EditorCanvasUI.Instance.SelectedTileModifierContainer.SetSelectedMazeTileModifierCategory(EditorTileModifierCategory.Background);
+        EditorSelectedTileModifierContainer selectedTileModifierContainer = EditorCanvasUI.Instance.SelectedTileModifierContainer;
 
-        int index = EditorManager.SelectedTileBackgroundModifierIndex;
-        EditorCanvasUI.Instance.SelectedTileModifierContainer.SetSelectedMazeTileModifier(index);
-    }
+        int index = selectedTileModifierContainer.UsedTileModifierCategories.IndexOf(currentTileModifierCategory);
 
-    public void SelectTileTransformationTriggerer()
-    {
-        EditorCanvasUI.Instance.SelectedTileModifierContainer.SetSelectedMazeTileModifierCategory(EditorTileModifierCategory.TransformationTriggerer);
-
-        int index = EditorManager.SelectedTileBackgroundModifierIndex;
-        EditorCanvasUI.Instance.SelectedTileModifierContainer.SetSelectedMazeTileModifier(index);
+        if (index < selectedTileModifierContainer.UsedTileModifierCategories.Count - 1)
+        {
+            return selectedTileModifierContainer.UsedTileModifierCategories[index + 1];
+        }
+        return selectedTileModifierContainer.UsedTileModifierCategories[0];
     }
 }

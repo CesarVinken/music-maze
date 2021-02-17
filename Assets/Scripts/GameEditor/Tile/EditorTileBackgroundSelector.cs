@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-
-public class EditorTileBackgroundSelector : EditorTileModifierSelector
+﻿public class EditorTileBackgroundSelector : EditorTileModifierSelector
 {
     public EditorTileBackgroundSelector(EditorSelectedTileModifierContainer editorSelectedModifierContainer) : base(editorSelectedModifierContainer) { }
 
@@ -8,6 +6,12 @@ public class EditorTileBackgroundSelector : EditorTileModifierSelector
     {
         EditorTileModifierCategory currentCategory = EditorTileModifierCategory.Background;
         EditorSelectedTileModifierContainer selectedTileModifierContainer = EditorCanvasUI.Instance.SelectedTileModifierContainer;
+
+        if (EditorModificationPanelContainer.Instance.SelectedPanel is IEditorTileModificationPanel)
+        {
+            IEditorTileModificationPanel selectedPanel = EditorModificationPanelContainer.Instance.SelectedPanel as IEditorTileModificationPanel;
+            selectedPanel.DestroyModifierActions();
+        }
 
         int selectedBackgroundIndex = EditorManager.SelectedTileBackgroundModifierIndex;
         int newIndex = selectedBackgroundIndex + newValue;
@@ -17,15 +21,15 @@ public class EditorTileBackgroundSelector : EditorTileModifierSelector
             EditorTileModifierCategory previousEditorTileModifierCategory = PreviousEditorTileModfierCategory(currentCategory);
             int modifierCount = selectedTileModifierContainer.ModifierCountByCategories[previousEditorTileModifierCategory];
 
-            EditorCanvasUI.Instance.SelectedTileModifierContainer.SetSelectedMazeTileModifierCategory(previousEditorTileModifierCategory);
-            EditorCanvasUI.Instance.SelectedTileModifierContainer.SetSelectedMazeTileModifier(modifierCount - 1);
+            EditorCanvasUI.Instance.SelectedTileModifierContainer.SetSelectedTileModifierCategory(previousEditorTileModifierCategory);
+            EditorCanvasUI.Instance.SelectedTileModifierContainer.SetSelectedTileModifier(modifierCount - 1);
         }
         else if (newIndex >= _editorSelectedModifierContainer.EditorTileBackgrounds.Count)
         {
             EditorTileModifierCategory nextEditorTileModifierCategory = NextEditorTileModfierCategory(currentCategory);
 
-            EditorCanvasUI.Instance.SelectedTileModifierContainer.SetSelectedMazeTileModifierCategory(nextEditorTileModifierCategory);
-            EditorCanvasUI.Instance.SelectedTileModifierContainer.SetSelectedMazeTileModifier(0);
+            EditorCanvasUI.Instance.SelectedTileModifierContainer.SetSelectedTileModifierCategory(nextEditorTileModifierCategory);
+            EditorCanvasUI.Instance.SelectedTileModifierContainer.SetSelectedTileModifier(0);
         }
         else
         {
