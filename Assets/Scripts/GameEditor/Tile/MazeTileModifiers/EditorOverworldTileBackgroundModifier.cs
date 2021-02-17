@@ -1,28 +1,42 @@
 ﻿using UnityEngine;
 
-public class EditorOverworldTileBackgroundModifier<T> : IEditorTileBackground<T> where T : EditorOverworldTile
+public class EditorOverworldTileBackgroundModifier : EditorTileBackgroundModifier
 {
-    public virtual string Name => "";
+    public override string Name { get; set; }
 
-    public Sprite Sprite => null;
+    public override Sprite Sprite { get; set; }
 
-    public virtual Sprite GetSprite()
+    public override void PlaceBackground<T>(T tile)
+    {
+        PlaceBackground(tile as EditorOverworldTile);
+    }
+
+    public virtual void PlaceBackground(EditorOverworldTile tile)
+    {
+
+    }
+
+    public override void PlaceBackgroundVariation<T>(T tile)
+    {
+        PlaceBackgroundVariation(tile as EditorOverworldTile);
+    }
+
+    public virtual void PlaceBackgroundVariation(EditorOverworldTile tile)
+    {
+        Logger.Log("There are no background variations implemented for this background type");
+    }
+
+
+    public override Sprite GetSprite()
     {
         return EditorCanvasUI.Instance.DefaultIcon;
     }
 
-    public virtual void InstantiateModifierActions()
+    public override void InstantiateModifierActions()
     {
-        throw new System.NotImplementedException();
     }
 
-    public virtual void PlaceBackground(T tile)
+    public override void DestroyModifierActions()
     {
-        throw new System.NotImplementedException();
-    }
-
-    public virtual void PlaceBackgroundVariation(T tile)
-    {
-        throw new System.NotImplementedException();
     }
 }

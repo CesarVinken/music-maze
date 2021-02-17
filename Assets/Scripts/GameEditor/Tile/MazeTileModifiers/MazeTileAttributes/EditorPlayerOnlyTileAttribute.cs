@@ -1,7 +1,7 @@
 ﻿using System.Linq;
 using UnityEngine;
 
-public class EditorPlayerOnlyTileAttribute : EditorMazeTileAttributeModifier<EditorMazeTile>
+public class EditorPlayerOnlyTileAttribute : EditorMazeTileAttributeModifier
 {
     public override string Name { get => "Player Only"; }
 

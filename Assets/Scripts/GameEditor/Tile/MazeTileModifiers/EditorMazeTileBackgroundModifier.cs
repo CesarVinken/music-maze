@@ -1,43 +1,38 @@
 ﻿using UnityEngine;
 
-public abstract class EditorTileBackgroundModifier
+public abstract class EditorMazeTileBackgroundModifier : EditorTileBackgroundModifier
 {
-    public virtual string Name => "";
+    public override string Name { get; set; }
 
-    public Sprite Sprite => null;
+    public override Sprite Sprite { get; set; }
 
-    public virtual Sprite GetSprite()
+    public override void PlaceBackground<T>(T tile)
+    {
+        PlaceBackground(tile as EditorMazeTile);
+    }
+
+    public virtual void PlaceBackground(EditorMazeTile tile)
+    { }
+
+    public override void PlaceBackgroundVariation<T>(T tile)
+    {
+        PlaceBackgroundVariation(tile as EditorMazeTile);
+    }
+
+    public virtual void PlaceBackgroundVariation(EditorMazeTile tile)
+    { }
+
+
+    public override Sprite GetSprite()
     {
         return EditorCanvasUI.Instance.DefaultIcon;
     }
-}
 
-public abstract class EditorMazeTileBackgroundModifier<T> : EditorTileBackgroundModifier, IEditorTileBackground<T> where T : EditorMazeTile
-{
-    //public virtual string Name => "";
-
-    //public Sprite Sprite => null;
-
-    public virtual void PlaceBackground(T tile)
-    {
-        throw new System.NotImplementedException();
-    }
-
-    public virtual void PlaceBackgroundVariation(T tile)
-    {
-        throw new System.NotImplementedException();
-    }
-
-    //public virtual Sprite GetSprite()
-    //{
-    //    return EditorCanvasUI.Instance.DefaultIcon;
-    //}
-
-    public void InstantiateModifierActions()
+    public override void InstantiateModifierActions()
     {
     }
 
-    public void DestroyModifierActions()
+    public override void DestroyModifierActions()
     {
     }
 }

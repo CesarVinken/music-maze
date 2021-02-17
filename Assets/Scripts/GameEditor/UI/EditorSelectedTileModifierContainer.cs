@@ -4,12 +4,12 @@ using UnityEngine.UI;
 
 public abstract class EditorSelectedTileModifierContainer : MonoBehaviour
 {
-    public List<IEditorTileAttribute<Tile>> EditorTileAttributes = new List<IEditorTileAttribute<Tile>>();
+    public List<EditorTileAttributeModifier> EditorTileAttributes = new List<EditorTileAttributeModifier>();
     public List<EditorTileBackgroundModifier> EditorTileBackgrounds = new List<EditorTileBackgroundModifier>();
-    public List<IEditorTileTransformationTriggerer<Tile>> EditorTileTransformationTriggerers = new List<IEditorTileTransformationTriggerer<Tile>>();
+    public List<EditorTileTransformationModifier> EditorTileTransformationTriggerers = new List<EditorTileTransformationModifier>();
 
     public List<EditorTileModifierCategory> UsedTileModifierCategories = new List<EditorTileModifierCategory>();
-    public Dictionary<EditorTileModifierCategory, List<IEditorTileModifierType>> ModifiersByCategories = new Dictionary<EditorTileModifierCategory, List<IEditorTileModifierType>>();
+    public Dictionary<EditorTileModifierCategory, List<EditorTileModifier>> ModifiersByCategories = new Dictionary<EditorTileModifierCategory, List<EditorTileModifier>>();
 
     //public Dictionary<EditorTileModifierCategory, EditorTileModifierSelector> ModifierSelectorsByType = new Dictionary<EditorTileModifierCategory, EditorTileModifierSelector>();
 

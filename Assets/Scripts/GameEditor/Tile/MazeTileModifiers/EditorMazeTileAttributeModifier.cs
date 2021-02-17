@@ -1,31 +1,41 @@
 ﻿using UnityEngine;
 
-public abstract class EditorMazeTileAttributeModifier<T> : IEditorTileAttribute<T> where T : EditorMazeTile
+public abstract class EditorMazeTileAttributeModifier : EditorTileAttributeModifier
 {
-    public virtual string Name => "";
+    public override string Name { get; set; }
 
-    public Sprite Sprite => null;
+    public override Sprite Sprite { get; set; }
 
-    public virtual void PlaceAttribute(T tile)
+    public override void PlaceAttribute<T>(T tile)
     {
-        throw new System.NotImplementedException();
+        PlaceAttribute(tile as EditorMazeTile);
     }
 
-    public virtual void PlaceAttributeVariation(T tile)
+    public virtual void PlaceAttribute(EditorMazeTile tile)
+    {
+
+    }
+
+    public override void PlaceAttributeVariation<T>(T tile)
+    {
+        PlaceAttributeVariation(tile as EditorMazeTile);
+    }
+
+    public virtual void PlaceAttributeVariation(EditorMazeTile tile)
     {
         Logger.Log("There are no attribute variations implemented for this attribute type");
     }
 
-    public virtual Sprite GetSprite()
+    public override Sprite GetSprite()
     {
         return EditorCanvasUI.Instance.DefaultIcon;
     }
 
-    public void InstantiateModifierActions()
+    public override void InstantiateModifierActions()
     {
     }
 
-    public void DestroyModifierActions()
+    public override void DestroyModifierActions()
     {
     }
 }

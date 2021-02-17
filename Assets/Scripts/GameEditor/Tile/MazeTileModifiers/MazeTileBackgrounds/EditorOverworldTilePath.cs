@@ -1,7 +1,7 @@
 ﻿using System.Linq;
 using UnityEngine;
 
-public class EditorOverworldTilePath : EditorOverworldTileBackgroundModifier<EditorOverworldTile>
+public class EditorOverworldTilePath : EditorOverworldTileBackgroundModifier
 {
     public override string Name => "Path";
 

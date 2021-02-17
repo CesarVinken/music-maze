@@ -132,7 +132,7 @@ public class EditorTileSelector : MonoBehaviour
 
         if (editorMazeTileModifierType == EditorTileModifierCategory.Attribute)
         {
-            IEditorTileAttribute<Tile> attribute = selectedTileModifierContainer.EditorTileAttributes[EditorManager.SelectedTileAttributeModifierIndex];
+            EditorTileAttributeModifier attribute = selectedTileModifierContainer.EditorTileAttributes[EditorManager.SelectedTileAttributeModifierIndex];
             PlaceTileAttribute(CurrentSelectedLocation, attribute);
         }
         else if (editorMazeTileModifierType == EditorTileModifierCategory.Background)
@@ -142,7 +142,7 @@ public class EditorTileSelector : MonoBehaviour
         }
         else if (editorMazeTileModifierType == EditorTileModifierCategory.TransformationTriggerer)
         {
-            IEditorTileTransformationTriggerer<Tile> transformationTriggerer = selectedTileModifierContainer.EditorTileTransformationTriggerers[EditorManager.SelectedTileTransformationTriggererIndex];
+            EditorTileTransformationModifier transformationTriggerer = selectedTileModifierContainer.EditorTileTransformationTriggerers[EditorManager.SelectedTileTransformationTriggererIndex];
             PlaceTransformationTriggerer(CurrentSelectedLocation, transformationTriggerer);
         }
         else
@@ -169,7 +169,7 @@ public class EditorTileSelector : MonoBehaviour
 
         if (editorMazeTileModifierCategory == EditorTileModifierCategory.Attribute)
         {
-            IEditorTileAttribute<Tile> attribute = EditorCanvasUI.Instance.SelectedTileModifierContainer.EditorTileAttributes[EditorManager.SelectedTileAttributeModifierIndex];
+            EditorTileAttributeModifier attribute = EditorCanvasUI.Instance.SelectedTileModifierContainer.EditorTileAttributes[EditorManager.SelectedTileAttributeModifierIndex];
             PlaceTileAttributeVariation(CurrentSelectedLocation, attribute);
         }
         else if (editorMazeTileModifierCategory == EditorTileModifierCategory.Background)
@@ -179,7 +179,7 @@ public class EditorTileSelector : MonoBehaviour
         }
     }
 
-    private void PlaceTileAttribute(GridLocation gridLocation, IEditorTileAttribute<Tile> attribute)
+    private void PlaceTileAttribute(GridLocation gridLocation, EditorTileAttributeModifier attribute)
     {
         if (attribute == null) Logger.Error($"Could not find the attribute type {attribute.GetType()}");
 
@@ -195,7 +195,7 @@ public class EditorTileSelector : MonoBehaviour
         background.PlaceBackground(tile);
     }
 
-    private void PlaceTileAttributeVariation(GridLocation gridLocation, IEditorTileAttribute<Tile> attribute)
+    private void PlaceTileAttributeVariation(GridLocation gridLocation, EditorTileAttributeModifier attribute)
     {
         if (attribute == null) Logger.Error($"Could not find the attribute type {attribute.GetType()}");
 
@@ -208,10 +208,10 @@ public class EditorTileSelector : MonoBehaviour
         if (background == null) Logger.Error($"Could not find the background type {background.GetType()}");
 
         GameManager.Instance.CurrentEditorLevel.TilesByLocation.TryGetValue(gridLocation, out Tile tile);
-        background.PlaceBackgroundVariation(tile);
+        background.PlaceBackgroundVariation<Tile>(tile);
     }
 
-    private void PlaceTransformationTriggerer(GridLocation gridLocation, IEditorTileTransformationTriggerer<Tile> transformationTriggerer)
+    private void PlaceTransformationTriggerer(GridLocation gridLocation, EditorTileTransformationModifier transformationTriggerer)
     {
         if (transformationTriggerer == null) Logger.Error($"Could not find the transformationTriggerer type {transformationTriggerer.GetType()}");
 

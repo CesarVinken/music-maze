@@ -15,7 +15,7 @@ public class EditorTileTransformationTriggererSelector : EditorTileModifierSelec
         if (newIndex < 0)
         {
             EditorTileModifierCategory previousEditorTileModifierCategory = PreviousEditorTileModfierCategory(currentCategory);
-            List<IEditorTileModifierType> registeredModifiers = selectedTileModifierContainer.ModifiersByCategories[previousEditorTileModifierCategory];
+            List<EditorTileModifier> registeredModifiers = selectedTileModifierContainer.ModifiersByCategories[previousEditorTileModifierCategory];
 
             selectedTileModifierContainer.SetSelectedMazeTileModifierCategory(previousEditorTileModifierCategory);
             selectedTileModifierContainer.SetSelectedMazeTileModifier(registeredModifiers.Count - 1);
@@ -39,7 +39,7 @@ public class EditorTileTransformationTriggererSelector : EditorTileModifierSelec
 
     public override void SetSelectedModifier(int modifierIndex)
     {
-        IEditorTileTransformationTriggerer<Tile> transformationTrigger = _editorSelectedModifierContainer.EditorTileTransformationTriggerers[modifierIndex];
+        EditorTileTransformationModifier transformationTrigger = _editorSelectedModifierContainer.EditorTileTransformationTriggerers[modifierIndex];
         _editorSelectedModifierContainer.SelectedModifierLabel.text = GetSelectedModifierLabel(transformationTrigger.Name);
         _editorSelectedModifierContainer.SelectedModifierSprite.sprite = transformationTrigger.GetSprite();
         EditorManager.SelectedTileTransformationTriggererIndex = modifierIndex;

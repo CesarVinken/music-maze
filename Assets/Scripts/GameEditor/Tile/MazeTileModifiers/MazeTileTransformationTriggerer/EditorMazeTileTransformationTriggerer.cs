@@ -1,24 +1,31 @@
 ﻿using System.Linq;
 using UnityEngine;
-public abstract class EditorMazeTileTransformationTriggerer<T> : IEditorTileTransformationTriggerer<T> where T : EditorMazeTile
+public class EditorMazeTileTransformationTriggerer : EditorTileTransformationModifier
 {
-    public virtual string Name => throw new System.NotImplementedException();
+    public override string Name { get; set; }
 
-    public virtual Sprite Sprite => throw new System.NotImplementedException();
+    public override Sprite Sprite { get; set; }
 
-    public virtual Sprite GetSprite()
+    public override Sprite GetSprite()
     {
-        throw new System.NotImplementedException();
+        return EditorCanvasUI.Instance.DefaultIcon;
     }
 
-    public virtual void HandleBeautificationTriggerPlacement(T tile)
+    public override void HandleBeautificationTriggerPlacement<T>(T tile)
     {
-        throw new System.NotImplementedException();
+        HandleBeautificationTriggerPlacement(tile as EditorMazeTile);
+
+    }
+    public virtual void HandleBeautificationTriggerPlacement(EditorMazeTile tile)
+    {
     }
 
-    public virtual void InstantiateModifierActions()
+    public override void InstantiateModifierActions()
     {
-        throw new System.NotImplementedException();
+    }
+
+    public override void DestroyModifierActions()
+    {
     }
 }
 

@@ -14,7 +14,7 @@ public class EditorTileBackgroundSelector : EditorTileModifierSelector
         if (newIndex < 0)
         {
             EditorTileModifierCategory previousEditorTileModifierCategory = PreviousEditorTileModfierCategory(currentCategory);
-            List<IEditorTileModifierType> registeredModifiers = EditorCanvasUI.Instance.SelectedTileModifierContainer.ModifiersByCategories[previousEditorTileModifierCategory];
+            List<EditorTileModifier> registeredModifiers = EditorCanvasUI.Instance.SelectedTileModifierContainer.ModifiersByCategories[previousEditorTileModifierCategory];
 
             EditorCanvasUI.Instance.SelectedTileModifierContainer.SetSelectedMazeTileModifierCategory(previousEditorTileModifierCategory);
             EditorCanvasUI.Instance.SelectedTileModifierContainer.SetSelectedMazeTileModifier(registeredModifiers.Count - 1);

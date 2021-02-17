@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-public class EditorMazeTileBeautificationTriggerer : EditorMazeTileTransformationTriggerer<EditorMazeTile>
+public class EditorMazeTileBeautificationTriggerer : EditorMazeTileTransformationTriggerer
 {
     public override string Name { get => "Beautification Triggerer"; }
 

@@ -14,7 +14,6 @@ public class EditorSelectedMazeTileModifierContainer : EditorSelectedTileModifie
         Guard.CheckIsNull(SelectedModifierSpriteGO, "SelectedModifierSpriteGO", gameObject);
         Guard.CheckIsNull(SelectedModifierLabel, "SelectedModifierLabel", gameObject);
         Guard.CheckIsNull(SelectedModifierSprite, "SelectedModifierSprite", gameObject);
-        Logger.Warning("BABABA");
 
         EditorCanvasUI.Instance.SelectedTileModifierContainer = this;
 
@@ -24,33 +23,39 @@ public class EditorSelectedMazeTileModifierContainer : EditorSelectedTileModifie
         _editorMazeTileBackgroundSelector = new EditorTileBackgroundSelector(this);
         _editorMazeTileTransformationTriggererSelector = new EditorTileTransformationTriggererSelector(this);
 
-        EditorTileAttributes.Add(new EditorObstacleTileAttribute() as IEditorTileAttribute<Tile>);
-        EditorTileAttributes.Add(new EditorPlayerExitTileAttribute() as IEditorTileAttribute<Tile>);
-        EditorTileAttributes.Add(new EditorPlayerSpawnpointTileAttribute() as IEditorTileAttribute<Tile>);
-        EditorTileAttributes.Add(new EditorPlayerOnlyTileAttribute() as IEditorTileAttribute<Tile>);
-        EditorTileAttributes.Add(new EditorEnemySpawnpointTileAttribute() as IEditorTileAttribute<Tile>);
-
+        EditorTileAttributes.Add(new EditorObstacleTileAttribute());
+        EditorTileAttributes.Add(new EditorPlayerExitTileAttribute());
+        EditorTileAttributes.Add(new EditorPlayerSpawnpointTileAttribute());
+        EditorTileAttributes.Add(new EditorPlayerOnlyTileAttribute() );
+        EditorTileAttributes.Add(new EditorEnemySpawnpointTileAttribute());
 
         EditorManager.SelectedTileAttributeModifierIndex = 0;
 
         EditorTileBackgrounds.Add(new EditorMazeTilePath());
         EditorManager.SelectedTileBackgroundModifierIndex = 0;
+
         Logger.Warning("We are failing to add the tile backgrounds to the list");
         for (int i = 0; i < EditorTileBackgrounds.Count; i++)
         {
             Logger.Log(EditorTileBackgrounds[i].Name);
         }
 
-        EditorTileTransformationTriggerers.Add(new EditorMazeTileBeautificationTriggerer() as IEditorTileTransformationTriggerer<Tile>);
+        EditorTileTransformationTriggerers.Add(new EditorMazeTileBeautificationTriggerer());
+
         EditorManager.SelectedTileTransformationTriggererIndex = 0;
+        Logger.Warning("We are failing to add the tile EditorTileTransformationTriggerers to the list");
+        for (int i = 0; i < EditorTileTransformationTriggerers.Count; i++)
+        {
+            Logger.Log(EditorTileTransformationTriggerers[i].Name);
+        }
 
         UsedTileModifierCategories.Add(EditorTileModifierCategory.Background);
         UsedTileModifierCategories.Add(EditorTileModifierCategory.Attribute);
         UsedTileModifierCategories.Add(EditorTileModifierCategory.TransformationTriggerer);
 
-        ModifiersByCategories.Add(EditorTileModifierCategory.Background, (EditorTileBackgrounds as IEnumerable<IEditorTileModifierType>).ToList());
-        ModifiersByCategories.Add(EditorTileModifierCategory.Attribute, (EditorTileAttributes as IEnumerable<IEditorTileModifierType>).ToList());
-        ModifiersByCategories.Add(EditorTileModifierCategory.TransformationTriggerer, (EditorTileTransformationTriggerers as IEnumerable<IEditorTileModifierType>).ToList());
+        ModifiersByCategories.Add(EditorTileModifierCategory.Background, (EditorTileBackgrounds as IEnumerable<EditorTileModifier>).ToList());
+        ModifiersByCategories.Add(EditorTileModifierCategory.Attribute, (EditorTileAttributes as IEnumerable<EditorTileModifier>).ToList());
+        ModifiersByCategories.Add(EditorTileModifierCategory.TransformationTriggerer, (EditorTileTransformationTriggerers as IEnumerable<EditorTileModifier>).ToList());
 
         //ModifierSelectorsByType.Add(EditorTileModifierCategory.Attribute, _editorMazeTileAttributeSelector);
         //ModifierSelectorsByType.Add(EditorTileModifierCategory.Background, _editorMazeTileBackgroundSelector);

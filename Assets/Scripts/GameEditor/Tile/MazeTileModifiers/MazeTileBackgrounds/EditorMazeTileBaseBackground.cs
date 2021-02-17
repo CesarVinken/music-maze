@@ -1,7 +1,7 @@
 ﻿using System.Linq;
 using UnityEngine;
 
-public class EditorMazeTileBaseBackground : EditorMazeTileBackgroundModifier<EditorMazeTile>
+public class EditorMazeTileBaseBackground : EditorMazeTileBackgroundModifier
 {
     public override string Name => "Base Background";
 

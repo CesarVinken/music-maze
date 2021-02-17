@@ -4,8 +4,6 @@ using UnityEngine;
 
 public class EditorSelectedOverworldTileModifierContainer : EditorSelectedTileModifierContainer
 {
-    //public static EditorSelectedOverworldTileModifierContainer Instance;
-
     private EditorTileAttributeSelector _editorOverworldTileAttributeSelector;
     private EditorTileBackgroundSelector _editorOverworldTileBackgroundSelector;
     private EditorTileTransformationTriggererSelector _editorOverworldTileTransformationTriggererSelector;
@@ -37,7 +35,7 @@ public class EditorSelectedOverworldTileModifierContainer : EditorSelectedTileMo
 
         EditorTileBackgrounds.Clear();
 
-        EditorTileBackgrounds.Add(new EditorOverworldTilePath() as IEditorTileBackground<Tile>);
+        EditorTileBackgrounds.Add(new EditorOverworldTilePath());
         EditorManager.SelectedTileBackgroundModifierIndex = 0;
 
         EditorTileTransformationTriggerers.Clear();
@@ -49,8 +47,8 @@ public class EditorSelectedOverworldTileModifierContainer : EditorSelectedTileMo
         UsedTileModifierCategories.Add(EditorTileModifierCategory.Attribute);
 
 
-        ModifiersByCategories.Add(EditorTileModifierCategory.Background, (EditorTileBackgrounds as IEnumerable<IEditorTileModifierType>).ToList());
-        ModifiersByCategories.Add(EditorTileModifierCategory.Attribute, (EditorTileAttributes as IEnumerable<IEditorTileModifierType>).ToList());
+        ModifiersByCategories.Add(EditorTileModifierCategory.Background, (EditorTileBackgrounds as IEnumerable<EditorTileModifier>).ToList());
+        ModifiersByCategories.Add(EditorTileModifierCategory.Attribute, (EditorTileAttributes as IEnumerable<EditorTileModifier>).ToList());
 
         //ModifierSelectorsByType.Add(EditorTileModifierCategory.Attribute, _editorOverworldTileAttributeSelector);
         //ModifierSelectorsByType.Add(EditorTileModifierCategory.Background, _editorOverworldTileBackgroundSelector);

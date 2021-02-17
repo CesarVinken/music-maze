@@ -16,7 +16,7 @@ public class EditorTileAttributeSelector : EditorTileModifierSelector
         {
             EditorTileModifierCategory previousEditorTileModifierCategory = PreviousEditorTileModfierCategory(currentCategory);
             Logger.Log($"The previous category is {previousEditorTileModifierCategory}");
-            List<IEditorTileModifierType> registeredModifiers = selectedTileModifierContainer.ModifiersByCategories[previousEditorTileModifierCategory];
+            List<EditorTileModifier> registeredModifiers = selectedTileModifierContainer.ModifiersByCategories[previousEditorTileModifierCategory];
 
             selectedTileModifierContainer.SetSelectedMazeTileModifierCategory(previousEditorTileModifierCategory);
             selectedTileModifierContainer.SetSelectedMazeTileModifier(registeredModifiers.Count - 1);
@@ -38,7 +38,7 @@ public class EditorTileAttributeSelector : EditorTileModifierSelector
     {
         if (_editorSelectedModifierContainer.EditorTileAttributes.Count == 0) return;
 
-        IEditorTileAttribute<Tile> attribute = _editorSelectedModifierContainer.EditorTileAttributes[modifierIndex];
+        EditorTileAttributeModifier attribute = _editorSelectedModifierContainer.EditorTileAttributes[modifierIndex];
         _editorSelectedModifierContainer.SelectedModifierLabel.text = GetSelectedModifierLabel(attribute.Name);
         _editorSelectedModifierContainer.SelectedModifierSprite.sprite = attribute.GetSprite();
         EditorManager.SelectedTileAttributeModifierIndex = modifierIndex;
