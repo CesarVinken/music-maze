@@ -8,6 +8,7 @@ public class EditorSelectedOverworldTileModifierContainer : EditorSelectedTileMo
         Guard.CheckIsNull(SelectedModifierSpriteGO, "SelectedModifierSpriteGO", gameObject);
         Guard.CheckIsNull(SelectedModifierLabel, "SelectedModifierLabel", gameObject);
         Guard.CheckIsNull(SelectedModifierSprite, "SelectedModifierSprite", gameObject);
+        Logger.Warning("Overworldererer");
 
         EditorCanvasUI.Instance.SelectedTileModifierContainer = this;
 
@@ -19,7 +20,7 @@ public class EditorSelectedOverworldTileModifierContainer : EditorSelectedTileMo
 
         //EditorTileAttributes.Add(new EditorObstacleTileAttribute());
         //EditorTileAttributes.Add(new EditorPlayerExitTileAttribute());
-        EditorTileAttributes.Add(new EditorPlayerSpawnpointTileAttribute());
+        EditorTileAttributes.Add(new EditorPlayerSpawnpointOverworldTileAttribute());
         //EditorTileAttributes.Add(new EditorPlayerOnlyTileAttribute());
         //EditorTileAttributes.Add(new EditorEnemySpawnpointTileAttribute());
 

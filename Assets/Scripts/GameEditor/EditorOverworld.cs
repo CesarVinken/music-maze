@@ -67,6 +67,12 @@ public class EditorOverworld : Overworld, IEditorLevel
             if (tile.GridLocation.X > furthestBounds.X) _levelBounds.X = tile.GridLocation.X;
             if (tile.GridLocation.Y > furthestBounds.Y) _levelBounds.Y = tile.GridLocation.Y;
         }
+
+        for (int k = 0; k < Tiles.Count; k++)
+        {
+            EditorOverworldTile tile = Tiles[k];
+            tile.AddNeighbours(this);
+        }
     }
 
     public void AddBackgroundSprites(SerialisableTile serialisableTile, EditorOverworldTile tile)
@@ -105,10 +111,10 @@ public class EditorOverworld : Overworld, IEditorLevel
             //{
             //    tileAttributePlacer.PlacePlayerExit(ObstacleType.Bush, new TileConnectionScoreInfo(serialisableTileAttribute.ObstacleConnectionScore, serialisableTileAttribute.SpriteNumber));
             //}
-            //else if (tileAttributeId == SerialisableTileAttribute.PlayerSpawnpointCode)
-            //{
-            //    tileAttributePlacer.PlacePlayerSpawnpoint();
-            //}
+            if (tileAttributeId == SerialisableTileAttribute.PlayerSpawnpointCode)
+            {
+                tileAttributePlacer.PlacePlayerSpawnpoint();
+            }
             //else if (tileAttributeId == SerialisableTileAttribute.PlayerOnlyAttributeCode)
             //{
             //    tileAttributePlacer.PlacePlayerOnlyAttribute(PlayerOnlyType.Bush);
@@ -119,7 +125,7 @@ public class EditorOverworld : Overworld, IEditorLevel
             //}
             //else
             //{
-                Logger.Error($"Unknown tile attribute with tileAttributeId {tileAttributeId}");
+            Logger.Error($"Unknown tile attribute with tileAttributeId {tileAttributeId}");
             //}
         }
     }

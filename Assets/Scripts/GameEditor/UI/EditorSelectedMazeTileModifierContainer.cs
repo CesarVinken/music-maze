@@ -8,7 +8,7 @@ public class EditorSelectedMazeTileModifierContainer : EditorSelectedTileModifie
         Guard.CheckIsNull(SelectedModifierSpriteGO, "SelectedModifierSpriteGO", gameObject);
         Guard.CheckIsNull(SelectedModifierLabel, "SelectedModifierLabel", gameObject);
         Guard.CheckIsNull(SelectedModifierSprite, "SelectedModifierSprite", gameObject);
-
+        Logger.Warning("MAZERER");
         EditorCanvasUI.Instance.SelectedTileModifierContainer = this;
 
         Reset();
@@ -19,7 +19,7 @@ public class EditorSelectedMazeTileModifierContainer : EditorSelectedTileModifie
 
         EditorTileAttributes.Add(new EditorObstacleTileAttribute());
         EditorTileAttributes.Add(new EditorPlayerExitTileAttribute());
-        EditorTileAttributes.Add(new EditorPlayerSpawnpointTileAttribute());
+        EditorTileAttributes.Add(new EditorPlayerSpawnpointMazeTileAttribute());
         EditorTileAttributes.Add(new EditorPlayerOnlyTileAttribute() );
         EditorTileAttributes.Add(new EditorEnemySpawnpointTileAttribute());
 

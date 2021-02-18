@@ -126,21 +126,20 @@ public class EditorTileSelector : MonoBehaviour
             }
         }
 
-        EditorTileModifierCategory editorMazeTileModifierType = EditorManager.SelectedTileModifierCategory;
-
+        EditorTileModifierCategory editorTileModifierType = EditorManager.SelectedTileModifierCategory;
         EditorSelectedTileModifierContainer selectedTileModifierContainer = EditorCanvasUI.Instance.SelectedTileModifierContainer;
 
-        if (editorMazeTileModifierType == EditorTileModifierCategory.Attribute)
+        if (editorTileModifierType == EditorTileModifierCategory.Attribute)
         {
             EditorTileAttributeModifier attribute = selectedTileModifierContainer.EditorTileAttributes[EditorManager.SelectedTileAttributeModifierIndex];
             PlaceTileAttribute(CurrentSelectedLocation, attribute);
         }
-        else if (editorMazeTileModifierType == EditorTileModifierCategory.Background)
+        else if (editorTileModifierType == EditorTileModifierCategory.Background)
         {
             EditorTileBackgroundModifier background = selectedTileModifierContainer.EditorTileBackgrounds[EditorManager.SelectedTileBackgroundModifierIndex];
             PlaceTileBackground(CurrentSelectedLocation, background);
         }
-        else if (editorMazeTileModifierType == EditorTileModifierCategory.TransformationTriggerer)
+        else if (editorTileModifierType == EditorTileModifierCategory.TransformationTriggerer)
         {
             EditorTileTransformationModifier transformationTriggerer = selectedTileModifierContainer.EditorTileTransformationTriggerers[EditorManager.SelectedTileTransformationTriggererIndex];
             PlaceTransformationTriggerer(CurrentSelectedLocation, transformationTriggerer);

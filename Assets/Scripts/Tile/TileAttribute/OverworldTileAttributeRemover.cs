@@ -37,11 +37,10 @@ public class OverworldTileAttributeRemover : TileAttributeRemover
 
     public override void RemovePlayerSpawnpoint()
     {
-        Logger.Log("To be implemented");
-        //ITileAttribute playerSpawnpoint = (PlayerSpawnpoint)_tile.TileAttributes.FirstOrDefault(attribute => attribute is PlayerSpawnpoint);
-        //if (playerSpawnpoint == null) return;
-        //_tile.TileAttributes.Remove(playerSpawnpoint);
-        //playerSpawnpoint.Remove();
+        ITileAttribute playerSpawnpoint = (PlayerSpawnpoint)_tile.TileAttributes.FirstOrDefault(attribute => attribute is PlayerSpawnpoint);
+        if (playerSpawnpoint == null) return;
+        _tile.TileAttributes.Remove(playerSpawnpoint);
+        playerSpawnpoint.Remove();
     }
 
     private void UpdateNeighboursForRemovedObstacle(ObstacleType obstacleType)

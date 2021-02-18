@@ -18,4 +18,11 @@ public class EditorOverworldTileAttributePlacer : OverworldTileAttributePlacer<E
         return tileAttributeGO.GetComponent<U>();
     }
 
+    public void PlacePlayerSpawnpoint()
+    {
+        PlayerSpawnpoint playerSpawnpoint = (PlayerSpawnpoint)InstantiateTileAttributeGO<PlayerSpawnpoint>();
+
+        Tile.Walkable = true;
+        Tile.TileAttributes.Add(playerSpawnpoint);
+    }
 }

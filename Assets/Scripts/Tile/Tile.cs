@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public abstract class Tile : MonoBehaviour
@@ -36,11 +37,20 @@ public abstract class Tile : MonoBehaviour
         GridLocation = new GridLocation(x, y);
     }
 
-    //public abstract void InitialiseTileAttributes();
-    //public abstract void InitialiseTileBackgrounds();
-
-    public abstract TilePath TryGetTilePath();
     public abstract TileObstacle TryGetTileObstacle();
+
+    public TilePath TryGetTilePath()
+    {
+        TilePath tilePath = (TilePath)TileBackgrounds.FirstOrDefault(background => background is TilePath);
+
+        if (tilePath == null)
+        {
+            Logger.Log($"did NOT find a tile path on {GridLocation.X},{GridLocation.Y}");
+            return null;
+        }
+        Logger.Log($"found tile path {tilePath.TilePathType} on {GridLocation.X},{GridLocation.Y} with score {tilePath.ConnectionScore}");
+        return tilePath;
+    }
 
     public void InitialiseTileAttributes()
     {
@@ -55,6 +65,33 @@ public abstract class Tile : MonoBehaviour
         for (int i = 0; i < TileBackgrounds.Count; i++)
         {
             TileBackgrounds[i].SetTile(this);
+        }
+    }
+
+    public void AddNeighbours(IEditorLevel level)
+    {
+        //Add Right
+        if (GridLocation.X < level.LevelBounds.X)
+        {
+            Neighbours.Add(ObjectDirection.Right, level.TilesByLocation[new GridLocation(GridLocation.X + 1, GridLocation.Y)]);
+        }
+
+        //Add Down
+        if (GridLocation.Y > 0)
+        {
+            Neighbours.Add(ObjectDirection.Down, level.TilesByLocation[new GridLocation(GridLocation.X, GridLocation.Y - 1)]);
+        }
+
+        //Add Left
+        if (GridLocation.X > 0)
+        {
+            Neighbours.Add(ObjectDirection.Left, level.TilesByLocation[new GridLocation(GridLocation.X - 1, GridLocation.Y)]);
+        }
+
+        //Add Up
+        if (GridLocation.Y < level.LevelBounds.Y)
+        {
+            Neighbours.Add(ObjectDirection.Up, level.TilesByLocation[new GridLocation(GridLocation.X, GridLocation.Y + 1)]);
         }
     }
 }

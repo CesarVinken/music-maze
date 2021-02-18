@@ -72,19 +72,6 @@ public class MazeTile : Tile
         return tileObstacle;
     }
 
-    public override TilePath TryGetTilePath()
-    {
-        MazeTilePath mazeTilePath = (MazeTilePath)TileBackgrounds.FirstOrDefault(background => background is MazeTilePath);
-
-        if (mazeTilePath == null)
-        {
-            Logger.Log($"did NOT find a maze tile path on {GridLocation.X},{GridLocation.Y}");
-            return null;
-        }
-        Logger.Log($"found maze tile path {mazeTilePath.TilePathType} on {GridLocation.X},{GridLocation.Y} with score {mazeTilePath.ConnectionScore}");
-        return mazeTilePath;
-    }
-
     public void TryMakeMarkable(bool isMarkable)
     {
         MazeTilePath mazeTilePath = (MazeTilePath)TileBackgrounds.FirstOrDefault(background => background is MazeTilePath);
