@@ -38,7 +38,7 @@ public static class EditorManager
         switch (GameManager.CurrentSceneType)
         {
             case SceneType.Overworld:
-                //EditorCanvasUI.Instance.OverworldModificationPanel.GenerateTiles();
+                EditorCanvasUI.Instance.OverworldModificationPanel.GenerateTiles();
                 Logger.Log("To do: auto generate overworld tiles");
                 break;
             case SceneType.Maze:

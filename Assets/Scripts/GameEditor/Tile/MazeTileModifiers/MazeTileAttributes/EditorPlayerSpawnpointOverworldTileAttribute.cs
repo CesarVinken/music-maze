@@ -21,4 +21,9 @@ public class EditorPlayerSpawnpointOverworldTileAttribute : EditorOverworldTileA
 
         tileAttributeRemover.RemovePlayerSpawnpoint();
     }
+
+    public override Sprite GetSprite()
+    {
+        return EditorCanvasUI.Instance.TileAttributeIcons[2];
+    }
 }

@@ -8,7 +8,6 @@ public class EditorSelectedOverworldTileModifierContainer : EditorSelectedTileMo
         Guard.CheckIsNull(SelectedModifierSpriteGO, "SelectedModifierSpriteGO", gameObject);
         Guard.CheckIsNull(SelectedModifierLabel, "SelectedModifierLabel", gameObject);
         Guard.CheckIsNull(SelectedModifierSprite, "SelectedModifierSprite", gameObject);
-        Logger.Warning("Overworldererer");
 
         EditorCanvasUI.Instance.SelectedTileModifierContainer = this;
 
@@ -21,6 +20,7 @@ public class EditorSelectedOverworldTileModifierContainer : EditorSelectedTileMo
         //EditorTileAttributes.Add(new EditorObstacleTileAttribute());
         //EditorTileAttributes.Add(new EditorPlayerExitTileAttribute());
         EditorTileAttributes.Add(new EditorPlayerSpawnpointOverworldTileAttribute());
+        EditorTileAttributes.Add(new EditorOverworldMazeEntryTileAttribute());
         //EditorTileAttributes.Add(new EditorPlayerOnlyTileAttribute());
         //EditorTileAttributes.Add(new EditorEnemySpawnpointTileAttribute());
 
@@ -41,12 +41,8 @@ public class EditorSelectedOverworldTileModifierContainer : EditorSelectedTileMo
 
         ModifierCountByCategories.Add(EditorTileModifierCategory.Background, EditorTileBackgrounds.Count);
         ModifierCountByCategories.Add(EditorTileModifierCategory.Attribute, EditorTileAttributes.Count);
-    }
 
-    public void Start()
-    {
-        SetSelectedTileModifierCategory(EditorTileModifierCategory.Background);
-        SetSelectedTileModifier(0);//Set selected modifier to Background -> Path 
+        SetInitialModifierValue();
     }
 
     private void Update()
@@ -95,5 +91,11 @@ public class EditorSelectedOverworldTileModifierContainer : EditorSelectedTileMo
             // Not known type
             Logger.Error("Unknown tile modifier type");
         }
+    }
+
+    private void SetInitialModifierValue()
+    {
+        SetSelectedTileModifierCategory(EditorTileModifierCategory.Background);
+        SetSelectedTileModifier(0);//Set selected modifier to Background -> Path 
     }
 }

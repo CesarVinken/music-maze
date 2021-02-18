@@ -25,4 +25,12 @@ public class EditorOverworldTileAttributePlacer : OverworldTileAttributePlacer<E
         Tile.Walkable = true;
         Tile.TileAttributes.Add(playerSpawnpoint);
     }
+
+    public void PlaceMazeEntry()
+    {
+        MazeEntry mazeEntry = (MazeEntry)InstantiateTileAttributeGO<MazeEntry>();
+
+        Tile.Walkable = true;
+        Tile.TileAttributes.Add(mazeEntry);
+    }
 }

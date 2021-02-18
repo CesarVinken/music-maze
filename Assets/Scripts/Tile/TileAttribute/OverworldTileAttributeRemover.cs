@@ -1,5 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
@@ -41,6 +40,14 @@ public class OverworldTileAttributeRemover : TileAttributeRemover
         if (playerSpawnpoint == null) return;
         _tile.TileAttributes.Remove(playerSpawnpoint);
         playerSpawnpoint.Remove();
+    }
+
+    public void RemoveMazeEntry()
+    {
+        ITileAttribute mazeEntry = (MazeEntry)_tile.TileAttributes.FirstOrDefault(attribute => attribute is MazeEntry);
+        if (mazeEntry == null) return;
+        _tile.TileAttributes.Remove(mazeEntry);
+        mazeEntry.Remove();
     }
 
     private void UpdateNeighboursForRemovedObstacle(ObstacleType obstacleType)

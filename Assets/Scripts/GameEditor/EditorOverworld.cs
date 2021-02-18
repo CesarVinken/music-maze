@@ -115,6 +115,10 @@ public class EditorOverworld : Overworld, IEditorLevel
             {
                 tileAttributePlacer.PlacePlayerSpawnpoint();
             }
+            else if (tileAttributeId == SerialisableTileAttribute.MazeEntry)
+            {
+                tileAttributePlacer.PlaceMazeEntry();
+            }
             //else if (tileAttributeId == SerialisableTileAttribute.PlayerOnlyAttributeCode)
             //{
             //    tileAttributePlacer.PlacePlayerOnlyAttribute(PlayerOnlyType.Bush);
@@ -123,10 +127,10 @@ public class EditorOverworld : Overworld, IEditorLevel
             //{
             //    tileAttributePlacer.PlaceEnemySpawnpoint();
             //}
-            //else
-            //{
-            Logger.Error($"Unknown tile attribute with tileAttributeId {tileAttributeId}");
-            //}
+            else
+            {
+                Logger.Error($"Unknown tile attribute with tileAttributeId {tileAttributeId}");
+            }
         }
     }
 }

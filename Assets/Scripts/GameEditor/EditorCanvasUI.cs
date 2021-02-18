@@ -14,6 +14,7 @@ public class EditorCanvasUI : MonoBehaviour
     public Sprite[] TileAttributeIcons;
 
     public EditorMazeModificationPanel MazeModificationPanel;
+    public EditorOverworldModificationPanel OverworldModificationPanel;
     public EditorSelectedTileModifierContainer SelectedTileModifierContainer;
 
     [Space(10)]
@@ -30,6 +31,7 @@ public class EditorCanvasUI : MonoBehaviour
         Guard.CheckIsNull(_gameEditorWorldPrefab, "_gameEditorWorldPrefab");
 
         Guard.CheckIsNull(MazeModificationPanel, "MazeModificationPanel", gameObject);
+        Guard.CheckIsNull(OverworldModificationPanel, "OverworldModificationPanel", gameObject);
 
         Guard.CheckIsNull(GenerateTileTransformationMapPrefab, "GenerateTileTransformationMapPrefab");
 

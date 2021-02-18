@@ -128,7 +128,7 @@ public class EditorTileSelector : MonoBehaviour
 
         EditorTileModifierCategory editorTileModifierType = EditorManager.SelectedTileModifierCategory;
         EditorSelectedTileModifierContainer selectedTileModifierContainer = EditorCanvasUI.Instance.SelectedTileModifierContainer;
-
+        Logger.Log(editorTileModifierType);
         if (editorTileModifierType == EditorTileModifierCategory.Attribute)
         {
             EditorTileAttributeModifier attribute = selectedTileModifierContainer.EditorTileAttributes[EditorManager.SelectedTileAttributeModifierIndex];
