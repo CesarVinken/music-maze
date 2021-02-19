@@ -73,7 +73,7 @@ public class ScoreScreenContainer : MonoBehaviour
         _scoreCalculator.ResetMazeLevelScore();
         _scoreCalculator.CalculateScores();
 
-        _subtitleLabel.text = $"You escaped from {MazeLevelManager.Instance.Level.MazeName}";
+        _subtitleLabel.text = $"You escaped from {MazeLevelManager.Instance.Level.Name}";
 
         if (GameManager.GameType == GameType.SinglePlayer)
             ShowSingleplayerScore(_scoreCalculator.PlayerScores);

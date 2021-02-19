@@ -4,7 +4,6 @@ using UnityEngine;
 public class MazeTileAttributePlacer<T> : TileAttributePlacer<T> where T : MazeTile
 {
     public override T Tile { get; set; }
-    //public ITileAttribute InstantiateTileAttributeGO<U>() where U : ITileAttribute;
 
     public override ITileAttribute InstantiateTileAttributeGO<U>()
     {

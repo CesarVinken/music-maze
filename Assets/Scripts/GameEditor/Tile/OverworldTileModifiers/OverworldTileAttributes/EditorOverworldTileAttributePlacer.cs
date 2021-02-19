@@ -17,20 +17,4 @@ public class EditorOverworldTileAttributePlacer : OverworldTileAttributePlacer<E
         GameObject tileAttributeGO = GameObject.Instantiate(OverworldManager.Instance.GetTileAttributePrefab<U>(), Tile.transform);
         return tileAttributeGO.GetComponent<U>();
     }
-
-    public void PlacePlayerSpawnpoint()
-    {
-        PlayerSpawnpoint playerSpawnpoint = (PlayerSpawnpoint)InstantiateTileAttributeGO<PlayerSpawnpoint>();
-
-        Tile.Walkable = true;
-        Tile.TileAttributes.Add(playerSpawnpoint);
-    }
-
-    public void PlaceMazeEntry()
-    {
-        MazeEntry mazeEntry = (MazeEntry)InstantiateTileAttributeGO<MazeEntry>();
-
-        Tile.Walkable = true;
-        Tile.TileAttributes.Add(mazeEntry);
-    }
 }

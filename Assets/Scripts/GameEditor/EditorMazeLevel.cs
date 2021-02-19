@@ -1,20 +1,9 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 
-public interface IEditorLevel
-{
-    Dictionary<GridLocation, Tile> TilesByLocation { get; set; }
-     GridLocation LevelBounds { get; set; }
-}
-
 public class EditorMazeLevel : MazeLevel, IEditorLevel
 {
-    private Dictionary<GridLocation, Tile> _tilesByLocation = new Dictionary<GridLocation, Tile>();
-
     public List<EditorMazeTile> Tiles = new List<EditorMazeTile>();
-
-    public Dictionary<GridLocation, Tile> TilesByLocation { get => _tilesByLocation; set => _tilesByLocation = value; }
-
 
     public EditorMazeLevel()
     {
@@ -25,7 +14,7 @@ public class EditorMazeLevel : MazeLevel, IEditorLevel
     {
         GameManager.Instance.CurrentEditorLevel = this;
         
-        MazeName = mazeLevelData.Name;
+        Name = mazeLevelData.Name;
 
         if (TilesContainer.Instance != null)
         {
@@ -33,7 +22,7 @@ public class EditorMazeLevel : MazeLevel, IEditorLevel
             TilesContainer.Instance = null;
         }
 
-        _mazeContainer = new GameObject(MazeName);
+        _mazeContainer = new GameObject(Name);
         _mazeContainer.transform.SetParent(GameManager.Instance.GridGO.transform);
         _mazeContainer.transform.position = new Vector3(0, 0, 0);
         _mazeContainer.AddComponent<TilesContainer>();

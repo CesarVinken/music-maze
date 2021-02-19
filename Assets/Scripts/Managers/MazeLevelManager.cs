@@ -281,15 +281,15 @@ public class MazeLevelManager : MonoBehaviour, IOnEventCallback
         int playerStartLocations = Level.PlayerCharacterSpawnpoints.Count;
         if (playerStartLocations == 0)
         {
-            Logger.Warning(Logger.Initialisation, "The level {0} does not have any player starting positions set up while it needs 2.", Level.MazeName);
+            Logger.Warning(Logger.Initialisation, "The level {0} does not have any player starting positions set up while it needs 2.", Level.Name);
         }
         else if (playerStartLocations == 1)
         {
-            Logger.Warning(Logger.Initialisation, "The level {0} has only 1 player starting position set up while it needs 2.", Level.MazeName);
+            Logger.Warning(Logger.Initialisation, "The level {0} has only 1 player starting position set up while it needs 2.", Level.Name);
         }
         else if (playerStartLocations > 2)
         {
-            Logger.Warning(Logger.Initialisation, "The level {0} has {1} player starting positions set up. There should be 2 positions.", Level.MazeName, playerStartLocations);
+            Logger.Warning(Logger.Initialisation, "The level {0} has {1} player starting positions set up. There should be 2 positions.", Level.Name, playerStartLocations);
         }
     }
 

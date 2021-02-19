@@ -132,7 +132,7 @@ public class Character : MonoBehaviour
 
     public bool ValidateTarget(GridLocation targetGridLocation)
     {
-        if (MazeLevelManager.Instance.Level.TilesByLocation.TryGetValue(targetGridLocation, out InGameMazeTile tile))
+        if (MazeLevelManager.Instance.Level.TilesByLocation.TryGetValue(targetGridLocation, out Tile tile))
         {
             if (tile.Walkable)
                 return true;

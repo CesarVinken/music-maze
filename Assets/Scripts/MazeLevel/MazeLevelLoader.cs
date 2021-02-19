@@ -89,7 +89,7 @@ public static class MazeLevelLoader
 
             if (!levelNameData.IsPlayable) continue;
 
-            if (levelNameData.LevelName == MazeLevelManager.Instance.Level.MazeName) continue;
+            if (levelNameData.LevelName == MazeLevelManager.Instance.Level.Name) continue;
 
             playableLevelNames.Add(levelNameData.LevelName);
         }

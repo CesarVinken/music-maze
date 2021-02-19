@@ -96,6 +96,31 @@ public class GameManager : MonoBehaviourPunCallbacks, IOnEventCallback
         {
             case SceneType.Overworld:
                 Logger.Log("instantiate overworld sprites, tiles and characters");
+                if (SceneLoadOrigin == SceneLoadOrigin.Gameplay)
+                {
+                    OverworldData startUpOverworldData = OverworldLoader.LoadOverworldData("overworld");
+
+                    if (startUpOverworldData == null)
+                    {
+                        Logger.Error("Could not find the default overworld for startup");
+                    }
+
+                    OverworldLoader.LoadOverworld(startUpOverworldData);
+
+                    if (OverworldManager.Instance.Overworld == null)
+                    {
+                        Logger.Log(Logger.Initialisation, "No overworld loaded on startup. Returning");
+                        return;
+                    }
+                    //if (OverworldManager.Instance.Overworld.PlayerCharacterSpawnpoints.Count == 0) return;
+
+                    //PlayableLevelNames = OverworldLoader.GetAllPlayableLevelNames();
+                } // We loaded a overworld scene through the editor. Set up an empty grid for in the editor
+                else
+                {
+                    Logger.Log("create empty grid");
+                    EditorCanvasUI.Instance.OverworldModificationPanel.GenerateTiles();
+                }
                 break;
             case SceneType.Maze:
                 // We loaded a maze scene through the game. Set up the maze level

@@ -1,10 +1,9 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 
-public class InGameOverworld : Overworld
+public class InGameOverworld : Overworld, IInGameLevel
 {
     public List<InGameOverworldTile> Tiles = new List<InGameOverworldTile>();
-    public Dictionary<GridLocation, InGameOverworldTile> TilesByLocation = new Dictionary<GridLocation, InGameOverworldTile>();
 
     public InGameOverworld()
     {
@@ -13,7 +12,7 @@ public class InGameOverworld : Overworld
 
     public InGameOverworld(OverworldData overworldData)
     {
-        OverworldName = overworldData.Name;
+        Name = overworldData.Name;
 
         if (TilesContainer.Instance != null)
         {
@@ -21,7 +20,7 @@ public class InGameOverworld : Overworld
             TilesContainer.Instance = null;
         }
 
-        _overworldContainer = new GameObject(OverworldName);
+        _overworldContainer = new GameObject(Name);
         _overworldContainer.transform.SetParent(GameManager.Instance.GridGO.transform);
         _overworldContainer.transform.position = new Vector3(0, 0, 0);
         _overworldContainer.AddComponent<TilesContainer>();
@@ -39,60 +38,83 @@ public class InGameOverworld : Overworld
     public void BuildTiles(OverworldData overworldData)
     {
         Logger.Log("TODO: implement BuildTiles function");
-        //Dictionary<InGameTile, List<SerialisableGridLocation>> TileTransformationGridLocationByTile = new Dictionary<InGameTile, List<SerialisableGridLocation>>();
+        Dictionary<InGameOverworldTile, List<SerialisableGridLocation>> TileTransformationGridLocationByTile = new Dictionary<InGameOverworldTile, List<SerialisableGridLocation>>();
 
-        //for (int i = 0; i < mazeLevelData.Tiles.Count; i++)
-        //{
-        //    SerialisableTile serialisableTile = mazeLevelData.Tiles[i];
-        //    GameObject tileGO = GameObject.Instantiate(MazeLevelManager.Instance.InGameTilePrefab, _mazeContainer.transform);
+        for (int i = 0; i < overworldData.Tiles.Count; i++)
+        {
+            SerialisableTile serialisableTile = overworldData.Tiles[i];
+            GameObject tileGO = GameObject.Instantiate(OverworldManager.Instance.InGameTilePrefab, _overworldContainer.transform);
 
-        //    InGameTile tile = tileGO.GetComponent<InGameTile>();
-        //    tileGO.name = "serialisableTile" + serialisableTile.GridLocation.X + ", " + serialisableTile.GridLocation.Y;
+            InGameOverworldTile tile = tileGO.GetComponent<InGameOverworldTile>();
 
-        //    tile.SetGridLocation(serialisableTile.GridLocation.X, serialisableTile.GridLocation.Y);
-        //    tile.SetId(serialisableTile.Id);
+            tile.SetGridLocation(serialisableTile.GridLocation.X, serialisableTile.GridLocation.Y);
+            tile.SetId(serialisableTile.Id);
 
-        //    tileGO.name = "Tile" + tile.GridLocation.X + ", " + tile.GridLocation.Y;
-        //    tileGO.transform.position = GridLocation.GridToVector(tile.GridLocation);
+            tileGO.name = "Tile" + tile.GridLocation.X + ", " + tile.GridLocation.Y;
+            tileGO.transform.position = GridLocation.GridToVector(tile.GridLocation);
 
-        //    Tiles.Add(tile);
+            Tiles.Add(tile);
 
-        //    AddTileAttributes(serialisableTile, tile);
-        //    AddBackgroundSprites(serialisableTile, tile);
+            AddTileAttributes(serialisableTile, tile);
+            AddBackgroundSprites(serialisableTile, tile);
 
-        //    TilesByLocation.Add(tile.GridLocation, tile);
+            TilesByLocation.Add(tile.GridLocation, tile);
 
-        //    GridLocation furthestBounds = LevelBounds;
-        //    if (tile.GridLocation.X > furthestBounds.X) LevelBounds.X = tile.GridLocation.X;
-        //    if (tile.GridLocation.Y > furthestBounds.Y) LevelBounds.Y = tile.GridLocation.Y;
+            GridLocation furthestBounds = LevelBounds;
+            if (tile.GridLocation.X > furthestBounds.X) _levelBounds.X = tile.GridLocation.X;
+            if (tile.GridLocation.Y > furthestBounds.Y) _levelBounds.Y = tile.GridLocation.Y;
 
-        //    TileTransformationGridLocationByTile.Add(tile, serialisableTile.TilesToTransform);
-        //}
+            TileTransformationGridLocationByTile.Add(tile, serialisableTile.TilesToTransform);
+        }
 
-        //foreach (KeyValuePair<InGameTile, List<SerialisableGridLocation>> item in TileTransformationGridLocationByTile)
-        //{
-        //    List<InGameTile> tilesToTransform = new List<InGameTile>();
+        for (int k = 0; k < Tiles.Count; k++)
+        {
+            InGameOverworldTile tile = Tiles[k];
+            tile.AddNeighbours(this);
+        }
+    }
 
-        //    for (int i = 0; i < item.Value.Count; i++)
-        //    {
-        //        for (int j = 0; j < Tiles.Count; j++)
-        //        {
-        //            InGameTile tile = Tiles[j];
-        //            if (item.Value[i].X == tile.GridLocation.X && item.Value[i].Y == tile.GridLocation.Y)
-        //            {
-        //                tilesToTransform.Add(tile);
-        //                break;
-        //            }
-        //        }
-        //    }
+    public void AddTileAttributes(SerialisableTile serialisableTile, InGameOverworldTile tile)
+    {
+        InGameOverworldTileAttributePlacer tileAttributePlacer = new InGameOverworldTileAttributePlacer(tile);
 
-        //    item.Key.AddTilesToTransform(tilesToTransform);
-        //}
+        foreach (SerialisableTileAttribute serialisableTileAttribute in serialisableTile.TileAttributes)
+        {
+            int tileAttributeId = serialisableTileAttribute.TileAttributeId;
+            if (tileAttributeId == SerialisableTileAttribute.MazeEntryCode)
+            {
+                tileAttributePlacer.PlaceMazeEntry();
+            }
 
-        //for (int k = 0; k < Tiles.Count; k++)
-        //{
-        //    InGameTile tile = Tiles[k];
-        //    tile.AddNeighbours(this);
-        //}
+            else if (tileAttributeId == SerialisableTileAttribute.PlayerSpawnpointCode)
+            {
+                tileAttributePlacer.PlacePlayerSpawnpoint();
+            }
+            else
+            {
+                Logger.Error($"Unknown tile attribute with tileAttributeId {tileAttributeId}");
+            }
+        }
+    }
+
+    public void AddBackgroundSprites(SerialisableTile serialisableTile, InGameOverworldTile tile)
+    {
+        InGameOverworldTileBackgroundPlacer tileBackgroundPlacer = new InGameOverworldTileBackgroundPlacer(tile);
+
+        foreach (SerialisableTileBackground serialisableTileBackground in serialisableTile.TileBackgrounds)
+        {
+            if (serialisableTileBackground.TileBackgroundId == SerialisableTileBackground.PathBackgroundCode)
+            {
+                tileBackgroundPlacer.PlacePath(new OverworldDefaultPathType(), new TileConnectionScoreInfo(serialisableTileBackground.TileConnectionScore));
+            }
+            else if (serialisableTileBackground.TileBackgroundId == SerialisableTileBackground.BaseBackgroundCode)
+            {
+                tileBackgroundPlacer.PlaceBaseBackground(new OverworldDefaultBaseBackgroundType());
+            }
+            else
+            {
+                Logger.Error($"Unknown TileBackgroundId {serialisableTileBackground.TileBackgroundId}");
+            }
+        }
     }
 }

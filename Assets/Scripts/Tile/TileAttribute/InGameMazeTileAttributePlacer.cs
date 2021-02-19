@@ -1,6 +1,4 @@
-﻿using UnityEngine;
-
-public class InGameMazeTileAttributePlacer : MazeTileAttributePlacer<InGameMazeTile>
+﻿public class InGameMazeTileAttributePlacer : MazeTileAttributePlacer<InGameMazeTile>
 {
     private InGameMazeTile _tile;
 

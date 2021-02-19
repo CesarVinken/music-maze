@@ -4,7 +4,6 @@ using UnityEngine;
 public class InGameMazeLevel : MazeLevel
 {
     public List<InGameMazeTile> Tiles = new List<InGameMazeTile>();
-    public Dictionary<GridLocation, InGameMazeTile> TilesByLocation = new Dictionary<GridLocation, InGameMazeTile>();
 
     public InGameMazeLevel()
     {
@@ -13,7 +12,7 @@ public class InGameMazeLevel : MazeLevel
 
     public InGameMazeLevel(MazeLevelData mazeLevelData)
     {
-        MazeName = mazeLevelData.Name;
+        Name = mazeLevelData.Name;
 
         if (TilesContainer.Instance != null)
         {
@@ -21,7 +20,7 @@ public class InGameMazeLevel : MazeLevel
             TilesContainer.Instance = null;
         }
 
-        _mazeContainer = new GameObject(MazeName);
+        _mazeContainer = new GameObject(Name);
         _mazeContainer.transform.SetParent(GameManager.Instance.GridGO.transform);
         _mazeContainer.transform.position = new Vector3(0, 0, 0);
         _mazeContainer.AddComponent<TilesContainer>();
@@ -46,7 +45,6 @@ public class InGameMazeLevel : MazeLevel
             GameObject tileGO = GameObject.Instantiate(MazeLevelManager.Instance.InGameTilePrefab, _mazeContainer.transform);
 
             InGameMazeTile tile = tileGO.GetComponent<InGameMazeTile>();
-            tileGO.name = "serialisableTile" + serialisableTile.GridLocation.X + ", " + serialisableTile.GridLocation.Y;
 
             tile.SetGridLocation(serialisableTile.GridLocation.X, serialisableTile.GridLocation.Y);
             tile.SetId(serialisableTile.Id);

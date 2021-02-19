@@ -3,11 +3,7 @@ using UnityEngine;
 
 public class EditorOverworld : Overworld, IEditorLevel
 {
-    private Dictionary<GridLocation, Tile> _tilesByLocation = new Dictionary<GridLocation, Tile>();
-
     public List<EditorOverworldTile> Tiles = new List<EditorOverworldTile>();
-
-    public Dictionary<GridLocation, Tile> TilesByLocation { get => _tilesByLocation; set => _tilesByLocation = value; }
 
     public EditorOverworld()
     {
@@ -18,7 +14,7 @@ public class EditorOverworld : Overworld, IEditorLevel
     {
         GameManager.Instance.CurrentEditorLevel = this;
 
-        OverworldName = overworldData.Name;
+        Name = overworldData.Name;
 
         if (TilesContainer.Instance != null)
         {
@@ -26,7 +22,7 @@ public class EditorOverworld : Overworld, IEditorLevel
             TilesContainer.Instance = null;
         }
 
-        _overworldContainer = new GameObject(OverworldName);
+        _overworldContainer = new GameObject(Name);
         _overworldContainer.transform.SetParent(GameManager.Instance.GridGO.transform);
         _overworldContainer.transform.position = new Vector3(0, 0, 0);
         _overworldContainer.AddComponent<TilesContainer>();
