@@ -39,7 +39,6 @@ public static class EditorManager
         {
             case SceneType.Overworld:
                 EditorCanvasUI.Instance.OverworldModificationPanel.GenerateTiles();
-                Logger.Log("To do: auto generate overworld tiles");
                 break;
             case SceneType.Maze:
                 EditorCanvasUI.Instance.MazeModificationPanel.GenerateTiles();

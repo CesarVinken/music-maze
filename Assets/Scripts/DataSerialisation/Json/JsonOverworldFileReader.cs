@@ -2,36 +2,35 @@
 using UnityEngine;
 using UnityEngine.Networking;
 
-public class JsonMazeLevelFileReader
+public class JsonOverworldFileReader
 {
-    public MazeLevelData ReadLevelData(string levelName)
+    public OverworldData ReadOverworldData(string overworldName = "overworld")
     {
         string jsonContent;
         string filePath = "";
 
         if (Application.platform == RuntimePlatform.Android)
         {
-            filePath = Path.Combine(Application.streamingAssetsPath, levelName + ".json");
+            filePath = Path.Combine(Application.streamingAssetsPath, "overworld", overworldName + ".json");
 
             UnityWebRequest loadingRequest = UnityWebRequest.Get(filePath);
             loadingRequest.SendWebRequest();
-            while (!loadingRequest.isDone);
+            while (!loadingRequest.isDone) ;
             jsonContent = loadingRequest.downloadHandler.text.Trim();
         }
         else
         {
-            filePath = Path.Combine(Application.streamingAssetsPath, levelName + ".json");
+            filePath = Path.Combine(Application.streamingAssetsPath, "overworld", overworldName + ".json");
 
             if (!File.Exists(filePath))
             {
-                Logger.Warning($"File {levelName}.json doesn't exist");
+                Logger.Warning($"File {overworldName}.json doesn't exist");
                 return null;
             }
             jsonContent = File.ReadAllText(filePath);
         }
-        MazeLevelData levelData = JsonUtility.FromJson<MazeLevelData>(jsonContent);
+        OverworldData overworldData = JsonUtility.FromJson<OverworldData>(jsonContent);
 
-        return levelData;
+        return overworldData;
     }
 }
-

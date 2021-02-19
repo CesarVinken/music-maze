@@ -1,7 +1,7 @@
 ﻿using System.Linq;
 using UnityEngine;
 
-public class MazeTile : Tile
+public class MazeTile : Tile, IMazeLevel
 {
     public SpriteRenderer PlayerMarkRenderer;
     public SpriteRenderer PlayerMarkEndsRenderer;

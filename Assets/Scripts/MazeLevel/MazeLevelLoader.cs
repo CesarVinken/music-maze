@@ -42,7 +42,7 @@ public static class MazeLevelLoader
     {
         string sanatisedMazeName = mazeLevelName.ToLower().Replace(" ", " ");
 
-        string filePath = Path.Combine(Application.streamingAssetsPath, sanatisedMazeName + ".json");
+        string filePath = Path.Combine(Path.Combine(Application.streamingAssetsPath, "maze"), sanatisedMazeName + ".json");
 
         if (!File.Exists(filePath))
         {
@@ -56,7 +56,7 @@ public static class MazeLevelLoader
 
     public static string GetAllMazeLevelNamesForPrint(string printLine = "")
     {
-        foreach (string mazeName in Directory.GetFiles(Application.streamingAssetsPath, "*.json"))
+        foreach (string mazeName in Directory.GetFiles(Path.Combine(Application.streamingAssetsPath, "maze"), "*.json"))
         {
             string[] fileNameParts = mazeName.Split('\\');
             string[] fileNameWithoutExtention = fileNameParts[fileNameParts.Length - 1].Split('.');

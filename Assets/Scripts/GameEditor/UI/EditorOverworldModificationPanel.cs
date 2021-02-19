@@ -20,11 +20,61 @@ public class EditorOverworldModificationPanel : EditorGridModificationPanel
     public void SaveOverworld()
     {
         Logger.Log("Save overworld");
+        if (string.IsNullOrWhiteSpace(_overworldName))
+        {
+            Logger.Warning(Logger.Datawriting, "In order to save the overworld, please fill in an overworld name");
+            return;
+        }
+
+        if (OverworldManager.Instance.EditorOverworld == null)
+        {
+            Logger.Warning(Logger.Datawriting, "Please first generate an overworld before saving.");
+            return;
+        }
+
+        if (_overworldName == "overworlds")
+        {
+            Logger.Warning(Logger.Datawriting, "A maze level cannot have the name 'levels', as this is already the name of the file that lists all the maze levels");
+            return;
+        }
+
+        SaveOverworldData();
+        AddOverworldToOverworldList();
+
+        Logger.Log(Logger.Datawriting, "Overworld {0} Saved.", _overworldName);
+    }
+
+    private void SaveOverworldData()
+    {
+        OverworldData overworldData = new OverworldData(OverworldManager.Instance.EditorOverworld).WithName(_overworldName);
+        JsonOverworldFileWriter fileWriter = new JsonOverworldFileWriter();
+        fileWriter.SerialiseData(overworldData);
+    }
+
+    private void AddOverworldToOverworldList()
+    {
+        OverworldNamesData overworldNameData = new OverworldNamesData(_overworldName).AddOverworldName(_overworldName);
+
+        JsonOverworldListFileWriter fileWriter = new JsonOverworldListFileWriter();
+        fileWriter.SerialiseData(overworldNameData);
     }
 
     public void LoadOverworld()
     {
         Logger.Log("Load overworld");
+        if (string.IsNullOrWhiteSpace(_overworldName))
+        {
+            Logger.Warning(Logger.Datawriting, "In order to save the overworld, please fill in an overworld name");
+            return;
+        }
+
+        bool overworldNameExists = OverworldLoader.OverworldExists(_overworldName);
+
+        if (overworldNameExists)
+        {
+            OverworldData pverworldData = OverworldLoader.LoadOverworldData(_overworldName);
+            OverworldLoader.LoadOverworldForEditor(pverworldData);
+        }
     }
 
     public void SetOverworldName(string input)

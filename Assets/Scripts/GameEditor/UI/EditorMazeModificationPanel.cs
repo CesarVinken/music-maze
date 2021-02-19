@@ -158,10 +158,10 @@ public class EditorMazeModificationPanel : EditorGridModificationPanel
 
     private void AddMazeToMazeList()
     {
-        MazeLevelNamesData levelData = new MazeLevelNamesData(_mazeName).AddLevelName(_mazeName);
+        MazeLevelNamesData levelNamesData = new MazeLevelNamesData(_mazeName).AddLevelName(_mazeName);
 
         JsonMazeLevelListFileWriter fileWriter = new JsonMazeLevelListFileWriter();
-        fileWriter.SerialiseData(levelData);
+        fileWriter.SerialiseData(levelNamesData);
     }
 
     public void TogglePlayableMazesPanel()

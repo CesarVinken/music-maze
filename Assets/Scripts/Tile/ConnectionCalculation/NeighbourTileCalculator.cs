@@ -211,7 +211,7 @@ public class NeighbourTileCalculator
         TileConnectionVariationRegister<T> TileConnectionVariationRegister = new TileConnectionVariationRegister<T>(thisMazeTileAttribute, connectionRight, connectionDown, connectionLeft, connectionUp);
         Type modifierType = typeof(T);
 
-        if(modifierType == typeof(MazeTilePath))
+        if(modifierType == typeof(TilePath))
         {
             return TileConnectionVariationRegister.MazeTilePath() as List<T>;
         }
@@ -221,7 +221,7 @@ public class NeighbourTileCalculator
         }
         else
         {
-            Logger.Error($"Type {modifierType} was not yet implemented for Tile Connetion Register");
+            Logger.Error($"Type {modifierType} was not yet implemented for Tile Connection Register");
             return null;
         }
     }

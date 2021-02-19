@@ -115,7 +115,7 @@ public class EditorOverworld : Overworld, IEditorLevel
             {
                 tileAttributePlacer.PlacePlayerSpawnpoint();
             }
-            else if (tileAttributeId == SerialisableTileAttribute.MazeEntry)
+            else if (tileAttributeId == SerialisableTileAttribute.MazeEntryCode)
             {
                 tileAttributePlacer.PlaceMazeEntry();
             }

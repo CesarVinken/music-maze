@@ -7,7 +7,7 @@ public class JsonMazeLevelListFileReader
     public MazeLevelNamesData ReadMazeLevelList()
     {
         string fileContent;
-        string filePath = Path.Combine(Application.streamingAssetsPath, "levels.json");
+        string filePath = Path.Combine(Application.streamingAssetsPath, "maze", "levels.json");
 
         if (Application.platform == RuntimePlatform.Android)
         {

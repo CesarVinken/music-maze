@@ -1,14 +1,14 @@
-﻿using UnityEngine;
+﻿using System.IO;
+using UnityEngine;
 
 public class OverworldLoader : MonoBehaviour
 {
-    public static OverworldData LoadOverworldData(string mazeName)
+    public static OverworldData LoadOverworldData(string overworldName)
     {
-        Logger.Log("TODO: implement loading of data"); return null;
-        //JsonMazeLevelFileReader levelReader = new JsonMazeLevelFileReader();
-        //MazeLevelData mazeLevelData = levelReader.ReadLevelData(mazeName);
+        JsonOverworldFileReader overworldReader = new JsonOverworldFileReader();
+        OverworldData overworldData = overworldReader.ReadOverworldData(overworldName);
 
-        //return mazeLevelData;
+        return overworldData;
     }
 
     public static void LoadOverworld(OverworldData overworldData)
@@ -34,5 +34,33 @@ public class OverworldLoader : MonoBehaviour
     {
         OverworldManager.Instance.UnloadOverworld();
         OverworldManager.Instance.SetupOverworldForEditor(overworldData); // sets up the level without instantiating characters etc.
+    }
+
+    public static bool OverworldExists(string overworldName)
+    {
+        string sanatisedOverworldName = overworldName.ToLower().Replace(" ", " ");
+
+        string filePath = Path.Combine(Application.streamingAssetsPath, "overworld", sanatisedOverworldName + ".json");
+
+        if (!File.Exists(filePath))
+        {
+            Logger.Warning(Logger.Datawriting, $"Looked for the overworld '{sanatisedOverworldName}' but could not find it");
+            Logger.Log($"The available overworlds are: {GetAllOverworldNamesForPrint()}");
+            return false;
+        }
+
+        return true;
+    }
+
+    public static string GetAllOverworldNamesForPrint(string printLine = "")
+    {
+        foreach (string overworldName in Directory.GetFiles(Application.streamingAssetsPath + "overworld/", "*.json"))
+        {
+            string[] fileNameParts = overworldName.Split('\\');
+            string[] fileNameWithoutExtention = fileNameParts[fileNameParts.Length - 1].Split('.');
+            printLine += "\n   -" + fileNameWithoutExtention[0];
+        }
+
+        return printLine;
     }
 }

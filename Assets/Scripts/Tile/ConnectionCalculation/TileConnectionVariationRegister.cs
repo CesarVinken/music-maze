@@ -115,9 +115,9 @@ public class TileConnectionVariationRegister<T> where T : MonoBehaviour, ITileCo
         return new TileConnectionScoreInfo(connectionScore, spriteNumber);
     }
 
-    public List<MazeTilePath> MazeTilePath()
+    public List<TilePath> MazeTilePath()
     {
-        List<MazeTilePath> updatedConnections = new List<MazeTilePath>();
+        List<TilePath> updatedConnections = new List<TilePath>();
 
         int currentScoreThisTilePath = _thisMazeTileAttribute.ConnectionScore;
         int currentScoreRight = _connectionRight != null ? _connectionRight.ConnectionScore : -1;

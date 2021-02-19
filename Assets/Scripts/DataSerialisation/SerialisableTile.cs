@@ -12,7 +12,7 @@ public class SerialisableTile
 
     public List<SerialisableGridLocation> TilesToTransform;
 
-    public SerialisableTile(EditorMazeTile tile)
+    public SerialisableTile(Tile tile)
     {
         Id = tile.TileId;
         TileAttributes = SerialiseTileAttributes(tile);
@@ -20,8 +20,11 @@ public class SerialisableTile
 
         GridLocation = new SerialisableGridLocation(tile.GridLocation.X, tile.GridLocation.Y);
 
-        List<EditorMazeTile> tilesToTransform = MazeLevelManager.Instance.EditorLevel.FindTilesToTransform(tile);
-        TilesToTransform = SerialiseTilesToTransform(tilesToTransform);
+        if(tile is IMazeLevel)
+        {
+            List<EditorMazeTile> tilesToTransform = MazeLevelManager.Instance.EditorLevel.FindTilesToTransform(tile as EditorMazeTile);
+            TilesToTransform = SerialiseTilesToTransform(tilesToTransform);
+        }
     }
 
     public SerialisableTile(string id, List<SerialisableTileAttribute> tileAttributes, List<SerialisableTileBackground> tileBackgrounds, int gridLocationX, int gridLocationY)
@@ -32,7 +35,7 @@ public class SerialisableTile
         GridLocation = new SerialisableGridLocation(gridLocationX, gridLocationY);
     }
 
-    private List<SerialisableTileAttribute> SerialiseTileAttributes(EditorMazeTile tile)
+    private List<SerialisableTileAttribute> SerialiseTileAttributes(Tile tile)
     {
         List<SerialisableTileAttribute> tileAttributes = new List<SerialisableTileAttribute>();
 
@@ -69,6 +72,11 @@ public class SerialisableTile
                 SerialisableEnemySpawnpointAttribute serialisableEnemySpawnpointAttribute = new SerialisableEnemySpawnpointAttribute();
                 tileAttributes.Add(serialisableEnemySpawnpointAttribute);
             }
+            else if (tileAttribute.GetType() == typeof(MazeEntry))
+            {
+                SerialisableMazeEntryAttribute serialisableMazeEntryAttribute = new SerialisableMazeEntryAttribute();
+                tileAttributes.Add(serialisableMazeEntryAttribute);
+            }
             else
             {
                 Logger.Error($"Could not serialise the tile attribute {tileAttribute.GetType()}");
@@ -77,22 +85,21 @@ public class SerialisableTile
         return tileAttributes;
     }
 
-    private List<SerialisableTileBackground> SerialiseTileBackgrounds(EditorMazeTile tile)
+    private List<SerialisableTileBackground> SerialiseTileBackgrounds(Tile tile)
     {
         List<SerialisableTileBackground> tilebackgrounds = new List<SerialisableTileBackground>();
 
         foreach (ITileBackground tileBackground in tile.TileBackgrounds)
         {
-            if (tileBackground.GetType() == typeof(MazeTilePath))
+            if (tileBackground.GetType() == typeof(MazeTilePath) || tileBackground.GetType() == typeof(OverworldTilePath))
             {
-                MazeTilePath mazeTilePath = tileBackground as MazeTilePath;
+                TilePath tilePath = tileBackground as TilePath;
                 SerialisableTilePathBackground serialisedTilePathBackground =
-                    new SerialisableTilePathBackground(mazeTilePath.ConnectionScore);
+                    new SerialisableTilePathBackground(tilePath.ConnectionScore);
                 tilebackgrounds.Add(serialisedTilePathBackground);
             }
-            else if (tileBackground.GetType() == typeof(MazeTileBaseBackground))
+            else if (tileBackground.GetType() == typeof(MazeTileBaseBackground) || (tileBackground.GetType() == typeof(OverworldTileBaseBackground)))
             {
-                MazeTileBaseBackground baseBackground = tileBackground as MazeTileBaseBackground;
                 SerialisableTileBaseBackground serialisedTileBaseBackground =
                     new SerialisableTileBaseBackground(-1); // TODO: make work/remove connection scores for BaseBackground
                 tilebackgrounds.Add(serialisedTileBaseBackground);

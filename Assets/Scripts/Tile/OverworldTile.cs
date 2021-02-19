@@ -1,4 +1,4 @@
-﻿public class OverworldTile : Tile
+﻿public class OverworldTile : Tile, IOverworld
 {
     public override TileObstacle TryGetTileObstacle()
     {
