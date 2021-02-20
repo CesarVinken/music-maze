@@ -30,6 +30,13 @@ public class CharacterAnimationHandler : MonoBehaviour
 
     public void SetAnimationControllerForCharacterType(CharacterType characterType)
     {
+        /*TODO: Refactor like this
+         * Instead of characterType enum, have separate class for each Charactertype, with shared itnerface ICharacter. 
+         * ICharacter has GetAnimationController function. For enemy, always get controller from MazeCharacterManager. For bard types, make it depend on the GameManager.CurrentScene
+         * 
+         * - Move EnemyController from CharacterManager base class to MazeCharacterManager
+         * 
+         * */
         switch (characterType)
         {
             case CharacterType.Bard1:

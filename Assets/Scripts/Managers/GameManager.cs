@@ -24,12 +24,14 @@ public class GameManager : MonoBehaviourPunCallbacks, IOnEventCallback
     public IPlatformConfiguration Configuration;
     public KeyboardConfiguration KeyboardConfiguration;
 
-    public IEditorLevel CurrentEditorLevel; // can be any editor or game level 
+    public IEditorLevel CurrentEditorLevel; // can be any editor or game level
+    public IInGameLevel CurrentGameLevel;
 
     public GameObject GridGO;
     
     [SerializeField] private GameObject _mazeLevelManagerPrefab;
-    [SerializeField] private GameObject _characterManagerPrefab;
+    [SerializeField] private GameObject _mazeCharacterManagerPrefab;
+    [SerializeField] private GameObject _overworldCharacterManagerPrefab;
     [SerializeField] private GameObject _mazeLevelSpriteManagerPrefab;
     [SerializeField] private GameObject _overworldSpriteManagerPrefab;
     [SerializeField] private GameObject _overworldManagerPrefab;
@@ -47,7 +49,8 @@ public class GameManager : MonoBehaviourPunCallbacks, IOnEventCallback
         Guard.CheckIsNull(GridGO, "GridGO", gameObject);
 
         Guard.CheckIsNull(_mazeLevelManagerPrefab, "MazeLevelManagerPrefab", gameObject);
-        Guard.CheckIsNull(_characterManagerPrefab, "CharacterManagerPrefab", gameObject);
+        Guard.CheckIsNull(_mazeCharacterManagerPrefab, "_mazeCharacterManagerPrefab", gameObject);
+        Guard.CheckIsNull(_overworldCharacterManagerPrefab, "_overworldCharacterManagerPrefab", gameObject);
         Guard.CheckIsNull(_mazeLevelSpriteManagerPrefab, "MazeLevelSpriteManagerPrefab", gameObject);
         Guard.CheckIsNull(_overworldSpriteManagerPrefab, "_overworldSpriteManagerPrefab", gameObject);
         Guard.CheckIsNull(_overworldManagerPrefab, "OverworldManagerPrefab", gameObject);
@@ -74,13 +77,14 @@ public class GameManager : MonoBehaviourPunCallbacks, IOnEventCallback
         switch (CurrentSceneType)
         {
             case SceneType.Overworld:
-                Instantiate(_overworldManagerPrefab, transform);
                 Instantiate(_overworldSpriteManagerPrefab, transform);
+                Instantiate(_overworldCharacterManagerPrefab, transform);
+                Instantiate(_overworldManagerPrefab, transform);
                 break;
             case SceneType.Maze:
-                Instantiate(_mazeLevelManagerPrefab, transform);
-                Instantiate(_characterManagerPrefab, transform);
                 Instantiate(_mazeLevelSpriteManagerPrefab, transform);
+                Instantiate(_mazeCharacterManagerPrefab, transform);
+                Instantiate(_mazeLevelManagerPrefab, transform);
                 break;
             default:
                 Logger.Error($"Scenetype {CurrentSceneType} is not implemented yet");
@@ -135,12 +139,12 @@ public class GameManager : MonoBehaviourPunCallbacks, IOnEventCallback
 
                     MazeLevelLoader.LoadMazeLevel(startUpMazeLevelData);
 
-                    if (MazeLevelManager.Instance.Level == null)
+                    if (CurrentGameLevel == null)
                     {
                         Logger.Log(Logger.Initialisation, "No level loaded on startup. Returning");
                         return;
                     }
-                    if (MazeLevelManager.Instance.Level.PlayerCharacterSpawnpoints.Count == 0) return;
+                    if (CurrentGameLevel.PlayerCharacterSpawnpoints.Count == 0) return;
 
                     PlayableLevelNames = MazeLevelLoader.GetAllPlayableLevelNames();
                 } // We loaded a maze scene through the editor. Set up an empty grid for in the editor

@@ -1,9 +1,10 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 
-public class MazeLevel : IGameScene
+public class MazeLevel : IGameScene<Tile>
 {
     public string Name { get; set; }
+    public List<Tile> Tiles { get; set; }
 
     protected GridLocation _levelBounds = new GridLocation(0, 0);
     public GridLocation LevelBounds { get => _levelBounds; set => _levelBounds = value; }
@@ -13,7 +14,9 @@ public class MazeLevel : IGameScene
 
     public List<PlayerExit> MazeExits = new List<PlayerExit>();
 
-    public Dictionary<PlayerNumber, CharacterSpawnpoint> PlayerCharacterSpawnpoints = new Dictionary<PlayerNumber, CharacterSpawnpoint>();
+    private Dictionary<PlayerNumber, CharacterSpawnpoint> _playerCharacterSpawnpoints = new Dictionary<PlayerNumber, CharacterSpawnpoint>();
+    public Dictionary<PlayerNumber, CharacterSpawnpoint> PlayerCharacterSpawnpoints { get => _playerCharacterSpawnpoints; set => _playerCharacterSpawnpoints = value;}
+
     public List<CharacterSpawnpoint> EnemyCharacterSpawnpoints = new List<CharacterSpawnpoint>();
 
     protected GameObject _mazeContainer;

@@ -68,7 +68,7 @@ public abstract class Tile : MonoBehaviour
         }
     }
 
-    public void AddNeighbours<T>(T level) where T : IGameScene
+    public void AddNeighbours<T>(T level) where T : IGameScene<Tile>
     {
         //Add Right
         if (GridLocation.X < level.LevelBounds.X)

@@ -54,11 +54,11 @@ public class OverworldManager : MonoBehaviour
 
         InitialiseTileAttributes();
 
-        //Logger.Log("Start scan...");
-        //IEnumerator coroutine = ScanCoroutine();
-
-        //StartCoroutine(coroutine);
+        CharacterManager.Instance.SpawnCharacters();
+        CameraController.Instance.SetPanLimits(Overworld.LevelBounds);
+        CameraController.Instance.FocusOnPlayer();
     }
+
 
     public void SetupOverworldForEditor(OverworldData overworldData)
     {

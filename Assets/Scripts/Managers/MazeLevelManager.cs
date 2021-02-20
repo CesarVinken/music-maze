@@ -29,6 +29,7 @@ public class MazeLevelManager : MonoBehaviour, IOnEventCallback
 
     public int NumberOfUnmarkedTiles = -1;
 
+
     public GameObject GetTileAttributePrefab<T>() where T : ITileAttribute
     {
         switch (typeof(T))
@@ -65,6 +66,9 @@ public class MazeLevelManager : MonoBehaviour, IOnEventCallback
         Instance = this;
     }
 
+    public void Start()
+    {
+    }
     private void OnEnable()
     {
         PhotonNetwork.AddCallbackTarget(this);
@@ -348,7 +352,11 @@ public class MazeLevelManager : MonoBehaviour, IOnEventCallback
 
     private void HandleSpawnpointMarkability()
     {
-        if(CharacterManager.Instance.MazePlayers.Count < 2)
+        MazeCharacterManager characterManager = CharacterManager.Instance as MazeCharacterManager;
+
+        if (characterManager == null) return;
+
+        if(characterManager.Players.Count < 2)
         {
             MazeTile spawnpoint1Tile = Level.PlayerCharacterSpawnpoints[PlayerNumber.Player1].Tile as MazeTile;
             spawnpoint1Tile.TryMakeMarkable(false);

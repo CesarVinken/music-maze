@@ -1,9 +1,10 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 
-public class InGameMazeLevel : MazeLevel
+public class InGameMazeLevel : MazeLevel, IInGameLevel
 {
-    public List<InGameMazeTile> Tiles = new List<InGameMazeTile>();
+    private List<InGameMazeTile> _tiles = new List<InGameMazeTile>();
+    public new List<InGameMazeTile> Tiles { get => _tiles; set => _tiles = value; }
 
     public InGameMazeLevel()
     {
@@ -13,6 +14,7 @@ public class InGameMazeLevel : MazeLevel
     public InGameMazeLevel(MazeLevelData mazeLevelData)
     {
         Name = mazeLevelData.Name;
+        GameManager.Instance.CurrentGameLevel = this;
 
         if (TilesContainer.Instance != null)
         {

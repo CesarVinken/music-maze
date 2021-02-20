@@ -60,11 +60,14 @@ public class PlayerExit : TileObstacle, ITileAttribute, ITileConnectable
 
     public void OnCollisionEnter2D(Collision2D collision)
     {
-        PlayerCharacter player = collision.gameObject.GetComponent<PlayerCharacter>();
+        MazePlayerCharacter player = collision.gameObject.GetComponent<MazePlayerCharacter>();
         if (player != null)
         {
             Logger.Log("{0} reached the exit! {1},{2}", player.name, Tile.GridLocation.X, Tile.GridLocation.Y);
-            CharacterManager.Instance.CharacterExit(player);
+            MazeCharacterManager characterManager = CharacterManager.Instance as MazeCharacterManager;
+
+            if (characterManager) return;
+            characterManager.CharacterExit(player);
         }
     }
 

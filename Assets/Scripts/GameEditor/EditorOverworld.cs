@@ -3,7 +3,10 @@ using UnityEngine;
 
 public class EditorOverworld : Overworld, IEditorLevel
 {
-    public List<EditorOverworldTile> Tiles = new List<EditorOverworldTile>();
+    private List<EditorOverworldTile> _tiles = new List<EditorOverworldTile>();
+    public new List<EditorOverworldTile> Tiles { get => _tiles; set => _tiles = value; }
+
+    //public List<EditorOverworldTile> Tiles = new List<EditorOverworldTile>();
 
     public EditorOverworld()
     {

@@ -36,7 +36,11 @@ public class ScoreCalculator
     {
         Logger.Log(Logger.Score, "Finished counting score.");
 
-        if (CharacterManager.Instance.MazePlayers.Count == 1)
+        MazeCharacterManager characterManager = CharacterManager.Instance as MazeCharacterManager;
+
+        if (characterManager == null) return; 
+        
+        if (characterManager.Players.Count == 1)
         {
             PlayerScores.Add(PlayerNumber.Player1, new PlayerScore());
         }
@@ -105,7 +109,11 @@ public class ScoreCalculator
         
         foreach (KeyValuePair<PlayerNumber, PlayerScore> item in PlayerScores)
         {
-            int playerCaughtScore = CharacterManager.Instance.MazePlayers[item.Key].TimesCaught * -PlayerCaughtPenaltyValue;
+            MazeCharacterManager characterManager = CharacterManager.Instance as MazeCharacterManager;
+
+            if (characterManager == null) return;
+
+            int playerCaughtScore = characterManager.Players[item.Key].TimesCaught * -PlayerCaughtPenaltyValue;
             PlayerScore p = item.Value;
             p.PlayerCaughtScore = playerCaughtScore;
             tempPlayerScores.Add(item.Key, p);

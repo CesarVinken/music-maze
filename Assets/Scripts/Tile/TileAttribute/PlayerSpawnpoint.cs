@@ -18,19 +18,21 @@ public class PlayerSpawnpoint : CharacterSpawnpoint
 
         if (EditorManager.InEditor) return;
 
-        int registeredSpawnpoints = MazeLevelManager.Instance.Level.PlayerCharacterSpawnpoints.Count;
+        int registeredSpawnpoints = GameManager.Instance.CurrentGameLevel.PlayerCharacterSpawnpoints.Count;
 
         if(registeredSpawnpoints == 0)
         {
-            MazeLevelManager.Instance.Level.PlayerCharacterSpawnpoints.Add(PlayerNumber.Player1, this);
+            GameManager.Instance.CurrentGameLevel.PlayerCharacterSpawnpoints.Add(PlayerNumber.Player1, this);
         }
         else if(registeredSpawnpoints == 1)
         {
-            MazeLevelManager.Instance.Level.PlayerCharacterSpawnpoints.Add(PlayerNumber.Player2, this);
+            GameManager.Instance.CurrentGameLevel.PlayerCharacterSpawnpoints.Add(PlayerNumber.Player2, this);
         }
         else
         {
             Logger.Error($"Found {registeredSpawnpoints} registered spawnpoints, but there can be only a maximum of 2");
         }
+
+        Logger.Log("Registered spawnpoint");
     }
 }

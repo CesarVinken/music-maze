@@ -1,31 +1,24 @@
 ﻿using UnityEngine;
 using Photon.Pun;
 using System.Collections;
-using System;
 
 public class PlayerCharacter : Character
 {
     [Space(10)]
-    [Header("Player specific")]
 
     public KeyboardInput KeyboardInput = KeyboardInput.None;
     public int PlayerNoInGame = 1;  // in multiplayer on multiple computers there can be a player 1 and player 2, while both use their Player1 keyboard input
     public PlayerNumber PlayerNumber = PlayerNumber.Player1;
-    public bool HasReachedExit = false;
     public Tile LastTile;
 
-    [SerializeField] private GameObject _selectionIndicatorPrefab = null;
-    [SerializeField] private GameObject _selectionIndicatorGO = null;
+    [SerializeField] protected GameObject _selectionIndicatorPrefab = null;
+    [SerializeField] protected GameObject _selectionIndicatorGO = null;
 
     public GridLocation CurrentGridLocation;
-    public int TimesCaught = 0;
 
-    private bool _isPressingPointerForSeconds = false;
-    private float _pointerPresserTimer = 1;
-    private const float _pointerPresserDelay = 0.25f;
-
-    public event Action PlayerExitsEvent;
-    public event Action PlayerCaughtEvent;
+    protected bool _isPressingPointerForSeconds = false;
+    protected float _pointerPresserTimer = 1;
+    protected const float _pointerPresserDelay = 0.25f;
 
     public override void Awake()
     {
@@ -52,7 +45,6 @@ public class PlayerCharacter : Character
                     PlayerNumber = PlayerNumber.Player1;
             }
         }
-        CharacterManager.Instance.MazePlayers.Add(PlayerNumber, this);
 
         _pointerPresserTimer = _pointerPresserDelay;
 
@@ -69,38 +61,21 @@ public class PlayerCharacter : Character
         }        
     }
 
-    public void Start()
+    public virtual void Start()
     {
         _characterPath.CharacterReachesTarget += OnTargetReached;
-        PlayerExitsEvent += OnPlayerExit;
-        PlayerCaughtEvent += OnPlayerCaught;
-
-        if (GameManager.GameType == GameType.SinglePlayer
-            || PhotonView.IsMine)
-        {
-            _selectionIndicatorGO = Instantiate(_selectionIndicatorPrefab, SceneObjectManager.Instance.CharactersGO);
-
-            SelectionIndicator selectionIndicator = _selectionIndicatorGO.GetComponent<SelectionIndicator>();
-            selectionIndicator.Setup(transform, this);
-
-            SceneObjectManager.Instance.SceneObjects.Add(_selectionIndicatorGO);
-        }
-
-        //transform the player's starting tile and surrounding tiles
-        InGameMazeTile currentTile = MazeLevelManager.Instance.Level.TilesByLocation[StartingPosition] as InGameMazeTile;
-        currentTile.TriggerTransformations();
     }
 
-    public void OnCollisionEnter2D(Collision2D collision)
-    {
-        if (GameManager.GameType == GameType.Multiplayer && !PhotonView.IsMine) return;
+    //public void OnCollisionEnter2D(Collision2D collision)
+    //{
+    //    if (GameManager.GameType == GameType.Multiplayer && !PhotonView.IsMine) return;
 
-        EnemyCharacter enemy = collision.gameObject.GetComponent<EnemyCharacter>();
-        if (enemy != null)
-        {
-            PlayerCaughtEvent?.Invoke();
-        }
-    }
+    //    EnemyCharacter enemy = collision.gameObject.GetComponent<EnemyCharacter>();
+    //    if (enemy != null)
+    //    {
+    //        PlayerCaughtEvent?.Invoke();
+    //    }
+    //}
 
     public void Update()
     {
@@ -344,19 +319,6 @@ public class PlayerCharacter : Character
             _animationHandler.SetLocomotion(true);
     }
 
-    public void Exit()
-    {
-        PlayerExitsEvent?.Invoke();
-    }
-
-    private void OnPlayerExit()
-    {
-        FreezeCharacter();
-        HasReachedExit = true;
-
-        CharacterBody.SetActive(false);
-    }
-
     public void UpdateCurrentGridLocation(GridLocation gridLocation)
     {
         CurrentGridLocation = gridLocation;
@@ -387,35 +349,11 @@ public class PlayerCharacter : Character
         SetHasCalculatedTarget(false);
 
         if (!IsPressingMovementKey() && !_isPressingPointerForSeconds)
-        //if (!IsPressingMovementKey() && (!_isPressingPointerForSeconds || !Input.GetMouseButton(0)))
         {
             _animationHandler.SetLocomotion(false);
         }
         IsMoving = false;
     }
 
-    public void OnPlayerCaught()
-    {
-        if (GameManager.GameType == GameType.SinglePlayer)
-        {
-            PunRPCCaughtByEnemy();
-        }
-        else
-        {
-            PhotonView.RPC("PunRPCCaughtByEnemy", RpcTarget.All);
-        }
 
-        float freezeTime = 2.0f;
-
-        IEnumerator coroutine = this.RespawnCharacter(this, freezeTime);
-        StartCoroutine(coroutine);
-
-        _isPressingPointerForSeconds = false;
-    }
-
-    [PunRPC] // the part all clients need to be informed about
-    private void PunRPCCaughtByEnemy()
-    {
-        TimesCaught++;
-    }
 }

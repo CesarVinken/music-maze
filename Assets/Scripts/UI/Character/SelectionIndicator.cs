@@ -3,14 +3,14 @@
 public class SelectionIndicator : MonoBehaviour
 {
     public Transform SelectedObject;
-    private PlayerCharacter _playerCharacter;
+    private MazePlayerCharacter _playerCharacter;
 
     public void Update()
     {
         transform.position = SelectedObject.position;
     }
 
-    public void Setup(Transform selectedObject, PlayerCharacter player) 
+    public void Setup(Transform selectedObject, MazePlayerCharacter player) 
     {
         SelectedObject = selectedObject;
         _playerCharacter = player;

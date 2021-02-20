@@ -42,8 +42,8 @@ public class CameraController : MonoBehaviour
 
     public void Start()
     {
-        if(MazeLevelManager.Instance?.Level != null)
-            SetPanLimits(MazeLevelManager.Instance.Level.LevelBounds);
+        if(GameManager.Instance.CurrentGameLevel != null)
+            SetPanLimits(GameManager.Instance.CurrentGameLevel.LevelBounds);
     }
 
     public void SetZoomLevel(float zoomLevel)
@@ -87,12 +87,24 @@ public class CameraController : MonoBehaviour
 
         PlayerCharacter player = null;
 
-        if (GameManager.GameType == GameType.SinglePlayer)
-            player = CharacterManager.Instance.MazePlayers[PlayerNumber.Player1];
+        if (GameManager.CurrentSceneType == SceneType.Maze)
+        {
+            if (GameManager.GameType == GameType.SinglePlayer)
+                player = CharacterManager.Instance.GetPlayers<MazePlayerCharacter>()[PlayerNumber.Player1] as PlayerCharacter;
+            else
+            {
+                player = CharacterManager.Instance.GetPlayers<MazePlayerCharacter>().FirstOrDefault(p => p.Value.PhotonView.IsMine).Value;
+            }
+        }
         else
         {
-            player = CharacterManager.Instance.MazePlayers.FirstOrDefault(p => p.Value.PhotonView.IsMine).Value;
-        }   
+            if (GameManager.GameType == GameType.SinglePlayer)
+                player = CharacterManager.Instance.GetPlayers<OverworldPlayerCharacter>()[PlayerNumber.Player1] as PlayerCharacter;
+            else
+            {
+                player = CharacterManager.Instance.GetPlayers<OverworldPlayerCharacter>().FirstOrDefault(p => p.Value.PhotonView.IsMine).Value;
+            }
+        }
 
         if (player == null)
         {

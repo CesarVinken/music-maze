@@ -4,12 +4,18 @@ using UnityEngine;
 
 public class EnemyCharacter : Character
 {
+    private MazeCharacterManager _characterManager;
+
     public override void Awake()
     {
         base.Awake();
         _characterPath.CharacterReachesTarget += OnTargetReached;
 
-        CharacterManager.Instance.Enemies.Add(this);
+        _characterManager = CharacterManager.Instance as MazeCharacterManager;
+
+        if (_characterManager == null) return;
+
+        _characterManager.Enemies.Add(this);
     }
 
     public void Start()
@@ -63,11 +69,11 @@ public class EnemyCharacter : Character
     private void TargetPlayer()
     {
         //Randomly pick one of the players
-        int randomNumber = UnityEngine.Random.Range(0, CharacterManager.Instance.MazePlayers.Count);
+        int randomNumber = UnityEngine.Random.Range(0, _characterManager.Players.Count);
 
         PlayerCharacter randomPlayer = randomNumber == 0 ?
-            CharacterManager.Instance.MazePlayers[PlayerNumber.Player1] :
-            CharacterManager.Instance.MazePlayers[PlayerNumber.Player2];
+            _characterManager.Players[PlayerNumber.Player1] :
+            _characterManager.Players[PlayerNumber.Player2];
 
         Vector3 playerVectorLocation = GridLocation.GridToVector(randomPlayer.CurrentGridLocation);
 

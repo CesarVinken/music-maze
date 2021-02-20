@@ -3,7 +3,8 @@ using UnityEngine;
 
 public class InGameOverworld : Overworld, IInGameLevel
 {
-    public List<InGameOverworldTile> Tiles = new List<InGameOverworldTile>();
+    private List<InGameOverworldTile> _tiles = new List<InGameOverworldTile>();
+    public new List<InGameOverworldTile> Tiles { get => _tiles; set => _tiles = value; }
 
     public InGameOverworld()
     {
@@ -13,6 +14,7 @@ public class InGameOverworld : Overworld, IInGameLevel
     public InGameOverworld(OverworldData overworldData)
     {
         Name = overworldData.Name;
+        GameManager.Instance.CurrentGameLevel = this;
 
         if (TilesContainer.Instance != null)
         {
@@ -37,7 +39,6 @@ public class InGameOverworld : Overworld, IInGameLevel
 
     public void BuildTiles(OverworldData overworldData)
     {
-        Logger.Log("TODO: implement BuildTiles function");
         Dictionary<InGameOverworldTile, List<SerialisableGridLocation>> TileTransformationGridLocationByTile = new Dictionary<InGameOverworldTile, List<SerialisableGridLocation>>();
 
         for (int i = 0; i < overworldData.Tiles.Count; i++)

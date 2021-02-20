@@ -3,7 +3,8 @@ using UnityEngine;
 
 public class EditorMazeLevel : MazeLevel, IEditorLevel
 {
-    public List<EditorMazeTile> Tiles = new List<EditorMazeTile>();
+    private List<EditorMazeTile> _tiles = new List<EditorMazeTile>();
+    public new List<EditorMazeTile> Tiles { get => _tiles; set => _tiles = value; }
 
     public EditorMazeLevel()
     {
