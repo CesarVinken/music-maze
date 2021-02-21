@@ -188,20 +188,6 @@ public class GameManager : MonoBehaviourPunCallbacks, IOnEventCallback
         CompleteMazeLevelEvent.Invoke();
     }
 
-    // THIS FUNCTION IS TEMPORARY
-    public void ToMazeFromOverworld()
-    {
-        if (GameManager.GameType == GameType.SinglePlayer)
-        {
-            SceneManager.LoadScene("Maze");
-        }
-        else
-        {
-            LoadNextMazeLevelEvent loadNextLevelEvent = new LoadNextMazeLevelEvent();
-            loadNextLevelEvent.SendLoadNextMazeLevelEvent("default");
-        }
-    }
-
     public void OnEvent(EventData photonEvent)
     {
         byte eventCode = photonEvent.Code;

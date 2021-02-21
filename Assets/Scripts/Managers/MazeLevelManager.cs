@@ -98,7 +98,7 @@ public class MazeLevelManager : MonoBehaviour, IOnEventCallback
         InitialiseEditorTileBackgrounds();
         InitialiseEditorTileAttributes();
 
-        MainCanvas.Instance.BlackOutSquare.ResetToDefault();
+        MainScreenOverlayCanvas.Instance.BlackOutSquare.ResetToDefault();
         CameraController.Instance.ResetCamera();
         CameraController.Instance.SetPanLimits(EditorLevel.LevelBounds);
     }
@@ -106,7 +106,7 @@ public class MazeLevelManager : MonoBehaviour, IOnEventCallback
     public IEnumerator ScanCoroutine()
     {
         yield return new WaitForSeconds(.2f); // This waiting time should be dealt with more efficiently. Currently it is there to make sure that the characters are spawned in 
-        MainCanvas.Instance.BlackOutSquare.ResetToDefault();
+        MainScreenOverlayCanvas.Instance.BlackOutSquare.ResetToDefault();
         CharacterManager.Instance.SpawnCharacters();
         CameraController.Instance.SetPanLimits(Level.LevelBounds);
         CameraController.Instance.FocusOnPlayer();

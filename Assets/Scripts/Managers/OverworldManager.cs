@@ -69,7 +69,7 @@ public class OverworldManager : MonoBehaviour
         InitialiseEditorTileBackgrounds();
         InitialiseEditorTileAttributes();
 
-        MainCanvas.Instance.BlackOutSquare.ResetToDefault();
+        MainScreenOverlayCanvas.Instance.BlackOutSquare.ResetToDefault();
 
         CameraController.Instance.ResetCamera();
         CameraController.Instance.SetPanLimits(EditorOverworld.LevelBounds);
@@ -78,7 +78,7 @@ public class OverworldManager : MonoBehaviour
     public IEnumerator ScanCoroutine()
     {
         yield return new WaitForSeconds(.2f); // This waiting time should be dealt with more efficiently. Currently it is there to make sure that the characters are spawned in 
-        MainCanvas.Instance.BlackOutSquare.ResetToDefault();
+        MainScreenOverlayCanvas.Instance.BlackOutSquare.ResetToDefault();
         CharacterManager.Instance.SpawnCharacters();
         CameraController.Instance.SetPanLimits(Overworld.LevelBounds);
         CameraController.Instance.FocusOnPlayer();

@@ -1,8 +1,8 @@
 ﻿using UnityEngine;
 
-public class MainCanvas : MonoBehaviour
+public class MainScreenOverlayCanvas : MonoBehaviour
 {
-    public static MainCanvas Instance;
+    public static MainScreenOverlayCanvas Instance;
 
     public GameObject ConsoleContainer;
     public GameObject ConsoleButton;

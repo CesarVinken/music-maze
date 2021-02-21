@@ -66,17 +66,6 @@ public class PlayerCharacter : Character
         _characterPath.CharacterReachesTarget += OnTargetReached;
     }
 
-    //public void OnCollisionEnter2D(Collision2D collision)
-    //{
-    //    if (GameManager.GameType == GameType.Multiplayer && !PhotonView.IsMine) return;
-
-    //    EnemyCharacter enemy = collision.gameObject.GetComponent<EnemyCharacter>();
-    //    if (enemy != null)
-    //    {
-    //        PlayerCaughtEvent?.Invoke();
-    //    }
-    //}
-
     public void Update()
     {
         if (EditorManager.InEditor) return;
@@ -173,7 +162,7 @@ public class PlayerCharacter : Character
         GridLocation newLocomotionTarget = CurrentGridLocation;
         Vector2 direction = tempFingerPosition - (Vector2)transform.position;
         float angle = Vector2.SignedAngle(Vector2.up, direction) * -1;
-        Logger.Log($"angle is {angle}");
+
         new GridLocation(CurrentGridLocation.X, CurrentGridLocation.Y);
         if (angle <= -135)  // go down
         {
@@ -195,8 +184,6 @@ public class PlayerCharacter : Character
         {
             newLocomotionTarget = new GridLocation(CurrentGridLocation.X, CurrentGridLocation.Y - 1);
         }
-        Logger.Log($"Grid location closest to mouse click at {closestGridLocation.X}, {closestGridLocation.Y}");
-        Logger.Log($"Current locatin is at {CurrentGridLocation.X}, {CurrentGridLocation.Y}. New target at {newLocomotionTarget.X}, {newLocomotionTarget.Y}");
 
         SetPointerLocomotionTarget(GridLocation.GridToVector(newLocomotionTarget));
     }

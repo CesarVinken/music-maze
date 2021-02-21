@@ -149,7 +149,7 @@ public class Character : MonoBehaviour
 
     public IEnumerator RespawnCharacter(Character character, float freezeTime)
     {
-        BlackOutSquare blackOutSquare = MainCanvas.Instance.BlackOutSquare;
+        BlackOutSquare blackOutSquare = MainScreenOverlayCanvas.Instance.BlackOutSquare;
         character.FreezeCharacter();
         CharacterBody.SetActive(false); // TODO make character animation for appearing and disappearing of character, rather than turning the GO off and on
 
