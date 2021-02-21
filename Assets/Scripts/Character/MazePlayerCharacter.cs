@@ -95,4 +95,14 @@ public class MazePlayerCharacter : PlayerCharacter
     {
         TimesCaught++;
     }
+
+    public override bool ValidateTarget(GridLocation targetGridLocation)
+    {
+        if (MazeLevelManager.Instance.Level.TilesByLocation.TryGetValue(targetGridLocation, out Tile tile))
+        {
+            if (tile.Walkable)
+                return true;
+        }
+        return false;
+    }
 }

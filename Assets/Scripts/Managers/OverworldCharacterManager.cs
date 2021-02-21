@@ -61,7 +61,7 @@ public class OverworldCharacterManager : CharacterManager
     {
         string prefabName = GetPrefabNameByCharacter(character);
         Vector2 startPosition = GetCharacterGridPosition(GridLocation.GridToVector(gridLocation)); // start position is grid position plus grid tile offset
-        Logger.Log(prefabName);
+
         GameObject characterGO = PhotonNetwork.Instantiate(prefabName, startPosition, Quaternion.identity, 0); // TODO solve prefab for single player
 
         PlayerCharacter playerCharacter = characterGO.GetComponent<PlayerCharacter>();
@@ -114,6 +114,15 @@ public class OverworldCharacterManager : CharacterManager
                 Logger.Error(Logger.Initialisation, "Cannot find prefab for character type {0}", character.CharacterType);
                 return null;
         }
+    }
+
+    public override void UnfreezeCharacters()
+    {
+        foreach (KeyValuePair<PlayerNumber, OverworldPlayerCharacter> p in Players)
+        {
+            p.Value.UnfreezeCharacter();
+        }
+
     }
 
     public override Dictionary<PlayerNumber, OverworldPlayerCharacter> GetPlayers<OverworldPlayerCharacter>()

@@ -2288,7 +2288,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1553840996}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 597.82117, y: 640.7677, z: -56.75}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 1016344782}
@@ -3438,6 +3438,11 @@ PrefabInstance:
       propertyPath: AstarGO
       value: 
       objectReference: {fileID: 1254919226}
+    - target: {fileID: 9155724151073738243, guid: f5dd3dc015884b245a265e281dfb9ea7,
+        type: 3}
+      propertyPath: _thisSceneType
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 9155724151073738243, guid: f5dd3dc015884b245a265e281dfb9ea7,
         type: 3}
       propertyPath: _overworldManagerPrefab

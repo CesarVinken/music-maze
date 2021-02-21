@@ -72,8 +72,8 @@ public class EditorOverworldModificationPanel : EditorGridModificationPanel
 
         if (overworldNameExists)
         {
-            OverworldData pverworldData = OverworldLoader.LoadOverworldData(_overworldName);
-            OverworldLoader.LoadOverworldForEditor(pverworldData);
+            OverworldData overworldData = OverworldLoader.LoadOverworldData(_overworldName);
+            OverworldLoader.LoadOverworldForEditor(overworldData);
         }
     }
 

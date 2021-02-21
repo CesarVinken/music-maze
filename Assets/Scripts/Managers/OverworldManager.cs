@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using UnityEngine;
 
 public class OverworldManager : MonoBehaviour
@@ -54,9 +55,10 @@ public class OverworldManager : MonoBehaviour
 
         InitialiseTileAttributes();
 
-        CharacterManager.Instance.SpawnCharacters();
-        CameraController.Instance.SetPanLimits(Overworld.LevelBounds);
-        CameraController.Instance.FocusOnPlayer();
+        Logger.Log("Start scan...");
+        IEnumerator coroutine = ScanCoroutine();
+
+        StartCoroutine(coroutine);
     }
 
 
@@ -68,9 +70,26 @@ public class OverworldManager : MonoBehaviour
         InitialiseEditorTileAttributes();
 
         MainCanvas.Instance.BlackOutSquare.ResetToDefault();
+
         CameraController.Instance.ResetCamera();
         CameraController.Instance.SetPanLimits(EditorOverworld.LevelBounds);
     }
+
+    public IEnumerator ScanCoroutine()
+    {
+        yield return new WaitForSeconds(.2f); // This waiting time should be dealt with more efficiently. Currently it is there to make sure that the characters are spawned in 
+        MainCanvas.Instance.BlackOutSquare.ResetToDefault();
+        CharacterManager.Instance.SpawnCharacters();
+        CameraController.Instance.SetPanLimits(Overworld.LevelBounds);
+        CameraController.Instance.FocusOnPlayer();
+
+        AstarPath.active.Scan();    // We should only scan once all the tiles are loaded with their correct (walkable) attributes and obstacles
+        yield return new WaitForSeconds(.4f);
+
+        // start movement of all actors that depend on the updated pathfinding only after the scan.
+        CharacterManager.Instance.UnfreezeCharacters();
+    }
+
 
     private void InitialiseTileAttributes()
     {

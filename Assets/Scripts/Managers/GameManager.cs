@@ -51,9 +51,9 @@ public class GameManager : MonoBehaviourPunCallbacks, IOnEventCallback
         Guard.CheckIsNull(_mazeLevelManagerPrefab, "MazeLevelManagerPrefab", gameObject);
         Guard.CheckIsNull(_mazeCharacterManagerPrefab, "_mazeCharacterManagerPrefab", gameObject);
         Guard.CheckIsNull(_overworldCharacterManagerPrefab, "_overworldCharacterManagerPrefab", gameObject);
-        Guard.CheckIsNull(_mazeLevelSpriteManagerPrefab, "MazeLevelSpriteManagerPrefab", gameObject);
+        Guard.CheckIsNull(_mazeLevelSpriteManagerPrefab, "_mazeLevelSpriteManagerPrefab", gameObject);
         Guard.CheckIsNull(_overworldSpriteManagerPrefab, "_overworldSpriteManagerPrefab", gameObject);
-        Guard.CheckIsNull(_overworldManagerPrefab, "OverworldManagerPrefab", gameObject);
+        Guard.CheckIsNull(_overworldManagerPrefab, "_overworldManagerPrefab", gameObject);
 
         InitialiseLoggers();
 

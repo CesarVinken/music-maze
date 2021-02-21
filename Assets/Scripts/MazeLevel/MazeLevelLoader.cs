@@ -34,7 +34,6 @@ public static class MazeLevelLoader
 
     public static void LoadMazeLevelForEditor(MazeLevelData mazeLevelData)
     {
-        MazeLevelManager.Instance.UnloadLevel();
         MazeLevelManager.Instance.SetupLevelForEditor(mazeLevelData); // sets up the level without instantiating characters etc.
     }
 

@@ -151,6 +151,8 @@ public class EditorMazeModificationPanel : EditorGridModificationPanel
 
         if (mazeLevelNameExists)
         {
+            MazeLevelManager.Instance.UnloadLevel();
+
             MazeLevelData mazeLevelData = MazeLevelLoader.LoadMazeLevelData(_mazeName);
             MazeLevelLoader.LoadMazeLevelForEditor(mazeLevelData);
         }

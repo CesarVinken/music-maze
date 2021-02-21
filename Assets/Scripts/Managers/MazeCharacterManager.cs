@@ -185,7 +185,6 @@ public class MazeCharacterManager : CharacterManager
             p.Value.UnfreezeCharacter();
         }
 
-
         for (int j = 0; j < Enemies.Count; j++)
         {
             Enemies[j].UnfreezeCharacter();
