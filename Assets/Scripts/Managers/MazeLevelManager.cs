@@ -175,7 +175,7 @@ public class MazeLevelManager : MonoBehaviour, IOnEventCallback
     // This way we can be sure all tiles are getting marked.
     public void SetTileMarker(InGameMazeTile tile, PlayerCharacter player)
     {
-        if (GameManager.GameType == GameType.SinglePlayer)
+        if (GameRules.GamePlayerType == GamePlayerType.SinglePlayer)
         {
             player.LastTile = tile;
 
@@ -201,9 +201,10 @@ public class MazeLevelManager : MonoBehaviour, IOnEventCallback
 
     public void LoadOverworld()
     {
-        if (GameManager.GameType == GameType.SinglePlayer)
+        if (GameRules.GamePlayerType == GamePlayerType.SinglePlayer)
         {
-            SceneManager.LoadScene("Overworld");
+            PhotonNetwork.LoadLevel("Overworld");
+            //SceneManager.LoadScene("Overworld");
         }
         else
         {
@@ -214,7 +215,7 @@ public class MazeLevelManager : MonoBehaviour, IOnEventCallback
 
     public void LoadNextLevel(string pickedLevel)
     {
-        if (GameManager.GameType == GameType.SinglePlayer)
+        if (GameRules.GamePlayerType == GamePlayerType.SinglePlayer)
         {
             JsonMazeLevelFileReader levelReader = new JsonMazeLevelFileReader();
             MazeLevelData levelData = levelReader.ReadLevelData(pickedLevel);
@@ -276,7 +277,7 @@ public class MazeLevelManager : MonoBehaviour, IOnEventCallback
             ScoreScreenContainer.Instance.CloseScoreScreenPanel();
         } else if (eventCode == LoadOverworldEvent.LoadOverworldEventCode)
         {
-            SceneManager.LoadScene("Overworld");
+            PhotonNetwork.LoadLevel("Overworld");
         }
     }
 

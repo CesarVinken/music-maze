@@ -89,7 +89,7 @@ public class CameraController : MonoBehaviour
 
         if (GameManager.CurrentSceneType == SceneType.Maze)
         {
-            if (GameManager.GameType == GameType.SinglePlayer)
+            if (GameRules.GamePlayerType == GamePlayerType.SinglePlayer)
                 player = CharacterManager.Instance.GetPlayers<MazePlayerCharacter>()[PlayerNumber.Player1] as PlayerCharacter;
             else
             {
@@ -98,7 +98,7 @@ public class CameraController : MonoBehaviour
         }
         else
         {
-            if (GameManager.GameType == GameType.SinglePlayer)
+            if (GameRules.GamePlayerType == GamePlayerType.SinglePlayer)
                 player = CharacterManager.Instance.GetPlayers<OverworldPlayerCharacter>()[PlayerNumber.Player1] as PlayerCharacter;
             else
             {

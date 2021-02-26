@@ -31,7 +31,7 @@ public class MazePlayerCharacter : PlayerCharacter
         PlayerExitsEvent += OnPlayerExit;
         PlayerCaughtEvent += OnPlayerCaught;
 
-        if (GameManager.GameType == GameType.SinglePlayer
+        if (GameRules.GamePlayerType == GamePlayerType.SinglePlayer
     || PhotonView.IsMine)
         {
             _selectionIndicatorGO = Instantiate(_selectionIndicatorPrefab, SceneObjectManager.Instance.CharactersGO);
@@ -44,12 +44,18 @@ public class MazePlayerCharacter : PlayerCharacter
 
         //transform the player's starting tile and surrounding tiles
         InGameMazeTile currentTile = GameManager.Instance.CurrentGameLevel.TilesByLocation[StartingPosition] as InGameMazeTile;
+
+        if(currentTile == null)
+        {
+            Logger.Error($"Current tile at {StartingPosition.X},{StartingPosition.Y} is null");
+        }
+
         currentTile.TriggerTransformations();
     }
 
     public void OnCollisionEnter2D(Collision2D collision)
     {
-        if (GameManager.GameType == GameType.Multiplayer && !PhotonView.IsMine) return;
+        if (GameRules.GamePlayerType == GamePlayerType.Multiplayer && !PhotonView.IsMine) return;
 
         EnemyCharacter enemy = collision.gameObject.GetComponent<EnemyCharacter>();
         if (enemy != null)
@@ -73,7 +79,7 @@ public class MazePlayerCharacter : PlayerCharacter
 
     public void OnPlayerCaught()
     {
-        if (GameManager.GameType == GameType.SinglePlayer)
+        if (GameRules.GamePlayerType == GamePlayerType.SinglePlayer)
         {
             PunRPCCaughtByEnemy();
         }

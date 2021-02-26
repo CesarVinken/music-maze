@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using Photon.Pun;
+using UnityEngine;
 using UnityEngine.SceneManagement;
 
 public class EditorCanvasUI : MonoBehaviour
@@ -68,12 +69,12 @@ public class EditorCanvasUI : MonoBehaviour
     public void LoadOverworldEditor()
     {
         GameManager.SceneLoadOrigin = SceneLoadOrigin.Editor;
-        SceneManager.LoadScene("Overworld");
+        PhotonNetwork.LoadLevel("Overworld");
     }
 
     public void LoadMazeEditor()
     {
         GameManager.SceneLoadOrigin = SceneLoadOrigin.Editor;
-        SceneManager.LoadScene("Maze");
+        PhotonNetwork.LoadLevel("Maze");
     }
 }

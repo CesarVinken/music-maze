@@ -136,7 +136,7 @@ GameObject:
   - component: {fileID: 40619307}
   - component: {fileID: 40619306}
   m_Layer: 5
-  m_Name: NextLevelButton
+  m_Name: ToNextLevelButton
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -316,7 +316,8 @@ MonoBehaviour:
   _player1TotalScoreLabel: {fileID: 1699786455}
   _player2TotalScoreLabel: {fileID: 1790773557}
   _waitingForNextLevelLabel: {fileID: 518359143}
-  _nextLevelButton: {fileID: 1679013104}
+  _toNextLevelButton: {fileID: 40619304}
+  _toOverworldButton: {fileID: 1679013102}
 --- !u!222 &81165052
 CanvasRenderer:
   m_ObjectHideFlags: 0

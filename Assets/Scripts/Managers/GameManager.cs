@@ -18,7 +18,6 @@ public class GameManager : MonoBehaviourPunCallbacks, IOnEventCallback
 
     public static Platform CurrentPlatform;
     public static SceneType CurrentSceneType;
-    public static GameType GameType;
     public static SceneLoadOrigin SceneLoadOrigin = SceneLoadOrigin.Gameplay;
 
     public IPlatformConfiguration Configuration;
@@ -45,7 +44,7 @@ public class GameManager : MonoBehaviourPunCallbacks, IOnEventCallback
     public void Awake()
     {
         Instance = this;
-
+        Logger.Log(Logger.Initialisation, $"Our game mode is {GameRules.GameMode}");
         Guard.CheckIsNull(GridGO, "GridGO", gameObject);
 
         Guard.CheckIsNull(_mazeLevelManagerPrefab, "MazeLevelManagerPrefab", gameObject);
@@ -57,9 +56,17 @@ public class GameManager : MonoBehaviourPunCallbacks, IOnEventCallback
 
         InitialiseLoggers();
 
-        GameType = PhotonNetwork.PlayerList.Length == 0 ? GameType.SinglePlayer : GameType.Multiplayer;
+        if(PhotonNetwork.PlayerList.Length == 0)
+        {
+            GameRules.SetGamePlayerType(GamePlayerType.SinglePlayer);
+        }
+        else
+        {
+            GameRules.SetGamePlayerType(GamePlayerType.Multiplayer);
+        }
+
         CurrentSceneType = _thisSceneType;
-        Logger.Warning($"We set the game type to {GameType} in a {CurrentSceneType} scene. The scene loading origin is {SceneLoadOrigin}");
+        Logger.Warning($"We set the game type to {GameRules.GamePlayerType} in a {CurrentSceneType} scene. The scene loading origin is {SceneLoadOrigin}");
 
         if (Application.isMobilePlatform)
         {
@@ -194,7 +201,8 @@ public class GameManager : MonoBehaviourPunCallbacks, IOnEventCallback
 
         if (eventCode == LoadNextMazeLevelEvent.LoadNextMazeLevelEventCode)
         {
-            SceneManager.LoadScene("Maze");
+            PhotonNetwork.LoadLevel("Maze");
+            //SceneManager.LoadScene("Maze");
         }
     }
 }

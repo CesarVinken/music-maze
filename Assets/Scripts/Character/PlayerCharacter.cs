@@ -28,7 +28,7 @@ public class PlayerCharacter : Character
 
         gameObject.name = PhotonView.Owner == null ? "Player 1" : PhotonView.Owner?.NickName;
 
-        if (GameManager.GameType == GameType.Multiplayer)
+        if (GameRules.GamePlayerType == GamePlayerType.Multiplayer)
         {
             if (PhotonNetwork.IsMasterClient)
             {
@@ -75,7 +75,7 @@ public class PlayerCharacter : Character
         if (Console.Instance && Console.Instance.ConsoleState != ConsoleState.Closed)
             return;
 
-        if (GameManager.GameType == GameType.SinglePlayer
+        if (GameRules.GamePlayerType == GamePlayerType.SinglePlayer
             || PhotonView.IsMine)
         {
             if (GameManager.CurrentPlatform == Platform.PC)

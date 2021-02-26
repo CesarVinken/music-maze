@@ -34,7 +34,7 @@ public class EnemyCharacter : Character
         if (IsCalculatingPath) return;
 
         if (!HasCalculatedTarget &&
-            (GameManager.GameType == GameType.SinglePlayer
+            (GameRules.GamePlayerType == GamePlayerType.SinglePlayer
             || PhotonView.IsMine))
         {
             SetNextTarget();

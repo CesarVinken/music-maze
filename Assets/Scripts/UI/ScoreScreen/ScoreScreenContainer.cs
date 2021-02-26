@@ -25,7 +25,8 @@ public class ScoreScreenContainer : MonoBehaviour
     [SerializeField] private Text _waitingForNextLevelLabel;
 
     [Space(10)]
-    [SerializeField] private Button _nextLevelButton;
+    [SerializeField] private GameObject _toNextLevelButton;
+    [SerializeField] private GameObject _toOverworldButton;
 
     private ScoreCalculator _scoreCalculator;
 
@@ -43,7 +44,8 @@ public class ScoreScreenContainer : MonoBehaviour
         Guard.CheckIsNull(_player2TotalScoreLabel, "Player2TotalScoreLabel", gameObject);
         Guard.CheckIsNull(_player2TotalScoreLabel, "Player2TotalScoreLabel", gameObject);
         Guard.CheckIsNull(_waitingForNextLevelLabel, "WaitingForNextLevelLabel", gameObject);
-        Guard.CheckIsNull(_nextLevelButton, "NextLevelButton", gameObject);
+        Guard.CheckIsNull(_toNextLevelButton, "ToNextLevelButton", gameObject);
+        Guard.CheckIsNull(_toOverworldButton, "ToOverworldButton", gameObject);
 
         _scoreCalculator = new ScoreCalculator();
 
@@ -75,7 +77,7 @@ public class ScoreScreenContainer : MonoBehaviour
 
         _subtitleLabel.text = $"You escaped from {MazeLevelManager.Instance.Level.Name}";
 
-        if (GameManager.GameType == GameType.SinglePlayer)
+        if (GameRules.GamePlayerType == GamePlayerType.SinglePlayer)
             ShowSingleplayerScore(_scoreCalculator.PlayerScores);
         else
             ShowMultiplayerScore(_scoreCalculator.PlayerScores);
@@ -99,7 +101,16 @@ public class ScoreScreenContainer : MonoBehaviour
         _player1TotalScoreLabel.gameObject.SetActive(true);
         _player2TotalScoreLabel.gameObject.SetActive(false);
 
-        _nextLevelButton.gameObject.SetActive(true);
+        if(GameRules.GameMode == GameMode.Campaign)
+        {
+            _toNextLevelButton.SetActive(false);
+            _toOverworldButton.SetActive(true);
+        }
+        else if(GameRules.GameMode == GameMode.RandomMaze)
+        {
+            _toNextLevelButton.SetActive(true);
+            _toOverworldButton.SetActive(false);
+        }
 
         OpenScoreScreenPanel();
     }
@@ -129,14 +140,25 @@ public class ScoreScreenContainer : MonoBehaviour
 
         if (PhotonNetwork.IsMasterClient)
         {
-            _nextLevelButton.gameObject.SetActive(true);
+            if (GameRules.GameMode == GameMode.Campaign)
+            {
+                _toNextLevelButton.SetActive(false);
+                _toOverworldButton.SetActive(true);
+            }
+            else if (GameRules.GameMode == GameMode.RandomMaze)
+            {
+                _toNextLevelButton.SetActive(true);
+                _toOverworldButton.SetActive(false);
+            }
             _waitingForNextLevelLabel.gameObject.SetActive(false);
         }
         else
         {
             _waitingForNextLevelLabel.text = $"Waiting for {PhotonNetwork.MasterClient.NickName} to start the next level...";
             _waitingForNextLevelLabel.gameObject.SetActive(true);
-            _nextLevelButton.gameObject.SetActive(false);
+
+            _toNextLevelButton.SetActive(false);
+            _toOverworldButton.SetActive(false);
         }
 
         OpenScoreScreenPanel();

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using Photon.Pun;
+using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -28,7 +29,7 @@ public class LoadCommand : CommandProcedure
             if (GameManager.CurrentSceneType == SceneType.Overworld)
             {
                 Logger.Warning("We are currently in the overworld scene. Switching scenes.");
-                SceneManager.LoadScene("Maze"); // TODO this loads the default maze, should load specific maze
+                PhotonNetwork.LoadLevel("Maze"); // TODO this loads the default maze, should load specific maze
             }
             else
             {

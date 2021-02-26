@@ -39,7 +39,7 @@ public class OverworldCharacterManager : CharacterManager
             Logger.Error("Did not find 2, but {0} character startlocations for level", level.PlayerCharacterSpawnpoints.Count);
         }
 
-        if (PhotonNetwork.IsMasterClient || GameManager.GameType == GameType.SinglePlayer)
+        if (PhotonNetwork.IsMasterClient || GameRules.GamePlayerType == GamePlayerType.SinglePlayer)
         {
             Debug.Log("Instantiating Player 1");
 

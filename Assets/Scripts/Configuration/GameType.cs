@@ -1,4 +1,4 @@
-﻿public enum GameType
+﻿public enum GamePlayerType
 {
     SinglePlayer,
     Multiplayer

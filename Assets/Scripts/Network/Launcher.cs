@@ -1,6 +1,5 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
-
 using Photon.Pun;
 using Photon.Realtime;
 using UnityEngine.EventSystems;
@@ -32,13 +31,10 @@ namespace Photon.Pun.Demo.PunBasics
         [SerializeField] private GameObject _joinRoomButtonGO = null;
 
         [Space(5)]
-        [SerializeField] private GameObject _launchGameUI = null;
-        [SerializeField] private Text _player1Name = null;
-        [SerializeField] private Text _player2Name = null;
-        [SerializeField] private GameObject _launchGameButtonGO = null;
+        [SerializeField] private LaunchGameUI _launchGameUI = null;
 
         string playerName = "";
-        string roomName = "";
+        public string RoomName = "";
 
         public void Awake()
         {
@@ -49,7 +45,6 @@ namespace Photon.Pun.Demo.PunBasics
             Guard.CheckIsNull(_errorText, "_errorText", gameObject);
 
             Guard.CheckIsNull(_roomJoinUI, "_roomJoinUI", gameObject);
-            Guard.CheckIsNull(_launchGameButtonGO, "_launchGameButtonGO", gameObject);
             Guard.CheckIsNull(_joinRoomButtonGO, "_joinRoomButtonGO", gameObject);
           
             PhotonNetwork.AutomaticallySyncScene = true;
@@ -64,7 +59,7 @@ namespace Photon.Pun.Demo.PunBasics
             Debug.Log("Connecting to Maze World");
 
             _roomJoinUI.SetActive(false);
-            _launchGameButtonGO.SetActive(false);
+            _launchGameUI.TurnOff();
 
             ConnectToPhoton();
         }
@@ -96,7 +91,7 @@ namespace Photon.Pun.Demo.PunBasics
         {
             SetErrorText("");
             
-            roomName = name;
+            RoomName = name;
         }
 
         void ConnectToPhoton()
@@ -123,7 +118,7 @@ namespace Photon.Pun.Demo.PunBasics
                     EventSystem.current.SetSelectedGameObject(null);
                     return;
                 }
-                if (string.IsNullOrWhiteSpace(roomName))
+                if (string.IsNullOrWhiteSpace(RoomName))
                 {
                     SetErrorText("Please fill in a game name");
                     Debug.LogWarning("Could not go to game room because no game name was given.");
@@ -133,24 +128,8 @@ namespace Photon.Pun.Demo.PunBasics
                 }
 
                 RoomOptions roomOptions = new RoomOptions();
-                TypedLobby typedLobby = new TypedLobby(roomName, LobbyType.Default);
-                PhotonNetwork.JoinOrCreateRoom(roomName, roomOptions, typedLobby);
-            }
-        }
-
-        public void LoadArena()
-        {
-            SetErrorText("");
-            
-            if (PhotonNetwork.CurrentRoom.PlayerCount > 1)
-            {
-                // TODO: depending on game play mode, pick either overworld or a randomly selected maze level
-                PhotonNetwork.LoadLevel("Overworld");
-            }
-            else
-            {
-                SetErrorText("You need a second player to start your game");
-                Debug.LogWarning("Could not launch the game because there is only 1 player in the game room.");
+                TypedLobby typedLobby = new TypedLobby(RoomName, LobbyType.Default);
+                PhotonNetwork.JoinOrCreateRoom(RoomName, roomOptions, typedLobby);
             }
         }
 
@@ -160,7 +139,7 @@ namespace Photon.Pun.Demo.PunBasics
             _connectionStatus.text = "Connected to Music Maze!";
             _connectionStatus.color = Color.green;
             _roomJoinUI.SetActive(true);
-            _launchGameUI.SetActive(false);
+            _launchGameUI.TurnOff();
 
             EventSystem.current.SetSelectedGameObject(_playerNameField.gameObject);
         }
@@ -168,7 +147,7 @@ namespace Photon.Pun.Demo.PunBasics
         public override void OnDisconnected(DisconnectCause cause)
         {
             _roomJoinUI.SetActive(false);
-            _launchGameUI.SetActive(false);
+            _launchGameUI.TurnOff();
 
             _connectionStatus.text = "Disconnected. Please check your internet connection and restart.";
             _connectionStatus.color = Color.red;
@@ -179,39 +158,43 @@ namespace Photon.Pun.Demo.PunBasics
         public override void OnJoinedRoom()
         {
             _roomJoinUI.SetActive(false);
-            _launchGameUI.SetActive(true);
-
-            if (PhotonNetwork.IsMasterClient)
-            {
-                Logger.Log("{0} joined the rumble", PhotonNetwork.PlayerList[0].NickName);
-                _launchGameButtonGO.SetActive(true);
-
-                _playerStatus.text = "You created a new Game Room";
-                _player1Name.text = "<color=green>" + PhotonNetwork.MasterClient.NickName + "</color>";
-            }
-            else
-            {
-                Logger.Log("{0} joined the rumble", PhotonNetwork.PlayerList[1].NickName);
-
-                _playerStatus.text = "Connected to " + roomName + ". Waiting for " + PhotonNetwork.MasterClient.NickName + " to launch the game..";
-                _player1Name.text = PhotonNetwork.MasterClient.NickName;
-                _player2Name.text = "<color=green>" + PhotonNetwork.PlayerList[1].NickName + "</color>";
-            }
-
+            _launchGameUI.TurnOn();
             _playerNameField.readOnly = true;
             _roomNameField.readOnly = true;
         }
 
-        public override void OnPlayerEnteredRoom(Player newPlayer)
-        {
-            Logger.Log("{0} joined the rumble", newPlayer.NickName);
-
-            _player2Name.text = newPlayer.NickName;
-        }
-
-        private void SetErrorText(string errorText)
+        public void SetErrorText(string errorText)
         {
             _errorText.text = errorText;
+        }
+
+        public void SetPlayerStatusText(string statusText)
+        {
+            _playerStatus.text = statusText;
+        }
+
+        public void LaunchMultiplayerGame()
+        {
+            SetErrorText("");
+
+            if (PhotonNetwork.CurrentRoom.PlayerCount > 1)
+            {
+                GameRules.SetGamePlayerType(GamePlayerType.Multiplayer);
+                // TODO: depending on game play mode, pick either overworld or a randomly selected maze level
+                if (GameRules.GameMode == GameMode.Campaign)
+                {
+                    PhotonNetwork.LoadLevel("Overworld");
+                }
+                else
+                {
+                    PhotonNetwork.LoadLevel("Maze");
+                }
+            }
+            else
+            {
+                SetErrorText("You need a second player to start your game");
+                Debug.LogWarning("Could not launch the game because there is only 1 player in the game room.");
+            }
         }
 
         public void LaunchSinglePlayerGame()
@@ -221,7 +204,17 @@ namespace Photon.Pun.Demo.PunBasics
                 Logger.Log("Cannot play single player because there are already multiple players in this room.");
                 return;
             }
-            PhotonNetwork.LoadLevel("SampleScene");
+
+            GameRules.SetGamePlayerType(GamePlayerType.SinglePlayer);
+
+            if (GameRules.GameMode == GameMode.Campaign)
+            {
+                PhotonNetwork.LoadLevel("Overworld");
+            }
+            else
+            {
+                PhotonNetwork.LoadLevel("Maze");
+            }
         }
     }
 }
