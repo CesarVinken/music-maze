@@ -1,6 +1,4 @@
-﻿using Photon.Pun;
-using UnityEngine;
-using UnityEngine.SceneManagement;
+﻿using UnityEngine;
 
 public class MazeEntry : MonoBehaviour, ITileAttribute
 {
@@ -67,6 +65,6 @@ public class MazeEntry : MonoBehaviour, ITileAttribute
 
     public static void EnterMaze()
     {
-        PhotonNetwork.LoadLevel("Maze");
+        OverworldManager.Instance.LoadMaze();
     }
 }

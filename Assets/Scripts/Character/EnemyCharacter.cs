@@ -1,10 +1,13 @@
 ﻿using Photon.Pun;
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class EnemyCharacter : Character
 {
     private MazeCharacterManager _characterManager;
+    private bool _isInitialised = false;
 
     public override void Awake()
     {
@@ -23,6 +26,8 @@ public class EnemyCharacter : Character
         GameManager.Instance.CompleteMazeLevelEvent += OnMazeLevelCompleted;
 
         SetCharacterType(CharacterType.Enemy);
+
+        _isInitialised = true;
     }
 
     public void Update()
@@ -30,6 +35,8 @@ public class EnemyCharacter : Character
         if (EditorManager.InEditor) return;
 
         if (IsFrozen) return;
+
+        if (!_isInitialised) return;
 
         if (IsCalculatingPath) return;
 
@@ -81,6 +88,26 @@ public class EnemyCharacter : Character
 
         _seeker.StartPath(transform.position, playerVectorLocation, _characterPath.OnPathCalculated);
         Logger.Log(Logger.Pathfinding, $"The enemy {gameObject.name} is now going to the location of player {randomPlayer.gameObject.name} at {randomPlayer.CurrentGridLocation.X},{randomPlayer.CurrentGridLocation.Y}");
+    }
+
+    private void SetRandomTarget()
+    {
+        Vector3 randomGridVectorLocation = GridLocation.GridToVector(GetRandomTileTarget().GridLocation);
+        //Logger.Log("Set new target for enemy: {0},{1}", randomGridVectorLocation.x, randomGridVectorLocation.y);
+        _seeker.StartPath(transform.position, randomGridVectorLocation, _characterPath.OnPathCalculated);
+    }
+
+    private Tile GetRandomTileTarget()
+    {
+        //MazeLevelManager mazeLevelManager = GameManager.Instance.
+        List<InGameMazeTile> walkableTiles = MazeLevelManager.Instance.GetTiles().Where(tile => tile.Walkable).ToList();
+
+        //TODO remove current tile from walkable tiles
+        //TODO pick random
+        int random = UnityEngine.Random.Range(0, walkableTiles.Count);
+        //Logger.Warning("Picked random:: {0}", random);
+        //Logger.Log("We want a random tile. We found: {0}, {1}", walkableTiles[random].GridLocation.X, walkableTiles[random].GridLocation.Y);
+        return walkableTiles[random];
     }
 
     public void OnTargetReached()

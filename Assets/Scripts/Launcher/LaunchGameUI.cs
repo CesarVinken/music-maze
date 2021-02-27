@@ -61,6 +61,7 @@ public class LaunchGameUI : MonoBehaviourPunCallbacks, IOnEventCallback
         {
             _gameTypeReadonlyLabel.gameObject.SetActive(true);
             _gameTypeDropdown.TurnOff();
+            _launchGameButtonGO.SetActive(false);
 
             Logger.Log("{0} joined the rumble", PhotonNetwork.PlayerList[1].NickName);
 

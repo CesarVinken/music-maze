@@ -81,7 +81,6 @@ public static class MazeLevelLoader
         MazeLevelNamesData levelNamesData = jsonMazeLevelListFileReader.ReadMazeLevelList();
 
         if (levelNamesData == null) return playableLevelNames;
-
         for (int i = 0; i < levelNamesData.LevelNames.Count; i++)
         {
             MazeLevelNameData levelNameData = levelNamesData.LevelNames[i];
@@ -91,6 +90,11 @@ public static class MazeLevelLoader
             if (levelNameData.LevelName == MazeLevelManager.Instance.Level.Name) continue;
 
             playableLevelNames.Add(levelNameData.LevelName);
+        }
+
+        if(playableLevelNames.Count == 0)
+        {
+            Logger.Warning("Found 0 playable levels!");
         }
 
         return playableLevelNames;

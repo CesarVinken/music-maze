@@ -66,9 +66,6 @@ public class MazeLevelManager : MonoBehaviour, IOnEventCallback
         Instance = this;
     }
 
-    public void Start()
-    {
-    }
     private void OnEnable()
     {
         PhotonNetwork.AddCallbackTarget(this);
@@ -305,6 +302,11 @@ public class MazeLevelManager : MonoBehaviour, IOnEventCallback
             PlayerExit exit = Level.MazeExits[i];
             exit.OpenExit();
         }
+    }
+
+    public List<InGameMazeTile> GetTiles()
+    {
+        return Level.Tiles;
     }
 
     private void HandlePlayerMarkerSprite(MazeTile tile, PlayerNumber playerNumber, PlayerMark playerMark)

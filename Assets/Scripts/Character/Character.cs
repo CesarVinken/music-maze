@@ -112,24 +112,6 @@ public class Character : MonoBehaviour
         }
     }
 
-    public void SetRandomTarget()
-    {
-        Vector3 randomGridVectorLocation = GridLocation.GridToVector(GetRandomTileTarget().GridLocation);
-        //Logger.Log("Set new target for enemy: {0},{1}", randomGridVectorLocation.x, randomGridVectorLocation.y);
-        _seeker.StartPath(transform.position, randomGridVectorLocation, _characterPath.OnPathCalculated);
-    }
-
-    public Tile GetRandomTileTarget()
-    {
-        List<Tile> walkableTiles = GameManager.Instance.CurrentGameLevel.Tiles.Where(tile => tile.Walkable).ToList(); // to do keep central list in Tilemanager
-        //TODO remove current tile from walkable tiles
-        //TODO pick random
-        int random = UnityEngine.Random.Range(0, walkableTiles.Count);
-        //Logger.Warning("Picked random:: {0}", random);
-        //Logger.Log("We want a random tile. We found: {0}, {1}", walkableTiles[random].GridLocation.X, walkableTiles[random].GridLocation.Y);
-        return walkableTiles[random];
-    }
-
     public virtual bool ValidateTarget(GridLocation targetGridLocation)
     {
         return false;

@@ -1,4 +1,6 @@
-﻿using System;
+﻿using ExitGames.Client.Photon;
+using Photon.Pun;
+using System;
 using System.Collections;
 using UnityEngine;
 
@@ -90,7 +92,6 @@ public class OverworldManager : MonoBehaviour
         CharacterManager.Instance.UnfreezeCharacters();
     }
 
-
     private void InitialiseTileAttributes()
     {
         for (int i = 0; i < Overworld.Tiles.Count; i++)
@@ -134,4 +135,40 @@ public class OverworldManager : MonoBehaviour
         }
     }
 
+    //TODO: pick which maze to load
+    public void LoadMaze()
+    {
+        if (GameRules.GamePlayerType == GamePlayerType.SinglePlayer)
+        {
+            PhotonNetwork.LoadLevel("Maze");
+        }
+        else
+        {
+            LoadNextMazeLevelEvent loadNextLevelEvent = new LoadNextMazeLevelEvent();
+            loadNextLevelEvent.SendLoadNextMazeLevelEvent("default");
+        }
+    }
+
+
+    public void OnEvent(EventData photonEvent)
+    {
+        PhotonNetwork.LoadLevel("Maze");
+
+        // TODO: Make work with particular maze level names
+        //byte eventCode = photonEvent.Code;
+        //if (eventCode == LoadNextMazeLevelEvent.LoadNextMazeLevelEventCode)
+        //{
+        //    object[] data = (object[])photonEvent.CustomData;
+        //    string pickedLevel = (string)data[0];
+
+        //    MazeLevelData mazeLevelData = MazeLevelLoader.LoadMazeLevelData(pickedLevel);
+
+        //    if (mazeLevelData == null)
+        //    {
+        //        Logger.Error($"Could not load maze level data for the randomly picked maze level {pickedLevel}");
+        //    }
+
+        //    MazeLevelLoader.LoadMazeLevel(mazeLevelData);
+        //}
+    }
 }

@@ -35,7 +35,6 @@ public class MapInteractionButton : MonoBehaviour, IMapInteractionButton
     public void ShowMapInteractionButton(Vector2 pos, string mapText)
     {
         _buttonWorldBasePosition = pos;
-        Logger.Log($"{pos.x},{pos.y}");
         SetMapInteractionButtonLabel(mapText);
         transform.position = new Vector2(_buttonWorldBasePosition.x + 1, _buttonWorldBasePosition.y);
         gameObject.SetActive(true);

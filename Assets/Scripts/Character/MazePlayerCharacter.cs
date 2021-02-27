@@ -1,6 +1,7 @@
 ﻿using Photon.Pun;
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class MazePlayerCharacter : PlayerCharacter
@@ -17,6 +18,7 @@ public class MazePlayerCharacter : PlayerCharacter
     {
         base.Awake();
 
+        HasReachedExit = false;
         _characterManager = CharacterManager.Instance as MazeCharacterManager;
 
         if (_characterManager == null) return;
@@ -73,7 +75,7 @@ public class MazePlayerCharacter : PlayerCharacter
     {
         FreezeCharacter();
         HasReachedExit = true;
-
+        Logger.Log($"{gameObject.name} reached the exit");
         CharacterBody.SetActive(false);
     }
 

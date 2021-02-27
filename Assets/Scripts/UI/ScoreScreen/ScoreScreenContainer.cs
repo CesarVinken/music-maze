@@ -177,7 +177,7 @@ public class ScoreScreenContainer : MonoBehaviour
             Logger.Warning("We played all playable levels. Starting the random selection from the beginning");
             GameManager.Instance.PlayableLevelNames = MazeLevelLoader.GetAllPlayableLevelNames();
         }
-
+        Logger.Log("number of found levels: " + GameManager.Instance.PlayableLevelNames.Count);
         int randomIndex = Random.Range(0, GameManager.Instance.PlayableLevelNames.Count);
         string pickedLevel = GameManager.Instance.PlayableLevelNames[randomIndex];
         Logger.Log($"Load next random level: {pickedLevel}");

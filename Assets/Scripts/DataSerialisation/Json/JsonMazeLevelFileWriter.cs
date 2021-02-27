@@ -11,7 +11,7 @@ public class JsonMazeLevelFileWriter
         Directory.CreateDirectory(Path.Combine(Application.dataPath, "StreamingAssets", "maze"));
         
         _levelData = levelData;
-        _path = Path.Combine(Application.dataPath, "StreamingAssets", "overworld/", _levelData.Name + ".json");
+        _path = Path.Combine(Application.dataPath, "StreamingAssets", "maze", _levelData.Name + ".json");
 
         string jsonDataString = JsonUtility.ToJson(_levelData, true).ToString();
 

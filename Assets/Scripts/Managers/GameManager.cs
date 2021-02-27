@@ -12,7 +12,7 @@ public enum SceneLoadOrigin
     Editor
 }
 
-public class GameManager : MonoBehaviourPunCallbacks, IOnEventCallback
+public class GameManager : MonoBehaviourPunCallbacks
 {
     public static GameManager Instance;
 
@@ -193,16 +193,5 @@ public class GameManager : MonoBehaviourPunCallbacks, IOnEventCallback
     public void CompleteMazeLevel()
     {
         CompleteMazeLevelEvent.Invoke();
-    }
-
-    public void OnEvent(EventData photonEvent)
-    {
-        byte eventCode = photonEvent.Code;
-
-        if (eventCode == LoadNextMazeLevelEvent.LoadNextMazeLevelEventCode)
-        {
-            PhotonNetwork.LoadLevel("Maze");
-            //SceneManager.LoadScene("Maze");
-        }
     }
 }

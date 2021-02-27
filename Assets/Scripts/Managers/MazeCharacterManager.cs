@@ -132,12 +132,13 @@ public class MazeCharacterManager : CharacterManager
         player.Exit();
 
         // Check if all players are gone. If so, the level is completed;
-
         int exitedCharacters = 0;
         foreach (KeyValuePair<PlayerNumber, MazePlayerCharacter> p in Players)
         {
             if (p.Value.HasReachedExit)
+            {
                 exitedCharacters++;
+            }
         }
 
         if (exitedCharacters == Players.Count)
