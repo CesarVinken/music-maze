@@ -8,11 +8,11 @@ public class LoadNextMazeLevelEvent
 
     public void SendLoadNextMazeLevelEvent(string levelName)
     {
-        Logger.Log("SendLoadNextMazeLevelEvent");
         object[] content = new object[] {
             levelName
         };
         RaiseEventOptions raiseEventOptions = new RaiseEventOptions { Receivers = ReceiverGroup.All };
         PhotonNetwork.RaiseEvent(LoadNextMazeLevelEventCode, content, raiseEventOptions, SendOptions.SendReliable);
+        Logger.Log("SendLoadNextMazeLevelEvent");
     }
 }

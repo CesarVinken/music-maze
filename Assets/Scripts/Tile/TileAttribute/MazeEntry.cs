@@ -22,7 +22,7 @@ public class MazeEntry : MonoBehaviour, ITileAttribute
     {
         if (_hasPlayerOnTile)
         {
-            if(Input.GetKeyDown(KeyCode.Return) || Input.GetKeyDown(KeyCode.KeypadEnter))
+            if(Input.GetKeyDown(KeyCode.Return) || Input.GetKeyDown(KeyCode.KeypadEnter) || Input.GetMouseButtonDown(0) || Input.GetMouseButtonDown(1))
             {
                 EnterMaze();
             }

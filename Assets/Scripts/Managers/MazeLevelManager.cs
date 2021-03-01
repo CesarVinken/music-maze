@@ -6,7 +6,6 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
 public class MazeLevelManager : MonoBehaviour, IOnEventCallback
 {
@@ -28,7 +27,6 @@ public class MazeLevelManager : MonoBehaviour, IOnEventCallback
     public GameObject EnemySpawnpointPrefab;
 
     public int NumberOfUnmarkedTiles = -1;
-
 
     public GameObject GetTileAttributePrefab<T>() where T : ITileAttribute
     {

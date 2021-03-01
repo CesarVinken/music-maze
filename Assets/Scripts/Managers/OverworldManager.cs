@@ -1,10 +1,11 @@
 ﻿using ExitGames.Client.Photon;
 using Photon.Pun;
+using Photon.Realtime;
 using System;
 using System.Collections;
 using UnityEngine;
 
-public class OverworldManager : MonoBehaviour
+public class OverworldManager : MonoBehaviour, IOnEventCallback
 {
     public static OverworldManager Instance;
 
@@ -29,6 +30,17 @@ public class OverworldManager : MonoBehaviour
         Guard.CheckIsNull(PlayerSpawnpointPrefab, "PlayerSpawnpointPrefab", gameObject);
         Guard.CheckIsNull(MazeEntryPrefab, "MazeEntryPrefab", gameObject);
     }
+
+    private void OnEnable()
+    {
+        PhotonNetwork.AddCallbackTarget(this);
+    }
+
+    private void OnDisable()
+    {
+        PhotonNetwork.RemoveCallbackTarget(this);
+    }
+
 
     public void UnloadOverworld()
     {
@@ -152,23 +164,23 @@ public class OverworldManager : MonoBehaviour
 
     public void OnEvent(EventData photonEvent)
     {
-        PhotonNetwork.LoadLevel("Maze");
-
+        byte eventCode = photonEvent.Code;
+        if (eventCode == LoadNextMazeLevelEvent.LoadNextMazeLevelEventCode)
+        {
+            Logger.Log("received event to load maze");
         // TODO: Make work with particular maze level names
-        //byte eventCode = photonEvent.Code;
-        //if (eventCode == LoadNextMazeLevelEvent.LoadNextMazeLevelEventCode)
-        //{
-        //    object[] data = (object[])photonEvent.CustomData;
-        //    string pickedLevel = (string)data[0];
+            PhotonNetwork.LoadLevel("Maze");
+            //    object[] data = (object[])photonEvent.CustomData;
+            //    string pickedLevel = (string)data[0];
 
-        //    MazeLevelData mazeLevelData = MazeLevelLoader.LoadMazeLevelData(pickedLevel);
+            //    MazeLevelData mazeLevelData = MazeLevelLoader.LoadMazeLevelData(pickedLevel);
 
-        //    if (mazeLevelData == null)
-        //    {
-        //        Logger.Error($"Could not load maze level data for the randomly picked maze level {pickedLevel}");
-        //    }
+            //    if (mazeLevelData == null)
+            //    {
+            //        Logger.Error($"Could not load maze level data for the randomly picked maze level {pickedLevel}");
+            //    }
 
-        //    MazeLevelLoader.LoadMazeLevel(mazeLevelData);
-        //}
+            //    MazeLevelLoader.LoadMazeLevel(mazeLevelData);
+        }
     }
 }
