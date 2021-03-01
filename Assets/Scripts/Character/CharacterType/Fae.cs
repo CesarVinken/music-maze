@@ -6,16 +6,7 @@ namespace CharacterType
     {
         public RuntimeAnimatorController GetAnimationController()
         {
-            if (GameManager.CurrentSceneType == SceneType.Maze)
-            {
-                MazeCharacterManager manager = CharacterManager.Instance as MazeCharacterManager;
-                return manager.Bard2Controller;
-            }
-            else
-            {
-                OverworldCharacterManager manager = CharacterManager.Instance as OverworldCharacterManager;
-                return manager.Bard2Controller;
-            }
+            return GameManager.Instance.CharacterManager.Bard2Controller;
         }
 
         public string GetPrefabPath()

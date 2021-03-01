@@ -6,7 +6,7 @@ namespace CharacterType
     {
         public RuntimeAnimatorController GetAnimationController()
         {
-            MazeCharacterManager manager = CharacterManager.Instance as MazeCharacterManager;
+            MazeCharacterManager manager = GameManager.Instance.CharacterManager as MazeCharacterManager;
             return manager.EnemyController;
         }
 

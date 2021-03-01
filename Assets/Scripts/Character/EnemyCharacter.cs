@@ -17,7 +17,7 @@ public class EnemyCharacter : Character
         base.Awake();
         _characterPath.CharacterReachesTarget += OnTargetReached;
 
-        _characterManager = CharacterManager.Instance as MazeCharacterManager;
+        _characterManager = GameManager.Instance.CharacterManager as MazeCharacterManager;
 
         if (_characterManager == null) return;
 
@@ -80,11 +80,11 @@ public class EnemyCharacter : Character
     private void TargetPlayer()
     {
         //Randomly pick one of the players
-        int randomNumber = UnityEngine.Random.Range(0, _characterManager.Players.Count);
+        int randomNumber = UnityEngine.Random.Range(0, _characterManager.GetPlayers<MazePlayerCharacter>().Count);
 
         PlayerCharacter randomPlayer = randomNumber == 0 ?
-            _characterManager.Players[PlayerNumber.Player1] :
-            _characterManager.Players[PlayerNumber.Player2];
+            _characterManager.GetPlayerCharacter<MazePlayerCharacter>(PlayerNumber.Player1):
+            _characterManager.GetPlayerCharacter<MazePlayerCharacter>(PlayerNumber.Player1);
 
         Vector3 playerVectorLocation = GridLocation.GridToVector(randomPlayer.CurrentGridLocation);
 

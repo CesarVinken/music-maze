@@ -102,7 +102,7 @@ public class MazeLevelManager : MonoBehaviour, IOnEventCallback
     {
         yield return new WaitForSeconds(.2f); // This waiting time should be dealt with more efficiently. Currently it is there to make sure that the characters are spawned in 
         MainScreenOverlayCanvas.Instance.BlackOutSquare.ResetToDefault();
-        CharacterManager.Instance.SpawnCharacters();
+        GameManager.Instance.CharacterManager.SpawnCharacters();
         CameraController.Instance.SetPanLimits(Level.LevelBounds);
         CameraController.Instance.FocusOnPlayer();
 
@@ -110,7 +110,7 @@ public class MazeLevelManager : MonoBehaviour, IOnEventCallback
         yield return new WaitForSeconds(.4f);
 
         // start movement of all actors that depend on the updated pathfinding only after the scan.
-        CharacterManager.Instance.UnfreezeCharacters();
+        GameManager.Instance.CharacterManager.UnfreezeCharacters();
 
         HandleSpawnpointMarkability();
     }
@@ -126,7 +126,7 @@ public class MazeLevelManager : MonoBehaviour, IOnEventCallback
 
         TilesContainer.Instance = null;
 
-        CharacterManager.Instance.UnloadCharacters();
+        GameManager.Instance.CharacterManager.UnloadCharacters();
         SceneObjectManager.Instance.UnloadSceneObjects();
 
         Logger.Log(Logger.Initialisation, "Unload level {0}", Level);
@@ -353,11 +353,7 @@ public class MazeLevelManager : MonoBehaviour, IOnEventCallback
 
     private void HandleSpawnpointMarkability()
     {
-        MazeCharacterManager characterManager = CharacterManager.Instance as MazeCharacterManager;
-
-        if (characterManager == null) return;
-
-        if(characterManager.Players.Count < 2)
+        if(GameManager.Instance.CharacterManager.GetPlayers<MazePlayerCharacter>().Count < 2)
         {
             MazeTile spawnpoint1Tile = Level.PlayerCharacterSpawnpoints[PlayerNumber.Player1].Tile as MazeTile;
             spawnpoint1Tile.TryMakeMarkable(false);

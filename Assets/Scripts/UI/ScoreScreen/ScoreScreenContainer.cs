@@ -117,9 +117,8 @@ public class ScoreScreenContainer : MonoBehaviour
 
     private void ShowMultiplayerScore(Dictionary<PlayerNumber, PlayerScore> playerScores)
     {
-        MazeCharacterManager characterManager = CharacterManager.Instance as MazeCharacterManager;
-        _player1Label.text = characterManager.Players[PlayerNumber.Player1].PhotonView.Owner?.NickName;
-        _player2Label.text = characterManager.Players[PlayerNumber.Player2].PhotonView.Owner?.NickName;
+        _player1Label.text = GameManager.Instance.CharacterManager.GetPlayerCharacter<PlayerCharacter>(PlayerNumber.Player1).PhotonView.Owner?.NickName;
+        _player2Label.text = GameManager.Instance.CharacterManager.GetPlayerCharacter<PlayerCharacter>(PlayerNumber.Player2).PhotonView.Owner?.NickName;
 
         _player1MarkedTilesScoreLabel.text = playerScores[PlayerNumber.Player1].TileMarkScore.ToString();
         _player2MarkedTilesScoreLabel.text = playerScores[PlayerNumber.Player2].TileMarkScore.ToString();

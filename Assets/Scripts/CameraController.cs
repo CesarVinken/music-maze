@@ -90,19 +90,19 @@ public class CameraController : MonoBehaviour
         if (GameManager.CurrentSceneType == SceneType.Maze)
         {
             if (GameRules.GamePlayerType == GamePlayerType.SinglePlayer)
-                player = CharacterManager.Instance.GetPlayers<MazePlayerCharacter>()[PlayerNumber.Player1] as PlayerCharacter;
+                player = GameManager.Instance.CharacterManager.GetPlayerCharacter<MazePlayerCharacter>(PlayerNumber.Player1);
             else
             {
-                player = CharacterManager.Instance.GetPlayers<MazePlayerCharacter>().FirstOrDefault(p => p.Value.PhotonView.IsMine).Value;
+                player = GameManager.Instance.CharacterManager.GetPlayers<MazePlayerCharacter>().FirstOrDefault(p => p.Value.PhotonView.IsMine).Value;
             }
         }
         else
         {
             if (GameRules.GamePlayerType == GamePlayerType.SinglePlayer)
-                player = CharacterManager.Instance.GetPlayers<OverworldPlayerCharacter>()[PlayerNumber.Player1] as PlayerCharacter;
+                player = GameManager.Instance.CharacterManager.GetPlayerCharacter<OverworldPlayerCharacter>(PlayerNumber.Player1);
             else
             {
-                player = CharacterManager.Instance.GetPlayers<OverworldPlayerCharacter>().FirstOrDefault(p => p.Value.PhotonView.IsMine).Value;
+                player = GameManager.Instance.CharacterManager.GetPlayers<OverworldPlayerCharacter>().FirstOrDefault(p => p.Value.PhotonView.IsMine).Value;
             }
         }
 

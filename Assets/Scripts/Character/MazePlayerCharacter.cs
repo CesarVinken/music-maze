@@ -1,13 +1,10 @@
 ﻿using Photon.Pun;
 using System;
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class MazePlayerCharacter : PlayerCharacter
 {
-    private MazeCharacterManager _characterManager;
-    
     public bool HasReachedExit = false;
     public event Action PlayerExitsEvent;
     public event Action PlayerCaughtEvent;
@@ -19,11 +16,8 @@ public class MazePlayerCharacter : PlayerCharacter
         base.Awake();
 
         HasReachedExit = false;
-        _characterManager = CharacterManager.Instance as MazeCharacterManager;
 
-        if (_characterManager == null) return;
-
-        _characterManager.Players.Add(PlayerNumber, this);
+        GameManager.Instance.CharacterManager.AddPlayer(PlayerNumber, this);
     }
 
     public override void Start()

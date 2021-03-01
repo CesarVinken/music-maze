@@ -53,7 +53,7 @@ public class OverworldManager : MonoBehaviour, IOnEventCallback
 
         TilesContainer.Instance = null;
 
-        CharacterManager.Instance.UnloadCharacters();
+        GameManager.Instance.CharacterManager.UnloadCharacters();
         SceneObjectManager.Instance.UnloadSceneObjects();
 
         Logger.Log(Logger.Initialisation, "Unload Overworld {0}", Overworld);
@@ -93,7 +93,7 @@ public class OverworldManager : MonoBehaviour, IOnEventCallback
     {
         yield return new WaitForSeconds(.2f); // This waiting time should be dealt with more efficiently. Currently it is there to make sure that the characters are spawned in 
         MainScreenOverlayCanvas.Instance.BlackOutSquare.ResetToDefault();
-        CharacterManager.Instance.SpawnCharacters();
+        GameManager.Instance.CharacterManager.SpawnCharacters();
         CameraController.Instance.SetPanLimits(Overworld.LevelBounds);
         CameraController.Instance.FocusOnPlayer();
 
@@ -101,7 +101,7 @@ public class OverworldManager : MonoBehaviour, IOnEventCallback
         yield return new WaitForSeconds(.4f);
 
         // start movement of all actors that depend on the updated pathfinding only after the scan.
-        CharacterManager.Instance.UnfreezeCharacters();
+        GameManager.Instance.CharacterManager.UnfreezeCharacters();
     }
 
     private void InitialiseTileAttributes()

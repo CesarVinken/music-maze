@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class OverworldCharacterManager : CharacterManager
+public class OverworldCharacterManager : MonoBehaviourPunCallbacks, ICharacterManager
 {
     public struct CharacterBundle
     {
@@ -16,17 +16,29 @@ public class OverworldCharacterManager : CharacterManager
         }
     }
 
-    public Dictionary<PlayerNumber, OverworldPlayerCharacter> Players = new Dictionary<PlayerNumber, OverworldPlayerCharacter>();
+    [SerializeField] private GameObject _player1GO;
+    [SerializeField] private GameObject _player2GO;
 
+    [SerializeField] private RuntimeAnimatorController _bard1Controller;
+    [SerializeField] private RuntimeAnimatorController _bard2Controller;
+
+    private Dictionary<PlayerNumber, OverworldPlayerCharacter> _players = new Dictionary<PlayerNumber, OverworldPlayerCharacter>();
+
+    public GameObject Player1GO { get => _player1GO; set => _player1GO = value; }
+    public GameObject Player2GO { get => _player2GO; set => _player2GO = value; }
+
+    public RuntimeAnimatorController Bard1Controller { get => _bard1Controller; set => _bard1Controller = value; }
+    public RuntimeAnimatorController Bard2Controller { get => _bard2Controller; set => _bard2Controller = value; }
+    
     public void Awake()
     {
-        base._awake();
+        Guard.CheckIsNull(_bard1Controller, "Bard1Controller", gameObject);
+        Guard.CheckIsNull(_bard2Controller, "Bard2Controller", gameObject);
 
-        Guard.CheckIsNull(Bard1Controller, "Bard1Controller", gameObject);
-        Guard.CheckIsNull(Bard2Controller, "Bard2Controller", gameObject);
+        GameManager.Instance.CharacterManager = this;
     }
 
-    public override void SpawnCharacters()
+    public void SpawnCharacters()
     {
         Logger.Log("Spawn characters...");
 
@@ -76,48 +88,80 @@ public class OverworldCharacterManager : CharacterManager
 
         if (GameManager.CurrentPlatform == Platform.PC)
         {
-            if (Players.Count == 0)
+            if (_players.Count == 0)
             {
                 playerCharacter.KeyboardInput = KeyboardInput.Player1;
                 playerCharacter.PlayerNoInGame = 1;
 
             }
-            else if (Players.Count == 1)
+            else if (_players.Count == 1)
             {
                 playerCharacter.KeyboardInput = KeyboardInput.Player2;
                 playerCharacter.PlayerNoInGame = 2;
             }
             else
             {
-                Logger.Warning("There are {0} players in the level. There can be max 2 players in a level", Players.Count);
+                Logger.Warning("There are {0} players in the level. There can be max 2 players in a level", _players.Count);
             }
         }
         CharacterBundle characterBundle = new CharacterBundle(playerCharacter, characterGO);
         return characterBundle;
     }
 
-
-    public override void UnloadCharacters()
+    public void UnloadCharacters()
     {
-        foreach (KeyValuePair<PlayerNumber, OverworldPlayerCharacter> p in Players)
+        foreach (KeyValuePair<PlayerNumber, OverworldPlayerCharacter> p in _players)
         {
             Destroy(p.Value.gameObject);
         }
 
-        Players.Clear();
+        _players.Clear();
     }
 
-    public override void UnfreezeCharacters()
+    public void UnfreezeCharacters()
     {
-        foreach (KeyValuePair<PlayerNumber, OverworldPlayerCharacter> p in Players)
+        foreach (KeyValuePair<PlayerNumber, OverworldPlayerCharacter> p in _players)
         {
             p.Value.UnfreezeCharacter();
         }
-
     }
 
-    public override Dictionary<PlayerNumber, OverworldPlayerCharacter> GetPlayers<OverworldPlayerCharacter>()
+    public void ExitCharacter(MazePlayerCharacter player)
     {
-        return Players as Dictionary<PlayerNumber, OverworldPlayerCharacter>;
+        Logger.Log("Exit player character");
+    }
+
+    public Dictionary<PlayerNumber, OverworldPlayerCharacter> GetPlayers<OverworldPlayerCharacter>()
+    {
+        return _players as Dictionary<PlayerNumber, OverworldPlayerCharacter>;
+    }
+
+    public PlayerCharacter GetPlayerCharacter<T>(PlayerNumber playerNumber) where T : PlayerCharacter
+    {
+        return _players[playerNumber] as OverworldPlayerCharacter;
+    }
+
+    public void AddPlayer(PlayerNumber playerNumber, PlayerCharacter playerCharacter)
+    {
+        _players.Add(playerNumber, playerCharacter as OverworldPlayerCharacter);
+    }
+
+    public string GetPrefabNameByCharacter(CharacterBlueprint character)
+    {
+        return character.CharacterType.GetPrefabPath();
+    }
+
+    public Vector3 GetCharacterGridPosition(Vector3 gridVectorLocation)
+    {
+        return new Vector3(gridVectorLocation.x + GridLocation.OffsetToTileMiddle, gridVectorLocation.y + GridLocation.OffsetToTileMiddle);
+    }
+
+    public void PutCharacterOnGrid(GameObject characterGO, Vector3 gridVectorLocation)
+    {
+        characterGO.transform.position =
+            new Vector3(
+                gridVectorLocation.x + GridLocation.OffsetToTileMiddle,
+                gridVectorLocation.y + GridLocation.OffsetToTileMiddle
+            );
     }
 }

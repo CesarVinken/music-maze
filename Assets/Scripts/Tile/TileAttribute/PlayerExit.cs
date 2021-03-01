@@ -64,10 +64,7 @@ public class PlayerExit : TileObstacle, ITileAttribute, ITileConnectable
         if (player != null)
         {
             Logger.Log("{0} reached the exit! {1},{2}", player.name, Tile.GridLocation.X, Tile.GridLocation.Y);
-            MazeCharacterManager characterManager = CharacterManager.Instance as MazeCharacterManager;
-
-            if (characterManager == null) return;
-            characterManager.CharacterExit(player);
+            GameManager.Instance.CharacterManager.ExitCharacter(player);
         }
     }
 

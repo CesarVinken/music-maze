@@ -1,10 +1,7 @@
-﻿using ExitGames.Client.Photon;
-using Photon.Pun;
-using Photon.Realtime;
+﻿using Photon.Pun;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
 public enum SceneLoadOrigin
 {
@@ -40,6 +37,8 @@ public class GameManager : MonoBehaviourPunCallbacks
     public event Action CompleteMazeLevelEvent;
 
     public List<string> PlayableLevelNames = new List<string>();
+
+    public ICharacterManager CharacterManager;
 
     public void Awake()
     {
