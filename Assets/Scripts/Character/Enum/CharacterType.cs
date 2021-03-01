@@ -1,6 +1,8 @@
-﻿public enum CharacterType
-{
-    Bard1,
-    Bard2,
-    Enemy
-}
+﻿using UnityEngine;
+
+//public enum CharacterType
+//{
+//    Bard1,
+//    Bard2,
+//    Enemy
+//}

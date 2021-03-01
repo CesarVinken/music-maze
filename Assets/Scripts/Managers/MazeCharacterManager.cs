@@ -19,6 +19,8 @@ public class MazeCharacterManager : CharacterManager
     public GameObject EnemyCharacterPrefab;
     public GameObject PlayerCharacterPrefab;
 
+    public RuntimeAnimatorController EnemyController;
+
     [Space(10)]
     [Header("Enemies")]
     public List<EnemyCharacter> Enemies = new List<EnemyCharacter>();
@@ -145,21 +147,6 @@ public class MazeCharacterManager : CharacterManager
         {
             Logger.Warning("The level is completed!");
             GameManager.Instance.CompleteMazeLevel();
-        }
-    }
-
-    public override string GetPrefabNameByCharacter(CharacterBlueprint character)
-    {
-        switch (character.CharacterType)
-        {
-            case CharacterType.Bard1:
-            case CharacterType.Bard2:
-                return "Prefabs/Character/MazePlayerCharacter";
-            case CharacterType.Enemy:
-                return "Prefabs/Character/EnemyCharacter";
-            default:
-                Logger.Error(Logger.Initialisation, "Cannot find prefab for character type {0}", character.CharacterType);
-                return null;
         }
     }
 

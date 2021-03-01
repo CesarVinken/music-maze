@@ -9,7 +9,7 @@ public class Character : MonoBehaviour
     public CharacterBlueprint CharacterBlueprint;
     public GridLocation StartingPosition;
     public GameObject CharacterBody;
-    protected CharacterType _characterType;
+    protected ICharacter _characterType;
 
     [Space(10)]
     [Header("Rendering")]
@@ -66,7 +66,7 @@ public class Character : MonoBehaviour
         }
     }
 
-    protected void SetCharacterType(CharacterType characterType)
+    protected void SetCharacterType(ICharacter characterType)
     {
         _characterType = characterType;
         _animationHandler.SetAnimationControllerForCharacterType(_characterType);

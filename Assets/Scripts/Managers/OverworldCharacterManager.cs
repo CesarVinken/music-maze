@@ -43,7 +43,9 @@ public class OverworldCharacterManager : CharacterManager
         {
             Debug.Log("Instantiating Player 1");
 
-            CharacterBundle PlayerBundle = SpawnCharacter(level.PlayerCharacterSpawnpoints[PlayerNumber.Player1].CharacterBlueprint, level.PlayerCharacterSpawnpoints[PlayerNumber.Player1].GridLocation);
+            CharacterBundle PlayerBundle = SpawnCharacter(
+                level.PlayerCharacterSpawnpoints[PlayerNumber.Player1].CharacterBlueprint,
+                level.PlayerCharacterSpawnpoints[PlayerNumber.Player1].GridLocation);
             Player1GO = PlayerBundle.CharacterGO;
             PlayerCharacter player = PlayerBundle.Character as PlayerCharacter;
         }
@@ -59,6 +61,8 @@ public class OverworldCharacterManager : CharacterManager
 
     private CharacterBundle SpawnCharacter(CharacterBlueprint character, GridLocation gridLocation)
     {
+        Logger.Log(character.CharacterType.GetType());
+
         string prefabName = GetPrefabNameByCharacter(character);
         Vector2 startPosition = GetCharacterGridPosition(GridLocation.GridToVector(gridLocation)); // start position is grid position plus grid tile offset
 
@@ -101,19 +105,6 @@ public class OverworldCharacterManager : CharacterManager
         }
 
         Players.Clear();
-    }
-
-    public override string GetPrefabNameByCharacter(CharacterBlueprint character)
-    {
-        switch (character.CharacterType)
-        {
-            case CharacterType.Bard1:
-            case CharacterType.Bard2:
-                return "Prefabs/Character/OverworldPlayerCharacter";
-            default:
-                Logger.Error(Logger.Initialisation, "Cannot find prefab for character type {0}", character.CharacterType);
-                return null;
-        }
     }
 
     public override void UnfreezeCharacters()

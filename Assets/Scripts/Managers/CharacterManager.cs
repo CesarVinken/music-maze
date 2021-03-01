@@ -11,7 +11,6 @@ public abstract class CharacterManager : MonoBehaviourPunCallbacks
 
     public RuntimeAnimatorController Bard1Controller;
     public RuntimeAnimatorController Bard2Controller;
-    public RuntimeAnimatorController EnemyController;
 
     protected void _awake()
     {
@@ -34,8 +33,11 @@ public abstract class CharacterManager : MonoBehaviourPunCallbacks
 
     public abstract Dictionary<PlayerNumber, T> GetPlayers<T>() where T : PlayerCharacter;
 
-    public abstract string GetPrefabNameByCharacter(CharacterBlueprint character);
-  
+    public string GetPrefabNameByCharacter(CharacterBlueprint character)
+    {
+        return character.CharacterType.GetPrefabPath();
+    }
+
     public virtual void UnfreezeCharacters()
     {
 

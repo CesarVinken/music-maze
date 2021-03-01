@@ -1,8 +1,9 @@
-﻿using UnityEngine;
+﻿using CharacterType;
+using UnityEngine;
 
 public class CharacterSpawnpoint : MonoBehaviour, ITileAttribute
 {
-    public CharacterType CharacterType;
+    public ICharacter CharacterType;
     public CharacterBlueprint CharacterBlueprint;
     public GridLocation GridLocation;
 
@@ -20,7 +21,7 @@ public class CharacterSpawnpoint : MonoBehaviour, ITileAttribute
     {
         Guard.CheckIsNull(_spriteRenderer, "_spriteRenderer", gameObject);
 
-        CharacterBlueprint = new CharacterBlueprint(CharacterType);
+        CharacterBlueprint = new CharacterBlueprint(new Emmon());
 
         _spriteRenderer.sortingOrder = (int)(_sortingOrderBase - transform.position.y - _sortingOrderCalculationOffset) * 10;
     }

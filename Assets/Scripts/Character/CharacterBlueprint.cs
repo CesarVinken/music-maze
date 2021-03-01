@@ -1,16 +1,18 @@
-﻿public class CharacterBlueprint
+﻿using CharacterType;
+
+public class CharacterBlueprint
 {
-    public CharacterType CharacterType;
+    public ICharacter CharacterType;
     public bool IsPlayable 
     { 
         get
         {
-            if (CharacterType == CharacterType.Bard1 || CharacterType == CharacterType.Bard2) return true;
+            if (CharacterType is Emmon || CharacterType is Fae) return true;
             return false;
         }
     }
 
-    public CharacterBlueprint(CharacterType characterType)
+    public CharacterBlueprint(ICharacter characterType)
     {
         CharacterType = characterType;
     }

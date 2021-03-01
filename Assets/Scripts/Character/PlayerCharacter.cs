@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using Photon.Pun;
 using System.Collections;
+using CharacterType;
 
 public class PlayerCharacter : Character
 {
@@ -51,10 +52,10 @@ public class PlayerCharacter : Character
         switch (PlayerNumber)
         {
             case PlayerNumber.Player1:
-                SetCharacterType(CharacterType.Bard1);
+                SetCharacterType(new Emmon());
                 break;
             case PlayerNumber.Player2:
-                SetCharacterType(CharacterType.Bard2);
+                SetCharacterType(new Fae());
                 break;
             default:
                 break;

@@ -1,4 +1,5 @@
-﻿using Photon.Pun;
+﻿using CharacterType;
+using Photon.Pun;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,6 +10,8 @@ public class EnemyCharacter : Character
     private MazeCharacterManager _characterManager;
     private bool _isInitialised = false;
 
+    private ICharacter _enemyType = null;
+
     public override void Awake()
     {
         base.Awake();
@@ -18,6 +21,7 @@ public class EnemyCharacter : Character
 
         if (_characterManager == null) return;
 
+        _enemyType = new EvilViolin();
         _characterManager.Enemies.Add(this);
     }
 
@@ -25,7 +29,7 @@ public class EnemyCharacter : Character
     {
         GameManager.Instance.CompleteMazeLevelEvent += OnMazeLevelCompleted;
 
-        SetCharacterType(CharacterType.Enemy);
+        SetCharacterType(_enemyType);
 
         _isInitialised = true;
     }

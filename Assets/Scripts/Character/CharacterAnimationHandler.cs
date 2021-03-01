@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using Photon.Pun;
+using CharacterType;
 
 public class CharacterAnimationHandler : MonoBehaviour
 {
@@ -28,7 +29,7 @@ public class CharacterAnimationHandler : MonoBehaviour
             _photonAnimatorView = GetComponent<PhotonAnimatorView>();
     }
 
-    public void SetAnimationControllerForCharacterType(CharacterType characterType)
+    public void SetAnimationControllerForCharacterType(ICharacter characterType)
     {
         /*TODO: Refactor like this
          * Instead of characterType enum, have separate class for each Charactertype, with shared itnerface ICharacter. 
@@ -37,21 +38,8 @@ public class CharacterAnimationHandler : MonoBehaviour
          * - Move EnemyController from CharacterManager base class to MazeCharacterManager
          * 
          * */
-        switch (characterType)
-        {
-            case CharacterType.Bard1:
-                Animator.runtimeAnimatorController = CharacterManager.Instance.Bard1Controller;
-                break;
-            case CharacterType.Bard2:
-                Animator.runtimeAnimatorController = CharacterManager.Instance.Bard2Controller;
-                break;
-            case CharacterType.Enemy:
-                Animator.runtimeAnimatorController = CharacterManager.Instance.EnemyController;
-                break;
-            default:
-                Logger.Error($"The CharacterType {characterType} is not yet implemented");
-                break;
-        }
+
+        Animator.runtimeAnimatorController = characterType.GetAnimationController();
 
         // valid for both player and enemy animators
         _photonAnimatorView.SetParameterSynchronized("Locomotion", PhotonAnimatorView.ParameterType.Bool, PhotonAnimatorView.SynchronizeType.Discrete);
