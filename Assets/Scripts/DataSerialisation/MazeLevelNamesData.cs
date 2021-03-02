@@ -14,8 +14,7 @@ public class MazeLevelNamesData
 
     public MazeLevelNamesData(string levelName)
     {
-        JsonMazeLevelListFileReader mazeLevelListFileReader = new JsonMazeLevelListFileReader();
-        MazeLevelNamesData oldData = mazeLevelListFileReader.ReadMazeLevelList();
+        MazeLevelNamesData oldData = new JsonMazeLevelListFileReader().ReadData<MazeLevelNamesData>();
 
         if (oldData != null)
         {

@@ -2,9 +2,9 @@
 using UnityEngine;
 using UnityEngine.Networking;
 
-public class JsonMazeLevelFileReader
+public class JsonMazeLevelFileReader : IJsonFileReader
 {
-    public MazeLevelData ReadLevelData(string levelName)
+    public MazeLevelData ReadData<MazeLevelData>(string levelName)
     {
         string jsonContent;
         string filePath = "";
@@ -25,7 +25,7 @@ public class JsonMazeLevelFileReader
             if (!File.Exists(filePath))
             {
                 Logger.Warning($"File {levelName}.json doesn't exist");
-                return null;
+                return default(MazeLevelData);
             }
             jsonContent = File.ReadAllText(filePath);
         }

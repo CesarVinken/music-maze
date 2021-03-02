@@ -7,8 +7,7 @@ public static class MazeLevelLoader
 {
     public static MazeLevelData LoadMazeLevelData(string mazeName)
     {
-        JsonMazeLevelFileReader levelReader = new JsonMazeLevelFileReader();
-        MazeLevelData mazeLevelData = levelReader.ReadLevelData(mazeName);
+        MazeLevelData mazeLevelData = new JsonMazeLevelFileReader().ReadData<MazeLevelData>(mazeName);
 
         return mazeLevelData;
     }
@@ -67,8 +66,7 @@ public static class MazeLevelLoader
 
     public static MazeLevelNamesData GetAllMazeLevelNamesData()
     {
-        JsonMazeLevelListFileReader jsonMazeLevelListFileReader = new JsonMazeLevelListFileReader();
-        MazeLevelNamesData levelNamesData = jsonMazeLevelListFileReader.ReadMazeLevelList();
+        MazeLevelNamesData levelNamesData = new JsonMazeLevelListFileReader().ReadData<MazeLevelNamesData>();
 
         return levelNamesData;
     }
@@ -76,9 +74,8 @@ public static class MazeLevelLoader
     public static List<string> GetAllPlayableLevelNames()
     {
         List<string> playableLevelNames = new List<string>();
-
-        JsonMazeLevelListFileReader jsonMazeLevelListFileReader = new JsonMazeLevelListFileReader();
-        MazeLevelNamesData levelNamesData = jsonMazeLevelListFileReader.ReadMazeLevelList();
+        
+        MazeLevelNamesData levelNamesData = new JsonMazeLevelListFileReader().ReadData<MazeLevelNamesData>();
 
         if (levelNamesData == null) return playableLevelNames;
         for (int i = 0; i < levelNamesData.LevelNames.Count; i++)

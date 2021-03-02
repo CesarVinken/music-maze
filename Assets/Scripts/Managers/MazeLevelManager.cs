@@ -212,8 +212,7 @@ public class MazeLevelManager : MonoBehaviour, IOnEventCallback
     {
         if (GameRules.GamePlayerType == GamePlayerType.SinglePlayer)
         {
-            JsonMazeLevelFileReader levelReader = new JsonMazeLevelFileReader();
-            MazeLevelData levelData = levelReader.ReadLevelData(pickedLevel);
+            MazeLevelData levelData = new JsonMazeLevelFileReader().ReadData<MazeLevelData>(pickedLevel);
 
             if (levelData == null)
             {

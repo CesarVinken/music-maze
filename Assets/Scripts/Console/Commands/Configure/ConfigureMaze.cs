@@ -45,8 +45,7 @@ public class ConfigureMaze : IConfigureCommand
             throw new NotEnoughArgumentsConsoleException(message);
         }
 
-        JsonMazeLevelListFileReader jsonMazeLevelListFileReader = new JsonMazeLevelListFileReader();
-        MazeLevelNamesData levelNamesData = jsonMazeLevelListFileReader.ReadMazeLevelList();
+        MazeLevelNamesData levelNamesData = new JsonMazeLevelListFileReader().ReadData<MazeLevelNamesData>();
 
         string sanatisedLevelName = levelName.ToLower().Replace(" ", "-");
         int levelNameIndex = levelNamesData.LevelNames.FindIndex(l => l.LevelName == sanatisedLevelName);

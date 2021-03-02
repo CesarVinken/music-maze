@@ -1,15 +1,15 @@
 ﻿using System.IO;
 using UnityEngine;
 
-public class JsonOverworldListFileWriter
+public class JsonOverworldListFileWriter : IJsonFileWriter
 {
     private OverworldNamesData _levelNamesData;
 
     private string _path;
 
-    public void SerialiseData(OverworldNamesData levelNamesData)
+    public void SerialiseData<T>(T levelNamesData)
     {
-        _levelNamesData = levelNamesData;
+        _levelNamesData = levelNamesData as OverworldNamesData;
         _path = Path.Combine(Application.dataPath, "StreamingAssets", "maze", "levels.json");
 
         string jsonLevelNamesData = JsonUtility.ToJson(_levelNamesData, true).ToString();

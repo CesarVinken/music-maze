@@ -33,8 +33,7 @@ public class PlayableLevelsPanel : MonoBehaviour
 
     public void OnEnable()
     {
-        JsonMazeLevelListFileReader jsonMazeLevelListFileReader = new JsonMazeLevelListFileReader();
-        MazeLevelNamesData levelNamesData = jsonMazeLevelListFileReader.ReadMazeLevelList();
+        MazeLevelNamesData levelNamesData = new JsonMazeLevelListFileReader().ReadData<MazeLevelNamesData>();
         
         LevelNameToggleData.Clear();
 

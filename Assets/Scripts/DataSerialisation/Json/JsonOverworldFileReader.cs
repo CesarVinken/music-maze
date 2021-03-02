@@ -2,9 +2,9 @@
 using UnityEngine;
 using UnityEngine.Networking;
 
-public class JsonOverworldFileReader
+public class JsonOverworldFileReader : IJsonFileReader
 {
-    public OverworldData ReadOverworldData(string overworldName = "overworld")
+    public OverworldData ReadData<OverworldData>(string overworldName = "overworld")
     {
         string jsonContent;
         string filePath = "";
@@ -25,7 +25,7 @@ public class JsonOverworldFileReader
             if (!File.Exists(filePath))
             {
                 Logger.Warning($"File {overworldName}.json doesn't exist");
-                return null;
+                return default(OverworldData);
             }
             jsonContent = File.ReadAllText(filePath);
         }

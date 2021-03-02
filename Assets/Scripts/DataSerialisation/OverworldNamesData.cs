@@ -14,8 +14,7 @@ public class OverworldNamesData
 
     public OverworldNamesData(string overworldName)
     {
-        JsonOverworldListFileReader overworldListFileReader = new JsonOverworldListFileReader();
-        OverworldNamesData oldData = overworldListFileReader.ReadOverworldList();
+        OverworldNamesData oldData = new JsonOverworldListFileReader().ReadData<OverworldNamesData>();
 
         if (oldData != null)
         {

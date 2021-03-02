@@ -5,8 +5,7 @@ public class OverworldLoader : MonoBehaviour
 {
     public static OverworldData LoadOverworldData(string overworldName)
     {
-        JsonOverworldFileReader overworldReader = new JsonOverworldFileReader();
-        OverworldData overworldData = overworldReader.ReadOverworldData(overworldName);
+        OverworldData overworldData = new JsonOverworldFileReader().ReadData<OverworldData>(overworldName);
 
         return overworldData;
     }
