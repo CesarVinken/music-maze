@@ -12,7 +12,7 @@ public class PlayerRejectsMazeLevelInvitationEvent
             rejector,
             mazeName
         };
-        RaiseEventOptions raiseEventOptions = new RaiseEventOptions { Receivers = ReceiverGroup.All };
+        RaiseEventOptions raiseEventOptions = new RaiseEventOptions { Receivers = ReceiverGroup.Others };
         PhotonNetwork.RaiseEvent(PlayerRejectsMazeLevelInvitationEventCode, content, raiseEventOptions, SendOptions.SendReliable);
         Logger.Log("PlayerRejectsMazeLevelInvitationEvent");
     }

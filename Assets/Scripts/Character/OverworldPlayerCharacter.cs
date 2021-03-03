@@ -24,7 +24,7 @@ public class OverworldPlayerCharacter : PlayerCharacter
     {
         base.Update();
 
-        if (OccupiedMazeEntry != null)
+        if (OccupiedMazeEntry != null && PhotonView.IsMine && MazeLevelInvitation.PendingInvitation == false)
         {
             if (Input.GetKeyDown(KeyCode.Return) || Input.GetKeyDown(KeyCode.KeypadEnter) || Input.GetMouseButtonDown(0) || Input.GetMouseButtonDown(1))
             {
@@ -45,6 +45,8 @@ public class OverworldPlayerCharacter : PlayerCharacter
         {
             PlayerSendsMazeLevelInvitationEvent playerSendsMazeLevelInvitationEvent = new PlayerSendsMazeLevelInvitationEvent();
             playerSendsMazeLevelInvitationEvent.SendPlayerSendsMazeLevelInvitationEvent(PhotonView.Owner.NickName, "default");
+
+            MazeLevelInvitation.PendingInvitation = true;
         }
     }
 

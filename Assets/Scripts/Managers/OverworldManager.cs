@@ -183,10 +183,14 @@ public class OverworldManager : MonoBehaviour, IOnEventCallback
             //    MazeLevelLoader.LoadMazeLevel(mazeLevelData);
         } else if(eventCode == PlayerSendsMazeLevelInvitationEvent.PlayerSendsMazeLevelInvitationEventCode)
         {
-            Logger.Log("received event for invitation");
             object[] data = (object[])photonEvent.CustomData;
             string invitorName = (string)data[0];
             string mazeName = (string)data[1];
+
+            Logger.Log($"received event for invitation from {invitorName}");
+
+            MazeLevelInvitation.PendingInvitation = true;
+
             OverworldMainScreenOverlayCanvas.Instance.ShowMazeInvitation(invitorName, mazeName);
         } else if(eventCode == PlayerRejectsMazeLevelInvitationEvent.PlayerRejectsMazeLevelInvitationEventCode)
         {

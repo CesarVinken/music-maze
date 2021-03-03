@@ -15,6 +15,8 @@ public class MazeLevelInvitationRejection : MonoBehaviour
 
     public void Show(string playerName, string mazeName)
     {
+        gameObject.SetActive(true);
+
         _mazeLevelName = mazeName;
         SetInfoText(playerName);
     }
@@ -27,5 +29,7 @@ public class MazeLevelInvitationRejection : MonoBehaviour
     public void Close()
     {
         gameObject.SetActive(false);
+
+        MazeLevelInvitation.PendingInvitation = false;
     }
 }

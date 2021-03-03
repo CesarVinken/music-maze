@@ -13,7 +13,7 @@ public class PlayerSendsMazeLevelInvitationEvent
             invitor,
             levelName
         };
-        RaiseEventOptions raiseEventOptions = new RaiseEventOptions { Receivers = ReceiverGroup.All };
+        RaiseEventOptions raiseEventOptions = new RaiseEventOptions { Receivers = ReceiverGroup.Others };
         PhotonNetwork.RaiseEvent(PlayerSendsMazeLevelInvitationEventCode, content, raiseEventOptions, SendOptions.SendReliable);
         Logger.Log("PlayerSendsMazeLevelInvitationEvent");
     }

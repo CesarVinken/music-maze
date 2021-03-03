@@ -9,6 +9,8 @@ public class MazeLevelInvitation : MonoBehaviour
     [SerializeField] private Text _infoText;
     private string _mazeLevelName = "";
 
+    public static bool PendingInvitation = false;
+
     public void Awake()
     {
         Instance = this;
@@ -16,6 +18,8 @@ public class MazeLevelInvitation : MonoBehaviour
 
     public void Show(string playerName, string mazeName)
     {
+        gameObject.SetActive(true);
+
         _mazeLevelName = mazeName;
         SetInfoText(playerName);
     }
@@ -35,12 +39,14 @@ public class MazeLevelInvitation : MonoBehaviour
 
     public void Reject()
     {
-        gameObject.SetActive(false);
-
         PlayerNumber ourPlayerCharacterNumber = GameManager.Instance.CharacterManager.GetOurPlayerCharacter();
         PlayerCharacter ourPlayerCharacter = GameManager.Instance.CharacterManager.GetPlayerCharacter<PlayerCharacter>(ourPlayerCharacterNumber);
 
         PlayerRejectsMazeLevelInvitationEvent playerRejectsMazeLevelInvitationEvent = new PlayerRejectsMazeLevelInvitationEvent();
         playerRejectsMazeLevelInvitationEvent.SendPlayerRejectsMazeLevelInvitationEvent(ourPlayerCharacter.PhotonView.name, _mazeLevelName);
+
+        PendingInvitation = false;
+
+        gameObject.SetActive(false);
     }
 }
