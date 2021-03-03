@@ -1,0 +1,31 @@
+﻿using UnityEngine;
+using UnityEngine.UI;
+
+public class MazeLevelInvitationRejection : MonoBehaviour
+{
+    public static MazeLevelInvitationRejection Instance;
+
+    [SerializeField] private Text _infoText;
+    private string _mazeLevelName = "";
+
+    public void Awake()
+    {
+        Instance = this;
+    }
+
+    public void Show(string playerName, string mazeName)
+    {
+        _mazeLevelName = mazeName;
+        SetInfoText(playerName);
+    }
+
+    private void SetInfoText(string playerName)
+    {
+        _infoText.text = $"{playerName} rejected your invitation to go to {_mazeLevelName}.";
+    }
+
+    public void Close()
+    {
+        gameObject.SetActive(false);
+    }
+}

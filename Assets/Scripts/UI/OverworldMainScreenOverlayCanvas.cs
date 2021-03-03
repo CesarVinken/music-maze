@@ -7,6 +7,7 @@ public class OverworldMainScreenOverlayCanvas : MonoBehaviour
     public static OverworldMainScreenOverlayCanvas Instance;
 
     [SerializeField] private GameObject _mazeLevelInvitationPanelPrefab;
+    [SerializeField] private GameObject _mazeLevelInvitationRejectionPanelPrefab;
 
     public void Awake()
     {
@@ -27,6 +28,21 @@ public class OverworldMainScreenOverlayCanvas : MonoBehaviour
         else
         {
             MazeLevelInvitation.Instance.Show(playerName, mazeName);
+        }
+    }
+
+    public void ShowMazeInvitationRejection(string rejectorName, string mazeName)
+    {
+        if (MazeLevelInvitationRejection.Instance == null)
+        {
+            GameObject mazeInvitationRejectionGO = Instantiate(_mazeLevelInvitationRejectionPanelPrefab);
+            mazeInvitationRejectionGO.SetActive(true);
+            MazeLevelInvitationRejection mazeInvitationRejection = mazeInvitationRejectionGO.GetComponent<MazeLevelInvitationRejection>();
+            mazeInvitationRejection.Show(rejectorName, mazeName);
+        }
+        else
+        {
+            MazeLevelInvitationRejection.Instance.Show(rejectorName, mazeName);
         }
     }
 }

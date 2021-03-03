@@ -223,4 +223,16 @@ public class MazeCharacterManager : MonoBehaviourPunCallbacks, ICharacterManager
     {
         _players.Add(playerNumber, playerCharacter as MazePlayerCharacter);
     }
+
+    public PlayerNumber GetOurPlayerCharacter()
+    {
+        PlayerNumber ourPlayerCharacter = PlayerNumber.Player1;
+
+        foreach (KeyValuePair<PlayerNumber, MazePlayerCharacter> p in _players)
+        {
+            if (p.Value.PhotonView.IsMine) return p.Key;
+        }
+
+        return ourPlayerCharacter;
+    }
 }

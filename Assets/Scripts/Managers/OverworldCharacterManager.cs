@@ -164,4 +164,16 @@ public class OverworldCharacterManager : MonoBehaviourPunCallbacks, ICharacterMa
                 gridVectorLocation.y + GridLocation.OffsetToTileMiddle
             );
     }
+
+    public PlayerNumber GetOurPlayerCharacter()
+    {
+        PlayerNumber ourPlayerCharacter = PlayerNumber.Player1;
+
+        foreach (KeyValuePair<PlayerNumber, OverworldPlayerCharacter> p in _players)
+        {
+            if (p.Value.PhotonView.IsMine) return p.Key;
+        }
+
+        return ourPlayerCharacter;
+    }
 }
