@@ -17,9 +17,9 @@ public class MainScreenCameraCanvas : MonoBehaviour
     }
 
     // Make generic so different types of button interactions can be used, not just Maze Entry
-    public void ShowMapInteractionButton(Vector2 pos, string mapText)
+    public void ShowMapInteractionButton(OverworldPlayerCharacter player, Vector2 pos, string mapText)
     {
-        MapInteractionButton.ShowMapInteractionButton(pos, mapText);
+        MapInteractionButton.ShowMapInteractionButton(player, pos, mapText);
     }
 
     public void HideMapMapInteractionButton()

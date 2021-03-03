@@ -83,7 +83,7 @@ public class MazeCharacterManager : MonoBehaviourPunCallbacks, ICharacterManager
     {
         string prefabName = GetPrefabNameByCharacter(character);
         Vector2 startPosition = GetCharacterGridPosition(GridLocation.GridToVector(gridLocation)); // start position is grid position plus grid tile offset
-        Logger.Log(prefabName);
+
         GameObject characterGO = PhotonNetwork.Instantiate(prefabName, startPosition, Quaternion.identity, 0); // TODO solve prefab for single player
         if (character.IsPlayable)
         {

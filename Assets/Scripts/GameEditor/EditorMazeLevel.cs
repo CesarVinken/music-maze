@@ -113,11 +113,11 @@ public class EditorMazeLevel : MazeLevel, IEditorLevel
             int tileAttributeId = serialisableTileAttribute.TileAttributeId;
             if (tileAttributeId == SerialisableTileAttribute.ObstacleAttributeCode)
             {
-                tileAttributePlacer.PlaceTileObstacle(ObstacleType.Bush, new TileConnectionScoreInfo(serialisableTileAttribute.ObstacleConnectionScore, serialisableTileAttribute.SpriteNumber)); //TODO, find a way to use polymorphism so we can cast as SerialisableTileObstacleAttribute instead of a general 
+                tileAttributePlacer.PlaceTileObstacle(ObstacleType.Bush, new TileConnectionScoreInfo(serialisableTileAttribute.ConnectionScore, serialisableTileAttribute.SpriteNumber)); //TODO, find a way to use polymorphism so we can cast as SerialisableTileObstacleAttribute instead of a general 
             }
             else if (tileAttributeId == SerialisableTileAttribute.PlayerExitCode)
             {
-                tileAttributePlacer.PlacePlayerExit(ObstacleType.Bush, new TileConnectionScoreInfo(serialisableTileAttribute.ObstacleConnectionScore, serialisableTileAttribute.SpriteNumber));
+                tileAttributePlacer.PlacePlayerExit(ObstacleType.Bush, new TileConnectionScoreInfo(serialisableTileAttribute.ConnectionScore, serialisableTileAttribute.SpriteNumber));
             }
             else if (tileAttributeId == SerialisableTileAttribute.PlayerSpawnpointCode)
             {

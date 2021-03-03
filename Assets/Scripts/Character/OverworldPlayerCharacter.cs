@@ -1,6 +1,9 @@
-﻿public class OverworldPlayerCharacter : PlayerCharacter
+﻿using UnityEngine;
+
+public class OverworldPlayerCharacter : PlayerCharacter
 {
-    
+    public MazeEntry OccupiedMazeEntry = null;
+
     public override void Awake()
     {
         base.Awake();
@@ -15,6 +18,34 @@
         //transform the player's starting tile and surrounding tiles
         InGameOverworldTile currentTile = GameManager.Instance.CurrentGameLevel.TilesByLocation[StartingPosition] as InGameOverworldTile;
         CurrentGridLocation = currentTile.GridLocation;
+    }
+
+    public override void Update()
+    {
+        base.Update();
+
+        if (OccupiedMazeEntry != null)
+        {
+            if (Input.GetKeyDown(KeyCode.Return) || Input.GetKeyDown(KeyCode.KeypadEnter) || Input.GetMouseButtonDown(0) || Input.GetMouseButtonDown(1))
+            {
+                PerformMazeEntryAction();
+            }
+        }
+    }
+
+    public void PerformMazeEntryAction()
+    {
+        // Player does not meet entry requirements? Return;
+
+        if (GameRules.GamePlayerType == GamePlayerType.SinglePlayer)
+        {
+            OverworldManager.Instance.LoadMaze();
+        }
+        else
+        {
+            PlayerSendsMazeLevelInvitationEvent playerSendsMazeLevelInvitationEvent = new PlayerSendsMazeLevelInvitationEvent();
+            playerSendsMazeLevelInvitationEvent.SendPlayerSendsMazeLevelInvitationEvent(PhotonView.Owner.NickName, "default");
+        }
     }
 
     public override bool ValidateTarget(GridLocation targetGridLocation)

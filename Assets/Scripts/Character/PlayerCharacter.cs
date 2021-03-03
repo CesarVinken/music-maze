@@ -67,7 +67,7 @@ public class PlayerCharacter : Character
         _characterPath.CharacterReachesTarget += OnTargetReached;
     }
 
-    public void Update()
+    public virtual void Update()
     {
         if (EditorManager.InEditor) return;
 

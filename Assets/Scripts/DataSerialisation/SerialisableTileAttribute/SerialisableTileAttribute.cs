@@ -5,7 +5,7 @@ public class SerialisableTileAttribute
 {
     public int TileAttributeId;
 
-    public int ObstacleConnectionScore; // Should only be on TileObstacle class, but polymorphism is currently not possible on serialisation
+    public int ConnectionScore; // Should only be on TileObstacle class, but polymorphism is currently not possible on serialisation
     public int SpriteNumber;
 
     public const int ObstacleAttributeCode = 0;

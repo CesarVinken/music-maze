@@ -40,4 +40,6 @@ public class MainScreenOverlayCanvas : MonoBehaviour
             EditorCanvasUI.Instance.UpdateCanvasForSceneChange();
         }
     }
+
+
 }

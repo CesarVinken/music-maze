@@ -6,7 +6,7 @@ public class SerialisablePlayerExitAttribute : SerialisableTileAttribute
     public SerialisablePlayerExitAttribute(TileConnectionScoreInfo ConnectionScoreInfo)
     {
         TileAttributeId = PlayerExitCode;
-        ObstacleConnectionScore = ConnectionScoreInfo.RawConnectionScore;
+        ConnectionScore = ConnectionScoreInfo.RawConnectionScore;
         SpriteNumber = ConnectionScoreInfo.SpriteNumber;
     }
 }

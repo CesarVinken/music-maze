@@ -4,7 +4,7 @@ using UnityEngine.UI;
 
 public interface IMapInteractionButton
 {
-    void ShowMapInteractionButton(Vector2 pos, string mapText);
+    void ShowMapInteractionButton(OverworldPlayerCharacter triggerPlayer, Vector2 pos, string mapText);
     void ExecuteMapInteraction();
     void HideMapInteractionButton();
 }
@@ -13,6 +13,7 @@ public class MapInteractionButton : MonoBehaviour, IMapInteractionButton
 {
     [SerializeField] private Text _mapTextLabel;
     private Vector2 _buttonWorldBasePosition;
+    [SerializeField] private OverworldPlayerCharacter _triggerPlayer;
 
     private void Awake()
     {
@@ -32,7 +33,7 @@ public class MapInteractionButton : MonoBehaviour, IMapInteractionButton
         _mapTextLabel.text = mapText;
     }
 
-    public void ShowMapInteractionButton(Vector2 pos, string mapText)
+    public void ShowMapInteractionButton(OverworldPlayerCharacter player, Vector2 pos, string mapText)
     {
         _buttonWorldBasePosition = pos;
         SetMapInteractionButtonLabel(mapText);
@@ -49,6 +50,6 @@ public class MapInteractionButton : MonoBehaviour, IMapInteractionButton
     public void ExecuteMapInteraction()
     {
         //TODO later make generic, so there can be different interaction button types. For now always enter maze.
-        MazeEntry.EnterMaze();
+        _triggerPlayer.PerformMazeEntryAction();
     }
 }

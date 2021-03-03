@@ -825,6 +825,7 @@ GameObject:
   - component: {fileID: 1385362375}
   - component: {fileID: 1385362374}
   - component: {fileID: 1385362378}
+  - component: {fileID: 1385362379}
   m_Layer: 5
   m_Name: Canvas
   m_TagString: Untagged
@@ -932,6 +933,20 @@ MonoBehaviour:
   _gameEditorUIPrefab: {fileID: 7666147024566430390, guid: 6a1f682b6471c0b4682b9fd9b24c0e41,
     type: 3}
   BlackOutSquare: {fileID: 65176385}
+--- !u!114 &1385362379
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1385362373}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1356b8a019a861e48be733814e8186ec, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _mazeLevelInvitationPanelPrefab: {fileID: 8532729250783619614, guid: 82a692a28faa05c4db8e1c6fe5626128,
+    type: 3}
 --- !u!1001 &1553234224
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1222,7 +1237,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1865196164}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 97f083caf2488644e85290c3a41fae4c, type: 3}
+  m_Script: {fileID: 11500000, guid: 5a709a0dedc79ec4d9640c831f22f8d1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   FocussedOnPlayer: 0
@@ -1365,6 +1380,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _mapTextLabel: {fileID: 31952053}
+  _triggerPlayer: {fileID: 0}
 --- !u!224 &2016654671
 RectTransform:
   m_ObjectHideFlags: 0

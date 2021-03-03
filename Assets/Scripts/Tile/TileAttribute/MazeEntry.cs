@@ -18,33 +18,42 @@ public class MazeEntry : MonoBehaviour, ITileAttribute
         _spriteRenderer.sortingOrder = (int)(_sortingOrderBase - transform.position.y) * 10;
     }
 
-    public void Update()
-    {
-        if (_hasPlayerOnTile)
-        {
-            if(Input.GetKeyDown(KeyCode.Return) || Input.GetKeyDown(KeyCode.KeypadEnter) || Input.GetMouseButtonDown(0) || Input.GetMouseButtonDown(1))
-            {
-                EnterMaze();
-            }
-        }
-    }
+    //public void Update()
+    //{
+    //    if (_hasPlayerOnTile)
+    //    {
+    //        if(Input.GetKeyDown(KeyCode.Return) || Input.GetKeyDown(KeyCode.KeypadEnter) || Input.GetMouseButtonDown(0) || Input.GetMouseButtonDown(1))
+    //        {
+    //            if(GameRules.GamePlayerType == GamePlayerType.SinglePlayer)
+    //            {
+    //                EnterMaze();
+    //            }
+    //            else
+    //            {
+    //                PlayerSendsMazeLevelInvitationEvent playerSendsMazeLevelInvitationEvent = new PlayerSendsMazeLevelInvitationEvent();
+    //                playerSendsMazeLevelInvitationEvent.SendPlayerSendsMazeLevelInvitationEvent("temporary");
+    //                MainScreenOverlayCanvas.Instance.ShowMazeInvitation(PhotonNetwork.);
+    //            }
+    //        }
+    //    }
+    //}
 
     public void OnCollisionEnter2D(Collision2D collision)
     {
-        PlayerCharacter player = collision.gameObject.GetComponent<PlayerCharacter>();
+        OverworldPlayerCharacter player = collision.gameObject.GetComponent<OverworldPlayerCharacter>();
         if (player != null)
         {
-            _hasPlayerOnTile = true;
-            MainScreenCameraCanvas.Instance.ShowMapInteractionButton(transform.position, "Enter maze");
+            player.OccupiedMazeEntry = this;
+            MainScreenCameraCanvas.Instance.ShowMapInteractionButton(player, transform.position, "Enter default maze");
         }
     }
 
     public void OnCollisionExit2D(Collision2D collision)
     {
-        PlayerCharacter player = collision.gameObject.GetComponent<PlayerCharacter>();
+        OverworldPlayerCharacter player = collision.gameObject.GetComponent<OverworldPlayerCharacter>();
         if (player != null)
         {
-            _hasPlayerOnTile = false;
+            player.OccupiedMazeEntry = null;
             MainScreenCameraCanvas.Instance.HideMapMapInteractionButton();
         }
     }
@@ -63,8 +72,8 @@ public class MazeEntry : MonoBehaviour, ITileAttribute
         ParentId = tile.TileId;
     }
 
-    public static void EnterMaze()
-    {
-        OverworldManager.Instance.LoadMaze();
-    }
+    //private void EnterMaze()
+    //{
+    //    OverworldManager.Instance.LoadMaze();
+    //}
 }

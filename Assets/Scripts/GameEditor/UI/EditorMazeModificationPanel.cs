@@ -297,7 +297,7 @@ public class EditorMazeModificationPanel : EditorGridModificationPanel
             return new SerialisableTileBaseBackground(-1);
         }
 
-        if (obstacleAttribute.ObstacleConnectionScore == 16)
+        if (obstacleAttribute.ConnectionScore == 16)
         {
             return null;
         }
