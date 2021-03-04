@@ -29,6 +29,8 @@ public class OverworldManager : MonoBehaviour, IOnEventCallback
         Guard.CheckIsNull(TilePathPrefab, "TilePathPrefab", gameObject);
         Guard.CheckIsNull(PlayerSpawnpointPrefab, "PlayerSpawnpointPrefab", gameObject);
         Guard.CheckIsNull(MazeEntryPrefab, "MazeEntryPrefab", gameObject);
+
+        MazeLevelInvitation.PendingInvitation = false;
     }
 
     private void OnEnable()
@@ -199,8 +201,6 @@ public class OverworldManager : MonoBehaviour, IOnEventCallback
             string mazeName = (string)data[1];
             Logger.Log($"received event that {rejectorName} rejected the invitation");
             OverworldMainScreenOverlayCanvas.Instance.ShowMazeInvitationRejection(rejectorName, mazeName);
-
-            //Show info screen
         }
     }
 }

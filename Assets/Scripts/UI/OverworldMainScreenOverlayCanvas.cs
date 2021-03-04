@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class OverworldMainScreenOverlayCanvas : MonoBehaviour
 {
@@ -8,10 +6,13 @@ public class OverworldMainScreenOverlayCanvas : MonoBehaviour
 
     [SerializeField] private GameObject _mazeLevelInvitationPanelPrefab;
     [SerializeField] private GameObject _mazeLevelInvitationRejectionPanelPrefab;
+    [SerializeField] private GameObject _playerMessagePrefab;
 
     public void Awake()
     {
         Guard.CheckIsNull(_mazeLevelInvitationPanelPrefab, "MazeLevelInvitationPanelPrefab", gameObject);
+        Guard.CheckIsNull(_mazeLevelInvitationRejectionPanelPrefab, "_mazeLevelInvitationRejectionPanelPrefab", gameObject);
+        Guard.CheckIsNull(_playerMessagePrefab, "_playerMessagePrefab", gameObject);
 
         Instance = this;
     }
@@ -44,5 +45,17 @@ public class OverworldMainScreenOverlayCanvas : MonoBehaviour
         {
             MazeLevelInvitationRejection.Instance.Show(rejectorName, mazeName);
         }
+    }
+
+    public void ShowPlayerMessagePanel(string message)
+    {
+        GameObject playerMessagePanelGO = Instantiate(_playerMessagePrefab, transform);
+        PlayerMessagePanel playerMessagePanel = playerMessagePanelGO.GetComponent<PlayerMessagePanel>();
+        playerMessagePanel.ShowMessage(message);
+    }
+
+    public void ClosePlayerMessagePanel()
+    {
+        PlayerMessagePanel.Instance.CloseMessagePanel();
     }
 }

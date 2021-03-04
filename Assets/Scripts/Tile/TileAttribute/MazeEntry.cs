@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System.Collections.Generic;
+using UnityEngine;
 
 public class MazeEntry : MonoBehaviour, ITileAttribute
 {
@@ -10,6 +11,8 @@ public class MazeEntry : MonoBehaviour, ITileAttribute
 
     public Tile Tile;
     public string ParentId;
+
+    private List<OverworldPlayerCharacter> _occupyingPlayers = new List<OverworldPlayerCharacter>();
 
     public virtual void Awake()
     {
@@ -38,11 +41,39 @@ public class MazeEntry : MonoBehaviour, ITileAttribute
     //    }
     //}
 
+    public void OnMouseDown()
+    {
+        if (_occupyingPlayers.Count == 0) return;
+
+        //SINGLEPLAYER
+        if (GameRules.GamePlayerType == GamePlayerType.SinglePlayer &&
+            _occupyingPlayers[0].CurrentGridLocation.X == Tile.GridLocation.X &&
+            _occupyingPlayers[0].CurrentGridLocation.Y == Tile.GridLocation.Y)
+        {
+            _occupyingPlayers[0].PerformMazeEntryAction();
+            return;
+        }
+
+        // MULTIPLAYER
+        for (int i = 0; i < _occupyingPlayers.Count; i++)
+        {
+            if(!MazeLevelInvitation.PendingInvitation &&
+                _occupyingPlayers[i].PhotonView.IsMine && 
+                _occupyingPlayers[i].CurrentGridLocation.X == Tile.GridLocation.X && 
+                _occupyingPlayers[i].CurrentGridLocation.Y == Tile.GridLocation.Y)
+            {
+                _occupyingPlayers[i].PerformMazeEntryAction();
+                break;
+            }
+        }
+    }
+
     public void OnCollisionEnter2D(Collision2D collision)
     {
         OverworldPlayerCharacter player = collision.gameObject.GetComponent<OverworldPlayerCharacter>();
         if (player != null)
         {
+            _occupyingPlayers.Add(player);
             player.OccupiedMazeEntry = this;
             MainScreenCameraCanvas.Instance.ShowMapInteractionButton(player, transform.position, "Enter default maze");
         }
@@ -53,6 +84,7 @@ public class MazeEntry : MonoBehaviour, ITileAttribute
         OverworldPlayerCharacter player = collision.gameObject.GetComponent<OverworldPlayerCharacter>();
         if (player != null)
         {
+            _occupyingPlayers.Remove(player);
             player.OccupiedMazeEntry = null;
             MainScreenCameraCanvas.Instance.HideMapMapInteractionButton();
         }

@@ -949,6 +949,8 @@ MonoBehaviour:
     type: 3}
   _mazeLevelInvitationRejectionPanelPrefab: {fileID: 6894142256031083610, guid: 6ea0c33b49141ce498f15285cec395ab,
     type: 3}
+  _playerMessagePrefab: {fileID: 658330486536227245, guid: db45c67ab7d6beb4292bdadc677aaae8,
+    type: 3}
 --- !u!1001 &1553234224
 PrefabInstance:
   m_ObjectHideFlags: 0

@@ -23,6 +23,11 @@ public class MazeLevelInvitationRejection : MonoBehaviour
 
     private void SetInfoText(string playerName)
     {
+        if(PlayerMessagePanel.Instance != null)
+        {
+            PlayerMessagePanel.Instance.CloseMessagePanel();
+        }
+
         _infoText.text = $"{playerName} rejected your invitation to go to {_mazeLevelName}.";
     }
 
