@@ -34,23 +34,24 @@ public class OverworldPlayerCharacter : PlayerCharacter
             {
                 if(OccupiedMazeEntry.Tile.GridLocation.X == CurrentGridLocation.X && OccupiedMazeEntry.Tile.GridLocation.Y == CurrentGridLocation.Y)
                 {
-                    PerformMazeEntryAction();
+                    PerformMazeEntryAction(OccupiedMazeEntry.MazeName);
                 }
             }
         }
     }
 
-    public void PerformMazeEntryAction()
+    public void PerformMazeEntryAction(string mazeName)
     {
         // Player does not meet entry requirements? Return;
 
         if (GameRules.GamePlayerType == GamePlayerType.SinglePlayer)
         {
+            PersistentGameManager.SetCurrentSceneName(mazeName);
             OverworldManager.Instance.LoadMaze();
         }
         else
         {
-            string mazeName = "Default maze";
+            PersistentGameManager.SetCurrentSceneName(mazeName);
 
             PlayerSendsMazeLevelInvitationEvent playerSendsMazeLevelInvitationEvent = new PlayerSendsMazeLevelInvitationEvent();
             playerSendsMazeLevelInvitationEvent.SendPlayerSendsMazeLevelInvitationEvent(PhotonView.Owner.NickName, mazeName);

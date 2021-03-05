@@ -1,8 +1,12 @@
-﻿using UnityEngine;
+﻿using CharacterType;
+using UnityEngine;
 
 public class EnemySpawnpoint : CharacterSpawnpoint
 {
     [SerializeField] private Sprite _enemySpawnpointSprite;
+
+    // TODO:: Implement way to customise type for different enemy spawnpoints
+    private ICharacter EnemyType = new EvilViolin();
 
     public override void Awake()
     {
@@ -17,6 +21,9 @@ public class EnemySpawnpoint : CharacterSpawnpoint
         GridLocation = GridLocation.VectorToGrid(transform.position);
 
         if (EditorManager.InEditor) return;
+
+        
+        CharacterBlueprint = new CharacterBlueprint(EnemyType);
 
         MazeLevelManager.Instance.Level.EnemyCharacterSpawnpoints.Add(this);
     }

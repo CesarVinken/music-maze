@@ -9,13 +9,33 @@ public enum SceneLoadOrigin
     Editor
 }
 
+public static class PersistentGameManager
+{
+    public static Platform CurrentPlatform;
+    public static SceneType CurrentSceneType;
+    public static SceneLoadOrigin SceneLoadOrigin = SceneLoadOrigin.Gameplay;
+    private static string _currentScene = "none";
+    private static string _overworldName = "none";
+
+    public static string CurrentScene { get => _currentScene; private set => _currentScene = value; }
+    public static string OverworldName { get => _overworldName; private set => _overworldName = value; }
+
+    public static void SetCurrentSceneName(string currentScene)
+    {
+        _currentScene = currentScene;
+    }
+
+    public static void SetOverworldName(string overworldName)
+    {
+        _overworldName = overworldName;
+    }
+}
+
 public class GameManager : MonoBehaviourPunCallbacks
 {
     public static GameManager Instance;
 
-    public static Platform CurrentPlatform;
-    public static SceneType CurrentSceneType;
-    public static SceneLoadOrigin SceneLoadOrigin = SceneLoadOrigin.Gameplay;
+
 
     public IPlatformConfiguration Configuration;
     public KeyboardConfiguration KeyboardConfiguration;
@@ -64,23 +84,23 @@ public class GameManager : MonoBehaviourPunCallbacks
             GameRules.SetGamePlayerType(GamePlayerType.Multiplayer);
         }
 
-        CurrentSceneType = _thisSceneType;
-        Logger.Warning($"We set the game type to {GameRules.GamePlayerType} in a {CurrentSceneType} scene. The scene loading origin is {SceneLoadOrigin}");
+        PersistentGameManager.CurrentSceneType = _thisSceneType;
+        Logger.Warning($"We set the game type to {GameRules.GamePlayerType} in a {PersistentGameManager.CurrentSceneType} scene. The scene loading origin is {PersistentGameManager.SceneLoadOrigin}");
 
         if (Application.isMobilePlatform)
         {
-            CurrentPlatform = Platform.Android;
+            PersistentGameManager.CurrentPlatform = Platform.Android;
             Configuration = new AndroidConfiguration();
         }
         else
         {
-            CurrentPlatform = Platform.PC;
+            PersistentGameManager.CurrentPlatform = Platform.PC;
             Configuration = new PCConfiguration();
         }
 
         KeyboardConfiguration = new KeyboardConfiguration();
 
-        switch (CurrentSceneType)
+        switch (PersistentGameManager.CurrentSceneType)
         {
             case SceneType.Overworld:
                 Instantiate(_overworldSpriteManagerPrefab, transform);
@@ -93,7 +113,7 @@ public class GameManager : MonoBehaviourPunCallbacks
                 Instantiate(_mazeLevelManagerPrefab, transform);
                 break;
             default:
-                Logger.Error($"Scenetype {CurrentSceneType} is not implemented yet");
+                Logger.Error($"Scenetype {PersistentGameManager.CurrentSceneType} is not implemented yet");
                 break;
         }  
     }
@@ -102,13 +122,20 @@ public class GameManager : MonoBehaviourPunCallbacks
     {
         CameraController.Instance.SetZoomLevel(Configuration.CameraZoomLevel);
 
-        switch (CurrentSceneType)
+        switch (PersistentGameManager.CurrentSceneType)
         {
             case SceneType.Overworld:
                 Logger.Log("instantiate overworld sprites, tiles and characters");
-                if (SceneLoadOrigin == SceneLoadOrigin.Gameplay)
+                if (PersistentGameManager.SceneLoadOrigin == SceneLoadOrigin.Gameplay)
                 {
-                    OverworldData startUpOverworldData = OverworldLoader.LoadOverworldData("overworld");
+                    if(PersistentGameManager.OverworldName == "none")
+                    {
+                        PersistentGameManager.SetOverworldName("overworld");
+                    }
+
+                    string overworldName = PersistentGameManager.OverworldName;
+                    Logger.Log($"We will load the maze '{overworldName}'");
+                    OverworldData startUpOverworldData = OverworldLoader.LoadOverworldData(overworldName);
 
                     if (startUpOverworldData == null)
                     {
@@ -134,9 +161,11 @@ public class GameManager : MonoBehaviourPunCallbacks
                 break;
             case SceneType.Maze:
                 // We loaded a maze scene through the game. Set up the maze level
-                if(SceneLoadOrigin == SceneLoadOrigin.Gameplay)
+                if(PersistentGameManager.SceneLoadOrigin == SceneLoadOrigin.Gameplay)
                 {
-                    MazeLevelData startUpMazeLevelData = MazeLevelLoader.LoadMazeLevelData("default");
+                    string mazeName = PersistentGameManager.CurrentScene;
+                    Logger.Log($"We will load the maze '{mazeName}'");
+                    MazeLevelData startUpMazeLevelData = MazeLevelLoader.LoadMazeLevelData(mazeName);
 
                     if (startUpMazeLevelData == null)
                     {
@@ -161,7 +190,7 @@ public class GameManager : MonoBehaviourPunCallbacks
                 }
                 break;
             default:
-                Logger.Error($"Scenetype {CurrentSceneType} is not implemented yet");
+                Logger.Error($"Scenetype {PersistentGameManager.CurrentSceneType} is not implemented yet");
                 break;
         }
     }

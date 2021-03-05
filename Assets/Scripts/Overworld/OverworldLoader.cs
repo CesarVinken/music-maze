@@ -18,7 +18,7 @@ public class OverworldLoader : MonoBehaviour
             EditorManager.CloseEditor();
         }
 
-        if (GameManager.CurrentSceneType == SceneType.Maze)
+        if (PersistentGameManager.CurrentSceneType == SceneType.Maze)
         {
             Logger.Warning("We are currently in the maze scene. Do not load overworld but return.");
             return;

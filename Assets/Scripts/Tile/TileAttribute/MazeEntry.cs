@@ -4,13 +4,13 @@ using UnityEngine;
 public class MazeEntry : MonoBehaviour, ITileAttribute
 {
     [SerializeField] private SpriteRenderer _spriteRenderer;
-    private bool _hasPlayerOnTile = false;
 
     private int _sortingOrderBase = 500;
     public int SortingOrderBase { get => _sortingOrderBase; set => _sortingOrderBase = value; }
 
     public Tile Tile;
     public string ParentId;
+    public string MazeName = "b";
 
     private List<OverworldPlayerCharacter> _occupyingPlayers = new List<OverworldPlayerCharacter>();
 
@@ -21,26 +21,6 @@ public class MazeEntry : MonoBehaviour, ITileAttribute
         _spriteRenderer.sortingOrder = (int)(_sortingOrderBase - transform.position.y) * 10;
     }
 
-    //public void Update()
-    //{
-    //    if (_hasPlayerOnTile)
-    //    {
-    //        if(Input.GetKeyDown(KeyCode.Return) || Input.GetKeyDown(KeyCode.KeypadEnter) || Input.GetMouseButtonDown(0) || Input.GetMouseButtonDown(1))
-    //        {
-    //            if(GameRules.GamePlayerType == GamePlayerType.SinglePlayer)
-    //            {
-    //                EnterMaze();
-    //            }
-    //            else
-    //            {
-    //                PlayerSendsMazeLevelInvitationEvent playerSendsMazeLevelInvitationEvent = new PlayerSendsMazeLevelInvitationEvent();
-    //                playerSendsMazeLevelInvitationEvent.SendPlayerSendsMazeLevelInvitationEvent("temporary");
-    //                MainScreenOverlayCanvas.Instance.ShowMazeInvitation(PhotonNetwork.);
-    //            }
-    //        }
-    //    }
-    //}
-
     public void OnMouseDown()
     {
         if (_occupyingPlayers.Count == 0) return;
@@ -50,7 +30,7 @@ public class MazeEntry : MonoBehaviour, ITileAttribute
             _occupyingPlayers[0].CurrentGridLocation.X == Tile.GridLocation.X &&
             _occupyingPlayers[0].CurrentGridLocation.Y == Tile.GridLocation.Y)
         {
-            _occupyingPlayers[0].PerformMazeEntryAction();
+            _occupyingPlayers[0].PerformMazeEntryAction(MazeName);
             return;
         }
 
@@ -62,7 +42,7 @@ public class MazeEntry : MonoBehaviour, ITileAttribute
                 _occupyingPlayers[i].CurrentGridLocation.X == Tile.GridLocation.X && 
                 _occupyingPlayers[i].CurrentGridLocation.Y == Tile.GridLocation.Y)
             {
-                _occupyingPlayers[i].PerformMazeEntryAction();
+                _occupyingPlayers[i].PerformMazeEntryAction(MazeName);
                 break;
             }
         }
@@ -103,9 +83,4 @@ public class MazeEntry : MonoBehaviour, ITileAttribute
         Tile = tile;
         ParentId = tile.TileId;
     }
-
-    //private void EnterMaze()
-    //{
-    //    OverworldManager.Instance.LoadMaze();
-    //}
 }

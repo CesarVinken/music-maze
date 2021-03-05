@@ -20,7 +20,7 @@ public static class MazeLevelLoader
             EditorManager.CloseEditor();
         }
 
-        if(GameManager.CurrentSceneType == SceneType.Overworld)
+        if(PersistentGameManager.CurrentSceneType == SceneType.Overworld)
         {
             Logger.Warning("We are currently in the overworld scene. Do not load maze but return.");
             return;

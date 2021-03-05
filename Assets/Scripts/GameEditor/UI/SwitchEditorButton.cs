@@ -21,7 +21,7 @@ public class SwitchEditorButton : MonoBehaviour
 
     public void SetButtonLabel()
     {
-        if (GameManager.CurrentSceneType == SceneType.Maze)
+        if (PersistentGameManager.CurrentSceneType == SceneType.Maze)
         {
             _buttonLabel.text = "To Overworld Editor";
         }
@@ -33,7 +33,7 @@ public class SwitchEditorButton : MonoBehaviour
 
     public void SwitchEditor()
     {
-        if(GameManager.CurrentSceneType == SceneType.Maze)
+        if(PersistentGameManager.CurrentSceneType == SceneType.Maze)
         {
             EditorCanvasUI.Instance.LoadOverworldEditor();
         }

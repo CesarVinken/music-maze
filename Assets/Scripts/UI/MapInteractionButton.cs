@@ -49,7 +49,7 @@ public class MapInteractionButton : MonoBehaviour, IMapInteractionButton
 
     public void ExecuteMapInteraction()
     {
-        //TODO later make generic, so there can be different interaction button types. For now always enter maze.
-        _triggerPlayer.PerformMazeEntryAction();
+        string mazeName = _triggerPlayer.OccupiedMazeEntry.MazeName;
+        _triggerPlayer.PerformMazeEntryAction(mazeName);
     }
 }

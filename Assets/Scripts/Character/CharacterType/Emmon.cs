@@ -11,7 +11,7 @@ namespace CharacterType
 
         public string GetPrefabPath()
         {
-            if (GameManager.CurrentSceneType == SceneType.Maze)
+            if (PersistentGameManager.CurrentSceneType == SceneType.Maze)
             {
                 return "Prefabs/Character/MazePlayerCharacter";
             }

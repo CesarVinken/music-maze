@@ -68,13 +68,25 @@ public class EditorCanvasUI : MonoBehaviour
 
     public void LoadOverworldEditor()
     {
-        GameManager.SceneLoadOrigin = SceneLoadOrigin.Editor;
+        PersistentGameManager.SceneLoadOrigin = SceneLoadOrigin.Editor;
+
+        if(PersistentGameManager.OverworldName == "none")
+        {
+            PersistentGameManager.SetOverworldName("overworld");
+        }
+
+        PersistentGameManager.SetCurrentSceneName(PersistentGameManager.OverworldName);
+
         PhotonNetwork.LoadLevel("Overworld");
     }
 
     public void LoadMazeEditor()
     {
-        GameManager.SceneLoadOrigin = SceneLoadOrigin.Editor;
+        PersistentGameManager.SceneLoadOrigin = SceneLoadOrigin.Editor;
+
+        string mazeName = "default";
+        PersistentGameManager.SetCurrentSceneName(mazeName);
+
         PhotonNetwork.LoadLevel("Maze");
     }
 }

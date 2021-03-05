@@ -34,8 +34,8 @@ public static class EditorManager
         _inEditor = true;
         EditorCanvasUI.Instance.InitialiseEditor();
         EditorWorldContainer.Instance.InitialiseEditor();
-        Logger.Log($"Our current scene type is {GameManager.CurrentSceneType}");
-        switch (GameManager.CurrentSceneType)
+        Logger.Log($"Our current scene type is {PersistentGameManager.CurrentSceneType}");
+        switch (PersistentGameManager.CurrentSceneType)
         {
             case SceneType.Overworld:
                 EditorCanvasUI.Instance.OverworldModificationPanel.GenerateTiles();
@@ -44,7 +44,7 @@ public static class EditorManager
                 EditorCanvasUI.Instance.MazeModificationPanel.GenerateTiles();
                 break;
             default:
-                Logger.Error($"Unknown scene type {GameManager.CurrentSceneType} is not implemented");
+                Logger.Error($"Unknown scene type {PersistentGameManager.CurrentSceneType} is not implemented");
                 break;
         }
     }

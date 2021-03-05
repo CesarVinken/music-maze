@@ -22,7 +22,7 @@ public class MainScreenOverlayCanvas : MonoBehaviour
 
         Guard.CheckIsNull(BlackOutSquare, "BlackOutSquare", gameObject);
 
-        if (GameManager.CurrentPlatform == Platform.Android)
+        if (PersistentGameManager.CurrentPlatform == Platform.Android)
         {
             ConsoleButton.SetActive(true);
         }

@@ -165,7 +165,8 @@ public class ScoreScreenContainer : MonoBehaviour
 
     public void ToOverworld()
     {
-        MazeLevelManager.Instance.LoadOverworld();
+        string overworldName = "default";
+        MazeLevelManager.Instance.LoadOverworld(overworldName);
     }
 
     public void ToNextLevel()

@@ -79,7 +79,7 @@ public class PlayerCharacter : Character
         if (GameRules.GamePlayerType == GamePlayerType.SinglePlayer
             || PhotonView.IsMine)
         {
-            if (GameManager.CurrentPlatform == Platform.PC)
+            if (PersistentGameManager.CurrentPlatform == Platform.PC)
                 HandleKeyboardInput();
 
             if (Input.GetMouseButtonUp(0))

@@ -38,9 +38,9 @@ public class EditorModificationPanelContainer : MonoBehaviour
 
     public void UpdateForSceneChange()
     {
-        Logger.Warning($"Show tabs. Scene type is {GameManager.CurrentSceneType}");
+        Logger.Warning($"Show tabs. Scene type is {PersistentGameManager.CurrentSceneType}");
 
-        switch (GameManager.CurrentSceneType)
+        switch (PersistentGameManager.CurrentSceneType)
         {
             case SceneType.Overworld:
                 _mazeLevelTabButton.SetActive(false);
@@ -59,7 +59,7 @@ public class EditorModificationPanelContainer : MonoBehaviour
                 SelectMazeLevelModificationPanel();
                 break;
             default:
-                Logger.Error($"Unknown scene type {GameManager.CurrentSceneType}");
+                Logger.Error($"Unknown scene type {PersistentGameManager.CurrentSceneType}");
                 break;
         }
     }

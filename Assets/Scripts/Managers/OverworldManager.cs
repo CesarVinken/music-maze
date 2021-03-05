@@ -149,7 +149,6 @@ public class OverworldManager : MonoBehaviour, IOnEventCallback
         }
     }
 
-    //TODO: pick which maze to load
     public void LoadMaze()
     {
         if (GameRules.GamePlayerType == GamePlayerType.SinglePlayer)
@@ -169,20 +168,14 @@ public class OverworldManager : MonoBehaviour, IOnEventCallback
         byte eventCode = photonEvent.Code;
         if (eventCode == LoadNextMazeLevelEvent.LoadNextMazeLevelEventCode)
         {
+            object[] data = (object[])photonEvent.CustomData;
+            string mazeName = (string)data[0];
+
+            PersistentGameManager.SetCurrentSceneName(mazeName);
             Logger.Log("received event to load maze");
-        // TODO: Make work with particular maze level names
+
             PhotonNetwork.LoadLevel("Maze");
-            //    object[] data = (object[])photonEvent.CustomData;
-            //    string pickedLevel = (string)data[0];
 
-            //    MazeLevelData mazeLevelData = MazeLevelLoader.LoadMazeLevelData(pickedLevel);
-
-            //    if (mazeLevelData == null)
-            //    {
-            //        Logger.Error($"Could not load maze level data for the randomly picked maze level {pickedLevel}");
-            //    }
-
-            //    MazeLevelLoader.LoadMazeLevel(mazeLevelData);
         } else if(eventCode == PlayerSendsMazeLevelInvitationEvent.PlayerSendsMazeLevelInvitationEventCode)
         {
             object[] data = (object[])photonEvent.CustomData;

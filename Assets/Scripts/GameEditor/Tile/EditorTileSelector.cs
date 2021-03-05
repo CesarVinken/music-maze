@@ -117,7 +117,7 @@ public class EditorTileSelector : MonoBehaviour
     {
         if (EditorCanvasUI.Instance.SelectedTileModifierContainer == null)
         {
-            if(GameManager.CurrentSceneType == SceneType.Maze)
+            if(PersistentGameManager.CurrentSceneType == SceneType.Maze)
             {
                 EditorModificationPanelContainer.Instance.SelectMazeTileModificationPanel();
             } else
@@ -154,7 +154,7 @@ public class EditorTileSelector : MonoBehaviour
     {
         if (EditorCanvasUI.Instance.SelectedTileModifierContainer == null)
         {
-            if (GameManager.CurrentSceneType == SceneType.Maze)
+            if (PersistentGameManager.CurrentSceneType == SceneType.Maze)
             {
                 EditorModificationPanelContainer.Instance.SelectMazeTileModificationPanel();
             }

@@ -183,10 +183,14 @@ namespace Photon.Pun.Demo.PunBasics
                 // TODO: depending on game play mode, pick either overworld or a randomly selected maze level
                 if (GameRules.GameMode == GameMode.Campaign)
                 {
+                    PersistentGameManager.SetOverworldName("overworld");
+                    PersistentGameManager.SetCurrentSceneName(PersistentGameManager.OverworldName);
+
                     PhotonNetwork.LoadLevel("Overworld");
                 }
                 else
                 {
+                    PersistentGameManager.SetCurrentSceneName("default");
                     PhotonNetwork.LoadLevel("Maze");
                 }
             }
@@ -209,10 +213,14 @@ namespace Photon.Pun.Demo.PunBasics
 
             if (GameRules.GameMode == GameMode.Campaign)
             {
+                PersistentGameManager.SetOverworldName("overworld");
+                PersistentGameManager.SetCurrentSceneName(PersistentGameManager.OverworldName);
+
                 PhotonNetwork.LoadLevel("Overworld");
             }
             else
             {
+                PersistentGameManager.SetCurrentSceneName("default");
                 PhotonNetwork.LoadLevel("Maze");
             }
         }

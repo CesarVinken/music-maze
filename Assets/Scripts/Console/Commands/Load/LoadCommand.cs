@@ -26,9 +26,11 @@ public class LoadCommand : CommandProcedure
     {
         if (MazeLevelManager.Instance == null)
         {
-            if (GameManager.CurrentSceneType == SceneType.Overworld)
+            if (PersistentGameManager.CurrentSceneType == SceneType.Overworld)
             {
                 Logger.Warning("We are currently in the overworld scene. Switching scenes.");
+                PersistentGameManager.SetCurrentSceneName("default");
+
                 PhotonNetwork.LoadLevel("Maze"); // TODO this loads the default maze, should load specific maze
             }
             else
@@ -43,8 +45,9 @@ public class LoadCommand : CommandProcedure
 
         if (arguments.Count < 2)
         {
+            PersistentGameManager.SetCurrentSceneName("default");
 
-            mazeLevelData = MazeLevelLoader.LoadMazeLevelData("default");
+            mazeLevelData = MazeLevelLoader.LoadMazeLevelData(PersistentGameManager.CurrentScene);
             MazeLevelLoader.LoadMazeLevel(mazeLevelData);
             return;
             //string message = "The command '<color=" + ConsoleConfiguration.HighlightColour + ">load maze</color>' needs an additional argument with the name of the maze level";
@@ -55,7 +58,8 @@ public class LoadCommand : CommandProcedure
             //throw new NotEnoughArgumentsConsoleException(message);
         }
 
-        mazeLevelData = MazeLevelLoader.LoadMazeLevelData(arguments[1]);
+        string mazeName = arguments[1];
+        mazeLevelData = MazeLevelLoader.LoadMazeLevelData(mazeName);
 
         if (mazeLevelData == null && Console.Instance.ConsoleState != ConsoleState.Closed)
         {
@@ -65,6 +69,9 @@ public class LoadCommand : CommandProcedure
             Console.Instance.PrintToReportText(printLine);
         }
 
+        PersistentGameManager.SetCurrentSceneName(mazeName);
+        
+        mazeLevelData = MazeLevelLoader.LoadMazeLevelData(PersistentGameManager.CurrentScene);
         MazeLevelLoader.LoadMazeLevel(mazeLevelData);
     }
 

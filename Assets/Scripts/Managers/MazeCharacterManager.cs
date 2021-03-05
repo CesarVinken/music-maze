@@ -93,7 +93,7 @@ public class MazeCharacterManager : MonoBehaviourPunCallbacks, ICharacterManager
             playerCharacter.FreezeCharacter();
             playerCharacter.SetStartingPosition(playerCharacter, gridLocation);
 
-            if (GameManager.CurrentPlatform == Platform.PC)
+            if (PersistentGameManager.CurrentPlatform == Platform.PC)
             {
                 if (_players.Count == 0)
                 {

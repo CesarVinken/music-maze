@@ -194,17 +194,17 @@ public class MazeLevelManager : MonoBehaviour, IOnEventCallback
         }
     }
 
-    public void LoadOverworld()
+    public void LoadOverworld(string overworldName = "default")
     {
         if (GameRules.GamePlayerType == GamePlayerType.SinglePlayer)
         {
+            PersistentGameManager.SetCurrentSceneName(overworldName);
             PhotonNetwork.LoadLevel("Overworld");
-            //SceneManager.LoadScene("Overworld");
         }
         else
         {
             LoadOverworldEvent loadOverworldEvent = new LoadOverworldEvent();
-            loadOverworldEvent.SendLoadOverworldEvent();
+            loadOverworldEvent.SendLoadOverworldEvent(overworldName);
         }
     }
 
@@ -266,11 +266,16 @@ public class MazeLevelManager : MonoBehaviour, IOnEventCallback
                 Logger.Error($"Could not load maze level data for the randomly picked maze level {pickedLevel}");
             }
 
+            PersistentGameManager.SetCurrentSceneName(pickedLevel);
             MazeLevelLoader.LoadMazeLevel(mazeLevelData);
 
             ScoreScreenContainer.Instance.CloseScoreScreenPanel();
         } else if (eventCode == LoadOverworldEvent.LoadOverworldEventCode)
         {
+            object[] data = (object[])photonEvent.CustomData;
+            string overworldName = (string)data[0];
+
+            PersistentGameManager.SetCurrentSceneName(PersistentGameManager.OverworldName);
             PhotonNetwork.LoadLevel("Overworld");
         }
     }

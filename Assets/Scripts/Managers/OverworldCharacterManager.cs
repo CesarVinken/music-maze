@@ -86,7 +86,7 @@ public class OverworldCharacterManager : MonoBehaviourPunCallbacks, ICharacterMa
         playerCharacter.FreezeCharacter();
         playerCharacter.SetStartingPosition(playerCharacter, gridLocation);
 
-        if (GameManager.CurrentPlatform == Platform.PC)
+        if (PersistentGameManager.CurrentPlatform == Platform.PC)
         {
             if (_players.Count == 0)
             {
