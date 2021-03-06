@@ -20,7 +20,7 @@ public class EditorSelectedOverworldTileModifierContainer : EditorSelectedTileMo
         //EditorTileAttributes.Add(new EditorObstacleTileAttribute());
         //EditorTileAttributes.Add(new EditorPlayerExitTileAttribute());
         EditorTileAttributes.Add(new EditorPlayerSpawnpointOverworldTileAttribute());
-        EditorTileAttributes.Add(new EditorOverworldMazeEntryTileAttribute());
+        EditorTileAttributes.Add(new EditorOverworldMazeLevelEntryTileAttribute());
         //EditorTileAttributes.Add(new EditorPlayerOnlyTileAttribute());
         //EditorTileAttributes.Add(new EditorEnemySpawnpointTileAttribute());
 

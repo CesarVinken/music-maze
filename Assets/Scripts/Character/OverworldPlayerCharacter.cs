@@ -2,7 +2,7 @@
 
 public class OverworldPlayerCharacter : PlayerCharacter
 {
-    public MazeEntry OccupiedMazeEntry = null;
+    public MazeLevelEntry OccupiedMazeLevelEntry = null;
 
     public override void Awake()
     {
@@ -28,19 +28,19 @@ public class OverworldPlayerCharacter : PlayerCharacter
         base.Update();
 
 
-        if (OccupiedMazeEntry != null && (GameRules.GamePlayerType == GamePlayerType.SinglePlayer || PhotonView.IsMine))
+        if (OccupiedMazeLevelEntry != null && (GameRules.GamePlayerType == GamePlayerType.SinglePlayer || PhotonView.IsMine))
         {
             if (Input.GetKeyDown(KeyCode.Return) || Input.GetKeyDown(KeyCode.KeypadEnter) )
             {
-                if(OccupiedMazeEntry.Tile.GridLocation.X == CurrentGridLocation.X && OccupiedMazeEntry.Tile.GridLocation.Y == CurrentGridLocation.Y)
+                if(OccupiedMazeLevelEntry.Tile.GridLocation.X == CurrentGridLocation.X && OccupiedMazeLevelEntry.Tile.GridLocation.Y == CurrentGridLocation.Y)
                 {
-                    PerformMazeEntryAction(OccupiedMazeEntry.MazeName);
+                    PerformMazeLevelEntryAction(OccupiedMazeLevelEntry.MazeLevelName);
                 }
             }
         }
     }
 
-    public void PerformMazeEntryAction(string mazeName)
+    public void PerformMazeLevelEntryAction(string mazeName)
     {
         // Player does not meet entry requirements? Return;
 

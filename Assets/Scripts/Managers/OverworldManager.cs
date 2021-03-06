@@ -17,7 +17,7 @@ public class OverworldManager : MonoBehaviour, IOnEventCallback
     public GameObject TileBaseBackgroundPrefab;
     public GameObject TilePathPrefab;
     public GameObject PlayerSpawnpointPrefab;
-    public GameObject MazeEntryPrefab;
+    public GameObject MazeLevelEntryPrefab;
 
     public void Awake()
     {
@@ -28,7 +28,7 @@ public class OverworldManager : MonoBehaviour, IOnEventCallback
         Guard.CheckIsNull(TileBaseBackgroundPrefab, "TileBaseBackgroundPrefab", gameObject);
         Guard.CheckIsNull(TilePathPrefab, "TilePathPrefab", gameObject);
         Guard.CheckIsNull(PlayerSpawnpointPrefab, "PlayerSpawnpointPrefab", gameObject);
-        Guard.CheckIsNull(MazeEntryPrefab, "MazeEntryPrefab", gameObject);
+        Guard.CheckIsNull(MazeLevelEntryPrefab, "MazeLevelEntryPrefab", gameObject);
 
         MazeLevelInvitation.PendingInvitation = false;
     }
@@ -141,8 +141,8 @@ public class OverworldManager : MonoBehaviour, IOnEventCallback
             //    return TileObstaclePrefab;
             case Type playerSpawnpoint when playerSpawnpoint == typeof(PlayerSpawnpoint):
                 return PlayerSpawnpointPrefab;
-            case Type mazeEntry when mazeEntry == typeof(MazeEntry):
-                return MazeEntryPrefab;
+            case Type MazeLevelEntry when MazeLevelEntry == typeof(MazeLevelEntry):
+                return MazeLevelEntryPrefab;
             default:
                 Logger.Error($"Could not find a prefab for the tile attribute type of {typeof(T)}");
                 return null;

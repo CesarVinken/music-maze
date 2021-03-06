@@ -6,7 +6,7 @@ public class EditorOverworld : Overworld, IEditorLevel
     private List<EditorOverworldTile> _tiles = new List<EditorOverworldTile>();
     public new List<EditorOverworldTile> Tiles { get => _tiles; set => _tiles = value; }
 
-    public List<MazeEntry> MazeEntries = new List<MazeEntry>();
+    public List<MazeLevelEntry> MazeEntries = new List<MazeLevelEntry>();
 
     public EditorOverworld()
     {
@@ -114,9 +114,9 @@ public class EditorOverworld : Overworld, IEditorLevel
             {
                 tileAttributePlacer.PlacePlayerSpawnpoint();
             }
-            else if (tileAttributeId == SerialisableTileAttribute.MazeEntryCode)
+            else if (tileAttributeId == SerialisableTileAttribute.MazeLevelEntryCode)
             {
-                tileAttributePlacer.PlaceMazeEntry();
+                tileAttributePlacer.PlaceMazeLevelEntry();
             }
             //else if (tileAttributeId == SerialisableTileAttribute.PlayerOnlyAttributeCode)
             //{

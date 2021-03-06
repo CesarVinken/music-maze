@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 
-public class MazeEntry : MonoBehaviour, ITileAttribute
+public class MazeLevelEntry : MonoBehaviour, ITileAttribute
 {
     [SerializeField] private SpriteRenderer _spriteRenderer;
 
@@ -10,7 +10,7 @@ public class MazeEntry : MonoBehaviour, ITileAttribute
 
     public Tile Tile;
     public string ParentId;
-    public string MazeName = "b";
+    public string MazeLevelName = "b";
 
     private List<OverworldPlayerCharacter> _occupyingPlayers = new List<OverworldPlayerCharacter>();
 
@@ -30,7 +30,7 @@ public class MazeEntry : MonoBehaviour, ITileAttribute
             _occupyingPlayers[0].CurrentGridLocation.X == Tile.GridLocation.X &&
             _occupyingPlayers[0].CurrentGridLocation.Y == Tile.GridLocation.Y)
         {
-            _occupyingPlayers[0].PerformMazeEntryAction(MazeName);
+            _occupyingPlayers[0].PerformMazeLevelEntryAction(MazeLevelName);
             return;
         }
 
@@ -42,7 +42,7 @@ public class MazeEntry : MonoBehaviour, ITileAttribute
                 _occupyingPlayers[i].CurrentGridLocation.X == Tile.GridLocation.X && 
                 _occupyingPlayers[i].CurrentGridLocation.Y == Tile.GridLocation.Y)
             {
-                _occupyingPlayers[i].PerformMazeEntryAction(MazeName);
+                _occupyingPlayers[i].PerformMazeLevelEntryAction(MazeLevelName);
                 break;
             }
         }
@@ -54,7 +54,7 @@ public class MazeEntry : MonoBehaviour, ITileAttribute
         if (player != null)
         {
             _occupyingPlayers.Add(player);
-            player.OccupiedMazeEntry = this;
+            player.OccupiedMazeLevelEntry = this;
             MainScreenCameraCanvas.Instance.ShowMapInteractionButton(player, transform.position, "Enter default maze");
         }
     }
@@ -65,7 +65,7 @@ public class MazeEntry : MonoBehaviour, ITileAttribute
         if (player != null)
         {
             _occupyingPlayers.Remove(player);
-            player.OccupiedMazeEntry = null;
+            player.OccupiedMazeLevelEntry = null;
             MainScreenCameraCanvas.Instance.HideMapMapInteractionButton();
         }
     }

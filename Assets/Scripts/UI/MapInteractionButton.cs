@@ -49,7 +49,7 @@ public class MapInteractionButton : MonoBehaviour, IMapInteractionButton
 
     public void ExecuteMapInteraction()
     {
-        string mazeName = _triggerPlayer.OccupiedMazeEntry.MazeName;
-        _triggerPlayer.PerformMazeEntryAction(mazeName);
+        string mazeName = _triggerPlayer.OccupiedMazeLevelEntry.MazeLevelName;
+        _triggerPlayer.PerformMazeLevelEntryAction(mazeName);
     }
 }

@@ -13,5 +13,5 @@ public class SerialisableTileAttribute
     public const int PlayerSpawnpointCode = 2;
     public const int EnemySpawnpointCode = 3;
     public const int PlayerOnlyAttributeCode = 4;
-    public const int MazeEntryCode = 5;
+    public const int MazeLevelEntryCode = 5;
 }

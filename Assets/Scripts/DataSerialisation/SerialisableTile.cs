@@ -72,10 +72,10 @@ public class SerialisableTile
                 SerialisableEnemySpawnpointAttribute serialisableEnemySpawnpointAttribute = new SerialisableEnemySpawnpointAttribute();
                 tileAttributes.Add(serialisableEnemySpawnpointAttribute);
             }
-            else if (tileAttribute.GetType() == typeof(MazeEntry))
+            else if (tileAttribute.GetType() == typeof(MazeLevelEntry))
             {
-                SerialisableMazeEntryAttribute serialisableMazeEntryAttribute = new SerialisableMazeEntryAttribute();
-                tileAttributes.Add(serialisableMazeEntryAttribute);
+                SerialisableMazeLevelEntryAttribute serialisableMazeLevelEntryAttribute = new SerialisableMazeLevelEntryAttribute();
+                tileAttributes.Add(serialisableMazeLevelEntryAttribute);
             }
             else
             {

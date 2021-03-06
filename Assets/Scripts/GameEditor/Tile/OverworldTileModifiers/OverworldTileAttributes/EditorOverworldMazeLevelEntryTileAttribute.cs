@@ -1,7 +1,7 @@
 ﻿using System.Linq;
 using UnityEngine;
 
-public class EditorOverworldMazeEntryTileAttribute : EditorOverworldTileAttributeModifier
+public class EditorOverworldMazeLevelEntryTileAttribute : EditorOverworldTileAttributeModifier
 {
     public override string Name { get => "Maze Entry"; }
 
@@ -10,18 +10,18 @@ public class EditorOverworldMazeEntryTileAttribute : EditorOverworldTileAttribut
         EditorOverworldTileAttributePlacer tileAttributePlacer = new EditorOverworldTileAttributePlacer(tile);
         OverworldTileAttributeRemover tileAttributeRemover = new OverworldTileAttributeRemover(tile);
 
-        ITileAttribute mazeEntry = (MazeEntry)tile.TileAttributes.FirstOrDefault(attribute => attribute is MazeEntry);
-        if (mazeEntry == null)
+        ITileAttribute MazeLevelEntry = (MazeLevelEntry)tile.TileAttributes.FirstOrDefault(attribute => attribute is MazeLevelEntry);
+        if (MazeLevelEntry == null)
         {
             tileAttributeRemover.RemovePlayerSpawnpoint();
             tileAttributeRemover.RemoveTileObstacle();
 
             Logger.Log(Logger.Editor, $"Now place maze entry at {tile.GridLocation.X}, {tile.GridLocation.Y}");
-            tileAttributePlacer.PlaceMazeEntry();
+            tileAttributePlacer.PlaceMazeLevelEntry();
             return;
         }
 
-        tileAttributeRemover.RemoveMazeEntry();
+        tileAttributeRemover.RemoveMazeLevelEntry();
     }
 
     public override Sprite GetSprite()

@@ -17,17 +17,18 @@ public class OverworldTileAttributePlacer<T> : TileAttributePlacer<T> where T : 
         Tile.TileAttributes.Add(playerSpawnpoint);
     }
 
-    public void PlaceMazeEntry()
+    public void PlaceMazeLevelEntry()
     {
-        MazeEntry mazeEntry = (MazeEntry)InstantiateTileAttributeGO<MazeEntry>();
-        mazeEntry.Tile = Tile;
+        MazeLevelEntry mazeLevelEntry = (MazeLevelEntry)InstantiateTileAttributeGO<MazeLevelEntry>();
+        mazeLevelEntry.Tile = Tile;
 
         Tile.Walkable = true;
-        Tile.TileAttributes.Add(mazeEntry);
+        Tile.TileAttributes.Add(mazeLevelEntry);
 
         if(OverworldManager.Instance != null && OverworldManager.Instance.EditorOverworld != null)
         {
-            OverworldManager.Instance.EditorOverworld.MazeEntries.Add(mazeEntry);
+            OverworldManager.Instance.EditorOverworld.MazeEntries.Add(mazeLevelEntry);
+            ScreenSpaceOverworldEditorElements.Instance.InstantiateMazeLevelEntryName(mazeLevelEntry);
         }
     }
 }

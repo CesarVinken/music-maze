@@ -42,16 +42,17 @@ public class OverworldTileAttributeRemover : TileAttributeRemover
         playerSpawnpoint.Remove();
     }
 
-    public void RemoveMazeEntry()
+    public void RemoveMazeLevelEntry()
     {
-        MazeEntry mazeEntry = (MazeEntry)_tile.TileAttributes.FirstOrDefault(attribute => attribute is MazeEntry);
-        if (mazeEntry == null) return;
-        _tile.TileAttributes.Remove(mazeEntry);
-        mazeEntry.Remove();
+        MazeLevelEntry mazeLevelEntry = (MazeLevelEntry)_tile.TileAttributes.FirstOrDefault(attribute => attribute is MazeLevelEntry);
+        if (mazeLevelEntry == null) return;
+        _tile.TileAttributes.Remove(mazeLevelEntry);
+        mazeLevelEntry.Remove();
 
         if (OverworldManager.Instance != null && OverworldManager.Instance.EditorOverworld != null)
         {
-            OverworldManager.Instance.EditorOverworld.MazeEntries.Remove(mazeEntry);
+            OverworldManager.Instance.EditorOverworld.MazeEntries.Remove(mazeLevelEntry);
+            ScreenSpaceOverworldEditorElements.Instance.RemoveMazeLevelEntryName(mazeLevelEntry);
         }
     }
 

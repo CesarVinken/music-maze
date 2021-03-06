@@ -82,9 +82,9 @@ public class InGameOverworld : Overworld, IInGameLevel
         foreach (SerialisableTileAttribute serialisableTileAttribute in serialisableTile.TileAttributes)
         {
             int tileAttributeId = serialisableTileAttribute.TileAttributeId;
-            if (tileAttributeId == SerialisableTileAttribute.MazeEntryCode)
+            if (tileAttributeId == SerialisableTileAttribute.MazeLevelEntryCode)
             {
-                tileAttributePlacer.PlaceMazeEntry();
+                tileAttributePlacer.PlaceMazeLevelEntry();
             }
 
             else if (tileAttributeId == SerialisableTileAttribute.PlayerSpawnpointCode)
