@@ -20,8 +20,14 @@ public class OverworldTileAttributePlacer<T> : TileAttributePlacer<T> where T : 
     public void PlaceMazeEntry()
     {
         MazeEntry mazeEntry = (MazeEntry)InstantiateTileAttributeGO<MazeEntry>();
+        mazeEntry.Tile = Tile;
 
         Tile.Walkable = true;
         Tile.TileAttributes.Add(mazeEntry);
+
+        if(OverworldManager.Instance != null && OverworldManager.Instance.EditorOverworld != null)
+        {
+            OverworldManager.Instance.EditorOverworld.MazeEntries.Add(mazeEntry);
+        }
     }
 }

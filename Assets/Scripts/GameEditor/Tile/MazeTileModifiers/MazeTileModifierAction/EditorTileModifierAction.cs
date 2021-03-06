@@ -7,6 +7,9 @@ public class EditorTileModifierAction : MonoBehaviour
     {
         switch (_tileModifierActionType)
         {
+            case TileModifierActionType.AssignMazeLevelEntry:
+                MazeLevelEntryAssigner.AssignMazeLevelEntry();
+                break;
             case TileModifierActionType.GenerateTileTransformationMap:
                 MazeTileTransformationMapper.GenerateTileTransformationMap();
                 break;
@@ -16,3 +19,4 @@ public class EditorTileModifierAction : MonoBehaviour
         }
     }
 }
+

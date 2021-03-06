@@ -2,7 +2,7 @@
 using System.Linq;
 using UnityEngine;
 
-public class MazeTileTransformationMapper : MonoBehaviour
+public class MazeTileTransformationMapper
 {
     private static List<EditorMazeTile> _checkedNeighbours = new List<EditorMazeTile>();
 
@@ -67,7 +67,6 @@ public class MazeTileTransformationMapper : MonoBehaviour
                 {
                     foundSoFar.Add(markableNeighbours[k]);
                 }
-
             }
         }
 

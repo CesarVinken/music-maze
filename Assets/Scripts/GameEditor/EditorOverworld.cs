@@ -6,7 +6,7 @@ public class EditorOverworld : Overworld, IEditorLevel
     private List<EditorOverworldTile> _tiles = new List<EditorOverworldTile>();
     public new List<EditorOverworldTile> Tiles { get => _tiles; set => _tiles = value; }
 
-    //public List<EditorOverworldTile> Tiles = new List<EditorOverworldTile>();
+    public List<MazeEntry> MazeEntries = new List<MazeEntry>();
 
     public EditorOverworld()
     {

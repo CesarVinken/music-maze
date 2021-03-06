@@ -16,9 +16,11 @@ public static class PersistentGameManager
     public static SceneLoadOrigin SceneLoadOrigin = SceneLoadOrigin.Gameplay;
     private static string _currentScene = "none";
     private static string _overworldName = "none";
+    private static string _originMazeLevelName = "none";
 
     public static string CurrentScene { get => _currentScene; private set => _currentScene = value; }
     public static string OverworldName { get => _overworldName; private set => _overworldName = value; }
+    public static string OriginMazeLevelName { get => _originMazeLevelName; private set => _originMazeLevelName = value; }
 
     public static void SetCurrentSceneName(string currentScene)
     {
@@ -28,6 +30,11 @@ public static class PersistentGameManager
     public static void SetOverworldName(string overworldName)
     {
         _overworldName = overworldName;
+    }
+
+    public static void SetOriginMazeLevelName(string originMazeLevelName)
+    {
+        _originMazeLevelName = originMazeLevelName;
     }
 }
 
@@ -163,6 +170,11 @@ public class GameManager : MonoBehaviourPunCallbacks
                 // We loaded a maze scene through the game. Set up the maze level
                 if(PersistentGameManager.SceneLoadOrigin == SceneLoadOrigin.Gameplay)
                 {
+                    if (PersistentGameManager.CurrentScene == "none")
+                    {
+                        PersistentGameManager.SetCurrentSceneName("default");
+                    }
+
                     string mazeName = PersistentGameManager.CurrentScene;
                     Logger.Log($"We will load the maze '{mazeName}'");
                     MazeLevelData startUpMazeLevelData = MazeLevelLoader.LoadMazeLevelData(mazeName);

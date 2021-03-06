@@ -44,10 +44,15 @@ public class OverworldTileAttributeRemover : TileAttributeRemover
 
     public void RemoveMazeEntry()
     {
-        ITileAttribute mazeEntry = (MazeEntry)_tile.TileAttributes.FirstOrDefault(attribute => attribute is MazeEntry);
+        MazeEntry mazeEntry = (MazeEntry)_tile.TileAttributes.FirstOrDefault(attribute => attribute is MazeEntry);
         if (mazeEntry == null) return;
         _tile.TileAttributes.Remove(mazeEntry);
         mazeEntry.Remove();
+
+        if (OverworldManager.Instance != null && OverworldManager.Instance.EditorOverworld != null)
+        {
+            OverworldManager.Instance.EditorOverworld.MazeEntries.Remove(mazeEntry);
+        }
     }
 
     private void UpdateNeighboursForRemovedObstacle(ObstacleType obstacleType)

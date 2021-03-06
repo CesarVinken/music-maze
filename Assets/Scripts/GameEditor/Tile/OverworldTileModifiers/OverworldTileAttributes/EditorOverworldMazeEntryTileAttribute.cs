@@ -28,4 +28,10 @@ public class EditorOverworldMazeEntryTileAttribute : EditorOverworldTileAttribut
     {
         return EditorCanvasUI.Instance.TileAttributeIcons[5];
     }
+
+    public override void InstantiateModifierActions()
+    {
+        Logger.Log("Load actions for triggerer");
+        GameObject.Instantiate(EditorCanvasUI.Instance.AssignMazeLevelEntryPrefab, EditorOverworldTileModificationPanel.Instance.TileModifierActionsContainer);
+    }
 }

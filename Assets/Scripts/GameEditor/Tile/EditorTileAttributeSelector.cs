@@ -46,5 +46,7 @@
         _editorSelectedModifierContainer.SelectedModifierLabel.text = GetSelectedModifierLabel(attribute.Name);
         _editorSelectedModifierContainer.SelectedModifierSprite.sprite = attribute.GetSprite();
         EditorManager.SelectedTileAttributeModifierIndex = modifierIndex;
+
+        attribute.InstantiateModifierActions();
     }
 }

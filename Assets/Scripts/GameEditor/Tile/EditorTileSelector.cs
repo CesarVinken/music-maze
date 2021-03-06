@@ -3,6 +3,8 @@ using UnityEngine.EventSystems;
 
 public class EditorTileSelector : MonoBehaviour
 {
+    public static EditorTileSelector Instance;
+
     private GridLocation _currentSelectedLocation;
     public GridLocation CurrentSelectedLocation
     {
@@ -25,6 +27,8 @@ public class EditorTileSelector : MonoBehaviour
     public void Awake()
     {
         Guard.CheckIsNull(_lineRenderer, "_lineRenderer", gameObject);
+
+        Instance = this;
     }
 
     public void Start()
