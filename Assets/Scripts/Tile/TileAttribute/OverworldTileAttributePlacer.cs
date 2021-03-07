@@ -25,8 +25,10 @@ public class OverworldTileAttributePlacer<T> : TileAttributePlacer<T> where T : 
         Tile.Walkable = true;
         Tile.TileAttributes.Add(mazeLevelEntry);
 
-        if(OverworldManager.Instance != null && OverworldManager.Instance.EditorOverworld != null)
+        if(OverworldManager.Instance?.EditorOverworld != null)
         {
+            mazeLevelEntry.MazeLevelName = MazeLevelEntryAssigner.Instance.GetCurentDropdownSelection();
+
             OverworldManager.Instance.EditorOverworld.MazeEntries.Add(mazeLevelEntry);
             ScreenSpaceOverworldEditorElements.Instance.InstantiateMazeLevelEntryName(mazeLevelEntry);
         }

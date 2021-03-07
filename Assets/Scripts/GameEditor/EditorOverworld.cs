@@ -8,6 +8,9 @@ public class EditorOverworld : Overworld, IEditorLevel
 
     public List<MazeLevelEntry> MazeEntries = new List<MazeLevelEntry>();
 
+    public List<string> MazeLevelNames = new List<string>();
+    
+
     public EditorOverworld()
     {
 
@@ -32,6 +35,8 @@ public class EditorOverworld : Overworld, IEditorLevel
         _overworldContainer.SetActive(true);
 
         BuildTiles(overworldData);
+
+        MazeLevelNames = MazeLevelLoader.GetAllPlayableLevelNames();
     }
 
     public static EditorOverworld Create(OverworldData overworldData)

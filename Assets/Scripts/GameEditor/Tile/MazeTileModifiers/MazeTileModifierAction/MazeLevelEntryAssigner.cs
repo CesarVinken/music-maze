@@ -1,17 +1,29 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using static UnityEngine.UI.Dropdown;
 
 public class MazeLevelEntryAssigner : MonoBehaviour
 {
     public static MazeLevelEntryAssigner Instance;
 
-    [SerializeField] private InputField _mazeLevelNameInputField;
+    [SerializeField] private Dropdown _mazeLevelNamesDropdown;
     private void Awake()
     {
         Instance = this;
+    }
+
+    private void Start()
+    {
+        _mazeLevelNamesDropdown.ClearOptions();
+        List<OptionData> options = new List<OptionData>();
+        for (int i = 0; i < OverworldManager.Instance.EditorOverworld.MazeLevelNames.Count; i++)
+        {
+            string levelName = OverworldManager.Instance.EditorOverworld.MazeLevelNames[i];
+            options.Add(new OptionData(levelName));
+
+        }
+        _mazeLevelNamesDropdown.AddOptions(options);
     }
 
     public static void AssignMazeLevelEntry()
@@ -21,7 +33,7 @@ public class MazeLevelEntryAssigner : MonoBehaviour
 
     private void SetMazeLevelEntryName()
     {
-        if (_mazeLevelNameInputField.text == "") return;
+        //if (_mazeLevelNameInputField.text == "") return;
 
         GridLocation selectedLocation = EditorTileSelector.Instance.CurrentSelectedLocation;
         MazeLevelEntry MazeLevelEntry = null;
@@ -41,10 +53,14 @@ public class MazeLevelEntryAssigner : MonoBehaviour
             return;
         }
 
-        MazeLevelEntry.MazeLevelName = _mazeLevelNameInputField.text;
+        MazeLevelEntry.MazeLevelName = GetCurentDropdownSelection();
         ScreenSpaceOverworldEditorElements.Instance.UpdateMazeLevelEntryName(MazeLevelEntry);
 
         Logger.Log($"This tile now connects to the maze '{MazeLevelEntry.MazeLevelName}'");
     }
 
+    public string GetCurentDropdownSelection()
+    {
+        return _mazeLevelNamesDropdown.options[_mazeLevelNamesDropdown.value].text;
+    }
 }
