@@ -10,7 +10,7 @@ public class MazeLevelEntry : MonoBehaviour, ITileAttribute
 
     public Tile Tile;
     public string ParentId;
-    public string MazeLevelName = "none";
+    public string MazeLevelName = "";
 
     private List<OverworldPlayerCharacter> _occupyingPlayers = new List<OverworldPlayerCharacter>();
 

@@ -20,6 +20,7 @@ public class EditorMazeLevelEntryName : MonoBehaviour
 
     public void SetMazeLevelEntry(MazeLevelEntry mazeLevelEntry)
     {
+        Logger.Log($"Set name to {mazeLevelEntry.MazeLevelName}");
         MazeLevelEntry = mazeLevelEntry;
         SetText(mazeLevelEntry.MazeLevelName);
     }

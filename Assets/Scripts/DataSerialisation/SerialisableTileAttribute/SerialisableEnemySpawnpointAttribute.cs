@@ -1,10 +1,12 @@
 ﻿using System;
 
 [Serializable]
-public class SerialisableEnemySpawnpointAttribute : SerialisableTileAttribute
+public class SerialisableEnemySpawnpointAttribute : ISerialisableTileAttribute
 {
+    // To do: Enemy type
+
     public SerialisableEnemySpawnpointAttribute()
     {
-        TileAttributeId = EnemySpawnpointCode;
+
     }
 }

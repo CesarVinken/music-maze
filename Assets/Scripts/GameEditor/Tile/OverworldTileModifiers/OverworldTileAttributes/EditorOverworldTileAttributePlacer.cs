@@ -17,10 +17,19 @@ public class EditorOverworldTileAttributePlacer : OverworldTileAttributePlacer<E
         return tileAttributeGO.GetComponent<U>();
     }
 
-    public override MazeLevelEntry PlaceMazeLevelEntry()
+    public override MazeLevelEntry PlaceMazeLevelEntry(string mazeLevelName = "")
     {
         MazeLevelEntry mazeLevelEntry = (MazeLevelEntry)InstantiateTileAttributeGO<MazeLevelEntry>();
         mazeLevelEntry.Tile = Tile;
+
+        // When we place the entry from a LoadOverworld situation, we already have a maze level name from the file data.
+        if(mazeLevelName == "")
+        {
+            mazeLevelName = MazeLevelEntryAssigner.Instance.GetCurentDropdownSelection();
+            Logger.Warning(mazeLevelName);
+        }
+
+        mazeLevelEntry.MazeLevelName = mazeLevelName;
 
         Tile.Walkable = true;
         Tile.TileAttributes.Add(mazeLevelEntry);

@@ -45,10 +45,10 @@ public abstract class Tile : MonoBehaviour
 
         if (tilePath == null)
         {
-            Logger.Log($"did NOT find a tile path on {GridLocation.X},{GridLocation.Y}");
+            //Logger.Log($"did NOT find a tile path on {GridLocation.X},{GridLocation.Y}");
             return null;
         }
-        Logger.Log($"found tile path {tilePath.TilePathType} on {GridLocation.X},{GridLocation.Y} with score {tilePath.ConnectionScore}");
+        //Logger.Log($"found tile path {tilePath.TilePathType} on {GridLocation.X},{GridLocation.Y} with score {tilePath.ConnectionScore}");
         return tilePath;
     }
 

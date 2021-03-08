@@ -14,9 +14,9 @@ public static class PersistentGameManager
     public static Platform CurrentPlatform;
     public static SceneType CurrentSceneType;
     public static SceneLoadOrigin SceneLoadOrigin = SceneLoadOrigin.Gameplay;
-    private static string _currentScene = "none";
-    private static string _overworldName = "none";
-    private static string _originMazeLevelName = "none";
+    private static string _currentScene = "";
+    private static string _overworldName = "";
+    private static string _originMazeLevelName = "";
 
     public static string CurrentScene { get => _currentScene; private set => _currentScene = value; }
     public static string OverworldName { get => _overworldName; private set => _overworldName = value; }
@@ -135,7 +135,7 @@ public class GameManager : MonoBehaviourPunCallbacks
                 Logger.Log("instantiate overworld sprites, tiles and characters");
                 if (PersistentGameManager.SceneLoadOrigin == SceneLoadOrigin.Gameplay)
                 {
-                    if(PersistentGameManager.OverworldName == "none")
+                    if(PersistentGameManager.OverworldName == "")
                     {
                         PersistentGameManager.SetOverworldName("overworld");
                     }
@@ -170,7 +170,7 @@ public class GameManager : MonoBehaviourPunCallbacks
                 // We loaded a maze scene through the game. Set up the maze level
                 if(PersistentGameManager.SceneLoadOrigin == SceneLoadOrigin.Gameplay)
                 {
-                    if (PersistentGameManager.CurrentScene == "none")
+                    if (PersistentGameManager.CurrentScene == "")
                     {
                         PersistentGameManager.SetCurrentSceneName("default");
                     }

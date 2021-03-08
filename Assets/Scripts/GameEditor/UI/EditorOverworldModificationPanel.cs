@@ -172,7 +172,7 @@ public class EditorOverworldModificationPanel : EditorGridModificationPanel
             return null;
         }
 
-        SerialisableTileAttribute obstacleAttribute = tileAttributes.FirstOrDefault(attribute => attribute.TileAttributeId == SerialisableTileAttribute.ObstacleAttributeCode);
+        SerialisableTileObstacleAttribute obstacleAttribute = tileAttributes.OfType<SerialisableTileObstacleAttribute>().FirstOrDefault();
 
         if (obstacleAttribute == null)
         {

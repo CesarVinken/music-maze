@@ -1,10 +1,9 @@
 ﻿using System;
 
 [Serializable]
-public class SerialisablePlayerSpawnpointAttribute : SerialisableTileAttribute
+public class SerialisablePlayerSpawnpointAttribute : ISerialisableTileAttribute
 {
     public SerialisablePlayerSpawnpointAttribute()
     {
-        TileAttributeId = PlayerSpawnpointCode;
     }
 }

@@ -1,10 +1,9 @@
 ﻿using System;
 
 [Serializable]
-public class SerialisablePlayerOnlyAttribute : SerialisableTileAttribute
+public class SerialisablePlayerOnlyAttribute : ISerialisableTileAttribute
 {
     public SerialisablePlayerOnlyAttribute()
     {
-        TileAttributeId = PlayerOnlyAttributeCode;
     }
 }

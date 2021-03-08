@@ -8,7 +8,7 @@ public class EditorSelectedMazeTileModifierContainer : EditorSelectedTileModifie
         Guard.CheckIsNull(SelectedModifierSpriteGO, "SelectedModifierSpriteGO", gameObject);
         Guard.CheckIsNull(SelectedModifierLabel, "SelectedModifierLabel", gameObject);
         Guard.CheckIsNull(SelectedModifierSprite, "SelectedModifierSprite", gameObject);
-        Logger.Warning("MAZERER");
+
         EditorCanvasUI.Instance.SelectedTileModifierContainer = this;
 
         Reset();

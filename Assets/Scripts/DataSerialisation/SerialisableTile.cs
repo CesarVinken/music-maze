@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using UnityEngine;
 
 [Serializable]
 public class SerialisableTile
@@ -41,48 +42,17 @@ public class SerialisableTile
 
         foreach (ITileAttribute tileAttribute in tile.TileAttributes)
         {
-            if (tileAttribute.GetType() == typeof(TileObstacle))
-            {
-                TileObstacle tileObstacle = tileAttribute as TileObstacle;
-                SerialisableTileObstacleAttribute serialisableTileObstacleAttribute = 
-                    new SerialisableTileObstacleAttribute(
-                        new TileConnectionScoreInfo(tileObstacle.ConnectionScore, tileObstacle.SpriteNumber));
-                tileAttributes.Add(serialisableTileObstacleAttribute);
-            }
-            else if (tileAttribute.GetType() == typeof(PlayerExit))
-            {
-                PlayerExit playerExit = tileAttribute as PlayerExit;
+            ISerialisableTileAttribute iSerialisableTileAttribute = CreateSerialisableTileAttribute(tileAttribute);
 
-                SerialisablePlayerExitAttribute serialisablePlayerExitAttribute = new SerialisablePlayerExitAttribute(
-                    new TileConnectionScoreInfo(playerExit.ConnectionScore, playerExit.SpriteNumber));
-                tileAttributes.Add(serialisablePlayerExitAttribute);
-            }
-            else if (tileAttribute.GetType() == typeof(PlayerOnly))
-            {
-                SerialisablePlayerOnlyAttribute serialisablePlayerOnlyAttribute = new SerialisablePlayerOnlyAttribute();
-                tileAttributes.Add(serialisablePlayerOnlyAttribute);
-            }
-            else if (tileAttribute.GetType() == typeof(PlayerSpawnpoint))
-            {
-                SerialisablePlayerSpawnpointAttribute serialisablePlayerSpawnpointAttribute = new SerialisablePlayerSpawnpointAttribute();
-                tileAttributes.Add(serialisablePlayerSpawnpointAttribute);
-            }
-            else if (tileAttribute.GetType() == typeof(EnemySpawnpoint))
-            {
-                SerialisableEnemySpawnpointAttribute serialisableEnemySpawnpointAttribute = new SerialisableEnemySpawnpointAttribute();
-                tileAttributes.Add(serialisableEnemySpawnpointAttribute);
-            }
-            else if (tileAttribute.GetType() == typeof(MazeLevelEntry))
-            {
-                MazeLevelEntry mazeLevelEntry = tileAttribute as MazeLevelEntry;
-                SerialisableMazeLevelEntryAttribute serialisableMazeLevelEntryAttribute = new SerialisableMazeLevelEntryAttribute(mazeLevelEntry.MazeLevelName);
-                tileAttributes.Add(serialisableMazeLevelEntryAttribute);
-            }
-            else
-            {
-                Logger.Error($"Could not serialise the tile attribute {tileAttribute.GetType()}");
-            }
+            SerialisableTileAttribute serialisableTileAttribute = new SerialisableTileAttribute(
+                iSerialisableTileAttribute.GetType().ToString(), iSerialisableTileAttribute
+                );
+            //serialisableTileAttribute.SerialisedData = JsonUtility.ToJson(iSerialisableTileAttribute);
+            //serialisableTileAttribute.AttributeType = iSerialisableTileAttribute.GetType().ToString();
+
+            tileAttributes.Add(serialisableTileAttribute);
         }
+
         return tileAttributes;
     }
 
@@ -124,5 +94,51 @@ public class SerialisableTile
         }
 
         return serialisableTilesToTransform;
+    }
+
+    private ISerialisableTileAttribute CreateSerialisableTileAttribute(ITileAttribute tileAttribute)
+    {
+        if (tileAttribute.GetType() == typeof(TileObstacle))
+        {
+            TileObstacle tileObstacle = tileAttribute as TileObstacle;
+            SerialisableTileObstacleAttribute serialisableTileObstacleAttribute =
+                new SerialisableTileObstacleAttribute(
+                    new TileConnectionScoreInfo(tileObstacle.ConnectionScore, tileObstacle.SpriteNumber));
+            return serialisableTileObstacleAttribute;
+        }
+        else if (tileAttribute.GetType() == typeof(PlayerExit))
+        {
+            PlayerExit playerExit = tileAttribute as PlayerExit;
+
+            SerialisablePlayerExitAttribute serialisablePlayerExitAttribute = new SerialisablePlayerExitAttribute(
+                new TileConnectionScoreInfo(playerExit.ConnectionScore, playerExit.SpriteNumber));
+            return serialisablePlayerExitAttribute;
+        }
+        else if (tileAttribute.GetType() == typeof(PlayerOnly))
+        {
+            SerialisablePlayerOnlyAttribute serialisablePlayerOnlyAttribute = new SerialisablePlayerOnlyAttribute();
+            return serialisablePlayerOnlyAttribute;
+        }
+        else if (tileAttribute.GetType() == typeof(PlayerSpawnpoint))
+        {
+            SerialisablePlayerSpawnpointAttribute serialisablePlayerSpawnpointAttribute = new SerialisablePlayerSpawnpointAttribute();
+            return serialisablePlayerSpawnpointAttribute;
+        }
+        else if (tileAttribute.GetType() == typeof(EnemySpawnpoint))
+        {
+            SerialisableEnemySpawnpointAttribute serialisableEnemySpawnpointAttribute = new SerialisableEnemySpawnpointAttribute();
+            return serialisableEnemySpawnpointAttribute;
+        }
+        if (tileAttribute.GetType() == typeof(MazeLevelEntry))
+        {
+            MazeLevelEntry mazeLevelEntry = tileAttribute as MazeLevelEntry;
+            SerialisableMazeLevelEntryAttribute serialisableMazeLevelEntryAttribute = new SerialisableMazeLevelEntryAttribute(mazeLevelEntry.MazeLevelName);
+            return serialisableMazeLevelEntryAttribute;
+        }
+        else
+        {
+            Logger.Error($"Could not serialise the tile attribute {tileAttribute.GetType()}");
+            return null;
+        }
     }
 }

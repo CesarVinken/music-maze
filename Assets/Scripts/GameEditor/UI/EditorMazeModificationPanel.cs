@@ -72,11 +72,11 @@ public class EditorMazeModificationPanel : EditorGridModificationPanel
                 List<SerialisableTileAttribute> tileAttributes = new List<SerialisableTileAttribute>();
                 List<SerialisableTileBackground> tileBackgrounds = new List<SerialisableTileBackground>();
 
-                SerialisableTileAttribute edgeObstacle = TryAddEdgeObstacle(gridLocation);
+                SerialisableTileObstacleAttribute edgeObstacle = TryAddEdgeObstacle(gridLocation);
 
                 if(edgeObstacle != null)
                 {
-                    tileAttributes.Add(edgeObstacle);
+                    tileAttributes.Add(new SerialisableTileAttribute(edgeObstacle.GetType().ToString(), edgeObstacle));
                 }
 
                 SerialisableTilePathBackground mazeTilePath = TryAddPathsForNewMaze(gridLocation, tileAttributes);
@@ -178,7 +178,7 @@ public class EditorMazeModificationPanel : EditorGridModificationPanel
         }
     }
 
-    private SerialisableTileAttribute TryAddEdgeObstacle(GridLocation gridLocation)
+    private SerialisableTileObstacleAttribute TryAddEdgeObstacle(GridLocation gridLocation)
     {
         if (gridLocation.X == 0)
         {
@@ -232,11 +232,13 @@ public class EditorMazeModificationPanel : EditorGridModificationPanel
 
     private SerialisableTilePathBackground TryAddPathsForNewMaze(GridLocation gridLocation, List<SerialisableTileAttribute> tileAttributes)
     {
-        bool hasObstacleAttribute = tileAttributes.Any(attribute => attribute.TileAttributeId == SerialisableTileAttribute.ObstacleAttributeCode);
-
-        if (hasObstacleAttribute)
+        for (int i = 0; i < tileAttributes.Count; i++)
         {
-            return null;
+            Type type = Type.GetType(tileAttributes[i].AttributeType);
+            if (type.Equals(typeof(SerialisableTileObstacleAttribute)))
+            {
+                return null;
+            }
         }
 
         if (gridLocation.X == 1)
@@ -290,7 +292,7 @@ public class EditorMazeModificationPanel : EditorGridModificationPanel
             return null;
         }
 
-        SerialisableTileAttribute obstacleAttribute = tileAttributes.FirstOrDefault(attribute => attribute.TileAttributeId == SerialisableTileAttribute.ObstacleAttributeCode);
+        SerialisableTileObstacleAttribute obstacleAttribute = tileAttributes.OfType<SerialisableTileObstacleAttribute>().FirstOrDefault();
 
         if (obstacleAttribute == null)
         {

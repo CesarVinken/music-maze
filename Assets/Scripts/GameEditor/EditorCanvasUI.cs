@@ -72,7 +72,7 @@ public class EditorCanvasUI : MonoBehaviour
     {
         PersistentGameManager.SceneLoadOrigin = SceneLoadOrigin.Editor;
 
-        if(PersistentGameManager.OverworldName == "none")
+        if(PersistentGameManager.OverworldName == "")
         {
             PersistentGameManager.SetOverworldName("overworld");
         }

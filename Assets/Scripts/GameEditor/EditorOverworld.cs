@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class EditorOverworld : Overworld, IEditorLevel
@@ -105,7 +106,8 @@ public class EditorOverworld : Overworld, IEditorLevel
 
         foreach (SerialisableTileAttribute serialisableTileAttribute in serialisableTile.TileAttributes)
         {
-            int tileAttributeId = serialisableTileAttribute.TileAttributeId;
+            Type type = Type.GetType(serialisableTileAttribute.AttributeType);
+
             //if (tileAttributeId == SerialisableTileAttribute.ObstacleAttributeCode)
             //{
             //    tileAttributePlacer.PlaceTileObstacle(ObstacleType.Bush, new TileConnectionScoreInfo(serialisableTileAttribute.ObstacleConnectionScore, serialisableTileAttribute.SpriteNumber)); //TODO, find a way to use polymorphism so we can cast as SerialisableTileObstacleAttribute instead of a general 
@@ -114,13 +116,14 @@ public class EditorOverworld : Overworld, IEditorLevel
             //{
             //    tileAttributePlacer.PlacePlayerExit(ObstacleType.Bush, new TileConnectionScoreInfo(serialisableTileAttribute.ObstacleConnectionScore, serialisableTileAttribute.SpriteNumber));
             //}
-            if (tileAttributeId == SerialisableTileAttribute.PlayerSpawnpointCode)
+            if (type.Equals(typeof(SerialisablePlayerSpawnpointAttribute)))
             {
                 tileAttributePlacer.PlacePlayerSpawnpoint();
             }
-            else if (tileAttributeId == SerialisableTileAttribute.MazeLevelEntryCode)
+            else if (type.Equals(typeof(SerialisableMazeLevelEntryAttribute)))
             {
-               MazeLevelEntry mazeLevelEntry = tileAttributePlacer.PlaceMazeLevelEntry();
+               SerialisableMazeLevelEntryAttribute serialisableMazeLevelEntryAttribute = (SerialisableMazeLevelEntryAttribute)JsonUtility.FromJson(serialisableTileAttribute.SerialisedData, type);
+               MazeLevelEntry mazeLevelEntry = tileAttributePlacer.PlaceMazeLevelEntry(serialisableMazeLevelEntryAttribute.MazeLevelName);
                MazeEntries.Add(mazeLevelEntry);
             }
             //else if (tileAttributeId == SerialisableTileAttribute.PlayerOnlyAttributeCode)
@@ -133,27 +136,8 @@ public class EditorOverworld : Overworld, IEditorLevel
             //}
             else
             {
-                Logger.Error($"Unknown tile attribute with tileAttributeId {tileAttributeId}");
+                Logger.Error($"Unknown tile attribute of the type {type}");
             }
         }
     }
-
-    //private void HandleMazeLevelEntries()
-    //{
-    //    Logger.Warning("HandleMazeLevelEntries");
-    //    for (int i = 0; i < OverworldManager.Instance.MazeLevelEntries.Count; i++)
-    //    {
-    //        MazeLevelEntry mazeLevelEntry = OverworldManager.Instance.MazeLevelEntries[i];
-
-    //        if (mazeLevelEntry.MazeLevelName == "none")
-    //        {
-    //            mazeLevelEntry.MazeLevelName = MazeLevelEntryAssigner.Instance.GetCurentDropdownSelection();
-    //        }
-
-    //        //OverworldManager.Instance.EditorOverworld.MazeEntries.Add(mazeLevelEntry);
-    //        Logger.Log($"add mazeLevelEntry to list. In total there are now {OverworldManager.Instance.MazeLevelEntries.Count} entries");
-    //        ScreenSpaceOverworldEditorElements.Instance.InstantiateMazeLevelEntryName(mazeLevelEntry);
-    //    }
-
-    //}
 }

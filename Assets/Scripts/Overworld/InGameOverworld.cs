@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class InGameOverworld : Overworld, IInGameLevel
@@ -81,19 +82,20 @@ public class InGameOverworld : Overworld, IInGameLevel
 
         foreach (SerialisableTileAttribute serialisableTileAttribute in serialisableTile.TileAttributes)
         {
-            int tileAttributeId = serialisableTileAttribute.TileAttributeId;
-            if (tileAttributeId == SerialisableTileAttribute.MazeLevelEntryCode)
-            {
-                tileAttributePlacer.PlaceMazeLevelEntry();
-            }
+            Type type = Type.GetType(serialisableTileAttribute.AttributeType);
 
-            else if (tileAttributeId == SerialisableTileAttribute.PlayerSpawnpointCode)
+            if (type.Equals(typeof(SerialisableMazeLevelEntryAttribute)))
+            {
+                SerialisableMazeLevelEntryAttribute serialisableMazeLevelEntryAttribute = (SerialisableMazeLevelEntryAttribute)JsonUtility.FromJson(serialisableTileAttribute.SerialisedData, type);
+                tileAttributePlacer.PlaceMazeLevelEntry(serialisableMazeLevelEntryAttribute.MazeLevelName);
+            }
+            else if (type.Equals(typeof(SerialisablePlayerSpawnpointAttribute)))
             {
                 tileAttributePlacer.PlacePlayerSpawnpoint();
             }
             else
             {
-                Logger.Error($"Unknown tile attribute with tileAttributeId {tileAttributeId}");
+                Logger.Error($"Unknown tile attribute of type {type}");
             }
         }
     }

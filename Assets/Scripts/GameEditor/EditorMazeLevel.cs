@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class EditorMazeLevel : MazeLevel, IEditorLevel
@@ -110,30 +111,33 @@ public class EditorMazeLevel : MazeLevel, IEditorLevel
 
         foreach (SerialisableTileAttribute serialisableTileAttribute in serialisableTile.TileAttributes)
         {
-            int tileAttributeId = serialisableTileAttribute.TileAttributeId;
-            if (tileAttributeId == SerialisableTileAttribute.ObstacleAttributeCode)
+            Type type = Type.GetType(serialisableTileAttribute.AttributeType);
+
+            if (type.Equals(typeof(SerialisableTileObstacleAttribute)))
             {
-                tileAttributePlacer.PlaceTileObstacle(ObstacleType.Bush, new TileConnectionScoreInfo(serialisableTileAttribute.ConnectionScore, serialisableTileAttribute.SpriteNumber)); //TODO, find a way to use polymorphism so we can cast as SerialisableTileObstacleAttribute instead of a general 
+                SerialisableTileObstacleAttribute serialisableTileObstacleAttribute = (SerialisableTileObstacleAttribute)JsonUtility.FromJson(serialisableTileAttribute.SerialisedData, type);
+                tileAttributePlacer.PlaceTileObstacle(ObstacleType.Bush, new TileConnectionScoreInfo(serialisableTileObstacleAttribute.ConnectionScore, serialisableTileObstacleAttribute.SpriteNumber));
             }
-            else if (tileAttributeId == SerialisableTileAttribute.PlayerExitCode)
+            else if (type.Equals(typeof(SerialisablePlayerExitAttribute)))
             {
-                tileAttributePlacer.PlacePlayerExit(ObstacleType.Bush, new TileConnectionScoreInfo(serialisableTileAttribute.ConnectionScore, serialisableTileAttribute.SpriteNumber));
+                SerialisablePlayerExitAttribute serialisablePlayerExitAttribute = (SerialisablePlayerExitAttribute)JsonUtility.FromJson(serialisableTileAttribute.SerialisedData, type);
+                tileAttributePlacer.PlacePlayerExit(ObstacleType.Bush, new TileConnectionScoreInfo(serialisablePlayerExitAttribute.ConnectionScore, serialisablePlayerExitAttribute.SpriteNumber));
             }
-            else if (tileAttributeId == SerialisableTileAttribute.PlayerSpawnpointCode)
+            else if (type.Equals(typeof(SerialisablePlayerSpawnpointAttribute)))
             {
                 tileAttributePlacer.PlacePlayerSpawnpoint();
             }
-            else if (tileAttributeId == SerialisableTileAttribute.PlayerOnlyAttributeCode)
+            else if (type.Equals(typeof(SerialisablePlayerOnlyAttribute)))
             {
                 tileAttributePlacer.PlacePlayerOnlyAttribute(PlayerOnlyType.Bush);
             }
-            else if (tileAttributeId == SerialisableTileAttribute.EnemySpawnpointCode)
+            else if (type.Equals(typeof(SerialisableEnemySpawnpointAttribute)))
             {
                 tileAttributePlacer.PlaceEnemySpawnpoint();
             }
             else
             {
-                Logger.Error($"Unknown tile attribute with tileAttributeId {tileAttributeId}");
+                Logger.Error($"Unknown tile attribute with type {type}");
             }
         }
     }

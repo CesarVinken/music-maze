@@ -1,9 +1,9 @@
-﻿public class SerialisableMazeLevelEntryAttribute : SerialisableTileAttribute
+﻿public class SerialisableMazeLevelEntryAttribute : ISerialisableTileAttribute
 {
     public string MazeLevelName;
+
     public SerialisableMazeLevelEntryAttribute(string mazeLevelName)
     {
-        TileAttributeId = MazeLevelEntryCode;
         MazeLevelName = mazeLevelName;
     }
 }

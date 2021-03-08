@@ -17,10 +17,11 @@ public class OverworldTileAttributePlacer<T> : TileAttributePlacer<T> where T : 
         Tile.TileAttributes.Add(playerSpawnpoint);
     }
 
-    public virtual MazeLevelEntry PlaceMazeLevelEntry()
+    public virtual MazeLevelEntry PlaceMazeLevelEntry(string mazeLevelName = "")
     {
         MazeLevelEntry mazeLevelEntry = (MazeLevelEntry)InstantiateTileAttributeGO<MazeLevelEntry>();
         mazeLevelEntry.Tile = Tile;
+        mazeLevelEntry.MazeLevelName = mazeLevelName;
 
         Tile.Walkable = true;
         Tile.TileAttributes.Add(mazeLevelEntry);
