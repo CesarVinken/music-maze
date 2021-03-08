@@ -77,7 +77,6 @@ public class OverworldManager : MonoBehaviour, IOnEventCallback
         StartCoroutine(coroutine);
     }
 
-
     public void SetupOverworldForEditor(OverworldData overworldData)
     {
         EditorOverworld = EditorOverworld.Create(overworldData);

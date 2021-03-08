@@ -74,7 +74,8 @@ public class SerialisableTile
             }
             else if (tileAttribute.GetType() == typeof(MazeLevelEntry))
             {
-                SerialisableMazeLevelEntryAttribute serialisableMazeLevelEntryAttribute = new SerialisableMazeLevelEntryAttribute();
+                MazeLevelEntry mazeLevelEntry = tileAttribute as MazeLevelEntry;
+                SerialisableMazeLevelEntryAttribute serialisableMazeLevelEntryAttribute = new SerialisableMazeLevelEntryAttribute(mazeLevelEntry.MazeLevelName);
                 tileAttributes.Add(serialisableMazeLevelEntryAttribute);
             }
             else

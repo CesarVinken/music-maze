@@ -16,12 +16,13 @@ public class MazeLevelEntryAssigner : MonoBehaviour
     private void Start()
     {
         _mazeLevelNamesDropdown.ClearOptions();
+
         List<OptionData> options = new List<OptionData>();
+
         for (int i = 0; i < OverworldManager.Instance.EditorOverworld.MazeLevelNames.Count; i++)
         {
             string levelName = OverworldManager.Instance.EditorOverworld.MazeLevelNames[i];
             options.Add(new OptionData(levelName));
-
         }
         _mazeLevelNamesDropdown.AddOptions(options);
     }
@@ -33,11 +34,9 @@ public class MazeLevelEntryAssigner : MonoBehaviour
 
     private void SetMazeLevelEntryName()
     {
-        //if (_mazeLevelNameInputField.text == "") return;
-
         GridLocation selectedLocation = EditorTileSelector.Instance.CurrentSelectedLocation;
         MazeLevelEntry MazeLevelEntry = null;
-        
+
         for (int i = 0; i < OverworldManager.Instance.EditorOverworld.MazeEntries.Count; i++)
         {
             MazeLevelEntry m = OverworldManager.Instance.EditorOverworld.MazeEntries[i];

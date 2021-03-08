@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class EditorOverworldTileAttributePlacer : OverworldTileAttributePlacer<EditorOverworldTile>
 {
@@ -17,4 +16,19 @@ public class EditorOverworldTileAttributePlacer : OverworldTileAttributePlacer<E
         GameObject tileAttributeGO = GameObject.Instantiate(OverworldManager.Instance.GetTileAttributePrefab<U>(), Tile.transform);
         return tileAttributeGO.GetComponent<U>();
     }
+
+    public override MazeLevelEntry PlaceMazeLevelEntry()
+    {
+        MazeLevelEntry mazeLevelEntry = (MazeLevelEntry)InstantiateTileAttributeGO<MazeLevelEntry>();
+        mazeLevelEntry.Tile = Tile;
+
+        Tile.Walkable = true;
+        Tile.TileAttributes.Add(mazeLevelEntry);
+
+        OverworldManager.Instance.EditorOverworld.MazeEntries.Add(mazeLevelEntry);
+
+        ScreenSpaceOverworldEditorElements.Instance.InstantiateMazeLevelEntryName(mazeLevelEntry);
+        return mazeLevelEntry;
+    }
 }
+

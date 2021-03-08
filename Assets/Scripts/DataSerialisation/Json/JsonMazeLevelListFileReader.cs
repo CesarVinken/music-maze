@@ -11,7 +11,6 @@ public class JsonMazeLevelListFileReader : IJsonFileReader
 
         if (Application.platform == RuntimePlatform.Android)
         {
-
             UnityWebRequest loadingRequest = UnityWebRequest.Get(filePath);
             loadingRequest.SendWebRequest();
             while (!loadingRequest.isDone) ;

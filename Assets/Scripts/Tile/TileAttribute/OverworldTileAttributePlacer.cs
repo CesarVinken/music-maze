@@ -17,7 +17,7 @@ public class OverworldTileAttributePlacer<T> : TileAttributePlacer<T> where T : 
         Tile.TileAttributes.Add(playerSpawnpoint);
     }
 
-    public void PlaceMazeLevelEntry()
+    public virtual MazeLevelEntry PlaceMazeLevelEntry()
     {
         MazeLevelEntry mazeLevelEntry = (MazeLevelEntry)InstantiateTileAttributeGO<MazeLevelEntry>();
         mazeLevelEntry.Tile = Tile;
@@ -25,12 +25,6 @@ public class OverworldTileAttributePlacer<T> : TileAttributePlacer<T> where T : 
         Tile.Walkable = true;
         Tile.TileAttributes.Add(mazeLevelEntry);
 
-        if(OverworldManager.Instance?.EditorOverworld != null)
-        {
-            mazeLevelEntry.MazeLevelName = MazeLevelEntryAssigner.Instance.GetCurentDropdownSelection();
-
-            OverworldManager.Instance.EditorOverworld.MazeEntries.Add(mazeLevelEntry);
-            ScreenSpaceOverworldEditorElements.Instance.InstantiateMazeLevelEntryName(mazeLevelEntry);
-        }
+        return mazeLevelEntry;
     }
 }

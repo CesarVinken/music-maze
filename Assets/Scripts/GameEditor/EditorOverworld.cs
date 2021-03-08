@@ -13,7 +13,6 @@ public class EditorOverworld : Overworld, IEditorLevel
 
     public EditorOverworld()
     {
-
     }
 
     public EditorOverworld(OverworldData overworldData)
@@ -121,7 +120,8 @@ public class EditorOverworld : Overworld, IEditorLevel
             }
             else if (tileAttributeId == SerialisableTileAttribute.MazeLevelEntryCode)
             {
-                tileAttributePlacer.PlaceMazeLevelEntry();
+               MazeLevelEntry mazeLevelEntry = tileAttributePlacer.PlaceMazeLevelEntry();
+               MazeEntries.Add(mazeLevelEntry);
             }
             //else if (tileAttributeId == SerialisableTileAttribute.PlayerOnlyAttributeCode)
             //{
@@ -137,4 +137,23 @@ public class EditorOverworld : Overworld, IEditorLevel
             }
         }
     }
+
+    //private void HandleMazeLevelEntries()
+    //{
+    //    Logger.Warning("HandleMazeLevelEntries");
+    //    for (int i = 0; i < OverworldManager.Instance.MazeLevelEntries.Count; i++)
+    //    {
+    //        MazeLevelEntry mazeLevelEntry = OverworldManager.Instance.MazeLevelEntries[i];
+
+    //        if (mazeLevelEntry.MazeLevelName == "none")
+    //        {
+    //            mazeLevelEntry.MazeLevelName = MazeLevelEntryAssigner.Instance.GetCurentDropdownSelection();
+    //        }
+
+    //        //OverworldManager.Instance.EditorOverworld.MazeEntries.Add(mazeLevelEntry);
+    //        Logger.Log($"add mazeLevelEntry to list. In total there are now {OverworldManager.Instance.MazeLevelEntries.Count} entries");
+    //        ScreenSpaceOverworldEditorElements.Instance.InstantiateMazeLevelEntryName(mazeLevelEntry);
+    //    }
+
+    //}
 }
