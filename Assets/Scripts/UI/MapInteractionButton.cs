@@ -2,12 +2,6 @@
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
-public interface IMapInteractionButton
-{
-    void ShowMapInteractionButton(OverworldPlayerCharacter triggerPlayer, Vector2 pos, string mapText);
-    void ExecuteMapInteraction();
-    void HideMapInteractionButton();
-}
 
 public class MapInteractionButton : MonoBehaviour, IMapInteractionButton
 {
@@ -51,5 +45,10 @@ public class MapInteractionButton : MonoBehaviour, IMapInteractionButton
     {
         string mazeName = _triggerPlayer.OccupiedMazeLevelEntry.MazeLevelName;
         _triggerPlayer.PerformMazeLevelEntryAction(mazeName);
+    }
+
+    public bool IsActive()
+    {
+        return gameObject.activeSelf;
     }
 }

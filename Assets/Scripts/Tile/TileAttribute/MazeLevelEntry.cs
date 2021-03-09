@@ -55,7 +55,6 @@ public class MazeLevelEntry : MonoBehaviour, ITileAttribute
         {
             _occupyingPlayers.Add(player);
             player.OccupiedMazeLevelEntry = this;
-            MainScreenCameraCanvas.Instance.ShowMapInteractionButton(player, transform.position, "Enter default maze");
         }
     }
 

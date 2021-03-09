@@ -37,6 +37,13 @@ public class OverworldPlayerCharacter : PlayerCharacter
                     PerformMazeLevelEntryAction(OccupiedMazeLevelEntry.MazeLevelName);
                 }
             }
+            if (OccupiedMazeLevelEntry.Tile.GridLocation.X == CurrentGridLocation.X && OccupiedMazeLevelEntry.Tile.GridLocation.Y == CurrentGridLocation.Y)
+            {
+                if (!MainScreenCameraCanvas.Instance.MapInteractionButton.IsActive())
+                {
+                    MainScreenCameraCanvas.Instance.ShowMapInteractionButton(this, new Vector2(OccupiedMazeLevelEntry.Tile.GridLocation.X, OccupiedMazeLevelEntry.Tile.GridLocation.Y), "Enter " + OccupiedMazeLevelEntry.MazeLevelName);
+                }
+            }
         }
     }
 
