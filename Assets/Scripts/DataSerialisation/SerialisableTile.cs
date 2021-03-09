@@ -62,23 +62,12 @@ public class SerialisableTile
 
         foreach (ITileBackground tileBackground in tile.TileBackgrounds)
         {
-            if (tileBackground.GetType() == typeof(MazeTilePath) || tileBackground.GetType() == typeof(OverworldTilePath))
-            {
-                TilePath tilePath = tileBackground as TilePath;
-                SerialisableTilePathBackground serialisedTilePathBackground =
-                    new SerialisableTilePathBackground(tilePath.ConnectionScore);
-                tilebackgrounds.Add(serialisedTilePathBackground);
-            }
-            else if (tileBackground.GetType() == typeof(MazeTileBaseBackground) || (tileBackground.GetType() == typeof(OverworldTileBaseBackground)))
-            {
-                SerialisableTileBaseBackground serialisedTileBaseBackground =
-                    new SerialisableTileBaseBackground(-1); // TODO: make work/remove connection scores for BaseBackground
-                tilebackgrounds.Add(serialisedTileBaseBackground);
-            }
-            else
-            {
-                Logger.Error($"Could not serialise the tile background {tileBackground.GetType()}");
-            }
+            ISerialisableTileBackground iSerialisableTileBackground = CreateSerialisableTileBackground(tileBackground);
+
+            SerialisableTileBackground serialisableTileBackground = new SerialisableTileBackground(
+                iSerialisableTileBackground.GetType().ToString(), iSerialisableTileBackground
+                );
+            tilebackgrounds.Add(serialisableTileBackground);
         }
 
         return tilebackgrounds;
@@ -94,6 +83,28 @@ public class SerialisableTile
         }
 
         return serialisableTilesToTransform;
+    }
+
+    private ISerialisableTileBackground CreateSerialisableTileBackground(ITileBackground tileBackground)
+    {
+
+        if (tileBackground.GetType() == typeof(MazeTilePath) || tileBackground.GetType() == typeof(OverworldTilePath))
+        {
+            TilePath tilePath = tileBackground as TilePath;
+
+            SerialisableTilePathBackground serialisableTilePathBackground = new SerialisableTilePathBackground(tilePath.ConnectionScore);
+            return serialisableTilePathBackground;
+        }
+        else if (tileBackground.GetType() == typeof(MazeTileBaseBackground) || (tileBackground.GetType() == typeof(OverworldTileBaseBackground)))
+        {
+            SerialisableTileBaseBackground serialisableTileBaseBackground = new SerialisableTileBaseBackground();
+            return serialisableTileBaseBackground;
+        }
+        else
+        {
+            Logger.Error($"Could not serialise the tile background {tileBackground.GetType()}");
+            return null;
+        }
     }
 
     private ISerialisableTileAttribute CreateSerialisableTileAttribute(ITileAttribute tileAttribute)

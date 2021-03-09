@@ -132,25 +132,11 @@ public class EditorOverworldModificationPanel : EditorGridModificationPanel
                 List<SerialisableTileAttribute> tileAttributes = new List<SerialisableTileAttribute>();
                 List<SerialisableTileBackground> tileBackgrounds = new List<SerialisableTileBackground>();
 
-                //SerialisableTileAttribute edgeObstacle = TryAddEdgeObstacle(gridLocation);
-
-                //if (edgeObstacle != null)
-                //{
-                //    tileAttributes.Add(edgeObstacle);
-                //}
-
-                //SerialisableTilePathBackground overworldTilePath = TryAddPathsForNewOverworld(gridLocation, tileAttributes);
-
-                //if (overworldTilePath != null)
-                //{
-                //    tileBackgrounds.Add(overworldTilePath);
-                //}
-
                 SerialisableTileBaseBackground baseBackground = TryAddBaseBackgroundForNewOverworld(tileBackgrounds, tileAttributes);
 
                 if (baseBackground != null)
                 {
-                    tileBackgrounds.Add(baseBackground);
+                    tileBackgrounds.Add(new SerialisableTileBackground(baseBackground.GetType().ToString(), baseBackground));
                 }
 
                 SerialisableTile tile = new SerialisableTile(tileId, tileAttributes, tileBackgrounds, gridLocation.X, gridLocation.Y);
@@ -166,17 +152,24 @@ public class EditorOverworldModificationPanel : EditorGridModificationPanel
 
     private SerialisableTileBaseBackground TryAddBaseBackgroundForNewOverworld(List<SerialisableTileBackground> tileBackgrounds, List<SerialisableTileAttribute> tileAttributes)
     {
-        SerialisableTileBackground pathBackgrounds = tileBackgrounds.FirstOrDefault(background => background.TileConnectionScore == 16);
-        if (pathBackgrounds != null)
+        for (int i = 0; i < tileBackgrounds.Count; i++)
         {
-            return null;
+            Type type = Type.GetType(tileBackgrounds[i].BackgroundType);
+            if (type.Equals(typeof(SerialisableTilePathBackground)))
+            {
+                SerialisableTilePathBackground serialisableTilePathBackground = (SerialisableTilePathBackground)JsonUtility.FromJson(tileBackgrounds[i].SerialisedData, type);
+                if (serialisableTilePathBackground.TileConnectionScore == 16)
+                {
+                    return null;
+                }
+            }
         }
 
         SerialisableTileObstacleAttribute obstacleAttribute = tileAttributes.OfType<SerialisableTileObstacleAttribute>().FirstOrDefault();
 
         if (obstacleAttribute == null)
         {
-            return new SerialisableTileBaseBackground(-1);
+            return new SerialisableTileBaseBackground();
         }
 
         if (obstacleAttribute.ConnectionScore == 16)
@@ -184,7 +177,7 @@ public class EditorOverworldModificationPanel : EditorGridModificationPanel
             return null;
         }
 
-        return new SerialisableTileBaseBackground(-1);
+        return new SerialisableTileBaseBackground();
     }
 
 }

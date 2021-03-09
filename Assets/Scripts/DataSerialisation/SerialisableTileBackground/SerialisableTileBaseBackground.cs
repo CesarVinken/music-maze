@@ -1,11 +1,9 @@
 ﻿using System;
 
 [Serializable]
-public class SerialisableTileBaseBackground : SerialisableTileBackground
+public class SerialisableTileBaseBackground : ISerialisableTileBackground
 {
-    public SerialisableTileBaseBackground(int connectionScore)
+    public SerialisableTileBaseBackground()
     {
-        TileBackgroundId = BaseBackgroundCode;
-        TileConnectionScore = connectionScore;
     }
 }

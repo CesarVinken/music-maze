@@ -106,17 +106,21 @@ public class InGameOverworld : Overworld, IInGameLevel
 
         foreach (SerialisableTileBackground serialisableTileBackground in serialisableTile.TileBackgrounds)
         {
-            if (serialisableTileBackground.TileBackgroundId == SerialisableTileBackground.PathBackgroundCode)
+            Type type = Type.GetType(serialisableTileBackground.BackgroundType);
+            
+            if (type.Equals(typeof(SerialisableTilePathBackground)))
             {
-                tileBackgroundPlacer.PlacePath(new OverworldDefaultPathType(), new TileConnectionScoreInfo(serialisableTileBackground.TileConnectionScore));
+                SerialisableTilePathBackground serialisableTilePathBackground = (SerialisableTilePathBackground)JsonUtility.FromJson(serialisableTileBackground.SerialisedData, type);
+
+                tileBackgroundPlacer.PlacePath(new OverworldDefaultPathType(), new TileConnectionScoreInfo(serialisableTilePathBackground.TileConnectionScore));
             }
-            else if (serialisableTileBackground.TileBackgroundId == SerialisableTileBackground.BaseBackgroundCode)
+            else if (type.Equals(typeof(SerialisableTileBaseBackground)))
             {
                 tileBackgroundPlacer.PlaceBaseBackground(new OverworldDefaultBaseBackgroundType());
             }
             else
             {
-                Logger.Error($"Unknown TileBackgroundId {serialisableTileBackground.TileBackgroundId}");
+                Logger.Error($"Unknown background of type {type}");
             }
         }
     }

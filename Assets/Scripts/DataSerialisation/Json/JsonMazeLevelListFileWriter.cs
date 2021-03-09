@@ -9,7 +9,7 @@ public class JsonMazeLevelListFileWriter : IJsonFileWriter
 
     public void SerialiseData<T>(T levelNamesData)
     {
-        Logger.Error("Are we goingto erase all Maze Level Names Data??? And why?");
+        Logger.Error("Are we going to erase all Maze Level Names Data??? And why?");
         _levelNamesData = levelNamesData as MazeLevelNamesData;
         _path = Path.Combine(Application.dataPath, "StreamingAssets", "maze", "levels.json");
 

@@ -83,14 +83,14 @@ public class EditorMazeModificationPanel : EditorGridModificationPanel
 
                 if (mazeTilePath != null)
                 {
-                    tileBackgrounds.Add(mazeTilePath);
+                    tileBackgrounds.Add(new SerialisableTileBackground(mazeTilePath.GetType().ToString(), mazeTilePath));
                 }
 
                 SerialisableTileBaseBackground baseBackground = TryAddBaseBackgroundForNewMaze(tileBackgrounds, tileAttributes);
 
                 if (baseBackground != null)
                 {
-                    tileBackgrounds.Add(baseBackground);
+                    tileBackgrounds.Add(new SerialisableTileBackground(baseBackground.GetType().ToString(), baseBackground));
                 }
 
                 SerialisableTile tile = new SerialisableTile(tileId, tileAttributes, tileBackgrounds, gridLocation.X, gridLocation.Y);
@@ -286,17 +286,24 @@ public class EditorMazeModificationPanel : EditorGridModificationPanel
     // return a base background, except for tiles that are completely covered by an obstacle or path (with connections to all sides)
     private SerialisableTileBaseBackground TryAddBaseBackgroundForNewMaze(List<SerialisableTileBackground> tileBackgrounds, List<SerialisableTileAttribute> tileAttributes)
     {
-        SerialisableTileBackground pathBackgrounds = tileBackgrounds.FirstOrDefault(background => background.TileConnectionScore == 16);
-        if (pathBackgrounds != null)
+        for (int i = 0; i < tileBackgrounds.Count; i++)
         {
-            return null;
+            Type type = Type.GetType(tileBackgrounds[i].BackgroundType);
+            if (type.Equals(typeof(SerialisableTilePathBackground)))
+            {
+                SerialisableTilePathBackground serialisableTilePathBackground = (SerialisableTilePathBackground)JsonUtility.FromJson(tileBackgrounds[i].SerialisedData, type);
+                if(serialisableTilePathBackground.TileConnectionScore == 16)
+                {
+                    return null;
+                }
+            }
         }
 
         SerialisableTileObstacleAttribute obstacleAttribute = tileAttributes.OfType<SerialisableTileObstacleAttribute>().FirstOrDefault();
 
         if (obstacleAttribute == null)
         {
-            return new SerialisableTileBaseBackground(-1);
+            return new SerialisableTileBaseBackground();
         }
 
         if (obstacleAttribute.ConnectionScore == 16)
@@ -304,7 +311,7 @@ public class EditorMazeModificationPanel : EditorGridModificationPanel
             return null;
         }
 
-        return new SerialisableTileBaseBackground(-1);
+        return new SerialisableTileBaseBackground();
     }
 
     private void CheckForTilesWithoutTransformationTriggerers()

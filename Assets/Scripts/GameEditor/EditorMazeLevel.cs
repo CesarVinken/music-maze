@@ -148,17 +148,20 @@ public class EditorMazeLevel : MazeLevel, IEditorLevel
 
         foreach (SerialisableTileBackground serialisableTileBackground in serialisableTile.TileBackgrounds)
         {
-            if (serialisableTileBackground.TileBackgroundId == SerialisableTileBackground.PathBackgroundCode)
+            Type type = Type.GetType(serialisableTileBackground.BackgroundType);
+
+            if (type.Equals(typeof(SerialisableTilePathBackground)))
             {
-                tileBackgroundPlacer.PlacePath(new MazeLevelDefaultPathType(), new TileConnectionScoreInfo(serialisableTileBackground.TileConnectionScore)); //TODO, fix path type
+                SerialisableTilePathBackground serialisableTilePathBackground = (SerialisableTilePathBackground)JsonUtility.FromJson(serialisableTileBackground.SerialisedData, type);
+                tileBackgroundPlacer.PlacePath(new MazeLevelDefaultPathType(), new TileConnectionScoreInfo(serialisableTilePathBackground.TileConnectionScore));
             }
-            else if (serialisableTileBackground.TileBackgroundId == SerialisableTileBackground.BaseBackgroundCode)
+            else if (type.Equals(typeof(SerialisableTileBaseBackground)))
             {
-                tileBackgroundPlacer.PlaceBaseBackground(new MazeLevelDefaultBaseBackgroundType()); // TODO fix background type
+                tileBackgroundPlacer.PlaceBaseBackground(new MazeLevelDefaultBaseBackgroundType());
             }
             else
             {
-                Logger.Error($"Unknown TileBackgroundId {serialisableTileBackground.TileBackgroundId}");
+                Logger.Error($"Unknown TileBackgroundType {serialisableTileBackground.BackgroundType}");
             }
         }
     }
