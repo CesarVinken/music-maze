@@ -14,17 +14,17 @@ public static class PersistentGameManager
     public static Platform CurrentPlatform;
     public static SceneType CurrentSceneType;
     public static SceneLoadOrigin SceneLoadOrigin = SceneLoadOrigin.Gameplay;
-    private static string _currentScene = "";
+    private static string _currentMazeLevelName  = "";
     private static string _overworldName = "";
     private static string _originMazeLevelName = "";
 
-    public static string CurrentScene { get => _currentScene; private set => _currentScene = value; }
+    public static string CurrentSceneName { get => _currentMazeLevelName; private set => _currentMazeLevelName = value; }
     public static string OverworldName { get => _overworldName; private set => _overworldName = value; }
-    public static string OriginMazeLevelName { get => _originMazeLevelName; private set => _originMazeLevelName = value; }
+    public static string LastMazeLevelName { get => _originMazeLevelName; private set => _originMazeLevelName = value; }
 
-    public static void SetCurrentSceneName(string currentScene)
+    public static void SetCurrentSceneName(string currentMazeLevelName)
     {
-        _currentScene = currentScene;
+        _currentMazeLevelName = currentMazeLevelName;
     }
 
     public static void SetOverworldName(string overworldName)
@@ -32,7 +32,7 @@ public static class PersistentGameManager
         _overworldName = overworldName;
     }
 
-    public static void SetOriginMazeLevelName(string originMazeLevelName)
+    public static void SetLastMazeLevelName(string originMazeLevelName)
     {
         _originMazeLevelName = originMazeLevelName;
     }
@@ -170,18 +170,22 @@ public class GameManager : MonoBehaviourPunCallbacks
                 // We loaded a maze scene through the game. Set up the maze level
                 if(PersistentGameManager.SceneLoadOrigin == SceneLoadOrigin.Gameplay)
                 {
-                    if (PersistentGameManager.CurrentScene == "")
+                    if (PersistentGameManager.CurrentSceneName == "")
                     {
                         PersistentGameManager.SetCurrentSceneName("default");
                     }
 
-                    string mazeName = PersistentGameManager.CurrentScene;
+                    string mazeName = PersistentGameManager.CurrentSceneName;
+
+                    PersistentGameManager.SetLastMazeLevelName(mazeName);
                     Logger.Log($"We will load the maze '{mazeName}'");
                     MazeLevelData startUpMazeLevelData = MazeLevelLoader.LoadMazeLevelData(mazeName);
 
                     if (startUpMazeLevelData == null)
                     {
-                        Logger.Error("Could not find the default level for startup");
+                        Logger.Error($"Could not find the level {mazeName} for startup. Will load defult level instead.");
+                        mazeName = "default";
+                        startUpMazeLevelData = MazeLevelLoader.LoadMazeLevelData(mazeName);
                     }
 
                     MazeLevelLoader.LoadMazeLevel(startUpMazeLevelData);

@@ -55,9 +55,10 @@ public class OverworldCharacterManager : MonoBehaviourPunCallbacks, ICharacterMa
         {
             Debug.Log("Instantiating Player 1");
 
+            GridLocation spawnLocation = GetSpawnLocation(PlayerNumber.Player1, level);
             CharacterBundle PlayerBundle = SpawnCharacter(
                 level.PlayerCharacterSpawnpoints[PlayerNumber.Player1].CharacterBlueprint,
-                level.PlayerCharacterSpawnpoints[PlayerNumber.Player1].GridLocation);
+                spawnLocation);
             Player1GO = PlayerBundle.CharacterGO;
             PlayerCharacter player = PlayerBundle.Character as PlayerCharacter;
         }
@@ -65,7 +66,8 @@ public class OverworldCharacterManager : MonoBehaviourPunCallbacks, ICharacterMa
         {
             Debug.Log("Instantiating Player 2");
 
-            CharacterBundle PlayerBundle = SpawnCharacter(level.PlayerCharacterSpawnpoints[PlayerNumber.Player2].CharacterBlueprint, level.PlayerCharacterSpawnpoints[PlayerNumber.Player2].GridLocation);
+            GridLocation spawnLocation = GetSpawnLocation(PlayerNumber.Player2, level);
+            CharacterBundle PlayerBundle = SpawnCharacter(level.PlayerCharacterSpawnpoints[PlayerNumber.Player2].CharacterBlueprint, spawnLocation);
             Player2GO = PlayerBundle.CharacterGO;
             PlayerCharacter player = PlayerBundle.Character as PlayerCharacter;
         }
@@ -175,5 +177,25 @@ public class OverworldCharacterManager : MonoBehaviourPunCallbacks, ICharacterMa
         }
 
         return ourPlayerCharacter;
+    }
+
+    private GridLocation GetSpawnLocation(PlayerNumber playerNumber, InGameOverworld level)
+    {
+        for (int i = 0; i < OverworldManager.Instance.Overworld.MazeEntries.Count; i++)
+        {
+            MazeLevelEntry mazeLevelEntry = OverworldManager.Instance.Overworld.MazeEntries[i];
+            if (mazeLevelEntry.MazeLevelName == PersistentGameManager.LastMazeLevelName)
+            {
+                return mazeLevelEntry.Tile.GridLocation;
+            }
+        }
+
+        // If we do not find a location for the last level, spawn charactes at the defaul player character spawnpoint.
+        if (playerNumber == PlayerNumber.Player1)
+        {
+            return level.PlayerCharacterSpawnpoints[PlayerNumber.Player1].GridLocation;
+        }
+
+        return level.PlayerCharacterSpawnpoints[PlayerNumber.Player2].GridLocation;
     }
 }

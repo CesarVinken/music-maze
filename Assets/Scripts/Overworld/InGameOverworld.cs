@@ -87,7 +87,8 @@ public class InGameOverworld : Overworld, IInGameLevel
             if (type.Equals(typeof(SerialisableMazeLevelEntryAttribute)))
             {
                 SerialisableMazeLevelEntryAttribute serialisableMazeLevelEntryAttribute = (SerialisableMazeLevelEntryAttribute)JsonUtility.FromJson(serialisableTileAttribute.SerialisedData, type);
-                tileAttributePlacer.PlaceMazeLevelEntry(serialisableMazeLevelEntryAttribute.MazeLevelName);
+                MazeLevelEntry mazeLevelEntry = tileAttributePlacer.PlaceMazeLevelEntry(serialisableMazeLevelEntryAttribute.MazeLevelName);
+                MazeEntries.Add(mazeLevelEntry);
             }
             else if (type.Equals(typeof(SerialisablePlayerSpawnpointAttribute)))
             {

@@ -77,6 +77,7 @@ public class EditorCanvasUI : MonoBehaviour
             PersistentGameManager.SetOverworldName("overworld");
         }
 
+        PersistentGameManager.SetLastMazeLevelName(PersistentGameManager.CurrentSceneName);
         PersistentGameManager.SetCurrentSceneName(PersistentGameManager.OverworldName);
 
         PhotonNetwork.LoadLevel("Overworld");
@@ -87,6 +88,7 @@ public class EditorCanvasUI : MonoBehaviour
         PersistentGameManager.SceneLoadOrigin = SceneLoadOrigin.Editor;
 
         string mazeName = "default";
+        PersistentGameManager.SetLastMazeLevelName(mazeName);
         PersistentGameManager.SetCurrentSceneName(mazeName);
 
         PhotonNetwork.LoadLevel("Maze");

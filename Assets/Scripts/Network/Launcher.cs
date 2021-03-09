@@ -190,6 +190,7 @@ namespace Photon.Pun.Demo.PunBasics
                 }
                 else
                 {
+                    PersistentGameManager.SetLastMazeLevelName("default");
                     PersistentGameManager.SetCurrentSceneName("default");
                     PhotonNetwork.LoadLevel("Maze");
                 }
@@ -220,6 +221,7 @@ namespace Photon.Pun.Demo.PunBasics
             }
             else
             {
+                PersistentGameManager.SetLastMazeLevelName("default");
                 PersistentGameManager.SetCurrentSceneName("default");
                 PhotonNetwork.LoadLevel("Maze");
             }

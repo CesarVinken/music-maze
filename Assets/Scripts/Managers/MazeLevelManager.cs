@@ -198,6 +198,7 @@ public class MazeLevelManager : MonoBehaviour, IOnEventCallback
     {
         if (GameRules.GamePlayerType == GamePlayerType.SinglePlayer)
         {
+            PersistentGameManager.SetLastMazeLevelName(PersistentGameManager.CurrentSceneName);
             PersistentGameManager.SetCurrentSceneName(overworldName);
             PhotonNetwork.LoadLevel("Overworld");
         }
@@ -275,6 +276,7 @@ public class MazeLevelManager : MonoBehaviour, IOnEventCallback
             object[] data = (object[])photonEvent.CustomData;
             string overworldName = (string)data[0];
 
+            PersistentGameManager.SetLastMazeLevelName(PersistentGameManager.CurrentSceneName);
             PersistentGameManager.SetCurrentSceneName(PersistentGameManager.OverworldName);
             PhotonNetwork.LoadLevel("Overworld");
         }

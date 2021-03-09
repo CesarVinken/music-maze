@@ -6,6 +6,8 @@ public class Overworld : IGameScene<Tile>
     public string Name { get; set; }
     public List<Tile> Tiles { get; set; }
 
+    public List<MazeLevelEntry> MazeEntries = new List<MazeLevelEntry>();
+
     protected GridLocation _levelBounds = new GridLocation(0, 0);
     public GridLocation LevelBounds { get => _levelBounds; set => _levelBounds = value; }
 

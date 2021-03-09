@@ -59,8 +59,11 @@ public class OverworldManager : MonoBehaviour, IOnEventCallback
         SceneObjectManager.Instance.UnloadSceneObjects();
 
         Logger.Log(Logger.Initialisation, "Unload Overworld {0}", Overworld);
+
         Overworld.Tiles.Clear();
         Overworld.TilesByLocation.Clear();
+        Overworld.MazeEntries.Clear();
+
         CameraController.Instance.ResetCamera();
         Overworld = null;
     }
