@@ -12,8 +12,10 @@ public abstract class Tile : MonoBehaviour
 
     public Dictionary<ObjectDirection, Tile> Neighbours = new Dictionary<ObjectDirection, Tile>();
 
-    [SerializeField] public List<ITileBackground> TileBackgrounds = new List<ITileBackground>();
-    [SerializeField] public List<ITileAttribute> TileAttributes = new List<ITileAttribute>();
+    public ITileMainMaterial TileMainMaterial;
+
+    protected List<ITileAttribute> _tileAttributes = new List<ITileAttribute>();
+    protected List<ITileBackground> _tileBackgrounds = new List<ITileBackground>();
 
     public void Awake()
     {
@@ -37,11 +39,41 @@ public abstract class Tile : MonoBehaviour
         GridLocation = new GridLocation(x, y);
     }
 
+    public void AddBackground(ITileBackground tileBackground)
+    {
+        _tileBackgrounds.Add(tileBackground);
+    }
+
+    public List<ITileBackground> GetBackgrounds()
+    {
+        return _tileBackgrounds;
+    }
+
+    public void RemoveBackground(ITileBackground tileBackground)
+    {
+        _tileBackgrounds.Remove(tileBackground);
+    }
+
+    public void AddAttribute(ITileAttribute tileAttribute)
+    {
+        _tileAttributes.Add(tileAttribute);
+    }
+
+    public List<ITileAttribute> GetAttributes()
+    {
+        return _tileAttributes;
+    }
+
+    public void RemoveAttribute(ITileAttribute tileAttribute)
+    {
+        _tileAttributes.Remove(tileAttribute);
+    }
+
     public abstract TileObstacle TryGetTileObstacle();
 
     public TilePath TryGetTilePath()
     {
-        TilePath tilePath = (TilePath)TileBackgrounds.FirstOrDefault(background => background is TilePath);
+        TilePath tilePath = (TilePath)_tileBackgrounds.FirstOrDefault(background => background is TilePath);
 
         if (tilePath == null)
         {
@@ -52,21 +84,27 @@ public abstract class Tile : MonoBehaviour
         return tilePath;
     }
 
-    public void InitialiseTileAttributes()
+    public void InitialiseTileMainMaterial()
     {
-        for (int i = 0; i < TileAttributes.Count; i++)
-        {
-            TileAttributes[i].SetTile(this);
-        }
+        TileMainMaterial.SetTile(this);
     }
 
     public void InitialiseTileBackgrounds()
     {
-        for (int i = 0; i < TileBackgrounds.Count; i++)
+        for (int i = 0; i < _tileBackgrounds.Count; i++)
         {
-            TileBackgrounds[i].SetTile(this);
+            _tileBackgrounds[i].SetTile(this);
         }
     }
+
+    public void InitialiseTileAttributes()
+    {
+        for (int i = 0; i < _tileAttributes.Count; i++)
+        {
+            _tileAttributes[i].SetTile(this);
+        }
+    }
+
 
     public void AddNeighbours<T>(T level) where T : IGameScene<Tile>
     {

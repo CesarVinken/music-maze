@@ -10,7 +10,7 @@ public class EditorOverworldMazeLevelEntryTileAttribute : EditorOverworldTileAtt
         EditorOverworldTileAttributePlacer tileAttributePlacer = new EditorOverworldTileAttributePlacer(tile);
         OverworldTileAttributeRemover tileAttributeRemover = new OverworldTileAttributeRemover(tile);
 
-        ITileAttribute MazeLevelEntry = (MazeLevelEntry)tile.TileAttributes.FirstOrDefault(attribute => attribute is MazeLevelEntry);
+        ITileAttribute MazeLevelEntry = (MazeLevelEntry)tile.GetAttributes().FirstOrDefault(attribute => attribute is MazeLevelEntry);
         if (MazeLevelEntry == null)
         {
             tileAttributeRemover.RemovePlayerSpawnpoint();

@@ -10,7 +10,7 @@ public class EditorObstacleTileAttribute : EditorMazeTileAttributeModifier
         EditorMazeTileAttributePlacer tileAttributePlacer = new EditorMazeTileAttributePlacer(tile);
         MazeTileAttributeRemover tileAttributeRemover = new MazeTileAttributeRemover(tile);
 
-        ITileAttribute tileObstacle = (TileObstacle)tile.TileAttributes.FirstOrDefault(attribute => (attribute is TileObstacle && !(attribute is PlayerExit)));
+        ITileAttribute tileObstacle = (TileObstacle)tile.GetAttributes().FirstOrDefault(attribute => (attribute is TileObstacle && !(attribute is PlayerExit)));
         if (tileObstacle == null)
         {
             tileAttributeRemover.RemoveEnemySpawnpoint();
@@ -31,7 +31,7 @@ public class EditorObstacleTileAttribute : EditorMazeTileAttributeModifier
 
     public override void PlaceAttributeVariation(EditorMazeTile tile)
     {
-        ITileAttribute tileObstacle = (TileObstacle)tile.TileAttributes.FirstOrDefault(attribute => attribute is TileObstacle);
+        ITileAttribute tileObstacle = (TileObstacle)tile.GetAttributes().FirstOrDefault(attribute => attribute is TileObstacle);
 
         if (tileObstacle == null) return; // only place variation if there is already an obstacle
 

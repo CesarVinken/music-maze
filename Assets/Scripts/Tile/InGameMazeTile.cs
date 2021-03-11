@@ -76,18 +76,18 @@ public class InGameMazeTile : MazeTile
 
     public void TriggerTransformationOnSelf()
     {
-        for (int i = 0; i < TileAttributes.Count; i++)
+        for (int i = 0; i < _tileAttributes.Count; i++)
         {
-            ITransformable attribute = TileAttributes[i] as ITransformable;
+            ITransformable attribute = _tileAttributes[i] as ITransformable;
             if (attribute != null)
             {
                 attribute.TriggerTransformation();
             }
         }
 
-        for (int j = 0; j < TileBackgrounds.Count; j++)
+        for (int j = 0; j < _tileBackgrounds.Count; j++)
         {
-            ITransformable background = TileBackgrounds[j] as ITransformable;
+            ITransformable background = _tileBackgrounds[j] as ITransformable;
             if (background != null)
             {
                 background.TriggerTransformation();

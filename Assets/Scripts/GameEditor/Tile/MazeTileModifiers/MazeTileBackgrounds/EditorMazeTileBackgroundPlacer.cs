@@ -23,7 +23,7 @@ public class EditorMazeTileBackgroundPlacer : MazeTileBackgroundPlacer<EditorMaz
         MazeTilePath mazeTilePath = mazeTilePathGO.GetComponent<MazeTilePath>();
         mazeTilePath.WithPathType(mazeTilePathType);
         mazeTilePath.WithConnectionScoreInfo(pathConnectionScore);
-        Tile.TileBackgrounds.Add(mazeTilePath as ITileBackground);
+        Tile.AddBackground(mazeTilePath as ITileBackground);
         Tile.TryMakeMarkable(true);
 
         // Update pathConnections for neighbouring tiles

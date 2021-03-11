@@ -13,12 +13,12 @@ public class MazeTileAttributeRemover : TileAttributeRemover
     public void RemovePlayerExit()
     {
         _tile.Walkable = true;
-        PlayerExit playerExit = (PlayerExit)_tile.TileAttributes.FirstOrDefault(attribute => attribute is PlayerExit);
+        PlayerExit playerExit = (PlayerExit)_tile.GetAttributes().FirstOrDefault(attribute => attribute is PlayerExit);
         if (playerExit == null) return;
 
         ObstacleType obstacleType = playerExit.ObstacleType;
 
-        _tile.TileAttributes.Remove(playerExit);
+        _tile.RemoveAttribute(playerExit);
         playerExit.Remove();
 
         UpdateNeighboursForRemovedObstacle(obstacleType);
@@ -27,7 +27,7 @@ public class MazeTileAttributeRemover : TileAttributeRemover
     public override void RemoveTileObstacle()
     {
         _tile.Walkable = true;
-        TileObstacle tileObstacle = (TileObstacle)_tile.TileAttributes.FirstOrDefault(attribute => attribute is TileObstacle);
+        TileObstacle tileObstacle = (TileObstacle)_tile.GetAttributes().FirstOrDefault(attribute => attribute is TileObstacle);
         if (tileObstacle == null) return;
         if (tileObstacle is PlayerExit) return;
 
@@ -42,7 +42,7 @@ public class MazeTileAttributeRemover : TileAttributeRemover
             tileBackgroundPlacer.PlaceBaseBackground(new MazeLevelDefaultBaseBackgroundType());
         }
 
-        _tile.TileAttributes.Remove(tileObstacle);
+        _tile.RemoveAttribute(tileObstacle);
         tileObstacle.Remove();
 
         //After removing tile, check with neighbour tiles if wall connections should be updated
@@ -51,25 +51,25 @@ public class MazeTileAttributeRemover : TileAttributeRemover
 
     public override void RemovePlayerSpawnpoint()
     {
-        ITileAttribute playerSpawnpoint = (PlayerSpawnpoint)_tile.TileAttributes.FirstOrDefault(attribute => attribute is PlayerSpawnpoint);
+        ITileAttribute playerSpawnpoint = (PlayerSpawnpoint)_tile.GetAttributes().FirstOrDefault(attribute => attribute is PlayerSpawnpoint);
         if (playerSpawnpoint == null) return;
-        _tile.TileAttributes.Remove(playerSpawnpoint);
+        _tile.RemoveAttribute(playerSpawnpoint);
         playerSpawnpoint.Remove();
     }
 
     public void RemoveEnemySpawnpoint()
     {
-        ITileAttribute enemySpawnpoint = (EnemySpawnpoint)_tile.TileAttributes.FirstOrDefault(attribute => attribute is EnemySpawnpoint);
+        ITileAttribute enemySpawnpoint = (EnemySpawnpoint)_tile.GetAttributes().FirstOrDefault(attribute => attribute is EnemySpawnpoint);
         if (enemySpawnpoint == null) return;
-        _tile.TileAttributes.Remove(enemySpawnpoint);
+        _tile.RemoveAttribute(enemySpawnpoint);
         enemySpawnpoint.Remove();
     }
 
     public void RemovePlayerOnlyAttribute()
     {
-        ITileAttribute playerOnlyAttribute = (PlayerOnly)_tile.TileAttributes.FirstOrDefault(attribute => attribute is PlayerOnly);
+        ITileAttribute playerOnlyAttribute = (PlayerOnly)_tile.GetAttributes().FirstOrDefault(attribute => attribute is PlayerOnly);
         if (playerOnlyAttribute == null) return;
-        _tile.TileAttributes.Remove(playerOnlyAttribute);
+        _tile.RemoveAttribute(playerOnlyAttribute);
         playerOnlyAttribute.Remove();
     }
 

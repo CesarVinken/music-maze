@@ -10,7 +10,7 @@ public class EditorPlayerSpawnpointOverworldTileAttribute : EditorOverworldTileA
         EditorOverworldTileAttributePlacer tileAttributePlacer = new EditorOverworldTileAttributePlacer(tile);
         OverworldTileAttributeRemover tileAttributeRemover = new OverworldTileAttributeRemover(tile);
 
-        ITileAttribute playerSpawnpoint = (PlayerSpawnpoint)tile.TileAttributes.FirstOrDefault(attribute => attribute is PlayerSpawnpoint);
+        ITileAttribute playerSpawnpoint = (PlayerSpawnpoint)tile.GetAttributes().FirstOrDefault(attribute => attribute is PlayerSpawnpoint);
         if (playerSpawnpoint == null)
         {
             //tileAttributeRemover.RemoveTileObstacle();

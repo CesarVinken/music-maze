@@ -174,7 +174,7 @@ public class MazeLevelManager : MonoBehaviour, IOnEventCallback
         {
             player.LastTile = tile;
 
-            MazeTilePath mazeTilePath = (MazeTilePath)tile.TileBackgrounds.FirstOrDefault(background => background is MazeTilePath);
+            MazeTilePath mazeTilePath = (MazeTilePath)tile.GetBackgrounds().FirstOrDefault(background => background is MazeTilePath);
             if (mazeTilePath == null) return;
 
             PlayerMark playerMark = new PlayerMark(mazeTilePath.ConnectionScore);
@@ -243,7 +243,7 @@ public class MazeLevelManager : MonoBehaviour, IOnEventCallback
 
             InGameMazeTile tile = Level.TilesByLocation[tileLocation] as InGameMazeTile;
 
-            MazeTilePath mazeTilePath = (MazeTilePath)tile.TileBackgrounds.FirstOrDefault(background => background is MazeTilePath);
+            MazeTilePath mazeTilePath = (MazeTilePath)tile.GetBackgrounds().FirstOrDefault(background => background is MazeTilePath);
             if (mazeTilePath == null) return;
 
             PlayerMark playerMark = new PlayerMark(mazeTilePath.ConnectionScore);
@@ -347,7 +347,7 @@ public class MazeLevelManager : MonoBehaviour, IOnEventCallback
         {
             MazeTile neighbour = item.Value as MazeTile;
 
-            MazeTilePath mazeTilePath = (MazeTilePath)neighbour.TileBackgrounds.FirstOrDefault(background => background is MazeTilePath);
+            MazeTilePath mazeTilePath = (MazeTilePath)neighbour.GetBackgrounds().FirstOrDefault(background => background is MazeTilePath);
             if (mazeTilePath == null) continue;
             
             if (neighbour.PlayerMark != null && neighbour.PlayerMark.Owner != PlayerMarkOwner.None) continue;

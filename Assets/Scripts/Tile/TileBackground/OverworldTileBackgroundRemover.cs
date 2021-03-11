@@ -14,7 +14,7 @@ public class OverworldTileBackgroundRemover : TileBackgroundRemover
 
     public override void RemovePath()
     {
-        OverworldTilePath overworldTilePath = (OverworldTilePath)_tile.TileBackgrounds.FirstOrDefault(background => background is OverworldTilePath);
+        OverworldTilePath overworldTilePath = (OverworldTilePath)_tile.GetBackgrounds().FirstOrDefault(background => background is OverworldTilePath);
         if (overworldTilePath == null) return;
 
         Logger.Log(overworldTilePath.TilePathType);
@@ -28,7 +28,7 @@ public class OverworldTileBackgroundRemover : TileBackgroundRemover
             tileBackgroundPlacer.PlaceBaseBackground(new OverworldDefaultBaseBackgroundType());
         }
 
-        _tile.TileBackgrounds.Remove(overworldTilePath);
+        _tile.RemoveBackground(overworldTilePath);
         overworldTilePath.Remove();
 
         //After removing tile, check with neighbour tiles if wall connections should be updated
@@ -58,11 +58,11 @@ public class OverworldTileBackgroundRemover : TileBackgroundRemover
 
     public override void RemoveBaseBackground(IBaseBackgroundType overworldTileBaseBackgroundType)
     {
-        OverworldTileBaseBackground overworldTileBaseBackground = (OverworldTileBaseBackground)_tile.TileBackgrounds.FirstOrDefault(background => background is OverworldTileBaseBackground);
+        OverworldTileBaseBackground overworldTileBaseBackground = (OverworldTileBaseBackground)_tile.GetBackgrounds().FirstOrDefault(background => background is OverworldTileBaseBackground);
 
         if (overworldTileBaseBackground == null) return;
 
-        _tile.TileBackgrounds.Remove(overworldTileBaseBackground);
+        _tile.GetBackgrounds().Remove(overworldTileBaseBackground);
         overworldTileBaseBackground.Remove();
     }
 }

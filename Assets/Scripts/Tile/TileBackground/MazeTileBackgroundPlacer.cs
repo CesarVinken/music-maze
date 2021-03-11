@@ -14,25 +14,13 @@ public class MazeTileBackgroundPlacer<T> : TileBackgroundPlacer<T> where T : Maz
         mazeTilePath.WithConnectionScoreInfo(pathConnectionScoreInfo);
         mazeTilePath.SetTile(Tile);
 
-        Tile.TileBackgrounds.Add(mazeTilePath);
+        Tile.AddBackground(mazeTilePath);
         Tile.TryMakeMarkable(true);
     }
 
-    //public void PlacePathVariation(MazeTilePath mazeTilePath)
-    //{
-    //    //return only connections that were updated
-    //    List<MazeTilePath> updatedPathConnections = NeighbourTileCalculator.GetUpdatedTileModifiersForVariation<MazeTilePath>(Tile, mazeTilePath, mazeTilePath.MazeTilePathType.ToString());
-
-    //    //update the sprites with the new variations
-    //    for (int i = 0; i < updatedPathConnections.Count; i++)
-    //    {
-    //        updatedPathConnections[i].WithConnectionScoreInfo(new TileConnectionScoreInfo(updatedPathConnections[i].ConnectionScore, updatedPathConnections[i].SpriteNumber));
-    //    }
-    //}
-
     public override void PlaceBaseBackground(IBaseBackgroundType baseBackgroundType)
     {
-        MazeTileBaseBackground oldBackground = (MazeTileBaseBackground)Tile.TileBackgrounds.FirstOrDefault(background => background is MazeTileBaseBackground);
+        MazeTileBaseBackground oldBackground = (MazeTileBaseBackground)Tile.GetBackgrounds().FirstOrDefault(background => background is MazeTileBaseBackground);
         if (oldBackground != null) return;
 
         GameObject baseBackgroundGO = GameObject.Instantiate(MazeLevelManager.Instance.TileBaseBackgroundPrefab, Tile.BackgroundsContainer);
@@ -41,6 +29,6 @@ public class MazeTileBackgroundPlacer<T> : TileBackgroundPlacer<T> where T : Maz
         int defaultConnectionScore = -1;
         baseBackground.WithPathConnectionScore(defaultConnectionScore);
         baseBackground.SetTile(Tile);
-        Tile.TileBackgrounds.Add(baseBackground as ITileBackground);
+        Tile.AddBackground(baseBackground as ITileBackground);
     }
 }

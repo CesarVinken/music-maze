@@ -10,7 +10,7 @@ public class EditorMazeTileBaseBackground : EditorMazeTileBackgroundModifier
         EditorMazeTileBackgroundPlacer tileBackgroundPlacer = new EditorMazeTileBackgroundPlacer(tile);
         MazeTileBackgroundRemover tileBackgroundRemover = new MazeTileBackgroundRemover(tile);
 
-        ITileBackground mazeTileBaseBackground = (MazeTileBaseBackground)tile.TileBackgrounds.FirstOrDefault(background => background is MazeTileBaseBackground);
+        ITileBackground mazeTileBaseBackground = (MazeTileBaseBackground)tile.GetBackgrounds().FirstOrDefault(background => background is MazeTileBaseBackground);
         if (mazeTileBaseBackground == null)
         {
             tileBackgroundPlacer.PlaceBaseBackground(new MazeLevelDefaultBaseBackgroundType());

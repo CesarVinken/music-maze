@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class OverworldTileBackgroundPlacer<T> : TileBackgroundPlacer<T> where T : OverworldTile
@@ -13,12 +14,14 @@ public class OverworldTileBackgroundPlacer<T> : TileBackgroundPlacer<T> where T 
         overworldTilePath.WithConnectionScoreInfo(pathConnectionScoreInfo);
         overworldTilePath.SetTile(Tile);
 
-        Tile.TileBackgrounds.Add(overworldTilePath);
+        Tile.AddBackground(overworldTilePath);
     }
 
     public override void PlaceBaseBackground(IBaseBackgroundType baseBackgroundType)
     {
-        OverworldTileBaseBackground oldBackground = (OverworldTileBaseBackground)Tile.TileBackgrounds.FirstOrDefault(background => background is OverworldTileBaseBackground);
+        List<ITileBackground> backgrounds = Tile.GetBackgrounds();
+        OverworldTileBaseBackground oldBackground = (OverworldTileBaseBackground)backgrounds.FirstOrDefault(background => background is OverworldTileBaseBackground);
+
         if (oldBackground != null) return;
 
         GameObject baseBackgroundGO = GameObject.Instantiate(OverworldManager.Instance.TileBaseBackgroundPrefab, Tile.BackgroundsContainer);
@@ -27,6 +30,6 @@ public class OverworldTileBackgroundPlacer<T> : TileBackgroundPlacer<T> where T 
         int defaultConnectionScore = -1;
         baseBackground.WithPathConnectionScore(defaultConnectionScore);
         baseBackground.SetTile(Tile);
-        Tile.TileBackgrounds.Add(baseBackground as ITileBackground);
+        Tile.AddBackground(baseBackground as ITileBackground);
     }
 }

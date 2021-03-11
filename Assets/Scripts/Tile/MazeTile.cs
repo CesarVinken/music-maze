@@ -11,10 +11,6 @@ public class MazeTile : Tile, IMazeLevel
 
     public PlayerMark PlayerMark = null;
 
-    //public Dictionary<ObjectDirection, MazeTile> Neighbours = new Dictionary<ObjectDirection, MazeTile>();
-
-
-
     public new void Awake()
     {
         base.Awake();
@@ -39,29 +35,13 @@ public class MazeTile : Tile, IMazeLevel
         }
     }
 
-    //public override void InitialiseTileAttributes()
-    //{
-    //    for (int i = 0; i < TileAttributes.Count; i++)
-    //    {
-    //        TileAttributes[i].SetTile(this);
-    //    }
-    //}
-
-    //public override void InitialiseTileBackgrounds()
-    //{
-    //    for (int i = 0; i < TileBackgrounds.Count; i++)
-    //    {
-    //        TileBackgrounds[i].SetTile(this);
-    //    }
-    //}
-
     public override TileObstacle TryGetTileObstacle()
     {
-        for (int i = 0; i < TileAttributes.Count; i++)
+        for (int i = 0; i < _tileAttributes.Count; i++)
         {
-            Logger.Log($"found attribute for {GridLocation.X}, {GridLocation.Y} is {TileAttributes[i].GetType()}");
+            Logger.Log($"found attribute for {GridLocation.X}, {GridLocation.Y} is {_tileAttributes[i].GetType()}");
         }
-        TileObstacle tileObstacle = (TileObstacle)TileAttributes.FirstOrDefault(attribute => attribute is TileObstacle);
+        TileObstacle tileObstacle = (TileObstacle)_tileAttributes.FirstOrDefault(attribute => attribute is TileObstacle);
 
         if (tileObstacle == null)
         {
@@ -74,7 +54,7 @@ public class MazeTile : Tile, IMazeLevel
 
     public void TryMakeMarkable(bool isMarkable)
     {
-        MazeTilePath mazeTilePath = (MazeTilePath)TileBackgrounds.FirstOrDefault(background => background is MazeTilePath);
+        MazeTilePath mazeTilePath = (MazeTilePath)_tileBackgrounds.FirstOrDefault(background => background is MazeTilePath);
 
         if (mazeTilePath == null)
         {
@@ -82,9 +62,9 @@ public class MazeTile : Tile, IMazeLevel
             return;
         }
 
-        for (int i = 0; i < TileAttributes.Count; i++)
+        for (int i = 0; i < _tileAttributes.Count; i++)
         {
-            if (TileAttributes[i] is PlayerExit)
+            if (_tileAttributes[i] is PlayerExit)
             {
                 Markable = false;
                 return;

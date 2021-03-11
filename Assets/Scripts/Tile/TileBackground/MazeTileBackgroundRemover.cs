@@ -12,7 +12,7 @@ public class MazeTileBackgroundRemover : TileBackgroundRemover
 
     public override void RemovePath()
     {
-        MazeTilePath mazeTilePath = (MazeTilePath)_tile.TileBackgrounds.FirstOrDefault(background => background is MazeTilePath);
+        MazeTilePath mazeTilePath = (MazeTilePath)_tile.GetBackgrounds().FirstOrDefault(background => background is MazeTilePath);
         if (mazeTilePath == null) return;
 
         Logger.Log(mazeTilePath.TilePathType);
@@ -26,7 +26,7 @@ public class MazeTileBackgroundRemover : TileBackgroundRemover
             tileBackgroundPlacer.PlaceBaseBackground(new MazeLevelDefaultBaseBackgroundType());
         }
 
-        _tile.TileBackgrounds.Remove(mazeTilePath);
+        _tile.RemoveBackground(mazeTilePath);
         mazeTilePath.Remove();
 
         TrySetTileNotMarkable();
@@ -61,17 +61,17 @@ public class MazeTileBackgroundRemover : TileBackgroundRemover
 
     public override void RemoveBaseBackground(IBaseBackgroundType mazeTileBaseBackgroundType)
     {
-        MazeTileBaseBackground mazeTileBaseBackground = (MazeTileBaseBackground)_tile.TileBackgrounds.FirstOrDefault(background => background is MazeTileBaseBackground);
+        MazeTileBaseBackground mazeTileBaseBackground = (MazeTileBaseBackground)_tile.GetBackgrounds().FirstOrDefault(background => background is MazeTileBaseBackground);
 
         if (mazeTileBaseBackground == null) return;
 
-        _tile.TileBackgrounds.Remove(mazeTileBaseBackground);
+        _tile.RemoveBackground(mazeTileBaseBackground);
         mazeTileBaseBackground.Remove();
     }
 
     private void TrySetTileNotMarkable()
     {
-        MazeTilePath mazeTilePath = (MazeTilePath)_tile.TileBackgrounds.FirstOrDefault(background => background is MazeTilePath);
+        MazeTilePath mazeTilePath = (MazeTilePath)_tile.GetBackgrounds().FirstOrDefault(background => background is MazeTilePath);
 
         if (mazeTilePath == null)
         {

@@ -24,7 +24,7 @@ public class EditorOverworldTileBackgroundPlacer : OverworldTileBackgroundPlacer
         OverworldTilePath overworldTilePath = overworldTilePathGO.GetComponent<OverworldTilePath>();
         overworldTilePath.WithPathType(overworldTilePathType);
         overworldTilePath.WithConnectionScoreInfo(pathConnectionScore);
-        Tile.TileBackgrounds.Add(overworldTilePath as ITileBackground);
+        Tile.AddBackground(overworldTilePath as ITileBackground);
 
         // Update pathConnections for neighbouring tiles
         foreach (KeyValuePair<ObjectDirection, Tile> neighbour in Tile.Neighbours)

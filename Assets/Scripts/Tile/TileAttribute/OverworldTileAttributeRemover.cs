@@ -14,7 +14,7 @@ public class OverworldTileAttributeRemover : TileAttributeRemover
     public override void RemoveTileObstacle()
     {
         _tile.Walkable = true;
-        TileObstacle tileObstacle = (TileObstacle)_tile.TileAttributes.FirstOrDefault(attribute => attribute is TileObstacle);
+        TileObstacle tileObstacle = (TileObstacle)_tile.GetAttributes().FirstOrDefault(attribute => attribute is TileObstacle);
         if (tileObstacle == null) return;
         if (tileObstacle is PlayerExit) return;
 
@@ -27,7 +27,7 @@ public class OverworldTileAttributeRemover : TileAttributeRemover
             tileBackgroundPlacer.PlaceBaseBackground(new OverworldDefaultBaseBackgroundType());
         }
 
-        _tile.TileAttributes.Remove(tileObstacle);
+        _tile.RemoveAttribute(tileObstacle);
         tileObstacle.Remove();
 
         //After removing tile, check with neighbour tiles if wall connections should be updated
@@ -36,17 +36,17 @@ public class OverworldTileAttributeRemover : TileAttributeRemover
 
     public override void RemovePlayerSpawnpoint()
     {
-        ITileAttribute playerSpawnpoint = (PlayerSpawnpoint)_tile.TileAttributes.FirstOrDefault(attribute => attribute is PlayerSpawnpoint);
+        ITileAttribute playerSpawnpoint = (PlayerSpawnpoint)_tile.GetAttributes().FirstOrDefault(attribute => attribute is PlayerSpawnpoint);
         if (playerSpawnpoint == null) return;
-        _tile.TileAttributes.Remove(playerSpawnpoint);
+        _tile.RemoveAttribute(playerSpawnpoint);
         playerSpawnpoint.Remove();
     }
 
     public void RemoveMazeLevelEntry()
     {
-        MazeLevelEntry mazeLevelEntry = (MazeLevelEntry)_tile.TileAttributes.FirstOrDefault(attribute => attribute is MazeLevelEntry);
+        MazeLevelEntry mazeLevelEntry = (MazeLevelEntry)_tile.GetAttributes().FirstOrDefault(attribute => attribute is MazeLevelEntry);
         if (mazeLevelEntry == null) return;
-        _tile.TileAttributes.Remove(mazeLevelEntry);
+        _tile.RemoveAttribute(mazeLevelEntry);
         mazeLevelEntry.Remove();
 
         if (OverworldManager.Instance != null && OverworldManager.Instance.EditorOverworld != null)

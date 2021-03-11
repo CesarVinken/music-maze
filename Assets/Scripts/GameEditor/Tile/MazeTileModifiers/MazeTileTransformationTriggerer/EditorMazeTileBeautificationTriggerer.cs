@@ -58,7 +58,7 @@ public class EditorMazeTileBeautificationTriggerer : EditorMazeTileTransformatio
 
     public override void HandleBeautificationTriggerPlacement(EditorMazeTile tile)
     {
-        if (tile.Markable || tile.TileAttributes.OfType<PlayerSpawnpoint>().Any())
+        if (tile.Markable || tile.GetAttributes().OfType<PlayerSpawnpoint>().Any())
         {
             // if we have a tile selected, add the markable tile as triggerer
             if (SelectedTile != null)

@@ -10,7 +10,7 @@ public class EditorEnemySpawnpointTileAttribute : EditorMazeTileAttributeModifie
         EditorMazeTileAttributePlacer tileAttributePlacer = new EditorMazeTileAttributePlacer(tile);
         MazeTileAttributeRemover tileAttributeRemover = new MazeTileAttributeRemover(tile);
 
-        ITileAttribute enemySpawnpoint = (EnemySpawnpoint)tile.TileAttributes.FirstOrDefault(attribute => attribute is EnemySpawnpoint);
+        ITileAttribute enemySpawnpoint = (EnemySpawnpoint)tile.GetAttributes().FirstOrDefault(attribute => attribute is EnemySpawnpoint);
         if (enemySpawnpoint == null)
         {
             tileAttributeRemover.RemovePlayerExit();

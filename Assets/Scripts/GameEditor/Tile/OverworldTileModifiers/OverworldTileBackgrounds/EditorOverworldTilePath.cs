@@ -15,7 +15,7 @@ public class EditorOverworldTilePath : EditorOverworldTileBackgroundModifier
         EditorOverworldTileBackgroundPlacer tileBackgroundPlacer = new EditorOverworldTileBackgroundPlacer(tile);
         OverworldTileBackgroundRemover tileBackgroundRemover = new OverworldTileBackgroundRemover(tile);
 
-        ITileBackground overworldTilePath = (OverworldTilePath)tile.TileBackgrounds.FirstOrDefault(background => background is OverworldTilePath);
+        ITileBackground overworldTilePath = (OverworldTilePath)tile.GetBackgrounds().FirstOrDefault(background => background is OverworldTilePath);
         if (overworldTilePath == null)
         {
             OverworldTileAttributeRemover tileAttributeRemover = new OverworldTileAttributeRemover(tile);
@@ -31,7 +31,7 @@ public class EditorOverworldTilePath : EditorOverworldTileBackgroundModifier
 
     public override void PlaceBackgroundVariation(EditorOverworldTile tile)
     {
-        ITileBackground overworldTilePath = (OverworldTilePath)tile.TileBackgrounds.FirstOrDefault(background => background is OverworldTilePath);
+        ITileBackground overworldTilePath = (OverworldTilePath)tile.GetBackgrounds().FirstOrDefault(background => background is OverworldTilePath);
 
         if (overworldTilePath == null) return; // only place variation if there is already a path
 

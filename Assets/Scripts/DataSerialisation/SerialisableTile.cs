@@ -40,7 +40,7 @@ public class SerialisableTile
     {
         List<SerialisableTileAttribute> tileAttributes = new List<SerialisableTileAttribute>();
 
-        foreach (ITileAttribute tileAttribute in tile.TileAttributes)
+        foreach (ITileAttribute tileAttribute in tile.GetAttributes())
         {
             ISerialisableTileAttribute iSerialisableTileAttribute = CreateSerialisableTileAttribute(tileAttribute);
 
@@ -60,7 +60,7 @@ public class SerialisableTile
     {
         List<SerialisableTileBackground> tilebackgrounds = new List<SerialisableTileBackground>();
 
-        foreach (ITileBackground tileBackground in tile.TileBackgrounds)
+        foreach (ITileBackground tileBackground in tile.GetBackgrounds())
         {
             ISerialisableTileBackground iSerialisableTileBackground = CreateSerialisableTileBackground(tileBackground);
 

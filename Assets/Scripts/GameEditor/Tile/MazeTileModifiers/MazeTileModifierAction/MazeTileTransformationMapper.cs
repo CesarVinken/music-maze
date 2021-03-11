@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using UnityEngine;
 
 public class MazeTileTransformationMapper
 {
@@ -14,7 +13,7 @@ public class MazeTileTransformationMapper
         for (int i = 0; i < MazeLevelManager.Instance.EditorLevel.Tiles.Count; i++)
         {
             EditorMazeTile tile = MazeLevelManager.Instance.EditorLevel.Tiles[i];
-            if (tile.Markable || tile.TileAttributes.OfType<PlayerSpawnpoint>().Any()) continue;
+            if (tile.Markable || tile.GetAttributes().OfType<PlayerSpawnpoint>().Any()) continue;
 
             tile.BeautificationTriggerers.Clear();
             _checkedNeighbours.Clear();

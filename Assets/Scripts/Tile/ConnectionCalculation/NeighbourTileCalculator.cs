@@ -169,11 +169,11 @@ public class NeighbourTileCalculator
 
             if (typeof(ITileAttribute).IsAssignableFrom(typeof(T)))
             {
-                connectedModifier = (T)neighbour.Value.TileAttributes.FirstOrDefault(attribute => attribute is T);
+                connectedModifier = (T)neighbour.Value.GetAttributes().FirstOrDefault(attribute => attribute is T);
             } 
             else
             {
-                connectedModifier = (T)neighbour.Value.TileBackgrounds.FirstOrDefault(background => background is T);
+                connectedModifier = (T)neighbour.Value.GetBackgrounds().FirstOrDefault(background => background is T);
             }
 
             if (connectedModifier == null || connectedModifier.GetSubtypeAsString() != modifierSubtype)

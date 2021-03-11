@@ -16,6 +16,6 @@
 
         Tile.Walkable = true;
 
-        Tile.TileAttributes.Add(playerSpawnpoint);
+        Tile.AddAttribute(playerSpawnpoint);
     }
 }

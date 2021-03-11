@@ -31,7 +31,7 @@ public class EditorMazeTileAttributePlacer : MazeTileAttributePlacer<EditorMazeT
         Tile.TryMakeMarkable(false);
 
         Logger.Log("Add player exit to maze tile attribute list");
-        Tile.TileAttributes.Add(playerExit);
+        Tile.AddAttribute(playerExit);
 
         // after adding obstacle to this tile, update connections of neighbours
         foreach (KeyValuePair<ObjectDirection, Tile> neighbour in Tile.Neighbours)
@@ -61,7 +61,7 @@ public class EditorMazeTileAttributePlacer : MazeTileAttributePlacer<EditorMazeT
 
         Tile.Walkable = false;
         Tile.TryMakeMarkable(false);
-        Tile.TileAttributes.Add(tileObstacle);
+        Tile.AddAttribute(tileObstacle);
 
         // If we now have obstacle connections on all sides, remove the backgrounds
         if (obstacleConnectionScore.RawConnectionScore == NeighbourTileCalculator.ConnectionOnAllSidesScore)
@@ -102,7 +102,7 @@ public class EditorMazeTileAttributePlacer : MazeTileAttributePlacer<EditorMazeT
         Tile.Walkable = true;
         Tile.TryMakeMarkable(false);
 
-        Tile.TileAttributes.Add(playerSpawnpoint);
+        Tile.AddAttribute(playerSpawnpoint);
     }
 
 }

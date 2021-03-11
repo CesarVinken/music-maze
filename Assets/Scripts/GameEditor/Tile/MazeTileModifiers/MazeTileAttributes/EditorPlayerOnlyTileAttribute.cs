@@ -10,7 +10,7 @@ public class EditorPlayerOnlyTileAttribute : EditorMazeTileAttributeModifier
         EditorMazeTileAttributePlacer tileAttributePlacer = new EditorMazeTileAttributePlacer(tile);
         MazeTileAttributeRemover tileAttributeRemover = new MazeTileAttributeRemover(tile);
 
-        ITileAttribute playerOnlyAttribute = (PlayerOnly)tile.TileAttributes.FirstOrDefault(attribute => attribute is PlayerOnly);
+        ITileAttribute playerOnlyAttribute = (PlayerOnly)tile.GetAttributes().FirstOrDefault(attribute => attribute is PlayerOnly);
         if (playerOnlyAttribute == null)
         {
             tileAttributeRemover.RemoveTileObstacle();

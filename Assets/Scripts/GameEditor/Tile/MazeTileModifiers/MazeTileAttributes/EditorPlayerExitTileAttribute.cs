@@ -10,7 +10,7 @@ public class EditorPlayerExitTileAttribute : EditorMazeTileAttributeModifier
         EditorMazeTileAttributePlacer tileAttributePlacer = new EditorMazeTileAttributePlacer(tile);
         MazeTileAttributeRemover tileAttributeRemover = new MazeTileAttributeRemover(tile);
 
-        ITileAttribute playerExit = (PlayerExit)tile.TileAttributes.FirstOrDefault(attribute => attribute is PlayerExit);
+        ITileAttribute playerExit = (PlayerExit)tile.GetAttributes().FirstOrDefault(attribute => attribute is PlayerExit);
         if (playerExit == null)
         {
             tileAttributeRemover.RemoveEnemySpawnpoint();

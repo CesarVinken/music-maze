@@ -20,7 +20,7 @@ public class MazeTileAttributePlacer<T> : TileAttributePlacer<T> where T : MazeT
 
         Tile.Walkable = false;
         Tile.TryMakeMarkable(false);
-        Tile.TileAttributes.Add(playerExit);
+        Tile.AddAttribute(playerExit);
     }
 
     // Loading a tile obstacle for a tile, not creating a new one. We already have the connection score
@@ -32,7 +32,7 @@ public class MazeTileAttributePlacer<T> : TileAttributePlacer<T> where T : MazeT
 
         Tile.Walkable = false;
         Tile.TryMakeMarkable(false);
-        Tile.TileAttributes.Add(tileObstacle);
+        Tile.AddAttribute(tileObstacle);
     }
 
     public void PlaceEnemySpawnpoint()
@@ -41,7 +41,7 @@ public class MazeTileAttributePlacer<T> : TileAttributePlacer<T> where T : MazeT
 
         Tile.Walkable = true;
         Tile.TryMakeMarkable(true);
-        Tile.TileAttributes.Add(enemySpawnpoint);
+        Tile.AddAttribute(enemySpawnpoint);
     }
 
     public void PlacePlayerOnlyAttribute(PlayerOnlyType playerOnlyType)
@@ -49,7 +49,7 @@ public class MazeTileAttributePlacer<T> : TileAttributePlacer<T> where T : MazeT
         PlayerOnly playerOnly = (PlayerOnly)InstantiateTileAttributeGO<PlayerOnly>();
 
         Tile.Walkable = true;
-        Tile.TileAttributes.Add(playerOnly);
+        Tile.AddAttribute(playerOnly);
     }
 
     public void PlaceTileObstacleVariation(TileObstacle tileObstacle)
