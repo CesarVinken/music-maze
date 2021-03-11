@@ -4,10 +4,12 @@ using UnityEngine.UI;
 
 public abstract class EditorSelectedTileModifierContainer : MonoBehaviour
 {
+    protected EditorTileMainMaterialSelector _editorTileMainMaterialSelector;
     protected EditorTileAttributeSelector _editorTileAttributeSelector;
     protected EditorTileBackgroundSelector _editorTileBackgroundSelector;
     protected EditorTileTransformationTriggererSelector _editorTileTransformationTriggererSelector;
 
+    public List<EditorTileMainMaterialModifier> EditorTileMainMaterials = new List<EditorTileMainMaterialModifier>();
     public List<EditorTileAttributeModifier> EditorTileAttributes = new List<EditorTileAttributeModifier>();
     public List<EditorTileBackgroundModifier> EditorTileBackgrounds = new List<EditorTileBackgroundModifier>();
     public List<EditorTileTransformationModifier> EditorTileTransformationTriggerers = new List<EditorTileTransformationModifier>();
@@ -38,7 +40,11 @@ public abstract class EditorSelectedTileModifierContainer : MonoBehaviour
 
     public void SetSelectedTileModifier(int modifierIndex)
     {
-        if (EditorManager.SelectedTileModifierCategory == EditorTileModifierCategory.Attribute)
+        if (EditorManager.SelectedTileModifierCategory == EditorTileModifierCategory.MainMaterial)
+        {
+            _editorTileMainMaterialSelector.SetSelectedModifier(modifierIndex);
+        }
+        else if (EditorManager.SelectedTileModifierCategory == EditorTileModifierCategory.Attribute)
         {
             _editorTileAttributeSelector.SetSelectedModifier(modifierIndex);
         }
@@ -58,6 +64,7 @@ public abstract class EditorSelectedTileModifierContainer : MonoBehaviour
 
     public void Reset()
     {
+        EditorTileMainMaterials.Clear();
         EditorTileAttributes.Clear();
         EditorTileBackgrounds.Clear();
         EditorTileTransformationTriggerers.Clear();

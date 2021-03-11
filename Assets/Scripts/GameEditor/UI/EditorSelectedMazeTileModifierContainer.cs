@@ -13,9 +13,14 @@ public class EditorSelectedMazeTileModifierContainer : EditorSelectedTileModifie
 
         Reset();
 
+        _editorTileMainMaterialSelector = new EditorTileMainMaterialSelector(this);
         _editorTileAttributeSelector = new EditorTileAttributeSelector(this);
         _editorTileBackgroundSelector = new EditorTileBackgroundSelector(this);
         _editorTileTransformationTriggererSelector = new EditorTileTransformationTriggererSelector(this);
+
+        EditorTileMainMaterials.Add(new EditorMazeTileGroundMaterial());
+
+        EditorManager.SelectedTileMainMaterialModifierIndex = 0;
 
         EditorTileAttributes.Add(new EditorObstacleTileAttribute());
         EditorTileAttributes.Add(new EditorPlayerExitTileAttribute());
@@ -38,10 +43,12 @@ public class EditorSelectedMazeTileModifierContainer : EditorSelectedTileModifie
 
         EditorManager.SelectedTileTransformationTriggererIndex = 0;
 
+        UsedTileModifierCategories.Add(EditorTileModifierCategory.MainMaterial);
         UsedTileModifierCategories.Add(EditorTileModifierCategory.Background);
         UsedTileModifierCategories.Add(EditorTileModifierCategory.Attribute);
         UsedTileModifierCategories.Add(EditorTileModifierCategory.TransformationTriggerer);
 
+        ModifierCountByCategories.Add(EditorTileModifierCategory.MainMaterial, EditorTileMainMaterials.Count);
         ModifierCountByCategories.Add(EditorTileModifierCategory.Background, EditorTileBackgrounds.Count);
         ModifierCountByCategories.Add(EditorTileModifierCategory.Attribute, EditorTileAttributes.Count);
         ModifierCountByCategories.Add(EditorTileModifierCategory.TransformationTriggerer, EditorTileTransformationTriggerers.Count);
@@ -69,7 +76,11 @@ public class EditorSelectedMazeTileModifierContainer : EditorSelectedTileModifie
 
     public override void SelectPreviousTileModifier()
     {
-        if (EditorManager.SelectedTileModifierCategory == EditorTileModifierCategory.Background)
+        if (EditorManager.SelectedTileModifierCategory == EditorTileModifierCategory.MainMaterial)
+        {
+            _editorTileMainMaterialSelector.SwitchSelectedModifier(-1);
+        }
+        else if (EditorManager.SelectedTileModifierCategory == EditorTileModifierCategory.Background)
         {
             _editorTileBackgroundSelector.SwitchSelectedModifier(-1);
         }
@@ -90,7 +101,11 @@ public class EditorSelectedMazeTileModifierContainer : EditorSelectedTileModifie
 
     public override void SelectNextTileModifier()
     {
-        if (EditorManager.SelectedTileModifierCategory == EditorTileModifierCategory.Background)
+        if (EditorManager.SelectedTileModifierCategory == EditorTileModifierCategory.MainMaterial)
+        {
+            _editorTileMainMaterialSelector.SwitchSelectedModifier(1);
+        }
+        else if (EditorManager.SelectedTileModifierCategory == EditorTileModifierCategory.Background)
         {
             _editorTileBackgroundSelector.SwitchSelectedModifier(1);
         }

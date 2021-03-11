@@ -2,5 +2,6 @@
 {
     Attribute,
     Background,
+    MainMaterial,
     TransformationTriggerer
 }

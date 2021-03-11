@@ -11,34 +11,32 @@ public class EditorSelectedOverworldTileModifierContainer : EditorSelectedTileMo
 
         EditorCanvasUI.Instance.SelectedTileModifierContainer = this;
 
+        Reset();
+
+        _editorTileMainMaterialSelector = new EditorTileMainMaterialSelector(this);
         _editorTileAttributeSelector = new EditorTileAttributeSelector(this);
         _editorTileBackgroundSelector = new EditorTileBackgroundSelector(this);
         _editorTileTransformationTriggererSelector = new EditorTileTransformationTriggererSelector(this);
 
-        EditorTileAttributes.Clear();
+        EditorTileMainMaterials.Add(new EditorOverworldGroundMaterial());
 
-        //EditorTileAttributes.Add(new EditorObstacleTileAttribute());
-        //EditorTileAttributes.Add(new EditorPlayerExitTileAttribute());
+        EditorManager.SelectedTileMainMaterialModifierIndex = 0;
+        
         EditorTileAttributes.Add(new EditorPlayerSpawnpointOverworldTileAttribute());
         EditorTileAttributes.Add(new EditorOverworldMazeLevelEntryTileAttribute());
-        //EditorTileAttributes.Add(new EditorPlayerOnlyTileAttribute());
-        //EditorTileAttributes.Add(new EditorEnemySpawnpointTileAttribute());
 
         EditorManager.SelectedTileAttributeModifierIndex = 0;
-
-        EditorTileBackgrounds.Clear();
 
         EditorTileBackgrounds.Add(new EditorOverworldTilePath());
         EditorManager.SelectedTileBackgroundModifierIndex = 0;
 
-        EditorTileTransformationTriggerers.Clear();
-
-        //EditorTileTransformationTriggerers.Add(new EditorMazeTileTransformationTriggerer());
         EditorManager.SelectedTileTransformationTriggererIndex = 0;
 
+        UsedTileModifierCategories.Add(EditorTileModifierCategory.MainMaterial);
         UsedTileModifierCategories.Add(EditorTileModifierCategory.Background);
         UsedTileModifierCategories.Add(EditorTileModifierCategory.Attribute);
 
+        ModifierCountByCategories.Add(EditorTileModifierCategory.MainMaterial, EditorTileMainMaterials.Count);
         ModifierCountByCategories.Add(EditorTileModifierCategory.Background, EditorTileBackgrounds.Count);
         ModifierCountByCategories.Add(EditorTileModifierCategory.Attribute, EditorTileAttributes.Count);
 
@@ -61,7 +59,11 @@ public class EditorSelectedOverworldTileModifierContainer : EditorSelectedTileMo
 
     public override void SelectPreviousTileModifier()
     {
-        if (EditorManager.SelectedTileModifierCategory == EditorTileModifierCategory.Background)
+        if (EditorManager.SelectedTileModifierCategory == EditorTileModifierCategory.MainMaterial)
+        {
+            _editorTileMainMaterialSelector.SwitchSelectedModifier(-1);
+        }
+        else if (EditorManager.SelectedTileModifierCategory == EditorTileModifierCategory.Background)
         {
             _editorTileBackgroundSelector.SwitchSelectedModifier(-1);
         }
@@ -78,7 +80,11 @@ public class EditorSelectedOverworldTileModifierContainer : EditorSelectedTileMo
 
     public override void SelectNextTileModifier()
     {
-        if (EditorManager.SelectedTileModifierCategory == EditorTileModifierCategory.Background)
+        if (EditorManager.SelectedTileModifierCategory == EditorTileModifierCategory.MainMaterial)
+        {
+            _editorTileMainMaterialSelector.SwitchSelectedModifier(1);
+        }
+        else if (EditorManager.SelectedTileModifierCategory == EditorTileModifierCategory.Background)
         {
             _editorTileBackgroundSelector.SwitchSelectedModifier(1);
         }

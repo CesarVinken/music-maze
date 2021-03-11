@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-
-public abstract class TileAttributePlacer<T> where T : Tile
+﻿public abstract class TileAttributePlacer<T> where T : Tile
 {
     public abstract T Tile { get; set; }
 

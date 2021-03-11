@@ -133,20 +133,27 @@ public class EditorTileSelector : MonoBehaviour
         EditorTileModifierCategory editorTileModifierType = EditorManager.SelectedTileModifierCategory;
         EditorSelectedTileModifierContainer selectedTileModifierContainer = EditorCanvasUI.Instance.SelectedTileModifierContainer;
 
-        if (editorTileModifierType == EditorTileModifierCategory.Attribute)
+        GameManager.Instance.CurrentEditorLevel.TilesByLocation.TryGetValue(CurrentSelectedLocation, out Tile tile);
+
+        if (editorTileModifierType == EditorTileModifierCategory.MainMaterial)
+        {
+            EditorTileMainMaterialModifier mainMaterial = selectedTileModifierContainer.EditorTileMainMaterials[EditorManager.SelectedTileMainMaterialModifierIndex];
+            PlaceTileMainMaterial(tile, mainMaterial);
+        }
+        else if (editorTileModifierType == EditorTileModifierCategory.Attribute)
         {
             EditorTileAttributeModifier attribute = selectedTileModifierContainer.EditorTileAttributes[EditorManager.SelectedTileAttributeModifierIndex];
-            PlaceTileAttribute(CurrentSelectedLocation, attribute);
+            PlaceTileAttribute(tile, attribute);
         }
         else if (editorTileModifierType == EditorTileModifierCategory.Background)
         {
             EditorTileBackgroundModifier background = selectedTileModifierContainer.EditorTileBackgrounds[EditorManager.SelectedTileBackgroundModifierIndex];
-            PlaceTileBackground(CurrentSelectedLocation, background);
+            PlaceTileBackground(tile, background);
         }
         else if (editorTileModifierType == EditorTileModifierCategory.TransformationTriggerer)
         {
             EditorTileTransformationModifier transformationTriggerer = selectedTileModifierContainer.EditorTileTransformationTriggerers[EditorManager.SelectedTileTransformationTriggererIndex];
-            PlaceTransformationTriggerer(CurrentSelectedLocation, transformationTriggerer);
+            PlaceTransformationTriggerer(tile, transformationTriggerer);
         }
         else
         {
@@ -169,56 +176,59 @@ public class EditorTileSelector : MonoBehaviour
         }
 
         EditorTileModifierCategory editorMazeTileModifierCategory = EditorManager.SelectedTileModifierCategory;
+        GameManager.Instance.CurrentEditorLevel.TilesByLocation.TryGetValue(CurrentSelectedLocation, out Tile tile);
 
         if (editorMazeTileModifierCategory == EditorTileModifierCategory.Attribute)
         {
             EditorTileAttributeModifier attribute = EditorCanvasUI.Instance.SelectedTileModifierContainer.EditorTileAttributes[EditorManager.SelectedTileAttributeModifierIndex];
-            PlaceTileAttributeVariation(CurrentSelectedLocation, attribute);
+            PlaceTileAttributeVariation(tile, attribute);
         }
         else if (editorMazeTileModifierCategory == EditorTileModifierCategory.Background)
         {
             EditorTileBackgroundModifier background = EditorCanvasUI.Instance.SelectedTileModifierContainer.EditorTileBackgrounds[EditorManager.SelectedTileBackgroundModifierIndex];
-            PlaceMazeTileBackgroundVariation(CurrentSelectedLocation, background);
+            PlaceMazeTileBackgroundVariation(tile, background);
         }
     }
 
-    private void PlaceTileAttribute(GridLocation gridLocation, EditorTileAttributeModifier attribute)
+    private void PlaceTileMainMaterial(Tile tile, EditorTileMainMaterialModifier mainMaterial)
+    {
+        if (mainMaterial == null) Logger.Error($"Could not find the main material type {mainMaterial.GetType()}");
+        Logger.Log("place main material");
+        mainMaterial.PlaceMainMaterial(tile);
+    }
+
+    private void PlaceTileAttribute(Tile tile, EditorTileAttributeModifier attribute)
     {
         if (attribute == null) Logger.Error($"Could not find the attribute type {attribute.GetType()}");
 
-        GameManager.Instance.CurrentEditorLevel.TilesByLocation.TryGetValue(gridLocation, out Tile tile);
         attribute.PlaceAttribute(tile);
     }
 
-    private void PlaceTileBackground(GridLocation gridLocation, EditorTileBackgroundModifier background)
+    private void PlaceTileBackground(Tile tile, EditorTileBackgroundModifier background)
     {
         if (background == null) Logger.Error($"Could not find the background type {background.GetType()}");
 
-        GameManager.Instance.CurrentEditorLevel.TilesByLocation.TryGetValue(gridLocation, out Tile tile);
         background.PlaceBackground(tile);
     }
 
-    private void PlaceTileAttributeVariation(GridLocation gridLocation, EditorTileAttributeModifier attribute)
+    private void PlaceTileAttributeVariation(Tile tile, EditorTileAttributeModifier attribute)
     {
         if (attribute == null) Logger.Error($"Could not find the attribute type {attribute.GetType()}");
 
-        GameManager.Instance.CurrentEditorLevel.TilesByLocation.TryGetValue(gridLocation, out Tile tile);
         attribute.PlaceAttributeVariation(tile);
     }
 
-    private void PlaceMazeTileBackgroundVariation(GridLocation gridLocation, EditorTileBackgroundModifier background)
+    private void PlaceMazeTileBackgroundVariation(Tile tile, EditorTileBackgroundModifier background)
     {
         if (background == null) Logger.Error($"Could not find the background type {background.GetType()}");
 
-        GameManager.Instance.CurrentEditorLevel.TilesByLocation.TryGetValue(gridLocation, out Tile tile);
         background.PlaceBackgroundVariation<Tile>(tile);
     }
 
-    private void PlaceTransformationTriggerer(GridLocation gridLocation, EditorTileTransformationModifier transformationTriggerer)
+    private void PlaceTransformationTriggerer(Tile tile, EditorTileTransformationModifier transformationTriggerer)
     {
         if (transformationTriggerer == null) Logger.Error($"Could not find the transformationTriggerer type {transformationTriggerer.GetType()}");
 
-        GameManager.Instance.CurrentEditorLevel.TilesByLocation.TryGetValue(gridLocation, out Tile tile);
         transformationTriggerer.HandleBeautificationTriggerPlacement(tile);
     }
 }
