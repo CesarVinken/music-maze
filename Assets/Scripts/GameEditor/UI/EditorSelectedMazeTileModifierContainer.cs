@@ -33,12 +33,6 @@ public class EditorSelectedMazeTileModifierContainer : EditorSelectedTileModifie
         EditorTileBackgrounds.Add(new EditorMazeTilePath());
         EditorManager.SelectedTileBackgroundModifierIndex = 0;
 
-        Logger.Warning("We are failing to add the tile backgrounds to the list");
-        for (int i = 0; i < EditorTileBackgrounds.Count; i++)
-        {
-            Logger.Log(EditorTileBackgrounds[i].Name);
-        }
-
         EditorTileTransformationTriggerers.Add(new EditorMazeTileBeautificationTriggerer());
 
         EditorManager.SelectedTileTransformationTriggererIndex = 0;
@@ -56,8 +50,7 @@ public class EditorSelectedMazeTileModifierContainer : EditorSelectedTileModifie
 
     public void Start()
     {
-        SetSelectedTileModifierCategory(EditorTileModifierCategory.Background);
-        SetSelectedTileModifier(0);//Set selected modifier to Background -> Path 
+        SetInitialModifierValues();
     }
 
     private void Update()
@@ -122,5 +115,14 @@ public class EditorSelectedMazeTileModifierContainer : EditorSelectedTileModifie
             // Not known type
             Logger.Error("Unknown tile modifier type");
         }
+    }
+
+    private void SetInitialModifierValues()
+    {
+        Logger.Log("Set initial value");
+        _editorTileMainMaterialSelector.SetSelectedModifier(0);     // set to Ground material by default
+
+        SetSelectedTileModifierCategory(EditorTileModifierCategory.Background);
+        SetSelectedTileModifier(0);//Set selected modifier to Background -> Path 
     }
 }

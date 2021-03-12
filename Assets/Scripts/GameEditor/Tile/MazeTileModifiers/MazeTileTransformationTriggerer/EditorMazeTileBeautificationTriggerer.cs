@@ -1,19 +1,17 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using UnityEngine;
 
 public class EditorMazeTileBeautificationTriggerer : EditorMazeTileTransformationTriggerer
 {
     public override string Name { get => "Beautification Triggerer"; }
 
-    public override Sprite Sprite => throw new System.NotImplementedException();
+    public override Sprite Sprite { get => MazeSpriteManager.Instance.DefaultDoor[0]; }
 
     public EditorMazeTile SelectedTile;
 
     public override Sprite GetSprite()
     {
-        return MazeSpriteManager.Instance.DefaultDoor[0];
+        return Sprite;
     }
 
     public void SetSelectedTile(EditorMazeTile tile)

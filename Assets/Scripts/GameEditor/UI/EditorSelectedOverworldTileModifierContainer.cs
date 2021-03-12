@@ -39,8 +39,11 @@ public class EditorSelectedOverworldTileModifierContainer : EditorSelectedTileMo
         ModifierCountByCategories.Add(EditorTileModifierCategory.MainMaterial, EditorTileMainMaterials.Count);
         ModifierCountByCategories.Add(EditorTileModifierCategory.Background, EditorTileBackgrounds.Count);
         ModifierCountByCategories.Add(EditorTileModifierCategory.Attribute, EditorTileAttributes.Count);
+    }
 
-        SetInitialModifierValue();
+    public void Start()
+    {
+        SetInitialModifierValues();
     }
 
     private void Update()
@@ -99,8 +102,10 @@ public class EditorSelectedOverworldTileModifierContainer : EditorSelectedTileMo
         }
     }
 
-    private void SetInitialModifierValue()
+    private void SetInitialModifierValues()
     {
+        _editorTileMainMaterialSelector.SetSelectedModifier(0);     // set to Ground material by default
+
         SetSelectedTileModifierCategory(EditorTileModifierCategory.Background);
         SetSelectedTileModifier(0);//Set selected modifier to Background -> Path 
     }

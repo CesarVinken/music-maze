@@ -1,6 +1,5 @@
 ﻿using Photon.Pun;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
 public class EditorCanvasUI : MonoBehaviour
 {
@@ -12,6 +11,7 @@ public class EditorCanvasUI : MonoBehaviour
     [SerializeField] private GameObject _gameEditorWorldPrefab;
 
     public Sprite DefaultIcon;
+    public Sprite[] TileMainMaterialIcons;
     public Sprite[] TileAttributeIcons;
 
     public EditorMazeModificationPanel MazeModificationPanel;

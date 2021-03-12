@@ -1,5 +1,16 @@
-﻿public class EditorMazeTileGroundMaterial : EditorMazeTileMainMaterialModifier
+﻿using UnityEngine;
+
+public class EditorMazeTileGroundMaterial : EditorMazeTileMainMaterialModifier
 {
+    public override string Name { get => "Ground"; }
+    private Sprite _sprite = EditorCanvasUI.Instance.TileMainMaterialIcons[0];
+    public override Sprite Sprite { get => _sprite; set => _sprite = value; }
+
+    public override Sprite GetSprite()
+    {
+        return Sprite;
+    }
+
     public override void PlaceMainMaterial(EditorMazeTile tile)
     {
         EditorMazeTileMainMaterialPlacer tileMainMaterialPlacer = new EditorMazeTileMainMaterialPlacer(tile);

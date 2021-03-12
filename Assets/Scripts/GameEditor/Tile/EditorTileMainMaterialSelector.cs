@@ -42,8 +42,13 @@
     {
         if (_editorSelectedModifierContainer.EditorTileMainMaterials.Count == 0) return;
 
-        EditorTileMainMaterialModifier attribute = _editorSelectedModifierContainer.EditorTileMainMaterials[modifierIndex];
-        _editorSelectedModifierContainer.SelectedModifierLabel.text = GetSelectedModifierLabel(attribute.Name);
+        EditorTileMainMaterialModifier mainMaterial = _editorSelectedModifierContainer.EditorTileMainMaterials[modifierIndex];
+        _editorSelectedModifierContainer.SelectedModifierLabel.text = GetSelectedModifierLabel(mainMaterial.Name); 
+        _editorSelectedModifierContainer.SelectedModifierSprite.sprite = mainMaterial.GetSprite();
+
+        IEditorTileModificationPanel selectedPanel = EditorModificationPanelContainer.Instance.SelectedPanel as IEditorTileModificationPanel;
+        selectedPanel.SetMainMaterialIcon(mainMaterial.GetSprite());
+
         EditorManager.SelectedTileMainMaterialModifierIndex = modifierIndex;
     }
 }

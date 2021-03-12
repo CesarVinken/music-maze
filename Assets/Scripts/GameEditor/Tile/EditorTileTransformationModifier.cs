@@ -3,8 +3,8 @@
 public abstract class EditorTileTransformationModifier : EditorTileModifier
 {
     public abstract string Name { get; set; }
-
     public abstract Sprite Sprite { get; set; }
+
     public abstract Sprite GetSprite();
 
     public abstract void InstantiateModifierActions();
