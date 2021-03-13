@@ -36,9 +36,7 @@ public class EditorSelectedOverworldTileModifierContainer : EditorSelectedTileMo
         UsedTileModifierCategories.Add(EditorTileModifierCategory.Background);
         UsedTileModifierCategories.Add(EditorTileModifierCategory.Attribute);
 
-        ModifierCountByCategories.Add(EditorTileModifierCategory.MainMaterial, EditorTileMainMaterials.Count);
-        ModifierCountByCategories.Add(EditorTileModifierCategory.Background, EditorTileBackgrounds.Count);
-        ModifierCountByCategories.Add(EditorTileModifierCategory.Attribute, EditorTileAttributes.Count);
+        SetCurrentlyAvailableModifiers();
     }
 
     public void Start()

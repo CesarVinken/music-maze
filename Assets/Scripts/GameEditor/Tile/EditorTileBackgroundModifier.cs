@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-public abstract class EditorTileBackgroundModifier : EditorTileModifier
+public abstract class EditorTileBackgroundModifier : IEditorTileModifier
 {
     public abstract string Name { get; set; }
 

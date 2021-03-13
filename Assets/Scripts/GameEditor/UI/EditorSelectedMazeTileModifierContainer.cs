@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System.Collections.Generic;
+using UnityEngine;
 
 public class EditorSelectedMazeTileModifierContainer : EditorSelectedTileModifierContainer
 {
@@ -42,10 +43,7 @@ public class EditorSelectedMazeTileModifierContainer : EditorSelectedTileModifie
         UsedTileModifierCategories.Add(EditorTileModifierCategory.Attribute);
         UsedTileModifierCategories.Add(EditorTileModifierCategory.TransformationTriggerer);
 
-        ModifierCountByCategories.Add(EditorTileModifierCategory.MainMaterial, EditorTileMainMaterials.Count);
-        ModifierCountByCategories.Add(EditorTileModifierCategory.Background, EditorTileBackgrounds.Count);
-        ModifierCountByCategories.Add(EditorTileModifierCategory.Attribute, EditorTileAttributes.Count);
-        ModifierCountByCategories.Add(EditorTileModifierCategory.TransformationTriggerer, EditorTileTransformationTriggerers.Count);
+        SetCurrentlyAvailableModifiers();
     }
 
     public void Start()

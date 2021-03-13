@@ -1,7 +1,7 @@
 ﻿using System.Linq;
 using UnityEngine;
 
-public class EditorMazeTilePath : EditorMazeTileBackgroundModifier
+public class EditorMazeTilePath : EditorMazeTileBackgroundModifier, IGroundMaterialModifier
 {
     public override string Name => "Path";
 

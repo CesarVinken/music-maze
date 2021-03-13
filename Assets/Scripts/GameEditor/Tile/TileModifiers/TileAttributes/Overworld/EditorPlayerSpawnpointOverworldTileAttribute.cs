@@ -1,7 +1,7 @@
 ﻿using System.Linq;
 using UnityEngine;
 
-public class EditorPlayerSpawnpointOverworldTileAttribute : EditorOverworldTileAttributeModifier
+public class EditorPlayerSpawnpointOverworldTileAttribute : EditorOverworldTileAttributeModifier, IGroundMaterialModifier
 {
     public override string Name { get => "Player Spawnpoint"; }
 

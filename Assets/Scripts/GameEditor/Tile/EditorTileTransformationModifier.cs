@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-public abstract class EditorTileTransformationModifier : EditorTileModifier
+public abstract class EditorTileTransformationModifier : IEditorTileModifier
 {
     public abstract string Name { get; set; }
     public abstract Sprite Sprite { get; set; }

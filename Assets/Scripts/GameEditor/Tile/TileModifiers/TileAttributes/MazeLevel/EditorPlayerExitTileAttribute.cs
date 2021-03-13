@@ -1,7 +1,7 @@
 ﻿using System.Linq;
 using UnityEngine;
 
-public class EditorPlayerExitTileAttribute : EditorMazeTileAttributeModifier
+public class EditorPlayerExitTileAttribute : EditorMazeTileAttributeModifier, IGroundMaterialModifier
 {
     public override string Name { get => "Player Exit"; }
 

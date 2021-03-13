@@ -19,10 +19,17 @@
         if (newIndex < 0)
         {
             EditorTileModifierCategory previousEditorTileModifierCategory = PreviousEditorTileModfierCategory(currentCategory);
-            int modifierCount = selectedTileModifierContainer.ModifierCountByCategories[previousEditorTileModifierCategory];
+            int modifierCount = selectedTileModifierContainer.CurrentlyAvailableTileModifiers[previousEditorTileModifierCategory].Count;
+
+            // Get currently selected material
+            // Get available backgrounds for currently selected material
+            // Select last of the currently available Backgrounds
+
 
             EditorCanvasUI.Instance.SelectedTileModifierContainer.SetSelectedTileModifierCategory(previousEditorTileModifierCategory);
-            EditorCanvasUI.Instance.SelectedTileModifierContainer.SetSelectedTileModifier(modifierCount - 1);
+
+            int lastAvailableIndex = modifierCount - 1;
+            EditorCanvasUI.Instance.SelectedTileModifierContainer.SetSelectedTileModifier(lastAvailableIndex);
         }
         else if (newIndex >= _editorSelectedModifierContainer.EditorTileBackgrounds.Count)
         {

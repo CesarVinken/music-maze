@@ -1,4 +1,4 @@
-﻿public abstract class EditorTileModifier
+﻿public interface IEditorTileModifier
 {
 
 }

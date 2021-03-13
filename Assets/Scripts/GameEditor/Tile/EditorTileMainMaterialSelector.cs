@@ -20,10 +20,11 @@
         {
             EditorTileModifierCategory previousEditorTileModifierCategory = PreviousEditorTileModfierCategory(currentCategory);
 
-            int modifierCount = selectedTileModifierContainer.ModifierCountByCategories[previousEditorTileModifierCategory];
+            int modifierCount = selectedTileModifierContainer.CurrentlyAvailableTileModifiers[previousEditorTileModifierCategory].Count;
+            int lastAvailableIndex = modifierCount - 1;
 
             selectedTileModifierContainer.SetSelectedTileModifierCategory(previousEditorTileModifierCategory);
-            selectedTileModifierContainer.SetSelectedTileModifier(modifierCount - 1);
+            selectedTileModifierContainer.SetSelectedTileModifier(lastAvailableIndex);
         }
         else if (newIndex >= _editorSelectedModifierContainer.EditorTileMainMaterials.Count)
         {

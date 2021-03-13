@@ -15,7 +15,8 @@ public abstract class EditorSelectedTileModifierContainer : MonoBehaviour
     public List<EditorTileTransformationModifier> EditorTileTransformationTriggerers = new List<EditorTileTransformationModifier>();
 
     public List<EditorTileModifierCategory> UsedTileModifierCategories = new List<EditorTileModifierCategory>();
-    public Dictionary<EditorTileModifierCategory, int> ModifierCountByCategories = new Dictionary<EditorTileModifierCategory, int>();
+
+    public Dictionary<EditorTileModifierCategory, List<IEditorTileModifier>> CurrentlyAvailableTileModifiers = new Dictionary<EditorTileModifierCategory, List<IEditorTileModifier>>();
     
     public GameObject SelectedModifierLabelGO;
     public GameObject SelectedModifierSpriteGO;
@@ -70,5 +71,51 @@ public abstract class EditorSelectedTileModifierContainer : MonoBehaviour
         EditorTileTransformationTriggerers.Clear();
 
         UsedTileModifierCategories.Clear();
+    }
+
+    // TODO: make work with other MainMaterials than Ground
+    public void SetCurrentlyAvailableModifiers()
+    {
+        CurrentlyAvailableTileModifiers.Clear();
+
+        List<IEditorTileModifier> currentlyAvailableMainMaterials = new List<IEditorTileModifier>();
+        for (int i = 0; i < EditorTileMainMaterials.Count; i++)
+        {
+            //if(EditorTileMainMaterials[i] is IGroundMaterialModifier) 
+            //{
+            currentlyAvailableMainMaterials.Add(EditorTileMainMaterials[i]);
+            //}
+        }
+        CurrentlyAvailableTileModifiers.Add(EditorTileModifierCategory.MainMaterial, currentlyAvailableMainMaterials);
+
+        List<IEditorTileModifier> currentlyAvailableBackgrounds = new List<IEditorTileModifier>();
+        for (int i = 0; i < EditorTileBackgrounds.Count; i++)
+        {
+            if (EditorTileBackgrounds[i] is IGroundMaterialModifier)
+            {
+                currentlyAvailableBackgrounds.Add(EditorTileBackgrounds[i]);
+            }
+        }
+        CurrentlyAvailableTileModifiers.Add(EditorTileModifierCategory.Background, currentlyAvailableBackgrounds);
+
+        List<IEditorTileModifier> currentlyAvailableAttributes = new List<IEditorTileModifier>();
+        for (int i = 0; i < EditorTileAttributes.Count; i++)
+        {
+            if (EditorTileAttributes[i] is IGroundMaterialModifier)
+            {
+                currentlyAvailableAttributes.Add(EditorTileAttributes[i]);
+            }
+        }
+        CurrentlyAvailableTileModifiers.Add(EditorTileModifierCategory.Attribute, currentlyAvailableAttributes);
+
+        List<IEditorTileModifier> currentlyAvailableTransformationTriggers = new List<IEditorTileModifier>();
+        for (int i = 0; i < EditorTileTransformationTriggerers.Count; i++)
+        {
+            if (EditorTileTransformationTriggerers[i] is IGroundMaterialModifier)
+            {
+                currentlyAvailableTransformationTriggers.Add(EditorTileTransformationTriggerers[i]);
+            }
+        }
+        CurrentlyAvailableTileModifiers.Add(EditorTileModifierCategory.TransformationTriggerer, currentlyAvailableTransformationTriggers);
     }
 }

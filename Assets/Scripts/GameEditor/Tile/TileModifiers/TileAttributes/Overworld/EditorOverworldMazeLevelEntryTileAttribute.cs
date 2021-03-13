@@ -1,7 +1,7 @@
 ﻿using System.Linq;
 using UnityEngine;
 
-public class EditorOverworldMazeLevelEntryTileAttribute : EditorOverworldTileAttributeModifier
+public class EditorOverworldMazeLevelEntryTileAttribute : EditorOverworldTileAttributeModifier, IGroundMaterialModifier
 {
     public override string Name { get => "Maze Entry"; }
 

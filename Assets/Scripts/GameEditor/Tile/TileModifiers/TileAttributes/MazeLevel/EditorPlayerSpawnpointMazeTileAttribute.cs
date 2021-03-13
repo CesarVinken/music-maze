@@ -1,7 +1,7 @@
 ﻿using System.Linq;
 using UnityEngine;
 
-public class EditorPlayerSpawnpointMazeTileAttribute : EditorMazeTileAttributeModifier
+public class EditorPlayerSpawnpointMazeTileAttribute : EditorMazeTileAttributeModifier, IGroundMaterialModifier
 {
     public override string Name { get => "Player Spawnpoint"; }
 

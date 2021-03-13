@@ -1,7 +1,7 @@
 ﻿using System.Linq;
 using UnityEngine;
 
-public class EditorMazeTileBeautificationTriggerer : EditorMazeTileTransformationTriggerer
+public class EditorMazeTileBeautificationTriggerer : EditorMazeTileTransformationTriggerer, IGroundMaterialModifier
 {
     public override string Name { get => "Beautification Triggerer"; }
 
