@@ -1,3 +1,3 @@
-﻿public interface IGroundMaterialModifier
+﻿public interface IGroundMaterialModifier : IMaterialModifier
 {
 }

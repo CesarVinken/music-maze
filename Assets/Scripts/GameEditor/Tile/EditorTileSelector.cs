@@ -135,12 +135,7 @@ public class EditorTileSelector : MonoBehaviour
 
         GameManager.Instance.CurrentEditorLevel.TilesByLocation.TryGetValue(CurrentSelectedLocation, out Tile tile);
 
-        if (editorTileModifierType == EditorTileModifierCategory.MainMaterial)
-        {
-            EditorTileMainMaterialModifier mainMaterial = selectedTileModifierContainer.EditorTileMainMaterials[EditorManager.SelectedTileMainMaterialModifierIndex];
-            PlaceTileMainMaterial(tile, mainMaterial);
-        }
-        else if (editorTileModifierType == EditorTileModifierCategory.Attribute)
+        if (editorTileModifierType == EditorTileModifierCategory.Attribute)
         {
             EditorTileAttributeModifier attribute = selectedTileModifierContainer.EditorTileAttributes[EditorManager.SelectedTileAttributeModifierIndex];
             PlaceTileAttribute(tile, attribute);
@@ -190,12 +185,12 @@ public class EditorTileSelector : MonoBehaviour
         }
     }
 
-    private void PlaceTileMainMaterial(Tile tile, EditorTileMainMaterialModifier mainMaterial)
-    {
-        if (mainMaterial == null) Logger.Error($"Could not find the main material type {mainMaterial.GetType()}");
-        Logger.Log("place main material");
-        mainMaterial.PlaceMainMaterial(tile);
-    }
+    //private void PlaceTileMainMaterial(Tile tile, EditorTileMainMaterialModifier mainMaterial)
+    //{
+    //    if (mainMaterial == null) Logger.Error($"Could not find the main material type {mainMaterial.GetType()}");
+    //    Logger.Log("place main material");
+    //    mainMaterial.PlaceMainMaterial(tile);
+    //}
 
     private void PlaceTileAttribute(Tile tile, EditorTileAttributeModifier attribute)
     {

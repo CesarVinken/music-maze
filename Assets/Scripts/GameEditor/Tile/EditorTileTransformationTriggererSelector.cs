@@ -1,4 +1,6 @@
-﻿public class EditorTileTransformationTriggererSelector : EditorTileModifierSelector
+﻿using System.Collections.Generic;
+
+public class EditorTileTransformationTriggererSelector : EditorTileModifierSelector
 {
     public EditorTileTransformationTriggererSelector(EditorSelectedTileModifierContainer editorSelectedModifierContainer) : base(editorSelectedModifierContainer) { }
 
@@ -45,7 +47,15 @@
 
     public override void SetSelectedModifier(int modifierIndex)
     {
-        EditorTileTransformationModifier transformationTrigger = _editorSelectedModifierContainer.EditorTileTransformationTriggerers[modifierIndex];
+        List<IEditorTileModifier> currentlyAvailableTileTransformationTriggerers = _editorSelectedModifierContainer.CurrentlyAvailableTileModifiers[EditorTileModifierCategory.TransformationTriggerer];
+
+        if (currentlyAvailableTileTransformationTriggerers.Count == 0)
+        {
+            EditorManager.SelectedTileTransformationTriggererIndex = 0;
+            return;
+        }
+
+        EditorTileTransformationModifier transformationTrigger = currentlyAvailableTileTransformationTriggerers[modifierIndex] as EditorTileTransformationModifier;
         _editorSelectedModifierContainer.SelectedModifierLabel.text = GetSelectedModifierLabel(transformationTrigger.Name);
         _editorSelectedModifierContainer.SelectedModifierSprite.sprite = transformationTrigger.GetSprite();
         EditorManager.SelectedTileTransformationTriggererIndex = modifierIndex;

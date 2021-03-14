@@ -1,15 +1,14 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
 public abstract class EditorSelectedTileModifierContainer : MonoBehaviour
 {
-    protected EditorTileMainMaterialSelector _editorTileMainMaterialSelector;
     protected EditorTileAttributeSelector _editorTileAttributeSelector;
     protected EditorTileBackgroundSelector _editorTileBackgroundSelector;
     protected EditorTileTransformationTriggererSelector _editorTileTransformationTriggererSelector;
 
-    public List<EditorTileMainMaterialModifier> EditorTileMainMaterials = new List<EditorTileMainMaterialModifier>();
     public List<EditorTileAttributeModifier> EditorTileAttributes = new List<EditorTileAttributeModifier>();
     public List<EditorTileBackgroundModifier> EditorTileBackgrounds = new List<EditorTileBackgroundModifier>();
     public List<EditorTileTransformationModifier> EditorTileTransformationTriggerers = new List<EditorTileTransformationModifier>();
@@ -41,11 +40,7 @@ public abstract class EditorSelectedTileModifierContainer : MonoBehaviour
 
     public void SetSelectedTileModifier(int modifierIndex)
     {
-        if (EditorManager.SelectedTileModifierCategory == EditorTileModifierCategory.MainMaterial)
-        {
-            _editorTileMainMaterialSelector.SetSelectedModifier(modifierIndex);
-        }
-        else if (EditorManager.SelectedTileModifierCategory == EditorTileModifierCategory.Attribute)
+        if (EditorManager.SelectedTileModifierCategory == EditorTileModifierCategory.Attribute)
         {
             _editorTileAttributeSelector.SetSelectedModifier(modifierIndex);
         }
@@ -65,7 +60,6 @@ public abstract class EditorSelectedTileModifierContainer : MonoBehaviour
 
     public void Reset()
     {
-        EditorTileMainMaterials.Clear();
         EditorTileAttributes.Clear();
         EditorTileBackgrounds.Clear();
         EditorTileTransformationTriggerers.Clear();
@@ -73,21 +67,61 @@ public abstract class EditorSelectedTileModifierContainer : MonoBehaviour
         UsedTileModifierCategories.Clear();
     }
 
-    // TODO: make work with other MainMaterials than Ground
-    public void SetCurrentlyAvailableModifiers()
+    public void SetCurrentlyAvailableModifiers(EditorTileMainMaterialModifier mainMaterialModifier)
     {
         CurrentlyAvailableTileModifiers.Clear();
 
-        List<IEditorTileModifier> currentlyAvailableMainMaterials = new List<IEditorTileModifier>();
-        for (int i = 0; i < EditorTileMainMaterials.Count; i++)
+        if (mainMaterialModifier is EditorMazeTileGroundMaterial || mainMaterialModifier is EditorOverworldGroundMaterial)
         {
-            //if(EditorTileMainMaterials[i] is IGroundMaterialModifier) 
-            //{
-            currentlyAvailableMainMaterials.Add(EditorTileMainMaterials[i]);
-            //}
+            Logger.Log("SetCurrentlyAvailableModifiers for ground");
+            SetCurrentlyAvailableGroundModifiers();
         }
-        CurrentlyAvailableTileModifiers.Add(EditorTileModifierCategory.MainMaterial, currentlyAvailableMainMaterials);
+        else if(mainMaterialModifier is EditorMazeTileWaterMaterial || mainMaterialModifier is EditorOverworldWaterMaterial)
+        {
+            Logger.Log("SetCurrentlyAvailableModifiers for water");
+            SetCurrentlyAvailableWaterModifiers();
+        }
+    }
 
+    private void SetCurrentlyAvailableWaterModifiers()
+    {
+        List<IEditorTileModifier> currentlyAvailableBackgrounds = new List<IEditorTileModifier>();
+        for (int i = 0; i < EditorTileBackgrounds.Count; i++)
+        {
+            if (EditorTileBackgrounds[i] is IWaterMaterialModifier)
+            {
+                currentlyAvailableBackgrounds.Add(EditorTileBackgrounds[i]);
+            }
+        }
+        CurrentlyAvailableTileModifiers.Add(EditorTileModifierCategory.Background, currentlyAvailableBackgrounds);
+
+        List<IEditorTileModifier> currentlyAvailableAttributes = new List<IEditorTileModifier>();
+        for (int i = 0; i < EditorTileAttributes.Count; i++)
+        {
+            if (EditorTileAttributes[i] is IWaterMaterialModifier)
+            {
+                currentlyAvailableAttributes.Add(EditorTileAttributes[i]);
+            }
+        }
+        CurrentlyAvailableTileModifiers.Add(EditorTileModifierCategory.Attribute, currentlyAvailableAttributes);
+
+        List<IEditorTileModifier> currentlyAvailableTransformationTriggers = new List<IEditorTileModifier>();
+        for (int i = 0; i < EditorTileTransformationTriggerers.Count; i++)
+        {
+            if (EditorTileTransformationTriggerers[i] is IWaterMaterialModifier)
+            {
+                currentlyAvailableTransformationTriggers.Add(EditorTileTransformationTriggerers[i]);
+            }
+        }
+        CurrentlyAvailableTileModifiers.Add(EditorTileModifierCategory.TransformationTriggerer, currentlyAvailableTransformationTriggers);
+
+        // initial value for water: 
+        EditorCanvasUI.Instance.SelectedTileModifierContainer.SetSelectedTileModifierCategory(EditorTileModifierCategory.Background);
+        EditorCanvasUI.Instance.SelectedTileModifierContainer.SetSelectedTileModifier(0);
+    }
+
+    private void SetCurrentlyAvailableGroundModifiers()
+    {
         List<IEditorTileModifier> currentlyAvailableBackgrounds = new List<IEditorTileModifier>();
         for (int i = 0; i < EditorTileBackgrounds.Count; i++)
         {
@@ -117,5 +151,9 @@ public abstract class EditorSelectedTileModifierContainer : MonoBehaviour
             }
         }
         CurrentlyAvailableTileModifiers.Add(EditorTileModifierCategory.TransformationTriggerer, currentlyAvailableTransformationTriggers);
+
+        // initial value for groud:  Background -> path
+        EditorCanvasUI.Instance.SelectedTileModifierContainer.SetSelectedTileModifierCategory(EditorTileModifierCategory.Background);
+        EditorCanvasUI.Instance.SelectedTileModifierContainer.SetSelectedTileModifier(0);
     }
 }

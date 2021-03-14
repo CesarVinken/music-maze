@@ -1,11 +1,13 @@
-﻿using UnityEngine;
+﻿using System.Collections.Generic;
+using UnityEngine;
 using UnityEngine.UI;
 
 public interface IEditorTileModificationPanel : IEditorModificationPanel
 {
     [SerializeField] Transform TileModifierActionsContainer { get; set; }
-    Image SelectedMainMaterialIcon { get; set; }
+    Dropdown SelectedMainMaterialDropdown { get; set; }
 
-    void SetMainMaterialIcon(Sprite selectedMainMaterialIcon);
+    List<EditorTileMainMaterialModifier> EditorTileMainMaterials { get; set; }
+
     void DestroyModifierActions();
 }

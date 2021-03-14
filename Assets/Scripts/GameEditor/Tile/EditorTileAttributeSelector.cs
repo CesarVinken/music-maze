@@ -1,4 +1,6 @@
-﻿public class EditorTileAttributeSelector : EditorTileModifierSelector
+﻿using System.Collections.Generic;
+
+public class EditorTileAttributeSelector : EditorTileModifierSelector
 {
     public EditorTileAttributeSelector(EditorSelectedTileModifierContainer editorSelectedModifierContainer) : base(editorSelectedModifierContainer) { }
 
@@ -21,6 +23,7 @@
             EditorTileModifierCategory previousEditorTileModifierCategory = PreviousEditorTileModfierCategory(currentCategory);
 
             int modifierCount = selectedTileModifierContainer.CurrentlyAvailableTileModifiers[previousEditorTileModifierCategory].Count;
+            Logger.Log($"How many attributes do we have? {modifierCount}");
             int lastAvailableIndex = modifierCount - 1;
 
             selectedTileModifierContainer.SetSelectedTileModifierCategory(previousEditorTileModifierCategory);
@@ -41,9 +44,16 @@
 
     public override void SetSelectedModifier(int modifierIndex)
     {
-        if (_editorSelectedModifierContainer.EditorTileAttributes.Count == 0) return;
+        Logger.Log(modifierIndex);
+        List<IEditorTileModifier> currentlyAvailableTileAttributes = _editorSelectedModifierContainer.CurrentlyAvailableTileModifiers[EditorTileModifierCategory.Attribute];
+        
+        if (currentlyAvailableTileAttributes.Count == 0)
+        {
+            EditorManager.SelectedTileAttributeModifierIndex = 0;
+            return;
+        }
 
-        EditorTileAttributeModifier attribute = _editorSelectedModifierContainer.EditorTileAttributes[modifierIndex];
+        EditorTileAttributeModifier attribute = currentlyAvailableTileAttributes[modifierIndex] as EditorTileAttributeModifier;
         _editorSelectedModifierContainer.SelectedModifierLabel.text = GetSelectedModifierLabel(attribute.Name);
         _editorSelectedModifierContainer.SelectedModifierSprite.sprite = attribute.GetSprite();
         EditorManager.SelectedTileAttributeModifierIndex = modifierIndex;
