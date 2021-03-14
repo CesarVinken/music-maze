@@ -25,6 +25,8 @@ public class EditorSelectedMazeTileModifierContainer : EditorSelectedTileModifie
 
         EditorManager.SelectedTileAttributeModifierIndex = 0;
 
+        EditorTileBackgrounds.Add(new EditorMazeTileBaseGround());
+        EditorTileBackgrounds.Add(new EditorMazeTileBaseWater());
         EditorTileBackgrounds.Add(new EditorMazeTilePath());
         EditorManager.SelectedTileBackgroundModifierIndex = 0;
 

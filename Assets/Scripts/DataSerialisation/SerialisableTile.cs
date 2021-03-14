@@ -95,9 +95,9 @@ public class SerialisableTile
             SerialisableTilePathBackground serialisableTilePathBackground = new SerialisableTilePathBackground(tilePath.ConnectionScore);
             return serialisableTilePathBackground;
         }
-        else if (tileBackground.GetType() == typeof(MazeTileBaseBackground) || (tileBackground.GetType() == typeof(OverworldTileBaseBackground)))
+        else if (tileBackground.GetType() == typeof(MazeTileBaseGround) || (tileBackground.GetType() == typeof(OverworldTileBaseGround)))
         {
-            SerialisableTileBaseBackground serialisableTileBaseBackground = new SerialisableTileBaseBackground();
+            SerialisableTileBaseGround serialisableTileBaseBackground = new SerialisableTileBaseGround();
             return serialisableTileBaseBackground;
         }
         else

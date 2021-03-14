@@ -18,5 +18,5 @@ public abstract class TileBackgroundPlacer<T> where T : Tile
         }
     }
 
-    public abstract void PlaceBaseBackground(IBaseBackgroundType baseBackgroundType);
+    public abstract void PlaceBackground(IBaseBackgroundType baseGroundType);
 }

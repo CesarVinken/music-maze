@@ -25,7 +25,7 @@ public class OverworldTileBackgroundRemover : TileBackgroundRemover
         if (oldConnectionScore == NeighbourTileCalculator.ConnectionOnAllSidesScore)
         {
             EditorOverworldTileBackgroundPlacer tileBackgroundPlacer = new EditorOverworldTileBackgroundPlacer(_tile);
-            tileBackgroundPlacer.PlaceBaseBackground(new OverworldDefaultBaseBackgroundType());
+            tileBackgroundPlacer.PlaceBackground(new OverworldDefaultBaseGroundType());
         }
 
         _tile.RemoveBackground(overworldTilePath);
@@ -51,14 +51,14 @@ public class OverworldTileBackgroundRemover : TileBackgroundRemover
             if (oldConnectionScoreOnNeighbour == NeighbourTileCalculator.ConnectionOnAllSidesScore && overworldTilePathConnectionScoreOnNeighbourInfo.RawConnectionScore != NeighbourTileCalculator.ConnectionOnAllSidesScore)
             {
                 EditorOverworldTileBackgroundPlacer tileBackgroundPlacer = new EditorOverworldTileBackgroundPlacer(neighbour.Value as EditorOverworldTile);
-                tileBackgroundPlacer.PlaceBaseBackground(new OverworldDefaultBaseBackgroundType());
+                tileBackgroundPlacer.PlaceBackground(new OverworldDefaultBaseGroundType());
             }
         }
     }
 
     public override void RemoveBaseBackground(IBaseBackgroundType overworldTileBaseBackgroundType)
     {
-        OverworldTileBaseBackground overworldTileBaseBackground = (OverworldTileBaseBackground)_tile.GetBackgrounds().FirstOrDefault(background => background is OverworldTileBaseBackground);
+        OverworldTileBaseGround overworldTileBaseBackground = (OverworldTileBaseGround)_tile.GetBackgrounds().FirstOrDefault(background => background is OverworldTileBaseGround);
 
         if (overworldTileBaseBackground == null) return;
 

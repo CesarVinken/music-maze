@@ -45,7 +45,6 @@ public class EditorMazeTileModificationPanel : MonoBehaviour, IEditorTileModific
 
     public void DestroyModifierActions()
     {
-        Logger.Log("Destroy actions for triggerer");
         foreach (Transform action in TileModifierActionsContainer)
         {
             GameObject.Destroy(action.gameObject);
@@ -72,7 +71,7 @@ public class EditorMazeTileModificationPanel : MonoBehaviour, IEditorTileModific
     private void DropdownValueChanged(Dropdown change)
     {
         EditorTileMainMaterialModifier mainMaterialModifier = EditorTileMainMaterials[change.value];
-        Logger.Warning("New Value : " + mainMaterialModifier.Name);
+        Logger.Warning("New Dropdown Value : " + mainMaterialModifier.Name);
 
         EditorManager.SelectedTileMainMaterialModifierIndex = change.value;
 

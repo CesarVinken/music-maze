@@ -23,13 +23,13 @@ public class EditorTileAttributeSelector : EditorTileModifierSelector
             EditorTileModifierCategory previousEditorTileModifierCategory = PreviousEditorTileModfierCategory(currentCategory);
 
             int modifierCount = selectedTileModifierContainer.CurrentlyAvailableTileModifiers[previousEditorTileModifierCategory].Count;
-            Logger.Log($"How many attributes do we have? {modifierCount}");
+
             int lastAvailableIndex = modifierCount - 1;
 
             selectedTileModifierContainer.SetSelectedTileModifierCategory(previousEditorTileModifierCategory);
             selectedTileModifierContainer.SetSelectedTileModifier(lastAvailableIndex);
         }
-        else if (newIndex >= _editorSelectedModifierContainer.EditorTileAttributes.Count)
+        else if (newIndex >= _editorSelectedModifierContainer.CurrentlyAvailableTileModifiers[EditorTileModifierCategory.Attribute].Count)
         {
             EditorTileModifierCategory nextEditorTileModifierCategory = NextEditorTileModfierCategory(currentCategory);
 
@@ -44,7 +44,6 @@ public class EditorTileAttributeSelector : EditorTileModifierSelector
 
     public override void SetSelectedModifier(int modifierIndex)
     {
-        Logger.Log(modifierIndex);
         List<IEditorTileModifier> currentlyAvailableTileAttributes = _editorSelectedModifierContainer.CurrentlyAvailableTileModifiers[EditorTileModifierCategory.Attribute];
         
         if (currentlyAvailableTileAttributes.Count == 0)

@@ -24,7 +24,7 @@ public class OverworldTileAttributeRemover : TileAttributeRemover
         if (oldConnectionScore == NeighbourTileCalculator.ConnectionOnAllSidesScore)
         {
             EditorOverworldTileBackgroundPlacer tileBackgroundPlacer = new EditorOverworldTileBackgroundPlacer(_tile);
-            tileBackgroundPlacer.PlaceBaseBackground(new OverworldDefaultBaseBackgroundType());
+            tileBackgroundPlacer.PlaceBackground(new OverworldDefaultBaseGroundType());
         }
 
         _tile.RemoveAttribute(tileObstacle);
@@ -74,7 +74,7 @@ public class OverworldTileAttributeRemover : TileAttributeRemover
             if (obstacleConnectionScoreOnNeighbour.RawConnectionScore != NeighbourTileCalculator.ConnectionOnAllSidesScore)
             {
                 EditorOverworldTileBackgroundPlacer tileBackgroundPlacer = new EditorOverworldTileBackgroundPlacer(neighbour.Value as EditorOverworldTile);
-                tileBackgroundPlacer.PlaceBaseBackground(new OverworldDefaultBaseBackgroundType());
+                tileBackgroundPlacer.PlaceBackground(new OverworldDefaultBaseGroundType());
             }
         }
     }

@@ -75,7 +75,7 @@ public class OverworldCharacterManager : MonoBehaviourPunCallbacks, ICharacterMa
 
     private CharacterBundle SpawnCharacter(CharacterBlueprint character, GridLocation gridLocation)
     {
-        Logger.Log(character.CharacterType.GetType());
+        Logger.Log(Logger.Initialisation, character.CharacterType.GetType());
 
         string prefabName = GetPrefabNameByCharacter(character);
         Vector2 startPosition = GetCharacterGridPosition(GridLocation.GridToVector(gridLocation)); // start position is grid position plus grid tile offset

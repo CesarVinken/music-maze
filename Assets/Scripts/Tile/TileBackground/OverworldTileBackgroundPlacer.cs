@@ -8,7 +8,7 @@ public class OverworldTileBackgroundPlacer<T> : TileBackgroundPlacer<T> where T 
 
     public override void PlacePath(IPathType tilePathType, TileConnectionScoreInfo pathConnectionScoreInfo)
     {
-        GameObject overworldTilePathGO = GameObject.Instantiate(OverworldManager.Instance.TilePathPrefab, Tile.BackgroundsContainer);
+        GameObject overworldTilePathGO = GameObject.Instantiate(OverworldManager.Instance.GetTileBackgroundPrefab<OverworldTilePath>(), Tile.BackgroundsContainer);
         OverworldTilePath overworldTilePath = overworldTilePathGO.GetComponent<OverworldTilePath>();
         overworldTilePath.WithPathType(tilePathType);
         overworldTilePath.WithConnectionScoreInfo(pathConnectionScoreInfo);
@@ -17,15 +17,15 @@ public class OverworldTileBackgroundPlacer<T> : TileBackgroundPlacer<T> where T 
         Tile.AddBackground(overworldTilePath);
     }
 
-    public override void PlaceBaseBackground(IBaseBackgroundType baseBackgroundType)
+    public override void PlaceBackground(IBaseBackgroundType baseBackgroundType)
     {
         List<ITileBackground> backgrounds = Tile.GetBackgrounds();
-        OverworldTileBaseBackground oldBackground = (OverworldTileBaseBackground)backgrounds.FirstOrDefault(background => background is OverworldTileBaseBackground);
+        OverworldTileBaseGround oldBackground = (OverworldTileBaseGround)backgrounds.FirstOrDefault(background => background is OverworldTileBaseGround);
 
         if (oldBackground != null) return;
 
-        GameObject baseBackgroundGO = GameObject.Instantiate(OverworldManager.Instance.TileBaseBackgroundPrefab, Tile.BackgroundsContainer);
-        OverworldTileBaseBackground baseBackground = baseBackgroundGO.GetComponent<OverworldTileBaseBackground>();
+        GameObject baseBackgroundGO = GameObject.Instantiate(OverworldManager.Instance.GetTileBackgroundPrefab<OverworldTileBaseGround>(), Tile.BackgroundsContainer);
+        OverworldTileBaseGround baseBackground = baseBackgroundGO.GetComponent<OverworldTileBaseGround>();
 
         int defaultConnectionScore = -1;
         baseBackground.WithPathConnectionScore(defaultConnectionScore);

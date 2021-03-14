@@ -39,7 +39,7 @@ public class MazeTileAttributeRemover : TileAttributeRemover
         if (oldConnectionScore == NeighbourTileCalculator.ConnectionOnAllSidesScore)
         {
             EditorMazeTileBackgroundPlacer tileBackgroundPlacer = new EditorMazeTileBackgroundPlacer(_tile);
-            tileBackgroundPlacer.PlaceBaseBackground(new MazeLevelDefaultBaseBackgroundType());
+            tileBackgroundPlacer.PlaceBackground(new MazeLevelDefaultGroundType());
         }
 
         _tile.RemoveAttribute(tileObstacle);
@@ -91,7 +91,7 @@ public class MazeTileAttributeRemover : TileAttributeRemover
             if (obstacleConnectionScoreOnNeighbour.RawConnectionScore != NeighbourTileCalculator.ConnectionOnAllSidesScore)
             {
                 EditorMazeTileBackgroundPlacer tileBackgroundPlacer = new EditorMazeTileBackgroundPlacer(neighbour.Value as EditorMazeTile);
-                tileBackgroundPlacer.PlaceBaseBackground(new MazeLevelDefaultBaseBackgroundType());
+                tileBackgroundPlacer.PlaceBackground(new MazeLevelDefaultGroundType());
             }
         }
     }

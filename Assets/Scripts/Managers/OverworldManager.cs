@@ -14,10 +14,11 @@ public class OverworldManager : MonoBehaviour, IOnEventCallback
 
     public GameObject EditorTilePrefab;
     public GameObject InGameTilePrefab;
-    public GameObject TileBaseBackgroundPrefab;
-    public GameObject TilePathPrefab;
-    public GameObject PlayerSpawnpointPrefab;
-    public GameObject MazeLevelEntryPrefab;
+    [SerializeField] private GameObject _tileBaseGroundPrefab;
+    [SerializeField] private GameObject _tileBaseWaterPrefab;
+    [SerializeField] private GameObject _tilePathPrefab;
+    [SerializeField] private GameObject _playerSpawnpointPrefab;
+    [SerializeField] private GameObject _mazeLevelEntryPrefab;
 
     public void Awake()
     {
@@ -25,10 +26,11 @@ public class OverworldManager : MonoBehaviour, IOnEventCallback
 
         Guard.CheckIsNull(EditorTilePrefab, "EditorTilePrefab", gameObject);
         Guard.CheckIsNull(InGameTilePrefab, "InGameTilePrefab", gameObject);
-        Guard.CheckIsNull(TileBaseBackgroundPrefab, "TileBaseBackgroundPrefab", gameObject);
-        Guard.CheckIsNull(TilePathPrefab, "TilePathPrefab", gameObject);
-        Guard.CheckIsNull(PlayerSpawnpointPrefab, "PlayerSpawnpointPrefab", gameObject);
-        Guard.CheckIsNull(MazeLevelEntryPrefab, "MazeLevelEntryPrefab", gameObject);
+        Guard.CheckIsNull(_tileBaseGroundPrefab, "TileBaseGroundPrefab", gameObject);
+        Guard.CheckIsNull(_tileBaseWaterPrefab, "TileBaseWaterPrefab", gameObject);
+        Guard.CheckIsNull(_tilePathPrefab, "TilePathPrefab", gameObject);
+        Guard.CheckIsNull(_playerSpawnpointPrefab, "PlayerSpawnpointPrefab", gameObject);
+        Guard.CheckIsNull(_mazeLevelEntryPrefab, "MazeLevelEntryPrefab", gameObject);
 
         MazeLevelInvitation.PendingInvitation = false;
     }
@@ -142,11 +144,27 @@ public class OverworldManager : MonoBehaviour, IOnEventCallback
             //case Type tileObstacle when tileObstacle == typeof(TileObstacle):
             //    return TileObstaclePrefab;
             case Type playerSpawnpoint when playerSpawnpoint == typeof(PlayerSpawnpoint):
-                return PlayerSpawnpointPrefab;
+                return _playerSpawnpointPrefab;
             case Type MazeLevelEntry when MazeLevelEntry == typeof(MazeLevelEntry):
-                return MazeLevelEntryPrefab;
+                return _mazeLevelEntryPrefab;
             default:
                 Logger.Error($"Could not find a prefab for the tile attribute type of {typeof(T)}");
+                return null;
+        }
+    }
+
+    public GameObject GetTileBackgroundPrefab<T>() where T : ITileBackground
+    {
+        switch (typeof(T))
+        {
+            case Type baseGround when baseGround == typeof(OverworldTileBaseGround):
+                return _tileBaseGroundPrefab;
+            case Type baseWater when baseWater == typeof(OverworldTileBaseWater):
+                return _tileBaseWaterPrefab;
+            case Type path when path == typeof(OverworldTilePath):
+                return _tilePathPrefab;
+            default:
+                Logger.Error($"Could not find a prefab for the tile background type of {typeof(T)}");
                 return null;
         }
     }

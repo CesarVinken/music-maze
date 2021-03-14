@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System.Collections.Generic;
+using UnityEngine;
 using UnityEngine.EventSystems;
 
 public class EditorTileSelector : MonoBehaviour
@@ -137,17 +138,20 @@ public class EditorTileSelector : MonoBehaviour
 
         if (editorTileModifierType == EditorTileModifierCategory.Attribute)
         {
-            EditorTileAttributeModifier attribute = selectedTileModifierContainer.EditorTileAttributes[EditorManager.SelectedTileAttributeModifierIndex];
+            List<IEditorTileModifier> attributes = selectedTileModifierContainer.CurrentlyAvailableTileModifiers[EditorTileModifierCategory.Attribute];
+            EditorTileAttributeModifier attribute = attributes[EditorManager.SelectedTileAttributeModifierIndex] as EditorTileAttributeModifier;
             PlaceTileAttribute(tile, attribute);
         }
         else if (editorTileModifierType == EditorTileModifierCategory.Background)
         {
-            EditorTileBackgroundModifier background = selectedTileModifierContainer.EditorTileBackgrounds[EditorManager.SelectedTileBackgroundModifierIndex];
+            List<IEditorTileModifier> backgrounds = selectedTileModifierContainer.CurrentlyAvailableTileModifiers[EditorTileModifierCategory.Background];
+            EditorTileBackgroundModifier background = backgrounds[EditorManager.SelectedTileBackgroundModifierIndex] as EditorTileBackgroundModifier;
             PlaceTileBackground(tile, background);
         }
         else if (editorTileModifierType == EditorTileModifierCategory.TransformationTriggerer)
         {
-            EditorTileTransformationModifier transformationTriggerer = selectedTileModifierContainer.EditorTileTransformationTriggerers[EditorManager.SelectedTileTransformationTriggererIndex];
+            List<IEditorTileModifier> transformationTriggerers = selectedTileModifierContainer.CurrentlyAvailableTileModifiers[EditorTileModifierCategory.TransformationTriggerer];
+            EditorTileTransformationModifier transformationTriggerer = transformationTriggerers[EditorManager.SelectedTileTransformationTriggererIndex] as EditorTileTransformationModifier;
             PlaceTransformationTriggerer(tile, transformationTriggerer);
         }
         else
@@ -172,15 +176,18 @@ public class EditorTileSelector : MonoBehaviour
 
         EditorTileModifierCategory editorMazeTileModifierCategory = EditorManager.SelectedTileModifierCategory;
         GameManager.Instance.CurrentEditorLevel.TilesByLocation.TryGetValue(CurrentSelectedLocation, out Tile tile);
+        EditorSelectedTileModifierContainer selectedTileModifierContainer = EditorCanvasUI.Instance.SelectedTileModifierContainer;
 
         if (editorMazeTileModifierCategory == EditorTileModifierCategory.Attribute)
         {
-            EditorTileAttributeModifier attribute = EditorCanvasUI.Instance.SelectedTileModifierContainer.EditorTileAttributes[EditorManager.SelectedTileAttributeModifierIndex];
+            List<IEditorTileModifier> attributes = selectedTileModifierContainer.CurrentlyAvailableTileModifiers[EditorTileModifierCategory.Attribute];
+            EditorTileAttributeModifier attribute = attributes[EditorManager.SelectedTileAttributeModifierIndex] as EditorTileAttributeModifier;
             PlaceTileAttributeVariation(tile, attribute);
         }
         else if (editorMazeTileModifierCategory == EditorTileModifierCategory.Background)
         {
-            EditorTileBackgroundModifier background = EditorCanvasUI.Instance.SelectedTileModifierContainer.EditorTileBackgrounds[EditorManager.SelectedTileBackgroundModifierIndex];
+            List<IEditorTileModifier> backgrounds = selectedTileModifierContainer.CurrentlyAvailableTileModifiers[EditorTileModifierCategory.Background];
+            EditorTileBackgroundModifier background = backgrounds[EditorManager.SelectedTileBackgroundModifierIndex] as EditorTileBackgroundModifier;
             PlaceMazeTileBackgroundVariation(tile, background);
         }
     }

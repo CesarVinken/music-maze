@@ -1,7 +1,6 @@
-﻿using System.Collections;
-using UnityEngine;
+﻿using UnityEngine;
 
-public class OverworldTileBaseBackground : MonoBehaviour, ITileBackground
+public class OverworldTileBaseGround : MonoBehaviour, ITileBackground
 {
     public Tile Tile;
     public string ParentId;

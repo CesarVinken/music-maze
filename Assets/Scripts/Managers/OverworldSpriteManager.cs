@@ -7,6 +7,7 @@ public class OverworldSpriteManager : SpriteManager
 
     public Sprite[] DefaultOverworldTileBackground;
     public Sprite[] Path;
+    public Sprite[] DefaultOverworldTileWater;
 
     public void Awake()
     {
@@ -14,5 +15,6 @@ public class OverworldSpriteManager : SpriteManager
 
         Guard.CheckLength(DefaultOverworldTileBackground, "DefaultOverworldTileBackground");
         Guard.CheckLength(Path, "Path");
+        Guard.CheckLength(DefaultOverworldTileWater, "DefaultOverworldTileWater");
     }
 }

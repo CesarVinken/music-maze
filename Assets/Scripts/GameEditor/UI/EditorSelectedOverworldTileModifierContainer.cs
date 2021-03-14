@@ -22,6 +22,8 @@ public class EditorSelectedOverworldTileModifierContainer : EditorSelectedTileMo
 
         EditorManager.SelectedTileAttributeModifierIndex = 0;
 
+        EditorTileBackgrounds.Add(new EditorOverworldTileBaseGround());
+        EditorTileBackgrounds.Add(new EditorOverworldTileBaseWater());
         EditorTileBackgrounds.Add(new EditorOverworldTilePath());
         EditorManager.SelectedTileBackgroundModifierIndex = 0;
 

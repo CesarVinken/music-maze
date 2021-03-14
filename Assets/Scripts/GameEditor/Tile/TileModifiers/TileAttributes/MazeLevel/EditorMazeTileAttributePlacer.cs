@@ -67,7 +67,7 @@ public class EditorMazeTileAttributePlacer : MazeTileAttributePlacer<EditorMazeT
         if (obstacleConnectionScore.RawConnectionScore == NeighbourTileCalculator.ConnectionOnAllSidesScore)
         {
             MazeTileBackgroundRemover tileBackgroundRemover = new MazeTileBackgroundRemover(Tile);
-            tileBackgroundRemover.RemoveBaseBackground(new MazeLevelDefaultBaseBackgroundType());
+            tileBackgroundRemover.RemoveBaseBackground(new MazeLevelDefaultGroundType());
         }
 
         // after adding obstacle to this tile, update connections of neighbours
@@ -90,7 +90,7 @@ public class EditorMazeTileAttributePlacer : MazeTileAttributePlacer<EditorMazeT
                 Logger.Log($"Remove the background on tile {neighbour.Value.GridLocation.X}, {neighbour.Value.GridLocation.Y}");
                 MazeTileBackgroundRemover tileBackgroundRemover = new MazeTileBackgroundRemover(neighbour.Value as EditorMazeTile);
 
-                tileBackgroundRemover.RemoveBaseBackground(new MazeLevelDefaultBaseBackgroundType());
+                tileBackgroundRemover.RemoveBaseBackground(new MazeLevelDefaultGroundType());
             }
         }
     }

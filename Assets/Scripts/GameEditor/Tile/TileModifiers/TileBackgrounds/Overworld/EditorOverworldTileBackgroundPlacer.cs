@@ -1,5 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 
 public class EditorOverworldTileBackgroundPlacer : OverworldTileBackgroundPlacer<EditorOverworldTile>
@@ -19,8 +18,8 @@ public class EditorOverworldTileBackgroundPlacer : OverworldTileBackgroundPlacer
         Logger.Warning("Start placing path.....");
 
         TileConnectionScoreInfo pathConnectionScore = NeighbourTileCalculator.MapNeighbourPathsOfTile(Tile, overworldTilePathType);
-        Logger.Log($"Found a score of {pathConnectionScore.RawConnectionScore}");
-        GameObject overworldTilePathGO = GameObject.Instantiate(OverworldManager.Instance.TilePathPrefab, Tile.BackgroundsContainer);
+
+        GameObject overworldTilePathGO = GameObject.Instantiate(OverworldManager.Instance.GetTileBackgroundPrefab<OverworldTilePath>(), Tile.BackgroundsContainer);
         OverworldTilePath overworldTilePath = overworldTilePathGO.GetComponent<OverworldTilePath>();
         overworldTilePath.WithPathType(overworldTilePathType);
         overworldTilePath.WithConnectionScoreInfo(pathConnectionScore);
@@ -43,7 +42,7 @@ public class EditorOverworldTileBackgroundPlacer : OverworldTileBackgroundPlacer
 
             if (oldConnectionScoreOnNeighbour == 16 && overworldTilePathConnectionScoreOnNeighbourInfo.RawConnectionScore != 16)
             {
-                PlaceBaseBackground(new OverworldDefaultBaseBackgroundType());
+                PlaceBackground(new OverworldDefaultBaseGroundType());
             }
         }
     }

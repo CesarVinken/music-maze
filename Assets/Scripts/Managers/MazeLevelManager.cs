@@ -18,13 +18,14 @@ public class MazeLevelManager : MonoBehaviour, IOnEventCallback
 
     public GameObject EditorTilePrefab;
     public GameObject InGameTilePrefab;
-    public GameObject TileBaseBackgroundPrefab;
-    public GameObject TilePathPrefab;
-    public GameObject TileObstaclePrefab;
-    public GameObject PlayerExitPrefab;
-    public GameObject PlayerOnlyPrefab;
-    public GameObject PlayerSpawnpointPrefab;
-    public GameObject EnemySpawnpointPrefab;
+    [SerializeField] private GameObject _tileBaseGroundPrefab;
+    [SerializeField] private GameObject _tileBaseWaterPrefab;
+    [SerializeField] private GameObject _tilePathPrefab;
+    [SerializeField] private GameObject _tileObstaclePrefab;
+    [SerializeField] private GameObject _playerExitPrefab;
+    [SerializeField] private GameObject _playerOnlyPrefab;
+    [SerializeField] private GameObject _playerSpawnpointPrefab;
+    [SerializeField] private GameObject _enemySpawnpointPrefab;
 
     public int NumberOfUnmarkedTiles = -1;
 
@@ -33,15 +34,15 @@ public class MazeLevelManager : MonoBehaviour, IOnEventCallback
         switch (typeof(T))
         {
             case Type playerExit when playerExit == typeof(PlayerExit):
-                return PlayerExitPrefab;
+                return _playerExitPrefab;
             case Type tileObstacle when tileObstacle == typeof(TileObstacle):
-                return TileObstaclePrefab;
+                return _tileObstaclePrefab;
             case Type playerOnly when playerOnly == typeof(PlayerOnly):
-                return PlayerOnlyPrefab;
+                return _playerOnlyPrefab;
             case Type playerSpawnpoint when playerSpawnpoint == typeof(PlayerSpawnpoint):
-                return PlayerSpawnpointPrefab;
+                return _playerSpawnpointPrefab;
             case Type enemySpawnpoint when enemySpawnpoint == typeof(EnemySpawnpoint):
-                return EnemySpawnpointPrefab;
+                return _enemySpawnpointPrefab;
 
             default:
                 Logger.Error($"Could not find a prefab for the tile attribute type of {typeof(T)}");
@@ -49,17 +50,33 @@ public class MazeLevelManager : MonoBehaviour, IOnEventCallback
         }
     }
 
+    public GameObject GetTileBackgroundPrefab<T>() where T : ITileBackground
+    {
+        switch (typeof(T))
+        {
+            case Type baseGround when baseGround == typeof(MazeTileBaseGround):
+                return _tileBaseGroundPrefab;
+            case Type baseWater when baseWater == typeof(MazeTileBaseWater):
+                return _tileBaseWaterPrefab;
+            case Type path when path == typeof(MazeTilePath):
+                return _tilePathPrefab;
+            default:
+                Logger.Error($"Could not find a prefab for the tile background type of {typeof(T)}");
+                return null;
+        }
+    }
+
     public void Awake()
     {
         Guard.CheckIsNull(EditorTilePrefab, "EditorTilePrefab", gameObject);
         Guard.CheckIsNull(InGameTilePrefab, "InGameTilePrefab", gameObject);
-        Guard.CheckIsNull(TileBaseBackgroundPrefab, "TileBaseBackgroundPrefab", gameObject);
-        Guard.CheckIsNull(TilePathPrefab, "TilePathPrefab", gameObject);
-        Guard.CheckIsNull(TileObstaclePrefab, "TileObstaclePrefab", gameObject);
-        Guard.CheckIsNull(PlayerExitPrefab, "PlayerExitPrefab", gameObject);
-        Guard.CheckIsNull(PlayerOnlyPrefab, "PlayerOnlyPrefab", gameObject);
-        Guard.CheckIsNull(PlayerSpawnpointPrefab, "PlayerSpawnpointPrefab", gameObject);
-        Guard.CheckIsNull(EnemySpawnpointPrefab, "EnemySpawnpointPrefab", gameObject);
+        Guard.CheckIsNull(_tileBaseGroundPrefab, "TileBaseBackgroundPrefab", gameObject);
+        Guard.CheckIsNull(_tilePathPrefab, "TilePathPrefab", gameObject);
+        Guard.CheckIsNull(_tileObstaclePrefab, "TileObstaclePrefab", gameObject);
+        Guard.CheckIsNull(_playerExitPrefab, "PlayerExitPrefab", gameObject);
+        Guard.CheckIsNull(_playerOnlyPrefab, "PlayerOnlyPrefab", gameObject);
+        Guard.CheckIsNull(_playerSpawnpointPrefab, "PlayerSpawnpointPrefab", gameObject);
+        Guard.CheckIsNull(_enemySpawnpointPrefab, "EnemySpawnpointPrefab", gameObject);
 
         Instance = this;
     }

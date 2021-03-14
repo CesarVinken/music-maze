@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-public class EditorOverworldWaterMaterial : EditorOverworldTileMainMaterialModifier
+public class EditorOverworldWaterMaterial : EditorOverworldTileMainMaterialModifier, IWaterMaterialModifier
 {
     public override string Name { get => "Water"; }
     private Sprite _sprite = EditorCanvasUI.Instance.TileMainMaterialIcons[1];

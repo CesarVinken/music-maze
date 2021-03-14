@@ -1,7 +1,7 @@
 ﻿using System.Collections;
 using UnityEngine;
 
-public class MazeTileBaseBackground : MonoBehaviour, ITileBackground, ITransformable
+public class OverworldTileBaseWater : MonoBehaviour, ITileBackground, ITransformable
 {
     public Tile Tile;
     public string ParentId;
@@ -17,13 +17,13 @@ public class MazeTileBaseBackground : MonoBehaviour, ITileBackground, ITransform
         Tile = tile;
         ParentId = tile.TileId;
 
-        _sortingOrder = MazeSpriteManager.BaseBackgroundSortingOrder;
+        _sortingOrder = SpriteManager.BaseBackgroundSortingOrder;
         _tileSpriteContainer.SetSortingOrder(_sortingOrder);
     }
 
     public void WithPathConnectionScore(int score)
     {
-        Sprite sprite = MazeSpriteManager.Instance.DefaultMazeTileBackground[0];
+        Sprite sprite = MazeSpriteManager.Instance.DefaultMazeTileWater[0];
         _tileSpriteContainer.SetSprite(sprite);
     }
 
@@ -41,7 +41,7 @@ public class MazeTileBaseBackground : MonoBehaviour, ITileBackground, ITransform
 
     public IEnumerator TransformToColourful()
     {
-        Sprite colourfulSprite = MazeSpriteManager.Instance.DefaultMazeTileBackgroundColourful[0];
+        Sprite colourfulSprite = MazeSpriteManager.Instance.DefaultMazeTileWaterColourful[0];
 
         TileSpriteContainer transformedSpriteContainer = TileSpriteContainerPool.Instance.Get();
         transformedSpriteContainer.transform.SetParent(transform);
@@ -54,7 +54,7 @@ public class MazeTileBaseBackground : MonoBehaviour, ITileBackground, ITransform
 
         float fadeSpeed = 1f;
         float alphaAmount = 0;
-        
+
         while (alphaAmount < 1)
         {
             alphaAmount = alphaAmount + (fadeSpeed * Time.deltaTime);

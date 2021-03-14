@@ -86,7 +86,7 @@ public class EditorMazeModificationPanel : EditorGridModificationPanel
                     tileBackgrounds.Add(new SerialisableTileBackground(mazeTilePath.GetType().ToString(), mazeTilePath));
                 }
 
-                SerialisableTileBaseBackground baseBackground = TryAddBaseBackgroundForNewMaze(tileBackgrounds, tileAttributes);
+                SerialisableTileBaseGround baseBackground = TryAddBaseBackgroundForNewMaze(tileBackgrounds, tileAttributes);
 
                 if (baseBackground != null)
                 {
@@ -284,7 +284,7 @@ public class EditorMazeModificationPanel : EditorGridModificationPanel
     }
 
     // return a base background, except for tiles that are completely covered by an obstacle or path (with connections to all sides)
-    private SerialisableTileBaseBackground TryAddBaseBackgroundForNewMaze(List<SerialisableTileBackground> tileBackgrounds, List<SerialisableTileAttribute> tileAttributes)
+    private SerialisableTileBaseGround TryAddBaseBackgroundForNewMaze(List<SerialisableTileBackground> tileBackgrounds, List<SerialisableTileAttribute> tileAttributes)
     {
         for (int i = 0; i < tileBackgrounds.Count; i++)
         {
@@ -303,7 +303,7 @@ public class EditorMazeModificationPanel : EditorGridModificationPanel
 
         if (obstacleAttribute == null)
         {
-            return new SerialisableTileBaseBackground();
+            return new SerialisableTileBaseGround();
         }
 
         if (obstacleAttribute.ConnectionScore == 16)
@@ -311,7 +311,7 @@ public class EditorMazeModificationPanel : EditorGridModificationPanel
             return null;
         }
 
-        return new SerialisableTileBaseBackground();
+        return new SerialisableTileBaseGround();
     }
 
     private void CheckForTilesWithoutTransformationTriggerers()

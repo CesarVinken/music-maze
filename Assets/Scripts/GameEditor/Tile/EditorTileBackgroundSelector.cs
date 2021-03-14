@@ -23,17 +23,12 @@ public class EditorTileBackgroundSelector : EditorTileModifierSelector
             EditorTileModifierCategory previousEditorTileModifierCategory = PreviousEditorTileModfierCategory(currentCategory);
             int modifierCount = selectedTileModifierContainer.CurrentlyAvailableTileModifiers[previousEditorTileModifierCategory].Count;
 
-            // Get currently selected material
-            // Get available backgrounds for currently selected material
-            // Select last of the currently available Backgrounds
-
-
             EditorCanvasUI.Instance.SelectedTileModifierContainer.SetSelectedTileModifierCategory(previousEditorTileModifierCategory);
 
             int lastAvailableIndex = modifierCount - 1;
             EditorCanvasUI.Instance.SelectedTileModifierContainer.SetSelectedTileModifier(lastAvailableIndex);
         }
-        else if (newIndex >= _editorSelectedModifierContainer.EditorTileBackgrounds.Count)
+        else if (newIndex >= _editorSelectedModifierContainer.CurrentlyAvailableTileModifiers[EditorTileModifierCategory.Background].Count)
         {
             EditorTileModifierCategory nextEditorTileModifierCategory = NextEditorTileModfierCategory(currentCategory);
 
@@ -55,7 +50,6 @@ public class EditorTileBackgroundSelector : EditorTileModifierSelector
             EditorManager.SelectedTileBackgroundModifierIndex = 0;
             return;
         }
-
 
         EditorTileBackgroundModifier background = currentlyAvailableTileBackgrounds[modifierIndex] as EditorTileBackgroundModifier;
         _editorSelectedModifierContainer.SelectedModifierLabel.text = GetSelectedModifierLabel(background.Name);

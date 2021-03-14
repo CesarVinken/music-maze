@@ -23,7 +23,7 @@ public class MazeTileBackgroundRemover : TileBackgroundRemover
         if (oldConnectionScore == NeighbourTileCalculator.ConnectionOnAllSidesScore)
         {
             EditorMazeTileBackgroundPlacer tileBackgroundPlacer = new EditorMazeTileBackgroundPlacer(_tile);
-            tileBackgroundPlacer.PlaceBaseBackground(new MazeLevelDefaultBaseBackgroundType());
+            tileBackgroundPlacer.PlaceBackground(new MazeLevelDefaultGroundType());
         }
 
         _tile.RemoveBackground(mazeTilePath);
@@ -52,7 +52,7 @@ public class MazeTileBackgroundRemover : TileBackgroundRemover
             if (oldConnectionScoreOnNeighbour == NeighbourTileCalculator.ConnectionOnAllSidesScore && mazeTilePathConnectionScoreOnNeighbourInfo.RawConnectionScore != NeighbourTileCalculator.ConnectionOnAllSidesScore)
             {
                 EditorMazeTileBackgroundPlacer tileBackgroundPlacer = new EditorMazeTileBackgroundPlacer(neighbour.Value as EditorMazeTile);
-                tileBackgroundPlacer.PlaceBaseBackground(new MazeLevelDefaultBaseBackgroundType());
+                tileBackgroundPlacer.PlaceBackground(new MazeLevelDefaultGroundType());
             }
         }
 
@@ -61,7 +61,7 @@ public class MazeTileBackgroundRemover : TileBackgroundRemover
 
     public override void RemoveBaseBackground(IBaseBackgroundType mazeTileBaseBackgroundType)
     {
-        MazeTileBaseBackground mazeTileBaseBackground = (MazeTileBaseBackground)_tile.GetBackgrounds().FirstOrDefault(background => background is MazeTileBaseBackground);
+        MazeTileBaseGround mazeTileBaseBackground = (MazeTileBaseGround)_tile.GetBackgrounds().FirstOrDefault(background => background is MazeTileBaseGround);
 
         if (mazeTileBaseBackground == null) return;
 

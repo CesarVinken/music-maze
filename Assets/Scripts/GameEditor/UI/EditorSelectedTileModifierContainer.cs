@@ -88,8 +88,10 @@ public abstract class EditorSelectedTileModifierContainer : MonoBehaviour
         List<IEditorTileModifier> currentlyAvailableBackgrounds = new List<IEditorTileModifier>();
         for (int i = 0; i < EditorTileBackgrounds.Count; i++)
         {
+            Logger.Log($"Going over (for water): {EditorTileBackgrounds[i].Name}");
             if (EditorTileBackgrounds[i] is IWaterMaterialModifier)
             {
+                Logger.Log($"Add to backgrounds for water: {EditorTileBackgrounds[i].Name}");
                 currentlyAvailableBackgrounds.Add(EditorTileBackgrounds[i]);
             }
         }
@@ -125,8 +127,10 @@ public abstract class EditorSelectedTileModifierContainer : MonoBehaviour
         List<IEditorTileModifier> currentlyAvailableBackgrounds = new List<IEditorTileModifier>();
         for (int i = 0; i < EditorTileBackgrounds.Count; i++)
         {
+            Logger.Log($"Going over (for ground): {EditorTileBackgrounds[i].Name}");
             if (EditorTileBackgrounds[i] is IGroundMaterialModifier)
             {
+                Logger.Log($"Add to backgrounds for ground: {EditorTileBackgrounds[i].Name}");
                 currentlyAvailableBackgrounds.Add(EditorTileBackgrounds[i]);
             }
         }

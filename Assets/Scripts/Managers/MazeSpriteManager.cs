@@ -9,10 +9,12 @@ public class MazeSpriteManager : SpriteManager
     public Sprite[] DefaultPath;
     public Sprite[] DefaultWall;
     public Sprite[] DefaultWallColourful;
-    public Sprite[] DefaultMazeTileBackground;
-    public Sprite[] DefaultMazeTileBackgroundColourful;
+    public Sprite[] DefaultMazeTileGround;
+    public Sprite[] DefaultMazeTileGroundColourful;
     public Sprite[] Bush;
     public Sprite[] BushColourful;
+    public Sprite[] DefaultMazeTileWater;
+    public Sprite[] DefaultMazeTileWaterColourful;
 
     [Space(10)]
     [Header("Player graphics")]
@@ -29,10 +31,12 @@ public class MazeSpriteManager : SpriteManager
         Guard.CheckLength(DefaultPath, "DefaultPath");
         Guard.CheckLength(DefaultWall, "DefaultWall");
         Guard.CheckLength(DefaultWallColourful, "DefaultWallColourful");
-        Guard.CheckLength(DefaultMazeTileBackground, "DefaultMazeTileBackground");
-        Guard.CheckLength(DefaultMazeTileBackgroundColourful, "DefaultMazeTileBackgroundColourful");
+        Guard.CheckLength(DefaultMazeTileGround, "DefaultMazeTileGround");
+        Guard.CheckLength(DefaultMazeTileGroundColourful, "DefaultMazeTileGroundColourful");
         Guard.CheckLength(Bush, "Bush");
         Guard.CheckLength(BushColourful, "BushColourful");
+        Guard.CheckLength(DefaultMazeTileWater, "DefaultMazeTileWater");
+        Guard.CheckLength(DefaultMazeTileWaterColourful, "DefaultMazeTileWaterColourful");
 
         Guard.CheckLength(Player1TileMarker, "Player1TileMarker");
         Guard.CheckLength(Player2TileMarker, "Player2TileMarker");

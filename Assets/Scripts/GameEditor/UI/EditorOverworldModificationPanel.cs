@@ -132,7 +132,7 @@ public class EditorOverworldModificationPanel : EditorGridModificationPanel
                 List<SerialisableTileAttribute> tileAttributes = new List<SerialisableTileAttribute>();
                 List<SerialisableTileBackground> tileBackgrounds = new List<SerialisableTileBackground>();
 
-                SerialisableTileBaseBackground baseBackground = TryAddBaseBackgroundForNewOverworld(tileBackgrounds, tileAttributes);
+                SerialisableTileBaseGround baseBackground = TryAddBaseBackgroundForNewOverworld(tileBackgrounds, tileAttributes);
 
                 if (baseBackground != null)
                 {
@@ -150,7 +150,7 @@ public class EditorOverworldModificationPanel : EditorGridModificationPanel
         OverworldLoader.LoadOverworldForEditor(newOverworldData);
     }
 
-    private SerialisableTileBaseBackground TryAddBaseBackgroundForNewOverworld(List<SerialisableTileBackground> tileBackgrounds, List<SerialisableTileAttribute> tileAttributes)
+    private SerialisableTileBaseGround TryAddBaseBackgroundForNewOverworld(List<SerialisableTileBackground> tileBackgrounds, List<SerialisableTileAttribute> tileAttributes)
     {
         for (int i = 0; i < tileBackgrounds.Count; i++)
         {
@@ -169,7 +169,7 @@ public class EditorOverworldModificationPanel : EditorGridModificationPanel
 
         if (obstacleAttribute == null)
         {
-            return new SerialisableTileBaseBackground();
+            return new SerialisableTileBaseGround();
         }
 
         if (obstacleAttribute.ConnectionScore == 16)
@@ -177,7 +177,7 @@ public class EditorOverworldModificationPanel : EditorGridModificationPanel
             return null;
         }
 
-        return new SerialisableTileBaseBackground();
+        return new SerialisableTileBaseGround();
     }
 
 }

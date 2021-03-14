@@ -27,17 +27,13 @@ public class EditorTileTransformationTriggererSelector : EditorTileModifierSelec
 
             selectedTileModifierContainer.SetSelectedTileModifierCategory(previousEditorTileModifierCategory);
             selectedTileModifierContainer.SetSelectedTileModifier(lastAvailableIndex);
-
-            //EditorMazeTileModificationPanel.Instance.DestroyModifierActions();
         }
-        else if (newIndex >= _editorSelectedModifierContainer.EditorTileBackgrounds.Count)
+        else if (newIndex >= _editorSelectedModifierContainer.CurrentlyAvailableTileModifiers[EditorTileModifierCategory.TransformationTriggerer].Count)
         {
             EditorTileModifierCategory nextEditorTileModifierCategory = NextEditorTileModfierCategory(currentCategory);
 
             selectedTileModifierContainer.SetSelectedTileModifierCategory(nextEditorTileModifierCategory);
             selectedTileModifierContainer.SetSelectedTileModifier(0);
-
-            //EditorMazeTileModificationPanel.Instance.DestroyModifierActions();
         }
         else
         {
