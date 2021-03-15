@@ -92,7 +92,7 @@ public class EditorOverworld : Overworld, IEditorLevel
             }
             else if (type.Equals(typeof(SerialisableTileBaseGround)))
             {
-                tileBackgroundPlacer.PlaceBackground(new OverworldDefaultBaseGroundType());
+                tileBackgroundPlacer.PlaceBackground<OverworldTileBaseGround>();
             }
             else
             {

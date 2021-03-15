@@ -117,7 +117,7 @@ public class InGameOverworld : Overworld, IInGameLevel
             }
             else if (type.Equals(typeof(SerialisableTileBaseGround)))
             {
-                tileBackgroundPlacer.PlaceBackground(new OverworldDefaultBaseGroundType());
+                tileBackgroundPlacer.PlaceBackground<OverworldTileBaseGround>();
             }
             else
             {

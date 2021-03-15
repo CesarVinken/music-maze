@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class EditorMazeTileBaseGround : EditorMazeTileBackgroundModifier, IGroundMaterialModifier
@@ -10,10 +11,21 @@ public class EditorMazeTileBaseGround : EditorMazeTileBackgroundModifier, IGroun
         EditorMazeTileBackgroundPlacer tileBackgroundPlacer = new EditorMazeTileBackgroundPlacer(tile);
         MazeTileBackgroundRemover tileBackgroundRemover = new MazeTileBackgroundRemover(tile);
 
-        ITileBackground mazeTileBaseBackground = (MazeTileBaseGround)tile.GetBackgrounds().FirstOrDefault(background => background is MazeTileBaseGround);
-        if (mazeTileBaseBackground == null)
+        ITileBackground mazeTileBaseGround = (MazeTileBaseGround)tile.GetBackgrounds().FirstOrDefault(background => background is MazeTileBaseGround);
+        if (mazeTileBaseGround == null)
         {
-            tileBackgroundPlacer.PlaceBackground(new MazeLevelDefaultGroundType());
+            List<ITileAttribute> attributes = tile.GetAttributes();
+            for (int i = 0; i < attributes.Count; i++)
+            {
+                tile.RemoveAttribute(attributes[i]);
+            }
+
+            if(tile.TileMainMaterial?.GetType() == typeof(WaterMainMaterial) || tile.TileMainMaterial == null)
+            {
+                tileBackgroundRemover.RemoveBackground<MazeTileBaseWater>();
+            }
+
+            tileBackgroundPlacer.PlaceBackground<MazeTileBaseGround>();
             Logger.Log("TODO: Remove Water");
         }
 

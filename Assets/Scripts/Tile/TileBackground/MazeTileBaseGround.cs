@@ -19,10 +19,7 @@ public class MazeTileBaseGround : MonoBehaviour, ITileBackground, ITransformable
 
         _sortingOrder = MazeSpriteManager.BaseBackgroundSortingOrder;
         _tileSpriteContainer.SetSortingOrder(_sortingOrder);
-    }
 
-    public void WithPathConnectionScore(int score)
-    {
         Sprite sprite = MazeSpriteManager.Instance.DefaultMazeTileGround[0];
         _tileSpriteContainer.SetSprite(sprite);
     }

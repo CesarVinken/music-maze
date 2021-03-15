@@ -43,7 +43,7 @@ public class EditorMazeTileBackgroundPlacer : MazeTileBackgroundPlacer<EditorMaz
 
             if (oldConnectionScoreOnNeighbour == 16 && mazeTilePathConnectionScoreOnNeighbourInfo.RawConnectionScore != 16)
             {
-                PlaceBackground(new MazeLevelDefaultGroundType());
+                PlaceBackground<MazeTileBaseGround>();
             }
         }
 

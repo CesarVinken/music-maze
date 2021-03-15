@@ -39,6 +39,11 @@ public abstract class Tile : MonoBehaviour
         GridLocation = new GridLocation(x, y);
     }
 
+    public void SetMainMaterial(ITileMainMaterial tileMainMaterial)
+    {
+        TileMainMaterial = tileMainMaterial;
+    }
+
     public void AddBackground(ITileBackground tileBackground)
     {
         _tileBackgrounds.Add(tileBackground);
@@ -82,11 +87,6 @@ public abstract class Tile : MonoBehaviour
         }
         //Logger.Log($"found tile path {tilePath.TilePathType} on {GridLocation.X},{GridLocation.Y} with score {tilePath.ConnectionScore}");
         return tilePath;
-    }
-
-    public void InitialiseTileMainMaterial()
-    {
-        TileMainMaterial.SetTile(this);
     }
 
     public void InitialiseTileBackgrounds()

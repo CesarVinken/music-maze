@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
@@ -17,19 +18,31 @@ public class OverworldTileBackgroundPlacer<T> : TileBackgroundPlacer<T> where T 
         Tile.AddBackground(overworldTilePath);
     }
 
-    public override void PlaceBackground(IBaseBackgroundType baseBackgroundType)
+    public override void PlaceBackground<U>()
     {
+        switch (typeof(U))
+        {
+            case Type overworldTileBaseGround when overworldTileBaseGround == typeof(OverworldTileBaseGround):
+            case Type overworldTilePath when overworldTilePath == typeof(OverworldTilePath):
+                Tile.SetMainMaterial(new GroundMainMaterial());
+                break;
+            case Type overworldTileBaseWater when overworldTileBaseWater == typeof(OverworldTileBaseWater):
+                Tile.SetMainMaterial(new WaterMainMaterial());
+                break;
+            default:
+                Logger.Error($"Unknown type {typeof(U)}");
+                break;
+        }
+
         List<ITileBackground> backgrounds = Tile.GetBackgrounds();
-        OverworldTileBaseGround oldBackground = (OverworldTileBaseGround)backgrounds.FirstOrDefault(background => background is OverworldTileBaseGround);
+        U oldBackground = (U)backgrounds.FirstOrDefault(background => background is U);
 
         if (oldBackground != null) return;
 
-        GameObject baseBackgroundGO = GameObject.Instantiate(OverworldManager.Instance.GetTileBackgroundPrefab<OverworldTileBaseGround>(), Tile.BackgroundsContainer);
-        OverworldTileBaseGround baseBackground = baseBackgroundGO.GetComponent<OverworldTileBaseGround>();
+        GameObject baseBackgroundGO = GameObject.Instantiate(OverworldManager.Instance.GetTileBackgroundPrefab<U>(), Tile.BackgroundsContainer);
+        U baseBackground = baseBackgroundGO.GetComponent<U>();
 
-        int defaultConnectionScore = -1;
-        baseBackground.WithPathConnectionScore(defaultConnectionScore);
         baseBackground.SetTile(Tile);
-        Tile.AddBackground(baseBackground as ITileBackground);
+        Tile.AddBackground(baseBackground);
     }
 }

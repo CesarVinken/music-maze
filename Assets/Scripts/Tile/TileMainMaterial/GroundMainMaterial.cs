@@ -1,6 +1,5 @@
-﻿using UnityEngine;
-
-public class GroundMainMaterial : MonoBehaviour, ITileMainMaterial
+﻿
+public class GroundMainMaterial : ITileMainMaterial
 {
     public Tile Tile;
     public string ParentId;
@@ -9,5 +8,6 @@ public class GroundMainMaterial : MonoBehaviour, ITileMainMaterial
     {
         Tile = tile;
         ParentId = tile.TileId;
+        Tile.SetMainMaterial(this);
     }
 }

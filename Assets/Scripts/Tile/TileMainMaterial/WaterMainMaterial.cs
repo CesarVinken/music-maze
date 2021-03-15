@@ -1,6 +1,5 @@
-﻿using UnityEngine;
-
-public class WaterMainMaterial : MonoBehaviour, ITileMainMaterial
+﻿
+public class WaterMainMaterial : ITileMainMaterial
 {
     public Tile Tile;
     public string ParentId;
@@ -9,5 +8,6 @@ public class WaterMainMaterial : MonoBehaviour, ITileMainMaterial
     {
         Tile = tile;
         ParentId = tile.TileId;
+        Tile.SetMainMaterial(this);
     }
 }

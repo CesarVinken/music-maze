@@ -42,7 +42,7 @@ public class EditorOverworldTileBackgroundPlacer : OverworldTileBackgroundPlacer
 
             if (oldConnectionScoreOnNeighbour == 16 && overworldTilePathConnectionScoreOnNeighbourInfo.RawConnectionScore != 16)
             {
-                PlaceBackground(new OverworldDefaultBaseGroundType());
+                PlaceBackground<OverworldTileBaseGround>();
             }
         }
     }

@@ -18,10 +18,7 @@ public class OverworldTileBaseGround : MonoBehaviour, ITileBackground
 
         _sortingOrder = OverworldSpriteManager.BaseBackgroundSortingOrder;
         _tileSpriteContainer.SetSortingOrder(_sortingOrder);
-    }
 
-    public void WithPathConnectionScore(int score)
-    {
         Sprite sprite = OverworldSpriteManager.Instance.DefaultOverworldTileBackground[0];
         _tileSpriteContainer.SetSprite(sprite);
     }

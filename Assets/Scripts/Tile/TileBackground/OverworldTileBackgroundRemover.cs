@@ -1,7 +1,5 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using UnityEngine;
 
 public class OverworldTileBackgroundRemover : TileBackgroundRemover
 {
@@ -25,7 +23,7 @@ public class OverworldTileBackgroundRemover : TileBackgroundRemover
         if (oldConnectionScore == NeighbourTileCalculator.ConnectionOnAllSidesScore)
         {
             EditorOverworldTileBackgroundPlacer tileBackgroundPlacer = new EditorOverworldTileBackgroundPlacer(_tile);
-            tileBackgroundPlacer.PlaceBackground(new OverworldDefaultBaseGroundType());
+            tileBackgroundPlacer.PlaceBackground< OverworldTileBaseGround>();
         }
 
         _tile.RemoveBackground(overworldTilePath);
@@ -51,18 +49,18 @@ public class OverworldTileBackgroundRemover : TileBackgroundRemover
             if (oldConnectionScoreOnNeighbour == NeighbourTileCalculator.ConnectionOnAllSidesScore && overworldTilePathConnectionScoreOnNeighbourInfo.RawConnectionScore != NeighbourTileCalculator.ConnectionOnAllSidesScore)
             {
                 EditorOverworldTileBackgroundPlacer tileBackgroundPlacer = new EditorOverworldTileBackgroundPlacer(neighbour.Value as EditorOverworldTile);
-                tileBackgroundPlacer.PlaceBackground(new OverworldDefaultBaseGroundType());
+                tileBackgroundPlacer.PlaceBackground<OverworldTileBaseGround>();
             }
         }
     }
 
-    public override void RemoveBaseBackground(IBaseBackgroundType overworldTileBaseBackgroundType)
+    public override void RemoveBackground<T>()
     {
-        OverworldTileBaseGround overworldTileBaseBackground = (OverworldTileBaseGround)_tile.GetBackgrounds().FirstOrDefault(background => background is OverworldTileBaseGround);
+        T overworldTileBackground = (T)_tile.GetBackgrounds().FirstOrDefault(background => background is T);
 
-        if (overworldTileBaseBackground == null) return;
+        if (overworldTileBackground == null) return;
 
-        _tile.GetBackgrounds().Remove(overworldTileBaseBackground);
-        overworldTileBaseBackground.Remove();
+        _tile.RemoveBackground(overworldTileBackground);
+        overworldTileBackground.Remove();
     }
 }

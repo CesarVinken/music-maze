@@ -23,7 +23,7 @@ public class MazeTileBackgroundRemover : TileBackgroundRemover
         if (oldConnectionScore == NeighbourTileCalculator.ConnectionOnAllSidesScore)
         {
             EditorMazeTileBackgroundPlacer tileBackgroundPlacer = new EditorMazeTileBackgroundPlacer(_tile);
-            tileBackgroundPlacer.PlaceBackground(new MazeLevelDefaultGroundType());
+            tileBackgroundPlacer.PlaceBackground<MazeTileBaseGround>();
         }
 
         _tile.RemoveBackground(mazeTilePath);
@@ -52,21 +52,21 @@ public class MazeTileBackgroundRemover : TileBackgroundRemover
             if (oldConnectionScoreOnNeighbour == NeighbourTileCalculator.ConnectionOnAllSidesScore && mazeTilePathConnectionScoreOnNeighbourInfo.RawConnectionScore != NeighbourTileCalculator.ConnectionOnAllSidesScore)
             {
                 EditorMazeTileBackgroundPlacer tileBackgroundPlacer = new EditorMazeTileBackgroundPlacer(neighbour.Value as EditorMazeTile);
-                tileBackgroundPlacer.PlaceBackground(new MazeLevelDefaultGroundType());
+                tileBackgroundPlacer.PlaceBackground<MazeTileBaseGround>();
             }
         }
 
         _tile.RemoveTileAsBeautificationTrigger();
     }
 
-    public override void RemoveBaseBackground(IBaseBackgroundType mazeTileBaseBackgroundType)
+    public override void RemoveBackground<T>()
     {
-        MazeTileBaseGround mazeTileBaseBackground = (MazeTileBaseGround)_tile.GetBackgrounds().FirstOrDefault(background => background is MazeTileBaseGround);
+        T mazeTileBackground = (T)_tile.GetBackgrounds().FirstOrDefault(background => background.GetType() == typeof(T));
+        Logger.Log($"Did we find mazeTileBackground {typeof(T)}? {mazeTileBackground == null}");
+        if (mazeTileBackground == null) return;
 
-        if (mazeTileBaseBackground == null) return;
-
-        _tile.RemoveBackground(mazeTileBaseBackground);
-        mazeTileBaseBackground.Remove();
+        _tile.RemoveBackground(mazeTileBackground);
+        mazeTileBackground.Remove();
     }
 
     private void TrySetTileNotMarkable()

@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class EditorMazeTileBaseWater : EditorMazeTileBackgroundModifier, IWaterMaterialModifier
@@ -9,15 +10,32 @@ public class EditorMazeTileBaseWater : EditorMazeTileBackgroundModifier, IWaterM
     {
         EditorMazeTileBackgroundPlacer tileBackgroundPlacer = new EditorMazeTileBackgroundPlacer(tile);
         MazeTileBackgroundRemover tileBackgroundRemover = new MazeTileBackgroundRemover(tile);
+        MazeTileAttributeRemover tileAttributeRemover = new MazeTileAttributeRemover(tile);
 
-        ITileBackground mazeTileBaseWater = (MazeTileBaseWater)tile.GetBackgrounds().FirstOrDefault(background => background is MazeTileBaseWater);
+        List<ITileBackground> backgrounds = tile.GetBackgrounds();
+        ITileBackground mazeTileBaseWater = backgrounds.FirstOrDefault(background => background is MazeTileBaseWater);
+
+        // Only act if there is no water
         if (mazeTileBaseWater == null)
         {
-            tileBackgroundPlacer.PlaceBackground(new MazeLevelDefaultWaterType());
-            Logger.Log("TODO: Remove Land");
-        }
+            Logger.Log("remove land, place water");
+            //Logger.Log($"Current main material: {tile.TileMainMaterial}");
+            //Logger.Log($"Current main material: {tile.TileMainMaterial.GetType()}");
 
-        //tileBackgroundRemover.RemoveBaseBackground(new MazeLevelDefaultBaseBackgroundType());
+            List<ITileAttribute> attributes = tile.GetAttributes();
+            for (int i = 0; i < attributes.Count; i++)
+            {
+                tileAttributeRemover.Remove<attributes[i].GetType()>(attributes[i]);
+                Logger.Log($"We need to remove {attributes[i].GetType()}");
+            }
+            if (tile.TileMainMaterial?.GetType() == typeof(GroundMainMaterial) || tile.TileMainMaterial == null)
+            {
+                tileBackgroundRemover.RemoveBackground<MazeTilePath>();
+                tileBackgroundRemover.RemoveBackground<MazeTileBaseGround>();
+            }
+
+            tileBackgroundPlacer.PlaceBackground<MazeTileBaseWater>();
+        }
     }
 
     public override void PlaceBackgroundVariation(EditorMazeTile tile)

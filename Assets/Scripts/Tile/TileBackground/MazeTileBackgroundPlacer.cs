@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using UnityEngine;
 
 public class MazeTileBackgroundPlacer<T> : TileBackgroundPlacer<T> where T : MazeTile
@@ -18,20 +19,36 @@ public class MazeTileBackgroundPlacer<T> : TileBackgroundPlacer<T> where T : Maz
         Tile.TryMakeMarkable(true);
     }
 
-    public override void PlaceBackground(IBaseBackgroundType baseBackgroundType)
+    public override void PlaceBackground<U>()
     {
-        Logger.Log($"Place background of type {baseBackgroundType.GetType()}");
+        Logger.Log($"Place background");
+        Logger.Log("TODO : improve and implement for overworld as well");
+        Logger.Log(typeof(U));
+        switch (typeof(U))
+        {
+            case Type mazeTileBaseGround when mazeTileBaseGround == typeof(MazeTileBaseGround):
+            case Type mazeTilePath when mazeTilePath == typeof(MazeTilePath):
+                Logger.Warning("Set to ground main material");
+                Tile.SetMainMaterial(new GroundMainMaterial());
+                Logger.Warning($"it is now {Tile.TileMainMaterial}");
+                break;
+            case Type mazeTileBaseWater when mazeTileBaseWater == typeof(MazeTileBaseWater):
+                Tile.SetMainMaterial(new WaterMainMaterial());
+                break;
+            default:
+                Logger.Error($"Unknown type {typeof(U)}");
+                break;
+        }
 
-        //TODO: Do not only check for BaseGround, but also Water
-        MazeTileBaseGround oldBackground = (MazeTileBaseGround)Tile.GetBackgrounds().FirstOrDefault(background => background is MazeTileBaseGround);
+        U oldBackground = (U)Tile.GetBackgrounds().FirstOrDefault(background => background is U);
         if (oldBackground != null) return;
 
-        GameObject baseGroundGO = GameObject.Instantiate(MazeLevelManager.Instance.GetTileBackgroundPrefab<MazeTileBaseGround>(), Tile.BackgroundsContainer);
-        MazeTileBaseGround baseBackground = baseGroundGO.GetComponent<MazeTileBaseGround>();
+        GameObject backgroundGO = GameObject.Instantiate(MazeLevelManager.Instance.GetTileBackgroundPrefab<U>(), Tile.BackgroundsContainer);
+        U baseBackground = backgroundGO.GetComponent<U>();
 
-        int defaultConnectionScore = -1;
-        baseBackground.WithPathConnectionScore(defaultConnectionScore);
+        //int defaultConnectionScore = -1;
+        //baseBackground.WithPathConnectionScore(defaultConnectionScore);
         baseBackground.SetTile(Tile);
-        Tile.AddBackground(baseBackground as ITileBackground);
+        Tile.AddBackground(baseBackground);
     }
 }

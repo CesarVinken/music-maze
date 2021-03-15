@@ -148,7 +148,7 @@ public class InGameMazeLevel : MazeLevel, IInGameLevel
             }
             else if (type.Equals(typeof(SerialisableTileBaseGround)))
             {
-                tileBackgroundPlacer.PlaceBackground(new MazeLevelDefaultGroundType());
+                tileBackgroundPlacer.PlaceBackground<MazeTileBaseGround>();
             }
             else
             {

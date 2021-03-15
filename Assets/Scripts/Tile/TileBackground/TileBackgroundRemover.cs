@@ -2,6 +2,6 @@
 public abstract class TileBackgroundRemover
 {
     public abstract void RemovePath();
-    public abstract void RemoveBaseBackground(IBaseBackgroundType baseBackgroundType);
+    public abstract void RemoveBackground<T>() where T : ITileBackground;
 }
 
