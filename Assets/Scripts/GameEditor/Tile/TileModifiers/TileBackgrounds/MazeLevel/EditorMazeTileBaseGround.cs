@@ -10,6 +10,7 @@ public class EditorMazeTileBaseGround : EditorMazeTileBackgroundModifier, IGroun
     {
         EditorMazeTileBackgroundPlacer tileBackgroundPlacer = new EditorMazeTileBackgroundPlacer(tile);
         MazeTileBackgroundRemover tileBackgroundRemover = new MazeTileBackgroundRemover(tile);
+        MazeTileAttributeRemover tileAttributeRemover = new MazeTileAttributeRemover(tile);
 
         ITileBackground mazeTileBaseGround = (MazeTileBaseGround)tile.GetBackgrounds().FirstOrDefault(background => background is MazeTileBaseGround);
         if (mazeTileBaseGround == null)
@@ -17,10 +18,10 @@ public class EditorMazeTileBaseGround : EditorMazeTileBackgroundModifier, IGroun
             List<ITileAttribute> attributes = tile.GetAttributes();
             for (int i = 0; i < attributes.Count; i++)
             {
-                tile.RemoveAttribute(attributes[i]);
+                tileAttributeRemover.Remove(attributes[i]);
             }
 
-            if(tile.TileMainMaterial?.GetType() == typeof(WaterMainMaterial) || tile.TileMainMaterial == null)
+            if (tile.TileMainMaterial?.GetType() == typeof(WaterMainMaterial) || tile.TileMainMaterial == null)
             {
                 tileBackgroundRemover.RemoveBackground<MazeTileBaseWater>();
             }
@@ -28,8 +29,6 @@ public class EditorMazeTileBaseGround : EditorMazeTileBackgroundModifier, IGroun
             tileBackgroundPlacer.PlaceBackground<MazeTileBaseGround>();
             Logger.Log("TODO: Remove Water");
         }
-
-        //tileBackgroundRemover.RemoveBaseBackground(new MazeLevelDefaultBaseBackgroundType());
     }
 
     public override void PlaceBackgroundVariation(EditorMazeTile tile)

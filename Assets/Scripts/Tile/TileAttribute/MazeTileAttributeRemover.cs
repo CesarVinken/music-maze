@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 
 public class MazeTileAttributeRemover : TileAttributeRemover
@@ -10,11 +11,14 @@ public class MazeTileAttributeRemover : TileAttributeRemover
         _tile = tile;
     }
 
-    public void RemovePlayerExit()
+    public void RemovePlayerExit(PlayerExit playerExit = null)
     {
-        _tile.Walkable = true;
-        PlayerExit playerExit = (PlayerExit)_tile.GetAttributes().FirstOrDefault(attribute => attribute is PlayerExit);
+        if(playerExit == null)
+            playerExit = (PlayerExit)_tile.GetAttributes().FirstOrDefault(attribute => attribute is PlayerExit);
+        
         if (playerExit == null) return;
+        
+        _tile.Walkable = true;
 
         ObstacleType obstacleType = playerExit.ObstacleType;
 
@@ -24,12 +28,15 @@ public class MazeTileAttributeRemover : TileAttributeRemover
         UpdateNeighboursForRemovedObstacle(obstacleType);
     }
 
-    public override void RemoveTileObstacle()
+    public override void RemoveTileObstacle(TileObstacle tileObstacle = null)
     {
-        _tile.Walkable = true;
-        TileObstacle tileObstacle = (TileObstacle)_tile.GetAttributes().FirstOrDefault(attribute => attribute is TileObstacle);
+        if(!tileObstacle)
+            tileObstacle = (TileObstacle)_tile.GetAttributes().FirstOrDefault(attribute => attribute is TileObstacle);
+        
         if (tileObstacle == null) return;
         if (tileObstacle is PlayerExit) return;
+
+        _tile.Walkable = true;
 
         ObstacleType obstacleType = tileObstacle.ObstacleType;
         int oldConnectionScore = tileObstacle.ConnectionScore;
@@ -49,33 +56,62 @@ public class MazeTileAttributeRemover : TileAttributeRemover
         UpdateNeighboursForRemovedObstacle(obstacleType);
     }
 
-    public override void RemovePlayerSpawnpoint()
+    public override void RemovePlayerSpawnpoint(PlayerSpawnpoint playerSpawnpoint = null)
     {
-        ITileAttribute playerSpawnpoint = (PlayerSpawnpoint)_tile.GetAttributes().FirstOrDefault(attribute => attribute is PlayerSpawnpoint);
+        if(playerSpawnpoint == null)
+            playerSpawnpoint = (PlayerSpawnpoint)_tile.GetAttributes().FirstOrDefault(attribute => attribute is PlayerSpawnpoint);
+
         if (playerSpawnpoint == null) return;
+
         _tile.RemoveAttribute(playerSpawnpoint);
         playerSpawnpoint.Remove();
     }
 
-    public void RemoveEnemySpawnpoint()
+    public void RemoveEnemySpawnpoint(EnemySpawnpoint enemySpawnpoint = null)
     {
-        ITileAttribute enemySpawnpoint = (EnemySpawnpoint)_tile.GetAttributes().FirstOrDefault(attribute => attribute is EnemySpawnpoint);
+        if(enemySpawnpoint == null)
+            enemySpawnpoint = (EnemySpawnpoint)_tile.GetAttributes().FirstOrDefault(attribute => attribute is EnemySpawnpoint);
+    
         if (enemySpawnpoint == null) return;
+        
         _tile.RemoveAttribute(enemySpawnpoint);
         enemySpawnpoint.Remove();
     }
 
-    public void RemovePlayerOnlyAttribute()
+    public void RemovePlayerOnlyAttribute(PlayerOnly playerOnlyAttribute = null)
     {
-        ITileAttribute playerOnlyAttribute = (PlayerOnly)_tile.GetAttributes().FirstOrDefault(attribute => attribute is PlayerOnly);
+        if(playerOnlyAttribute == null)
+            playerOnlyAttribute = (PlayerOnly)_tile.GetAttributes().FirstOrDefault(attribute => attribute is PlayerOnly);
+    
         if (playerOnlyAttribute == null) return;
+        
         _tile.RemoveAttribute(playerOnlyAttribute);
         playerOnlyAttribute.Remove();
     }
 
-    public void Remove<T>(ITileAttribute attribute)
+    public void Remove(ITileAttribute attribute)
     {
-        Logger.Log("TODO");
+        switch (attribute.GetType())
+        {
+            case Type t when t == typeof(PlayerExit):
+                RemovePlayerExit(attribute as PlayerExit);
+                break;
+            case Type t when t == typeof(TileObstacle):
+                RemoveTileObstacle(attribute as TileObstacle);
+                break;
+            case Type t when t == typeof(PlayerSpawnpoint):
+                RemovePlayerSpawnpoint(attribute as PlayerSpawnpoint);
+                break;
+            case Type t when t == typeof(EnemySpawnpoint):
+                RemoveEnemySpawnpoint(attribute as EnemySpawnpoint);
+                break;
+            case Type t when t == typeof(PlayerOnly):
+                RemovePlayerOnlyAttribute(attribute as PlayerOnly);
+                break;
+            default:
+                Logger.Error($"Does not know how to remove attribute with type {attribute.GetType()}");
+                break;
+        }
     }
 
     private void UpdateNeighboursForRemovedObstacle(ObstacleType obstacleType)

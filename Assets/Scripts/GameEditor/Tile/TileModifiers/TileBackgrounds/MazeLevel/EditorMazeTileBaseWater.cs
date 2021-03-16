@@ -18,15 +18,10 @@ public class EditorMazeTileBaseWater : EditorMazeTileBackgroundModifier, IWaterM
         // Only act if there is no water
         if (mazeTileBaseWater == null)
         {
-            Logger.Log("remove land, place water");
-            //Logger.Log($"Current main material: {tile.TileMainMaterial}");
-            //Logger.Log($"Current main material: {tile.TileMainMaterial.GetType()}");
-
             List<ITileAttribute> attributes = tile.GetAttributes();
             for (int i = 0; i < attributes.Count; i++)
             {
-                tileAttributeRemover.Remove<attributes[i].GetType()>(attributes[i]);
-                Logger.Log($"We need to remove {attributes[i].GetType()}");
+                tileAttributeRemover.Remove(attributes[i]);
             }
             if (tile.TileMainMaterial?.GetType() == typeof(GroundMainMaterial) || tile.TileMainMaterial == null)
             {

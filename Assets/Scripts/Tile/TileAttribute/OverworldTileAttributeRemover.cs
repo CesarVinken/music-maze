@@ -1,6 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
-using UnityEngine;
 
 public class OverworldTileAttributeRemover : TileAttributeRemover
 {
@@ -11,10 +11,11 @@ public class OverworldTileAttributeRemover : TileAttributeRemover
         _tile = tile;
     }
 
-    public override void RemoveTileObstacle()
+    public override void RemoveTileObstacle(TileObstacle tileObstacle = null)
     {
         _tile.Walkable = true;
-        TileObstacle tileObstacle = (TileObstacle)_tile.GetAttributes().FirstOrDefault(attribute => attribute is TileObstacle);
+        if(!tileObstacle)
+            tileObstacle = (TileObstacle)_tile.GetAttributes().FirstOrDefault(attribute => attribute is TileObstacle);
         if (tileObstacle == null) return;
         if (tileObstacle is PlayerExit) return;
 
@@ -34,18 +35,24 @@ public class OverworldTileAttributeRemover : TileAttributeRemover
         UpdateNeighboursForRemovedObstacle(obstacleType);
     }
 
-    public override void RemovePlayerSpawnpoint()
+    public override void RemovePlayerSpawnpoint(PlayerSpawnpoint playerSpawnpoint = null)
     {
-        ITileAttribute playerSpawnpoint = (PlayerSpawnpoint)_tile.GetAttributes().FirstOrDefault(attribute => attribute is PlayerSpawnpoint);
+        if(playerSpawnpoint == null)
+            playerSpawnpoint = (PlayerSpawnpoint)_tile.GetAttributes().FirstOrDefault(attribute => attribute is PlayerSpawnpoint);
+    
         if (playerSpawnpoint == null) return;
+        
         _tile.RemoveAttribute(playerSpawnpoint);
         playerSpawnpoint.Remove();
     }
 
-    public void RemoveMazeLevelEntry()
+    public void RemoveMazeLevelEntry(MazeLevelEntry mazeLevelEntry = null)
     {
-        MazeLevelEntry mazeLevelEntry = (MazeLevelEntry)_tile.GetAttributes().FirstOrDefault(attribute => attribute is MazeLevelEntry);
+        if(mazeLevelEntry == null)
+            mazeLevelEntry = (MazeLevelEntry)_tile.GetAttributes().FirstOrDefault(attribute => attribute is MazeLevelEntry);
+
         if (mazeLevelEntry == null) return;
+        
         _tile.RemoveAttribute(mazeLevelEntry);
         mazeLevelEntry.Remove();
 
@@ -53,6 +60,25 @@ public class OverworldTileAttributeRemover : TileAttributeRemover
         {
             OverworldManager.Instance.EditorOverworld.MazeEntries.Remove(mazeLevelEntry);
             ScreenSpaceOverworldEditorElements.Instance.RemoveMazeLevelEntryName(mazeLevelEntry);
+        }
+    }
+
+    public void Remove(ITileAttribute attribute)
+    {
+        switch (attribute.GetType())
+        {
+            case Type t when t == typeof(TileObstacle):
+                RemoveTileObstacle(attribute as TileObstacle);
+                break;
+            case Type t when t == typeof(PlayerSpawnpoint):
+                RemovePlayerSpawnpoint(attribute as PlayerSpawnpoint);
+                break;
+            case Type t when t == typeof(MazeLevelEntry):
+                RemoveMazeLevelEntry(attribute as MazeLevelEntry);
+                break;
+            default:
+                Logger.Error($"Does not know how to remove attribute with type {attribute.GetType()}");
+                break;
         }
     }
 

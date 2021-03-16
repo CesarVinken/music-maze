@@ -10,6 +10,7 @@ public class EditorOverworldTileBaseGround : EditorOverworldTileBackgroundModifi
     {
         EditorOverworldTileBackgroundPlacer tileBackgroundPlacer = new EditorOverworldTileBackgroundPlacer(tile);
         OverworldTileBackgroundRemover tileBackgroundRemover = new OverworldTileBackgroundRemover(tile);
+        OverworldTileAttributeRemover tileAttributeRemover = new OverworldTileAttributeRemover(tile);
 
         ITileBackground overworldTileBaseGround = (OverworldTileBaseGround)tile.GetBackgrounds().FirstOrDefault(background => background is OverworldTileBaseGround);
         if (overworldTileBaseGround == null)
@@ -17,7 +18,7 @@ public class EditorOverworldTileBaseGround : EditorOverworldTileBackgroundModifi
             List<ITileAttribute> attributes = tile.GetAttributes();
             for (int i = 0; i < attributes.Count; i++)
             {
-                tile.RemoveAttribute(attributes[i]);
+                tileAttributeRemover.Remove(attributes[i]);
             }
 
             if (tile.TileMainMaterial?.GetType() == typeof(WaterMainMaterial) || tile.TileMainMaterial == null)
