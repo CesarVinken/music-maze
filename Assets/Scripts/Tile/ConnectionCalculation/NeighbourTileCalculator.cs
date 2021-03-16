@@ -117,8 +117,6 @@ public class NeighbourTileCalculator
             return null;
         }
 
-        Logger.Log("TODO: proper neighbour score calculation");
-
         foreach (KeyValuePair<ObjectDirection, Tile> neighbour in tile.Neighbours)
         {
             Logger.Warning($"Neighbour at {neighbour.Value.GridLocation.X},{neighbour.Value.GridLocation.Y} is {neighbour.Key} of {tile.GridLocation.X},{tile.GridLocation.Y}");
