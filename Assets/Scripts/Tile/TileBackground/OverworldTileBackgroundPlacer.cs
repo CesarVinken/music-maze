@@ -18,6 +18,19 @@ public class OverworldTileBackgroundPlacer<T> : TileBackgroundPlacer<T> where T 
         Tile.AddBackground(overworldTilePath);
     }
 
+    public override void PlaceWater(IBaseBackgroundType waterType, TileConnectionScoreInfo pathConnectionScoreInfo)
+    {
+        Logger.Warning("TODO: PLACE WATER function");
+        //GameObject waterGO = GameObject.Instantiate(MazeLevelManager.Instance.GetTileBackgroundPrefab<MazeTileBaseWater>(), Tile.BackgroundsContainer);
+        //MazeTileBaseWater mazeTileBaseWater = waterGO.GetComponent<MazeTileBaseWater>();
+        //mazeTileBaseWater.WithWaterType(waterType);
+        //mazeTileBaseWater.WithConnectionScoreInfo(pathConnectionScoreInfo);
+        //mazeTileBaseWater.SetTile(Tile);
+
+        //Tile.AddBackground(mazeTileBaseWater);
+        //Tile.TryMakeMarkable(true);
+    }
+
     public override void PlaceBackground<U>()
     {
         switch (typeof(U))

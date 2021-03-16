@@ -5,6 +5,7 @@ public abstract class TileBackgroundPlacer<T> where T : Tile
     public abstract T Tile { get; set; }
 
     public abstract void PlacePath(IPathType tilePathType, TileConnectionScoreInfo pathConnectionScoreInfo);
+    public abstract void PlaceWater(IBaseBackgroundType waterType, TileConnectionScoreInfo pathConnectionScoreInfo);
 
     public void PlacePathVariation(TilePath mazeTilePath)
     {

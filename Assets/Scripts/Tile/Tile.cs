@@ -89,6 +89,18 @@ public abstract class Tile : MonoBehaviour
         return tilePath;
     }
 
+    public TileWater TryGetTileWater()
+    {
+        TileWater tileWater = (TileWater)_tileBackgrounds.FirstOrDefault(background => background is TileWater);
+
+        if (tileWater == null)
+        {
+            return null;
+        }
+        Logger.Warning("WE FOUND TILE WATER TILE");
+        return tileWater;
+    }
+
     public void InitialiseTileBackgrounds()
     {
         for (int i = 0; i < _tileBackgrounds.Count; i++)

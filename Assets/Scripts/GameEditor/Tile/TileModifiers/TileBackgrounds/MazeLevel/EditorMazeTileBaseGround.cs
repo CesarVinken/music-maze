@@ -27,7 +27,6 @@ public class EditorMazeTileBaseGround : EditorMazeTileBackgroundModifier, IGroun
             }
 
             tileBackgroundPlacer.PlaceBackground<MazeTileBaseGround>();
-            Logger.Log("TODO: Remove Water");
         }
     }
 

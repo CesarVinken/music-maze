@@ -1,7 +1,7 @@
 ﻿//using System.Collections;
 //using UnityEngine;
 
-//public class OverworldTileBaseWater : MonoBehaviour, ITileBackground, ITransformable
+//public class OverworldTileBaseWater : TileWater, ITileBackground, ITransformable
 //{
 //    public Tile Tile;
 //    public string ParentId;

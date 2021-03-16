@@ -28,8 +28,6 @@ public class EditorOverworldTileBaseGround : EditorOverworldTileBackgroundModifi
 
             tileBackgroundPlacer.PlaceBackground<OverworldTileBaseGround>();
         }
-
-        //tileBackgroundRemover.RemoveBaseBackground(new MazeLevelDefaultBaseBackgroundType());
     }
 
     public override void PlaceBackgroundVariation(EditorOverworldTile tile)

@@ -19,24 +19,36 @@ public class MazeTileBackgroundPlacer<T> : TileBackgroundPlacer<T> where T : Maz
         Tile.TryMakeMarkable(true);
     }
 
+    public override void PlaceWater(IBaseBackgroundType waterType, TileConnectionScoreInfo pathConnectionScoreInfo)
+    {
+        GameObject waterGO = GameObject.Instantiate(MazeLevelManager.Instance.GetTileBackgroundPrefab<MazeTileBaseWater>(), Tile.BackgroundsContainer);
+        MazeTileBaseWater mazeTileBaseWater = waterGO.GetComponent<MazeTileBaseWater>();
+        mazeTileBaseWater.WithWaterType(waterType);
+        mazeTileBaseWater.WithConnectionScoreInfo(pathConnectionScoreInfo);
+        mazeTileBaseWater.SetTile(Tile);
+
+        Tile.SetMainMaterial(new WaterMainMaterial());
+        Tile.AddBackground(mazeTileBaseWater);
+        Tile.TryMakeMarkable(false);
+    }
+
     public override void PlaceBackground<U>()
     {
-        Logger.Log($"Place background");
-        Logger.Log("TODO : improve and implement for overworld as well");
-        Logger.Log(typeof(U));
+        Logger.Log($"Place background of type {typeof(U)}");
+
         switch (typeof(U))
         {
             case Type mazeTileBaseGround when mazeTileBaseGround == typeof(MazeTileBaseGround):
-            case Type mazeTilePath when mazeTilePath == typeof(MazeTilePath):
+            //case Type mazeTilePath when mazeTilePath == typeof(MazeTilePath):
                 Logger.Warning("Set to ground main material");
                 Tile.SetMainMaterial(new GroundMainMaterial());
                 Logger.Warning($"it is now {Tile.TileMainMaterial}");
                 break;
-            case Type mazeTileBaseWater when mazeTileBaseWater == typeof(MazeTileBaseWater):
-                Tile.SetMainMaterial(new WaterMainMaterial());
-                break;
+            //case Type mazeTileBaseWater when mazeTileBaseWater == typeof(MazeTileBaseWater):
+            //    //Tile.SetMainMaterial(new WaterMainMaterial());
+            //    break;
             default:
-                Logger.Error($"Unknown type {typeof(U)}");
+                Logger.Error($"Unexpected type {typeof(U)}");
                 break;
         }
 

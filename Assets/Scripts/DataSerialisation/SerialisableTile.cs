@@ -95,6 +95,13 @@ public class SerialisableTile
             SerialisableTilePathBackground serialisableTilePathBackground = new SerialisableTilePathBackground(tilePath.ConnectionScore);
             return serialisableTilePathBackground;
         }
+        else if (tileBackground.GetType() == typeof(MazeTileBaseWater) || tileBackground.GetType() == typeof(OverworldTileBaseWater))
+        {
+            TileWater tileWater = tileBackground as TileWater;
+
+            SerialisableTileBaseWater serialisableTileBaseWater = new SerialisableTileBaseWater(tileWater.ConnectionScore);
+            return serialisableTileBaseWater;
+        }
         else if (tileBackground.GetType() == typeof(MazeTileBaseGround) || (tileBackground.GetType() == typeof(OverworldTileBaseGround)))
         {
             SerialisableTileBaseGround serialisableTileBaseBackground = new SerialisableTileBaseGround();

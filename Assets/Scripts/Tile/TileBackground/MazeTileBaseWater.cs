@@ -1,17 +1,15 @@
 ﻿using System.Collections;
 using UnityEngine;
 
-public class MazeTileBaseWater : MonoBehaviour, ITileBackground, ITransformable
+public class MazeTileBaseWater : TileWater, ITileBackground, ITransformable
 {
-    public Tile Tile;
-    public string ParentId;
-
     [SerializeField] private TileSpriteContainer _tileSpriteContainer;
 
     private int _sortingOrder;
 
-    public void SetTile(Tile tile)
+    public override void SetTile(Tile tile)
     {
+        Logger.Log("water water water");
         if (string.IsNullOrEmpty(tile.TileId)) Logger.Error("This tile does not have an Id");
 
         Tile = tile;
@@ -19,15 +17,15 @@ public class MazeTileBaseWater : MonoBehaviour, ITileBackground, ITransformable
 
         _sortingOrder = SpriteManager.BaseBackgroundSortingOrder;
         _tileSpriteContainer.SetSortingOrder(_sortingOrder);
-
-        Sprite sprite = MazeSpriteManager.Instance.DefaultMazeTileWater[0];
-        _tileSpriteContainer.SetSprite(sprite);
     }
 
-    public void Remove()
+    public override void WithConnectionScoreInfo(TileConnectionScoreInfo connectionScoreInfo)
     {
-        Destroy(this);
-        Destroy(gameObject);
+        ConnectionScore = connectionScoreInfo.RawConnectionScore;
+        SpriteNumber = connectionScoreInfo.SpriteNumber;
+
+        _sprite = MazeSpriteManager.Instance.DefaultMazeTileWater[SpriteNumber - 1];
+        _tileSpriteContainer.SetSprite(_sprite);
     }
 
     public void TriggerTransformation()
