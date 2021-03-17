@@ -192,13 +192,6 @@ public class EditorTileSelector : MonoBehaviour
         }
     }
 
-    //private void PlaceTileMainMaterial(Tile tile, EditorTileMainMaterialModifier mainMaterial)
-    //{
-    //    if (mainMaterial == null) Logger.Error($"Could not find the main material type {mainMaterial.GetType()}");
-    //    Logger.Log("place main material");
-    //    mainMaterial.PlaceMainMaterial(tile);
-    //}
-
     private void PlaceTileAttribute(Tile tile, EditorTileAttributeModifier attribute)
     {
         if (attribute == null) Logger.Error($"Could not find the attribute type {attribute.GetType()}");

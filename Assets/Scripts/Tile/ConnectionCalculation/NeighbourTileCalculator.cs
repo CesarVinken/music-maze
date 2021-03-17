@@ -214,17 +214,19 @@ public class NeighbourTileCalculator
 
         foreach (KeyValuePair<ObjectDirection, Tile> neighbour in tile.Neighbours)
         {
-            Logger.Warning($"Neighbour at {neighbour.Value.GridLocation.X},{neighbour.Value.GridLocation.Y} is {neighbour.Key} of {tile.GridLocation.X},{tile.GridLocation.Y}");
+            Logger.Warning($"Neighbour at {neighbour.Value.GridLocation.X},{neighbour.Value.GridLocation.Y} is {neighbour.Key} of {tile.GridLocation.X},{tile.GridLocation.Y}. We look for a {typeof(T)}");
 
             T connectedModifier;
 
             if (typeof(ITileAttribute).IsAssignableFrom(typeof(T)))
             {
-                connectedModifier = (T)neighbour.Value.GetAttributes().FirstOrDefault(attribute => attribute is T);
+                List<ITileAttribute> attributes = neighbour.Value.GetAttributes();
+                connectedModifier = (T)attributes.FirstOrDefault(attribute => attribute is T);
             } 
             else
             {
-                connectedModifier = (T)neighbour.Value.GetBackgrounds().FirstOrDefault(background => background is T);
+                List<ITileBackground> backgrounds = neighbour.Value.GetBackgrounds();
+                connectedModifier = (T)backgrounds.FirstOrDefault(background => background is T);
             }
 
             if (connectedModifier == null || connectedModifier.GetSubtypeAsString() != modifierSubtype)
@@ -262,13 +264,13 @@ public class NeighbourTileCalculator
         TileConnectionVariationRegister<T> TileConnectionVariationRegister = new TileConnectionVariationRegister<T>(thisMazeTileAttribute, connectionRight, connectionDown, connectionLeft, connectionUp);
         Type modifierType = typeof(T);
 
-        if(modifierType == typeof(TilePath))
+        if(modifierType == typeof(TilePath) || modifierType == typeof(TileWater))
         {
-            return TileConnectionVariationRegister.MazeTilePath() as List<T>;
+            return TileConnectionVariationRegister.MazeTileBackgroundConnection();
         }
-        else if(modifierType == typeof(TileObstacle))
+        else if (modifierType == typeof(TileObstacle))
         {
-            return TileConnectionVariationRegister.TileObstacle() as List<T>;
+            return TileConnectionVariationRegister.TileAttribute() as List<T>;
         }
         else
         {

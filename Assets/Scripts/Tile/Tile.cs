@@ -97,7 +97,7 @@ public abstract class Tile : MonoBehaviour
         {
             return null;
         }
-        Logger.Warning("WE FOUND TILE WATER TILE");
+
         return tileWater;
     }
 

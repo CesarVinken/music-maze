@@ -1,4 +1,4 @@
 ﻿public class MazeLevelDefaultWaterType : IBaseBackgroundType, IMazeLevel
 {
-    public string Name { get => "DefaultWater"; }
+    public string Name { get => "MazeLevelDefaultWaterType"; }
 }

@@ -1,4 +1,4 @@
 ﻿public class MazeLevelDefaultPathType : IPathType, IMazeLevel
 {
-    public string Name { get => "DefaultMazePath"; }
+    public string Name { get => "MazeLevelDefaultPathType"; }
 }

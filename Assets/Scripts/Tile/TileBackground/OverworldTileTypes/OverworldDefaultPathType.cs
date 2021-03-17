@@ -1,4 +1,4 @@
 ﻿public class OverworldDefaultPathType : IPathType, IOverworld
 {
-    public string Name { get => "DefaultOverworldPath"; }
+    public string Name { get => "OverworldDefaultPathType"; }
 }

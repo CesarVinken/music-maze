@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
@@ -12,8 +13,11 @@ public class EditorMazeTileBaseGround : EditorMazeTileBackgroundModifier, IGroun
         MazeTileBackgroundRemover tileBackgroundRemover = new MazeTileBackgroundRemover(tile);
         MazeTileAttributeRemover tileAttributeRemover = new MazeTileAttributeRemover(tile);
 
+        Type oldMainMaterial = tile.TileMainMaterial?.GetType(); // old material before updating it
+        Logger.Log($"water connection score is {oldMainMaterial}");
+
         ITileBackground mazeTileBaseGround = (MazeTileBaseGround)tile.GetBackgrounds().FirstOrDefault(background => background is MazeTileBaseGround);
-        if (mazeTileBaseGround == null)
+        if (mazeTileBaseGround == null || (oldMainMaterial != typeof(GroundMainMaterial)))
         {
             List<ITileAttribute> attributes = tile.GetAttributes();
             for (int i = 0; i < attributes.Count; i++)

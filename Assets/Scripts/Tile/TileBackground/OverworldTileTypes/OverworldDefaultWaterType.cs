@@ -1,4 +1,4 @@
 ﻿public class OverworldDefaultWaterType : IBaseBackgroundType, IOverworld
 {
-    public string Name { get => "DefaultWater"; }
+    public string Name { get => "OverworldDefaultWaterType"; }
 }

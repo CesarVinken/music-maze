@@ -31,7 +31,7 @@ public class OverworldTileBackgroundPlacer<T> : TileBackgroundPlacer<T> where T 
         //Tile.TryMakeMarkable(true);
     }
 
-    public override void PlaceBackground<U>()
+    public override U PlaceBackground<U>()
     {
         switch (typeof(U))
         {
@@ -50,12 +50,14 @@ public class OverworldTileBackgroundPlacer<T> : TileBackgroundPlacer<T> where T 
         List<ITileBackground> backgrounds = Tile.GetBackgrounds();
         U oldBackground = (U)backgrounds.FirstOrDefault(background => background is U);
 
-        if (oldBackground != null) return;
+        if (oldBackground != null) return oldBackground;
 
         GameObject baseBackgroundGO = GameObject.Instantiate(OverworldManager.Instance.GetTileBackgroundPrefab<U>(), Tile.BackgroundsContainer);
         U baseBackground = baseBackgroundGO.GetComponent<U>();
 
         baseBackground.SetTile(Tile);
         Tile.AddBackground(baseBackground);
+
+        return baseBackground;
     }
 }

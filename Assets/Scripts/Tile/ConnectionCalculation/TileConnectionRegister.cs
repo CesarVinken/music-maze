@@ -158,7 +158,7 @@ public static class TileConnectionRegister
                     // left = wide
                     if (up.HasConnection)
                     {
-                        return new TileConnectionScoreInfo(15);
+                        return new TileConnectionScoreInfo(34);
                     }
                     return new TileConnectionScoreInfo(25);
                 }
