@@ -9,7 +9,6 @@ public class MazeTileBaseWater : TileWater, ITileBackground, ITransformable
 
     public override void SetTile(Tile tile)
     {
-        Logger.Log("water water water");
         if (string.IsNullOrEmpty(tile.TileId)) Logger.Error("This tile does not have an Id");
 
         Tile = tile;
@@ -36,7 +35,7 @@ public class MazeTileBaseWater : TileWater, ITileBackground, ITransformable
 
     public IEnumerator TransformToColourful()
     {
-        Sprite colourfulSprite = MazeSpriteManager.Instance.DefaultMazeTileWaterColourful[0];
+        Sprite colourfulSprite = MazeSpriteManager.Instance.DefaultMazeTileWaterColourful[SpriteNumber - 1];
 
         TileSpriteContainer transformedSpriteContainer = TileSpriteContainerPool.Instance.Get();
         transformedSpriteContainer.transform.SetParent(transform);

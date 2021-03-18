@@ -98,8 +98,8 @@ public static class MazeLevelLoader
 
     public static void ReplaceMazeLevel(string sourceLevelName, string destinationLevelName)
     {
-        string sourceLevelFilePath = Path.Combine(Application.streamingAssetsPath, sourceLevelName + ".json");
-        string destinationLevelFilePath = Path.Combine(Application.streamingAssetsPath, destinationLevelName + ".json");
+        string sourceLevelFilePath = Path.Combine(Application.streamingAssetsPath, "maze", sourceLevelName + ".json");
+        string destinationLevelFilePath = Path.Combine(Application.streamingAssetsPath, "maze", destinationLevelName + ".json");
         File.Copy(sourceLevelFilePath, destinationLevelFilePath, true);
     }
 }

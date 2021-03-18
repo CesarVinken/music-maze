@@ -14,7 +14,6 @@ public class EditorMazeTileBaseGround : EditorMazeTileBackgroundModifier, IGroun
         MazeTileAttributeRemover tileAttributeRemover = new MazeTileAttributeRemover(tile);
 
         Type oldMainMaterial = tile.TileMainMaterial?.GetType(); // old material before updating it
-        Logger.Log($"water connection score is {oldMainMaterial}");
 
         ITileBackground mazeTileBaseGround = (MazeTileBaseGround)tile.GetBackgrounds().FirstOrDefault(background => background is MazeTileBaseGround);
         if (mazeTileBaseGround == null || (oldMainMaterial != typeof(GroundMainMaterial)))

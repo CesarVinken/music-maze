@@ -37,7 +37,7 @@ public class EditorMazeTileBackgroundPlacer : MazeTileBackgroundPlacer<EditorMaz
     public ITileBackground PlaceWater(IBaseBackgroundType waterType)
     {
         TileConnectionScoreInfo waterConnectionScore = NeighbourTileCalculator.MapNeighbourWaterOfTile(Tile, waterType);
-
+        Logger.Log(waterConnectionScore.RawConnectionScore);
         // if the tile will not completely be covered with water, make sure we have a land background as well.
         if(waterConnectionScore.RawConnectionScore != 16)
         {

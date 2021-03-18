@@ -30,18 +30,15 @@ public class MazeTileBackgroundPlacer<T> : TileBackgroundPlacer<T> where T : Maz
         Tile.SetMainMaterial(new WaterMainMaterial());
         Tile.AddBackground(mazeTileBaseWater);
         Tile.TryMakeMarkable(false);
+        Tile.Walkable = false;
     }
 
     public override U PlaceBackground<U>()
     {
-        Logger.Log($"Place background of type {typeof(U)}");
-
         switch (typeof(U))
         {
             case Type mazeTileBaseGround when mazeTileBaseGround == typeof(MazeTileBaseGround):
-                Logger.Warning("Set to ground main material");
                 Tile.SetMainMaterial(new GroundMainMaterial());
-                Logger.Warning($"it is now {Tile.TileMainMaterial}");
                 break;
             default:
                 Logger.Error($"Unexpected type {typeof(U)}");
