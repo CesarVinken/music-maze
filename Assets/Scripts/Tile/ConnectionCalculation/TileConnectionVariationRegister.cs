@@ -156,7 +156,7 @@ public class TileConnectionVariationRegister<T> where T : MonoBehaviour, ITileCo
             }
         }
 
-        if (currentScoreThisTileBackground == 3)
+        else if (currentScoreThisTileBackground == 3)
         {
             if (currentScoreDown == 5)
             {
@@ -168,7 +168,7 @@ public class TileConnectionVariationRegister<T> where T : MonoBehaviour, ITileCo
                 _thisMazeTileAttribute.WithConnectionScoreInfo(GenerateConnectionScoreInfo(18));
                 _connectionDown.WithConnectionScoreInfo(GenerateConnectionScoreInfo(30));
             }
-            else if (currentScoreDown == 23 || currentScoreDown == 26)
+            else if (currentScoreDown == 16 || currentScoreDown == 23 || currentScoreDown == 26)
             {
                 _thisMazeTileAttribute.WithConnectionScoreInfo(GenerateConnectionScoreInfo(18));
             }
@@ -187,7 +187,7 @@ public class TileConnectionVariationRegister<T> where T : MonoBehaviour, ITileCo
             }
         }
 
-        if (currentScoreThisTileBackground == 4)
+        else if (currentScoreThisTileBackground == 4)
         {
             if (currentScoreLeft == 2)
             {
@@ -218,7 +218,7 @@ public class TileConnectionVariationRegister<T> where T : MonoBehaviour, ITileCo
             }
         }
 
-        if (currentScoreThisTileBackground == 5)
+        else if (currentScoreThisTileBackground == 5)
         {
             if (currentScoreUp == 3)
             {
@@ -249,12 +249,37 @@ public class TileConnectionVariationRegister<T> where T : MonoBehaviour, ITileCo
             }
         }
 
-        if (currentScoreThisTileBackground == 6)
+        else if (currentScoreThisTileBackground == 6)
         {
-            if (currentScoreRight == 9 || currentScoreRight == 11 || currentScoreRight == 12 || currentScoreRight == 14 || currentScoreRight == 15 || currentScoreRight == 16 ||
-                currentScoreDown == 8 || currentScoreDown == 11 || currentScoreDown == 13 || currentScoreDown == 14 || currentScoreDown == 15 || currentScoreDown == 16)
+            if (currentScoreRight == 12 || currentScoreRight == 14 || currentScoreRight == 15 ||
+                currentScoreDown == 13 || currentScoreDown == 14 || currentScoreDown == 15)
             {
                 // do nothing
+            }
+            else if (currentScoreRight == 9)
+            {
+                if (currentScoreDown == 8)
+                {
+                    _thisMazeTileAttribute.WithConnectionScoreInfo(GenerateConnectionScoreInfo(21));
+                    _connectionDown.WithConnectionScoreInfo(GenerateConnectionScoreInfo(23));
+                    _connectionRight.WithConnectionScoreInfo(GenerateConnectionScoreInfo(25));
+                }
+            }
+            else if(currentScoreRight == 11)
+            {
+                if(currentScoreDown == 11)
+                {
+                    _thisMazeTileAttribute.WithConnectionScoreInfo(GenerateConnectionScoreInfo(21));
+                    _connectionDown.WithConnectionScoreInfo(GenerateConnectionScoreInfo(26));
+                    _connectionRight.WithConnectionScoreInfo(GenerateConnectionScoreInfo(26));
+                }
+            }
+            else if(currentScoreRight == 16 || currentScoreRight == 31 || currentScoreRight == 33 || currentScoreRight == 34)
+            {
+                if(currentScoreDown == 16 || currentScoreRight == 32 || currentScoreRight == 33 || currentScoreRight == 34)
+                {
+                    _thisMazeTileAttribute.WithConnectionScoreInfo(GenerateConnectionScoreInfo(21));
+                }
             }
             else
             {
@@ -288,7 +313,7 @@ public class TileConnectionVariationRegister<T> where T : MonoBehaviour, ITileCo
             }
         }
 
-        if (currentScoreThisTileBackground == 7)
+        else if (currentScoreThisTileBackground == 7)
         {
             if (currentScoreRight == 4)
             {
@@ -398,6 +423,23 @@ public class TileConnectionVariationRegister<T> where T : MonoBehaviour, ITileCo
             {
                 _connectionRight.WithConnectionScoreInfo(GenerateConnectionScoreInfo(7));
             }
+            else if (currentScoreRight == 31 || currentScoreRight == 33 || currentScoreRight == 34)
+            {
+                if (currentScoreLeft == 2)
+                {
+                    _thisMazeTileAttribute.WithConnectionScoreInfo(GenerateConnectionScoreInfo(27));
+                }
+                else if (currentScoreLeft == 7)
+                {
+                    _thisMazeTileAttribute.WithConnectionScoreInfo(GenerateConnectionScoreInfo(27));
+
+                }
+                else if (currentScoreLeft == 29)
+                {
+                    _thisMazeTileAttribute.WithConnectionScoreInfo(GenerateConnectionScoreInfo(22));
+                    _connectionLeft.WithConnectionScoreInfo(GenerateConnectionScoreInfo(22));
+                }
+            }
 
             if (currentScoreLeft == 16)
             {
@@ -424,12 +466,30 @@ public class TileConnectionVariationRegister<T> where T : MonoBehaviour, ITileCo
             }
         }
 
-        if (currentScoreThisTileBackground == 8)
+        else if (currentScoreThisTileBackground == 8)
         {
-            if (currentScoreRight == 9 || currentScoreRight == 11 || currentScoreRight == 12 || currentScoreRight == 14 || currentScoreRight == 15 || currentScoreRight == 16 ||
-                currentScoreUp == 6 || currentScoreUp == 9 || currentScoreUp == 12 || currentScoreUp == 13 || currentScoreUp == 15 || currentScoreUp == 16)
+            if (currentScoreRight == 12 || currentScoreRight == 14 || currentScoreRight == 15 || currentScoreRight == 16 ||
+                currentScoreUp == 12 || currentScoreUp == 13 || currentScoreUp == 15 || currentScoreUp == 16)
             {
                 // do nothing
+            }
+            else if (currentScoreRight == 9)
+            {
+                if(currentScoreUp == 9)
+                {
+                    _thisMazeTileAttribute.WithConnectionScoreInfo(GenerateConnectionScoreInfo(23));
+                    _connectionRight.WithConnectionScoreInfo(GenerateConnectionScoreInfo(25));
+                    _connectionUp.WithConnectionScoreInfo(GenerateConnectionScoreInfo(25));
+                }
+            }
+            else if (currentScoreRight == 11)
+            {
+                if (currentScoreUp == 6)
+                {
+                    _thisMazeTileAttribute.WithConnectionScoreInfo(GenerateConnectionScoreInfo(23));
+                    _connectionRight.WithConnectionScoreInfo(GenerateConnectionScoreInfo(26));
+                    _connectionUp.WithConnectionScoreInfo(GenerateConnectionScoreInfo(21));
+                }
             }
             else
             {
@@ -463,12 +523,37 @@ public class TileConnectionVariationRegister<T> where T : MonoBehaviour, ITileCo
             }
         }
 
-        if (currentScoreThisTileBackground == 9)
+        else if (currentScoreThisTileBackground == 9)
         {
-            if (currentScoreDown == 8 || currentScoreDown == 11 || currentScoreDown == 13 || currentScoreDown == 14 || currentScoreDown == 15 || currentScoreDown == 16 ||
-                currentScoreLeft == 6 || currentScoreLeft == 8 || currentScoreLeft == 12 || currentScoreLeft == 13 || currentScoreLeft == 14 || currentScoreLeft == 16)
+            if (currentScoreDown == 13 || currentScoreDown == 14 || currentScoreDown == 15 ||
+                currentScoreLeft == 12 || currentScoreLeft == 13 || currentScoreLeft == 14)
             {
                 // do nothing
+            }
+            else if(currentScoreDown == 8)
+            {
+                if(currentScoreLeft == 8)
+                {
+                    _thisMazeTileAttribute.WithConnectionScoreInfo(GenerateConnectionScoreInfo(25));
+                    _connectionDown.WithConnectionScoreInfo(GenerateConnectionScoreInfo(23));
+                    _connectionLeft.WithConnectionScoreInfo(GenerateConnectionScoreInfo(23));
+                }
+            }
+            else if (currentScoreDown == 11)
+            {
+                if (currentScoreLeft == 6)
+                {
+                    _thisMazeTileAttribute.WithConnectionScoreInfo(GenerateConnectionScoreInfo(21));
+                    _connectionDown.WithConnectionScoreInfo(GenerateConnectionScoreInfo(26));
+                    _connectionLeft.WithConnectionScoreInfo(GenerateConnectionScoreInfo(21));
+                }
+            }
+            else if (currentScoreDown == 16 || currentScoreDown == 32 || currentScoreDown == 33 || currentScoreDown == 34)
+            {
+                if (currentScoreLeft == 16 || currentScoreLeft == 31 || currentScoreLeft == 32 || currentScoreLeft == 33)
+                {
+                    _thisMazeTileAttribute.WithConnectionScoreInfo(GenerateConnectionScoreInfo(25));
+                }
             }
             else
             {
@@ -502,16 +587,9 @@ public class TileConnectionVariationRegister<T> where T : MonoBehaviour, ITileCo
             }
         }
 
-        if (currentScoreThisTileBackground == 10)
+        else if (currentScoreThisTileBackground == 10)
         {
-            if (currentScoreDown == 26)
-            {
-                if (currentScoreUp == 12 || currentScoreUp == 13 || currentScoreUp == 15)
-                {
-                    _thisMazeTileAttribute.WithConnectionScoreInfo(GenerateConnectionScoreInfo(28));
-                }
-            }
-            else if (currentScoreDown == 5)
+            if (currentScoreDown == 5)
             {
                 if (currentScoreUp == 3)
                 {
@@ -526,6 +604,18 @@ public class TileConnectionVariationRegister<T> where T : MonoBehaviour, ITileCo
 
                     _connectionDown.WithConnectionScoreInfo(GenerateConnectionScoreInfo(20));
                     _connectionUp.WithConnectionScoreInfo(GenerateConnectionScoreInfo(28));
+                }
+                else if(currentScoreUp == 16)
+                {
+                    _thisMazeTileAttribute.WithConnectionScoreInfo(GenerateConnectionScoreInfo(24));
+                }
+            }
+            else if (currentScoreDown == 8)
+            {
+                if(currentScoreUp == 30)
+                {
+                    _thisMazeTileAttribute.WithConnectionScoreInfo(GenerateConnectionScoreInfo(30));
+                    _connectionUp.WithConnectionScoreInfo(GenerateConnectionScoreInfo(24));
                 }
             }
             else if (currentScoreDown == 10)
@@ -578,6 +668,17 @@ public class TileConnectionVariationRegister<T> where T : MonoBehaviour, ITileCo
             {
                 _connectionDown.WithConnectionScoreInfo(GenerateConnectionScoreInfo(28));
             }
+            else if (currentScoreDown == 26)
+            {
+                if (currentScoreUp == 6 || currentScoreUp == 9 || currentScoreUp == 12 || currentScoreUp == 13 || currentScoreUp == 15)
+                {
+                    _thisMazeTileAttribute.WithConnectionScoreInfo(GenerateConnectionScoreInfo(28));
+                }
+                else if(currentScoreUp == 16 || currentScoreUp == 31 || currentScoreUp == 32 || currentScoreUp == 34)
+                {
+                    _thisMazeTileAttribute.WithConnectionScoreInfo(GenerateConnectionScoreInfo(24));
+                }
+            }
             else if (currentScoreDown == 28)
             {
                 _thisMazeTileAttribute.WithConnectionScoreInfo(GenerateConnectionScoreInfo(24));
@@ -614,12 +715,30 @@ public class TileConnectionVariationRegister<T> where T : MonoBehaviour, ITileCo
 
         }
 
-        if (currentScoreThisTileBackground == 11)
+        else if (currentScoreThisTileBackground == 11)
         {
-            if (currentScoreUp == 6 || currentScoreUp == 9 || currentScoreUp == 12 || currentScoreUp == 13 || currentScoreUp == 15 || currentScoreUp == 16 ||
-                currentScoreLeft == 6 || currentScoreLeft == 8 || currentScoreLeft == 12 || currentScoreLeft == 13 || currentScoreLeft == 14 || currentScoreLeft == 16)
+            if (currentScoreUp == 12 || currentScoreUp == 13 || currentScoreUp == 15 || currentScoreUp == 16 ||
+                currentScoreLeft == 12 || currentScoreLeft == 13 || currentScoreLeft == 14 || currentScoreLeft == 16)
             {
                 // do nothing
+            }
+            else if(currentScoreLeft == 6)
+            {
+                if (currentScoreUp == 6)
+                {
+                    _thisMazeTileAttribute.WithConnectionScoreInfo(GenerateConnectionScoreInfo(26));
+                    _connectionLeft.WithConnectionScoreInfo(GenerateConnectionScoreInfo(21));
+                    _connectionUp.WithConnectionScoreInfo(GenerateConnectionScoreInfo(21));
+                }
+            }
+            else if(currentScoreLeft == 8)
+            {
+                if (currentScoreUp == 9)
+                {
+                    _thisMazeTileAttribute.WithConnectionScoreInfo(GenerateConnectionScoreInfo(26));
+                    _connectionLeft.WithConnectionScoreInfo(GenerateConnectionScoreInfo(23));
+                    _connectionUp.WithConnectionScoreInfo(GenerateConnectionScoreInfo(25));
+                }
             }
             else
             {
@@ -652,7 +771,7 @@ public class TileConnectionVariationRegister<T> where T : MonoBehaviour, ITileCo
             }
         }
 
-        if (currentScoreThisTileBackground == 12)
+        else if (currentScoreThisTileBackground == 12)
         {
             if (currentScoreRight == 7)
             {
@@ -728,9 +847,10 @@ public class TileConnectionVariationRegister<T> where T : MonoBehaviour, ITileCo
                     }
                 }
             }
+            _thisMazeTileAttribute.WithConnectionScoreInfo(GenerateConnectionScoreInfo(31));
         }
 
-        if (currentScoreThisTileBackground == 13)
+        else if (currentScoreThisTileBackground == 13)
         {
             if (currentScoreRight == 7)
             {
@@ -806,9 +926,10 @@ public class TileConnectionVariationRegister<T> where T : MonoBehaviour, ITileCo
                     }
                 }
             }
+            _thisMazeTileAttribute.WithConnectionScoreInfo(GenerateConnectionScoreInfo(32));
         }
 
-        if (currentScoreThisTileBackground == 14)
+        else if (currentScoreThisTileBackground == 14)
         {
             if (currentScoreRight == 7)
             {
@@ -884,9 +1005,10 @@ public class TileConnectionVariationRegister<T> where T : MonoBehaviour, ITileCo
                     }
                 }
             }
+            _thisMazeTileAttribute.WithConnectionScoreInfo(GenerateConnectionScoreInfo(33));
         }
 
-        if (currentScoreThisTileBackground == 15)
+        else if (currentScoreThisTileBackground == 15)
         {
             if (currentScoreDown == 10)
             {
@@ -925,7 +1047,7 @@ public class TileConnectionVariationRegister<T> where T : MonoBehaviour, ITileCo
                     }
                 }
             }
-            if (currentScoreDown == 5)
+            else if (currentScoreDown == 5)
             {
                 if (currentScoreLeft == 7)
                 {
@@ -962,9 +1084,10 @@ public class TileConnectionVariationRegister<T> where T : MonoBehaviour, ITileCo
                     }
                 }
             }
+            _thisMazeTileAttribute.WithConnectionScoreInfo(GenerateConnectionScoreInfo(34));
         }
 
-        if (currentScoreThisTileBackground == 16)
+        else if (currentScoreThisTileBackground == 16)
         {
             if (currentScoreRight == 4)
             {
@@ -1019,7 +1142,7 @@ public class TileConnectionVariationRegister<T> where T : MonoBehaviour, ITileCo
             }
         }
 
-        if (currentScoreThisTileBackground == 17)
+        else if (currentScoreThisTileBackground == 17)
         {
             if (currentScoreRight == 16 || currentScoreRight == 25 || currentScoreRight == 26 || currentScoreRight == 31 || currentScoreRight == 32 || currentScoreRight == 33 || currentScoreRight == 34)
             {
@@ -1044,7 +1167,7 @@ public class TileConnectionVariationRegister<T> where T : MonoBehaviour, ITileCo
             }
         }
 
-        if (currentScoreThisTileBackground == 18)
+        else if (currentScoreThisTileBackground == 18)
         {
             if (currentScoreDown == 16 || currentScoreDown == 23 || currentScoreDown == 25 || currentScoreDown == 26 || currentScoreDown == 32 || currentScoreDown == 33 || currentScoreDown == 34)
             {
@@ -1069,7 +1192,7 @@ public class TileConnectionVariationRegister<T> where T : MonoBehaviour, ITileCo
             }
         }
 
-        if (currentScoreThisTileBackground == 19)
+        else if (currentScoreThisTileBackground == 19)
         {
             if (currentScoreLeft == 16 || currentScoreLeft == 21 || currentScoreLeft == 23 || currentScoreLeft == 31 || currentScoreLeft == 32 || currentScoreLeft == 33)
             {
@@ -1391,6 +1514,11 @@ public class TileConnectionVariationRegister<T> where T : MonoBehaviour, ITileCo
                 {
                     _connectionLeft.WithConnectionScoreInfo(GenerateConnectionScoreInfo(7));
                 }
+                else if (currentScoreLeft == 29)
+                {
+                    _thisMazeTileAttribute.WithConnectionScoreInfo(GenerateConnectionScoreInfo(22));
+                    _connectionLeft.WithConnectionScoreInfo(GenerateConnectionScoreInfo(22));
+                }
             }
             else
             {
@@ -1413,12 +1541,12 @@ public class TileConnectionVariationRegister<T> where T : MonoBehaviour, ITileCo
 
         else if (currentScoreThisTileBackground == 28)
         {
-            if (currentScoreDown == 23 || currentScoreDown == 26 || currentScoreUp == 31 || currentScoreDown == 33 || currentScoreDown == 34)
+            if (currentScoreDown == 16 || currentScoreDown == 23 || currentScoreDown == 26 || currentScoreUp == 31 || currentScoreDown == 33 || currentScoreDown == 34)
             {
                 if (currentScoreUp == 3)
                 {
                     _connectionUp.WithConnectionScoreInfo(GenerateConnectionScoreInfo(18));
-                    _thisMazeTileAttribute.WithConnectionScoreInfo(GenerateConnectionScoreInfo(28));
+                    _thisMazeTileAttribute.WithConnectionScoreInfo(GenerateConnectionScoreInfo(24));
                 }
                 else if (currentScoreUp == 10)
                 {
@@ -1471,6 +1599,11 @@ public class TileConnectionVariationRegister<T> where T : MonoBehaviour, ITileCo
                 {
                     _connectionRight.WithConnectionScoreInfo(GenerateConnectionScoreInfo(27));
                 }
+                if (currentScoreRight == 27)
+                {
+                    _thisMazeTileAttribute.WithConnectionScoreInfo(GenerateConnectionScoreInfo(22));
+                    _connectionRight.WithConnectionScoreInfo(GenerateConnectionScoreInfo(22));
+                }
                 else if (currentScoreRight == 29)
                 {
                     _connectionRight.WithConnectionScoreInfo(GenerateConnectionScoreInfo(7));
@@ -1510,9 +1643,14 @@ public class TileConnectionVariationRegister<T> where T : MonoBehaviour, ITileCo
                     _thisMazeTileAttribute.WithConnectionScoreInfo(GenerateConnectionScoreInfo(24));
                     _connectionDown.WithConnectionScoreInfo(GenerateConnectionScoreInfo(30));
                 }
-                if (currentScoreDown == 24)
+                else if (currentScoreDown == 24)
                 {
                     _connectionDown.WithConnectionScoreInfo(GenerateConnectionScoreInfo(28));
+                }
+                else if (currentScoreDown == 28)
+                {
+                    _thisMazeTileAttribute.WithConnectionScoreInfo(GenerateConnectionScoreInfo(24));
+                    _connectionDown.WithConnectionScoreInfo(GenerateConnectionScoreInfo(24));
                 }
                 else if (currentScoreDown == 30)
                 {
