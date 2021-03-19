@@ -543,7 +543,7 @@ public class TileConnectionVariationRegister<T> where T : MonoBehaviour, ITileCo
             {
                 if (currentScoreLeft == 6)
                 {
-                    _thisMazeTileAttribute.WithConnectionScoreInfo(GenerateConnectionScoreInfo(21));
+                    _thisMazeTileAttribute.WithConnectionScoreInfo(GenerateConnectionScoreInfo(25));
                     _connectionDown.WithConnectionScoreInfo(GenerateConnectionScoreInfo(26));
                     _connectionLeft.WithConnectionScoreInfo(GenerateConnectionScoreInfo(21));
                 }
@@ -2046,7 +2046,6 @@ public class TileConnectionVariationRegister<T> where T : MonoBehaviour, ITileCo
             updatedConnections.Add((T)_connectionLeft);
         if (_connectionUp != null && currentScoreUp != _connectionUp.ConnectionScore)
             updatedConnections.Add((T)_connectionUp);
-        Logger.Log($"::::::::::updated {currentScoreThisTileBackground} to {_thisMazeTileAttribute.ConnectionScore}:::");
         return updatedConnections;
     }
 

@@ -20,15 +20,15 @@ public class OverworldTileBackgroundPlacer<T> : TileBackgroundPlacer<T> where T 
 
     public override void PlaceWater(IBaseBackgroundType waterType, TileConnectionScoreInfo pathConnectionScoreInfo)
     {
-        Logger.Warning("TODO: PLACE WATER function");
-        //GameObject waterGO = GameObject.Instantiate(MazeLevelManager.Instance.GetTileBackgroundPrefab<MazeTileBaseWater>(), Tile.BackgroundsContainer);
-        //MazeTileBaseWater mazeTileBaseWater = waterGO.GetComponent<MazeTileBaseWater>();
-        //mazeTileBaseWater.WithWaterType(waterType);
-        //mazeTileBaseWater.WithConnectionScoreInfo(pathConnectionScoreInfo);
-        //mazeTileBaseWater.SetTile(Tile);
+        GameObject waterGO = GameObject.Instantiate(OverworldManager.Instance.GetTileBackgroundPrefab<OverworldTileBaseWater>(), Tile.BackgroundsContainer);
+        OverworldTileBaseWater overworldTileBaseWater = waterGO.GetComponent<OverworldTileBaseWater>();
+        overworldTileBaseWater.WithWaterType(waterType);
+        overworldTileBaseWater.WithConnectionScoreInfo(pathConnectionScoreInfo);
+        overworldTileBaseWater.SetTile(Tile);
 
-        //Tile.AddBackground(mazeTileBaseWater);
-        //Tile.TryMakeMarkable(true);
+        Tile.SetMainMaterial(new WaterMainMaterial());
+        Tile.AddBackground(overworldTileBaseWater);
+        Tile.Walkable = false;
     }
 
     public override U PlaceBackground<U>()

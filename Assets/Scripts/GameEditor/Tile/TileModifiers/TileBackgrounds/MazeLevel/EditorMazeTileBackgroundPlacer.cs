@@ -37,14 +37,18 @@ public class EditorMazeTileBackgroundPlacer : MazeTileBackgroundPlacer<EditorMaz
     public ITileBackground PlaceWater(IBaseBackgroundType waterType)
     {
         TileConnectionScoreInfo waterConnectionScore = NeighbourTileCalculator.MapNeighbourWaterOfTile(Tile, waterType);
-        Logger.Log(waterConnectionScore.RawConnectionScore);
+
         // if the tile will not completely be covered with water, make sure we have a land background as well.
         if(waterConnectionScore.RawConnectionScore != 16)
         {
-            GameObject backgroundGO = GameObject.Instantiate(MazeLevelManager.Instance.GetTileBackgroundPrefab<MazeTileBaseGround>(), Tile.BackgroundsContainer);
-            MazeTileBaseGround baseBackground = backgroundGO.GetComponent<MazeTileBaseGround>();
-            baseBackground.SetTile(Tile);
-            Tile.AddBackground(baseBackground);
+            List<ITileBackground> backgrounds = Tile.GetBackgrounds();
+            if (backgrounds.Count == 0)
+            {
+                GameObject backgroundGO = GameObject.Instantiate(MazeLevelManager.Instance.GetTileBackgroundPrefab<MazeTileBaseGround>(), Tile.BackgroundsContainer);
+                MazeTileBaseGround baseBackground = backgroundGO.GetComponent<MazeTileBaseGround>();
+                baseBackground.SetTile(Tile);
+                Tile.AddBackground(baseBackground);
+            }
         }
  
         GameObject waterGO = GameObject.Instantiate(MazeLevelManager.Instance.GetTileBackgroundPrefab<MazeTileBaseWater>(), Tile.BackgroundsContainer);
@@ -132,7 +136,6 @@ public class EditorMazeTileBackgroundPlacer : MazeTileBackgroundPlacer<EditorMaz
             {
                 Logger.Warning($"oldConnectionScoreOnNeighbour {oldConnectionScoreOnNeighbour}");
 
-                //PlaceBackground<MazeTileBaseGround>();
                 GameObject backgroundGO = GameObject.Instantiate(MazeLevelManager.Instance.GetTileBackgroundPrefab<MazeTileBaseGround>(), neighbour.Value.BackgroundsContainer);
                 MazeTileBaseGround baseBackground = backgroundGO.GetComponent<MazeTileBaseGround>();
                 baseBackground.SetTile(neighbour.Value);

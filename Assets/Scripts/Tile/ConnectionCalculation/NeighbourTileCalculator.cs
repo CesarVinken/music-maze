@@ -122,7 +122,6 @@ public class NeighbourTileCalculator
             Logger.Warning($"Neighbour at {neighbour.Value.GridLocation.X},{neighbour.Value.GridLocation.Y} is {neighbour.Key} of {tile.GridLocation.X},{tile.GridLocation.Y}");
 
             TileWater tileWater = neighbour.Value.TryGetTileWater();
-
             if (tileWater == null || tileWater.TileWaterType.GetType() != waterType.GetType())
             {
                 continue;

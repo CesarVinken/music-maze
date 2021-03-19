@@ -14,7 +14,7 @@ public class MazeTileBaseWater : TileWater, ITileBackground, ITransformable
         Tile = tile;
         ParentId = tile.TileId;
 
-        _sortingOrder = SpriteManager.BaseBackgroundSortingOrder;
+        _sortingOrder = SpriteManager.BaseWaterSortingOrder;
         _tileSpriteContainer.SetSortingOrder(_sortingOrder);
     }
 

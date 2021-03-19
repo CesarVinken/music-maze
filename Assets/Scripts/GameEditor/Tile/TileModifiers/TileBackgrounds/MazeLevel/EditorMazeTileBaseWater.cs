@@ -46,10 +46,10 @@ public class EditorMazeTileBaseWater : EditorMazeTileBackgroundModifier, IWaterM
 
     public override void PlaceBackgroundVariation(EditorMazeTile tile)
     {
-        Logger.Log("Background variations to be implemented");
+        Logger.Log("Try place background variation");
         ITileBackground mazeTileWater = (MazeTileBaseWater)tile.GetBackgrounds().FirstOrDefault(background => background is MazeTileBaseWater);
 
-        if (mazeTileWater == null) return; // only place variation if there is already a path
+        if (mazeTileWater == null) return;
 
         EditorMazeTileBackgroundPlacer tileBackgroundPlacer = new EditorMazeTileBackgroundPlacer(tile);
         tileBackgroundPlacer.PlaceWaterVariation((MazeTileBaseWater)mazeTileWater);

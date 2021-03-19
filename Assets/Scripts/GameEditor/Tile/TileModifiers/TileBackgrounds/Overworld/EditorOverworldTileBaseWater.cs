@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
@@ -12,28 +13,44 @@ public class EditorOverworldTileBaseWater : EditorOverworldTileBackgroundModifie
         OverworldTileBackgroundRemover tileBackgroundRemover = new OverworldTileBackgroundRemover(tile);
         OverworldTileAttributeRemover tileAttributeRemover = new OverworldTileAttributeRemover(tile);
 
+        List<ITileBackground> backgrounds = tile.GetBackgrounds();
         ITileBackground overworldTileBaseWater = (OverworldTileBaseWater)tile.GetBackgrounds().FirstOrDefault(background => background is OverworldTileBaseWater);
+        
         if (overworldTileBaseWater == null)
         {
+            Type oldMainMaterial = tile.TileMainMaterial?.GetType(); // old material before updating it
+
+            if (oldMainMaterial == null || oldMainMaterial == typeof(GroundMainMaterial))
+            {
+                tileBackgroundRemover.RemoveBackground<OverworldTilePath>();
+            }
+            OverworldTileBaseWater water = tileBackgroundPlacer.PlaceBackground<OverworldTileBaseWater>();
+
             List<ITileAttribute> attributes = tile.GetAttributes();
             for (int i = 0; i < attributes.Count; i++)
             {
                 tileAttributeRemover.Remove(attributes[i]);
             }
 
-            if (tile.TileMainMaterial?.GetType() == typeof(GroundMainMaterial) || tile.TileMainMaterial == null)
+            if (oldMainMaterial == null || oldMainMaterial == typeof(GroundMainMaterial))
             {
-                tileBackgroundRemover.RemoveBackground<OverworldTilePath>();
-                tileBackgroundRemover.RemoveBackground<OverworldTileBaseGround>();
+                if (water.ConnectionScore == 16) // remove background if we completely covered the tile with water
+                {
+                    tileBackgroundRemover.RemoveBackground<OverworldTileBaseGround>();
+                }
             }
-
-            tileBackgroundPlacer.PlaceBackground<OverworldTileBaseWater>();
         }
     }
 
     public override void PlaceBackgroundVariation(EditorOverworldTile tile)
     {
-        Logger.Log("Background variations be implemented");
+        Logger.Log("Try place background variation");
+        ITileBackground overworldTileWater = (OverworldTileBaseWater)tile.GetBackgrounds().FirstOrDefault(background => background is OverworldTileBaseWater);
+
+        if (overworldTileWater == null) return;
+
+        EditorOverworldTileBackgroundPlacer tileBackgroundPlacer = new EditorOverworldTileBackgroundPlacer(tile);
+        tileBackgroundPlacer.PlaceWaterVariation((OverworldTileBaseWater)overworldTileWater);
     }
 
     public override Sprite GetSprite()

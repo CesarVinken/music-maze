@@ -12,9 +12,7 @@ public class EditorOverworldTileBackgroundModifier : EditorTileBackgroundModifie
     }
 
     public virtual void PlaceBackground(EditorOverworldTile tile)
-    {
-
-    }
+    { }
 
     public override void PlaceBackgroundVariation<T>(T tile)
     {
