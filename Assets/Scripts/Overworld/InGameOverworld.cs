@@ -115,6 +115,11 @@ public class InGameOverworld : Overworld, IInGameLevel
 
                 tileBackgroundPlacer.PlacePath(new OverworldDefaultPathType(), new TileConnectionScoreInfo(serialisableTilePathBackground.TileConnectionScore));
             }
+            else if (type.Equals(typeof(SerialisableTileBaseWater)))
+            {
+                SerialisableTileBaseWater serialisableTileBaseWater = (SerialisableTileBaseWater)JsonUtility.FromJson(serialisableTileBackground.SerialisedData, type);
+                tileBackgroundPlacer.PlaceWater(new OverworldDefaultWaterType(), new TileConnectionScoreInfo(serialisableTileBaseWater.TileConnectionScore));
+            }
             else if (type.Equals(typeof(SerialisableTileBaseGround)))
             {
                 tileBackgroundPlacer.PlaceBackground<OverworldTileBaseGround>();

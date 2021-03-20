@@ -94,6 +94,11 @@ public class EditorOverworld : Overworld, IEditorLevel
             {
                 tileBackgroundPlacer.PlaceBackground<OverworldTileBaseGround>();
             }
+            else if (type.Equals(typeof(SerialisableTileBaseWater)))
+            {
+                SerialisableTileBaseWater serialisableTileWater = (SerialisableTileBaseWater)JsonUtility.FromJson(serialisableTileBackground.SerialisedData, type);
+                tileBackgroundPlacer.PlaceWater(new OverworldDefaultWaterType(), new TileConnectionScoreInfo(serialisableTileWater.TileConnectionScore));
+            }
             else
             {
                 Logger.Error($"Unknown TileBackgroundType {serialisableTileBackground.BackgroundType}");
