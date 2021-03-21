@@ -35,6 +35,8 @@ public class MazeTileBackgroundRemover : TileBackgroundRemover
         //After removing tile, check with neighbour tiles if wall connections should be updated
         foreach (KeyValuePair<ObjectDirection, Tile> neighbour in _tile.Neighbours)
         {
+            if (!neighbour.Value) continue;
+
             TilePath mazeTilePathOnNeighbour = neighbour.Value.TryGetTilePath();
 
             if (mazeTilePathOnNeighbour == null) continue;
@@ -62,9 +64,9 @@ public class MazeTileBackgroundRemover : TileBackgroundRemover
     public override void RemoveBackground<T>()
     {
         T mazeTileBackground = (T)_tile.GetBackgrounds().FirstOrDefault(background => background.GetType() == typeof(T));
-        Logger.Log($"Did we find mazeTileBackground {typeof(T)}? {mazeTileBackground == null}");
+        Logger.Log($"Did we find mazeTileBackground {typeof(T)}? {mazeTileBackground != null}");
         if (mazeTileBackground == null) return;
-
+        Logger.Log($"Remove background of type {mazeTileBackground.GetType()}");
         _tile.RemoveBackground(mazeTileBackground);
         mazeTileBackground.Remove();
     }

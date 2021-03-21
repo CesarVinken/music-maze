@@ -364,6 +364,8 @@ public class MazeLevelManager : MonoBehaviour, IOnEventCallback
         {
             MazeTile neighbour = item.Value as MazeTile;
 
+            if (!neighbour) continue;
+
             MazeTilePath mazeTilePath = (MazeTilePath)neighbour.GetBackgrounds().FirstOrDefault(background => background is MazeTilePath);
             if (mazeTilePath == null) continue;
             

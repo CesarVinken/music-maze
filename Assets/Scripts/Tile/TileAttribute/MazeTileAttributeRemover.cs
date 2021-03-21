@@ -118,6 +118,8 @@ public class MazeTileAttributeRemover : TileAttributeRemover
     {
         foreach (KeyValuePair<ObjectDirection, Tile> neighbour in _tile.Neighbours)
         {
+            if (!neighbour.Value) continue;
+            
             TileObstacle tileObstacleOnNeighbour = neighbour.Value.TryGetTileObstacle();
 
             if (tileObstacleOnNeighbour == null) continue;

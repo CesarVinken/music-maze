@@ -36,9 +36,11 @@ public class MazeTileTransformationMapper
 
         List<EditorMazeTile> newNeighbouringTiles = new List<EditorMazeTile>();
 
-        foreach (KeyValuePair<ObjectDirection, Tile> item in tile.Neighbours)
+        foreach (KeyValuePair<ObjectDirection, Tile> neighbour in tile.Neighbours)
         {
-            EditorMazeTile neighbourTile = item.Value as EditorMazeTile;
+            if (!neighbour.Value) continue;
+
+            EditorMazeTile neighbourTile = neighbour.Value as EditorMazeTile;
             if (!foundSoFar.Contains(neighbourTile as EditorMazeTile))
             {
                 if (neighbourTile.Markable)

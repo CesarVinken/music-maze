@@ -641,6 +641,10 @@ public class TileConnectionVariationRegister<T> where T : MonoBehaviour, ITileCo
                     _connectionDown.WithConnectionScoreInfo(GenerateConnectionScoreInfo(30));
                     _connectionUp.WithConnectionScoreInfo(GenerateConnectionScoreInfo(28));
                 }
+                else if (currentScoreUp == 21 || currentScoreUp == 25)
+                {
+                    _thisMazeTileAttribute.WithConnectionScoreInfo(GenerateConnectionScoreInfo(30));
+                }
                 else if (currentScoreUp == 30)
                 {
                     _thisMazeTileAttribute.WithConnectionScoreInfo(GenerateConnectionScoreInfo(24));

@@ -16,7 +16,7 @@ public class EditorMazeTileBaseGround : EditorMazeTileBackgroundModifier, IGroun
         Type oldMainMaterial = tile.TileMainMaterial?.GetType(); // old material before updating it
 
         ITileBackground mazeTileBaseGround = (MazeTileBaseGround)tile.GetBackgrounds().FirstOrDefault(background => background is MazeTileBaseGround);
-        if (mazeTileBaseGround == null || (oldMainMaterial != typeof(GroundMainMaterial)))
+        if ((oldMainMaterial != typeof(GroundMainMaterial)))
         {
             List<ITileAttribute> attributes = tile.GetAttributes();
             for (int i = 0; i < attributes.Count; i++)
@@ -24,12 +24,19 @@ public class EditorMazeTileBaseGround : EditorMazeTileBackgroundModifier, IGroun
                 tileAttributeRemover.Remove(attributes[i]);
             }
 
-            if (tile.TileMainMaterial?.GetType() == typeof(WaterMainMaterial) || tile.TileMainMaterial == null)
+            if (oldMainMaterial == typeof(WaterMainMaterial) || tile.TileMainMaterial == null)
             {
                 tileBackgroundRemover.RemoveBackground<MazeTileBaseWater>();
             }
 
-            tileBackgroundPlacer.PlaceBackground<MazeTileBaseGround>();
+            if (mazeTileBaseGround == null)
+            {
+                tileBackgroundPlacer.PlaceBackground<MazeTileBaseGround>();
+            }
+            else
+            {
+                tileBackgroundPlacer.UpdateWaterConnectionsOnNeighbours(new MazeLevelDefaultWaterType());
+            }
         }
     }
 

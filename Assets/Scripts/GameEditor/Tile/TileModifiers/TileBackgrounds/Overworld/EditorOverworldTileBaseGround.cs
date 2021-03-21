@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
@@ -12,8 +13,10 @@ public class EditorOverworldTileBaseGround : EditorOverworldTileBackgroundModifi
         OverworldTileBackgroundRemover tileBackgroundRemover = new OverworldTileBackgroundRemover(tile);
         OverworldTileAttributeRemover tileAttributeRemover = new OverworldTileAttributeRemover(tile);
 
+        Type oldMainMaterial = tile.TileMainMaterial?.GetType(); // old material before updating it
         ITileBackground overworldTileBaseGround = (OverworldTileBaseGround)tile.GetBackgrounds().FirstOrDefault(background => background is OverworldTileBaseGround);
-        if (overworldTileBaseGround == null)
+
+        if (oldMainMaterial != typeof(GroundMainMaterial))
         {
             List<ITileAttribute> attributes = tile.GetAttributes();
             for (int i = 0; i < attributes.Count; i++)
@@ -21,12 +24,19 @@ public class EditorOverworldTileBaseGround : EditorOverworldTileBackgroundModifi
                 tileAttributeRemover.Remove(attributes[i]);
             }
 
-            if (tile.TileMainMaterial?.GetType() == typeof(WaterMainMaterial) || tile.TileMainMaterial == null)
+            if (oldMainMaterial == typeof(WaterMainMaterial) || tile.TileMainMaterial == null)
             {
-                tileBackgroundRemover.RemoveBackground<MazeTileBaseWater>();
+                tileBackgroundRemover.RemoveBackground<OverworldTileBaseWater>();
             }
 
-            tileBackgroundPlacer.PlaceBackground<OverworldTileBaseGround>();
+            if(overworldTileBaseGround == null)
+            {
+                tileBackgroundPlacer.PlaceBackground<OverworldTileBaseGround>();
+            }
+            else
+            {
+                tileBackgroundPlacer.UpdateWaterConnectionsOnNeighbours(new OverworldDefaultWaterType());
+            }
         }
     }
 

@@ -20,7 +20,7 @@ public class EditorMazeTileBackgroundPlacer : MazeTileBackgroundPlacer<EditorMaz
         Logger.Warning("Start placing path.....");
 
         TileConnectionScoreInfo pathConnectionScore = NeighbourTileCalculator.MapNeighbourPathsOfTile(Tile, mazeTilePathType);
-        Logger.Log($"Found a score of {pathConnectionScore.RawConnectionScore}");
+
         GameObject mazeTilePathGO = GameObject.Instantiate(MazeLevelManager.Instance.GetTileBackgroundPrefab<MazeTilePath>(), Tile.BackgroundsContainer);
         MazeTilePath mazeTilePath = mazeTilePathGO.GetComponent<MazeTilePath>();
         mazeTilePath.WithPathType(mazeTilePathType);
@@ -86,7 +86,6 @@ public class EditorMazeTileBackgroundPlacer : MazeTileBackgroundPlacer<EditorMaz
 
         // Update water connections on neighbours, because placing somewhere affects coastlines
         UpdateWaterConnectionsOnNeighbours(new MazeLevelDefaultWaterType());
-
         baseBackground.SetTile(Tile);
         Tile.AddBackground(baseBackground);
         return baseBackground;
@@ -118,6 +117,8 @@ public class EditorMazeTileBackgroundPlacer : MazeTileBackgroundPlacer<EditorMaz
     {
         foreach (KeyValuePair<ObjectDirection, Tile> neighbour in Tile.Neighbours)
         {
+            if (!neighbour.Value) continue;
+            
             TilePath tilePathOnNeighbour = neighbour.Value.TryGetTilePath();
 
             if (tilePathOnNeighbour == null) continue;
@@ -144,10 +145,12 @@ public class EditorMazeTileBackgroundPlacer : MazeTileBackgroundPlacer<EditorMaz
         }
     }
 
-    private void UpdateWaterConnectionsOnNeighbours(IBaseBackgroundType waterType)
+    public void UpdateWaterConnectionsOnNeighbours(IBaseBackgroundType waterType)
     {
         foreach (KeyValuePair<ObjectDirection, Tile> neighbour in Tile.Neighbours)
         {
+            if (!neighbour.Value) continue;
+            
             TileWater waterOnNeighbour = neighbour.Value.TryGetTileWater();
 
             if (waterOnNeighbour == null) continue;
@@ -160,9 +163,33 @@ public class EditorMazeTileBackgroundPlacer : MazeTileBackgroundPlacer<EditorMaz
             //update connection score on neighbour
             waterOnNeighbour.WithConnectionScoreInfo(mazeTileWaterConnectionScoreOnNeighbourInfo);
 
-            if (neighbour.Value.TileMainMaterial?.GetType() == typeof(WaterMainMaterial) && oldConnectionScoreOnNeighbour == 16 && mazeTileWaterConnectionScoreOnNeighbourInfo.RawConnectionScore != 16)
+            if(waterOnNeighbour.ConnectionScore == 16) // The water score is no 16, we need to remove the existing ground sprit
             {
-                PlaceBackground<MazeTileBaseWater>();
+                MazeTileBackgroundRemover tileBackgroundRemover = new MazeTileBackgroundRemover(neighbour.Value as EditorMazeTile);
+
+                List<ITileBackground> backgroundsOnNeighbour = neighbour.Value.GetBackgrounds();
+                for (int i = 0; i < backgroundsOnNeighbour.Count; i++)
+                {
+                    switch (backgroundsOnNeighbour[i].GetType())
+                    {
+                        case Type mazeTileBaseGround when mazeTileBaseGround == typeof(MazeTileBaseGround):
+                            tileBackgroundRemover.RemoveBackground<MazeTileBaseGround>();
+                            break;
+                        case Type mazeTileBaseWater when mazeTileBaseWater == typeof(MazeTileBaseWater):
+                            break;
+                        default:
+                            Logger.Error($"Unknown type {backgroundsOnNeighbour[i].GetType()}");
+                            break;
+                    }
+                }
+            }
+
+            if (neighbour.Value.TileMainMaterial?.GetType() == typeof(WaterMainMaterial)
+                && oldConnectionScoreOnNeighbour == 16
+                && mazeTileWaterConnectionScoreOnNeighbourInfo.RawConnectionScore != 16)
+            {
+                EditorMazeTileBackgroundPlacer tileBackgroundPlacerForNeighbour = new EditorMazeTileBackgroundPlacer(neighbour.Value as EditorMazeTile);
+                tileBackgroundPlacerForNeighbour.PlaceLand<MazeTileBaseGround>();
             }
         }
     }

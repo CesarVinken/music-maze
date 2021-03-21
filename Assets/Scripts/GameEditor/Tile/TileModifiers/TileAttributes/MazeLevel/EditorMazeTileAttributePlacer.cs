@@ -36,6 +36,8 @@ public class EditorMazeTileAttributePlacer : MazeTileAttributePlacer<EditorMazeT
         // after adding obstacle to this tile, update connections of neighbours
         foreach (KeyValuePair<ObjectDirection, Tile> neighbour in Tile.Neighbours)
         {
+            if (!neighbour.Value) continue;
+
             TileObstacle tileObstacleOnNeighbour = neighbour.Value.TryGetTileObstacle();
 
             if (tileObstacleOnNeighbour == null) continue;
@@ -73,6 +75,8 @@ public class EditorMazeTileAttributePlacer : MazeTileAttributePlacer<EditorMazeT
         // after adding obstacle to this tile, update connections of neighbours
         foreach (KeyValuePair<ObjectDirection, Tile> neighbour in Tile.Neighbours)
         {
+            if (!neighbour.Value) continue;
+            
             TileObstacle tileObstacleOnNeighbour = neighbour.Value.TryGetTileObstacle();
 
             if (tileObstacleOnNeighbour == null) continue;

@@ -5,20 +5,25 @@ public static class TileConnectionRegister
 {
     public static TileConnectionScoreInfo CalculateTileConnectionScore<T>(TileModifierConnectionInfo<T> right, TileModifierConnectionInfo<T> down, TileModifierConnectionInfo<T> left, TileModifierConnectionInfo<T> up) where T : MonoBehaviour, ITileConnectable
     {
+        int rightConnectionScore = right.TileModifier ? right.TileModifier.ConnectionScore : 16;
+        int downConnectionScore = down.TileModifier ? down.TileModifier.ConnectionScore : 16;
+        int leftConnectionScore = left.TileModifier ? left.TileModifier.ConnectionScore : 16;
+        int upConnectionScore = up.TileModifier ? up.TileModifier.ConnectionScore : 16;
+
         if (right.HasConnection)
         {
             // narrow
-            if (right.TileModifier.ConnectionScore == 1 || right.TileModifier.ConnectionScore == 2 || right.TileModifier.ConnectionScore == 3 || right.TileModifier.ConnectionScore == 4 || right.TileModifier.ConnectionScore == 5 || right.TileModifier.ConnectionScore == 6 || right.TileModifier.ConnectionScore == 7 || right.TileModifier.ConnectionScore == 8 || right.TileModifier.ConnectionScore == 9 || right.TileModifier.ConnectionScore == 10 || right.TileModifier.ConnectionScore == 11 || right.TileModifier.ConnectionScore == 12 || right.TileModifier.ConnectionScore == 14 || right.TileModifier.ConnectionScore == 15 || right.TileModifier.ConnectionScore == 17 || right.TileModifier.ConnectionScore == 18 || right.TileModifier.ConnectionScore == 20 || right.TileModifier.ConnectionScore == 27)
+            if (rightConnectionScore == 1 || rightConnectionScore == 2 || rightConnectionScore == 3 || rightConnectionScore == 4 || rightConnectionScore == 5 || rightConnectionScore == 6 || rightConnectionScore == 7 || rightConnectionScore == 8 || rightConnectionScore == 9 || rightConnectionScore == 10 || rightConnectionScore == 11 || rightConnectionScore == 12 || rightConnectionScore == 14 || rightConnectionScore == 15 || rightConnectionScore == 17 || rightConnectionScore == 18 || rightConnectionScore == 20 || rightConnectionScore == 27)
             {
                 if (down.HasConnection)
                 {
                     // narrow
-                    if (down.TileModifier.ConnectionScore == 1 || down.TileModifier.ConnectionScore == 2 || down.TileModifier.ConnectionScore == 3 || down.TileModifier.ConnectionScore == 4 || down.TileModifier.ConnectionScore == 5 || down.TileModifier.ConnectionScore == 6 || down.TileModifier.ConnectionScore == 7 || down.TileModifier.ConnectionScore == 8 || down.TileModifier.ConnectionScore == 9 || down.TileModifier.ConnectionScore == 10 || down.TileModifier.ConnectionScore == 11 || down.TileModifier.ConnectionScore == 13 || down.TileModifier.ConnectionScore == 14 || down.TileModifier.ConnectionScore == 15 || down.TileModifier.ConnectionScore == 17 || down.TileModifier.ConnectionScore == 19 || down.TileModifier.ConnectionScore == 20 || down.TileModifier.ConnectionScore == 28)
+                    if (downConnectionScore == 1 || downConnectionScore == 2 || downConnectionScore == 3 || downConnectionScore == 4 || downConnectionScore == 5 || downConnectionScore == 6 || downConnectionScore == 7 || downConnectionScore == 8 || downConnectionScore == 9 || downConnectionScore == 10 || downConnectionScore == 11 || downConnectionScore == 13 || downConnectionScore == 14 || downConnectionScore == 15 || downConnectionScore == 17 || downConnectionScore == 19 || downConnectionScore == 20 || downConnectionScore == 28)
                     {
                         if (left.HasConnection)
                         {
                             // narrow
-                            if (left.TileModifier.ConnectionScore == 1 || left.TileModifier.ConnectionScore == 2 || left.TileModifier.ConnectionScore == 3 || left.TileModifier.ConnectionScore == 4 || left.TileModifier.ConnectionScore == 5 || left.TileModifier.ConnectionScore == 6 || left.TileModifier.ConnectionScore == 7 || left.TileModifier.ConnectionScore == 8 || left.TileModifier.ConnectionScore == 9 || left.TileModifier.ConnectionScore == 10 || left.TileModifier.ConnectionScore == 11 || left.TileModifier.ConnectionScore == 12 || left.TileModifier.ConnectionScore == 13 || left.TileModifier.ConnectionScore == 14 || left.TileModifier.ConnectionScore == 18 || left.TileModifier.ConnectionScore == 19 || left.TileModifier.ConnectionScore == 20 || left.TileModifier.ConnectionScore == 29)
+                            if (leftConnectionScore == 1 || leftConnectionScore == 2 || leftConnectionScore == 3 || leftConnectionScore == 4 || leftConnectionScore == 5 || leftConnectionScore == 6 || leftConnectionScore == 7 || leftConnectionScore == 8 || leftConnectionScore == 9 || leftConnectionScore == 10 || leftConnectionScore == 11 || leftConnectionScore == 12 || leftConnectionScore == 13 || leftConnectionScore == 14 || leftConnectionScore == 18 || leftConnectionScore == 19 || leftConnectionScore == 20 || leftConnectionScore == 29)
                             {
                                 if (up.HasConnection)
                                 {
@@ -36,7 +41,7 @@ public static class TileConnectionRegister
                         if (up.HasConnection)
                         {
                             // narrow
-                            if (up.TileModifier.ConnectionScore == 1 || up.TileModifier.ConnectionScore == 2 || up.TileModifier.ConnectionScore == 3 || up.TileModifier.ConnectionScore == 4 || up.TileModifier.ConnectionScore == 5 || up.TileModifier.ConnectionScore == 6 || up.TileModifier.ConnectionScore == 7 || up.TileModifier.ConnectionScore == 8 || up.TileModifier.ConnectionScore == 9 || up.TileModifier.ConnectionScore == 10 || up.TileModifier.ConnectionScore == 11 || up.TileModifier.ConnectionScore == 12 || up.TileModifier.ConnectionScore == 13 || up.TileModifier.ConnectionScore == 15 || up.TileModifier.ConnectionScore == 17 || up.TileModifier.ConnectionScore == 18 || up.TileModifier.ConnectionScore == 19 || up.TileModifier.ConnectionScore == 20 || up.TileModifier.ConnectionScore == 30)
+                            if (upConnectionScore == 1 || upConnectionScore == 2 || upConnectionScore == 3 || upConnectionScore == 4 || upConnectionScore == 5 || upConnectionScore == 6 || upConnectionScore == 7 || upConnectionScore == 8 || upConnectionScore == 9 || upConnectionScore == 10 || upConnectionScore == 11 || upConnectionScore == 12 || upConnectionScore == 13 || upConnectionScore == 15 || upConnectionScore == 17 || upConnectionScore == 18 || upConnectionScore == 19 || upConnectionScore == 20 || upConnectionScore == 30)
                             {
                                 return new TileConnectionScoreInfo(13);
                             }
@@ -65,12 +70,12 @@ public static class TileConnectionRegister
                 if (left.HasConnection)
                 {
                     // narrow
-                    if (left.TileModifier.ConnectionScore == 1 || left.TileModifier.ConnectionScore == 2 || left.TileModifier.ConnectionScore == 3 || left.TileModifier.ConnectionScore == 4 || left.TileModifier.ConnectionScore == 5 || left.TileModifier.ConnectionScore == 6 || left.TileModifier.ConnectionScore == 7 || left.TileModifier.ConnectionScore == 8 || left.TileModifier.ConnectionScore == 9 || left.TileModifier.ConnectionScore == 10 || left.TileModifier.ConnectionScore == 11 || left.TileModifier.ConnectionScore == 12 || left.TileModifier.ConnectionScore == 13 || left.TileModifier.ConnectionScore == 14 || left.TileModifier.ConnectionScore == 18 || left.TileModifier.ConnectionScore == 19 || left.TileModifier.ConnectionScore == 20 || left.TileModifier.ConnectionScore == 29)
+                    if (leftConnectionScore == 1 || leftConnectionScore == 2 || leftConnectionScore == 3 || leftConnectionScore == 4 || leftConnectionScore == 5 || leftConnectionScore == 6 || leftConnectionScore == 7 || leftConnectionScore == 8 || leftConnectionScore == 9 || leftConnectionScore == 10 || leftConnectionScore == 11 || leftConnectionScore == 12 || leftConnectionScore == 13 || leftConnectionScore == 14 || leftConnectionScore == 18 || leftConnectionScore == 19 || leftConnectionScore == 20 || leftConnectionScore == 29)
                     {
                         if (up.HasConnection)
                         {
                             // narrow
-                            if (up.TileModifier.ConnectionScore == 1 || up.TileModifier.ConnectionScore == 2 || up.TileModifier.ConnectionScore == 3 || up.TileModifier.ConnectionScore == 4 || up.TileModifier.ConnectionScore == 5 || up.TileModifier.ConnectionScore == 6 || up.TileModifier.ConnectionScore == 7 || up.TileModifier.ConnectionScore == 8 || up.TileModifier.ConnectionScore == 9 || up.TileModifier.ConnectionScore == 10 || up.TileModifier.ConnectionScore == 11 || up.TileModifier.ConnectionScore == 12 || up.TileModifier.ConnectionScore == 13 || up.TileModifier.ConnectionScore == 15 || up.TileModifier.ConnectionScore == 17 || up.TileModifier.ConnectionScore == 18 || up.TileModifier.ConnectionScore == 19 || up.TileModifier.ConnectionScore == 20 || up.TileModifier.ConnectionScore == 30)
+                            if (upConnectionScore == 1 || upConnectionScore == 2 || upConnectionScore == 3 || upConnectionScore == 4 || upConnectionScore == 5 || upConnectionScore == 6 || upConnectionScore == 7 || upConnectionScore == 8 || upConnectionScore == 9 || upConnectionScore == 10 || upConnectionScore == 11 || upConnectionScore == 12 || upConnectionScore == 13 || upConnectionScore == 15 || upConnectionScore == 17 || upConnectionScore == 18 || upConnectionScore == 19 || upConnectionScore == 20 || upConnectionScore == 30)
                             {
                                 return new TileConnectionScoreInfo(14);
                             }
@@ -89,7 +94,7 @@ public static class TileConnectionRegister
                 if (up.HasConnection)
                 {
                     // narrow
-                    if (up.TileModifier.ConnectionScore == 1 || up.TileModifier.ConnectionScore == 2 || up.TileModifier.ConnectionScore == 3 || up.TileModifier.ConnectionScore == 4 || up.TileModifier.ConnectionScore == 5 || up.TileModifier.ConnectionScore == 6 || up.TileModifier.ConnectionScore == 7 || up.TileModifier.ConnectionScore == 8 || up.TileModifier.ConnectionScore == 9 || up.TileModifier.ConnectionScore == 10 || up.TileModifier.ConnectionScore == 11 || up.TileModifier.ConnectionScore == 12 || up.TileModifier.ConnectionScore == 13 || up.TileModifier.ConnectionScore == 15 || up.TileModifier.ConnectionScore == 17 || up.TileModifier.ConnectionScore == 18 || up.TileModifier.ConnectionScore == 19 || up.TileModifier.ConnectionScore == 20 || up.TileModifier.ConnectionScore == 30)
+                    if (upConnectionScore == 1 || upConnectionScore == 2 || upConnectionScore == 3 || upConnectionScore == 4 || upConnectionScore == 5 || upConnectionScore == 6 || upConnectionScore == 7 || upConnectionScore == 8 || upConnectionScore == 9 || upConnectionScore == 10 || upConnectionScore == 11 || upConnectionScore == 12 || upConnectionScore == 13 || upConnectionScore == 15 || upConnectionScore == 17 || upConnectionScore == 18 || upConnectionScore == 19 || upConnectionScore == 20 || upConnectionScore == 30)
                     {
                         return new TileConnectionScoreInfo(8);
                     }
@@ -122,7 +127,7 @@ public static class TileConnectionRegister
                     return new TileConnectionScoreInfo(33);
                 }
                 // narrow
-                if (left.TileModifier.ConnectionScore == 1 || left.TileModifier.ConnectionScore == 2 || left.TileModifier.ConnectionScore == 3 || left.TileModifier.ConnectionScore == 4 || left.TileModifier.ConnectionScore == 5 || left.TileModifier.ConnectionScore == 6 || left.TileModifier.ConnectionScore == 7 || left.TileModifier.ConnectionScore == 8 || left.TileModifier.ConnectionScore == 9 || left.TileModifier.ConnectionScore == 10 || left.TileModifier.ConnectionScore == 11 || left.TileModifier.ConnectionScore == 12 || left.TileModifier.ConnectionScore == 13 || left.TileModifier.ConnectionScore == 14 || left.TileModifier.ConnectionScore == 18 || left.TileModifier.ConnectionScore == 19 || left.TileModifier.ConnectionScore == 20 || left.TileModifier.ConnectionScore == 29)
+                if (leftConnectionScore == 1 || leftConnectionScore == 2 || leftConnectionScore == 3 || leftConnectionScore == 4 || leftConnectionScore == 5 || leftConnectionScore == 6 || leftConnectionScore == 7 || leftConnectionScore == 8 || leftConnectionScore == 9 || leftConnectionScore == 10 || leftConnectionScore == 11 || leftConnectionScore == 12 || leftConnectionScore == 13 || leftConnectionScore == 14 || leftConnectionScore == 18 || leftConnectionScore == 19 || leftConnectionScore == 20 || leftConnectionScore == 29)
                 {
                     return new TileConnectionScoreInfo(27);
                 }
@@ -137,17 +142,17 @@ public static class TileConnectionRegister
         if (down.HasConnection)
         {
             // narrow
-            if (down.TileModifier.ConnectionScore == 1 || down.TileModifier.ConnectionScore == 2 || down.TileModifier.ConnectionScore == 3 || down.TileModifier.ConnectionScore == 4 || down.TileModifier.ConnectionScore == 5 || down.TileModifier.ConnectionScore == 6 || down.TileModifier.ConnectionScore == 7 || down.TileModifier.ConnectionScore == 8 || down.TileModifier.ConnectionScore == 9 || down.TileModifier.ConnectionScore == 10 || down.TileModifier.ConnectionScore == 11 || down.TileModifier.ConnectionScore == 13 || down.TileModifier.ConnectionScore == 14 || down.TileModifier.ConnectionScore == 15 || down.TileModifier.ConnectionScore == 17 || down.TileModifier.ConnectionScore == 18 || down.TileModifier.ConnectionScore == 19 || down.TileModifier.ConnectionScore == 20 || down.TileModifier.ConnectionScore == 28)
+            if (downConnectionScore == 1 || downConnectionScore == 2 || downConnectionScore == 3 || downConnectionScore == 4 || downConnectionScore == 5 || downConnectionScore == 6 || downConnectionScore == 7 || downConnectionScore == 8 || downConnectionScore == 9 || downConnectionScore == 10 || downConnectionScore == 11 || downConnectionScore == 13 || downConnectionScore == 14 || downConnectionScore == 15 || downConnectionScore == 17 || downConnectionScore == 18 || downConnectionScore == 19 || downConnectionScore == 20 || downConnectionScore == 28)
             {
                 if (left.HasConnection)
                 {
                     // left = narrow
-                    if (left.TileModifier.ConnectionScore == 1 || left.TileModifier.ConnectionScore == 2 || left.TileModifier.ConnectionScore == 3 || left.TileModifier.ConnectionScore == 4 || left.TileModifier.ConnectionScore == 5 || left.TileModifier.ConnectionScore == 6 || left.TileModifier.ConnectionScore == 7 || left.TileModifier.ConnectionScore == 8 || left.TileModifier.ConnectionScore == 9 || left.TileModifier.ConnectionScore == 10 || left.TileModifier.ConnectionScore == 11 || left.TileModifier.ConnectionScore == 12 || left.TileModifier.ConnectionScore == 13 || left.TileModifier.ConnectionScore == 14 || left.TileModifier.ConnectionScore == 18 || left.TileModifier.ConnectionScore == 19 || left.TileModifier.ConnectionScore == 20 || left.TileModifier.ConnectionScore == 29)
+                    if (leftConnectionScore == 1 || leftConnectionScore == 2 || leftConnectionScore == 3 || leftConnectionScore == 4 || leftConnectionScore == 5 || leftConnectionScore == 6 || leftConnectionScore == 7 || leftConnectionScore == 8 || leftConnectionScore == 9 || leftConnectionScore == 10 || leftConnectionScore == 11 || leftConnectionScore == 12 || leftConnectionScore == 13 || leftConnectionScore == 14 || leftConnectionScore == 18 || leftConnectionScore == 19 || leftConnectionScore == 20 || leftConnectionScore == 29)
                     {
                         if (up.HasConnection)
                         {
                             // narrow
-                            if (up.TileModifier.ConnectionScore == 1 || up.TileModifier.ConnectionScore == 2 || up.TileModifier.ConnectionScore == 3 || up.TileModifier.ConnectionScore == 4 || up.TileModifier.ConnectionScore == 5 || up.TileModifier.ConnectionScore == 6 || up.TileModifier.ConnectionScore == 7 || up.TileModifier.ConnectionScore == 8 || up.TileModifier.ConnectionScore == 9 || up.TileModifier.ConnectionScore == 10 || up.TileModifier.ConnectionScore == 11 || up.TileModifier.ConnectionScore == 12 || up.TileModifier.ConnectionScore == 13 || up.TileModifier.ConnectionScore == 15 || up.TileModifier.ConnectionScore == 17 || up.TileModifier.ConnectionScore == 18 || up.TileModifier.ConnectionScore == 19 || up.TileModifier.ConnectionScore == 20 || up.TileModifier.ConnectionScore == 30)
+                            if (upConnectionScore == 1 || upConnectionScore == 2 || upConnectionScore == 3 || upConnectionScore == 4 || upConnectionScore == 5 || upConnectionScore == 6 || upConnectionScore == 7 || upConnectionScore == 8 || upConnectionScore == 9 || upConnectionScore == 10 || upConnectionScore == 11 || upConnectionScore == 12 || upConnectionScore == 13 || upConnectionScore == 15 || upConnectionScore == 17 || upConnectionScore == 18 || upConnectionScore == 19 || upConnectionScore == 20 || upConnectionScore == 30)
                             {
                                 return new TileConnectionScoreInfo(15);
                             }
@@ -165,11 +170,11 @@ public static class TileConnectionRegister
                 if (up.HasConnection)
                 {
                     // narrow
-                    if (up.TileModifier.ConnectionScore == 1 || up.TileModifier.ConnectionScore == 2 || up.TileModifier.ConnectionScore == 3 || up.TileModifier.ConnectionScore == 4 || up.TileModifier.ConnectionScore == 5 || up.TileModifier.ConnectionScore == 6 || up.TileModifier.ConnectionScore == 7 || up.TileModifier.ConnectionScore == 8 || up.TileModifier.ConnectionScore == 9 || up.TileModifier.ConnectionScore == 10 || up.TileModifier.ConnectionScore == 11 || up.TileModifier.ConnectionScore == 12 || up.TileModifier.ConnectionScore == 13 || up.TileModifier.ConnectionScore == 15 || up.TileModifier.ConnectionScore == 17 || up.TileModifier.ConnectionScore == 18 || up.TileModifier.ConnectionScore == 19 || up.TileModifier.ConnectionScore == 20 || up.TileModifier.ConnectionScore == 21 || up.TileModifier.ConnectionScore == 25 || up.TileModifier.ConnectionScore == 30)
+                    if (upConnectionScore == 1 || upConnectionScore == 2 || upConnectionScore == 3 || upConnectionScore == 4 || upConnectionScore == 5 || upConnectionScore == 6 || upConnectionScore == 7 || upConnectionScore == 8 || upConnectionScore == 9 || upConnectionScore == 10 || upConnectionScore == 11 || upConnectionScore == 12 || upConnectionScore == 13 || upConnectionScore == 15 || upConnectionScore == 17 || upConnectionScore == 18 || upConnectionScore == 19 || upConnectionScore == 20 || upConnectionScore == 21 || upConnectionScore == 25 || upConnectionScore == 30)
                     {
                         return new TileConnectionScoreInfo(10);
                     }
-                    if (up.TileModifier.ConnectionScore == 24 || up.TileModifier.ConnectionScore == 28)
+                    if (upConnectionScore == 24 || upConnectionScore == 28)
                     {
                         return new TileConnectionScoreInfo(30);
                     }
@@ -190,7 +195,7 @@ public static class TileConnectionRegister
             if (up.HasConnection)
             {
                 // narrow
-                if (up.TileModifier.ConnectionScore == 1 || up.TileModifier.ConnectionScore == 2 || up.TileModifier.ConnectionScore == 3 || up.TileModifier.ConnectionScore == 4 || up.TileModifier.ConnectionScore == 5 || up.TileModifier.ConnectionScore == 6 || up.TileModifier.ConnectionScore == 7 || up.TileModifier.ConnectionScore == 8 || up.TileModifier.ConnectionScore == 9 || up.TileModifier.ConnectionScore == 10 || up.TileModifier.ConnectionScore == 11 || up.TileModifier.ConnectionScore == 12 || up.TileModifier.ConnectionScore == 13 || up.TileModifier.ConnectionScore == 15 || up.TileModifier.ConnectionScore == 17 || up.TileModifier.ConnectionScore == 18 || up.TileModifier.ConnectionScore == 19 || up.TileModifier.ConnectionScore == 20 || up.TileModifier.ConnectionScore == 30)
+                if (upConnectionScore == 1 || upConnectionScore == 2 || upConnectionScore == 3 || upConnectionScore == 4 || upConnectionScore == 5 || upConnectionScore == 6 || upConnectionScore == 7 || upConnectionScore == 8 || upConnectionScore == 9 || upConnectionScore == 10 || upConnectionScore == 11 || upConnectionScore == 12 || upConnectionScore == 13 || upConnectionScore == 15 || upConnectionScore == 17 || upConnectionScore == 18 || upConnectionScore == 19 || upConnectionScore == 20 || upConnectionScore == 30)
                 {
                     return new TileConnectionScoreInfo(28);
                 }
@@ -202,12 +207,12 @@ public static class TileConnectionRegister
         if (left.HasConnection)
         {
             // narrow
-            if (left.TileModifier.ConnectionScore == 1 || left.TileModifier.ConnectionScore == 2 || left.TileModifier.ConnectionScore == 3 || left.TileModifier.ConnectionScore == 4 || left.TileModifier.ConnectionScore == 5 || left.TileModifier.ConnectionScore == 6 || left.TileModifier.ConnectionScore == 7 || left.TileModifier.ConnectionScore == 8 || left.TileModifier.ConnectionScore == 9 || left.TileModifier.ConnectionScore == 10 || left.TileModifier.ConnectionScore == 11 || left.TileModifier.ConnectionScore == 12 || left.TileModifier.ConnectionScore == 13 || left.TileModifier.ConnectionScore == 14 || left.TileModifier.ConnectionScore == 18 || left.TileModifier.ConnectionScore == 19 || left.TileModifier.ConnectionScore == 20 || left.TileModifier.ConnectionScore == 29)
+            if (leftConnectionScore == 1 || leftConnectionScore == 2 || leftConnectionScore == 3 || leftConnectionScore == 4 || leftConnectionScore == 5 || leftConnectionScore == 6 || leftConnectionScore == 7 || leftConnectionScore == 8 || leftConnectionScore == 9 || leftConnectionScore == 10 || leftConnectionScore == 11 || leftConnectionScore == 12 || leftConnectionScore == 13 || leftConnectionScore == 14 || leftConnectionScore == 18 || leftConnectionScore == 19 || leftConnectionScore == 20 || leftConnectionScore == 29)
             {
                 if (up.HasConnection)
                 {
                     // narrow
-                    if (up.TileModifier.ConnectionScore == 1 || up.TileModifier.ConnectionScore == 2 || up.TileModifier.ConnectionScore == 3 || up.TileModifier.ConnectionScore == 4 || up.TileModifier.ConnectionScore == 5 || up.TileModifier.ConnectionScore == 6 || up.TileModifier.ConnectionScore == 7 || up.TileModifier.ConnectionScore == 8 || up.TileModifier.ConnectionScore == 9 || up.TileModifier.ConnectionScore == 10 || up.TileModifier.ConnectionScore == 11 || up.TileModifier.ConnectionScore == 12 || up.TileModifier.ConnectionScore == 13 || up.TileModifier.ConnectionScore == 15 || up.TileModifier.ConnectionScore == 17 || up.TileModifier.ConnectionScore == 18 || up.TileModifier.ConnectionScore == 19 || up.TileModifier.ConnectionScore == 20 || up.TileModifier.ConnectionScore == 30)
+                    if (upConnectionScore == 1 || upConnectionScore == 2 || upConnectionScore == 3 || upConnectionScore == 4 || upConnectionScore == 5 || upConnectionScore == 6 || upConnectionScore == 7 || upConnectionScore == 8 || upConnectionScore == 9 || upConnectionScore == 10 || upConnectionScore == 11 || upConnectionScore == 12 || upConnectionScore == 13 || upConnectionScore == 15 || upConnectionScore == 17 || upConnectionScore == 18 || upConnectionScore == 19 || upConnectionScore == 20 || upConnectionScore == 30)
                     {
                         return new TileConnectionScoreInfo(11);
                     }
@@ -225,7 +230,7 @@ public static class TileConnectionRegister
         if (up.HasConnection)
         {
             // narrow
-            if (up.TileModifier.ConnectionScore == 1 || up.TileModifier.ConnectionScore == 2 || up.TileModifier.ConnectionScore == 3 || up.TileModifier.ConnectionScore == 4 || up.TileModifier.ConnectionScore == 5 || up.TileModifier.ConnectionScore == 6 || up.TileModifier.ConnectionScore == 7 || up.TileModifier.ConnectionScore == 8 || up.TileModifier.ConnectionScore == 9 || up.TileModifier.ConnectionScore == 10 || up.TileModifier.ConnectionScore == 11 || up.TileModifier.ConnectionScore == 12 || up.TileModifier.ConnectionScore == 13 || up.TileModifier.ConnectionScore == 15 || up.TileModifier.ConnectionScore == 17 || up.TileModifier.ConnectionScore == 18 || up.TileModifier.ConnectionScore == 19 || up.TileModifier.ConnectionScore == 20 || up.TileModifier.ConnectionScore == 30)
+            if (upConnectionScore == 1 || upConnectionScore == 2 || upConnectionScore == 3 || upConnectionScore == 4 || upConnectionScore == 5 || upConnectionScore == 6 || upConnectionScore == 7 || upConnectionScore == 8 || upConnectionScore == 9 || upConnectionScore == 10 || upConnectionScore == 11 || upConnectionScore == 12 || upConnectionScore == 13 || upConnectionScore == 15 || upConnectionScore == 17 || upConnectionScore == 18 || upConnectionScore == 19 || upConnectionScore == 20 || upConnectionScore == 30)
             {
                 return new TileConnectionScoreInfo(5);
             }

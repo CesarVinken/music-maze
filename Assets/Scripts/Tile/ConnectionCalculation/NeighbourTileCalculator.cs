@@ -31,7 +31,7 @@ public class NeighbourTileCalculator
         foreach (KeyValuePair<ObjectDirection, Tile> item in tile.Neighbours)
         {
             MazeTile neighbour = item.Value as MazeTile;
-            if (neighbour.PlayerMark == null || neighbour.PlayerMark.Owner == PlayerMarkOwner.None) continue;
+            if (neighbour == null || neighbour.PlayerMark == null || neighbour.PlayerMark.Owner == PlayerMarkOwner.None) continue;
 
             if (item.Key == ObjectDirection.Right)
             {
@@ -69,6 +69,28 @@ public class NeighbourTileCalculator
 
         foreach (KeyValuePair<ObjectDirection, Tile> neighbour in tile.Neighbours)
         {
+            if (!neighbour.Value)
+            {
+                // if there is no tile as neighbour, it must mean it as the level edge. This counts as a connection.
+                if (neighbour.Key == ObjectDirection.Right)
+                {
+                    pathRight.HasConnection = true;
+                }
+                else if (neighbour.Key == ObjectDirection.Down)
+                {
+                    pathDown.HasConnection = true;
+                }
+                else if (neighbour.Key == ObjectDirection.Left)
+                {
+                    pathLeft.HasConnection = true;
+                }
+                else if (neighbour.Key == ObjectDirection.Up)
+                {
+                    pathUp.HasConnection = true;
+                }
+                continue;
+            }
+
             Logger.Warning($"Neighbour at {neighbour.Value.GridLocation.X},{neighbour.Value.GridLocation.Y} is {neighbour.Key} of {tile.GridLocation.X},{tile.GridLocation.Y}");
             
             TilePath tilePath = neighbour.Value.TryGetTilePath();
@@ -119,6 +141,28 @@ public class NeighbourTileCalculator
 
         foreach (KeyValuePair<ObjectDirection, Tile> neighbour in tile.Neighbours)
         {
+            if (!neighbour.Value) 
+            {
+                // if there is no tile as neighbour, it must mean it as the level edge. This counts as a connection.
+                if (neighbour.Key == ObjectDirection.Right)
+                {
+                    waterRight.HasConnection = true;
+                }
+                else if (neighbour.Key == ObjectDirection.Down)
+                {
+                    waterDown.HasConnection = true;
+                }
+                else if (neighbour.Key == ObjectDirection.Left)
+                {
+                    waterLeft.HasConnection = true;
+                }
+                else if (neighbour.Key == ObjectDirection.Up)
+                {
+                    waterUp.HasConnection = true;
+                }
+                continue;
+            }
+            
             Logger.Warning($"Neighbour at {neighbour.Value.GridLocation.X},{neighbour.Value.GridLocation.Y} is {neighbour.Key} of {tile.GridLocation.X},{tile.GridLocation.Y}");
 
             TileWater tileWater = neighbour.Value.TryGetTileWater();
@@ -152,7 +196,6 @@ public class NeighbourTileCalculator
         return TileConnectionRegister.CalculateTileConnectionScore(waterRight, waterDown, waterLeft, waterUp);
     }
 
-
     public static TileConnectionScoreInfo MapNeighbourObstaclesOfTile(Tile tile, ObstacleType obstacleType)
     {
         Logger.Log($"Map neighbours of {tile.GridLocation.X},{tile.GridLocation.Y}");
@@ -169,6 +212,8 @@ public class NeighbourTileCalculator
 
         foreach (KeyValuePair<ObjectDirection, Tile> neighbour in tile.Neighbours)
         {
+            if (!neighbour.Value) continue;
+            
             Logger.Warning($"Neighbour at {neighbour.Value.GridLocation.X},{neighbour.Value.GridLocation.Y} is {neighbour.Key} of {tile.GridLocation.X},{tile.GridLocation.Y}");
             
             TileObstacle tileObstacle = neighbour.Value.TryGetTileObstacle();
@@ -213,7 +258,9 @@ public class NeighbourTileCalculator
 
         foreach (KeyValuePair<ObjectDirection, Tile> neighbour in tile.Neighbours)
         {
-            Logger.Warning($"Neighbour at {neighbour.Value.GridLocation.X},{neighbour.Value.GridLocation.Y} is {neighbour.Key} of {tile.GridLocation.X},{tile.GridLocation.Y}. We look for a {typeof(T)}");
+            if (!neighbour.Value) continue;
+
+             Logger.Warning($"Neighbour at {neighbour.Value.GridLocation.X},{neighbour.Value.GridLocation.Y} is {neighbour.Key} of {tile.GridLocation.X},{tile.GridLocation.Y}. We look for a {typeof(T)}");
 
             T connectedModifier;
 

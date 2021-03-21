@@ -124,6 +124,10 @@ public abstract class Tile : MonoBehaviour
         if (GridLocation.X < level.LevelBounds.X)
         {
             Neighbours.Add(ObjectDirection.Right, level.TilesByLocation[new GridLocation(GridLocation.X + 1, GridLocation.Y)]);
+        } 
+        else
+        {
+            Neighbours.Add(ObjectDirection.Right, null);
         }
 
         //Add Down
@@ -131,17 +135,27 @@ public abstract class Tile : MonoBehaviour
         {
             Neighbours.Add(ObjectDirection.Down, level.TilesByLocation[new GridLocation(GridLocation.X, GridLocation.Y - 1)]);
         }
-
+        else
+        {
+            Neighbours.Add(ObjectDirection.Down, null);
+        }
         //Add Left
         if (GridLocation.X > 0)
         {
             Neighbours.Add(ObjectDirection.Left, level.TilesByLocation[new GridLocation(GridLocation.X - 1, GridLocation.Y)]);
         }
-
+        else
+        {
+            Neighbours.Add(ObjectDirection.Left, null);
+        }
         //Add Up
         if (GridLocation.Y < level.LevelBounds.Y)
         {
             Neighbours.Add(ObjectDirection.Up, level.TilesByLocation[new GridLocation(GridLocation.X, GridLocation.Y + 1)]);
+        }
+        else
+        {
+            Neighbours.Add(ObjectDirection.Up, null);
         }
     }
 }

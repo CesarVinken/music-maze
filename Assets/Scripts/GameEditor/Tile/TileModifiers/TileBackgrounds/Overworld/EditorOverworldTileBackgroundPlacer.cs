@@ -113,6 +113,8 @@ public class EditorOverworldTileBackgroundPlacer : OverworldTileBackgroundPlacer
     {
         foreach (KeyValuePair<ObjectDirection, Tile> neighbour in Tile.Neighbours)
         {
+            if (!neighbour.Value) continue;
+            
             TilePath tilePathOnNeighbour = neighbour.Value.TryGetTilePath();
 
             if (tilePathOnNeighbour == null) continue;
@@ -139,10 +141,12 @@ public class EditorOverworldTileBackgroundPlacer : OverworldTileBackgroundPlacer
         }
     }
 
-    private void UpdateWaterConnectionsOnNeighbours(IBaseBackgroundType waterType)
+    public void UpdateWaterConnectionsOnNeighbours(IBaseBackgroundType waterType)
     {
         foreach (KeyValuePair<ObjectDirection, Tile> neighbour in Tile.Neighbours)
         {
+            if (!neighbour.Value) continue;
+            
             TileWater waterOnNeighbour = neighbour.Value.TryGetTileWater();
 
             if (waterOnNeighbour == null) continue;
@@ -155,9 +159,33 @@ public class EditorOverworldTileBackgroundPlacer : OverworldTileBackgroundPlacer
             //update connection score on neighbour
             waterOnNeighbour.WithConnectionScoreInfo(overworldTileWaterConnectionScoreOnNeighbourInfo);
 
-            if (neighbour.Value.TileMainMaterial?.GetType() == typeof(WaterMainMaterial) && oldConnectionScoreOnNeighbour == 16 && overworldTileWaterConnectionScoreOnNeighbourInfo.RawConnectionScore != 16)
+            if (waterOnNeighbour.ConnectionScore == 16) // The water score is no 16, we need to remove the existing ground sprit
             {
-                PlaceBackground<OverworldTileBaseWater>();
+                OverworldTileBackgroundRemover tileBackgroundRemover = new OverworldTileBackgroundRemover(neighbour.Value as EditorOverworldTile);
+
+                List<ITileBackground> backgroundsOnNeighbour = neighbour.Value.GetBackgrounds();
+                for (int i = 0; i < backgroundsOnNeighbour.Count; i++)
+                {
+                    switch (backgroundsOnNeighbour[i].GetType())
+                    {
+                        case Type overworldTileBaseGround when overworldTileBaseGround == typeof(OverworldTileBaseGround):
+                            tileBackgroundRemover.RemoveBackground<OverworldTileBaseGround>();
+                            break;
+                        case Type overworldTileBaseWater when overworldTileBaseWater == typeof(OverworldTileBaseWater):
+                            break;
+                        default:
+                            Logger.Error($"Unknown type {backgroundsOnNeighbour[i].GetType()}");
+                            break;
+                    }
+                }
+            }
+
+            if (neighbour.Value.TileMainMaterial?.GetType() == typeof(WaterMainMaterial)
+                && oldConnectionScoreOnNeighbour == 16
+                && overworldTileWaterConnectionScoreOnNeighbourInfo.RawConnectionScore != 16)
+            {
+                EditorOverworldTileBackgroundPlacer tileBackgroundPlacerForNeighbour = new EditorOverworldTileBackgroundPlacer(neighbour.Value as EditorOverworldTile);
+                tileBackgroundPlacerForNeighbour.PlaceLand<OverworldTileBaseGround>();
             }
         }
     }
