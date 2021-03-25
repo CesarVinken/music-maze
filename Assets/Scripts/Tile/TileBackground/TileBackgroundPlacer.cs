@@ -6,12 +6,12 @@ public abstract class TileBackgroundPlacer<T> where T : Tile
 
     public abstract void PlacePath(IPathType tilePathType, TileConnectionScoreInfo pathConnectionScoreInfo);
     public abstract void PlaceWater(IBaseBackgroundType waterType, TileConnectionScoreInfo pathConnectionScoreInfo);
+    public abstract void PlaceGround(IBaseBackgroundType groundType, TileConnectionScoreInfo pathConnectionScoreInfo);
 
     public void PlacePathVariation(TilePath tilePath)
     {
         //return only connections that were updated
         List<TilePath> updatedPathConnections = NeighbourTileCalculator.GetUpdatedTileModifiersForVariation(Tile, tilePath, tilePath.TilePathType.ToString());
-
         //update the sprites with the new variations
         for (int i = 0; i < updatedPathConnections.Count; i++)
         {
@@ -19,15 +19,17 @@ public abstract class TileBackgroundPlacer<T> where T : Tile
         }
     }
 
-    public void PlaceWaterVariation(TileWater tileWater)
+    public void PlaceGroundVariation(TileBaseGround tileGround)
     {
+        Logger.Log(tileGround.TileGroundType);
         //return only connections that were updated
-        List<TileWater> updatedWaterConnections = NeighbourTileCalculator.GetUpdatedTileModifiersForVariation(Tile, tileWater, tileWater.TileWaterType.ToString());
+        List<TileBaseGround> updatedGroundConnections = NeighbourTileCalculator.GetUpdatedTileModifiersForVariation(Tile, tileGround, tileGround.TileGroundType.ToString());
+        Logger.Warning($"Number of path connections to update with variations: {updatedGroundConnections.Count}");
 
         //update the sprites with the new variations
-        for (int i = 0; i < updatedWaterConnections.Count; i++)
+        for (int i = 0; i < updatedGroundConnections.Count; i++)
         {
-            updatedWaterConnections[i].WithConnectionScoreInfo(new TileConnectionScoreInfo(updatedWaterConnections[i].ConnectionScore, updatedWaterConnections[i].SpriteNumber));
+            updatedGroundConnections[i].WithConnectionScoreInfo(new TileConnectionScoreInfo(updatedGroundConnections[i].ConnectionScore, updatedGroundConnections[i].SpriteNumber));
         }
     }
 

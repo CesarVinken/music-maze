@@ -238,4 +238,96 @@ public static class TileConnectionRegister
         }
         return new TileConnectionScoreInfo(1);
     }
+
+    public static TileConnectionScoreInfo CalculateInversedTileConnectionScore<T>(TileModifierConnectionInfo<T> right, TileModifierConnectionInfo<T> down, TileModifierConnectionInfo<T> left, TileModifierConnectionInfo<T> up) where T : MonoBehaviour, ITileConnectable
+    {
+        int rightConnectionScore = right.TileModifier ? right.TileModifier.ConnectionScore : 16;
+        int downConnectionScore = down.TileModifier ? down.TileModifier.ConnectionScore : 16;
+        int leftConnectionScore = left.TileModifier ? left.TileModifier.ConnectionScore : 16;
+        int upConnectionScore = up.TileModifier ? up.TileModifier.ConnectionScore : 16;
+
+        if (right.HasConnection)
+        {
+            //if(right.TileModifier.ConnectionScore == 16)
+            //{
+            if (down.HasConnection)
+            {
+                if (left.HasConnection)
+                {
+                    if (up.HasConnection)
+                    {
+                        //Should this be an empty tile??? connections from all sides
+                        return new TileConnectionScoreInfo(1);
+                    }
+                    //return new TileConnectionScoreInfo(5);
+                    return new TileConnectionScoreInfo(20);
+                }
+                if (up.HasConnection)
+                {
+                    //return new TileConnectionScoreInfo(4);
+                    return new TileConnectionScoreInfo(19);
+                }
+                //return new TileConnectionScoreInfo(11);
+                return new TileConnectionScoreInfo(26);
+            }
+            if (left.HasConnection)
+            {
+                if (up.HasConnection)
+                {
+                    //return new TileConnectionScoreInfo(3);
+                    return new TileConnectionScoreInfo(18);
+                }
+                //return new TileConnectionScoreInfo(10);
+                return new TileConnectionScoreInfo(24);
+            }
+            if (up.HasConnection)
+            {
+                //return new TileConnectionScoreInfo(9);
+                return new TileConnectionScoreInfo(25);
+            }
+            //return new TileConnectionScoreInfo(15);
+            return new TileConnectionScoreInfo(34);
+            //}
+        }
+        if (down.HasConnection)
+        {
+            if (left.HasConnection)
+            {
+                //if (left.TileModifier.ConnectionScore == 16)
+                //{
+                    if (up.HasConnection)
+                    {
+                    //return new TileConnectionScoreInfo(2);
+                    return new TileConnectionScoreInfo(17);
+                }
+                //return new TileConnectionScoreInfo(8);
+                return new TileConnectionScoreInfo(23);
+                //}
+                //return new TileConnectionScoreInfo(4);
+            }
+            if (up.HasConnection)
+            {
+                //return new TileConnectionScoreInfo(7);
+                return new TileConnectionScoreInfo(22);
+            }
+            //return new TileConnectionScoreInfo(14);
+            return new TileConnectionScoreInfo(33);
+        }
+        if (left.HasConnection)
+        {
+            if (up.HasConnection)
+            {
+                //return new TileConnectionScoreInfo(6);
+                return new TileConnectionScoreInfo(21);
+            }
+            //return new TileConnectionScoreInfo(13);
+            return new TileConnectionScoreInfo(32);
+        }
+        if (up.HasConnection)
+        {
+            //return new TileConnectionScoreInfo(12);
+            return new TileConnectionScoreInfo(31);
+        }
+        return new TileConnectionScoreInfo(-1);
+    }
 }

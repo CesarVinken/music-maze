@@ -7,6 +7,11 @@ public class EditorOverworldMazeLevelEntryTileAttribute : EditorOverworldTileAtt
 
     public override void PlaceAttribute(EditorOverworldTile tile)
     {
+        if (tile.TileMainMaterial.GetType() != typeof(GroundMainMaterial))
+        {
+            return;
+        }
+
         EditorOverworldTileAttributePlacer tileAttributePlacer = new EditorOverworldTileAttributePlacer(tile);
         OverworldTileAttributeRemover tileAttributeRemover = new OverworldTileAttributeRemover(tile);
 

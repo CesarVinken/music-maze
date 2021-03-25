@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-public class TileWater : MonoBehaviour, ITileConnectable
+public class TileWater : MonoBehaviour, ITileBackground
 {
     public Tile Tile;
     public string ParentId;
@@ -16,24 +16,15 @@ public class TileWater : MonoBehaviour, ITileConnectable
     public int ConnectionScore { get => _connectionScore; set => _connectionScore = value; }
     public int SpriteNumber { get => _spriteNumber; set => _spriteNumber = value; }
 
-    public void WithWaterType(IBaseBackgroundType tileWaterType)
+    public void WithType(IBackgroundType tileWaterType)
     {
-        TileWaterType = tileWaterType;
+        TileWaterType = tileWaterType as IBaseBackgroundType;
     }
 
     public void Remove()
     {
         Destroy(this);
         Destroy(gameObject);
-    }
-
-    public string GetSubtypeAsString()
-    {
-        return TileWaterType.Name;
-    }
-
-    public virtual void WithConnectionScoreInfo(TileConnectionScoreInfo connectionScoreInfo)
-    {
     }
 
     public virtual void SetTile(Tile tile)

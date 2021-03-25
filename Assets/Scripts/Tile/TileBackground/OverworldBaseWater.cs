@@ -15,14 +15,8 @@ public class OverworldTileBaseWater : TileWater, ITileBackground
 
         _sortingOrder = SpriteManager.BaseWaterSortingOrder;
         _tileSpriteContainer.SetSortingOrder(_sortingOrder);
-    }
 
-    public override void WithConnectionScoreInfo(TileConnectionScoreInfo connectionScoreInfo)
-    {
-        ConnectionScore = connectionScoreInfo.RawConnectionScore;
-        SpriteNumber = connectionScoreInfo.SpriteNumber;
-
-        _sprite = OverworldSpriteManager.Instance.DefaultOverworldTileWater[SpriteNumber - 1];
-        _tileSpriteContainer.SetSprite(_sprite);
+        Sprite sprite = OverworldSpriteManager.Instance.DefaultOverworldTileWater[0];
+        _tileSpriteContainer.SetSprite(sprite);
     }
 }

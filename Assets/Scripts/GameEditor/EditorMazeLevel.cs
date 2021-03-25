@@ -63,6 +63,9 @@ public class EditorMazeLevel : MazeLevel, IEditorLevel
 
             TilesByLocation.Add(tile.GridLocation, tile);
 
+            ITileMainMaterial mainMaterial = AddMainMaterial(serialisableTile);
+            tile.SetMainMaterial(mainMaterial);
+
             GridLocation furthestBounds = LevelBounds;
             if (tile.GridLocation.X > furthestBounds.X) _levelBounds.X = tile.GridLocation.X;
             if (tile.GridLocation.Y > furthestBounds.Y) _levelBounds.Y = tile.GridLocation.Y;
@@ -157,17 +160,35 @@ public class EditorMazeLevel : MazeLevel, IEditorLevel
             }
             else if (type.Equals(typeof(SerialisableTileBaseGround)))
             {
-                tileBackgroundPlacer.PlaceBackground<MazeTileBaseGround>();
+                SerialisableTileBaseGround serialisableTileBaseGround = (SerialisableTileBaseGround)JsonUtility.FromJson(serialisableTileBackground.SerialisedData, type);
+                tileBackgroundPlacer.PlaceGround(new MazeLevelDefaultGroundType(), new TileConnectionScoreInfo(serialisableTileBaseGround.TileConnectionScore));
             }
             else if (type.Equals(typeof(SerialisableTileBaseWater)))
             {
-                SerialisableTileBaseWater serialisableTileWater = (SerialisableTileBaseWater)JsonUtility.FromJson(serialisableTileBackground.SerialisedData, type);
-                tileBackgroundPlacer.PlaceWater(new MazeLevelDefaultWaterType(), new TileConnectionScoreInfo(serialisableTileWater.TileConnectionScore));
+                tileBackgroundPlacer.PlaceCoveringBaseWater();
             }
             else
             {
                 Logger.Error($"Unknown TileBackgroundType {serialisableTileBackground.BackgroundType}");
             }
+        }
+    }
+
+    private ITileMainMaterial AddMainMaterial(SerialisableTile serialisableTile)
+    {
+        SerialisableTileMainMaterial serialisableMainMaterial = serialisableTile.MainMaterial;
+        if (serialisableMainMaterial.MainMaterialType == "GroundMainMaterial")
+        {
+            return new GroundMainMaterial();
+        }
+        else if (serialisableMainMaterial.MainMaterialType == "WaterMainMaterial")
+        {
+            return new WaterMainMaterial();
+        }
+        else
+        {
+            Logger.Error($"Unknown SerialisableTileMainMaterial {serialisableMainMaterial.MainMaterialType}");
+            return null;
         }
     }
 

@@ -18,12 +18,14 @@ public class MazeTileBackgroundRemover : TileBackgroundRemover
         Logger.Log(mazeTilePath.TilePathType);
         IPathType mazeTilePathType = mazeTilePath.TilePathType;
         int oldConnectionScore = mazeTilePath.ConnectionScore;
+        Logger.Log($"Old path score: {oldConnectionScore}");
 
         // If needed, place a background in the gap that the removed path left
         if (oldConnectionScore == NeighbourTileCalculator.ConnectionOnAllSidesScore)
         {
+            Logger.Log($"Place background in gap at {_tile.GridLocation.X},{_tile.GridLocation.Y}.");
             EditorMazeTileBackgroundPlacer tileBackgroundPlacer = new EditorMazeTileBackgroundPlacer(_tile);
-            tileBackgroundPlacer.PlaceBackground<MazeTileBaseGround>();
+            tileBackgroundPlacer.PlaceCoveringBaseGround(); // place background with connections on all sides
         }
 
         _tile.RemoveBackground(mazeTilePath);
@@ -51,10 +53,11 @@ public class MazeTileBackgroundRemover : TileBackgroundRemover
             mazeTilePathOnNeighbour.WithConnectionScoreInfo(mazeTilePathConnectionScoreOnNeighbourInfo);
 
             //Add background where needed
-            if (oldConnectionScoreOnNeighbour == NeighbourTileCalculator.ConnectionOnAllSidesScore && mazeTilePathConnectionScoreOnNeighbourInfo.RawConnectionScore != NeighbourTileCalculator.ConnectionOnAllSidesScore)
+            if (oldConnectionScoreOnNeighbour == NeighbourTileCalculator.ConnectionOnAllSidesScore && 
+                mazeTilePathConnectionScoreOnNeighbourInfo.RawConnectionScore != NeighbourTileCalculator.ConnectionOnAllSidesScore)
             {
                 EditorMazeTileBackgroundPlacer tileBackgroundPlacer = new EditorMazeTileBackgroundPlacer(neighbour.Value as EditorMazeTile);
-                tileBackgroundPlacer.PlaceBackground<MazeTileBaseGround>();
+                tileBackgroundPlacer.PlaceCoveringBaseGround();
             }
         }
 

@@ -11,7 +11,7 @@ public class MazeTileBackgroundPlacer<T> : TileBackgroundPlacer<T> where T : Maz
     {
         GameObject mazeTilePathGO = GameObject.Instantiate(MazeLevelManager.Instance.GetTileBackgroundPrefab<MazeTilePath>(), Tile.BackgroundsContainer);
         MazeTilePath mazeTilePath = mazeTilePathGO.GetComponent<MazeTilePath>();
-        mazeTilePath.WithPathType(mazeTilePathType);
+        mazeTilePath.WithType(mazeTilePathType as IBackgroundType);
         mazeTilePath.WithConnectionScoreInfo(pathConnectionScoreInfo);
         mazeTilePath.SetTile(Tile);
 
@@ -19,12 +19,24 @@ public class MazeTileBackgroundPlacer<T> : TileBackgroundPlacer<T> where T : Maz
         Tile.TryMakeMarkable(true);
     }
 
+    public override void PlaceGround(IBaseBackgroundType groundType, TileConnectionScoreInfo connectionScoreInfo)
+    {
+        GameObject groundGO = GameObject.Instantiate(MazeLevelManager.Instance.GetTileBackgroundPrefab<MazeTileBaseGround>(), Tile.BackgroundsContainer);
+        MazeTileBaseGround mazeTileBaseGround = groundGO.GetComponent<MazeTileBaseGround>();
+        mazeTileBaseGround.WithType(groundType);
+        mazeTileBaseGround.WithConnectionScoreInfo(connectionScoreInfo);
+        mazeTileBaseGround.SetTile(Tile);
+
+        Tile.SetMainMaterial(new GroundMainMaterial());
+        Tile.AddBackground(mazeTileBaseGround);
+        Tile.Walkable = true;
+    }
+
     public override void PlaceWater(IBaseBackgroundType waterType, TileConnectionScoreInfo pathConnectionScoreInfo)
     {
         GameObject waterGO = GameObject.Instantiate(MazeLevelManager.Instance.GetTileBackgroundPrefab<MazeTileBaseWater>(), Tile.BackgroundsContainer);
         MazeTileBaseWater mazeTileBaseWater = waterGO.GetComponent<MazeTileBaseWater>();
-        mazeTileBaseWater.WithWaterType(waterType);
-        mazeTileBaseWater.WithConnectionScoreInfo(pathConnectionScoreInfo);
+        mazeTileBaseWater.WithType(waterType);
         mazeTileBaseWater.SetTile(Tile);
 
         Tile.SetMainMaterial(new WaterMainMaterial());
@@ -40,21 +52,23 @@ public class MazeTileBackgroundPlacer<T> : TileBackgroundPlacer<T> where T : Maz
             case Type mazeTileBaseGround when mazeTileBaseGround == typeof(MazeTileBaseGround):
                 Tile.SetMainMaterial(new GroundMainMaterial());
                 break;
+            case Type mazeTileBaseWater when mazeTileBaseWater == typeof(MazeTileBaseWater):
+                Tile.SetMainMaterial(new WaterMainMaterial());
+                break;
             default:
                 Logger.Error($"Unexpected type {typeof(U)}");
                 break;
         }
 
-        U oldBackground = (U)Tile.GetBackgrounds().FirstOrDefault(background => background is U);
+        U oldBackground = (U)Tile.GetBackgrounds().FirstOrDefault(b => b is U);
         if (oldBackground != null) return oldBackground;
 
         GameObject backgroundGO = GameObject.Instantiate(MazeLevelManager.Instance.GetTileBackgroundPrefab<U>(), Tile.BackgroundsContainer);
-        U baseBackground = backgroundGO.GetComponent<U>();
+        U background = backgroundGO.GetComponent<U>();
  
-        baseBackground.SetTile(Tile);
-        Tile.AddBackground(baseBackground);
+        background.SetTile(Tile);
+        Tile.AddBackground(background);
 
-
-        return baseBackground;
+        return background;
     }
 }

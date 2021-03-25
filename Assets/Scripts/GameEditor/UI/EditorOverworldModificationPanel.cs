@@ -129,6 +129,8 @@ public class EditorOverworldModificationPanel : EditorGridModificationPanel
                 string tileId = Guid.NewGuid().ToString();
 
                 GridLocation gridLocation = new GridLocation(i, j);
+                SerialisableTileMainMaterial mainMaterial = new SerialisableTileMainMaterial("GroundMainMaterial", new SerialisableLandMaterial());
+
                 List<SerialisableTileAttribute> tileAttributes = new List<SerialisableTileAttribute>();
                 List<SerialisableTileBackground> tileBackgrounds = new List<SerialisableTileBackground>();
 
@@ -139,7 +141,7 @@ public class EditorOverworldModificationPanel : EditorGridModificationPanel
                     tileBackgrounds.Add(new SerialisableTileBackground(baseBackground.GetType().ToString(), baseBackground));
                 }
 
-                SerialisableTile tile = new SerialisableTile(tileId, tileAttributes, tileBackgrounds, gridLocation.X, gridLocation.Y);
+                SerialisableTile tile = new SerialisableTile(tileId, mainMaterial, tileAttributes, tileBackgrounds, gridLocation.X, gridLocation.Y);
                 tiles.Add(tile);
             }
         }
@@ -169,7 +171,7 @@ public class EditorOverworldModificationPanel : EditorGridModificationPanel
 
         if (obstacleAttribute == null)
         {
-            return new SerialisableTileBaseGround();
+            return new SerialisableTileBaseGround(16);
         }
 
         if (obstacleAttribute.ConnectionScore == 16)
@@ -177,7 +179,7 @@ public class EditorOverworldModificationPanel : EditorGridModificationPanel
             return null;
         }
 
-        return new SerialisableTileBaseGround();
+        return new SerialisableTileBaseGround(16);
     }
 
 }

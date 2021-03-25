@@ -91,11 +91,10 @@ public class NeighbourTileCalculator
                 continue;
             }
 
-            Logger.Warning($"Neighbour at {neighbour.Value.GridLocation.X},{neighbour.Value.GridLocation.Y} is {neighbour.Key} of {tile.GridLocation.X},{tile.GridLocation.Y}");
+            Logger.Warning($"Neighbour at {neighbour.Value.GridLocation.X},{neighbour.Value.GridLocation.Y} is {neighbour.Key} of {tile.GridLocation.X},{tile.GridLocation.Y}.");
             
             TilePath tilePath = neighbour.Value.TryGetTilePath();
-
-            if (tilePath == null || tilePath.TilePathType.GetType() != pathType.GetType())
+            if (tilePath == null || tilePath.TilePathType?.GetType() != pathType.GetType())
             {
                 continue;
             }
@@ -125,75 +124,84 @@ public class NeighbourTileCalculator
         return TileConnectionRegister.CalculateTileConnectionScore(pathRight, pathDown, pathLeft, pathUp);
     }
 
-    public static TileConnectionScoreInfo MapNeighbourWaterOfTile(Tile tile, IBaseBackgroundType waterType)
+    public static TileConnectionScoreInfo MapGroundConnectionsWithNeighbours(Tile tile, IBaseBackgroundType groundType)
     {
         Logger.Log($"---------Map neighbours of {tile.GridLocation.X},{tile.GridLocation.Y}--------");
-        TileModifierConnectionInfo<TileWater> waterRight = new TileModifierConnectionInfo<TileWater>(Direction.Right);
-        TileModifierConnectionInfo<TileWater> waterDown = new TileModifierConnectionInfo<TileWater>(Direction.Down);
-        TileModifierConnectionInfo<TileWater> waterLeft = new TileModifierConnectionInfo<TileWater>(Direction.Left);
-        TileModifierConnectionInfo<TileWater> waterUp = new TileModifierConnectionInfo<TileWater>(Direction.Up);
+        TileModifierConnectionInfo<TileBaseGround> groundRight = new TileModifierConnectionInfo<TileBaseGround>(Direction.Right);
+        TileModifierConnectionInfo<TileBaseGround> groundDown = new TileModifierConnectionInfo<TileBaseGround>(Direction.Down);
+        TileModifierConnectionInfo<TileBaseGround> groundLeft = new TileModifierConnectionInfo<TileBaseGround>(Direction.Left);
+        TileModifierConnectionInfo<TileBaseGround> groundUp = new TileModifierConnectionInfo<TileBaseGround>(Direction.Up);
 
         if (!EditorManager.InEditor)
         {
-            Logger.Error("MapNeighbourWaterOfTile was not called from the editor");
+            Logger.Error("MapNeighbourGroundOfTile was not called from the editor");
             return null;
         }
 
         foreach (KeyValuePair<ObjectDirection, Tile> neighbour in tile.Neighbours)
         {
-            if (!neighbour.Value) 
+            if (!neighbour.Value)
             {
                 // if there is no tile as neighbour, it must mean it as the level edge. This counts as a connection.
-                if (neighbour.Key == ObjectDirection.Right)
+                // But only if the main tile itself is a land tile
+                if(tile.TileMainMaterial.GetType() == typeof(GroundMainMaterial))
                 {
-                    waterRight.HasConnection = true;
-                }
-                else if (neighbour.Key == ObjectDirection.Down)
-                {
-                    waterDown.HasConnection = true;
-                }
-                else if (neighbour.Key == ObjectDirection.Left)
-                {
-                    waterLeft.HasConnection = true;
-                }
-                else if (neighbour.Key == ObjectDirection.Up)
-                {
-                    waterUp.HasConnection = true;
+                    if (neighbour.Key == ObjectDirection.Right)
+                    {
+                        groundRight.HasConnection = true;
+                    }
+                    else if (neighbour.Key == ObjectDirection.Down)
+                    {
+                        groundDown.HasConnection = true;
+                    }
+                    else if (neighbour.Key == ObjectDirection.Left)
+                    {
+                        groundLeft.HasConnection = true;
+                    }
+                    else if (neighbour.Key == ObjectDirection.Up)
+                    {
+                        groundUp.HasConnection = true;
+                    }
                 }
                 continue;
             }
             
-            Logger.Warning($"Neighbour at {neighbour.Value.GridLocation.X},{neighbour.Value.GridLocation.Y} is {neighbour.Key} of {tile.GridLocation.X},{tile.GridLocation.Y}");
+            Logger.Warning($"Neighbour at {neighbour.Value.GridLocation.X},{neighbour.Value.GridLocation.Y} is {neighbour.Key} of {tile.GridLocation.X},{tile.GridLocation.Y}. Its main material is {neighbour.Value.TileMainMaterial.GetType()}");
 
-            TileWater tileWater = neighbour.Value.TryGetTileWater();
-            if (tileWater == null || tileWater.TileWaterType.GetType() != waterType.GetType())
+            TileBaseGround tileGround = neighbour.Value.TryGetTileGround();
+            //if (tileGround == null || tileGround.TileGroundType.GetType() != groundType.GetType())
+            //{
+            //    continue;
+            //}
+
+            if (neighbour.Value.TileMainMaterial?.GetType() != typeof(GroundMainMaterial))
             {
                 continue;
             }
 
             if (neighbour.Key == ObjectDirection.Right)
             {
-                waterRight.HasConnection = true;
-                waterRight.TileModifier = tileWater;
+                groundRight.HasConnection = true;
+                groundRight.TileModifier = tileGround;
             }
             else if (neighbour.Key == ObjectDirection.Down)
             {
-                waterDown.HasConnection = true;
-                waterDown.TileModifier = tileWater;
+                groundDown.HasConnection = true;
+                groundDown.TileModifier = tileGround;
             }
             else if (neighbour.Key == ObjectDirection.Left)
             {
-                waterLeft.HasConnection = true;
-                waterLeft.TileModifier = tileWater;
+                groundLeft.HasConnection = true;
+                groundLeft.TileModifier = tileGround;
             }
             else if (neighbour.Key == ObjectDirection.Up)
             {
-                waterUp.HasConnection = true;
-                waterUp.TileModifier = tileWater;
+                groundUp.HasConnection = true;
+                groundUp.TileModifier = tileGround;
             }
         }
 
-        return TileConnectionRegister.CalculateTileConnectionScore(waterRight, waterDown, waterLeft, waterUp);
+        return TileConnectionRegister.CalculateInversedTileConnectionScore(groundRight, groundDown, groundLeft, groundUp);
     }
 
     public static TileConnectionScoreInfo MapNeighbourObstaclesOfTile(Tile tile, ObstacleType obstacleType)
@@ -272,6 +280,7 @@ public class NeighbourTileCalculator
             else
             {
                 List<ITileBackground> backgrounds = neighbour.Value.GetBackgrounds();
+
                 connectedModifier = (T)backgrounds.FirstOrDefault(background => background is T);
             }
 
@@ -310,7 +319,7 @@ public class NeighbourTileCalculator
         TileConnectionVariationRegister<T> TileConnectionVariationRegister = new TileConnectionVariationRegister<T>(thisMazeTileAttribute, connectionRight, connectionDown, connectionLeft, connectionUp);
         Type modifierType = typeof(T);
 
-        if(modifierType == typeof(TilePath) || modifierType == typeof(TileWater))
+        if(modifierType == typeof(TilePath) || modifierType == typeof(TileBaseGround))
         {
             return TileConnectionVariationRegister.MazeTileBackgroundConnection();
         }

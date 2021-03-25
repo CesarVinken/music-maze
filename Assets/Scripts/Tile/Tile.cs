@@ -101,6 +101,18 @@ public abstract class Tile : MonoBehaviour
         return tileWater;
     }
 
+    public TileBaseGround TryGetTileGround()
+    {
+        TileBaseGround tileGround = (TileBaseGround)_tileBackgrounds.FirstOrDefault(background => background is TileBaseGround);
+
+        if (tileGround == null)
+        {
+            return null;
+        }
+
+        return tileGround;
+    }
+
     public void InitialiseTileBackgrounds()
     {
         for (int i = 0; i < _tileBackgrounds.Count; i++)

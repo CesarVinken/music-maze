@@ -35,18 +35,24 @@ public class EditorOverworldTileBaseGround : EditorOverworldTileBackgroundModifi
             }
             else
             {
-                tileBackgroundPlacer.UpdateWaterConnectionsOnNeighbours(new OverworldDefaultWaterType());
+                tileBackgroundPlacer.UpdateGroundConnectionsOnNeighbours(new MazeLevelDefaultGroundType());
             }
         }
     }
 
     public override void PlaceBackgroundVariation(EditorOverworldTile tile)
     {
-        Logger.Log("Background variations be implemented");
+        Logger.Log("Try place background variation");
+        ITileBackground overworldTileGround = (OverworldTileBaseGround)tile.GetBackgrounds().FirstOrDefault(background => background is OverworldTileBaseGround);
+
+        if (overworldTileGround == null) return;
+
+        EditorOverworldTileBackgroundPlacer tileBackgroundPlacer = new EditorOverworldTileBackgroundPlacer(tile);
+        tileBackgroundPlacer.PlaceGroundVariation((OverworldTileBaseGround)overworldTileGround);
     }
 
     public override Sprite GetSprite()
     {
-        return OverworldSpriteManager.Instance.DefaultOverworldTileBackground[0];
+        return OverworldSpriteManager.Instance.DefaultOverworldTileBackground[15];
     }
 }

@@ -72,8 +72,10 @@ public class EditorMazeModificationPanel : EditorGridModificationPanel
                 List<SerialisableTileAttribute> tileAttributes = new List<SerialisableTileAttribute>();
                 List<SerialisableTileBackground> tileBackgrounds = new List<SerialisableTileBackground>();
 
-                SerialisableTileObstacleAttribute edgeObstacle = TryAddEdgeObstacle(gridLocation);
+                SerialisableTileMainMaterial mainMaterial = new SerialisableTileMainMaterial("GroundMainMaterial", new SerialisableLandMaterial());
 
+                SerialisableTileObstacleAttribute edgeObstacle = TryAddEdgeObstacle(gridLocation);
+                
                 if(edgeObstacle != null)
                 {
                     tileAttributes.Add(new SerialisableTileAttribute(edgeObstacle.GetType().ToString(), edgeObstacle));
@@ -93,7 +95,7 @@ public class EditorMazeModificationPanel : EditorGridModificationPanel
                     tileBackgrounds.Add(new SerialisableTileBackground(baseBackground.GetType().ToString(), baseBackground));
                 }
 
-                SerialisableTile tile = new SerialisableTile(tileId, tileAttributes, tileBackgrounds, gridLocation.X, gridLocation.Y);
+                SerialisableTile tile = new SerialisableTile(tileId, mainMaterial, tileAttributes, tileBackgrounds, gridLocation.X, gridLocation.Y);
                 tiles.Add(tile);
             }
         }
@@ -303,7 +305,7 @@ public class EditorMazeModificationPanel : EditorGridModificationPanel
 
         if (obstacleAttribute == null)
         {
-            return new SerialisableTileBaseGround();
+            return new SerialisableTileBaseGround(16);
         }
 
         if (obstacleAttribute.ConnectionScore == 16)
@@ -311,7 +313,7 @@ public class EditorMazeModificationPanel : EditorGridModificationPanel
             return null;
         }
 
-        return new SerialisableTileBaseGround();
+        return new SerialisableTileBaseGround(16);
     }
 
     private void CheckForTilesWithoutTransformationTriggerers()

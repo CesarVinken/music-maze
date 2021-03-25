@@ -12,6 +12,11 @@ public class EditorOverworldTilePath : EditorOverworldTileBackgroundModifier, IG
 
     public override void PlaceBackground(EditorOverworldTile tile)
     {
+        if (tile.TileMainMaterial.GetType() != typeof(GroundMainMaterial))
+        {
+            return;
+        }
+
         EditorOverworldTileBackgroundPlacer tileBackgroundPlacer = new EditorOverworldTileBackgroundPlacer(tile);
         OverworldTileBackgroundRemover tileBackgroundRemover = new OverworldTileBackgroundRemover(tile);
 

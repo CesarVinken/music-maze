@@ -16,15 +16,9 @@ public class MazeTileBaseWater : TileWater, ITileBackground, ITransformable
 
         _sortingOrder = SpriteManager.BaseWaterSortingOrder;
         _tileSpriteContainer.SetSortingOrder(_sortingOrder);
-    }
 
-    public override void WithConnectionScoreInfo(TileConnectionScoreInfo connectionScoreInfo)
-    {
-        ConnectionScore = connectionScoreInfo.RawConnectionScore;
-        SpriteNumber = connectionScoreInfo.SpriteNumber;
-
-        _sprite = MazeSpriteManager.Instance.DefaultMazeTileWater[SpriteNumber - 1];
-        _tileSpriteContainer.SetSprite(_sprite);
+        Sprite sprite = MazeSpriteManager.Instance.DefaultMazeTileWater[0];
+        _tileSpriteContainer.SetSprite(sprite);
     }
 
     public void TriggerTransformation()
@@ -35,7 +29,7 @@ public class MazeTileBaseWater : TileWater, ITileBackground, ITransformable
 
     public IEnumerator TransformToColourful()
     {
-        Sprite colourfulSprite = MazeSpriteManager.Instance.DefaultMazeTileWaterColourful[SpriteNumber - 1];
+        Sprite colourfulSprite = MazeSpriteManager.Instance.DefaultMazeTileWaterColourful[0];
 
         TileSpriteContainer transformedSpriteContainer = TileSpriteContainerPool.Instance.Get();
         transformedSpriteContainer.transform.SetParent(transform);

@@ -7,6 +7,11 @@ public class EditorPlayerExitTileAttribute : EditorMazeTileAttributeModifier, IG
 
     public override void PlaceAttribute(EditorMazeTile tile)
     {
+        if (tile.TileMainMaterial.GetType() != typeof(GroundMainMaterial))
+        {
+            return;
+        }
+        
         EditorMazeTileAttributePlacer tileAttributePlacer = new EditorMazeTileAttributePlacer(tile);
         MazeTileAttributeRemover tileAttributeRemover = new MazeTileAttributeRemover(tile);
 

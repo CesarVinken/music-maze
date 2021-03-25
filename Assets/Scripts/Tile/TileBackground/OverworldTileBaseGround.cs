@@ -1,31 +1,22 @@
-﻿using UnityEngine;
-
-public class OverworldTileBaseGround : MonoBehaviour, ITileBackground
+﻿public class OverworldTileBaseGround : TileBaseGround
 {
-    public Tile Tile;
-    public string ParentId;
-
-    [SerializeField] private TileSpriteContainer _tileSpriteContainer;
-
-    private int _sortingOrder;
-
-    public void SetTile(Tile tile)
+    public override void SetTile(Tile tile)
     {
         if (string.IsNullOrEmpty(tile.TileId)) Logger.Error("This tile does not have an Id");
 
         Tile = tile;
         ParentId = tile.TileId;
 
-        _sortingOrder = OverworldSpriteManager.BaseBackgroundSortingOrder;
+        _sortingOrder = OverworldSpriteManager.BaseGroundSortingOrder;
         _tileSpriteContainer.SetSortingOrder(_sortingOrder);
-
-        Sprite sprite = OverworldSpriteManager.Instance.DefaultOverworldTileBackground[0];
-        _tileSpriteContainer.SetSprite(sprite);
     }
 
-    public void Remove()
+    public override void WithConnectionScoreInfo(TileConnectionScoreInfo connectionScoreInfo)
     {
-        Destroy(this);
-        Destroy(gameObject);
+        ConnectionScore = connectionScoreInfo.RawConnectionScore;
+        SpriteNumber = connectionScoreInfo.SpriteNumber;
+
+        _sprite = OverworldSpriteManager.Instance.DefaultOverworldTileBackground[SpriteNumber - 1];
+        _tileSpriteContainer.SetSprite(_sprite);
     }
 }

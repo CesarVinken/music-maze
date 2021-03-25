@@ -92,12 +92,12 @@ public class EditorOverworld : Overworld, IEditorLevel
             }
             else if (type.Equals(typeof(SerialisableTileBaseGround)))
             {
-                tileBackgroundPlacer.PlaceBackground<OverworldTileBaseGround>();
+                SerialisableTileBaseGround serialisableTileBaseGround = (SerialisableTileBaseGround)JsonUtility.FromJson(serialisableTileBackground.SerialisedData, type);
+                tileBackgroundPlacer.PlaceGround(new OverworldDefaultGroundType(), new TileConnectionScoreInfo(serialisableTileBaseGround.TileConnectionScore));
             }
             else if (type.Equals(typeof(SerialisableTileBaseWater)))
             {
-                SerialisableTileBaseWater serialisableTileWater = (SerialisableTileBaseWater)JsonUtility.FromJson(serialisableTileBackground.SerialisedData, type);
-                tileBackgroundPlacer.PlaceWater(new OverworldDefaultWaterType(), new TileConnectionScoreInfo(serialisableTileWater.TileConnectionScore));
+                tileBackgroundPlacer.PlaceBackground<OverworldTileBaseWater>();
             }
             else
             {

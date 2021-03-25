@@ -3,7 +3,9 @@
 [Serializable]
 public class SerialisableTileBaseGround : ISerialisableTileBackground
 {
-    public SerialisableTileBaseGround()
+    public int TileConnectionScore;
+    public SerialisableTileBaseGround(int pathConnectionScore)
     {
+        TileConnectionScore = pathConnectionScore;
     }
 }

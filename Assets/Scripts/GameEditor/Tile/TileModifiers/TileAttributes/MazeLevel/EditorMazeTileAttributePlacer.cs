@@ -20,6 +20,11 @@ public class EditorMazeTileAttributePlacer : MazeTileAttributePlacer<EditorMazeT
 
     public void CreatePlayerExit(ObstacleType obstacleType)
     {
+        if (_tile.TileMainMaterial.GetType() != typeof(GroundMainMaterial))
+        {
+            return;
+        }
+        
         TileConnectionScoreInfo obstacleConnectionScore = NeighbourTileCalculator.MapNeighbourObstaclesOfTile(Tile, obstacleType);
         Logger.Log($"We calculated an obstacle connection type score of {obstacleConnectionScore} for location {Tile.GridLocation.X}, {Tile.GridLocation.Y}");
 

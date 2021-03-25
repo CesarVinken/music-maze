@@ -7,6 +7,11 @@ public class EditorMazeTilePath : EditorMazeTileBackgroundModifier, IGroundMater
 
     public override void PlaceBackground(EditorMazeTile tile)
     {
+        if (tile.TileMainMaterial.GetType() != typeof(GroundMainMaterial))
+        {
+            return;
+        }
+
         EditorMazeTileBackgroundPlacer tileBackgroundPlacer = new EditorMazeTileBackgroundPlacer(tile);
         MazeTileBackgroundRemover tileBackgroundRemover = new MazeTileBackgroundRemover(tile);
 

@@ -1,8 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-
-public class OverworldTilePath : TilePath, ITileBackground, ITileConnectable
+﻿public class OverworldTilePath : TilePath, ITileBackground, ITileConnectable
 {
     public override void WithConnectionScoreInfo(TileConnectionScoreInfo connectionScoreInfo)
     {

@@ -6,9 +6,10 @@ using UnityEngine;
 public class SerialisableTile
 {
     public string Id;
+    public SerialisableTileMainMaterial MainMaterial;
+
     public List<SerialisableTileAttribute> TileAttributes;
     public List<SerialisableTileBackground> TileBackgrounds;
-
     public SerialisableGridLocation GridLocation;
 
     public List<SerialisableGridLocation> TilesToTransform;
@@ -16,6 +17,7 @@ public class SerialisableTile
     public SerialisableTile(Tile tile)
     {
         Id = tile.TileId;
+        MainMaterial = SerialiseMainMaterial(tile);
         TileAttributes = SerialiseTileAttributes(tile);
         TileBackgrounds = SerialiseTileBackgrounds(tile);
 
@@ -28,12 +30,18 @@ public class SerialisableTile
         }
     }
 
-    public SerialisableTile(string id, List<SerialisableTileAttribute> tileAttributes, List<SerialisableTileBackground> tileBackgrounds, int gridLocationX, int gridLocationY)
+    public SerialisableTile(string id, SerialisableTileMainMaterial mainMaterial, List<SerialisableTileAttribute> tileAttributes, List<SerialisableTileBackground> tileBackgrounds, int gridLocationX, int gridLocationY)
     {
         Id = id;
+        MainMaterial = mainMaterial;
         TileAttributes = tileAttributes;
         TileBackgrounds = tileBackgrounds;
         GridLocation = new SerialisableGridLocation(gridLocationX, gridLocationY);
+    }
+
+    private SerialisableTileMainMaterial SerialiseMainMaterial(Tile tile)
+    {  
+        return new SerialisableTileMainMaterial(tile.TileMainMaterial.ToString(), CreateSerialisableTileMainMaterial(tile.TileMainMaterial));
     }
 
     private List<SerialisableTileAttribute> SerialiseTileAttributes(Tile tile)
@@ -85,9 +93,25 @@ public class SerialisableTile
         return serialisableTilesToTransform;
     }
 
+    private ISerialisableTileMainMaterial CreateSerialisableTileMainMaterial(ITileMainMaterial mainMaterial)
+    {
+        if (mainMaterial.GetType() == typeof(GroundMainMaterial))
+        {
+            return new SerialisableLandMaterial();
+        }
+        else if (mainMaterial.GetType() == typeof(WaterMainMaterial))
+        {
+            return new SerialisableWaterMaterial();
+        }
+        else
+        {
+            Logger.Error($"Could not serialise the main material {mainMaterial.GetType()}");
+            return null;
+        }
+    }
+
     private ISerialisableTileBackground CreateSerialisableTileBackground(ITileBackground tileBackground)
     {
-
         if (tileBackground.GetType() == typeof(MazeTilePath) || tileBackground.GetType() == typeof(OverworldTilePath))
         {
             TilePath tilePath = tileBackground as TilePath;
@@ -97,15 +121,16 @@ public class SerialisableTile
         }
         else if (tileBackground.GetType() == typeof(MazeTileBaseWater) || tileBackground.GetType() == typeof(OverworldTileBaseWater))
         {
-            TileWater tileWater = tileBackground as TileWater;
-
-            SerialisableTileBaseWater serialisableTileBaseWater = new SerialisableTileBaseWater(tileWater.ConnectionScore);
+            SerialisableTileBaseWater serialisableTileBaseWater = new SerialisableTileBaseWater();
             return serialisableTileBaseWater;
         }
         else if (tileBackground.GetType() == typeof(MazeTileBaseGround) || (tileBackground.GetType() == typeof(OverworldTileBaseGround)))
         {
-            SerialisableTileBaseGround serialisableTileBaseBackground = new SerialisableTileBaseGround();
-            return serialisableTileBaseBackground;
+            TileBaseGround tileGround = tileBackground as TileBaseGround;
+
+            SerialisableTileBaseGround serialisableTileBaseGround = new SerialisableTileBaseGround(tileGround.ConnectionScore);
+
+            return serialisableTileBaseGround;
         }
         else
         {

@@ -21,6 +21,7 @@ public class EditorMazeTileBaseWater : EditorMazeTileBackgroundModifier, IWaterM
         {
             Type oldMainMaterial = tile.TileMainMaterial?.GetType(); // old material before updating it
 
+            // Remove any background overlays for Ground tiles, such as paths.
             if (oldMainMaterial == null || oldMainMaterial == typeof(GroundMainMaterial))
             {
                 tileBackgroundRemover.RemoveBackground<MazeTilePath>();
@@ -33,6 +34,7 @@ public class EditorMazeTileBaseWater : EditorMazeTileBackgroundModifier, IWaterM
             {
                 tileAttributeRemover.Remove(attributes[i]);
             }
+
             if (oldMainMaterial == null || oldMainMaterial == typeof(GroundMainMaterial))
             {
                 if(water.ConnectionScore == 16) // remove background if we completely covered the tile with water
@@ -40,19 +42,12 @@ public class EditorMazeTileBaseWater : EditorMazeTileBackgroundModifier, IWaterM
                     tileBackgroundRemover.RemoveBackground<MazeTileBaseGround>();
                 }
             }
-
         }
     }
 
     public override void PlaceBackgroundVariation(EditorMazeTile tile)
     {
         Logger.Log("Try place background variation");
-        ITileBackground mazeTileWater = (MazeTileBaseWater)tile.GetBackgrounds().FirstOrDefault(background => background is MazeTileBaseWater);
-
-        if (mazeTileWater == null) return;
-
-        EditorMazeTileBackgroundPlacer tileBackgroundPlacer = new EditorMazeTileBackgroundPlacer(tile);
-        tileBackgroundPlacer.PlaceWaterVariation((MazeTileBaseWater)mazeTileWater);
     }
 
     public override Sprite GetSprite()

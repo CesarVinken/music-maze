@@ -146,14 +146,14 @@ public class InGameMazeLevel : MazeLevel, IInGameLevel
                 SerialisableTilePathBackground serialisableTilePathBackground = (SerialisableTilePathBackground)JsonUtility.FromJson(serialisableTileBackground.SerialisedData, type);
                 tileBackgroundPlacer.PlacePath(new MazeLevelDefaultPathType(), new TileConnectionScoreInfo(serialisableTilePathBackground.TileConnectionScore));
             }
-            else if (type.Equals(typeof(SerialisableTileBaseWater)))
-            {
-                SerialisableTileBaseWater serialisableTileBaseWater = (SerialisableTileBaseWater)JsonUtility.FromJson(serialisableTileBackground.SerialisedData, type);
-                tileBackgroundPlacer.PlaceWater(new MazeLevelDefaultWaterType(), new TileConnectionScoreInfo(serialisableTileBaseWater.TileConnectionScore));
-            }
             else if (type.Equals(typeof(SerialisableTileBaseGround)))
             {
-                tileBackgroundPlacer.PlaceBackground<MazeTileBaseGround>();
+                SerialisableTileBaseGround serialisableTileBaseGround = (SerialisableTileBaseGround)JsonUtility.FromJson(serialisableTileBackground.SerialisedData, type);
+                tileBackgroundPlacer.PlaceGround(new MazeLevelDefaultGroundType(), new TileConnectionScoreInfo(serialisableTileBaseGround.TileConnectionScore));
+            }
+            else if (type.Equals(typeof(SerialisableTileBaseWater)))
+            {
+                tileBackgroundPlacer.PlaceBackground<MazeTileBaseWater>();
             }
             else
             {

@@ -23,35 +23,47 @@ public class EditorOverworldTileBackgroundPlacer : OverworldTileBackgroundPlacer
 
         GameObject overworldTilePathGO = GameObject.Instantiate(OverworldManager.Instance.GetTileBackgroundPrefab<OverworldTilePath>(), Tile.BackgroundsContainer);
         OverworldTilePath overworldTilePath = overworldTilePathGO.GetComponent<OverworldTilePath>();
-        overworldTilePath.WithPathType(overworldTilePathType);
+        overworldTilePath.WithType(overworldTilePathType as IBackgroundType);
         overworldTilePath.WithConnectionScoreInfo(pathConnectionScore);
+
         Tile.AddBackground(overworldTilePath as ITileBackground);
 
         // Update pathConnections for neighbouring tiles
         UpdatePathConnectionsOnNeighbours();
     }
 
-    public ITileBackground PlaceWater(IBaseBackgroundType waterType)
+    public ITileBackground PlaceWater<U>() where U : ITileBackground
     {
-        TileConnectionScoreInfo waterConnectionScore = NeighbourTileCalculator.MapNeighbourWaterOfTile(Tile, waterType);
+        TileBaseGround existingGround = Tile.TryGetTileGround();
+        int oldLandConnectionScore = existingGround ? existingGround.ConnectionScore : -1;
 
-        // if the tile will not completely be covered with water, make sure we have a land background as well.
-        if (waterConnectionScore.RawConnectionScore != 16)
+        TileConnectionScoreInfo newLandConnectionScoreInfo = NeighbourTileCalculator.MapGroundConnectionsWithNeighbours(Tile, new OverworldDefaultGroundType());
+        int newLandConnectionScore = newLandConnectionScoreInfo.RawConnectionScore;
+        Logger.Log($"Old land connections score for tile {Tile.GridLocation.X},{Tile.GridLocation.Y} was {oldLandConnectionScore}. The New Score is {newLandConnectionScore}");
+
+        // If there are no land connections left (value -1), remove the ground sprite
+        if (newLandConnectionScore == -1)
         {
-            List<ITileBackground> backgrounds = Tile.GetBackgrounds();
-            if(backgrounds.Count == 0)
-            {
-                GameObject backgroundGO = GameObject.Instantiate(OverworldManager.Instance.GetTileBackgroundPrefab<OverworldTileBaseGround>(), Tile.BackgroundsContainer);
-                OverworldTileBaseGround baseBackground = backgroundGO.GetComponent<OverworldTileBaseGround>();
-                baseBackground.SetTile(Tile);
-                Tile.AddBackground(baseBackground);
-            }
+            RemoveGroundBackgroundFromCoveredTile(Tile, 16);
+        }
+        else if (existingGround == null)
+        {
+            //There are some connections and no ground sprite. Add ground sprite.
+            GameObject backgroundGO = GameObject.Instantiate(OverworldManager.Instance.GetTileBackgroundPrefab<OverworldTileBaseGround>(), Tile.BackgroundsContainer);
+            OverworldTileBaseGround baseBackground = backgroundGO.GetComponent<OverworldTileBaseGround>();
+
+            baseBackground.SetTile(Tile);
+            baseBackground.WithType(new OverworldDefaultGroundType());
+            baseBackground.WithConnectionScoreInfo(newLandConnectionScoreInfo);
+            Tile.AddBackground(baseBackground);
+        }
+        else
+        {
+            existingGround.WithConnectionScoreInfo(newLandConnectionScoreInfo);
         }
 
         GameObject waterGO = GameObject.Instantiate(OverworldManager.Instance.GetTileBackgroundPrefab<OverworldTileBaseWater>(), Tile.BackgroundsContainer);
         OverworldTileBaseWater overworldTileBaseWater = waterGO.GetComponent<OverworldTileBaseWater>();
-        overworldTileBaseWater.WithWaterType(waterType);
-        overworldTileBaseWater.WithConnectionScoreInfo(waterConnectionScore);
         overworldTileBaseWater.SetTile(Tile);
 
         Tile.SetMainMaterial(new WaterMainMaterial());
@@ -60,30 +72,63 @@ public class EditorOverworldTileBackgroundPlacer : OverworldTileBackgroundPlacer
 
         // Update pathConnections for neighbouring tiles
         UpdatePathConnectionsOnNeighbours();
-
-        // Update water connections on neighbours
-        UpdateWaterConnectionsOnNeighbours(waterType);
+        UpdateGroundConnectionsOnNeighbours(new OverworldDefaultGroundType());
 
         return overworldTileBaseWater;
     }
 
-    public U PlaceLand<U>() where U : ITileBackground
+    public ITileBackground PlaceGround<U>(IBaseBackgroundType groundType) where U : ITileBackground, ITileConnectable
     {
+        TileConnectionScoreInfo groundConnectionScore = NeighbourTileCalculator.MapGroundConnectionsWithNeighbours(Tile, new OverworldDefaultGroundType());
+
         U oldBackground = (U)Tile.GetBackgrounds().FirstOrDefault(background => background is U);
         if (oldBackground != null)
         {
-            UpdateWaterConnectionsOnNeighbours(new OverworldDefaultWaterType());
+            //UpdateWaterConnectionsOnNeighbours(new OverworldDefaultWaterType());
             return oldBackground;
         }
 
         GameObject backgroundGO = GameObject.Instantiate(OverworldManager.Instance.GetTileBackgroundPrefab<U>(), Tile.BackgroundsContainer);
         U baseBackground = backgroundGO.GetComponent<U>();
 
-        // Update water connections on neighbours, because placing somewhere affects coastlines
-        UpdateWaterConnectionsOnNeighbours(new OverworldDefaultWaterType());
+        // Update land connections on neighbours, because placing somewhere affects coastlines
+        UpdateGroundConnectionsOnNeighbours(groundType);
 
         baseBackground.SetTile(Tile);
+        baseBackground.WithType(groundType);
+        baseBackground.WithConnectionScoreInfo(groundConnectionScore);
+
         Tile.AddBackground(baseBackground);
+        return baseBackground;
+    }
+
+    public void PlaceCoveringBaseWater()
+    {
+        Tile.SetMainMaterial(new WaterMainMaterial());
+        Logger.Log("Place a water tile without updating neighbours or removing land tiles.");
+
+        GameObject waterGO = GameObject.Instantiate(OverworldManager.Instance.GetTileBackgroundPrefab<OverworldTileBaseWater>(), Tile.BackgroundsContainer);
+        OverworldTileBaseWater mazeTileBaseWater = waterGO.GetComponent<OverworldTileBaseWater>();
+        mazeTileBaseWater.SetTile(Tile);
+
+        Tile.AddBackground(mazeTileBaseWater);
+    }
+
+    public ITileBackground PlaceCoveringBaseGround()
+    {
+        Tile.SetMainMaterial(new GroundMainMaterial());
+
+        Logger.Log("Place a base ground tile will connections on all sides.");
+        GameObject backgroundGO = GameObject.Instantiate(OverworldManager.Instance.GetTileBackgroundPrefab<OverworldTileBaseGround>(), Tile.BackgroundsContainer);
+        OverworldTileBaseGround baseBackground = backgroundGO.GetComponent<OverworldTileBaseGround>();
+
+        baseBackground.SetTile(Tile);
+        baseBackground.WithType(new OverworldDefaultGroundType());
+        baseBackground.WithConnectionScoreInfo(new TileConnectionScoreInfo(16));
+        Tile.AddBackground(baseBackground);
+
+        UpdateGroundConnectionsOnNeighbours(new OverworldDefaultGroundType());
+
         return baseBackground;
     }
 
@@ -94,18 +139,16 @@ public class EditorOverworldTileBackgroundPlacer : OverworldTileBackgroundPlacer
         switch (typeof(U))
         {
             case Type overworldTileBaseGround when overworldTileBaseGround == typeof(OverworldTileBaseGround):
-                Logger.Warning("Set to ground main material");
-                Tile.SetMainMaterial(new GroundMainMaterial());
-                Logger.Warning($"it is now {Tile.TileMainMaterial}");
-                break;
+                return (U)PlaceCoveringBaseGround();
             case Type overworldTileBaseWater when overworldTileBaseWater == typeof(OverworldTileBaseWater):
-                return (U)PlaceWater(new OverworldDefaultWaterType());
+                Tile.SetMainMaterial(new WaterMainMaterial());
+                break;
             default:
                 Logger.Error($"Unknown type {typeof(U)}");
                 break;
         }
 
-        U tileBackground = PlaceLand<U>();
+        U tileBackground = (U)PlaceWater<U>();
         return tileBackground;
     }
 
@@ -118,74 +161,86 @@ public class EditorOverworldTileBackgroundPlacer : OverworldTileBackgroundPlacer
             TilePath tilePathOnNeighbour = neighbour.Value.TryGetTilePath();
 
             if (tilePathOnNeighbour == null) continue;
-            int oldConnectionScoreOnNeighbour = tilePathOnNeighbour.ConnectionScore;
+
+            int oldPathConnectionScoreOnNeighbour = tilePathOnNeighbour.ConnectionScore;
             Logger.Warning($"We will look for connections for neighbour {neighbour.Value.GridLocation.X},{neighbour.Value.GridLocation.Y}, which is {neighbour.Key} of {Tile.GridLocation.X},{Tile.GridLocation.Y}");
 
-            TileConnectionScoreInfo overworldTilePathConnectionScoreOnNeighbourInfo = NeighbourTileCalculator.MapNeighbourPathsOfTile(neighbour.Value, tilePathOnNeighbour.TilePathType);
-            Logger.Log($"We calculated an tile connection type score of neighbour {overworldTilePathConnectionScoreOnNeighbourInfo.RawConnectionScore} for location {neighbour.Value.GridLocation.X}, {neighbour.Value.GridLocation.Y}");
+            TileConnectionScoreInfo newPathConnectionScoreOnNeighbourInfo = NeighbourTileCalculator.MapNeighbourPathsOfTile(neighbour.Value, tilePathOnNeighbour.TilePathType);
+            Logger.Log($"We calculated an tile connection type score of neighbour {newPathConnectionScoreOnNeighbourInfo.RawConnectionScore} for location {neighbour.Value.GridLocation.X}, {neighbour.Value.GridLocation.Y}");
 
             //update connection score on neighbour
-            tilePathOnNeighbour.WithConnectionScoreInfo(overworldTilePathConnectionScoreOnNeighbourInfo);
+            tilePathOnNeighbour.WithConnectionScoreInfo(newPathConnectionScoreOnNeighbourInfo);
 
-            if (neighbour.Value.TileMainMaterial == null || neighbour.Value.TileMainMaterial.GetType() == typeof(GroundMainMaterial)
-                && oldConnectionScoreOnNeighbour == 16
-                && overworldTilePathConnectionScoreOnNeighbourInfo.RawConnectionScore != 16)
+            if (neighbour.Value.TileMainMaterial?.GetType() == typeof(GroundMainMaterial)
+                && oldPathConnectionScoreOnNeighbour == 16
+                && newPathConnectionScoreOnNeighbourInfo.RawConnectionScore != 16)
             {
-                Logger.Warning($"oldConnectionScoreOnNeighbour {oldConnectionScoreOnNeighbour}");
+                TileBaseGround existingGroundTile = neighbour.Value.TryGetTileGround();
 
+                if (existingGroundTile) continue;
+                
                 GameObject backgroundGO = GameObject.Instantiate(OverworldManager.Instance.GetTileBackgroundPrefab<OverworldTileBaseGround>(), neighbour.Value.BackgroundsContainer);
                 OverworldTileBaseGround baseBackground = backgroundGO.GetComponent<OverworldTileBaseGround>();
+
                 baseBackground.SetTile(neighbour.Value);
+                baseBackground.WithType(new OverworldDefaultGroundType());
+                baseBackground.WithConnectionScoreInfo(new TileConnectionScoreInfo(16));
                 neighbour.Value.AddBackground(baseBackground);
+            }
+
+            // If the path now covers the whole tile, remove any existing ground backgrounds
+            if (oldPathConnectionScoreOnNeighbour != 16)
+            {
+                RemoveGroundBackgroundFromCoveredTile(neighbour.Value as EditorOverworldTile, newPathConnectionScoreOnNeighbourInfo.RawConnectionScore);
             }
         }
     }
 
-    public void UpdateWaterConnectionsOnNeighbours(IBaseBackgroundType waterType)
+    private void RemoveGroundBackgroundFromCoveredTile(EditorOverworldTile tile, int newPathConnectionScore)
+    {
+        if (newPathConnectionScore == 16)
+        {
+            OverworldTileBackgroundRemover backgroundRemover = new OverworldTileBackgroundRemover(tile);
+            List<ITileBackground> backgrounds = tile.GetBackgrounds();
+            for (int i = 0; i < backgrounds.Count; i++)
+            {
+                backgroundRemover.RemoveBackground<OverworldTileBaseGround>();
+            }
+        }
+    }
+
+    public void UpdateGroundConnectionsOnNeighbours(IBaseBackgroundType groundType)
     {
         foreach (KeyValuePair<ObjectDirection, Tile> neighbour in Tile.Neighbours)
         {
-            if (!neighbour.Value) continue;
-            
-            TileWater waterOnNeighbour = neighbour.Value.TryGetTileWater();
+            EditorOverworldTile neighbourTile = neighbour.Value as EditorOverworldTile;
 
-            if (waterOnNeighbour == null) continue;
-            int oldConnectionScoreOnNeighbour = waterOnNeighbour.ConnectionScore;
-            Logger.Warning($"We will look for connections for neighbour {neighbour.Value.GridLocation.X},{neighbour.Value.GridLocation.Y}, which is {neighbour.Key} of {Tile.GridLocation.X},{Tile.GridLocation.Y}");
+            if (!neighbourTile) continue;
 
-            TileConnectionScoreInfo overworldTileWaterConnectionScoreOnNeighbourInfo = NeighbourTileCalculator.MapNeighbourWaterOfTile(neighbour.Value, waterType);
-            Logger.Log($"We calculated an maze connection type score of neighbour {overworldTileWaterConnectionScoreOnNeighbourInfo.RawConnectionScore} for location {neighbour.Value.GridLocation.X}, {neighbour.Value.GridLocation.Y}");
+            if (neighbourTile.TileMainMaterial?.GetType() == typeof(GroundMainMaterial)) continue;
 
-            //update connection score on neighbour
-            waterOnNeighbour.WithConnectionScoreInfo(overworldTileWaterConnectionScoreOnNeighbourInfo);
+            TileBaseGround existingGround = neighbourTile.TryGetTileGround();
 
-            if (waterOnNeighbour.ConnectionScore == 16) // The water score is no 16, we need to remove the existing ground sprit
+            TileConnectionScoreInfo newGroundConnectionScoreOnNeighbourInfo = NeighbourTileCalculator.MapGroundConnectionsWithNeighbours(neighbourTile, groundType);
+
+            if (newGroundConnectionScoreOnNeighbourInfo.RawConnectionScore == -1)
             {
-                OverworldTileBackgroundRemover tileBackgroundRemover = new OverworldTileBackgroundRemover(neighbour.Value as EditorOverworldTile);
-
-                List<ITileBackground> backgroundsOnNeighbour = neighbour.Value.GetBackgrounds();
-                for (int i = 0; i < backgroundsOnNeighbour.Count; i++)
-                {
-                    switch (backgroundsOnNeighbour[i].GetType())
-                    {
-                        case Type overworldTileBaseGround when overworldTileBaseGround == typeof(OverworldTileBaseGround):
-                            tileBackgroundRemover.RemoveBackground<OverworldTileBaseGround>();
-                            break;
-                        case Type overworldTileBaseWater when overworldTileBaseWater == typeof(OverworldTileBaseWater):
-                            break;
-                        default:
-                            Logger.Error($"Unknown type {backgroundsOnNeighbour[i].GetType()}");
-                            break;
-                    }
-                }
+                RemoveGroundBackgroundFromCoveredTile(neighbourTile, 16);
             }
-
-            if (neighbour.Value.TileMainMaterial?.GetType() == typeof(WaterMainMaterial)
-                && oldConnectionScoreOnNeighbour == 16
-                && overworldTileWaterConnectionScoreOnNeighbourInfo.RawConnectionScore != 16)
+            else if (existingGround == null)
             {
-                EditorOverworldTileBackgroundPlacer tileBackgroundPlacerForNeighbour = new EditorOverworldTileBackgroundPlacer(neighbour.Value as EditorOverworldTile);
-                tileBackgroundPlacerForNeighbour.PlaceLand<OverworldTileBaseGround>();
+                //There are some connections and no ground sprite. Add ground sprite.
+                GameObject backgroundGO = GameObject.Instantiate(OverworldManager.Instance.GetTileBackgroundPrefab<OverworldTileBaseGround>(), neighbourTile.BackgroundsContainer);
+                OverworldTileBaseGround baseBackground = backgroundGO.GetComponent<OverworldTileBaseGround>();
+
+                baseBackground.SetTile(Tile);
+                baseBackground.WithType(new OverworldDefaultGroundType());
+                baseBackground.WithConnectionScoreInfo(newGroundConnectionScoreOnNeighbourInfo);
+                neighbourTile.AddBackground(baseBackground);
+            }
+            else
+            {
+                existingGround.WithConnectionScoreInfo(newGroundConnectionScoreOnNeighbourInfo);
             }
         }
     }

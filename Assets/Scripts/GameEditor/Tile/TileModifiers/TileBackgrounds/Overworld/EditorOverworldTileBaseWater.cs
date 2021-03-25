@@ -45,12 +45,6 @@ public class EditorOverworldTileBaseWater : EditorOverworldTileBackgroundModifie
     public override void PlaceBackgroundVariation(EditorOverworldTile tile)
     {
         Logger.Log("Try place background variation");
-        ITileBackground overworldTileWater = (OverworldTileBaseWater)tile.GetBackgrounds().FirstOrDefault(background => background is OverworldTileBaseWater);
-
-        if (overworldTileWater == null) return;
-
-        EditorOverworldTileBackgroundPlacer tileBackgroundPlacer = new EditorOverworldTileBackgroundPlacer(tile);
-        tileBackgroundPlacer.PlaceWaterVariation((OverworldTileBaseWater)overworldTileWater);
     }
 
     public override Sprite GetSprite()

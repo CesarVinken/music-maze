@@ -5,25 +5,38 @@ using UnityEngine;
 
 public class OverworldTileBackgroundPlacer<T> : TileBackgroundPlacer<T> where T : OverworldTile
 {
-    public override T Tile { get => throw new System.NotImplementedException(); set => throw new System.NotImplementedException(); }
+    public override T Tile { get; set; }
 
+    // Called in game when we already have the connection score
     public override void PlacePath(IPathType tilePathType, TileConnectionScoreInfo pathConnectionScoreInfo)
     {
         GameObject overworldTilePathGO = GameObject.Instantiate(OverworldManager.Instance.GetTileBackgroundPrefab<OverworldTilePath>(), Tile.BackgroundsContainer);
         OverworldTilePath overworldTilePath = overworldTilePathGO.GetComponent<OverworldTilePath>();
-        overworldTilePath.WithPathType(tilePathType);
+        overworldTilePath.WithType(tilePathType as IBackgroundType);
         overworldTilePath.WithConnectionScoreInfo(pathConnectionScoreInfo);
         overworldTilePath.SetTile(Tile);
 
         Tile.AddBackground(overworldTilePath);
     }
 
+    public override void PlaceGround(IBaseBackgroundType groundType, TileConnectionScoreInfo connectionScoreInfo)
+    {
+        GameObject groundGO = GameObject.Instantiate(OverworldManager.Instance.GetTileBackgroundPrefab<OverworldTileBaseGround>(), Tile.BackgroundsContainer);
+        OverworldTileBaseGround mazeTileBaseGround = groundGO.GetComponent<OverworldTileBaseGround>();
+        mazeTileBaseGround.WithType(groundType);
+        mazeTileBaseGround.WithConnectionScoreInfo(connectionScoreInfo);
+        mazeTileBaseGround.SetTile(Tile);
+
+        Tile.SetMainMaterial(new GroundMainMaterial());
+        Tile.AddBackground(mazeTileBaseGround);
+        Tile.Walkable = true;
+    }
+
     public override void PlaceWater(IBaseBackgroundType waterType, TileConnectionScoreInfo pathConnectionScoreInfo)
     {
         GameObject waterGO = GameObject.Instantiate(OverworldManager.Instance.GetTileBackgroundPrefab<OverworldTileBaseWater>(), Tile.BackgroundsContainer);
         OverworldTileBaseWater overworldTileBaseWater = waterGO.GetComponent<OverworldTileBaseWater>();
-        overworldTileBaseWater.WithWaterType(waterType);
-        overworldTileBaseWater.WithConnectionScoreInfo(pathConnectionScoreInfo);
+        overworldTileBaseWater.WithType(waterType);
         overworldTileBaseWater.SetTile(Tile);
 
         Tile.SetMainMaterial(new WaterMainMaterial());

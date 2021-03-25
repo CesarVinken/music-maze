@@ -1,4 +1,4 @@
-﻿public interface IPathType
+﻿public interface IPathType : IBackgroundType
 {
     string Name { get; }
 }

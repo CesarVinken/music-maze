@@ -125,7 +125,7 @@ public class MazeTileAttributeRemover : TileAttributeRemover
             if (tileObstacleOnNeighbour == null) continue;
             Logger.Log($"We will look for connections for neighbour {neighbour.Value.GridLocation.X},{neighbour.Value.GridLocation.Y}, which is {neighbour.Key} of {_tile.GridLocation.X},{_tile.GridLocation.Y}");
             TileConnectionScoreInfo obstacleConnectionScoreOnNeighbour = NeighbourTileCalculator.MapNeighbourObstaclesOfTile(neighbour.Value, obstacleType);
-            Logger.Log($"We calculated an obstacle connection type score of {obstacleConnectionScoreOnNeighbour} for location {neighbour.Value.GridLocation.X}, {neighbour.Value.GridLocation.Y}");
+            Logger.Log($"We calculated an obstacle connection type score of {obstacleConnectionScoreOnNeighbour.RawConnectionScore} for location {neighbour.Value.GridLocation.X}, {neighbour.Value.GridLocation.Y}");
 
             //update connection score on neighbour
             tileObstacleOnNeighbour.WithConnectionScoreInfo(obstacleConnectionScoreOnNeighbour);
@@ -133,8 +133,12 @@ public class MazeTileAttributeRemover : TileAttributeRemover
             // If needed, place a background
             if (obstacleConnectionScoreOnNeighbour.RawConnectionScore != NeighbourTileCalculator.ConnectionOnAllSidesScore)
             {
-                EditorMazeTileBackgroundPlacer tileBackgroundPlacer = new EditorMazeTileBackgroundPlacer(neighbour.Value as EditorMazeTile);
-                tileBackgroundPlacer.PlaceBackground<MazeTileBaseGround>();
+                MazeTileBaseGround oldMazeTileBaseGround = (MazeTileBaseGround)neighbour.Value.GetBackgrounds().FirstOrDefault(background => background is MazeTileBaseGround);
+                if(oldMazeTileBaseGround == null)
+                {
+                    EditorMazeTileBackgroundPlacer tileBackgroundPlacer = new EditorMazeTileBackgroundPlacer(neighbour.Value as EditorMazeTile);
+                    tileBackgroundPlacer.PlaceBackground<MazeTileBaseGround>();
+                }
             }
         }
     }

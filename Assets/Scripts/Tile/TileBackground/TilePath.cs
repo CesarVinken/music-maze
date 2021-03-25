@@ -16,9 +16,14 @@ public class TilePath : MonoBehaviour, ITileConnectable
     public int ConnectionScore { get => _connectionScore; set => _connectionScore = value; }
     public int SpriteNumber { get => _spriteNumber; set => _spriteNumber = value; }
 
-    public void WithPathType(IPathType tilePathType)
+    public void WithType(IBackgroundType tilePathType)
     {
-        TilePathType = tilePathType;
+        TilePathType = tilePathType as IPathType;
+
+        if(TilePathType == null)
+        {
+            Logger.Error("Attempted to set illigal path type. Cast failed.");
+        }
     }
 
     public void Remove()

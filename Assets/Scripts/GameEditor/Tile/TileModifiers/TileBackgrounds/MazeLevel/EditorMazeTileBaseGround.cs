@@ -15,7 +15,7 @@ public class EditorMazeTileBaseGround : EditorMazeTileBackgroundModifier, IGroun
 
         Type oldMainMaterial = tile.TileMainMaterial?.GetType(); // old material before updating it
 
-        ITileBackground mazeTileBaseGround = (MazeTileBaseGround)tile.GetBackgrounds().FirstOrDefault(background => background is MazeTileBaseGround);
+        MazeTileBaseGround oldMazeTileBaseGround = (MazeTileBaseGround)tile.GetBackgrounds().FirstOrDefault(background => background is MazeTileBaseGround);
         if ((oldMainMaterial != typeof(GroundMainMaterial)))
         {
             List<ITileAttribute> attributes = tile.GetAttributes();
@@ -24,29 +24,53 @@ public class EditorMazeTileBaseGround : EditorMazeTileBackgroundModifier, IGroun
                 tileAttributeRemover.Remove(attributes[i]);
             }
 
-            if (oldMainMaterial == typeof(WaterMainMaterial) || tile.TileMainMaterial == null)
+            //if (oldMainMaterial == typeof(WaterMainMaterial) || tile.TileMainMaterial == null)
+            //{
+            //    tileBackgroundRemover.RemoveBackground<MazeTileBaseWater>();
+            //}
+
+            // Remove the old land background, because we are going to fully cover it with a new land background
+            if(oldMazeTileBaseGround != null && oldMazeTileBaseGround.ConnectionScore != 16)
+            {
+                tileBackgroundRemover.RemoveBackground<MazeTileBaseGround>();
+            }
+
+            MazeTileBaseGround newMazeTileBaseGround = tileBackgroundPlacer.PlaceBackground<MazeTileBaseGround>();
+            // Remove water from the tile that is fully covered by land
+            if (newMazeTileBaseGround.ConnectionScore == 16)
             {
                 tileBackgroundRemover.RemoveBackground<MazeTileBaseWater>();
             }
 
-            if (mazeTileBaseGround == null)
-            {
-                tileBackgroundPlacer.PlaceBackground<MazeTileBaseGround>();
-            }
-            else
-            {
-                tileBackgroundPlacer.UpdateWaterConnectionsOnNeighbours(new MazeLevelDefaultWaterType());
-            }
+            //if (oldMazeTileBaseGround == null)
+            //{
+            //    MazeTileBaseGround newMazeTileBaseGround = tileBackgroundPlacer.PlaceBackground<MazeTileBaseGround>();
+            //    if (newMazeTileBaseGround.ConnectionScore == 16)
+            //    {
+            //        tileBackgroundRemover.RemoveBackground<MazeTileBaseWater>();
+            //    }
+            //}
+            //else
+            //{
+            //    tileBackgroundPlacer.PlaceBackground<MazeTileBaseGround>();
+            //    //tileBackgroundPlacer.UpdateGroundConnectionsOnNeighbours(new MazeLevelDefaultGroundType());
+            //}
         }
     }
 
     public override void PlaceBackgroundVariation(EditorMazeTile tile)
     {
-        Logger.Log("Background variations be implemented");
+        Logger.Log("Try place background variation");
+        ITileBackground mazeTileGround = (MazeTileBaseGround)tile.GetBackgrounds().FirstOrDefault(background => background is MazeTileBaseGround);
+
+        if (mazeTileGround == null) return;
+
+        EditorMazeTileBackgroundPlacer tileBackgroundPlacer = new EditorMazeTileBackgroundPlacer(tile);
+        tileBackgroundPlacer.PlaceGroundVariation((MazeTileBaseGround)mazeTileGround);
     }
 
     public override Sprite GetSprite()
     {
-        return MazeSpriteManager.Instance.DefaultMazeTileGround[0];
+        return MazeSpriteManager.Instance.DefaultMazeTileGround[15];
     }
 }

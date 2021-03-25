@@ -1,33 +1,26 @@
 ﻿using System.Collections;
 using UnityEngine;
 
-public class MazeTileBaseGround : MonoBehaviour, ITileBackground, ITransformable
+public class MazeTileBaseGround : TileBaseGround, ITransformable
 {
-    public Tile Tile;
-    public string ParentId;
-
-    [SerializeField] private TileSpriteContainer _tileSpriteContainer;
-
-    private int _sortingOrder;
-
-    public void SetTile(Tile tile)
+    public override void SetTile(Tile tile)
     {
         if (string.IsNullOrEmpty(tile.TileId)) Logger.Error("This tile does not have an Id");
 
         Tile = tile;
         ParentId = tile.TileId;
 
-        _sortingOrder = MazeSpriteManager.BaseBackgroundSortingOrder;
+        _sortingOrder = MazeSpriteManager.BaseGroundSortingOrder;
         _tileSpriteContainer.SetSortingOrder(_sortingOrder);
-
-        Sprite sprite = MazeSpriteManager.Instance.DefaultMazeTileGround[0];
-        _tileSpriteContainer.SetSprite(sprite);
     }
 
-    public void Remove()
+    public override void WithConnectionScoreInfo(TileConnectionScoreInfo connectionScoreInfo)
     {
-        Destroy(this);
-        Destroy(gameObject);
+        ConnectionScore = connectionScoreInfo.RawConnectionScore;
+        SpriteNumber = connectionScoreInfo.SpriteNumber;
+
+        _sprite = MazeSpriteManager.Instance.DefaultMazeTileGround[SpriteNumber - 1];
+        _tileSpriteContainer.SetSprite(_sprite);
     }
 
     public void TriggerTransformation()
@@ -38,7 +31,7 @@ public class MazeTileBaseGround : MonoBehaviour, ITileBackground, ITransformable
 
     public IEnumerator TransformToColourful()
     {
-        Sprite colourfulSprite = MazeSpriteManager.Instance.DefaultMazeTileGroundColourful[0];
+        Sprite colourfulSprite = MazeSpriteManager.Instance.DefaultMazeTileGroundColourful[SpriteNumber - 1];
 
         TileSpriteContainer transformedSpriteContainer = TileSpriteContainerPool.Instance.Get();
         transformedSpriteContainer.transform.SetParent(transform);
