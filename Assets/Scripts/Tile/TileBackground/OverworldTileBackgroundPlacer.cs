@@ -27,21 +27,24 @@ public class OverworldTileBackgroundPlacer<T> : TileBackgroundPlacer<T> where T 
         mazeTileBaseGround.WithConnectionScoreInfo(connectionScoreInfo);
         mazeTileBaseGround.SetTile(Tile);
 
-        Tile.SetMainMaterial(new GroundMainMaterial());
+        //Tile.SetMainMaterial(new GroundMainMaterial());
         Tile.AddBackground(mazeTileBaseGround);
-        Tile.Walkable = true;
+        //Tile.Walkable = true;
     }
 
     public override void PlaceWater(IBaseBackgroundType waterType, TileConnectionScoreInfo pathConnectionScoreInfo)
     {
+        if (Tile.GridLocation.X == 0 && Tile.GridLocation.Y == 0)
+        {
+            Logger.Warning($"Set water HAMASDKQ");
+        }
         GameObject waterGO = GameObject.Instantiate(OverworldManager.Instance.GetTileBackgroundPrefab<OverworldTileBaseWater>(), Tile.BackgroundsContainer);
         OverworldTileBaseWater overworldTileBaseWater = waterGO.GetComponent<OverworldTileBaseWater>();
         overworldTileBaseWater.WithType(waterType);
         overworldTileBaseWater.SetTile(Tile);
 
-        Tile.SetMainMaterial(new WaterMainMaterial());
         Tile.AddBackground(overworldTileBaseWater);
-        Tile.Walkable = false;
+        Tile.SetWalkable(false);
     }
 
     public override U PlaceBackground<U>()
@@ -53,7 +56,12 @@ public class OverworldTileBackgroundPlacer<T> : TileBackgroundPlacer<T> where T 
                 Tile.SetMainMaterial(new GroundMainMaterial());
                 break;
             case Type overworldTileBaseWater when overworldTileBaseWater == typeof(OverworldTileBaseWater):
+                if (Tile.GridLocation.X == 0 && Tile.GridLocation.Y == 0)
+                {
+                    Logger.Warning($"Set water here");
+                }
                 Tile.SetMainMaterial(new WaterMainMaterial());
+                Tile.SetWalkable(false);
                 break;
             default:
                 Logger.Error($"Unknown type {typeof(U)}");

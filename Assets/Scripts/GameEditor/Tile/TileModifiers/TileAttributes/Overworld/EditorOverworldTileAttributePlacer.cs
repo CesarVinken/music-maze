@@ -31,7 +31,7 @@ public class EditorOverworldTileAttributePlacer : OverworldTileAttributePlacer<E
 
         mazeLevelEntry.MazeLevelName = mazeLevelName;
 
-        Tile.Walkable = true;
+        Tile.SetWalkable(true);
         Tile.AddAttribute(mazeLevelEntry);
 
         OverworldManager.Instance.EditorOverworld.MazeEntries.Add(mazeLevelEntry);

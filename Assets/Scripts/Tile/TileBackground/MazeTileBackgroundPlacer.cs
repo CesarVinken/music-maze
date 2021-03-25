@@ -27,9 +27,7 @@ public class MazeTileBackgroundPlacer<T> : TileBackgroundPlacer<T> where T : Maz
         mazeTileBaseGround.WithConnectionScoreInfo(connectionScoreInfo);
         mazeTileBaseGround.SetTile(Tile);
 
-        Tile.SetMainMaterial(new GroundMainMaterial());
         Tile.AddBackground(mazeTileBaseGround);
-        Tile.Walkable = true;
     }
 
     public override void PlaceWater(IBaseBackgroundType waterType, TileConnectionScoreInfo pathConnectionScoreInfo)
@@ -42,7 +40,7 @@ public class MazeTileBackgroundPlacer<T> : TileBackgroundPlacer<T> where T : Maz
         Tile.SetMainMaterial(new WaterMainMaterial());
         Tile.AddBackground(mazeTileBaseWater);
         Tile.TryMakeMarkable(false);
-        Tile.Walkable = false;
+        Tile.SetWalkable(false);
     }
 
     public override U PlaceBackground<U>()
@@ -54,6 +52,7 @@ public class MazeTileBackgroundPlacer<T> : TileBackgroundPlacer<T> where T : Maz
                 break;
             case Type mazeTileBaseWater when mazeTileBaseWater == typeof(MazeTileBaseWater):
                 Tile.SetMainMaterial(new WaterMainMaterial());
+                Tile.SetWalkable(false);
                 break;
             default:
                 Logger.Error($"Unexpected type {typeof(U)}");

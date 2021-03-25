@@ -18,7 +18,7 @@ public class MazeTileAttributePlacer<T> : TileAttributePlacer<T> where T : MazeT
         playerExit.WithObstacleType(obstacleType);
         playerExit.WithConnectionScoreInfo(obstacleConnectionScoreInfo);
 
-        Tile.Walkable = false;
+        Tile.SetWalkable(false);
         Tile.TryMakeMarkable(false);
         Tile.AddAttribute(playerExit);
     }
@@ -30,7 +30,7 @@ public class MazeTileAttributePlacer<T> : TileAttributePlacer<T> where T : MazeT
         tileObstacle.WithObstacleType(obstacleType);
         tileObstacle.WithConnectionScoreInfo(obstacleConnectionScore);
 
-        Tile.Walkable = false;
+        Tile.SetWalkable(false);
         Tile.TryMakeMarkable(false);
         Tile.AddAttribute(tileObstacle);
     }
@@ -39,7 +39,7 @@ public class MazeTileAttributePlacer<T> : TileAttributePlacer<T> where T : MazeT
     {
         EnemySpawnpoint enemySpawnpoint = (EnemySpawnpoint)InstantiateTileAttributeGO<EnemySpawnpoint>();
 
-        Tile.Walkable = true;
+        Tile.SetWalkable(true);
         Tile.TryMakeMarkable(true);
         Tile.AddAttribute(enemySpawnpoint);
     }
@@ -48,7 +48,7 @@ public class MazeTileAttributePlacer<T> : TileAttributePlacer<T> where T : MazeT
     {
         PlayerOnly playerOnly = (PlayerOnly)InstantiateTileAttributeGO<PlayerOnly>();
 
-        Tile.Walkable = true;
+        Tile.SetWalkable(true);
         Tile.AddAttribute(playerOnly);
     }
 

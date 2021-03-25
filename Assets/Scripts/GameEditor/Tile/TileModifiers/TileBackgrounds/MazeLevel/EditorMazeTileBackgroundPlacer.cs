@@ -74,7 +74,7 @@ public class EditorMazeTileBackgroundPlacer : MazeTileBackgroundPlacer<EditorMaz
 
         Tile.AddBackground(mazeTileBaseWater);
         Tile.TryMakeMarkable(false);
-        Tile.Walkable = false;
+        Tile.SetWalkable(false);
 
         // Update Connections for neighbouring tiles
         UpdatePathConnectionsOnNeighbours();

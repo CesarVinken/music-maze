@@ -13,7 +13,8 @@ public class OverworldTileAttributeRemover : TileAttributeRemover
 
     public override void RemoveTileObstacle(TileObstacle tileObstacle = null)
     {
-        _tile.Walkable = true;
+        _tile.SetWalkable(true);
+
         if(!tileObstacle)
             tileObstacle = (TileObstacle)_tile.GetAttributes().FirstOrDefault(attribute => attribute is TileObstacle);
         if (tileObstacle == null) return;

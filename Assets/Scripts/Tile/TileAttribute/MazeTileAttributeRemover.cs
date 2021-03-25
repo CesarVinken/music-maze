@@ -18,7 +18,7 @@ public class MazeTileAttributeRemover : TileAttributeRemover
         
         if (playerExit == null) return;
         
-        _tile.Walkable = true;
+        _tile.SetWalkable(true);
 
         ObstacleType obstacleType = playerExit.ObstacleType;
 
@@ -36,7 +36,7 @@ public class MazeTileAttributeRemover : TileAttributeRemover
         if (tileObstacle == null) return;
         if (tileObstacle is PlayerExit) return;
 
-        _tile.Walkable = true;
+        _tile.SetWalkable(true);
 
         ObstacleType obstacleType = tileObstacle.ObstacleType;
         int oldConnectionScore = tileObstacle.ConnectionScore;

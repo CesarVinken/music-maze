@@ -91,7 +91,7 @@ public class PlayerExit : TileObstacle, ITileAttribute, ITileConnectable
     public void OpenExit()
     {
         MazeTile tile = Tile as MazeTile;
-        tile.Walkable = true;
+        tile.SetWalkable(true);
         IsOpen = true;
 
         _tileSpriteContainer.SetSprite(MazeSpriteManager.Instance.DefaultDoorColourful[SpriteNumber - 1 + 3]); // + 3 to get to the 'open' version of the sprite
@@ -107,7 +107,7 @@ public class PlayerExit : TileObstacle, ITileAttribute, ITileConnectable
     public void CloseExit()
     {
         MazeTile tile = Tile as MazeTile;
-        tile.Walkable = false;
+        tile.SetWalkable(false);
         IsOpen = false;
 
         _tileSpriteContainer.SetSprite(MazeSpriteManager.Instance.DefaultDoor[SpriteNumber - 1]);

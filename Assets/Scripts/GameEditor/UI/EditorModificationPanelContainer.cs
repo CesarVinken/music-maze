@@ -38,7 +38,7 @@ public class EditorModificationPanelContainer : MonoBehaviour
 
     public void UpdateForSceneChange()
     {
-        Logger.Warning($"Show tabs. Scene type is {PersistentGameManager.CurrentSceneType}");
+        Logger.Warning(Logger.Editor, $"Show tabs. Scene type is {PersistentGameManager.CurrentSceneType}");
 
         switch (PersistentGameManager.CurrentSceneType)
         {

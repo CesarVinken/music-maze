@@ -32,7 +32,7 @@ public class EditorMazeTileAttributePlacer : MazeTileAttributePlacer<EditorMazeT
         playerExit.WithObstacleType(obstacleType);
         playerExit.WithConnectionScoreInfo(obstacleConnectionScore);
 
-        Tile.Walkable = false;
+        Tile.SetWalkable(false);
         Tile.TryMakeMarkable(false);
 
         Logger.Log("Add player exit to maze tile attribute list");
@@ -66,7 +66,7 @@ public class EditorMazeTileAttributePlacer : MazeTileAttributePlacer<EditorMazeT
         tileObstacle.WithObstacleType(obstacleType);
         tileObstacle.WithConnectionScoreInfo(obstacleConnectionScore);
 
-        Tile.Walkable = false;
+        Tile.SetWalkable(false);
         Tile.TryMakeMarkable(false);
         Tile.AddAttribute(tileObstacle);
 
@@ -108,7 +108,7 @@ public class EditorMazeTileAttributePlacer : MazeTileAttributePlacer<EditorMazeT
     {
         PlayerSpawnpoint playerSpawnpoint = (PlayerSpawnpoint)InstantiateTileAttributeGO<PlayerSpawnpoint>();
 
-        Tile.Walkable = true;
+        Tile.SetWalkable(true);
         Tile.TryMakeMarkable(false);
 
         Tile.AddAttribute(playerSpawnpoint);

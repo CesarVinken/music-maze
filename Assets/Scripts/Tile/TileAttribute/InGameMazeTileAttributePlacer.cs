@@ -14,7 +14,7 @@
         Logger.Log("TODO: only make not markable if there is a player for the spawnpoint");
         PlayerSpawnpoint playerSpawnpoint = (PlayerSpawnpoint)InstantiateTileAttributeGO<PlayerSpawnpoint>();
 
-        Tile.Walkable = true;
+        Tile.SetWalkable(true);
 
         Tile.AddAttribute(playerSpawnpoint);
     }

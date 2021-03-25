@@ -4,7 +4,7 @@ using UnityEngine;
 
 public abstract class Tile : MonoBehaviour
 {
-    public bool Walkable = true;
+    private bool _walkable = true;
     public Transform BackgroundsContainer;
     public string TileId;
 
@@ -16,6 +16,8 @@ public abstract class Tile : MonoBehaviour
 
     protected List<ITileAttribute> _tileAttributes = new List<ITileAttribute>();
     protected List<ITileBackground> _tileBackgrounds = new List<ITileBackground>();
+
+    public bool Walkable { get => _walkable; protected set => _walkable = value; }
 
     public void Awake()
     {
@@ -37,6 +39,15 @@ public abstract class Tile : MonoBehaviour
     public void SetGridLocation(int x, int y)
     {
         GridLocation = new GridLocation(x, y);
+    }
+
+    public void SetWalkable(bool isWalkable)
+    {
+        if(GridLocation.X == 0 && GridLocation.Y == 0)
+        {
+            Logger.Warning($"Make walkable {isWalkable}");
+        }
+        Walkable = isWalkable;
     }
 
     public void SetMainMaterial(ITileMainMaterial tileMainMaterial)

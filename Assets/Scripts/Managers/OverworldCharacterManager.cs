@@ -27,6 +27,8 @@ public class OverworldCharacterManager : MonoBehaviourPunCallbacks, ICharacterMa
     public GameObject Player1GO { get => _player1GO; set => _player1GO = value; }
     public GameObject Player2GO { get => _player2GO; set => _player2GO = value; }
 
+    [SerializeField] private GameObject _playerCharacterPrefab;
+
     public RuntimeAnimatorController Bard1Controller { get => _bard1Controller; set => _bard1Controller = value; }
     public RuntimeAnimatorController Bard2Controller { get => _bard2Controller; set => _bard2Controller = value; }
     
@@ -34,6 +36,8 @@ public class OverworldCharacterManager : MonoBehaviourPunCallbacks, ICharacterMa
     {
         Guard.CheckIsNull(_bard1Controller, "Bard1Controller", gameObject);
         Guard.CheckIsNull(_bard2Controller, "Bard2Controller", gameObject);
+
+        Guard.CheckIsNull(_playerCharacterPrefab, "PlayerCharacterPrefab", gameObject);
 
         GameManager.Instance.CharacterManager = this;
     }
@@ -53,7 +57,7 @@ public class OverworldCharacterManager : MonoBehaviourPunCallbacks, ICharacterMa
 
         if (PhotonNetwork.IsMasterClient || GameRules.GamePlayerType == GamePlayerType.SinglePlayer)
         {
-            Debug.Log("Instantiating Player 1");
+            Logger.Log(Logger.Initialisation, "Instantiating Player 1");
 
             GridLocation spawnLocation = GetSpawnLocation(PlayerNumber.Player1, level);
             CharacterBundle PlayerBundle = SpawnCharacter(
@@ -64,7 +68,7 @@ public class OverworldCharacterManager : MonoBehaviourPunCallbacks, ICharacterMa
         }
         else
         {
-            Debug.Log("Instantiating Player 2");
+            Logger.Log(Logger.Initialisation, "Instantiating Player 2");
 
             GridLocation spawnLocation = GetSpawnLocation(PlayerNumber.Player2, level);
             CharacterBundle PlayerBundle = SpawnCharacter(level.PlayerCharacterSpawnpoints[PlayerNumber.Player2].CharacterBlueprint, spawnLocation);
@@ -80,7 +84,15 @@ public class OverworldCharacterManager : MonoBehaviourPunCallbacks, ICharacterMa
         string prefabName = GetPrefabNameByCharacter(character);
         Vector2 startPosition = GetCharacterGridPosition(GridLocation.GridToVector(gridLocation)); // start position is grid position plus grid tile offset
 
-        GameObject characterGO = PhotonNetwork.Instantiate(prefabName, startPosition, Quaternion.identity, 0); // TODO solve prefab for single player
+        GameObject characterGO = null;
+        if (GameRules.GamePlayerType == GamePlayerType.SinglePlayer)
+        {
+            characterGO = GameObject.Instantiate(_playerCharacterPrefab, startPosition, Quaternion.identity);
+        }
+        else
+        {
+            characterGO = PhotonNetwork.Instantiate(prefabName, startPosition, Quaternion.identity, 0);
+        }
 
         PlayerCharacter playerCharacter = characterGO.GetComponent<PlayerCharacter>();
         playerCharacter.CharacterBlueprint = character;

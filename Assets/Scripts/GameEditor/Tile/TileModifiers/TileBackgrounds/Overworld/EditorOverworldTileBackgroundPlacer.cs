@@ -68,7 +68,7 @@ public class EditorOverworldTileBackgroundPlacer : OverworldTileBackgroundPlacer
 
         Tile.SetMainMaterial(new WaterMainMaterial());
         Tile.AddBackground(overworldTileBaseWater);
-        Tile.Walkable = false;
+        Tile.SetWalkable(false);
 
         // Update pathConnections for neighbouring tiles
         UpdatePathConnectionsOnNeighbours();

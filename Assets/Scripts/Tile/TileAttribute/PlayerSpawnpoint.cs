@@ -33,6 +33,6 @@ public class PlayerSpawnpoint : CharacterSpawnpoint
             Logger.Error($"Found {registeredSpawnpoints} registered spawnpoints, but there can be only a maximum of 2");
         }
 
-        Logger.Log("Registered spawnpoint");
+        Logger.Log(Logger.Initialisation, "Registered spawnpoint");
     }
 }

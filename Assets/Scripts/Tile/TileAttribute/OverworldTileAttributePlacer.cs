@@ -13,7 +13,7 @@ public class OverworldTileAttributePlacer<T> : TileAttributePlacer<T> where T : 
     {
         PlayerSpawnpoint playerSpawnpoint = (PlayerSpawnpoint)InstantiateTileAttributeGO<PlayerSpawnpoint>();
 
-        Tile.Walkable = true;
+        Tile.SetWalkable(true);
         Tile.AddAttribute(playerSpawnpoint);
     }
 
@@ -23,7 +23,7 @@ public class OverworldTileAttributePlacer<T> : TileAttributePlacer<T> where T : 
         mazeLevelEntry.Tile = Tile;
         mazeLevelEntry.MazeLevelName = mazeLevelName;
 
-        Tile.Walkable = true;
+        Tile.SetWalkable(true);
         Tile.AddAttribute(mazeLevelEntry);
 
         return mazeLevelEntry;
