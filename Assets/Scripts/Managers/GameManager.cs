@@ -42,8 +42,6 @@ public class GameManager : MonoBehaviourPunCallbacks
 {
     public static GameManager Instance;
 
-
-
     public IPlatformConfiguration Configuration;
     public KeyboardConfiguration KeyboardConfiguration;
 

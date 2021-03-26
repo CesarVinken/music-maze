@@ -1,5 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
@@ -15,7 +14,7 @@ public class CameraController : MonoBehaviour
 {
     public static CameraController Instance;
 
-    private float _panSpeed;
+    private float _panSpeed = 0.01f;
     public bool FocussedOnPlayer = false;
     public static Dictionary<Direction, float> PanLimits = new Dictionary<Direction, float> { };
 
@@ -24,9 +23,9 @@ public class CameraController : MonoBehaviour
     
     private float _maxXPercentageBoundary = 70f;
     private float _maxYPercentageBoundary = 70f;
-    private Vector2 _cameraBoundsOffset; // with this offset the camera is calculated when player is past the edge margin by calculating cameraPosition = _player.position - offset. 
 
     private Vector3 _dragOrigin;    //for camera dragging in editor
+
 
     public void Awake()
     {
@@ -34,16 +33,18 @@ public class CameraController : MonoBehaviour
 
         Guard.CheckIsNull(_camera, "_camera", gameObject);
 
-        _cameraBoundsOffset = _camera.ScreenToWorldPoint(new Vector3(
-            Screen.width - (Screen.width * (1 - _maxXPercentageBoundary / 100f)),
-            Screen.height - (Screen.height * (1 - _maxYPercentageBoundary / 100f)),
-            0));
+        if (GameManager.Instance.CurrentGameLevel != null)
+            SetPanLimits(GameManager.Instance.CurrentGameLevel.LevelBounds);
+
+        CalculateCameraPosition();
     }
 
     public void Start()
     {
         if(GameManager.Instance.CurrentGameLevel != null)
             SetPanLimits(GameManager.Instance.CurrentGameLevel.LevelBounds);
+
+        CalculateCameraPosition();
     }
 
     public void SetZoomLevel(float zoomLevel)
@@ -55,17 +56,12 @@ public class CameraController : MonoBehaviour
     {
         FocussedOnPlayer = false;
 
-        Vector3 cameraPosition = new Vector3(0, 0, -10);
-
         if(!PanLimits.ContainsKey(Direction.Left) || !PanLimits.ContainsKey(Direction.Right) || !PanLimits.ContainsKey(Direction.Down) || !PanLimits.ContainsKey(Direction.Up))
         {
             return;
         }
 
-        cameraPosition.x = Mathf.Clamp(cameraPosition.x, PanLimits[Direction.Left], PanLimits[Direction.Right]);
-        cameraPosition.y = Mathf.Clamp(cameraPosition.y, PanLimits[Direction.Down], PanLimits[Direction.Up]);
-
-        transform.position = new Vector3(cameraPosition.x, cameraPosition.y, cameraPosition.z);
+        CalculateCameraPosition();
     }
 
     public void SetPanLimits(GridLocation levelBounds)
@@ -77,8 +73,9 @@ public class CameraController : MonoBehaviour
         PanLimits.Add(Direction.Down, 4f); // should (with this zoom level) always have 4 as lowest boundary down. Should always be => 4
         PanLimits.Add(Direction.Left, 8f); // should (with this zoom level) always have 8 as the left most boundary. Should always be => 8
 
-        if (levelBounds.Y < 4) PanLimits[Direction.Up] = 4f;
-        if (levelBounds.X < 8) PanLimits[Direction.Right] = 8f;
+        // Set minima for small levels
+        if (PanLimits[Direction.Up] < PanLimits[Direction.Down]) PanLimits[Direction.Up] = PanLimits[Direction.Down];
+        if (PanLimits[Direction.Right] < PanLimits[Direction.Left]) PanLimits[Direction.Right] = PanLimits[Direction.Left];
     }
 
     public void FocusOnPlayer()
@@ -125,41 +122,41 @@ public class CameraController : MonoBehaviour
 
         if (!FocussedOnPlayer) return;
 
+        CalculateCameraPosition();
+    }
+
+    // Camera is static with player in the middle. Once the player get to the screen edges (the outer 30%) the camera follows the player.
+    // If the camera/player reach the edge of the level, the camera movement is clamped so it will not move further in that direction
+    private void CalculateCameraPosition()
+    {
         Vector2 cameraPosition = new Vector2(transform.position.x, transform.position.y);
 
-        // Check if the player has walked to far to the edge. If so, compensate by following the player in that direction with the camera.
         Vector3 playerWorldToScreenPos = _camera.WorldToScreenPoint(_player.position);
         float playerWidthPercentagePosOnScreen = (playerWorldToScreenPos.x / Screen.width) * 100f;
         float playerHeightPercentagePosOnScreen = (playerWorldToScreenPos.y / Screen.height) * 100f;
 
         if (playerWidthPercentagePosOnScreen >= _maxXPercentageBoundary)
         {
-            cameraPosition.x = _player.position.x - _cameraBoundsOffset.x;
+            cameraPosition = Vector3.Lerp(transform.position, new Vector3(_player.position.x, _player.position.y, -10), _panSpeed);
         }
         else if (playerWidthPercentagePosOnScreen <= 100 - _maxXPercentageBoundary)
         {
-            cameraPosition.x = _player.position.x + _cameraBoundsOffset.x;
+            cameraPosition = Vector3.Lerp(transform.position, new Vector3(_player.position.x, _player.position.y, -10), _panSpeed);
         }
 
         if (playerHeightPercentagePosOnScreen >= _maxYPercentageBoundary)
         {
-            cameraPosition.y = _player.position.y - _cameraBoundsOffset.y;
+            cameraPosition = Vector3.Lerp(transform.position, new Vector3(_player.position.x, _player.position.y, -10), _panSpeed);
         }
         else if (playerHeightPercentagePosOnScreen <= 100 - _maxYPercentageBoundary)
         {
-            //Logger.Warning($"cameraPosition.y {cameraPosition.y}");
-            //if (cameraPosition.y == _player.position.y - _cameraBoundsOffset.y)
-            //{
-            //    Logger.Warning("Got you!");
-            //}
-            cameraPosition.y = _player.position.y + _cameraBoundsOffset.y;
+            cameraPosition = Vector3.Lerp(transform.position, new Vector3(_player.position.x, _player.position.y, -10), _panSpeed);
         }
 
-        // binding to the limits of the map
-        //cameraPosition.x = Mathf.Clamp(cameraPosition.x, PanLimits[Direction.Left], PanLimits[Direction.Right]);
-        //cameraPosition.y = Mathf.Clamp(cameraPosition.y, PanLimits[Direction.Down], PanLimits[Direction.Up]);
+        cameraPosition.x = Mathf.Clamp(cameraPosition.x, PanLimits[Direction.Left], PanLimits[Direction.Right]);
+        cameraPosition.y = Mathf.Clamp(cameraPosition.y, PanLimits[Direction.Down], PanLimits[Direction.Up]);
 
-        transform.position = new Vector3(cameraPosition.x, cameraPosition.y, transform.position.z);
+        transform.position = new Vector3(cameraPosition.x, cameraPosition.y, -10);
     }
 
     public void HandleMiddleMousePanning()

@@ -85,17 +85,18 @@ public class MazeCharacterManager : MonoBehaviourPunCallbacks, ICharacterManager
         Vector2 startPosition = GetCharacterGridPosition(GridLocation.GridToVector(gridLocation)); // start position is grid position plus grid tile offset
 
         GameObject characterGO = null;
-        if (GameRules.GamePlayerType == GamePlayerType.SinglePlayer)
-        {
-            characterGO = GameObject.Instantiate(PlayerCharacterPrefab, startPosition, Quaternion.identity);
-        }
-        else
-        {
-            characterGO = PhotonNetwork.Instantiate(prefabName, startPosition, Quaternion.identity, 0);
-        }
 
         if (character.IsPlayable)
         {
+            if (GameRules.GamePlayerType == GamePlayerType.SinglePlayer)
+            {
+                characterGO = GameObject.Instantiate(PlayerCharacterPrefab, startPosition, Quaternion.identity);
+            }
+            else
+            {
+                characterGO = PhotonNetwork.Instantiate(prefabName, startPosition, Quaternion.identity, 0);
+            }
+
             PlayerCharacter playerCharacter = characterGO.GetComponent<PlayerCharacter>();
             playerCharacter.CharacterBlueprint = character;
 
@@ -125,6 +126,15 @@ public class MazeCharacterManager : MonoBehaviourPunCallbacks, ICharacterManager
         }
         else
         {
+            if (GameRules.GamePlayerType == GamePlayerType.SinglePlayer)
+            {
+                characterGO = GameObject.Instantiate(EnemyCharacterPrefab, startPosition, Quaternion.identity);
+            }
+            else
+            {
+                characterGO = PhotonNetwork.Instantiate(prefabName, startPosition, Quaternion.identity, 0);
+            }
+
             EnemyCharacter enemyCharacter = characterGO.GetComponent<EnemyCharacter>();
             enemyCharacter.SetStartingPosition(enemyCharacter, gridLocation);
             enemyCharacter.FreezeCharacter();
