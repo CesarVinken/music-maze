@@ -72,6 +72,11 @@ public class CameraManager : MonoBehaviour
 
     public void FocusCamerasOnPlayer()
     {
+        if (Camera.main)
+        {
+            Destroy(Camera.main.gameObject);
+        }
+        
         for (int i = 0; i < CameraControllers.Count; i++)
         {
             PlayerCharacter player = null;
