@@ -1,12 +1,15 @@
-﻿public enum GameMode
+﻿
+public enum GameMode
 {
     Campaign,
     RandomMaze
 }
+
 public static class GameRules
 {
     public static GameMode GameMode;
     public static GamePlayerType GamePlayerType;
+    public static bool SplitScreen;
 
     public static void SetGameMode(GameMode gameMode)
     {
@@ -16,5 +19,10 @@ public static class GameRules
     public static void SetGamePlayerType(GamePlayerType gamePlayerType)
     {
         GamePlayerType = gamePlayerType;
+    }
+
+    public static void SetSplitScreen(bool splitScreen)
+    {
+        SplitScreen = splitScreen;
     }
 }

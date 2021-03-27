@@ -111,8 +111,8 @@ public class MazeLevelManager : MonoBehaviour, IOnEventCallback
         InitialiseEditorTileAttributes();
 
         MainScreenOverlayCanvas.Instance.BlackOutSquare.ResetToDefault();
-        CameraController.Instance.ResetCamera();
-        CameraController.Instance.SetPanLimits(EditorLevel.LevelBounds);
+        CameraManager.Instance.ResetCameras();
+        CameraManager.Instance.SetPanLimits(EditorLevel.LevelBounds);
     }
 
     public IEnumerator ScanCoroutine()
@@ -120,8 +120,9 @@ public class MazeLevelManager : MonoBehaviour, IOnEventCallback
         yield return new WaitForSeconds(.2f); // This waiting time should be dealt with more efficiently. Currently it is there to make sure that the characters are spawned in 
         MainScreenOverlayCanvas.Instance.BlackOutSquare.ResetToDefault();
         GameManager.Instance.CharacterManager.SpawnCharacters();
-        CameraController.Instance.SetPanLimits(Level.LevelBounds);
-        CameraController.Instance.FocusOnPlayer();
+
+        CameraManager.Instance.SetPanLimits(Level.LevelBounds);
+        CameraManager.Instance.FocusCamerasOnPlayer();
 
         AstarPath.active.Scan();    // We should only scan once all the tiles are loaded with their correct (walkable) attributes and obstacles
         yield return new WaitForSeconds(.4f);
@@ -149,7 +150,7 @@ public class MazeLevelManager : MonoBehaviour, IOnEventCallback
         Logger.Log(Logger.Initialisation, "Unload level {0}", Level);
         Level.Tiles.Clear();
         Level.TilesByLocation.Clear();
-        CameraController.Instance.ResetCamera();
+        CameraManager.Instance.ResetCameras();
         Level = null;
 
         NumberOfUnmarkedTiles = -1;

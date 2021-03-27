@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
 
 public enum Direction
@@ -12,10 +11,8 @@ public enum Direction
 
 public class CameraController : MonoBehaviour
 {
-    public static CameraController Instance;
-
     private float _panSpeed = 0.01f;
-    public bool FocussedOnPlayer = false;
+    private bool _focussedOnPlayer = false;
     public static Dictionary<Direction, float> PanLimits = new Dictionary<Direction, float> { };
 
     [SerializeField] private Camera _camera;
@@ -29,14 +26,10 @@ public class CameraController : MonoBehaviour
 
     public void Awake()
     {
-        Instance = this;
-
         Guard.CheckIsNull(_camera, "_camera", gameObject);
 
         if (GameManager.Instance.CurrentGameLevel != null)
             SetPanLimits(GameManager.Instance.CurrentGameLevel.LevelBounds);
-
-        CalculateCameraPosition();
     }
 
     public void Start()
@@ -44,7 +37,17 @@ public class CameraController : MonoBehaviour
         if(GameManager.Instance.CurrentGameLevel != null)
             SetPanLimits(GameManager.Instance.CurrentGameLevel.LevelBounds);
 
-        CalculateCameraPosition();
+        //CalculateCameraPosition();
+    }
+
+    public void EnableCamera()
+    {
+        _camera.enabled = true;
+    }
+
+    public void DisableCamera()
+    {
+        _camera.enabled = false;
     }
 
     public void SetZoomLevel(float zoomLevel)
@@ -54,7 +57,7 @@ public class CameraController : MonoBehaviour
 
     public void ResetCamera()
     {
-        FocussedOnPlayer = false;
+        _focussedOnPlayer = false;
 
         if(!PanLimits.ContainsKey(Direction.Left) || !PanLimits.ContainsKey(Direction.Right) || !PanLimits.ContainsKey(Direction.Down) || !PanLimits.ContainsKey(Direction.Up))
         {
@@ -78,35 +81,9 @@ public class CameraController : MonoBehaviour
         if (PanLimits[Direction.Right] < PanLimits[Direction.Left]) PanLimits[Direction.Right] = PanLimits[Direction.Left];
     }
 
-    public void FocusOnPlayer()
+    public void FocusOnPlayer(PlayerCharacter player)
     {
-        FocussedOnPlayer = true;
-
-        PlayerCharacter player = null;
-
-        if (PersistentGameManager.CurrentSceneType == SceneType.Maze)
-        {
-            if (GameRules.GamePlayerType == GamePlayerType.SinglePlayer)
-                player = GameManager.Instance.CharacterManager.GetPlayerCharacter<MazePlayerCharacter>(PlayerNumber.Player1);
-            else
-            {
-                player = GameManager.Instance.CharacterManager.GetPlayers<MazePlayerCharacter>().FirstOrDefault(p => p.Value.PhotonView.IsMine).Value;
-            }
-        }
-        else
-        {
-            if (GameRules.GamePlayerType == GamePlayerType.SinglePlayer)
-                player = GameManager.Instance.CharacterManager.GetPlayerCharacter<OverworldPlayerCharacter>(PlayerNumber.Player1);
-            else
-            {
-                player = GameManager.Instance.CharacterManager.GetPlayers<OverworldPlayerCharacter>().FirstOrDefault(p => p.Value.PhotonView.IsMine).Value;
-            }
-        }
-
-        if (player == null)
-        {
-            Logger.Error("Could not find player character on client");
-        }
+        _focussedOnPlayer = true;
 
         _player = player.transform;
 
@@ -120,7 +97,7 @@ public class CameraController : MonoBehaviour
             HandleMiddleMousePanning();
         }
 
-        if (!FocussedOnPlayer) return;
+        if (!_focussedOnPlayer) return;
 
         CalculateCameraPosition();
     }

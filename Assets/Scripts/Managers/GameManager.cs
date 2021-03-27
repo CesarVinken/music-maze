@@ -56,6 +56,7 @@ public class GameManager : MonoBehaviourPunCallbacks
     [SerializeField] private GameObject _mazeLevelSpriteManagerPrefab;
     [SerializeField] private GameObject _overworldSpriteManagerPrefab;
     [SerializeField] private GameObject _overworldManagerPrefab;
+    [SerializeField] private GameObject _cameraContainerPrefab;
 
     [SerializeField] private SceneType _thisSceneType;
 
@@ -77,6 +78,7 @@ public class GameManager : MonoBehaviourPunCallbacks
         Guard.CheckIsNull(_mazeLevelSpriteManagerPrefab, "_mazeLevelSpriteManagerPrefab", gameObject);
         Guard.CheckIsNull(_overworldSpriteManagerPrefab, "_overworldSpriteManagerPrefab", gameObject);
         Guard.CheckIsNull(_overworldManagerPrefab, "_overworldManagerPrefab", gameObject);
+        Guard.CheckIsNull(_cameraContainerPrefab, "_cameraContainerPrefab", gameObject);
 
         InitialiseLoggers();
 
@@ -120,13 +122,13 @@ public class GameManager : MonoBehaviourPunCallbacks
             default:
                 Logger.Error($"Scenetype {PersistentGameManager.CurrentSceneType} is not implemented yet");
                 break;
-        }  
+        }
+
+        Instantiate(_cameraContainerPrefab);
     }
 
     public void Start()
     {
-        CameraController.Instance.SetZoomLevel(Configuration.CameraZoomLevel);
-
         switch (PersistentGameManager.CurrentSceneType)
         {
             case SceneType.Overworld:

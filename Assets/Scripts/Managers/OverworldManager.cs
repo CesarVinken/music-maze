@@ -66,7 +66,7 @@ public class OverworldManager : MonoBehaviour, IOnEventCallback
         Overworld.TilesByLocation.Clear();
         Overworld.MazeEntries.Clear();
 
-        CameraController.Instance.ResetCamera();
+        CameraManager.Instance.ResetCameras();
         Overworld = null;
     }
 
@@ -91,8 +91,8 @@ public class OverworldManager : MonoBehaviour, IOnEventCallback
 
         MainScreenOverlayCanvas.Instance.BlackOutSquare.ResetToDefault();
 
-        CameraController.Instance.ResetCamera();
-        CameraController.Instance.SetPanLimits(EditorOverworld.LevelBounds);
+        CameraManager.Instance.ResetCameras();
+        CameraManager.Instance.SetPanLimits(EditorOverworld.LevelBounds);
     }
 
     public IEnumerator ScanCoroutine()
@@ -100,8 +100,8 @@ public class OverworldManager : MonoBehaviour, IOnEventCallback
         yield return new WaitForSeconds(.2f); // This waiting time should be dealt with more efficiently. Currently it is there to make sure that the characters are spawned in 
         MainScreenOverlayCanvas.Instance.BlackOutSquare.ResetToDefault();
         GameManager.Instance.CharacterManager.SpawnCharacters();
-        CameraController.Instance.SetPanLimits(Overworld.LevelBounds);
-        CameraController.Instance.FocusOnPlayer();
+        CameraManager.Instance.SetPanLimits(Overworld.LevelBounds);
+        CameraManager.Instance.FocusCamerasOnPlayer();
 
         AstarPath.active.Scan();    // We should only scan once all the tiles are loaded with their correct (walkable) attributes and obstacles
         yield return new WaitForSeconds(.4f);
