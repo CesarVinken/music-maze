@@ -214,7 +214,8 @@ public class MazeLevelManager : MonoBehaviour, IOnEventCallback
 
     public void LoadOverworld(string overworldName = "default")
     {
-        if (GameRules.GamePlayerType == GamePlayerType.SinglePlayer)
+        if (GameRules.GamePlayerType == GamePlayerType.SinglePlayer ||
+            GameRules.GamePlayerType == GamePlayerType.SplitScreenMultiPlayer)
         {
             PersistentGameManager.SetLastMazeLevelName(PersistentGameManager.CurrentSceneName);
             PersistentGameManager.SetCurrentSceneName(overworldName);
@@ -229,7 +230,8 @@ public class MazeLevelManager : MonoBehaviour, IOnEventCallback
 
     public void LoadNextLevel(string pickedLevel)
     {
-        if (GameRules.GamePlayerType == GamePlayerType.SinglePlayer)
+        if (GameRules.GamePlayerType == GamePlayerType.SinglePlayer ||
+            GameRules.GamePlayerType == GamePlayerType.SplitScreenMultiPlayer)
         {
             MazeLevelData levelData = new JsonMazeLevelFileReader().ReadData<MazeLevelData>(pickedLevel);
 

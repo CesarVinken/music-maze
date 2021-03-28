@@ -22,7 +22,7 @@ public class CameraController : MonoBehaviour
     private float _maxYPercentageBoundary = 70f;
 
     private Vector3 _dragOrigin;    //for camera dragging in editor
-
+    public PlayerNumber PlayerNumberForCamera;
 
     public void Awake()
     {
@@ -86,6 +86,7 @@ public class CameraController : MonoBehaviour
         _focussedOnPlayer = true;
 
         _player = player.transform;
+        PlayerNumberForCamera = player.PlayerNumber;
 
         transform.position = new Vector3(_player.position.x, _player.position.y, -10f);
     }

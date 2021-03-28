@@ -2,6 +2,7 @@
 using Photon.Pun;
 using System.Collections;
 using CharacterType;
+using System.Collections.Generic;
 
 public class PlayerCharacter : Character
 {
@@ -14,6 +15,7 @@ public class PlayerCharacter : Character
 
     [SerializeField] protected GameObject _selectionIndicatorPrefab = null;
     [SerializeField] protected GameObject _selectionIndicatorGO = null;
+    [SerializeField] protected GameObject _multiplayerComponentsGO = null;
 
     public GridLocation CurrentGridLocation;
 
@@ -24,28 +26,18 @@ public class PlayerCharacter : Character
     public override void Awake()
     {
         Guard.CheckIsNull(_selectionIndicatorPrefab, "_selectionIndicatorPrefab", gameObject);
+        Guard.CheckIsNull(_multiplayerComponentsGO, "_multiplayerComponentsGO", gameObject);
 
         base.Awake();
 
-        gameObject.name = PhotonView.Owner == null ? "Player 1" : PhotonView.Owner?.NickName;
 
         if (GameRules.GamePlayerType == GamePlayerType.NetworkMultiPlayer)
         {
-            if (PhotonNetwork.IsMasterClient)
-            {
-                if (PhotonView.IsMine)
-                    PlayerNumber = PlayerNumber.Player1;
-                else
-                    PlayerNumber = PlayerNumber.Player2;
-            }
-            else
-            {
-                if (PhotonView.IsMine)
-                    PlayerNumber = PlayerNumber.Player2;
-                else
-                    PlayerNumber = PlayerNumber.Player1;
-            }
+            _multiplayerComponentsGO.SetActive(true);
         }
+        
+        //SetGameObjectName(players);
+        //SetPlayerNumber(players);
 
         _pointerPresserTimer = _pointerPresserDelay;
 
@@ -76,8 +68,9 @@ public class PlayerCharacter : Character
         if (Console.Instance && Console.Instance.ConsoleState != ConsoleState.Closed)
             return;
 
-        if (GameRules.GamePlayerType == GamePlayerType.SinglePlayer
-            || PhotonView.IsMine)
+
+        if (GameRules.GamePlayerType == GamePlayerType.SinglePlayer ||
+            PhotonView.IsMine)
         {
             if (PersistentGameManager.CurrentPlatform == Platform.PC)
                 HandleKeyboardInput();
@@ -132,6 +125,16 @@ public class PlayerCharacter : Character
                 MoveCharacter();
             }
         }
+        else if (GameRules.GamePlayerType == GamePlayerType.SplitScreenMultiPlayer)
+        {
+            HandleKeyboardInput();
+
+            if (HasCalculatedTarget)
+            {
+                MoveCharacter();
+            }
+        }
+
         if (_characterPath.reachedEndOfPath && IsMoving)
         {
             Logger.Log("player reached target");
@@ -150,6 +153,8 @@ public class PlayerCharacter : Character
         _isPressingPointerForSeconds = true;
         _pointerPresserTimer = 0;
     }
+
+   
 
     private void CheckPointerInput()
     {

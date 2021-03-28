@@ -16,6 +16,8 @@ public class CameraManager : MonoBehaviour
 
     public List<CameraController> CameraControllers = new List<CameraController>();
 
+    //public Dictionary<PlayerNumber, CameraController> CameraControllerByPlayer = new Dictionary<PlayerNumber, CameraController>();
+
     public void Awake()
     {
         Instance = this;
@@ -25,8 +27,9 @@ public class CameraManager : MonoBehaviour
         Guard.CheckIsNull(_splitScreenCameraTwoPrefab, "_splitScreenCameraTwoPrefab", gameObject);
 
         CameraControllers.Clear();
+        //CameraControllerByPlayer.Clear();
 
-        if (GameRules.SplitScreen)
+        if (GameRules.GamePlayerType == GamePlayerType.SplitScreenMultiPlayer)
         {
             GameObject splitScreenCameraOneGO = Instantiate(_splitScreenCameraOnePrefab, transform);
             SplitScreenCameraOne = splitScreenCameraOneGO.GetComponent<CameraController>();
@@ -35,6 +38,9 @@ public class CameraManager : MonoBehaviour
 
             CameraControllers.Add(SplitScreenCameraOne);
             CameraControllers.Add(SplitScreenCameraTwo);
+
+            //CameraControllerByPlayer.Add(PlayerNumber.Player1, SplitScreenCameraOne);
+            //CameraControllerByPlayer.Add(PlayerNumber.Player2, SplitScreenCameraTwo);
         }
         else
         {
@@ -84,7 +90,13 @@ public class CameraManager : MonoBehaviour
             if (PersistentGameManager.CurrentSceneType == SceneType.Maze)
             {
                 if (GameRules.GamePlayerType == GamePlayerType.SinglePlayer)
+                {
                     player = GameManager.Instance.CharacterManager.GetPlayerCharacter<MazePlayerCharacter>(PlayerNumber.Player1);
+                }
+                else if(GameRules.GamePlayerType == GamePlayerType.SplitScreenMultiPlayer)
+                {
+                    Logger.Warning("TODO FOR SPLIT SCREEN");
+                }
                 else
                 {
                     player = GameManager.Instance.CharacterManager.GetPlayers<MazePlayerCharacter>().FirstOrDefault(p => p.Value.PhotonView.IsMine).Value;
@@ -93,7 +105,25 @@ public class CameraManager : MonoBehaviour
             else
             {
                 if (GameRules.GamePlayerType == GamePlayerType.SinglePlayer)
+                {
                     player = GameManager.Instance.CharacterManager.GetPlayerCharacter<OverworldPlayerCharacter>(PlayerNumber.Player1);
+                }
+                else if (GameRules.GamePlayerType == GamePlayerType.SplitScreenMultiPlayer)
+                {
+                    Logger.Warning("TODO FOR SPLIT SCREEN");
+                    if(i == 0)
+                    {
+                        player = GameManager.Instance.CharacterManager.GetPlayerCharacter<OverworldPlayerCharacter>(PlayerNumber.Player1);
+                    } 
+                    else if (i == 1)
+                    {
+                        player = GameManager.Instance.CharacterManager.GetPlayerCharacter<OverworldPlayerCharacter>(PlayerNumber.Player2);
+                    }
+                    else
+                    {
+                        Logger.Error("There seem to be too many cameras registered.");
+                    }
+                }
                 else
                 {
                     player = GameManager.Instance.CharacterManager.GetPlayers<OverworldPlayerCharacter>().FirstOrDefault(p => p.Value.PhotonView.IsMine).Value;
@@ -104,7 +134,7 @@ public class CameraManager : MonoBehaviour
             {
                 Logger.Error("Could not find player character on client");
             }
-            Logger.Warning("Player is assigned only here!");
+            //Logger.Warning("Player is assigned only here!");
 
             CameraControllers[i].FocusOnPlayer(player);
         }

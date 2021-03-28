@@ -64,7 +64,15 @@ public class OverworldCharacterManager : MonoBehaviourPunCallbacks, ICharacterMa
                 level.PlayerCharacterSpawnpoints[PlayerNumber.Player1].CharacterBlueprint,
                 spawnLocation);
             Player1GO = PlayerBundle.CharacterGO;
-            PlayerCharacter player = PlayerBundle.Character as PlayerCharacter;
+        }
+        else if (GameRules.GamePlayerType == GamePlayerType.SplitScreenMultiPlayer)
+        {
+            Logger.Warning("TODO FOR SPLIT SCREEN");
+            CharacterBundle Player1Bundle = SpawnCharacter(level.PlayerCharacterSpawnpoints[PlayerNumber.Player1].CharacterBlueprint, level.PlayerCharacterSpawnpoints[PlayerNumber.Player1].GridLocation);
+            Player1GO = Player1Bundle.CharacterGO;
+
+            CharacterBundle Player2Bundle = SpawnCharacter(level.PlayerCharacterSpawnpoints[PlayerNumber.Player2].CharacterBlueprint, level.PlayerCharacterSpawnpoints[PlayerNumber.Player2].GridLocation);
+            Player2GO = Player2Bundle.CharacterGO;
         }
         else
         {
@@ -73,7 +81,6 @@ public class OverworldCharacterManager : MonoBehaviourPunCallbacks, ICharacterMa
             GridLocation spawnLocation = GetSpawnLocation(PlayerNumber.Player2, level);
             CharacterBundle PlayerBundle = SpawnCharacter(level.PlayerCharacterSpawnpoints[PlayerNumber.Player2].CharacterBlueprint, spawnLocation);
             Player2GO = PlayerBundle.CharacterGO;
-            PlayerCharacter player = PlayerBundle.Character as PlayerCharacter;
         }
     }
 
@@ -85,7 +92,8 @@ public class OverworldCharacterManager : MonoBehaviourPunCallbacks, ICharacterMa
         Vector2 startPosition = GetCharacterGridPosition(GridLocation.GridToVector(gridLocation)); // start position is grid position plus grid tile offset
 
         GameObject characterGO = null;
-        if (GameRules.GamePlayerType == GamePlayerType.SinglePlayer)
+        if (GameRules.GamePlayerType == GamePlayerType.SinglePlayer ||
+            GameRules.GamePlayerType == GamePlayerType.SplitScreenMultiPlayer)
         {
             characterGO = GameObject.Instantiate(_playerCharacterPrefab, startPosition, Quaternion.identity);
         }

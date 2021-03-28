@@ -43,10 +43,6 @@ public abstract class Tile : MonoBehaviour
 
     public void SetWalkable(bool isWalkable)
     {
-        if(GridLocation.X == 0 && GridLocation.Y == 0)
-        {
-            Logger.Warning($"Make walkable {isWalkable}");
-        }
         Walkable = isWalkable;
     }
 

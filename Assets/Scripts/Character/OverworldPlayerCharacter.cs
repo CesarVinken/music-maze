@@ -1,4 +1,6 @@
-﻿using UnityEngine;
+﻿using Photon.Pun;
+using System.Collections.Generic;
+using UnityEngine;
 
 public class OverworldPlayerCharacter : PlayerCharacter
 {
@@ -6,6 +8,12 @@ public class OverworldPlayerCharacter : PlayerCharacter
 
     public override void Awake()
     {
+
+        Dictionary<PlayerNumber, OverworldPlayerCharacter> players = GameManager.Instance.CharacterManager.GetPlayers<OverworldPlayerCharacter>();
+
+        SetGameObjectName(players);
+        SetPlayerNumber(players);
+
         base.Awake();
 
         GameManager.Instance.CharacterManager.AddPlayer(PlayerNumber, this);
@@ -28,7 +36,9 @@ public class OverworldPlayerCharacter : PlayerCharacter
         base.Update();
 
 
-        if (OccupiedMazeLevelEntry != null && (GameRules.GamePlayerType == GamePlayerType.SinglePlayer || PhotonView.IsMine))
+        if (OccupiedMazeLevelEntry != null && (GameRules.GamePlayerType == GamePlayerType.SinglePlayer || 
+            GameRules.GamePlayerType == GamePlayerType.SplitScreenMultiPlayer ||
+            PhotonView.IsMine))
         {
             if (Input.GetKeyDown(KeyCode.Return) || Input.GetKeyDown(KeyCode.KeypadEnter) )
             {
@@ -55,6 +65,10 @@ public class OverworldPlayerCharacter : PlayerCharacter
         {
             PersistentGameManager.SetCurrentSceneName(mazeName);
             OverworldManager.Instance.LoadMaze();
+        }
+        else if (GameRules.GamePlayerType == GamePlayerType.SplitScreenMultiPlayer)
+        {
+            Logger.Warning("TODO FOR SPLIT SCREEN");
         }
         else
         {
@@ -90,5 +104,65 @@ public class OverworldPlayerCharacter : PlayerCharacter
                 return true;
         }
         return false;
+    }
+
+    private void SetGameObjectName(Dictionary<PlayerNumber, OverworldPlayerCharacter> players)
+    {
+        if (GameRules.GamePlayerType == GamePlayerType.NetworkMultiPlayer)
+        {
+            gameObject.name = PhotonView.Owner == null ? "Player 1" : PhotonView.Owner?.NickName;
+        }
+        else if (GameRules.GamePlayerType == GamePlayerType.SinglePlayer)
+        {
+            gameObject.name = CharacterBlueprint.CharacterType.ToString();
+        }
+        else
+        {
+            if (players.Count == 0)
+            {
+                gameObject.name = "Player 1";
+            }
+            else
+            {
+                gameObject.name = "Player 2";
+            }
+        }
+    }
+
+    private void SetPlayerNumber(Dictionary<PlayerNumber, OverworldPlayerCharacter> players)
+    {
+        if (GameRules.GamePlayerType == GamePlayerType.NetworkMultiPlayer)
+        {
+            if (PhotonNetwork.IsMasterClient)
+            {
+                if (PhotonView.IsMine)
+                    PlayerNumber = PlayerNumber.Player1;
+                else
+                    PlayerNumber = PlayerNumber.Player2;
+            }
+            else
+            {
+                if (PhotonView.IsMine)
+                    PlayerNumber = PlayerNumber.Player2;
+                else
+                    PlayerNumber = PlayerNumber.Player1;
+            }
+        }
+        else if (GameRules.GamePlayerType == GamePlayerType.SinglePlayer)
+        {
+            PlayerNumber = PlayerNumber.Player1;
+        }
+        else
+        {
+
+            if (players.Count == 0)
+            {
+                PlayerNumber = PlayerNumber.Player1;
+            }
+            else
+            {
+                PlayerNumber = PlayerNumber.Player2;
+            }
+        }
     }
 }

@@ -78,9 +78,17 @@ public class ScoreScreenContainer : MonoBehaviour
         _subtitleLabel.text = $"You escaped from {MazeLevelManager.Instance.Level.Name}";
 
         if (GameRules.GamePlayerType == GamePlayerType.SinglePlayer)
+        {
             ShowSingleplayerScore(_scoreCalculator.PlayerScores);
+        }
+        else if (GameRules.GamePlayerType == GamePlayerType.SplitScreenMultiPlayer)
+        {
+            Logger.Warning("TODO FOR SPLIT SCREEN");
+        }
         else
+        {
             ShowMultiplayerScore(_scoreCalculator.PlayerScores);
+        }
     }
 
     private void ShowSingleplayerScore(Dictionary<PlayerNumber, PlayerScore> playerScores)

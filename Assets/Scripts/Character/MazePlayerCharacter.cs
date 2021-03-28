@@ -27,8 +27,9 @@ public class MazePlayerCharacter : PlayerCharacter
         PlayerExitsEvent += OnPlayerExit;
         PlayerCaughtEvent += OnPlayerCaught;
 
-        if (GameRules.GamePlayerType == GamePlayerType.SinglePlayer
-    || PhotonView.IsMine)
+        if (GameRules.GamePlayerType == GamePlayerType.SinglePlayer || 
+            GameRules.GamePlayerType == GamePlayerType.SplitScreenMultiPlayer ||
+            PhotonView.IsMine)
         {
             _selectionIndicatorGO = Instantiate(_selectionIndicatorPrefab, SceneObjectManager.Instance.CharactersGO);
 
@@ -75,7 +76,8 @@ public class MazePlayerCharacter : PlayerCharacter
 
     public void OnPlayerCaught()
     {
-        if (GameRules.GamePlayerType == GamePlayerType.SinglePlayer)
+        if (GameRules.GamePlayerType == GamePlayerType.SinglePlayer ||
+            GameRules.GamePlayerType == GamePlayerType.SplitScreenMultiPlayer)
         {
             PunRPCCaughtByEnemy();
         }

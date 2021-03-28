@@ -56,10 +56,6 @@ public class OverworldTileBackgroundPlacer<T> : TileBackgroundPlacer<T> where T 
                 Tile.SetMainMaterial(new GroundMainMaterial());
                 break;
             case Type overworldTileBaseWater when overworldTileBaseWater == typeof(OverworldTileBaseWater):
-                if (Tile.GridLocation.X == 0 && Tile.GridLocation.Y == 0)
-                {
-                    Logger.Warning($"Set water here");
-                }
                 Tile.SetMainMaterial(new WaterMainMaterial());
                 Tile.SetWalkable(false);
                 break;
