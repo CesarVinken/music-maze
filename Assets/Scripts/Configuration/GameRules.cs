@@ -9,7 +9,7 @@ public static class GameRules
 {
     public static GameMode GameMode;
     public static GamePlayerType GamePlayerType;
-    public static bool SplitScreen;
+    public static bool SplitScreen = true;
 
     public static void SetGameMode(GameMode gameMode)
     {

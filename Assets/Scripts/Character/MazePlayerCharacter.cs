@@ -51,7 +51,7 @@ public class MazePlayerCharacter : PlayerCharacter
 
     public void OnCollisionEnter2D(Collision2D collision)
     {
-        if (GameRules.GamePlayerType == GamePlayerType.Multiplayer && !PhotonView.IsMine) return;
+        if (GameRules.GamePlayerType == GamePlayerType.NetworkMultiPlayer && !PhotonView.IsMine) return;
 
         EnemyCharacter enemy = collision.gameObject.GetComponent<EnemyCharacter>();
         if (enemy != null)

@@ -88,7 +88,7 @@ public class GameManager : MonoBehaviourPunCallbacks
         }
         else
         {
-            GameRules.SetGamePlayerType(GamePlayerType.Multiplayer);
+            GameRules.SetGamePlayerType(GamePlayerType.NetworkMultiPlayer);
         }
 
         PersistentGameManager.CurrentSceneType = _thisSceneType;

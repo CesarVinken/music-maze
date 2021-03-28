@@ -29,7 +29,7 @@ public class PlayerCharacter : Character
 
         gameObject.name = PhotonView.Owner == null ? "Player 1" : PhotonView.Owner?.NickName;
 
-        if (GameRules.GamePlayerType == GamePlayerType.Multiplayer)
+        if (GameRules.GamePlayerType == GamePlayerType.NetworkMultiPlayer)
         {
             if (PhotonNetwork.IsMasterClient)
             {

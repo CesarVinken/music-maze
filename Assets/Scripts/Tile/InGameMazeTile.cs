@@ -13,7 +13,7 @@ public class InGameMazeTile : MazeTile
         if (player != null)
         {
             //Logger.Log("{0} entered tile {1},{2}", player.name, GridLocation.X, GridLocation.Y);
-            if (GameRules.GamePlayerType == GamePlayerType.Multiplayer && !player.PhotonView.IsMine) return;
+            if (GameRules.GamePlayerType == GamePlayerType.NetworkMultiPlayer && !player.PhotonView.IsMine) return;
 
             player.UpdateCurrentGridLocation(GridLocation);
 

@@ -2,7 +2,6 @@
 using Photon.Pun;
 using Photon.Pun.Demo.PunBasics;
 using Photon.Realtime;
-using System;
 using System.Text.RegularExpressions;
 using UnityEngine;
 using UnityEngine.UI;
@@ -19,8 +18,6 @@ public class LaunchGameUI : MonoBehaviourPunCallbacks, IOnEventCallback
     [SerializeField] private GameTypeSetter _gameTypeDropdown = null;
     [SerializeField] private Text _gameTypeReadonlyLabel = null;
 
-    //public event Action GameModeUpdatedEvent;
-
     public void Awake()
     {
         Instance = this;
@@ -36,11 +33,6 @@ public class LaunchGameUI : MonoBehaviourPunCallbacks, IOnEventCallback
 
         _launcher.SetErrorText("");
     }
-
-    //public void Start()
-    //{
-    //    GameModeUpdatedEvent += OnPlayerExit;
-    //}
 
     public void TurnOn()
     {

@@ -31,6 +31,7 @@ namespace Photon.Pun.Demo.PunBasics
 
         [Space(5)]
         [SerializeField] private LaunchGameUI _launchGameUI = null;
+        [SerializeField] private GameObject _splitScreenButtonGO = null;
 
         string playerName = "";
         public string RoomName = "";
@@ -45,10 +46,16 @@ namespace Photon.Pun.Demo.PunBasics
 
             Guard.CheckIsNull(_roomJoinUI, "_roomJoinUI", gameObject);
             Guard.CheckIsNull(_joinRoomButtonGO, "_joinRoomButtonGO", gameObject);
-          
+            Guard.CheckIsNull(_splitScreenButtonGO, "_splitScreenButtonGO", gameObject);
+
             PhotonNetwork.AutomaticallySyncScene = true;
 
             SetErrorText("");
+
+            if (!Application.isMobilePlatform)
+            {
+                _splitScreenButtonGO.SetActive(true);
+            }
         }
 
         void Start()
@@ -178,21 +185,10 @@ namespace Photon.Pun.Demo.PunBasics
 
             if (PhotonNetwork.CurrentRoom.PlayerCount > 1)
             {
-                GameRules.SetGamePlayerType(GamePlayerType.Multiplayer);
-                // TODO: depending on game play mode, pick either overworld or a randomly selected maze level
-                if (GameRules.GameMode == GameMode.Campaign)
-                {
-                    PersistentGameManager.SetOverworldName("overworld");
-                    PersistentGameManager.SetCurrentSceneName(PersistentGameManager.OverworldName);
+                GameRules.SetGamePlayerType(GamePlayerType.NetworkMultiPlayer);
 
-                    PhotonNetwork.LoadLevel("Overworld");
-                }
-                else
-                {
-                    PersistentGameManager.SetLastMazeLevelName("default");
-                    PersistentGameManager.SetCurrentSceneName("default");
-                    PhotonNetwork.LoadLevel("Maze");
-                }
+                GameLaunchAction launcher = new GameLaunchAction();
+                launcher.Launch();
             }
             else
             {
@@ -211,19 +207,23 @@ namespace Photon.Pun.Demo.PunBasics
 
             GameRules.SetGamePlayerType(GamePlayerType.SinglePlayer);
 
-            if (GameRules.GameMode == GameMode.Campaign)
-            {
-                PersistentGameManager.SetOverworldName("overworld");
-                PersistentGameManager.SetCurrentSceneName(PersistentGameManager.OverworldName);
+            GameLaunchAction launcher = new GameLaunchAction();
+            launcher.Launch();
+        }
 
-                PhotonNetwork.LoadLevel("Overworld");
-            }
-            else
+        public void LaunchSplitScreenGame()
+        {
+            if (PhotonNetwork.CurrentRoom != null && PhotonNetwork.CurrentRoom.PlayerCount > 1)
             {
-                PersistentGameManager.SetLastMazeLevelName("default");
-                PersistentGameManager.SetCurrentSceneName("default");
-                PhotonNetwork.LoadLevel("Maze");
+                Logger.Log("Cannot play single player because there are already multiple players in this room.");
+                return;
             }
+
+            GameRules.SetGamePlayerType(GamePlayerType.SplitScreenMultiPlayer);
+
+            GameLaunchAction launcher = new GameLaunchAction();
+            launcher.Launch();
         }
     }
 }
+

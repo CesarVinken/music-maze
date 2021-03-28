@@ -1,5 +1,6 @@
 ﻿public enum GamePlayerType
 {
     SinglePlayer,
-    Multiplayer
+    NetworkMultiPlayer,
+    SplitScreenMultiPlayer
 }

@@ -39,7 +39,7 @@ public class CustomisedPhotonTransformView : MonoBehaviour, IPunObservable
         {
             transform.rotation = Quaternion.RotateTowards(transform.rotation, this.m_NetworkRotation, this.m_Angle * (1.0f / PhotonNetwork.SerializationRate));
 
-            if (GameRules.GamePlayerType == GamePlayerType.Multiplayer && TeleportEnabled == true && Vector3.Distance(transform.position, this.m_NetworkPosition) > TeleportIfDistanceGreaterThan)
+            if (GameRules.GamePlayerType == GamePlayerType.NetworkMultiPlayer && TeleportEnabled == true && Vector3.Distance(transform.position, this.m_NetworkPosition) > TeleportIfDistanceGreaterThan)
             {
                 Logger.Log("The distance is too large. Teleport the player to {0},{1}.", this.m_NetworkPosition.x, this.m_NetworkPosition.y);
                 transform.position = this.m_NetworkPosition;
