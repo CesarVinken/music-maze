@@ -14,9 +14,10 @@ public class CameraManager : MonoBehaviour
     public CameraController SplitScreenCameraOne;
     public CameraController SplitScreenCameraTwo;
 
-    public List<CameraController> CameraControllers = new List<CameraController>();
+    public float ScreenWidth = Screen.width;
+    public float ScreenHeight = Screen.height;
 
-    //public Dictionary<PlayerNumber, CameraController> CameraControllerByPlayer = new Dictionary<PlayerNumber, CameraController>();
+    public List<CameraController> CameraControllers = new List<CameraController>();
 
     public void Awake()
     {
@@ -27,7 +28,6 @@ public class CameraManager : MonoBehaviour
         Guard.CheckIsNull(_splitScreenCameraTwoPrefab, "_splitScreenCameraTwoPrefab", gameObject);
 
         CameraControllers.Clear();
-        //CameraControllerByPlayer.Clear();
 
         if (GameRules.GamePlayerType == GamePlayerType.SplitScreenMultiPlayer)
         {
@@ -39,8 +39,8 @@ public class CameraManager : MonoBehaviour
             CameraControllers.Add(SplitScreenCameraOne);
             CameraControllers.Add(SplitScreenCameraTwo);
 
-            //CameraControllerByPlayer.Add(PlayerNumber.Player1, SplitScreenCameraOne);
-            //CameraControllerByPlayer.Add(PlayerNumber.Player2, SplitScreenCameraTwo);
+            ScreenWidth = Screen.width / 2;
+            ScreenHeight = Screen.height / 2;
         }
         else
         {
@@ -96,6 +96,18 @@ public class CameraManager : MonoBehaviour
                 else if(GameRules.GamePlayerType == GamePlayerType.SplitScreenMultiPlayer)
                 {
                     Logger.Warning("TODO FOR SPLIT SCREEN");
+                    if (i == 0)
+                    {
+                        player = GameManager.Instance.CharacterManager.GetPlayerCharacter<MazePlayerCharacter>(PlayerNumber.Player1);
+                    }
+                    else if (i == 1)
+                    {
+                        player = GameManager.Instance.CharacterManager.GetPlayerCharacter<MazePlayerCharacter>(PlayerNumber.Player2);
+                    }
+                    else
+                    {
+                        Logger.Error("There seem to be too many cameras registered.");
+                    }
                 }
                 else
                 {
@@ -110,7 +122,6 @@ public class CameraManager : MonoBehaviour
                 }
                 else if (GameRules.GamePlayerType == GamePlayerType.SplitScreenMultiPlayer)
                 {
-                    Logger.Warning("TODO FOR SPLIT SCREEN");
                     if(i == 0)
                     {
                         player = GameManager.Instance.CharacterManager.GetPlayerCharacter<OverworldPlayerCharacter>(PlayerNumber.Player1);

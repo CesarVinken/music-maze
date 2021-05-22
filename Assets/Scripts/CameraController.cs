@@ -70,11 +70,22 @@ public class CameraController : MonoBehaviour
     public void SetPanLimits(GridLocation levelBounds)
     {
         PanLimits.Clear();
+
         //TODO. the - .. value is currently hardcoded but would not work with different screen sizes or zoom levels
-        PanLimits.Add(Direction.Up, levelBounds.Y - 3f);  // should depend on the furthest upper edge of the maze level.Never less than 4.
-        PanLimits.Add(Direction.Right, levelBounds.X - 7f);// should depend on the furthest right edge of the maze level  Never less than 8.
-        PanLimits.Add(Direction.Down, 4f); // should (with this zoom level) always have 4 as lowest boundary down. Should always be => 4
-        PanLimits.Add(Direction.Left, 8f); // should (with this zoom level) always have 8 as the left most boundary. Should always be => 8
+        if (GameRules.GamePlayerType == GamePlayerType.SplitScreenMultiPlayer)
+        {
+            PanLimits.Add(Direction.Up, levelBounds.Y);  // should depend on the furthest upper edge of the maze level.Never less than 4.
+            PanLimits.Add(Direction.Right, levelBounds.X - 3f);// should depend on the furthest right edge of the maze level  Never less than 8.
+            PanLimits.Add(Direction.Down, 1f); // should (with this zoom level) always have 4 as lowest boundary down. Should always be => 4
+            PanLimits.Add(Direction.Left, 3f); // should (with this zoom level) always have 8 as the left most boundary. Should always be => 8
+        }
+        else
+        {
+            PanLimits.Add(Direction.Up, levelBounds.Y - 3f);  // should depend on the furthest upper edge of the maze level.Never less than 4.
+            PanLimits.Add(Direction.Right, levelBounds.X - 6f);// should depend on the furthest right edge of the maze level  Never less than 8.
+            PanLimits.Add(Direction.Down, 4f); // should (with this zoom level) always have 4 as lowest boundary down. Should always be => 4
+            PanLimits.Add(Direction.Left, 11f); // should (with this zoom level) always have 8 as the left most boundary. Should always be => 8
+        }
 
         // Set minima for small levels
         if (PanLimits[Direction.Up] < PanLimits[Direction.Down]) PanLimits[Direction.Up] = PanLimits[Direction.Down];
@@ -107,11 +118,12 @@ public class CameraController : MonoBehaviour
     // If the camera/player reach the edge of the level, the camera movement is clamped so it will not move further in that direction
     private void CalculateCameraPosition()
     {
+        //Logger.Log("CalculateCameraPosition");
         Vector2 cameraPosition = new Vector2(transform.position.x, transform.position.y);
 
         Vector3 playerWorldToScreenPos = _camera.WorldToScreenPoint(_player.position);
-        float playerWidthPercentagePosOnScreen = (playerWorldToScreenPos.x / Screen.width) * 100f;
-        float playerHeightPercentagePosOnScreen = (playerWorldToScreenPos.y / Screen.height) * 100f;
+        float playerWidthPercentagePosOnScreen = (playerWorldToScreenPos.x / CameraManager.Instance.ScreenWidth) * 100f;
+        float playerHeightPercentagePosOnScreen = (playerWorldToScreenPos.y / CameraManager.Instance.ScreenHeight) * 100f;
 
         if (playerWidthPercentagePosOnScreen >= _maxXPercentageBoundary)
         {
