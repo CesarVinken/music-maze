@@ -251,6 +251,8 @@ public class MazeCharacterManager : MonoBehaviourPunCallbacks, ICharacterManager
 
     public void AddPlayer(PlayerNumber playerNumber, PlayerCharacter playerCharacter)
     {
+        Logger.Log($"THERE ARE NOW ALREADY {_players.Count} playerS");
+        Logger.Log($"New player will haev PlayerNumber {playerNumber}");
         _players.Add(playerNumber, playerCharacter as MazePlayerCharacter);
     }
 

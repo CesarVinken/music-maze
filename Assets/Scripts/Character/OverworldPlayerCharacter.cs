@@ -8,7 +8,6 @@ public class OverworldPlayerCharacter : PlayerCharacter
 
     public override void Awake()
     {
-
         Dictionary<PlayerNumber, OverworldPlayerCharacter> players = GameManager.Instance.CharacterManager.GetPlayers<OverworldPlayerCharacter>();
 
         SetGameObjectName(players);
@@ -68,7 +67,30 @@ public class OverworldPlayerCharacter : PlayerCharacter
         }
         else if (GameRules.GamePlayerType == GamePlayerType.SplitScreenMultiPlayer)
         {
-            Logger.Warning("TODO FOR SPLIT SCREEN");
+            PersistentGameManager.SetCurrentSceneName(mazeName);
+            OverworldManager.Instance.LoadMaze();
+
+            //string invitorName = "";
+            //string otherPlayerName = "";
+            //if (PlayerNumber == PlayerNumber.Player1)
+            //{
+            //    invitorName = GameManager.Instance.CharacterManager.GetPlayerCharacter<PlayerCharacter>(PlayerNumber.Player1).name;
+            //    otherPlayerName = GameManager.Instance.CharacterManager.GetPlayerCharacter<PlayerCharacter>(PlayerNumber.Player2).name;
+            //}
+            //else if (PlayerNumber == PlayerNumber.Player2)
+            //{
+            //    invitorName = GameManager.Instance.CharacterManager.GetPlayerCharacter<PlayerCharacter>(PlayerNumber.Player2).name;
+            //    otherPlayerName = GameManager.Instance.CharacterManager.GetPlayerCharacter<PlayerCharacter>(PlayerNumber.Player1).name;
+            //}
+            //else
+            //{
+            //    Logger.Warning($"Unknown player number {PlayerNumber}");
+            //}
+
+            //OverworldMainScreenOverlayCanvas.Instance.ShowPlayerMessagePanel($"We are waiting for {otherPlayerName} to accept our invitation...", PlayerNumber);
+            //OverworldMainScreenOverlayCanvas.Instance.ShowMazeInvitation(invitorName, mazeName);
+
+            //MazeLevelInvitation.PendingInvitation = true;
         }
         else
         {
@@ -154,7 +176,6 @@ public class OverworldPlayerCharacter : PlayerCharacter
         }
         else
         {
-
             if (players.Count == 0)
             {
                 PlayerNumber = PlayerNumber.Player1;

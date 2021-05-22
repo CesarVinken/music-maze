@@ -154,8 +154,6 @@ public class PlayerCharacter : Character
         _pointerPresserTimer = 0;
     }
 
-   
-
     private void CheckPointerInput()
     {
         if (HasCalculatedTarget) return;

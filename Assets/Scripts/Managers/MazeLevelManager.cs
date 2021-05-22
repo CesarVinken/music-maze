@@ -188,7 +188,8 @@ public class MazeLevelManager : MonoBehaviour, IOnEventCallback
     // This way we can be sure all tiles are getting marked.
     public void SetTileMarker(InGameMazeTile tile, PlayerCharacter player)
     {
-        if (GameRules.GamePlayerType == GamePlayerType.SinglePlayer)
+        if (GameRules.GamePlayerType == GamePlayerType.SinglePlayer ||
+            GameRules.GamePlayerType == GamePlayerType.SplitScreenMultiPlayer)
         {
             player.LastTile = tile;
 

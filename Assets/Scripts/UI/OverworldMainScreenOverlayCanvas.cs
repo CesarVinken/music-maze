@@ -47,11 +47,11 @@ public class OverworldMainScreenOverlayCanvas : MonoBehaviour
         }
     }
 
-    public void ShowPlayerMessagePanel(string message)
+    public void ShowPlayerMessagePanel(string message, PlayerNumber playerNumber = PlayerNumber.Player1)
     {
         GameObject playerMessagePanelGO = Instantiate(_playerMessagePrefab, transform);
         PlayerMessagePanel playerMessagePanel = playerMessagePanelGO.GetComponent<PlayerMessagePanel>();
-        playerMessagePanel.ShowMessage(message);
+        playerMessagePanel.ShowMessage(message, playerNumber);
     }
 
     public void ClosePlayerMessagePanel()

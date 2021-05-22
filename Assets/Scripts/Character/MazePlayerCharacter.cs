@@ -1,6 +1,7 @@
 ﻿using Photon.Pun;
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class MazePlayerCharacter : PlayerCharacter
@@ -13,6 +14,11 @@ public class MazePlayerCharacter : PlayerCharacter
 
     public override void Awake()
     {
+        Dictionary<PlayerNumber, MazePlayerCharacter> players = GameManager.Instance.CharacterManager.GetPlayers<MazePlayerCharacter>();
+
+        SetGameObjectName(players);
+        SetPlayerNumber(players);
+
         base.Awake();
 
         HasReachedExit = false;
@@ -108,5 +114,64 @@ public class MazePlayerCharacter : PlayerCharacter
                 return true;
         }
         return false;
+    }
+
+    private void SetGameObjectName(Dictionary<PlayerNumber, MazePlayerCharacter> players)
+    {
+        if (GameRules.GamePlayerType == GamePlayerType.NetworkMultiPlayer)
+        {
+            gameObject.name = PhotonView.Owner == null ? "Player 1" : PhotonView.Owner?.NickName;
+        }
+        else if (GameRules.GamePlayerType == GamePlayerType.SinglePlayer)
+        {
+            gameObject.name = CharacterBlueprint.CharacterType.ToString();
+        }
+        else
+        {
+            if (players.Count == 0)
+            {
+                gameObject.name = "Player 1";
+            }
+            else
+            {
+                gameObject.name = "Player 2";
+            }
+        }
+    }
+
+    private void SetPlayerNumber(Dictionary<PlayerNumber, MazePlayerCharacter> players)
+    {
+        if (GameRules.GamePlayerType == GamePlayerType.NetworkMultiPlayer)
+        {
+            if (PhotonNetwork.IsMasterClient)
+            {
+                if (PhotonView.IsMine)
+                    PlayerNumber = PlayerNumber.Player1;
+                else
+                    PlayerNumber = PlayerNumber.Player2;
+            }
+            else
+            {
+                if (PhotonView.IsMine)
+                    PlayerNumber = PlayerNumber.Player2;
+                else
+                    PlayerNumber = PlayerNumber.Player1;
+            }
+        }
+        else if (GameRules.GamePlayerType == GamePlayerType.SinglePlayer)
+        {
+            PlayerNumber = PlayerNumber.Player1;
+        }
+        else
+        {
+            if (players.Count == 0)
+            {
+                PlayerNumber = PlayerNumber.Player1;
+            }
+            else
+            {
+                PlayerNumber = PlayerNumber.Player2;
+            }
+        }
     }
 }
