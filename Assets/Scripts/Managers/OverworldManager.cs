@@ -89,7 +89,7 @@ public class OverworldManager : MonoBehaviour, IOnEventCallback
         InitialiseEditorTileBackgrounds();
         InitialiseEditorTileAttributes();
 
-        MainScreenOverlayCanvas.Instance.BlackOutSquare.ResetToDefault();
+        MainScreenOverlayCanvas.Instance.ResetBlackOutSquares();
 
         CameraManager.Instance.ResetCameras();
         CameraManager.Instance.SetPanLimits(EditorOverworld.LevelBounds);
@@ -98,7 +98,7 @@ public class OverworldManager : MonoBehaviour, IOnEventCallback
     public IEnumerator ScanCoroutine()
     {
         yield return new WaitForSeconds(.2f); // This waiting time should be dealt with more efficiently. Currently it is there to make sure that the characters are spawned in 
-        MainScreenOverlayCanvas.Instance.BlackOutSquare.ResetToDefault();
+        MainScreenOverlayCanvas.Instance.ResetBlackOutSquares();
         GameManager.Instance.CharacterManager.SpawnCharacters();
         CameraManager.Instance.SetPanLimits(Overworld.LevelBounds);
         CameraManager.Instance.FocusCamerasOnPlayer();
@@ -182,7 +182,6 @@ public class OverworldManager : MonoBehaviour, IOnEventCallback
             loadNextLevelEvent.SendLoadNextMazeLevelEvent("default");
         }
     }
-
 
     public void OnEvent(EventData photonEvent)
     {

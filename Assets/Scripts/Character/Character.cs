@@ -2,6 +2,7 @@
 using Photon.Pun;
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class Character : MonoBehaviour
@@ -127,9 +128,21 @@ public class Character : MonoBehaviour
         _characterPathTransform.position = transform.position;
     }
 
-    public IEnumerator RespawnCharacter(Character character, float freezeTime)
+    public IEnumerator RespawnPlayerCharacter(PlayerCharacter character, float freezeTime)
     {
-        BlackOutSquare blackOutSquare = MainScreenOverlayCanvas.Instance.BlackOutSquare;
+        int blackScreenNo = 0;
+        if(GameRules.GamePlayerType == GamePlayerType.SplitScreenMultiPlayer &&
+        character.PlayerNumber == PlayerNumber.Player2)
+        {
+            blackScreenNo = 1;
+        }
+        BlackOutSquare blackOutSquare = MainScreenOverlayCanvas.Instance.BlackOutSquares[blackScreenNo];
+
+        if(blackOutSquare == null)
+        {
+            Logger.Error($"Could not find blackout square for player {blackScreenNo + 1}");
+        }
+
         character.FreezeCharacter();
         CharacterBody.SetActive(false); // TODO make character animation for appearing and disappearing of character, rather than turning the GO off and on
 

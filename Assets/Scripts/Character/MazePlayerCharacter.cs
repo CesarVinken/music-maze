@@ -94,7 +94,7 @@ public class MazePlayerCharacter : PlayerCharacter
 
         float freezeTime = 2.0f;
 
-        IEnumerator coroutine = this.RespawnCharacter(this, freezeTime);
+        IEnumerator coroutine = this.RespawnPlayerCharacter(this, freezeTime);
         StartCoroutine(coroutine);
 
         _isPressingPointerForSeconds = false;

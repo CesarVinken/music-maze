@@ -95,7 +95,6 @@ public class CameraManager : MonoBehaviour
                 }
                 else if(GameRules.GamePlayerType == GamePlayerType.SplitScreenMultiPlayer)
                 {
-                    Logger.Warning("TODO FOR SPLIT SCREEN");
                     if (i == 0)
                     {
                         player = GameManager.Instance.CharacterManager.GetPlayerCharacter<MazePlayerCharacter>(PlayerNumber.Player1);

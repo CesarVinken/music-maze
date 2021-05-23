@@ -70,7 +70,8 @@ public class MazeCharacterManager : MonoBehaviourPunCallbacks, ICharacterManager
         }
         else if (GameRules.GamePlayerType == GamePlayerType.SplitScreenMultiPlayer)
         {
-            Logger.Warning("TODO FOR SPLIT SCREEN");
+            Debug.Log("Instantiating Players");
+
             CharacterBundle Player1Bundle = SpawnCharacter(level.PlayerCharacterSpawnpoints[PlayerNumber.Player1].CharacterBlueprint, level.PlayerCharacterSpawnpoints[PlayerNumber.Player1].GridLocation);
             Player1GO = Player1Bundle.CharacterGO;
 
@@ -251,8 +252,6 @@ public class MazeCharacterManager : MonoBehaviourPunCallbacks, ICharacterManager
 
     public void AddPlayer(PlayerNumber playerNumber, PlayerCharacter playerCharacter)
     {
-        Logger.Log($"THERE ARE NOW ALREADY {_players.Count} playerS");
-        Logger.Log($"New player will haev PlayerNumber {playerNumber}");
         _players.Add(playerNumber, playerCharacter as MazePlayerCharacter);
     }
 
