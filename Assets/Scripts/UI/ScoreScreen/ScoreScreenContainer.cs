@@ -29,6 +29,7 @@ public class ScoreScreenContainer : MonoBehaviour
     [SerializeField] private GameObject _toOverworldButton;
 
     private ScoreCalculator _scoreCalculator;
+    private bool _screenIsOpen = false;
 
     public void Awake()
     {
@@ -59,6 +60,24 @@ public class ScoreScreenContainer : MonoBehaviour
         GameManager.Instance.CompleteMazeLevelEvent += OnMazeLevelCompleted;
     }
 
+    public void Update()
+    {
+        if (PersistentGameManager.CurrentPlatform == Platform.PC && _screenIsOpen)
+        {
+            if (Input.GetKeyDown(KeyCode.Return))
+            {
+                if (_toNextLevelButton.activeSelf)
+                {
+                    ToNextLevel();
+                }
+                else if (_toOverworldButton.activeSelf)
+                {
+                    ToOverworld();
+                }
+            }
+        }
+    }
+
     public void OnMazeLevelCompleted()
     {
         // wait a moment so that the player can see exit animation before bringing up the scores.
@@ -77,75 +96,40 @@ public class ScoreScreenContainer : MonoBehaviour
 
         _subtitleLabel.text = $"You escaped from {MazeLevelManager.Instance.Level.Name}";
 
-        if (GameRules.GamePlayerType == GamePlayerType.SinglePlayer)
-        {
-            ShowSingleplayerScore(_scoreCalculator.PlayerScores);
-        }
-        else if (GameRules.GamePlayerType == GamePlayerType.SplitScreenMultiPlayer)
-        {
-            Logger.Warning("TODO FOR SPLIT SCREEN");
-        }
-        else
-        {
-            ShowMultiplayerScore(_scoreCalculator.PlayerScores);
-        }
+        ShowScore(_scoreCalculator.PlayerScores);
     }
 
-    private void ShowSingleplayerScore(Dictionary<PlayerNumber, PlayerScore> playerScores)
+    private void ShowScore(Dictionary<PlayerNumber, PlayerScore> playerScores)
     {
-        _player1Label.text = "Player 1";
-
-        _player1MarkedTilesScoreLabel.text = playerScores[PlayerNumber.Player1].TileMarkScore.ToString();
-        _player1TimesCaughtScoreLabel.text = playerScores[PlayerNumber.Player1].PlayerCaughtScore.ToString();
-        _player1TotalScoreLabel.text = playerScores[PlayerNumber.Player1].TotalScore.ToString();
-
-        _player1Label.gameObject.SetActive(true);
-        _player2Label.gameObject.SetActive(false);
-
-        _player1MarkedTilesScoreLabel.gameObject.SetActive(true);
-        _player2MarkedTilesScoreLabel.gameObject.SetActive(false);
-        _player1TimesCaughtScoreLabel.gameObject.SetActive(true);
-        _player2TimesCaughtScoreLabel.gameObject.SetActive(false);
-        _player1TotalScoreLabel.gameObject.SetActive(true);
-        _player2TotalScoreLabel.gameObject.SetActive(false);
-
-        if(GameRules.GameMode == GameMode.Campaign)
+        foreach(KeyValuePair<PlayerNumber, PlayerScore> scoreSet in playerScores)
         {
-            _toNextLevelButton.SetActive(false);
-            _toOverworldButton.SetActive(true);
+            if(scoreSet.Key == PlayerNumber.Player1)
+            {
+                _player1Label.text = GameManager.Instance.CharacterManager.GetPlayerCharacter<PlayerCharacter>(PlayerNumber.Player1).name;
+                _player1MarkedTilesScoreLabel.text = playerScores[PlayerNumber.Player1].TileMarkScore.ToString();
+                _player1TimesCaughtScoreLabel.text = playerScores[PlayerNumber.Player1].PlayerCaughtScore.ToString();
+                _player1TotalScoreLabel.text = playerScores[PlayerNumber.Player1].TotalScore.ToString();
+                _player1Label.gameObject.SetActive(true);
+                _player1MarkedTilesScoreLabel.gameObject.SetActive(true);
+                _player1TimesCaughtScoreLabel.gameObject.SetActive(true);
+                _player1TotalScoreLabel.gameObject.SetActive(true);
+            }
+            else
+            {
+                _player2Label.text = GameManager.Instance.CharacterManager.GetPlayerCharacter<PlayerCharacter>(PlayerNumber.Player2).name;
+                _player2MarkedTilesScoreLabel.text = playerScores[PlayerNumber.Player2].TileMarkScore.ToString();
+                _player2TimesCaughtScoreLabel.text = playerScores[PlayerNumber.Player2].PlayerCaughtScore.ToString();
+                _player2TotalScoreLabel.text = playerScores[PlayerNumber.Player2].TotalScore.ToString();
+                _player2Label.gameObject.SetActive(true);
+                _player2MarkedTilesScoreLabel.gameObject.SetActive(true);
+                _player2TimesCaughtScoreLabel.gameObject.SetActive(true);
+                _player2TotalScoreLabel.gameObject.SetActive(true);
+            }
         }
-        else if(GameRules.GameMode == GameMode.RandomMaze)
-        {
-            _toNextLevelButton.SetActive(true);
-            _toOverworldButton.SetActive(false);
-        }
 
-        OpenScoreScreenPanel();
-    }
-
-    private void ShowMultiplayerScore(Dictionary<PlayerNumber, PlayerScore> playerScores)
-    {
-        _player1Label.text = GameManager.Instance.CharacterManager.GetPlayerCharacter<PlayerCharacter>(PlayerNumber.Player1).PhotonView.Owner?.NickName;
-        _player2Label.text = GameManager.Instance.CharacterManager.GetPlayerCharacter<PlayerCharacter>(PlayerNumber.Player2).PhotonView.Owner?.NickName;
-
-        _player1MarkedTilesScoreLabel.text = playerScores[PlayerNumber.Player1].TileMarkScore.ToString();
-        _player2MarkedTilesScoreLabel.text = playerScores[PlayerNumber.Player2].TileMarkScore.ToString();
-        _player1TimesCaughtScoreLabel.text = playerScores[PlayerNumber.Player1].PlayerCaughtScore.ToString();
-        _player2TimesCaughtScoreLabel.text = playerScores[PlayerNumber.Player2].PlayerCaughtScore.ToString();
-        _player1TotalScoreLabel.text = playerScores[PlayerNumber.Player1].TotalScore.ToString();
-        _player2TotalScoreLabel.text = playerScores[PlayerNumber.Player2].TotalScore.ToString();
-
-        _player1Label.gameObject.SetActive(true);
-        _player2Label.gameObject.SetActive(true);
-
-        _player1MarkedTilesScoreLabel.gameObject.SetActive(true);
-        _player2MarkedTilesScoreLabel.gameObject.SetActive(true);
-        _player1TimesCaughtScoreLabel.gameObject.SetActive(true);
-        _player2TimesCaughtScoreLabel.gameObject.SetActive(true);
-        _player1TotalScoreLabel.gameObject.SetActive(true);
-        _player2TotalScoreLabel.gameObject.SetActive(true);
-
-        if (PhotonNetwork.IsMasterClient)
+        if (GameRules.GamePlayerType == GamePlayerType.SinglePlayer ||
+            GameRules.GamePlayerType == GamePlayerType.SplitScreenMultiPlayer ||
+            (GameRules.GamePlayerType == GamePlayerType.NetworkMultiPlayer && PhotonNetwork.IsMasterClient))
         {
             if (GameRules.GameMode == GameMode.Campaign)
             {
@@ -173,14 +157,18 @@ public class ScoreScreenContainer : MonoBehaviour
 
     public void ToOverworld()
     {
+        _screenIsOpen = false;
+
         string overworldName = "default";
         MazeLevelManager.Instance.LoadOverworld(overworldName);
     }
 
     public void ToNextLevel()
     {
+        _screenIsOpen = false;
+
         // pick a random level from the list of playable levels
-        if(GameManager.Instance.PlayableLevelNames.Count == 0) // there are no levels left to choose from, reload all random levels.
+        if (GameManager.Instance.PlayableLevelNames.Count == 0) // there are no levels left to choose from, reload all random levels.
         {
             Logger.Warning("We played all playable levels. Starting the random selection from the beginning");
             GameManager.Instance.PlayableLevelNames = MazeLevelLoader.GetAllPlayableLevelNames();
@@ -195,11 +183,13 @@ public class ScoreScreenContainer : MonoBehaviour
 
     public void OpenScoreScreenPanel()
     {
+        _screenIsOpen = true;
         ScoreScreenPanel.SetActive(true);
     }
 
     public void CloseScoreScreenPanel()
     {
+        _screenIsOpen = false;
         ScoreScreenPanel.SetActive(false);
     }
 }
