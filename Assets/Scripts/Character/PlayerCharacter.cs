@@ -2,7 +2,6 @@
 using Photon.Pun;
 using System.Collections;
 using CharacterType;
-using System.Collections.Generic;
 
 public class PlayerCharacter : Character
 {
@@ -36,22 +35,7 @@ public class PlayerCharacter : Character
             _multiplayerComponentsGO.SetActive(true);
         }
         
-        //SetGameObjectName(players);
-        //SetPlayerNumber(players);
-
-        _pointerPresserTimer = _pointerPresserDelay;
-
-        switch (PlayerNumber)
-        {
-            case PlayerNumber.Player1:
-                SetCharacterType(new Emmon());
-                break;
-            case PlayerNumber.Player2:
-                SetCharacterType(new Fae());
-                break;
-            default:
-                break;
-        }        
+        _pointerPresserTimer = _pointerPresserDelay;        
     }
 
     public virtual void Start()
@@ -139,6 +123,21 @@ public class PlayerCharacter : Character
         {
             Logger.Log("player reached target");
             OnTargetReached();
+        }
+    }
+
+    public void AssignCharacterType()
+    {
+        switch (PlayerNumber)
+        {
+            case PlayerNumber.Player1:
+                SetCharacterType(new Emmon());
+                break;
+            case PlayerNumber.Player2:
+                SetCharacterType(new Fae());
+                break;
+            default:
+                break;
         }
     }
 

@@ -101,20 +101,24 @@ public class OverworldCharacterManager : MonoBehaviourPunCallbacks, ICharacterMa
 
         PlayerCharacter playerCharacter = characterGO.GetComponent<PlayerCharacter>();
         playerCharacter.CharacterBlueprint = character;
+
         SetGameObjectName(playerCharacter);
+        SetPlayerNumber(playerCharacter);
+        AddPlayer(playerCharacter.PlayerNumber, playerCharacter);
+
+        playerCharacter.AssignCharacterType();
 
         playerCharacter.FreezeCharacter();
         playerCharacter.SetStartingPosition(playerCharacter, gridLocation);
 
         if (PersistentGameManager.CurrentPlatform == Platform.PC)
         {
-            if (_players.Count == 0)
+            if (_players.Count == 1)
             {
                 playerCharacter.KeyboardInput = KeyboardInput.Player1;
                 playerCharacter.PlayerNoInGame = 1;
-
             }
-            else if (_players.Count == 1)
+            else if (_players.Count == 2)
             {
                 playerCharacter.KeyboardInput = KeyboardInput.Player2;
                 playerCharacter.PlayerNoInGame = 2;
@@ -124,6 +128,7 @@ public class OverworldCharacterManager : MonoBehaviourPunCallbacks, ICharacterMa
                 Logger.Warning("There are {0} players in the level. There can be max 2 players in a level", _players.Count);
             }
         }
+
         CharacterBundle characterBundle = new CharacterBundle(playerCharacter, characterGO);
         return characterBundle;
     }
@@ -236,6 +241,42 @@ public class OverworldCharacterManager : MonoBehaviourPunCallbacks, ICharacterMa
             else
             {
                 character.gameObject.name = "Player 2";
+            }
+        }
+    }
+
+    private void SetPlayerNumber(PlayerCharacter character)
+    {
+        if (GameRules.GamePlayerType == GamePlayerType.NetworkMultiPlayer)
+        {
+            if (PhotonNetwork.IsMasterClient)
+            {
+                if (character.PhotonView.IsMine)
+                    character.PlayerNumber = PlayerNumber.Player1;
+                else
+                    character.PlayerNumber = PlayerNumber.Player2;
+            }
+            else
+            {
+                if (character.PhotonView.IsMine)
+                    character.PlayerNumber = PlayerNumber.Player2;
+                else
+                    character.PlayerNumber = PlayerNumber.Player1;
+            }
+        }
+        else if (GameRules.GamePlayerType == GamePlayerType.SinglePlayer)
+        {
+            character.PlayerNumber = PlayerNumber.Player1;
+        }
+        else
+        {
+            if (_players.Count == 0)
+            {
+                character.PlayerNumber = PlayerNumber.Player1;
+            }
+            else
+            {
+                character.PlayerNumber = PlayerNumber.Player2;
             }
         }
     }
