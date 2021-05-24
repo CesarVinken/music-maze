@@ -2,13 +2,6 @@
 using UnityEngine;
 using UnityEngine.UI;
 
-public enum MessagePosition
-{
-    Middle,
-    PlayerLeft,
-    PlayerRight
-}
-
 public class PlayerMessagePanel : MonoBehaviour
 {
     public static PlayerMessagePanel Instance;

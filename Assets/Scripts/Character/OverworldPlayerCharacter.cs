@@ -5,6 +5,7 @@ using UnityEngine;
 public class OverworldPlayerCharacter : PlayerCharacter
 {
     public MazeLevelEntry OccupiedMazeLevelEntry = null;
+    public List<MapInteractionButton> MapInteractionButtonsForPlayer = new List<MapInteractionButton>();
 
     public override void Awake()
     {
@@ -43,9 +44,9 @@ public class OverworldPlayerCharacter : PlayerCharacter
             }
             if (OccupiedMazeLevelEntry.Tile.GridLocation.X == CurrentGridLocation.X && OccupiedMazeLevelEntry.Tile.GridLocation.Y == CurrentGridLocation.Y)
             {
-                if (!MainScreenCameraCanvas.Instance.MapInteractionButton.IsActive())
+                if(MapInteractionButtonsForPlayer.Count == 0)
                 {
-                    MainScreenCameraCanvas.Instance.ShowMapInteractionButton(this, new Vector2(OccupiedMazeLevelEntry.Tile.GridLocation.X, OccupiedMazeLevelEntry.Tile.GridLocation.Y), "Enter " + OccupiedMazeLevelEntry.MazeLevelName);
+                    MainScreenCameraCanvas.Instance.CreateMapInteractionButton(this, new Vector2(OccupiedMazeLevelEntry.Tile.GridLocation.X, OccupiedMazeLevelEntry.Tile.GridLocation.Y), "Enter " + OccupiedMazeLevelEntry.MazeLevelName);
                 }
             }
         }

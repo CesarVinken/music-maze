@@ -93,8 +93,6 @@ public class GameManager : MonoBehaviourPunCallbacks
         {
             GameRules.SetGamePlayerType(GamePlayerType.NetworkMultiPlayer);
         }
-        //TODO REMOVE LATER
-        GameRules.SetGamePlayerType(GamePlayerType.SplitScreenMultiPlayer);
 
         PersistentGameManager.CurrentSceneType = _thisSceneType;
         Logger.Warning($"We set the game type to {GameRules.GamePlayerType} in a {PersistentGameManager.CurrentSceneType} scene. The scene loading origin is {PersistentGameManager.SceneLoadOrigin}");

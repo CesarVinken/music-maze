@@ -6,7 +6,9 @@ public class MapInteractionButton : MonoBehaviour, IMapInteractionButton
 {
     [SerializeField] private Text _mapTextLabel;
     private Vector2 _buttonWorldBasePosition;
-    [SerializeField] private OverworldPlayerCharacter _triggerPlayer;
+    [SerializeField] public OverworldPlayerCharacter TriggerPlayer;
+    private Camera _cameraToUse = null;
+
 
     private void Awake()
     {
@@ -17,7 +19,8 @@ public class MapInteractionButton : MonoBehaviour, IMapInteractionButton
     {
         if (gameObject.activeSelf)
         {
-            transform.position = new Vector2(_buttonWorldBasePosition.x + 1, _buttonWorldBasePosition.y);
+            Vector2 positionAdjustedForScreenPoint = _cameraToUse.WorldToScreenPoint(new Vector2(_buttonWorldBasePosition.x + 0.5f, _buttonWorldBasePosition.y + 1));
+            transform.position = new Vector2(positionAdjustedForScreenPoint.x, positionAdjustedForScreenPoint.y);
         }
     }
 
@@ -29,21 +32,34 @@ public class MapInteractionButton : MonoBehaviour, IMapInteractionButton
     public void ShowMapInteractionButton(OverworldPlayerCharacter player, Vector2 pos, string mapText)
     {
         _buttonWorldBasePosition = pos;
+        TriggerPlayer = player;
+
+        if (GameRules.GamePlayerType == GamePlayerType.SplitScreenMultiPlayer &&
+            player.PlayerNumber == PlayerNumber.Player2)
+        {
+            _cameraToUse = CameraManager.Instance.CameraControllers[1].GetCamera();
+        }
+        else
+        {
+            _cameraToUse = CameraManager.Instance.CameraControllers[0].GetCamera();
+        }
+
+        Vector2 positionAdjustedForScreenPoint = _cameraToUse.WorldToScreenPoint(new Vector2(_buttonWorldBasePosition.x + 0.5f, _buttonWorldBasePosition.y + 1));
+
         SetMapInteractionButtonLabel(mapText);
-        transform.position = new Vector2(_buttonWorldBasePosition.x + 1, _buttonWorldBasePosition.y);
+        transform.position = new Vector2(positionAdjustedForScreenPoint.x, positionAdjustedForScreenPoint.y);
         gameObject.SetActive(true);
     }
 
-    public void HideMapInteractionButton()
+    public void DestroyMapInteractionButton()
     {
-        SetMapInteractionButtonLabel("");
-        gameObject.SetActive(false);
+        Destroy(gameObject);
     }
 
     public void ExecuteMapInteraction()
     {
-        string mazeName = _triggerPlayer.OccupiedMazeLevelEntry.MazeLevelName;
-        _triggerPlayer.PerformMazeLevelEntryAction(mazeName);
+        string mazeName = TriggerPlayer.OccupiedMazeLevelEntry.MazeLevelName;
+        TriggerPlayer.PerformMazeLevelEntryAction(mazeName);
     }
 
     public bool IsActive()
