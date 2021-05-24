@@ -67,7 +67,6 @@ public class OverworldCharacterManager : MonoBehaviourPunCallbacks, ICharacterMa
         }
         else if (GameRules.GamePlayerType == GamePlayerType.SplitScreenMultiPlayer)
         {
-            Logger.Warning("TODO FOR SPLIT SCREEN");
             CharacterBundle Player1Bundle = SpawnCharacter(level.PlayerCharacterSpawnpoints[PlayerNumber.Player1].CharacterBlueprint, level.PlayerCharacterSpawnpoints[PlayerNumber.Player1].GridLocation);
             Player1GO = Player1Bundle.CharacterGO;
 
@@ -86,8 +85,6 @@ public class OverworldCharacterManager : MonoBehaviourPunCallbacks, ICharacterMa
 
     private CharacterBundle SpawnCharacter(CharacterBlueprint character, GridLocation gridLocation)
     {
-        Logger.Log(Logger.Initialisation, character.CharacterType.GetType());
-
         string prefabName = GetPrefabNameByCharacter(character);
         Vector2 startPosition = GetCharacterGridPosition(GridLocation.GridToVector(gridLocation)); // start position is grid position plus grid tile offset
 
@@ -104,6 +101,7 @@ public class OverworldCharacterManager : MonoBehaviourPunCallbacks, ICharacterMa
 
         PlayerCharacter playerCharacter = characterGO.GetComponent<PlayerCharacter>();
         playerCharacter.CharacterBlueprint = character;
+        SetGameObjectName(playerCharacter);
 
         playerCharacter.FreezeCharacter();
         playerCharacter.SetStartingPosition(playerCharacter, gridLocation);
@@ -217,5 +215,28 @@ public class OverworldCharacterManager : MonoBehaviourPunCallbacks, ICharacterMa
         }
 
         return level.PlayerCharacterSpawnpoints[PlayerNumber.Player2].GridLocation;
+    }
+
+    private void SetGameObjectName(PlayerCharacter character)
+    {
+        if (GameRules.GamePlayerType == GamePlayerType.NetworkMultiPlayer)
+        {
+            character.gameObject.name = character.PhotonView.Owner == null ? "Player 1" : character.PhotonView.Owner?.NickName;
+        }
+        else if (GameRules.GamePlayerType == GamePlayerType.SinglePlayer)
+        {
+            character.gameObject.name = character.CharacterBlueprint.CharacterType.GetType().ToString().Split('.')[1];
+        }
+        else // split screen
+        {
+            if (_players.Count == 0)
+            {
+                character.gameObject.name = "Player 1";
+            }
+            else
+            {
+                character.gameObject.name = "Player 2";
+            }
+        }
     }
 }

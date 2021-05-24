@@ -6,13 +6,7 @@ public class CameraManager : MonoBehaviour
 {
     public static CameraManager Instance;
 
-    [SerializeField] private GameObject _mainCameraPrefab;
-    [SerializeField] private GameObject _splitScreenCameraOnePrefab;
-    [SerializeField] private GameObject _splitScreenCameraTwoPrefab;
-
-    public CameraController MainCamera;
-    public CameraController SplitScreenCameraOne;
-    public CameraController SplitScreenCameraTwo;
+    [SerializeField] private GameObject _cameraPrefab;
 
     public float ScreenWidth = Screen.width;
     public float ScreenHeight = Screen.height;
@@ -23,31 +17,20 @@ public class CameraManager : MonoBehaviour
     {
         Instance = this;
 
-        Guard.CheckIsNull(_mainCameraPrefab, "_mainCameraPrefab", gameObject);
-        Guard.CheckIsNull(_splitScreenCameraOnePrefab, "_splitScreenCameraOnePrefab", gameObject);
-        Guard.CheckIsNull(_splitScreenCameraTwoPrefab, "_splitScreenCameraTwoPrefab", gameObject);
+        Guard.CheckIsNull(_cameraPrefab, "_cameraPrefab", gameObject);
 
-        CameraControllers.Clear();
+        if (Camera.main)
+        {
+            Destroy(Camera.main.gameObject);
+        }
 
         if (GameRules.GamePlayerType == GamePlayerType.SplitScreenMultiPlayer)
         {
-            GameObject splitScreenCameraOneGO = Instantiate(_splitScreenCameraOnePrefab, transform);
-            SplitScreenCameraOne = splitScreenCameraOneGO.GetComponent<CameraController>();
-            GameObject splitScreenCameraTwoGO = Instantiate(_splitScreenCameraTwoPrefab, transform);
-            SplitScreenCameraTwo = splitScreenCameraTwoGO.GetComponent<CameraController>();
-
-            CameraControllers.Add(SplitScreenCameraOne);
-            CameraControllers.Add(SplitScreenCameraTwo);
-
-            ScreenWidth = Screen.width / 2;
-            ScreenHeight = Screen.height / 2;
+            CreateTwoCameras();
         }
         else
         {
-            GameObject mainCamera = Instantiate(_mainCameraPrefab, transform);
-            MainCamera = mainCamera.GetComponent<CameraController>();
-
-            CameraControllers.Add(MainCamera);
+            CreateOneCamera();
         }
     }
 
@@ -55,8 +38,8 @@ public class CameraManager : MonoBehaviour
     {
         for (int i = 0; i < CameraControllers.Count; i++)
         {
-            CameraControllers[i].SetZoomLevel(GameManager.Instance.Configuration.CameraZoomLevel);
-            CameraControllers[i].DisableCamera();
+            //CameraControllers[i].SetZoomLevel(GameManager.Instance.Configuration.CameraZoomLevel);
+            //CameraControllers[i].DisableCamera();
         }
     }
 
@@ -76,13 +59,57 @@ public class CameraManager : MonoBehaviour
         }
     }
 
-    public void FocusCamerasOnPlayer()
+    public void CreateTwoCameras()
     {
-        if (Camera.main)
+        for (int i = CameraControllers.Count - 1; i >= 0; i--)
         {
-            Destroy(Camera.main.gameObject);
+            Destroy(CameraControllers[i].gameObject);
         }
-        
+
+        CameraControllers.Clear();
+
+        GameObject splitScreenCameraOneGO = Instantiate(_cameraPrefab, transform);
+        CameraController splitScreenCameraOne = splitScreenCameraOneGO.GetComponent<CameraController>();
+        Camera splitScreenCameraOneCamera = splitScreenCameraOneGO.GetComponent<Camera>();
+        splitScreenCameraOneCamera.rect = new Rect(0, 0, 0.5f, 1);
+        splitScreenCameraOne.SetZoomLevel(GameManager.Instance.Configuration.CameraZoomLevel);
+
+        GameObject splitScreenCameraTwoGO = Instantiate(_cameraPrefab, transform);
+        CameraController splitScreenCameraTwo = splitScreenCameraTwoGO.GetComponent<CameraController>();
+        Camera splitScreenCameraTwoCamera = splitScreenCameraTwoGO.GetComponent<Camera>();
+        splitScreenCameraTwoCamera.rect = new Rect(0.5f, 0, 1, 1);
+        splitScreenCameraTwo.SetZoomLevel(GameManager.Instance.Configuration.CameraZoomLevel);
+
+        CameraControllers.Add(splitScreenCameraOne);
+        CameraControllers.Add(splitScreenCameraTwo);
+
+        ScreenWidth = Screen.width / 2;
+        ScreenHeight = Screen.height / 2;
+    }
+
+    public void CreateOneCamera()
+    {
+        for (int i = CameraControllers.Count - 1; i >= 0; i--)
+        {
+            Destroy(CameraControllers[i].gameObject);
+        }
+
+        CameraControllers.Clear();
+
+        GameObject mainCamera = Instantiate(_cameraPrefab, transform);
+        CameraController soleCamera = mainCamera.GetComponent<CameraController>();
+        Camera soleCameraCamera = soleCamera.GetComponent<Camera>();
+        soleCameraCamera.rect.Set(0, 0, 1, 1);
+        soleCamera.SetZoomLevel(GameManager.Instance.Configuration.CameraZoomLevel);
+
+        CameraControllers.Add(soleCamera);
+
+        ScreenWidth = Screen.width;
+        ScreenHeight = Screen.height;
+    }
+
+    public void FocusCamerasOnPlayer()
+    {      
         for (int i = 0; i < CameraControllers.Count; i++)
         {
             PlayerCharacter player = null;

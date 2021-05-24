@@ -10,7 +10,6 @@ public class OverworldPlayerCharacter : PlayerCharacter
     {
         Dictionary<PlayerNumber, OverworldPlayerCharacter> players = GameManager.Instance.CharacterManager.GetPlayers<OverworldPlayerCharacter>();
 
-        SetGameObjectName(players);
         SetPlayerNumber(players);
 
         base.Awake();
@@ -69,28 +68,6 @@ public class OverworldPlayerCharacter : PlayerCharacter
         {
             PersistentGameManager.SetCurrentSceneName(mazeName);
             OverworldManager.Instance.LoadMaze();
-
-            //string invitorName = "";
-            //string otherPlayerName = "";
-            //if (PlayerNumber == PlayerNumber.Player1)
-            //{
-            //    invitorName = GameManager.Instance.CharacterManager.GetPlayerCharacter<PlayerCharacter>(PlayerNumber.Player1).name;
-            //    otherPlayerName = GameManager.Instance.CharacterManager.GetPlayerCharacter<PlayerCharacter>(PlayerNumber.Player2).name;
-            //}
-            //else if (PlayerNumber == PlayerNumber.Player2)
-            //{
-            //    invitorName = GameManager.Instance.CharacterManager.GetPlayerCharacter<PlayerCharacter>(PlayerNumber.Player2).name;
-            //    otherPlayerName = GameManager.Instance.CharacterManager.GetPlayerCharacter<PlayerCharacter>(PlayerNumber.Player1).name;
-            //}
-            //else
-            //{
-            //    Logger.Warning($"Unknown player number {PlayerNumber}");
-            //}
-
-            //OverworldMainScreenOverlayCanvas.Instance.ShowPlayerMessagePanel($"We are waiting for {otherPlayerName} to accept our invitation...", PlayerNumber);
-            //OverworldMainScreenOverlayCanvas.Instance.ShowMazeInvitation(invitorName, mazeName);
-
-            //MazeLevelInvitation.PendingInvitation = true;
         }
         else
         {
@@ -126,29 +103,6 @@ public class OverworldPlayerCharacter : PlayerCharacter
                 return true;
         }
         return false;
-    }
-
-    private void SetGameObjectName(Dictionary<PlayerNumber, OverworldPlayerCharacter> players)
-    {
-        if (GameRules.GamePlayerType == GamePlayerType.NetworkMultiPlayer)
-        {
-            gameObject.name = PhotonView.Owner == null ? "Player 1" : PhotonView.Owner?.NickName;
-        }
-        else if (GameRules.GamePlayerType == GamePlayerType.SinglePlayer)
-        {
-            gameObject.name = CharacterBlueprint.CharacterType.ToString();
-        }
-        else
-        {
-            if (players.Count == 0)
-            {
-                gameObject.name = "Player 1";
-            }
-            else
-            {
-                gameObject.name = "Player 2";
-            }
-        }
     }
 
     private void SetPlayerNumber(Dictionary<PlayerNumber, OverworldPlayerCharacter> players)

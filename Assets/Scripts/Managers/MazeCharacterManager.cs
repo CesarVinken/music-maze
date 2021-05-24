@@ -110,6 +110,7 @@ public class MazeCharacterManager : MonoBehaviourPunCallbacks, ICharacterManager
 
             PlayerCharacter playerCharacter = characterGO.GetComponent<PlayerCharacter>();
             playerCharacter.CharacterBlueprint = character;
+            SetGameObjectName(playerCharacter);
 
             playerCharacter.FreezeCharacter();
             playerCharacter.SetStartingPosition(playerCharacter, gridLocation);
@@ -265,5 +266,28 @@ public class MazeCharacterManager : MonoBehaviourPunCallbacks, ICharacterManager
         }
 
         return ourPlayerCharacter;
+    }
+
+    private void SetGameObjectName(PlayerCharacter character)
+    {
+        if (GameRules.GamePlayerType == GamePlayerType.NetworkMultiPlayer)
+        {
+            character.gameObject.name = character.PhotonView.Owner == null ? "Player 1" : character.PhotonView.Owner?.NickName;
+        }
+        else if (GameRules.GamePlayerType == GamePlayerType.SinglePlayer)
+        {
+            character.gameObject.name = character.CharacterBlueprint.CharacterType.GetType().ToString().Split('.')[1];
+        }
+        else // split screen
+        {
+            if (_players.Count == 0)
+            {
+                character.gameObject.name = "Player 1";
+            }
+            else
+            {
+                character.gameObject.name = "Player 2";
+            }
+        }
     }
 }

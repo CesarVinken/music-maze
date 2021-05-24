@@ -55,8 +55,6 @@ public class SerialisableTile
             SerialisableTileAttribute serialisableTileAttribute = new SerialisableTileAttribute(
                 iSerialisableTileAttribute.GetType().ToString(), iSerialisableTileAttribute
                 );
-            //serialisableTileAttribute.SerialisedData = JsonUtility.ToJson(iSerialisableTileAttribute);
-            //serialisableTileAttribute.AttributeType = iSerialisableTileAttribute.GetType().ToString();
 
             tileAttributes.Add(serialisableTileAttribute);
         }

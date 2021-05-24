@@ -16,7 +16,6 @@ public class MazePlayerCharacter : PlayerCharacter
     {
         Dictionary<PlayerNumber, MazePlayerCharacter> players = GameManager.Instance.CharacterManager.GetPlayers<MazePlayerCharacter>();
 
-        SetGameObjectName(players);
         SetPlayerNumber(players);
 
         base.Awake();
@@ -114,29 +113,6 @@ public class MazePlayerCharacter : PlayerCharacter
                 return true;
         }
         return false;
-    }
-
-    private void SetGameObjectName(Dictionary<PlayerNumber, MazePlayerCharacter> players)
-    {
-        if (GameRules.GamePlayerType == GamePlayerType.NetworkMultiPlayer)
-        {
-            gameObject.name = PhotonView.Owner == null ? "Player 1" : PhotonView.Owner?.NickName;
-        }
-        else if (GameRules.GamePlayerType == GamePlayerType.SinglePlayer)
-        {
-            gameObject.name = CharacterBlueprint.CharacterType.ToString();
-        }
-        else
-        {
-            if (players.Count == 0)
-            {
-                gameObject.name = "Player 1";
-            }
-            else
-            {
-                gameObject.name = "Player 2";
-            }
-        }
     }
 
     private void SetPlayerNumber(Dictionary<PlayerNumber, MazePlayerCharacter> players)

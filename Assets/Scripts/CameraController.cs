@@ -26,7 +26,7 @@ public class CameraController : MonoBehaviour
 
     public void Awake()
     {
-        Guard.CheckIsNull(_camera, "_camera", gameObject);
+        _camera = GetComponent<Camera>();
 
         if (GameManager.Instance.CurrentGameLevel != null)
             SetPanLimits(GameManager.Instance.CurrentGameLevel.LevelBounds);
@@ -64,7 +64,7 @@ public class CameraController : MonoBehaviour
             return;
         }
 
-        CalculateCameraPosition();
+        //CalculateCameraPosition();
     }
 
     public void SetPanLimits(GridLocation levelBounds)
@@ -118,7 +118,6 @@ public class CameraController : MonoBehaviour
     // If the camera/player reach the edge of the level, the camera movement is clamped so it will not move further in that direction
     private void CalculateCameraPosition()
     {
-        //Logger.Log("CalculateCameraPosition");
         Vector2 cameraPosition = new Vector2(transform.position.x, transform.position.y);
 
         Vector3 playerWorldToScreenPos = _camera.WorldToScreenPoint(_player.position);

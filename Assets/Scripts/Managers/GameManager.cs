@@ -161,9 +161,6 @@ public class GameManager : MonoBehaviourPunCallbacks
                         Logger.Log(Logger.Initialisation, "No overworld loaded on startup. Returning");
                         return;
                     }
-                    //if (OverworldManager.Instance.Overworld.PlayerCharacterSpawnpoints.Count == 0) return;
-
-                    //PlayableLevelNames = OverworldLoader.GetAllPlayableLevelNames();
                 } // We loaded a overworld scene through the editor. Set up an empty grid for in the editor
                 else
                 {

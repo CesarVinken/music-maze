@@ -35,7 +35,7 @@ public static class EditorManager
         _inEditor = true;
         EditorCanvasUI.Instance.InitialiseEditor();
         EditorWorldContainer.Instance.InitialiseEditor();
-        Logger.Log($"Our current scene type is {PersistentGameManager.CurrentSceneType}");
+        Logger.Log($"Our current scene type is {PersistentGameManager.CurrentSceneType}. We are opening the editor");
         switch (PersistentGameManager.CurrentSceneType)
         {
             case SceneType.Overworld:
@@ -48,6 +48,11 @@ public static class EditorManager
                 Logger.Error($"Unknown scene type {PersistentGameManager.CurrentSceneType} is not implemented");
                 break;
         }
+
+        if (GameRules.GamePlayerType == GamePlayerType.SplitScreenMultiPlayer)
+        {
+            CameraManager.Instance.CreateOneCamera();
+        }
     }
 
     public static void CloseEditor()
@@ -55,5 +60,10 @@ public static class EditorManager
         _inEditor = false;
         EditorCanvasUI.Instance.CloseEditor();
         EditorWorldContainer.Instance.CloseEditor();
+
+        if (GameRules.GamePlayerType == GamePlayerType.SplitScreenMultiPlayer)
+        {
+            CameraManager.Instance.CreateTwoCameras();
+        }
     }
 }

@@ -54,7 +54,6 @@ public class EditorOverworld : Overworld, IEditorLevel
             tile.SetGridLocation(serialisableTile.GridLocation.X, serialisableTile.GridLocation.Y);
             tile.SetId(serialisableTile.Id);
 
-
             tileGO.name = "Tile" + tile.GridLocation.X + ", " + tile.GridLocation.Y;
             tileGO.transform.position = GridLocation.GridToVector(tile.GridLocation);
 
@@ -62,6 +61,9 @@ public class EditorOverworld : Overworld, IEditorLevel
 
             AddTileAttributes(serialisableTile, tile);
             AddBackgroundSprites(serialisableTile, tile);
+
+            ITileMainMaterial mainMaterial = AddMainMaterial(serialisableTile);
+            tile.SetMainMaterial(mainMaterial);
 
             TilesByLocation.Add(tile.GridLocation, tile);
 
@@ -144,6 +146,24 @@ public class EditorOverworld : Overworld, IEditorLevel
             {
                 Logger.Error($"Unknown tile attribute of the type {type}");
             }
+        }
+    }
+
+    private ITileMainMaterial AddMainMaterial(SerialisableTile serialisableTile)
+    {
+        SerialisableTileMainMaterial serialisableMainMaterial = serialisableTile.MainMaterial;
+        if (serialisableMainMaterial.MainMaterialType == "GroundMainMaterial")
+        {
+            return new GroundMainMaterial();
+        }
+        else if (serialisableMainMaterial.MainMaterialType == "WaterMainMaterial")
+        {
+            return new WaterMainMaterial();
+        }
+        else
+        {
+            Logger.Error($"Unknown SerialisableTileMainMaterial {serialisableMainMaterial.MainMaterialType}");
+            return null;
         }
     }
 }
