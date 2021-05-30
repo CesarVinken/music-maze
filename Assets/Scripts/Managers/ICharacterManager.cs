@@ -20,6 +20,7 @@ public interface ICharacterManager
     string GetPrefabNameByCharacter(CharacterBlueprint character);
 
     Dictionary<PlayerNumber, T> GetPlayers<T>();
+    int GetPlayerCount();
     void AddPlayer(PlayerNumber playerNumber, PlayerCharacter playerCharacter);
     PlayerCharacter GetPlayerCharacter<T>(PlayerNumber playerNumber) where T : PlayerCharacter;
     PlayerNumber GetOurPlayerCharacter();

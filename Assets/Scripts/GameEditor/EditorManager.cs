@@ -49,7 +49,7 @@ public static class EditorManager
                 break;
         }
 
-        if (GameRules.GamePlayerType == GamePlayerType.SplitScreenMultiPlayer)
+        if (GameRules.GamePlayerType == GamePlayerType.SplitScreenMultiplayer)
         {
             CameraManager.Instance.CreateOneCamera();
         }
@@ -61,7 +61,7 @@ public static class EditorManager
         EditorCanvasUI.Instance.CloseEditor();
         EditorWorldContainer.Instance.CloseEditor();
 
-        if (GameRules.GamePlayerType == GamePlayerType.SplitScreenMultiPlayer)
+        if (GameRules.GamePlayerType == GamePlayerType.SplitScreenMultiplayer)
         {
             CameraManager.Instance.CreateTwoCameras();
         }

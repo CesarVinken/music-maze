@@ -32,7 +32,7 @@ public class OverworldPlayerCharacter : PlayerCharacter
 
 
         if (OccupiedMazeLevelEntry != null && (GameRules.GamePlayerType == GamePlayerType.SinglePlayer || 
-            GameRules.GamePlayerType == GamePlayerType.SplitScreenMultiPlayer ||
+            GameRules.GamePlayerType == GamePlayerType.SplitScreenMultiplayer ||
             PhotonView.IsMine))
         {
             if (Input.GetKeyDown(KeyCode.Return) || Input.GetKeyDown(KeyCode.KeypadEnter) )
@@ -61,7 +61,7 @@ public class OverworldPlayerCharacter : PlayerCharacter
             PersistentGameManager.SetCurrentSceneName(mazeName);
             OverworldManager.Instance.LoadMaze();
         }
-        else if (GameRules.GamePlayerType == GamePlayerType.SplitScreenMultiPlayer)
+        else if (GameRules.GamePlayerType == GamePlayerType.SplitScreenMultiplayer)
         {
             PersistentGameManager.SetCurrentSceneName(mazeName);
             OverworldManager.Instance.LoadMaze();
@@ -101,4 +101,6 @@ public class OverworldPlayerCharacter : PlayerCharacter
         }
         return false;
     }
+
+   
 }

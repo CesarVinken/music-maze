@@ -1,6 +1,5 @@
 ﻿using UnityEngine;
 using Photon.Pun;
-using CharacterType;
 
 public class CharacterAnimationHandler : MonoBehaviour
 {
@@ -23,7 +22,11 @@ public class CharacterAnimationHandler : MonoBehaviour
     public void Awake()
     {
         if (Animator == null)
+        {
             Animator = GetComponent<Animator>();
+        }
+
+        Guard.CheckIsNull(Animator, "Animator", gameObject);
 
         if (Animator == null)
             _photonAnimatorView = GetComponent<PhotonAnimatorView>();
@@ -31,20 +34,15 @@ public class CharacterAnimationHandler : MonoBehaviour
 
     public void SetAnimationControllerForCharacterType(ICharacter characterType)
     {
-        /*TODO: Refactor like this
-         * Instead of characterType enum, have separate class for each Charactertype, with shared itnerface ICharacter. 
-         * ICharacter has GetAnimationController function. For enemy, always get controller from MazeCharacterManager. For bard types, make it depend on the GameManager.CurrentScene
-         * 
-         * - Move EnemyController from CharacterManager base class to MazeCharacterManager
-         * 
-         * */
-
         Animator.runtimeAnimatorController = characterType.GetAnimationController();
 
-        // valid for both player and enemy animators
-        _photonAnimatorView.SetParameterSynchronized("Locomotion", PhotonAnimatorView.ParameterType.Bool, PhotonAnimatorView.SynchronizeType.Discrete);
-        _photonAnimatorView.SetParameterSynchronized("Horizontal", PhotonAnimatorView.ParameterType.Float, PhotonAnimatorView.SynchronizeType.Discrete);
-        _photonAnimatorView.SetParameterSynchronized("Vertical", PhotonAnimatorView.ParameterType.Float, PhotonAnimatorView.SynchronizeType.Discrete);
+        //if (GameRules.GamePlayerType == GamePlayerType.NetworkMultiPlayer)
+        //{
+        //    // valid for both player and enemy animators
+        //    _photonAnimatorView.SetParameterSynchronized("Locomotion", PhotonAnimatorView.ParameterType.Bool, PhotonAnimatorView.SynchronizeType.Discrete);
+        //    _photonAnimatorView.SetParameterSynchronized("Horizontal", PhotonAnimatorView.ParameterType.Float, PhotonAnimatorView.SynchronizeType.Discrete);
+        //    _photonAnimatorView.SetParameterSynchronized("Vertical", PhotonAnimatorView.ParameterType.Float, PhotonAnimatorView.SynchronizeType.Discrete);
+        //}
     }
 
     public void SetHorizontal(float speed)

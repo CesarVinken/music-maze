@@ -26,7 +26,7 @@ public class MazePlayerCharacter : PlayerCharacter
         PlayerCaughtEvent += OnPlayerCaught;
 
         if (GameRules.GamePlayerType == GamePlayerType.SinglePlayer || 
-            GameRules.GamePlayerType == GamePlayerType.SplitScreenMultiPlayer ||
+            GameRules.GamePlayerType == GamePlayerType.SplitScreenMultiplayer ||
             PhotonView.IsMine)
         {
             _selectionIndicatorGO = Instantiate(_selectionIndicatorPrefab, SceneObjectManager.Instance.CharactersGO);
@@ -50,7 +50,7 @@ public class MazePlayerCharacter : PlayerCharacter
 
     public void OnCollisionEnter2D(Collision2D collision)
     {
-        if (GameRules.GamePlayerType == GamePlayerType.NetworkMultiPlayer && !PhotonView.IsMine) return;
+        if (GameRules.GamePlayerType == GamePlayerType.NetworkMultiplayer && !PhotonView.IsMine) return;
 
         EnemyCharacter enemy = collision.gameObject.GetComponent<EnemyCharacter>();
         if (enemy != null)
@@ -75,7 +75,7 @@ public class MazePlayerCharacter : PlayerCharacter
     public void OnPlayerCaught()
     {
         if (GameRules.GamePlayerType == GamePlayerType.SinglePlayer ||
-            GameRules.GamePlayerType == GamePlayerType.SplitScreenMultiPlayer)
+            GameRules.GamePlayerType == GamePlayerType.SplitScreenMultiplayer)
         {
             PunRPCCaughtByEnemy();
         }

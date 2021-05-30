@@ -172,7 +172,7 @@ public class OverworldManager : MonoBehaviour, IOnEventCallback
     public void LoadMaze()
     {
         if (GameRules.GamePlayerType == GamePlayerType.SinglePlayer ||
-            GameRules.GamePlayerType == GamePlayerType.SplitScreenMultiPlayer)
+            GameRules.GamePlayerType == GamePlayerType.SplitScreenMultiplayer)
         {
             PhotonNetwork.LoadLevel("Maze");
         }

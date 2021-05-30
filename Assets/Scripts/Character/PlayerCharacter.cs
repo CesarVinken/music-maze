@@ -2,6 +2,7 @@
 using Photon.Pun;
 using System.Collections;
 using CharacterType;
+using System.Collections.Generic;
 
 public class PlayerCharacter : Character
 {
@@ -14,7 +15,6 @@ public class PlayerCharacter : Character
 
     [SerializeField] protected GameObject _selectionIndicatorPrefab = null;
     [SerializeField] protected GameObject _selectionIndicatorGO = null;
-    [SerializeField] protected GameObject _multiplayerComponentsGO = null;
 
     public GridLocation CurrentGridLocation;
 
@@ -25,16 +25,33 @@ public class PlayerCharacter : Character
     public override void Awake()
     {
         Guard.CheckIsNull(_selectionIndicatorPrefab, "_selectionIndicatorPrefab", gameObject);
-        Guard.CheckIsNull(_multiplayerComponentsGO, "_multiplayerComponentsGO", gameObject);
+        SetPlayerNumber();
+        GameManager.Instance.CharacterManager.AddPlayer(PlayerNumber, this); // do here and not in manager.
+        int playerCount = GameManager.Instance.CharacterManager.GetPlayerCount();
+
+        // TODO: character type should not depend on Player Number, but on which character the player chose when starting the game
+        AssignCharacterType(); // relies on player number
+
+        if (PersistentGameManager.CurrentPlatform == Platform.PC)
+        {
+            if (playerCount == 1)
+            {
+                KeyboardInput = KeyboardInput.Player1;
+                PlayerNoInGame = 1; // Q: Does it make sense to keep variable PlayerNoInGame?
+            }
+            else if (playerCount == 2)
+            {
+                KeyboardInput = KeyboardInput.Player2;
+                PlayerNoInGame = 2;
+            }
+            else
+            {
+                Logger.Warning("There are {0} players in the level. There can be max 2 players in a level", playerCount);
+            }
+        }
 
         base.Awake();
 
-
-        if (GameRules.GamePlayerType == GamePlayerType.NetworkMultiPlayer)
-        {
-            _multiplayerComponentsGO.SetActive(true);
-        }
-        
         _pointerPresserTimer = _pointerPresserDelay;        
     }
 
@@ -52,9 +69,10 @@ public class PlayerCharacter : Character
         if (Console.Instance && Console.Instance.ConsoleState != ConsoleState.Closed)
             return;
 
-
         if (GameRules.GamePlayerType == GamePlayerType.SinglePlayer ||
-            PhotonView.IsMine)
+            GameRules.GamePlayerType == GamePlayerType.SplitScreenMultiplayer ||
+            (GameRules.GamePlayerType == GamePlayerType.NetworkMultiplayer && PhotonView.IsMine)
+            )
         {
             if (PersistentGameManager.CurrentPlatform == Platform.PC)
                 HandleKeyboardInput();
@@ -109,7 +127,7 @@ public class PlayerCharacter : Character
                 MoveCharacter();
             }
         }
-        else if (GameRules.GamePlayerType == GamePlayerType.SplitScreenMultiPlayer)
+        else if (GameRules.GamePlayerType == GamePlayerType.SplitScreenMultiplayer)
         {
             HandleKeyboardInput();
 
@@ -347,5 +365,43 @@ public class PlayerCharacter : Character
         IsMoving = false;
     }
 
+    // The player number needs to be set from the player character, and not from the manager.
+    // The reason is that in a network game, the character that is spawned by the other client will not be spawned here through the manager. However, it will go through the player character's Awake/Start function.
+    protected void SetPlayerNumber()
+    {
+        ICharacterManager characterManager = GameManager.Instance.CharacterManager;
 
+        if (GameRules.GamePlayerType == GamePlayerType.NetworkMultiplayer)
+        {
+            if (PhotonNetwork.IsMasterClient)
+            {
+                if (PhotonView.IsMine)
+                    PlayerNumber = PlayerNumber.Player1;
+                else
+                    PlayerNumber = PlayerNumber.Player2;
+            }
+            else
+            {
+                if (PhotonView.IsMine)
+                    PlayerNumber = PlayerNumber.Player2;
+                else
+                    PlayerNumber = PlayerNumber.Player1;
+            }
+        }
+        else if (GameRules.GamePlayerType == GamePlayerType.SinglePlayer)
+        {
+            PlayerNumber = PlayerNumber.Player1;
+        }
+        else
+        {
+            if (characterManager.GetPlayerCount() == 0)
+            {
+                PlayerNumber = PlayerNumber.Player1;
+            }
+            else
+            {
+                PlayerNumber = PlayerNumber.Player2;
+            }
+        }
+    }
 }

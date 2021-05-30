@@ -1,6 +1,6 @@
 ﻿public enum GamePlayerType
 {
     SinglePlayer,
-    NetworkMultiPlayer,
-    SplitScreenMultiPlayer
+    NetworkMultiplayer,
+    SplitScreenMultiplayer
 }

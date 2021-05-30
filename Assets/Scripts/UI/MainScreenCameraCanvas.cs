@@ -6,13 +6,11 @@ public class MainScreenCameraCanvas : MonoBehaviour
 {
     public static MainScreenCameraCanvas Instance;
 
-    public GameObject MapTextGO;
     public GameObject MapInteractionButtonPrefab;
     public List<MapInteractionButton> MapInteractionButtons = new List<MapInteractionButton>();
 
     private void Awake()
     {
-        Guard.CheckIsNull(MapTextGO, "MapTextGO", gameObject);
         Guard.CheckIsNull(MapInteractionButtonPrefab, "MapInteractionButtonPrefab", gameObject);
 
         Instance = this;

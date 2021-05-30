@@ -46,7 +46,7 @@ public class EnemyCharacter : Character
 
         if (!HasCalculatedTarget &&
             (GameRules.GamePlayerType == GamePlayerType.SinglePlayer ||
-            GameRules.GamePlayerType == GamePlayerType.SplitScreenMultiPlayer ||
+            GameRules.GamePlayerType == GamePlayerType.SplitScreenMultiplayer ||
             PhotonView.IsMine))
         {
             SetNextTarget();

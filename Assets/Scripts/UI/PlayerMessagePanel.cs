@@ -19,7 +19,7 @@ public class PlayerMessagePanel : MonoBehaviour
     {
         Instance = this;
 
-        if (GameRules.GamePlayerType == GamePlayerType.SplitScreenMultiPlayer)
+        if (GameRules.GamePlayerType == GamePlayerType.SplitScreenMultiplayer)
         {
             RectTransform rt = gameObject.GetComponent<RectTransform>();
 

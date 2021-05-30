@@ -1,6 +1,7 @@
 ﻿using Photon.Pun;
 using System.Collections.Generic;
 using UnityEngine;
+using CharacterType;
 
 public class OverworldCharacterManager : MonoBehaviourPunCallbacks, ICharacterManager
 {
@@ -60,17 +61,19 @@ public class OverworldCharacterManager : MonoBehaviourPunCallbacks, ICharacterMa
             Logger.Log(Logger.Initialisation, "Instantiating Player 1");
 
             GridLocation spawnLocation = GetSpawnLocation(PlayerNumber.Player1, level);
+            //TODO: Set which character spawns with which spawnpoint.
             CharacterBundle PlayerBundle = SpawnCharacter(
-                level.PlayerCharacterSpawnpoints[PlayerNumber.Player1].CharacterBlueprint,
+                new CharacterBlueprint(new Emmon()),
                 spawnLocation);
             Player1GO = PlayerBundle.CharacterGO;
         }
-        else if (GameRules.GamePlayerType == GamePlayerType.SplitScreenMultiPlayer)
+        else if (GameRules.GamePlayerType == GamePlayerType.SplitScreenMultiplayer)
         {
-            CharacterBundle Player1Bundle = SpawnCharacter(level.PlayerCharacterSpawnpoints[PlayerNumber.Player1].CharacterBlueprint, level.PlayerCharacterSpawnpoints[PlayerNumber.Player1].GridLocation);
+            //TODO: Set which character spawns with which spawnpoint.
+            CharacterBundle Player1Bundle = SpawnCharacter(new CharacterBlueprint(new Emmon()), level.PlayerCharacterSpawnpoints[PlayerNumber.Player1].GridLocation);
             Player1GO = Player1Bundle.CharacterGO;
 
-            CharacterBundle Player2Bundle = SpawnCharacter(level.PlayerCharacterSpawnpoints[PlayerNumber.Player2].CharacterBlueprint, level.PlayerCharacterSpawnpoints[PlayerNumber.Player2].GridLocation);
+            CharacterBundle Player2Bundle = SpawnCharacter(new CharacterBlueprint(new Fae()), level.PlayerCharacterSpawnpoints[PlayerNumber.Player2].GridLocation);
             Player2GO = Player2Bundle.CharacterGO;
         }
         else
@@ -78,7 +81,10 @@ public class OverworldCharacterManager : MonoBehaviourPunCallbacks, ICharacterMa
             Logger.Log(Logger.Initialisation, "Instantiating Player 2");
 
             GridLocation spawnLocation = GetSpawnLocation(PlayerNumber.Player2, level);
-            CharacterBundle PlayerBundle = SpawnCharacter(level.PlayerCharacterSpawnpoints[PlayerNumber.Player2].CharacterBlueprint, spawnLocation);
+            CharacterBundle PlayerBundle = SpawnCharacter(new CharacterBlueprint(new Fae()), spawnLocation);
+
+            //TODO: Set which character spawns with which spawnpoint.
+            //CharacterBundle PlayerBundle = SpawnCharacter(level.PlayerCharacterSpawnpoints[PlayerNumber.Player2].CharacterBlueprint, spawnLocation);
             Player2GO = PlayerBundle.CharacterGO;
         }
     }
@@ -90,44 +96,47 @@ public class OverworldCharacterManager : MonoBehaviourPunCallbacks, ICharacterMa
 
         GameObject characterGO = null;
         if (GameRules.GamePlayerType == GamePlayerType.SinglePlayer ||
-            GameRules.GamePlayerType == GamePlayerType.SplitScreenMultiPlayer)
+            GameRules.GamePlayerType == GamePlayerType.SplitScreenMultiplayer)
         {
+            // todo: get prefab by string, like in network game case
             characterGO = GameObject.Instantiate(_playerCharacterPrefab, startPosition, Quaternion.identity);
         }
         else
         {
+            Logger.Log($"We want to instantiate a character with the name {prefabName}");
             characterGO = PhotonNetwork.Instantiate(prefabName, startPosition, Quaternion.identity, 0);
         }
 
         PlayerCharacter playerCharacter = characterGO.GetComponent<PlayerCharacter>();
         playerCharacter.CharacterBlueprint = character;
 
-        SetGameObjectName(playerCharacter);
-        SetPlayerNumber(playerCharacter);
-        AddPlayer(playerCharacter.PlayerNumber, playerCharacter);
+        //SetGameObjectName(playerCharacter);
+        //SetPlayerNumber(playerCharacter);
+        //Logger.Warning($"WE ARE GOING TO ADD PLAYER NUMBER {playerCharacter.PlayerNumber}");
+        //AddPlayer(playerCharacter.PlayerNumber, playerCharacter);
 
-        playerCharacter.AssignCharacterType();
+        //playerCharacter.AssignCharacterType();
 
         playerCharacter.FreezeCharacter();
         playerCharacter.SetStartingPosition(playerCharacter, gridLocation);
 
-        if (PersistentGameManager.CurrentPlatform == Platform.PC)
-        {
-            if (_players.Count == 1)
-            {
-                playerCharacter.KeyboardInput = KeyboardInput.Player1;
-                playerCharacter.PlayerNoInGame = 1;
-            }
-            else if (_players.Count == 2)
-            {
-                playerCharacter.KeyboardInput = KeyboardInput.Player2;
-                playerCharacter.PlayerNoInGame = 2;
-            }
-            else
-            {
-                Logger.Warning("There are {0} players in the level. There can be max 2 players in a level", _players.Count);
-            }
-        }
+        //if (PersistentGameManager.CurrentPlatform == Platform.PC)
+        //{
+        //    if (_players.Count == 1)
+        //    {
+        //        playerCharacter.KeyboardInput = KeyboardInput.Player1;
+        //        playerCharacter.PlayerNoInGame = 1;
+        //    }
+        //    else if (_players.Count == 2)
+        //    {
+        //        playerCharacter.KeyboardInput = KeyboardInput.Player2;
+        //        playerCharacter.PlayerNoInGame = 2;
+        //    }
+        //    else
+        //    {
+        //        Logger.Warning("There are {0} players in the level. There can be max 2 players in a level", _players.Count);
+        //    }
+        //}
 
         CharacterBundle characterBundle = new CharacterBundle(playerCharacter, characterGO);
         return characterBundle;
@@ -156,9 +165,10 @@ public class OverworldCharacterManager : MonoBehaviourPunCallbacks, ICharacterMa
         Logger.Log("Exit player character");
     }
 
-    public Dictionary<PlayerNumber, OverworldPlayerCharacter> GetPlayers<OverworldPlayerCharacter>()
+    public Dictionary<PlayerNumber, PlayerCharacter> GetPlayers<PlayerCharacter>()
     {
-        return _players as Dictionary<PlayerNumber, OverworldPlayerCharacter>;
+        Logger.Log("Get player characters");
+        return _players as Dictionary<PlayerNumber, PlayerCharacter>;
     }
 
     public PlayerCharacter GetPlayerCharacter<T>(PlayerNumber playerNumber) where T : PlayerCharacter
@@ -169,6 +179,11 @@ public class OverworldCharacterManager : MonoBehaviourPunCallbacks, ICharacterMa
     public void AddPlayer(PlayerNumber playerNumber, PlayerCharacter playerCharacter)
     {
         _players.Add(playerNumber, playerCharacter as OverworldPlayerCharacter);
+    }
+
+    public int GetPlayerCount()
+    {
+        return _players.Count;
     }
 
     public string GetPrefabNameByCharacter(CharacterBlueprint character)
@@ -224,7 +239,7 @@ public class OverworldCharacterManager : MonoBehaviourPunCallbacks, ICharacterMa
 
     private void SetGameObjectName(PlayerCharacter character)
     {
-        if (GameRules.GamePlayerType == GamePlayerType.NetworkMultiPlayer)
+        if (GameRules.GamePlayerType == GamePlayerType.NetworkMultiplayer)
         {
             character.gameObject.name = character.PhotonView.Owner == null ? "Player 1" : character.PhotonView.Owner?.NickName;
         }
@@ -245,39 +260,40 @@ public class OverworldCharacterManager : MonoBehaviourPunCallbacks, ICharacterMa
         }
     }
 
-    private void SetPlayerNumber(PlayerCharacter character)
-    {
-        if (GameRules.GamePlayerType == GamePlayerType.NetworkMultiPlayer)
-        {
-            if (PhotonNetwork.IsMasterClient)
-            {
-                if (character.PhotonView.IsMine)
-                    character.PlayerNumber = PlayerNumber.Player1;
-                else
-                    character.PlayerNumber = PlayerNumber.Player2;
-            }
-            else
-            {
-                if (character.PhotonView.IsMine)
-                    character.PlayerNumber = PlayerNumber.Player2;
-                else
-                    character.PlayerNumber = PlayerNumber.Player1;
-            }
-        }
-        else if (GameRules.GamePlayerType == GamePlayerType.SinglePlayer)
-        {
-            character.PlayerNumber = PlayerNumber.Player1;
-        }
-        else
-        {
-            if (_players.Count == 0)
-            {
-                character.PlayerNumber = PlayerNumber.Player1;
-            }
-            else
-            {
-                character.PlayerNumber = PlayerNumber.Player2;
-            }
-        }
-    }
+    //private void SetPlayerNumber(PlayerCharacter character)
+    //{
+    //    Logger.Log($"GameRules.GamePlayerType {GameRules.GamePlayerType}. PhotonNetwork.IsMasterClient {PhotonNetwork.IsMasterClient}. {character.PhotonView.IsMine}");
+    //    if (GameRules.GamePlayerType == GamePlayerType.NetworkMultiplayer)
+    //    {
+    //        if (PhotonNetwork.IsMasterClient)
+    //        {
+    //            if (character.PhotonView.IsMine)
+    //                character.PlayerNumber = PlayerNumber.Player1;
+    //            else
+    //                character.PlayerNumber = PlayerNumber.Player2;
+    //        }
+    //        else
+    //        {
+    //            if (character.PhotonView.IsMine)
+    //                character.PlayerNumber = PlayerNumber.Player2;
+    //            else
+    //                character.PlayerNumber = PlayerNumber.Player1;
+    //        }
+    //    }
+    //    else if (GameRules.GamePlayerType == GamePlayerType.SinglePlayer)
+    //    {
+    //        character.PlayerNumber = PlayerNumber.Player1;
+    //    }
+    //    else
+    //    {
+    //        if (_players.Count == 0)
+    //        {
+    //            character.PlayerNumber = PlayerNumber.Player1;
+    //        }
+    //        else
+    //        {
+    //            character.PlayerNumber = PlayerNumber.Player2;
+    //        }
+    //    }
+    //}
 }

@@ -189,7 +189,7 @@ public class MazeLevelManager : MonoBehaviour, IOnEventCallback
     public void SetTileMarker(InGameMazeTile tile, PlayerCharacter player)
     {
         if (GameRules.GamePlayerType == GamePlayerType.SinglePlayer ||
-            GameRules.GamePlayerType == GamePlayerType.SplitScreenMultiPlayer)
+            GameRules.GamePlayerType == GamePlayerType.SplitScreenMultiplayer)
         {
             player.LastTile = tile;
 
@@ -216,7 +216,7 @@ public class MazeLevelManager : MonoBehaviour, IOnEventCallback
     public void LoadOverworld(string overworldName = "default")
     {
         if (GameRules.GamePlayerType == GamePlayerType.SinglePlayer ||
-            GameRules.GamePlayerType == GamePlayerType.SplitScreenMultiPlayer)
+            GameRules.GamePlayerType == GamePlayerType.SplitScreenMultiplayer)
         {
             PersistentGameManager.SetLastMazeLevelName(PersistentGameManager.CurrentSceneName);
             PersistentGameManager.SetCurrentSceneName(overworldName);
@@ -232,7 +232,7 @@ public class MazeLevelManager : MonoBehaviour, IOnEventCallback
     public void LoadNextLevel(string pickedLevel)
     {
         if (GameRules.GamePlayerType == GamePlayerType.SinglePlayer ||
-            GameRules.GamePlayerType == GamePlayerType.SplitScreenMultiPlayer)
+            GameRules.GamePlayerType == GamePlayerType.SplitScreenMultiplayer)
         {
             MazeLevelData levelData = new JsonMazeLevelFileReader().ReadData<MazeLevelData>(pickedLevel);
 
@@ -382,7 +382,7 @@ public class MazeLevelManager : MonoBehaviour, IOnEventCallback
 
     private void HandleSpawnpointMarkability()
     {
-        if(GameManager.Instance.CharacterManager.GetPlayers<MazePlayerCharacter>().Count < 2)
+        if(GameManager.Instance.CharacterManager.GetPlayerCount() < 2)
         {
             MazeTile spawnpoint1Tile = Level.PlayerCharacterSpawnpoints[PlayerNumber.Player1].Tile as MazeTile;
             spawnpoint1Tile.TryMakeMarkable(false);

@@ -34,7 +34,7 @@ public class MapInteractionButton : MonoBehaviour, IMapInteractionButton
         _buttonWorldBasePosition = pos;
         TriggerPlayer = player;
 
-        if (GameRules.GamePlayerType == GamePlayerType.SplitScreenMultiPlayer &&
+        if (GameRules.GamePlayerType == GamePlayerType.SplitScreenMultiplayer &&
             player.PlayerNumber == PlayerNumber.Player2)
         {
             _cameraToUse = CameraManager.Instance.CameraControllers[1].GetCamera();

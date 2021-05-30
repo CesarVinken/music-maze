@@ -81,17 +81,16 @@ public class GameManager : MonoBehaviourPunCallbacks
         Guard.CheckIsNull(_cameraContainerPrefab, "_cameraContainerPrefab", gameObject);
 
         InitialiseLoggers();
-
-        if(PhotonNetwork.PlayerList.Length == 0)
+        if (PhotonNetwork.PlayerList.Length == 0)
         {
-            if(GameRules.GamePlayerType != GamePlayerType.SplitScreenMultiPlayer)
+            if(GameRules.GamePlayerType != GamePlayerType.SplitScreenMultiplayer)
             {
                 GameRules.SetGamePlayerType(GamePlayerType.SinglePlayer);
             }
         }
         else
         {
-            GameRules.SetGamePlayerType(GamePlayerType.NetworkMultiPlayer);
+            GameRules.SetGamePlayerType(GamePlayerType.NetworkMultiplayer);
         }
 
         PersistentGameManager.CurrentSceneType = _thisSceneType;

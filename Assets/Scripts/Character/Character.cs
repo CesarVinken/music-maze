@@ -131,7 +131,7 @@ public class Character : MonoBehaviour
     public IEnumerator RespawnPlayerCharacter(PlayerCharacter character, float freezeTime)
     {
         int blackScreenNo = 0;
-        if(GameRules.GamePlayerType == GamePlayerType.SplitScreenMultiPlayer &&
+        if(GameRules.GamePlayerType == GamePlayerType.SplitScreenMultiplayer &&
         character.PlayerNumber == PlayerNumber.Player2)
         {
             blackScreenNo = 1;

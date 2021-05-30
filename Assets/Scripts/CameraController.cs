@@ -72,7 +72,7 @@ public class CameraController : MonoBehaviour
         PanLimits.Clear();
 
         //TODO. the - .. value is currently hardcoded but would not work with different screen sizes or zoom levels
-        if (GameRules.GamePlayerType == GamePlayerType.SplitScreenMultiPlayer)
+        if (GameRules.GamePlayerType == GamePlayerType.SplitScreenMultiplayer)
         {
             PanLimits.Add(Direction.Up, levelBounds.Y);  // should depend on the furthest upper edge of the maze level.Never less than 4.
             PanLimits.Add(Direction.Right, levelBounds.X - 3f);// should depend on the furthest right edge of the maze level  Never less than 8.

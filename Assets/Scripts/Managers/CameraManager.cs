@@ -24,7 +24,7 @@ public class CameraManager : MonoBehaviour
             Destroy(Camera.main.gameObject);
         }
 
-        if (GameRules.GamePlayerType == GamePlayerType.SplitScreenMultiPlayer)
+        if (GameRules.GamePlayerType == GamePlayerType.SplitScreenMultiplayer)
         {
             CreateTwoCameras();
         }
@@ -120,7 +120,7 @@ public class CameraManager : MonoBehaviour
                 {
                     player = GameManager.Instance.CharacterManager.GetPlayerCharacter<MazePlayerCharacter>(PlayerNumber.Player1);
                 }
-                else if(GameRules.GamePlayerType == GamePlayerType.SplitScreenMultiPlayer)
+                else if(GameRules.GamePlayerType == GamePlayerType.SplitScreenMultiplayer)
                 {
                     if (i == 0)
                     {
@@ -146,7 +146,7 @@ public class CameraManager : MonoBehaviour
                 {
                     player = GameManager.Instance.CharacterManager.GetPlayerCharacter<OverworldPlayerCharacter>(PlayerNumber.Player1);
                 }
-                else if (GameRules.GamePlayerType == GamePlayerType.SplitScreenMultiPlayer)
+                else if (GameRules.GamePlayerType == GamePlayerType.SplitScreenMultiplayer)
                 {
                     if(i == 0)
                     {

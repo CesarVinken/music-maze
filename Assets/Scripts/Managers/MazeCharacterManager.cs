@@ -1,4 +1,5 @@
-﻿using Photon.Pun;
+﻿using CharacterType;
+using Photon.Pun;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -64,18 +65,18 @@ public class MazeCharacterManager : MonoBehaviourPunCallbacks, ICharacterManager
         {
             Debug.Log("Instantiating Player 1");
 
-            CharacterBundle PlayerBundle = SpawnCharacter(level.PlayerCharacterSpawnpoints[PlayerNumber.Player1].CharacterBlueprint, level.PlayerCharacterSpawnpoints[PlayerNumber.Player1].GridLocation);
+            CharacterBundle PlayerBundle = SpawnCharacter(new CharacterBlueprint(new Emmon()), level.PlayerCharacterSpawnpoints[PlayerNumber.Player1].GridLocation);
             Player1GO = PlayerBundle.CharacterGO;
             SpawnEnemies();
         }
-        else if (GameRules.GamePlayerType == GamePlayerType.SplitScreenMultiPlayer)
+        else if (GameRules.GamePlayerType == GamePlayerType.SplitScreenMultiplayer)
         {
             Debug.Log("Instantiating Players");
 
-            CharacterBundle Player1Bundle = SpawnCharacter(level.PlayerCharacterSpawnpoints[PlayerNumber.Player1].CharacterBlueprint, level.PlayerCharacterSpawnpoints[PlayerNumber.Player1].GridLocation);
+            CharacterBundle Player1Bundle = SpawnCharacter(new CharacterBlueprint(new Emmon()), level.PlayerCharacterSpawnpoints[PlayerNumber.Player1].GridLocation);
             Player1GO = Player1Bundle.CharacterGO;
 
-            CharacterBundle Player2Bundle = SpawnCharacter(level.PlayerCharacterSpawnpoints[PlayerNumber.Player2].CharacterBlueprint, level.PlayerCharacterSpawnpoints[PlayerNumber.Player2].GridLocation);
+            CharacterBundle Player2Bundle = SpawnCharacter(new CharacterBlueprint(new Fae()), level.PlayerCharacterSpawnpoints[PlayerNumber.Player2].GridLocation);
             Player2GO = Player2Bundle.CharacterGO;
 
             SpawnEnemies();
@@ -84,7 +85,7 @@ public class MazeCharacterManager : MonoBehaviourPunCallbacks, ICharacterManager
         {
             Debug.Log("Instantiating Player 2");
 
-            CharacterBundle PlayerBundle = SpawnCharacter(level.PlayerCharacterSpawnpoints[PlayerNumber.Player2].CharacterBlueprint, level.PlayerCharacterSpawnpoints[PlayerNumber.Player2].GridLocation);
+            CharacterBundle PlayerBundle = SpawnCharacter(new CharacterBlueprint(new Fae()), level.PlayerCharacterSpawnpoints[PlayerNumber.Player2].GridLocation);
             Player2GO = PlayerBundle.CharacterGO;
         }
     }
@@ -99,8 +100,9 @@ public class MazeCharacterManager : MonoBehaviourPunCallbacks, ICharacterManager
         if (character.IsPlayable)
         {
             if (GameRules.GamePlayerType == GamePlayerType.SinglePlayer ||
-                GameRules.GamePlayerType == GamePlayerType.SplitScreenMultiPlayer)
+                GameRules.GamePlayerType == GamePlayerType.SplitScreenMultiplayer)
             {
+                // todo: get prefab by string, like in network game case
                 characterGO = GameObject.Instantiate(PlayerCharacterPrefab, startPosition, Quaternion.identity);
             }
             else
@@ -112,38 +114,39 @@ public class MazeCharacterManager : MonoBehaviourPunCallbacks, ICharacterManager
             playerCharacter.CharacterBlueprint = character;
 
             SetGameObjectName(playerCharacter);
-            SetPlayerNumber(playerCharacter);
-            AddPlayer(playerCharacter.PlayerNumber, playerCharacter);
+            //SetPlayerNumber(playerCharacter);
+            //AddPlayer(playerCharacter.PlayerNumber, playerCharacter);
 
-            playerCharacter.AssignCharacterType();
+            //// TODO: character type should not depend on Player Number, but on which character the player chose when starting the game
+            //playerCharacter.AssignCharacterType();
 
             playerCharacter.FreezeCharacter();
             playerCharacter.SetStartingPosition(playerCharacter, gridLocation);
 
-            if (PersistentGameManager.CurrentPlatform == Platform.PC)
-            {
-                if (_players.Count == 1)
-                {
-                    playerCharacter.KeyboardInput = KeyboardInput.Player1;
-                    playerCharacter.PlayerNoInGame = 1;
-                }
-                else if (_players.Count == 2)
-                {
-                    playerCharacter.KeyboardInput = KeyboardInput.Player2;
-                    playerCharacter.PlayerNoInGame = 2;
-                }
-                else
-                {
-                    Logger.Warning("There are {0} players in the level. There can be max 2 players in a level", _players.Count);
-                }
-            }
+            //if (PersistentGameManager.CurrentPlatform == Platform.PC)
+            //{
+            //    if (_players.Count == 1)
+            //    {
+            //        playerCharacter.KeyboardInput = KeyboardInput.Player1;
+            //        playerCharacter.PlayerNoInGame = 1;
+            //    }
+            //    else if (_players.Count == 2)
+            //    {
+            //        playerCharacter.KeyboardInput = KeyboardInput.Player2;
+            //        playerCharacter.PlayerNoInGame = 2;
+            //    }
+            //    else
+            //    {
+            //        Logger.Warning("There are {0} players in the level. There can be max 2 players in a level", _players.Count);
+            //    }
+            //}
             CharacterBundle characterBundle = new CharacterBundle(playerCharacter, characterGO);
             return characterBundle;
         }
         else
         {
             if (GameRules.GamePlayerType == GamePlayerType.SinglePlayer ||
-                GameRules.GamePlayerType == GamePlayerType.SplitScreenMultiPlayer)
+                GameRules.GamePlayerType == GamePlayerType.SplitScreenMultiplayer)
             {
                 characterGO = GameObject.Instantiate(EnemyCharacterPrefab, startPosition, Quaternion.identity);
             }
@@ -231,6 +234,11 @@ public class MazeCharacterManager : MonoBehaviourPunCallbacks, ICharacterManager
         return _players as Dictionary<PlayerNumber, MazePlayerCharacter>;
     }
 
+    public int GetPlayerCount()
+    {
+        return _players.Count;
+    }
+
     public string GetPrefabNameByCharacter(CharacterBlueprint character)
     {
         return character.CharacterType.GetPrefabPath();
@@ -274,7 +282,7 @@ public class MazeCharacterManager : MonoBehaviourPunCallbacks, ICharacterManager
 
     private void SetGameObjectName(PlayerCharacter character)
     {
-        if (GameRules.GamePlayerType == GamePlayerType.NetworkMultiPlayer)
+        if (GameRules.GamePlayerType == GamePlayerType.NetworkMultiplayer)
         {
             character.gameObject.name = character.PhotonView.Owner == null ? "Player 1" : character.PhotonView.Owner?.NickName;
         }
@@ -291,42 +299,6 @@ public class MazeCharacterManager : MonoBehaviourPunCallbacks, ICharacterManager
             else
             {
                 character.gameObject.name = "Player 2";
-            }
-        }
-    }
-
-    private void SetPlayerNumber(PlayerCharacter character)
-    {
-        if (GameRules.GamePlayerType == GamePlayerType.NetworkMultiPlayer)
-        {
-            if (PhotonNetwork.IsMasterClient)
-            {
-                if (character.PhotonView.IsMine)
-                    character.PlayerNumber = PlayerNumber.Player1;
-                else
-                    character.PlayerNumber = PlayerNumber.Player2;
-            }
-            else
-            {
-                if (character.PhotonView.IsMine)
-                    character.PlayerNumber = PlayerNumber.Player2;
-                else
-                    character.PlayerNumber = PlayerNumber.Player1;
-            }
-        }
-        else if (GameRules.GamePlayerType == GamePlayerType.SinglePlayer)
-        {
-            character.PlayerNumber = PlayerNumber.Player1;
-        }
-        else
-        {
-            if (_players.Count == 0)
-            {
-                character.PlayerNumber = PlayerNumber.Player1;
-            }
-            else
-            {
-                character.PlayerNumber = PlayerNumber.Player2;
             }
         }
     }

@@ -46,7 +46,7 @@ public class MainScreenOverlayCanvas : MonoBehaviour
 
     private void SetupBlackOutSquares()
     {
-        int blackOutSquaresToInstantiate = GameRules.GamePlayerType == GamePlayerType.SplitScreenMultiPlayer ? 2 : 1;
+        int blackOutSquaresToInstantiate = GameRules.GamePlayerType == GamePlayerType.SplitScreenMultiplayer ? 2 : 1;
 
         for (int i = 0; i < blackOutSquaresToInstantiate; i++)
         {

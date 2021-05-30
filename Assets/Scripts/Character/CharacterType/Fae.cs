@@ -11,6 +11,19 @@ namespace CharacterType
 
         public string GetPrefabPath()
         {
+            if(GameRules.GamePlayerType == GamePlayerType.NetworkMultiplayer)
+            {
+                if (PersistentGameManager.CurrentSceneType == SceneType.Maze)
+                {
+                    return "Prefabs/Character/MazeNetworkFae";
+                }
+                else
+                {
+                    return "Prefabs/Character/OverworldNetworkFae";
+                }
+            }
+
+            // GAME TYPE IS NOT NETWORK BUT SINGLEPLAYER OR SPLIT SCREEN
             if (PersistentGameManager.CurrentSceneType == SceneType.Maze)
             {
                 return "Prefabs/Character/MazePlayerCharacter";

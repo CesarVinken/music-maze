@@ -128,8 +128,8 @@ public class ScoreScreenContainer : MonoBehaviour
         }
 
         if (GameRules.GamePlayerType == GamePlayerType.SinglePlayer ||
-            GameRules.GamePlayerType == GamePlayerType.SplitScreenMultiPlayer ||
-            (GameRules.GamePlayerType == GamePlayerType.NetworkMultiPlayer && PhotonNetwork.IsMasterClient))
+            GameRules.GamePlayerType == GamePlayerType.SplitScreenMultiplayer ||
+            (GameRules.GamePlayerType == GamePlayerType.NetworkMultiplayer && PhotonNetwork.IsMasterClient))
         {
             if (GameRules.GameMode == GameMode.Campaign)
             {

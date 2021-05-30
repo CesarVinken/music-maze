@@ -185,7 +185,7 @@ namespace Photon.Pun.Demo.PunBasics
 
             if (PhotonNetwork.CurrentRoom.PlayerCount > 1)
             {
-                GameRules.SetGamePlayerType(GamePlayerType.NetworkMultiPlayer);
+                GameRules.SetGamePlayerType(GamePlayerType.NetworkMultiplayer);
 
                 GameLaunchAction launcher = new GameLaunchAction();
                 launcher.Launch();
@@ -219,7 +219,7 @@ namespace Photon.Pun.Demo.PunBasics
                 return;
             }
 
-            GameRules.SetGamePlayerType(GamePlayerType.SplitScreenMultiPlayer);
+            GameRules.SetGamePlayerType(GamePlayerType.SplitScreenMultiplayer);
 
             GameLaunchAction launcher = new GameLaunchAction();
             launcher.Launch();
