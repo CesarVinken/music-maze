@@ -9,17 +9,24 @@ public class ScoreScreenContainer : MonoBehaviour
     public static ScoreScreenContainer Instance; 
     public GameObject ScoreScreenPanel;
 
+    [SerializeField] private GameObject _firstFinishBonusRowContainer;
+
     [Space(10)]
     [Header("Text Labels")]
     [SerializeField] private Text _subtitleLabel;
 
     [SerializeField] private Text _player1Label;
-    [SerializeField] private Text _player2Label;
     [SerializeField] private Text _player1MarkedTilesScoreLabel;
-    [SerializeField] private Text _player2MarkedTilesScoreLabel;
     [SerializeField] private Text _player1TimesCaughtScoreLabel;
-    [SerializeField] private Text _player2TimesCaughtScoreLabel;
+    [SerializeField] private Text _player1FirstFinishScoreLabel;
+    [SerializeField] private Text _player1MazeTotalScoreLabel;
     [SerializeField] private Text _player1TotalScoreLabel;
+
+    [SerializeField] private Text _player2Label;
+    [SerializeField] private Text _player2MarkedTilesScoreLabel;
+    [SerializeField] private Text _player2FirstFinishScoreLabel;
+    [SerializeField] private Text _player2TimesCaughtScoreLabel;
+    [SerializeField] private Text _player2MazeTotalScoreLabel;
     [SerializeField] private Text _player2TotalScoreLabel;
 
     [SerializeField] private Text _waitingForNextLevelLabel;
@@ -28,7 +35,7 @@ public class ScoreScreenContainer : MonoBehaviour
     [SerializeField] private GameObject _toNextLevelButton;
     [SerializeField] private GameObject _toOverworldButton;
 
-    private ScoreCalculator _scoreCalculator;
+    private MazeScoreCalculator _mazeScoreCalculator;
     private bool _screenIsOpen = false;
 
     public void Awake()
@@ -36,19 +43,24 @@ public class ScoreScreenContainer : MonoBehaviour
         Guard.CheckIsNull(ScoreScreenPanel, "ScoreScreenPanel", gameObject);
 
         Guard.CheckIsNull(_subtitleLabel, "SubtitleLabel", gameObject);
+        Guard.CheckIsNull(_firstFinishBonusRowContainer, "_firstFinishBonusRowContainer", gameObject);
+
         Guard.CheckIsNull(_player1Label, "Player1Label", gameObject);
-        Guard.CheckIsNull(_player2Label, "Player2Label", gameObject);
         Guard.CheckIsNull(_player1MarkedTilesScoreLabel, "Player1MarkedTilesScoreLabel", gameObject);
-        Guard.CheckIsNull(_player2MarkedTilesScoreLabel, "Player2MarkedTilesScoreLabel", gameObject);
         Guard.CheckIsNull(_player1TimesCaughtScoreLabel, "Player1TimesCaughtScoreLabel", gameObject);
+        Guard.CheckIsNull(_player1FirstFinishScoreLabel, "Player1FirstFinishScoreLabel", gameObject);
+        Guard.CheckIsNull(_player1TotalScoreLabel, "Player1TotalScoreLabel", gameObject);
+
+        Guard.CheckIsNull(_player2Label, "Player2Label", gameObject);
+        Guard.CheckIsNull(_player2MarkedTilesScoreLabel, "Player2MarkedTilesScoreLabel", gameObject);
         Guard.CheckIsNull(_player2TimesCaughtScoreLabel, "Player2TimesCaughtScoreLabel", gameObject);
-        Guard.CheckIsNull(_player2TotalScoreLabel, "Player2TotalScoreLabel", gameObject);
+        Guard.CheckIsNull(_player2FirstFinishScoreLabel, "Player2FinishedFirstScoreLabel", gameObject);
         Guard.CheckIsNull(_player2TotalScoreLabel, "Player2TotalScoreLabel", gameObject);
         Guard.CheckIsNull(_waitingForNextLevelLabel, "WaitingForNextLevelLabel", gameObject);
         Guard.CheckIsNull(_toNextLevelButton, "ToNextLevelButton", gameObject);
         Guard.CheckIsNull(_toOverworldButton, "ToOverworldButton", gameObject);
 
-        _scoreCalculator = new ScoreCalculator();
+        _mazeScoreCalculator = new MazeScoreCalculator();
 
         CloseScoreScreenPanel();
 
@@ -91,27 +103,35 @@ public class ScoreScreenContainer : MonoBehaviour
 
         yield return new WaitForSeconds(waitTime);
 
-        _scoreCalculator.ResetMazeLevelScore();
-        _scoreCalculator.CalculateScores();
+        _mazeScoreCalculator.ResetMazeLevelScore();
+        _mazeScoreCalculator.CalculateScores();
 
         _subtitleLabel.text = $"You escaped from {MazeLevelManager.Instance.Level.Name}";
 
-        ShowScore(_scoreCalculator.PlayerScores);
+        ShowScore(_mazeScoreCalculator.PlayerMazeScores);
     }
 
-    private void ShowScore(Dictionary<PlayerNumber, PlayerScore> playerScores)
+    private void ShowScore(Dictionary<PlayerNumber, PlayerMazeScore> playerScores)
     {
-        foreach(KeyValuePair<PlayerNumber, PlayerScore> scoreSet in playerScores)
+        Logger.Log($"scores: {PersistentGameManager.PlayerOveralScores.Count}");
+        Logger.Log($"Show score: {PersistentGameManager.PlayerOveralScores[PlayerNumber.Player1]}");
+        foreach (KeyValuePair<PlayerNumber, PlayerMazeScore> scoreSet in playerScores)
         {
             if(scoreSet.Key == PlayerNumber.Player1)
             {
                 _player1Label.text = GameManager.Instance.CharacterManager.GetPlayerCharacter<PlayerCharacter>(PlayerNumber.Player1).name;
                 _player1MarkedTilesScoreLabel.text = playerScores[PlayerNumber.Player1].TileMarkScore.ToString();
                 _player1TimesCaughtScoreLabel.text = playerScores[PlayerNumber.Player1].PlayerCaughtScore.ToString();
-                _player1TotalScoreLabel.text = playerScores[PlayerNumber.Player1].TotalScore.ToString();
+                _player1FirstFinishScoreLabel.text = playerScores[PlayerNumber.Player1].FinishFirstBonusScore.ToString();
+
+                _player1MazeTotalScoreLabel.text = playerScores[PlayerNumber.Player1].MazeScore.ToString();
+                _player1TotalScoreLabel.text = PersistentGameManager.PlayerOveralScores[PlayerNumber.Player1].ToString();
+
                 _player1Label.gameObject.SetActive(true);
                 _player1MarkedTilesScoreLabel.gameObject.SetActive(true);
                 _player1TimesCaughtScoreLabel.gameObject.SetActive(true);
+                _player1FirstFinishScoreLabel.gameObject.SetActive(true);
+                _player1MazeTotalScoreLabel.gameObject.SetActive(true);
                 _player1TotalScoreLabel.gameObject.SetActive(true);
             }
             else
@@ -119,12 +139,35 @@ public class ScoreScreenContainer : MonoBehaviour
                 _player2Label.text = GameManager.Instance.CharacterManager.GetPlayerCharacter<PlayerCharacter>(PlayerNumber.Player2).name;
                 _player2MarkedTilesScoreLabel.text = playerScores[PlayerNumber.Player2].TileMarkScore.ToString();
                 _player2TimesCaughtScoreLabel.text = playerScores[PlayerNumber.Player2].PlayerCaughtScore.ToString();
-                _player2TotalScoreLabel.text = playerScores[PlayerNumber.Player2].TotalScore.ToString();
+                _player2FirstFinishScoreLabel.text = playerScores[PlayerNumber.Player2].FinishFirstBonusScore.ToString();
+
+                _player2MazeTotalScoreLabel.text = playerScores[PlayerNumber.Player2].MazeScore.ToString();
+                _player2TotalScoreLabel.text = PersistentGameManager.PlayerOveralScores[PlayerNumber.Player2].ToString();
+
                 _player2Label.gameObject.SetActive(true);
                 _player2MarkedTilesScoreLabel.gameObject.SetActive(true);
                 _player2TimesCaughtScoreLabel.gameObject.SetActive(true);
+                _player2FirstFinishScoreLabel.gameObject.SetActive(true);
+                _player2MazeTotalScoreLabel.gameObject.SetActive(true);
                 _player2TotalScoreLabel.gameObject.SetActive(true);
             }
+        }
+
+        if(playerScores.Count < 2)
+        {
+            _player2Label.gameObject.SetActive(false);
+            _player2MarkedTilesScoreLabel.gameObject.SetActive(false);
+            _player2TimesCaughtScoreLabel.gameObject.SetActive(false);
+            _player2MazeTotalScoreLabel.gameObject.SetActive(false);
+            _player2TotalScoreLabel.gameObject.SetActive(false);
+
+            _firstFinishBonusRowContainer.SetActive(false);
+            _player1FirstFinishScoreLabel.gameObject.SetActive(false);
+            _player2FirstFinishScoreLabel.gameObject.SetActive(false);
+        }
+        else
+        {
+            _firstFinishBonusRowContainer.SetActive(true);
         }
 
         if (GameRules.GamePlayerType == GamePlayerType.SinglePlayer ||
