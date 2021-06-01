@@ -244,7 +244,7 @@ public class MazeLevelManager : MonoBehaviour, IOnEventCallback
             UnloadLevel();
             SetupLevel(levelData);
 
-            ScoreScreenContainer.Instance.CloseScoreScreenPanel();
+            MazeScoreScreenContainer.Instance.CloseScoreScreenPanel();
         }
         else
         {
@@ -291,7 +291,7 @@ public class MazeLevelManager : MonoBehaviour, IOnEventCallback
             PersistentGameManager.SetCurrentSceneName(pickedLevel);
             MazeLevelLoader.LoadMazeLevel(mazeLevelData);
 
-            ScoreScreenContainer.Instance.CloseScoreScreenPanel();
+            MazeScoreScreenContainer.Instance.CloseScoreScreenPanel();
         } else if (eventCode == LoadOverworldEvent.LoadOverworldEventCode)
         {
             object[] data = (object[])photonEvent.CustomData;

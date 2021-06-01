@@ -12,6 +12,7 @@ public class PlayerCharacter : Character
     public int PlayerNoInGame = 1;  // in multiplayer on multiple computers there can be a player 1 and player 2, while both use their Player1 keyboard input
     public PlayerNumber PlayerNumber = PlayerNumber.Player1;
     public Tile LastTile;
+    public string Name;
 
     [SerializeField] protected GameObject _selectionIndicatorPrefab = null;
     [SerializeField] protected GameObject _selectionIndicatorGO = null;
@@ -26,11 +27,13 @@ public class PlayerCharacter : Character
     {
         Guard.CheckIsNull(_selectionIndicatorPrefab, "_selectionIndicatorPrefab", gameObject);
         SetPlayerNumber();
+
         GameManager.Instance.CharacterManager.AddPlayer(PlayerNumber, this); // do here and not in manager.
         int playerCount = GameManager.Instance.CharacterManager.GetPlayerCount();
 
         // TODO: character type should not depend on Player Number, but on which character the player chose when starting the game
         AssignCharacterType(); // relies on player number
+        SetPlayerName(); // relies on player type
 
         if (PersistentGameManager.CurrentPlatform == Platform.PC)
         {
@@ -403,5 +406,40 @@ public class PlayerCharacter : Character
                 PlayerNumber = PlayerNumber.Player2;
             }
         }
+        Logger.Log($"We set the player number to {PlayerNumber}");
+    }
+
+    // Should be here and not in manager.
+    private void SetPlayerName()
+    {
+        ICharacterManager characterManager = GameManager.Instance.CharacterManager;
+        
+        if (GameRules.GamePlayerType == GamePlayerType.NetworkMultiplayer)
+        {
+            Name = PhotonView.Owner == null ? "Player 1" : PhotonView.Owner?.NickName;
+        }
+        else if (GameRules.GamePlayerType == GamePlayerType.SinglePlayer)
+        {
+            Name = _characterType.ToString().Split('.')[1];
+        }
+        else // split screen
+        {
+            int playerCount = characterManager.GetPlayerCount();
+            if (playerCount == 1)
+            {
+                Name = "Player 1";
+            }
+            else if (playerCount == 2)
+            {
+                Name = "Player 2";
+            }
+            else
+            {
+                Logger.Error($"Unexpected number of players: {playerCount}");
+            }
+        }
+
+        gameObject.name = Name;
+        Logger.Warning($"Set name of character to {Name}");
     }
 }

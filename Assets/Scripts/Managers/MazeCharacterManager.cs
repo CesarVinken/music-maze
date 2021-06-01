@@ -113,33 +113,10 @@ public class MazeCharacterManager : MonoBehaviourPunCallbacks, ICharacterManager
             PlayerCharacter playerCharacter = characterGO.GetComponent<PlayerCharacter>();
             playerCharacter.CharacterBlueprint = character;
 
-            SetGameObjectName(playerCharacter);
-            //SetPlayerNumber(playerCharacter);
-            //AddPlayer(playerCharacter.PlayerNumber, playerCharacter);
-
-            //// TODO: character type should not depend on Player Number, but on which character the player chose when starting the game
-            //playerCharacter.AssignCharacterType();
 
             playerCharacter.FreezeCharacter();
             playerCharacter.SetStartingPosition(playerCharacter, gridLocation);
 
-            //if (PersistentGameManager.CurrentPlatform == Platform.PC)
-            //{
-            //    if (_players.Count == 1)
-            //    {
-            //        playerCharacter.KeyboardInput = KeyboardInput.Player1;
-            //        playerCharacter.PlayerNoInGame = 1;
-            //    }
-            //    else if (_players.Count == 2)
-            //    {
-            //        playerCharacter.KeyboardInput = KeyboardInput.Player2;
-            //        playerCharacter.PlayerNoInGame = 2;
-            //    }
-            //    else
-            //    {
-            //        Logger.Warning("There are {0} players in the level. There can be max 2 players in a level", _players.Count);
-            //    }
-            //}
             CharacterBundle characterBundle = new CharacterBundle(playerCharacter, characterGO);
             return characterBundle;
         }
@@ -278,28 +255,5 @@ public class MazeCharacterManager : MonoBehaviourPunCallbacks, ICharacterManager
         }
 
         return ourPlayerCharacter;
-    }
-
-    private void SetGameObjectName(PlayerCharacter character)
-    {
-        if (GameRules.GamePlayerType == GamePlayerType.NetworkMultiplayer)
-        {
-            character.gameObject.name = character.PhotonView.Owner == null ? "Player 1" : character.PhotonView.Owner?.NickName;
-        }
-        else if (GameRules.GamePlayerType == GamePlayerType.SinglePlayer)
-        {
-            character.gameObject.name = character.CharacterBlueprint.CharacterType.GetType().ToString().Split('.')[1];
-        }
-        else // split screen
-        {
-            if (_players.Count == 0)
-            {
-                character.gameObject.name = "Player 1";
-            }
-            else
-            {
-                character.gameObject.name = "Player 2";
-            }
-        }
     }
 }

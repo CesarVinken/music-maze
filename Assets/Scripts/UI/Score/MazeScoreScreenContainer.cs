@@ -4,9 +4,9 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class ScoreScreenContainer : MonoBehaviour
+public class MazeScoreScreenContainer : MonoBehaviour
 {
-    public static ScoreScreenContainer Instance; 
+    public static MazeScoreScreenContainer Instance; 
     public GameObject ScoreScreenPanel;
 
     [SerializeField] private GameObject _firstFinishBonusRowContainer;

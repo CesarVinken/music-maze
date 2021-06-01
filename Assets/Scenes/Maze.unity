@@ -307,8 +307,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ScoreScreenPanel: {fileID: 2037339656}
+  _firstFinishBonusRowContainer: {fileID: 1319788340}
   _subtitleLabel: {fileID: 134831207}
-  _firstFinishLabel: {fileID: 136271488}
   _player1Label: {fileID: 1154196320}
   _player1MarkedTilesScoreLabel: {fileID: 1365266345}
   _player1TimesCaughtScoreLabel: {fileID: 294037753}

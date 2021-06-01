@@ -12,6 +12,8 @@ public class OverworldPlayerCharacter : PlayerCharacter
         Dictionary<PlayerNumber, OverworldPlayerCharacter> players = GameManager.Instance.CharacterManager.GetPlayers<OverworldPlayerCharacter>();
 
         base.Awake();
+
+        OverworldScoreContainer.Instance.UpdateScoreLabel(PlayerNumber);
     }
 
     public override void Start()
