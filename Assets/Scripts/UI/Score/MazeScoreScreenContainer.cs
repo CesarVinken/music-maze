@@ -113,8 +113,6 @@ public class MazeScoreScreenContainer : MonoBehaviour
 
     private void ShowScore(Dictionary<PlayerNumber, PlayerMazeScore> playerScores)
     {
-        Logger.Log($"scores: {PersistentGameManager.PlayerOveralScores.Count}");
-        Logger.Log($"Show score FinishFirstBonusScore: {playerScores[PlayerNumber.Player1].FinishFirstBonusScore} and {playerScores[PlayerNumber.Player2].FinishFirstBonusScore}");
         foreach (KeyValuePair<PlayerNumber, PlayerMazeScore> scoreSet in playerScores)
         {
             if(scoreSet.Key == PlayerNumber.Player1)

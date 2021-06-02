@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using CharacterType;
+using System.Linq;
 
 public class OverworldCharacterManager : MonoBehaviourPunCallbacks, ICharacterManager
 {
@@ -143,6 +144,16 @@ public class OverworldCharacterManager : MonoBehaviourPunCallbacks, ICharacterMa
     public Dictionary<PlayerNumber, PlayerCharacter> GetPlayers<PlayerCharacter>()
     {
         return _players as Dictionary<PlayerNumber, PlayerCharacter>;
+    }
+
+    public Dictionary<PlayerNumber, string> GetPlayerNames()
+    {
+        Dictionary<PlayerNumber, string> playerNamesDictionary = new Dictionary<PlayerNumber, string>();
+        foreach (var item in _players)
+        {
+            playerNamesDictionary.Add(item.Key, item.Value.Name);
+        }
+        return playerNamesDictionary;
     }
 
     public PlayerCharacter GetPlayerCharacter<T>(PlayerNumber playerNumber) where T : PlayerCharacter

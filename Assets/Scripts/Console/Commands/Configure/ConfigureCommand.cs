@@ -1,7 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
+﻿using System.Collections.Generic;
 
 public class ConfigureCommand : CommandProcedure
 {
@@ -14,15 +11,18 @@ public class ConfigureCommand : CommandProcedure
 
             switch (infoObject)
             {
-                case "maze":
-                    Configure(new ConfigureMaze(), arguments);
-                    break;
                 case "default-maze":
                     Configure(new ConfigureDefaultMaze(), arguments);
                     break;
+                case "maze":
+                    Configure(new ConfigureMaze(), arguments);
+                    break;
+                case "score":
+                    Configure(new ConfigureScore(), arguments);
+                    break;
                 default:
                     //Console.Instance.PrintToReportText();
-                    string message = $"Unknown configure argument '{infoObject}' for the configure command. Try 'maze' or 'default-maze'";
+                    string message = $"Unknown configure argument '{infoObject}' for the configure command. Try 'score', 'maze' or 'default-maze'";
                     throw new UnknownArgumentConsoleException(message);
             }
         }
@@ -48,8 +48,9 @@ public class ConfigureCommand : CommandProcedure
     public override void Help()
     {
         string printLine = "The configure command can be used to configure things such as maze levels.\n";
-        printLine += "With 'default-maze' as a second argument, you can set the default level. Input the name of the level as third argument\n";
-        printLine += "For this use 'maze' as a second argument and enter as a third argument what should be configured. The configured state, such as 'on' or 'off' should be given as a fourth argument. \n\n";
+        printLine += "With '<color=" + ConsoleConfiguration.HighlightColour + ">score</color>' as a second argument, you can set the score of a player. Input the name of the player as third argument and their desired score as fourth argument\n";
+        printLine += "With '<color=" + ConsoleConfiguration.HighlightColour + ">default-maze</color>' as a second argument, you can set the default level. Input the name of the level as third argument\n";
+        printLine += "For this use '<color=" + ConsoleConfiguration.HighlightColour + ">maze</color>' as a second argument and enter as a third argument what should be configured. The configured state, such as 'on' or 'off' should be given as a fourth argument. \n\n";
 
         Console.Instance.PrintToReportText(printLine);
     }

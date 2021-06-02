@@ -216,6 +216,16 @@ public class MazeCharacterManager : MonoBehaviourPunCallbacks, ICharacterManager
         return _players as Dictionary<PlayerNumber, MazePlayerCharacter>;
     }
 
+    public Dictionary<PlayerNumber, string> GetPlayerNames()
+    {
+        Dictionary<PlayerNumber, string> playerNamesDictionary = new Dictionary<PlayerNumber, string>();
+        foreach (var item in _players)
+        {
+            playerNamesDictionary.Add(item.Key, item.Value.Name);
+        }
+        return playerNamesDictionary;
+    }
+
     public int GetPlayerCount()
     {
         return _players.Count;
