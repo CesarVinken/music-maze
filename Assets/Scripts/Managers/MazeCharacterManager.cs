@@ -170,6 +170,11 @@ public class MazeCharacterManager : MonoBehaviourPunCallbacks, ICharacterManager
             }
         }
 
+        if(exitedCharacters == 1 && GameRules.GamePlayerType != GamePlayerType.SinglePlayer)
+        {
+            player.FinishedFirstBonus = true;
+        }
+
         if (exitedCharacters == _players.Count)
         {
             Logger.Warning("The level is completed!");

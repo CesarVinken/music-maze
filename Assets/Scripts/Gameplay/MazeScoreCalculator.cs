@@ -53,6 +53,7 @@ public class MazeScoreCalculator
 
         CountTileMarkerScores();
         CountTimesCaughtScores();
+        CountFirstFinishedBonus();
 
         Dictionary<PlayerNumber, PlayerMazeScore> tempPlayerScores = new Dictionary<PlayerNumber, PlayerMazeScore>();
 
@@ -73,10 +74,11 @@ public class MazeScoreCalculator
     private void CountTileMarkerScores()
     {
         Dictionary<PlayerNumber, int> tempPlayerScores = new Dictionary<PlayerNumber, int>();
+        List<InGameMazeTile> markedTiles = MazeLevelManager.Instance.Level.Tiles.Where(t => t.PlayerMark != null).ToList();
 
         int playerMarkScorePlayer1 = 0;
         int playerMarkScorePlayer2 = 0;
-        List<InGameMazeTile> markedTiles = MazeLevelManager.Instance.Level.Tiles.Where(t => t.PlayerMark != null).ToList();
+
         for (int i = 0; i < markedTiles.Count; i++)
         {
             PlayerMark playerMark = markedTiles[i].PlayerMark;
@@ -108,20 +110,38 @@ public class MazeScoreCalculator
 
     private void CountTimesCaughtScores()
     {
+
+        MazeCharacterManager characterManager = GameManager.Instance.CharacterManager as MazeCharacterManager;
+
+        if (characterManager == null) return;
+
         Dictionary<PlayerNumber, PlayerMazeScore> tempPlayerScores = new Dictionary<PlayerNumber, PlayerMazeScore>();
-        
+
         foreach (KeyValuePair<PlayerNumber, PlayerMazeScore> item in PlayerMazeScores)
         {
-            MazeCharacterManager characterManager = GameManager.Instance.CharacterManager as MazeCharacterManager;
-
-            if (characterManager == null) return;
-
             Dictionary<PlayerNumber, MazePlayerCharacter> players = characterManager.GetPlayers<MazePlayerCharacter>();
             int playerCaughtScore = players[item.Key].TimesCaught * -PlayerCaughtPenaltyValue;
             PlayerMazeScore p = item.Value;
             p.PlayerCaughtScore = playerCaughtScore;
             tempPlayerScores.Add(item.Key, p);
         }
+        PlayerMazeScores = tempPlayerScores;
+    }
+
+    private void CountFirstFinishedBonus()
+    {
+        Dictionary<PlayerNumber, MazePlayerCharacter> players = GameManager.Instance.CharacterManager.GetPlayers<MazePlayerCharacter>();
+        Dictionary<PlayerNumber, PlayerMazeScore> tempPlayerScores = new Dictionary<PlayerNumber, PlayerMazeScore>();
+
+        foreach (KeyValuePair<PlayerNumber, PlayerMazeScore> item in PlayerMazeScores)
+        {
+
+            int playerCaughtScore = players[item.Key].FinishedFirstBonus ? 50 : 0;
+            PlayerMazeScore p = item.Value;
+            p.PlayerCaughtScore = playerCaughtScore;
+            tempPlayerScores.Add(item.Key, p);
+        }
+
         PlayerMazeScores = tempPlayerScores;
     }
 

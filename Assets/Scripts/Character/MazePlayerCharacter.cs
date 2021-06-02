@@ -6,6 +6,8 @@ using UnityEngine;
 public class MazePlayerCharacter : PlayerCharacter
 {
     public bool HasReachedExit = false;
+    public bool FinishedFirstBonus = false;
+
     public event Action PlayerExitsEvent;
     public event Action PlayerCaughtEvent;
 
