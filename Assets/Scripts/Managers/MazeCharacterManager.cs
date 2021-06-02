@@ -170,7 +170,7 @@ public class MazeCharacterManager : MonoBehaviourPunCallbacks, ICharacterManager
             }
         }
 
-        if(exitedCharacters == 1 && GameRules.GamePlayerType != GamePlayerType.SinglePlayer)
+        if (exitedCharacters == 1 && GameRules.GamePlayerType != GamePlayerType.SinglePlayer)
         {
             player.FinishedFirstBonus = true;
         }

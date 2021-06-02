@@ -9,8 +9,6 @@ public class OverworldPlayerCharacter : PlayerCharacter
 
     public override void Awake()
     {
-        Dictionary<PlayerNumber, OverworldPlayerCharacter> players = GameManager.Instance.CharacterManager.GetPlayers<OverworldPlayerCharacter>();
-
         base.Awake();
 
         OverworldScoreContainer.Instance.UpdateScoreLabel(PlayerNumber);

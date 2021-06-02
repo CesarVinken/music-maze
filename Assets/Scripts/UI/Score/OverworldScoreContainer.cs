@@ -57,7 +57,6 @@ public class OverworldScoreContainer : MonoBehaviour
     {
         Dictionary<PlayerNumber, int> playerOveralScores = PersistentGameManager.PlayerOveralScores;
         Dictionary<PlayerNumber, OverworldPlayerCharacter> playerCharacters = GameManager.Instance.CharacterManager.GetPlayers<OverworldPlayerCharacter>();
-
         if (PlayerScores.ContainsKey(playerNumber))
         {
             if(playerOveralScores.TryGetValue(playerNumber, out int playerScore))
@@ -90,47 +89,6 @@ public class OverworldScoreContainer : MonoBehaviour
         }
 
         PlayerScores[playerNumber].GetTextLabel().text = $"{playerCharacters[playerNumber].Name}: {PlayerScores[playerNumber].GetPlayerScore()} points";
+        PlayerScores[playerNumber].GetTextLabel().gameObject.SetActive(true);
     }
-
-    //public void UpdateScoreLabels()
-    //{
-    //    Dictionary<PlayerNumber, OverworldPlayerCharacter> playerCharacters = GameManager.Instance.CharacterManager.GetPlayers<OverworldPlayerCharacter>();
-    //    Dictionary<PlayerNumber, int> playerOveralScores = PersistentGameManager.PlayerOveralScores;
-    //    Logger.Log($"no of players: {playerCharacters.Count}");
-    //    foreach (KeyValuePair<PlayerNumber, OverworldPlayerCharacter> item in playerCharacters)
-    //    {
-    //        Logger.Log($"In loop found playerNumber {item.Key}");
-    //        if(playerOveralScores.TryGetValue(item.Key, out int playerScore))
-    //        {
-    //            Logger.Log($"We add player number {item.Key}");
-    //            PlayerScores.Add(item.Key, playerScore);
-    //        }
-    //        else
-    //        {
-    //            Logger.Log($"We did not find player number {item.Key}");
-    //            PersistentGameManager.PlayerOveralScores.Add(item.Key, 0);
-    //            PlayerScores.Add(item.Key, 0);
-    //        }
-    //    }
-
-    //    if(PlayerScores.Count == 2)
-    //    {
-    //        _player1ScoreLabel.gameObject.SetActive(true);
-    //        _player2ScoreLabel.gameObject.SetActive(true);
-
-    //        _player1ScoreLabel.text = $"{playerCharacters[PlayerNumber.Player1].Name}: {PlayerScores[PlayerNumber.Player1]} points";
-    //        _player1ScoreLabel.text = $"{playerCharacters[PlayerNumber.Player2].Name}: {PlayerScores[PlayerNumber.Player2]} points";
-    //    }
-    //    else if (PlayerScores.Count == 1)
-    //    {
-    //        _player1ScoreLabel.gameObject.SetActive(true);
-    //        _player1ScoreLabel.text = $"{playerCharacters[PlayerNumber.Player1].Name}: {PlayerScores[PlayerNumber.Player1]} points";
-
-    //        _player2ScoreLabel.gameObject.SetActive(false);
-    //    }
-    //    else
-    //    {
-    //        Logger.Error($"Unexpected number of player scores: {PlayerScores.Count}");
-    //    }
-    //}
 }

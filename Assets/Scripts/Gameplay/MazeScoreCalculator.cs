@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using UnityEngine;
 
 public struct PlayerMazeScore
 {
@@ -68,7 +67,6 @@ public class MazeScoreCalculator
         }
 
         PlayerMazeScores = tempPlayerScores;
-
     }
 
     private void CountTileMarkerScores()
@@ -110,7 +108,6 @@ public class MazeScoreCalculator
 
     private void CountTimesCaughtScores()
     {
-
         MazeCharacterManager characterManager = GameManager.Instance.CharacterManager as MazeCharacterManager;
 
         if (characterManager == null) return;
@@ -135,10 +132,9 @@ public class MazeScoreCalculator
 
         foreach (KeyValuePair<PlayerNumber, PlayerMazeScore> item in PlayerMazeScores)
         {
-
-            int playerCaughtScore = players[item.Key].FinishedFirstBonus ? 50 : 0;
+            int finishFirstBonusScore = players[item.Key].FinishedFirstBonus ? 50 : 0;
             PlayerMazeScore p = item.Value;
-            p.PlayerCaughtScore = playerCaughtScore;
+            p.FinishFirstBonusScore = finishFirstBonusScore;
             tempPlayerScores.Add(item.Key, p);
         }
 
