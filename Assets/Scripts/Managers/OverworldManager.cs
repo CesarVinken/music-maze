@@ -19,6 +19,7 @@ public class OverworldManager : MonoBehaviour, IOnEventCallback
     [SerializeField] private GameObject _tilePathPrefab;
     [SerializeField] private GameObject _playerSpawnpointPrefab;
     [SerializeField] private GameObject _mazeLevelEntryPrefab;
+    [SerializeField] private GameObject _cornerFillerPrefab;
 
     public void Awake()
     {
@@ -31,6 +32,7 @@ public class OverworldManager : MonoBehaviour, IOnEventCallback
         Guard.CheckIsNull(_tilePathPrefab, "TilePathPrefab", gameObject);
         Guard.CheckIsNull(_playerSpawnpointPrefab, "PlayerSpawnpointPrefab", gameObject);
         Guard.CheckIsNull(_mazeLevelEntryPrefab, "MazeLevelEntryPrefab", gameObject);
+        Guard.CheckIsNull(_cornerFillerPrefab, "CornerFillerPrefab", gameObject);
 
         MazeLevelInvitation.PendingInvitation = false;
     }
@@ -164,6 +166,8 @@ public class OverworldManager : MonoBehaviour, IOnEventCallback
                 return _tileBaseWaterPrefab;
             case Type path when path == typeof(OverworldTilePath):
                 return _tilePathPrefab;
+            case Type cornerFiller when cornerFiller == typeof(TileCornerFiller):
+                return _cornerFillerPrefab;
             default:
                 Logger.Error($"Could not find a prefab for the tile background type of {typeof(T)}");
                 return null;

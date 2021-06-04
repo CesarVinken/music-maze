@@ -5,7 +5,6 @@ public class TileBaseGround : MonoBehaviour, ITileBackground, ITileConnectable
 {
     public Tile Tile;
     public string ParentId;
-
     public IBaseBackgroundType TileGroundType;
 
     [SerializeField] protected Sprite _sprite;

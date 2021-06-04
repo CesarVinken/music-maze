@@ -41,20 +41,6 @@ public class EditorMazeTileBaseGround : EditorMazeTileBackgroundModifier, IGroun
             {
                 tileBackgroundRemover.RemoveBackground<MazeTileBaseWater>();
             }
-
-            //if (oldMazeTileBaseGround == null)
-            //{
-            //    MazeTileBaseGround newMazeTileBaseGround = tileBackgroundPlacer.PlaceBackground<MazeTileBaseGround>();
-            //    if (newMazeTileBaseGround.ConnectionScore == 16)
-            //    {
-            //        tileBackgroundRemover.RemoveBackground<MazeTileBaseWater>();
-            //    }
-            //}
-            //else
-            //{
-            //    tileBackgroundPlacer.PlaceBackground<MazeTileBaseGround>();
-            //    //tileBackgroundPlacer.UpdateGroundConnectionsOnNeighbours(new MazeLevelDefaultGroundType());
-            //}
         }
     }
 

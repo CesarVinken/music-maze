@@ -27,9 +27,7 @@ public class OverworldTileBackgroundPlacer<T> : TileBackgroundPlacer<T> where T 
         mazeTileBaseGround.WithConnectionScoreInfo(connectionScoreInfo);
         mazeTileBaseGround.SetTile(Tile);
 
-        //Tile.SetMainMaterial(new GroundMainMaterial());
         Tile.AddBackground(mazeTileBaseGround);
-        //Tile.Walkable = true;
     }
 
     public override void PlaceWater(IBaseBackgroundType waterType, TileConnectionScoreInfo pathConnectionScoreInfo)

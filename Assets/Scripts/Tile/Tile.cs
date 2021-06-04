@@ -2,6 +2,14 @@
 using System.Linq;
 using UnityEngine;
 
+public enum TileCorner
+{
+    RightUp,
+    RightDown,
+    LeftDown,
+    LeftUp
+}
+
 public abstract class Tile : MonoBehaviour
 {
     private bool _walkable = true;
@@ -16,6 +24,7 @@ public abstract class Tile : MonoBehaviour
 
     protected List<ITileAttribute> _tileAttributes = new List<ITileAttribute>();
     protected List<ITileBackground> _tileBackgrounds = new List<ITileBackground>();
+    protected List<TileCornerFiller> _tileCornerFillers = new List<TileCornerFiller>();
 
     public bool Walkable { get => _walkable; protected set => _walkable = value; }
 
@@ -83,6 +92,23 @@ public abstract class Tile : MonoBehaviour
 
     public abstract TileObstacle TryGetTileObstacle();
 
+    public void AddCornerFiller(TileCornerFiller cornerFiller)
+    {
+        _tileCornerFillers.Add(cornerFiller);
+    }
+
+    public void TryRemoveCornerFiller(TileCorner tileCorner)
+    {
+        Logger.Warning("Try to remove corner filler");
+        TileCornerFiller cornerFiller = TryGetCornerFiller(tileCorner);
+
+        if (cornerFiller)
+        {
+            _tileCornerFillers.Remove(cornerFiller);
+            cornerFiller.Remove();
+        }
+    }
+
     public TilePath TryGetTilePath()
     {
         TilePath tilePath = (TilePath)_tileBackgrounds.FirstOrDefault(background => background is TilePath);
@@ -120,6 +146,18 @@ public abstract class Tile : MonoBehaviour
         return tileGround;
     }
 
+    public TileCornerFiller TryGetCornerFiller(TileCorner tileCorner)
+    {
+        TileCornerFiller cornerFiller = (TileCornerFiller)_tileCornerFillers.FirstOrDefault(background => background is TileCornerFiller && background.TileCorner == tileCorner);
+
+        if (cornerFiller == null)
+        {
+            return null;
+        }
+
+        return cornerFiller;
+    }
+
     public void InitialiseTileBackgrounds()
     {
         for (int i = 0; i < _tileBackgrounds.Count; i++)
@@ -135,7 +173,6 @@ public abstract class Tile : MonoBehaviour
             _tileAttributes[i].SetTile(this);
         }
     }
-
 
     public void AddNeighbours<T>(T level) where T : IGameScene<Tile>
     {

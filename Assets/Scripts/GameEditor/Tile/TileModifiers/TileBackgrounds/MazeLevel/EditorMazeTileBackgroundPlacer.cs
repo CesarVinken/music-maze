@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
 
 public class EditorMazeTileBackgroundPlacer : MazeTileBackgroundPlacer<EditorMazeTile>
@@ -79,37 +78,8 @@ public class EditorMazeTileBackgroundPlacer : MazeTileBackgroundPlacer<EditorMaz
         // Update Connections for neighbouring tiles
         UpdatePathConnectionsOnNeighbours();
         UpdateGroundConnectionsOnNeighbours(new MazeLevelDefaultGroundType());
-        //Tile.RemoveBeautificationTriggerers();
 
         return mazeTileBaseWater;
-    }
-
-    public ITileBackground PlaceGround<U>(IBaseBackgroundType groundType) where U : ITileBackground, ITileConnectable
-    {
-        TileConnectionScoreInfo groundConnectionScore = NeighbourTileCalculator.MapGroundConnectionsWithNeighbours(Tile, new MazeLevelDefaultGroundType());
-        
-        Logger.Log($"Place ground. Connection Score: {groundConnectionScore.RawConnectionScore}");
-        U oldBackground = (U)Tile.GetBackgrounds().FirstOrDefault(background => background is U);
-        if (oldBackground != null)
-        {
-            //UpdateWaterConnectionsOnNeighbours(new MazeLevelDefaultWaterType());
-            return oldBackground;
-        }
-
-        GameObject backgroundGO = GameObject.Instantiate(MazeLevelManager.Instance.GetTileBackgroundPrefab<U>(), Tile.BackgroundsContainer);
-        U baseBackground = backgroundGO.GetComponent<U>();
-
-        // Update land connections on neighbours, because placing somewhere affects coastlines
-        UpdateGroundConnectionsOnNeighbours(groundType);
-
-        baseBackground.SetTile(Tile);
-        baseBackground.WithType(groundType);
-        baseBackground.WithConnectionScoreInfo(groundConnectionScore);
-
-        Tile.AddBackground(baseBackground);
-        //Tile.RemoveBeautificationTriggerers();
-
-        return baseBackground;
     }
 
     public void PlaceCoveringBaseWater()
@@ -137,7 +107,6 @@ public class EditorMazeTileBackgroundPlacer : MazeTileBackgroundPlacer<EditorMaz
         baseBackground.WithType(new MazeLevelDefaultGroundType());
         baseBackground.WithConnectionScoreInfo(new TileConnectionScoreInfo(16));
         Tile.AddBackground(baseBackground);
-        //Tile.RemoveBeautificationTriggerers();
 
         UpdateGroundConnectionsOnNeighbours(new MazeLevelDefaultGroundType());
 

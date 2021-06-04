@@ -51,7 +51,7 @@ public class EditorGridModificationPanel : MonoBehaviour, IEditorModificationPan
     {
         if (int.TryParse(input, out int result)) return true;
 
-        Logger.Warning("Could not parse the input {0}. Make sure to only give numeric values.", input);
+        Logger.Warning("Could not parse the input '{0}'. Make sure to only give numeric values.", input);
         return false;
     }
 }
