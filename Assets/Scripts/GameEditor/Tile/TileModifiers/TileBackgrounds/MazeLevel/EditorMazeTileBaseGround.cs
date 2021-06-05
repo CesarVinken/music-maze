@@ -24,11 +24,6 @@ public class EditorMazeTileBaseGround : EditorMazeTileBackgroundModifier, IGroun
                 tileAttributeRemover.Remove(attributes[i]);
             }
 
-            //if (oldMainMaterial == typeof(WaterMainMaterial) || tile.TileMainMaterial == null)
-            //{
-            //    tileBackgroundRemover.RemoveBackground<MazeTileBaseWater>();
-            //}
-
             // Remove the old land background, because we are going to fully cover it with a new land background
             if(oldMazeTileBaseGround != null && oldMazeTileBaseGround.ConnectionScore != 16)
             {
@@ -42,6 +37,10 @@ public class EditorMazeTileBaseGround : EditorMazeTileBackgroundModifier, IGroun
                 tileBackgroundRemover.RemoveBackground<MazeTileBaseWater>();
             }
         }
+
+        // Place corner fillers
+        TileCornerFillerRegister.TryPlaceCornerFillers(tile);
+        TileCornerFillerRegister.TryPlaceCornerFillersForNeighbours(tile);
     }
 
     public override void PlaceBackgroundVariation(EditorMazeTile tile)

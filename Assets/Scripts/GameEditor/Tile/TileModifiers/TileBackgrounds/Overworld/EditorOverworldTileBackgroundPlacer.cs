@@ -184,14 +184,11 @@ public class EditorOverworldTileBackgroundPlacer : OverworldTileBackgroundPlacer
                 backgroundRemover.RemoveBackground<OverworldTileBaseGround>();
             }
         }
-    }
-
-
-
-    
+    }  
 
     public void UpdateGroundConnectionsOnNeighbours(IBaseBackgroundType groundType)
     {
+        Logger.Log($"UpdateGroundConnectionsOnNeighbours with ground type {groundType}");
         foreach (KeyValuePair<ObjectDirection, Tile> neighbour in Tile.Neighbours)
         {
             EditorOverworldTile neighbourTile = neighbour.Value as EditorOverworldTile;
@@ -224,18 +221,6 @@ public class EditorOverworldTileBackgroundPlacer : OverworldTileBackgroundPlacer
             {
                 //Logger.Warning($"This is where we need to update the neighbours of the neighbours watercornerends. newGroundConnectionScoreOnNeighbourInfo ${newGroundConnectionScoreOnNeighbourInfo.RawConnectionScore} at {neighbourTile.GridLocation.X}, {neighbourTile.GridLocation.Y}");
                 existingGround.WithConnectionScoreInfo(newGroundConnectionScoreOnNeighbourInfo);
-
-                //if(newGroundConnectionScoreOnNeighbourInfo.RawConnectionScore == 22)
-                //{
-                //    if(neighbour.Key == ObjectDirection.Right) 
-                //    { 
-                //        Tile.TryAddCornerFiller(TileCorner.LeftUp);
-                //    }
-                //    else if(neighbour.Key == ObjectDirection.Left)
-                //    {
-                //        Tile.TryAddCornerFiller(TileCorner.RightUp);
-                //    }
-                //}
             }
         }
     }

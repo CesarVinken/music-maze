@@ -16,6 +16,8 @@ public class EditorOverworldTileBaseGround : EditorOverworldTileBackgroundModifi
         Type oldMainMaterial = tile.TileMainMaterial?.GetType(); // old material before updating it
         ITileBackground overworldTileBaseGround = (OverworldTileBaseGround)tile.GetBackgrounds().FirstOrDefault(background => background is OverworldTileBaseGround);
 
+
+        OverworldTileBaseGround oldOverworldTileBaseGround = (OverworldTileBaseGround)tile.GetBackgrounds().FirstOrDefault(background => background is OverworldTileBaseGround);
         if (oldMainMaterial != typeof(GroundMainMaterial))
         {
             List<ITileAttribute> attributes = tile.GetAttributes();
@@ -24,20 +26,37 @@ public class EditorOverworldTileBaseGround : EditorOverworldTileBackgroundModifi
                 tileAttributeRemover.Remove(attributes[i]);
             }
 
-            if (oldMainMaterial == typeof(WaterMainMaterial) || tile.TileMainMaterial == null)
+            //if (oldMainMaterial == typeof(WaterMainMaterial) || tile.TileMainMaterial == null)
+            //{
+            //    tileBackgroundRemover.RemoveBackground<OverworldTileBaseWater>();
+            //}
+
+            //if(overworldTileBaseGround == null)
+            //{
+            //    tileBackgroundPlacer.PlaceBackground<OverworldTileBaseGround>();
+            //}
+            //else
+            //{
+            //    tileBackgroundPlacer.UpdateGroundConnectionsOnNeighbours(new OverworldDefaultGroundType());
+            //}
+
+            if (oldOverworldTileBaseGround != null && oldOverworldTileBaseGround.ConnectionScore != 16)
+            {
+                tileBackgroundRemover.RemoveBackground<OverworldTileBaseGround>();
+            }
+
+            OverworldTileBaseGround newMazeTileBaseGround = tileBackgroundPlacer.PlaceBackground<OverworldTileBaseGround>();
+            // Remove water from the tile that is fully covered by land
+            if (newMazeTileBaseGround.ConnectionScore == 16)
             {
                 tileBackgroundRemover.RemoveBackground<OverworldTileBaseWater>();
             }
 
-            if(overworldTileBaseGround == null)
-            {
-                tileBackgroundPlacer.PlaceBackground<OverworldTileBaseGround>();
-            }
-            else
-            {
-                tileBackgroundPlacer.UpdateGroundConnectionsOnNeighbours(new MazeLevelDefaultGroundType());
-            }
         }
+
+        // Place corner fillers
+        TileCornerFillerRegister.TryPlaceCornerFillers(tile);
+        TileCornerFillerRegister.TryPlaceCornerFillersForNeighbours(tile);
     }
 
     public override void PlaceBackgroundVariation(EditorOverworldTile tile)

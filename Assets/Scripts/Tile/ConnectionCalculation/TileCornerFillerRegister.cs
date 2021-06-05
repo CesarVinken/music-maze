@@ -464,6 +464,10 @@ public class TileCornerFillerRegister
                 TryRemoveCornerFiller(tile.Neighbours[ObjectDirection.Down], TileCorner.LeftUp);
                 TryAddCornerFiller(tile, TileCorner.LeftDown);
             }
+            else if (downConnectionScore == 32)
+            {
+                TryRemoveCornerFiller(tile.Neighbours[ObjectDirection.Down], TileCorner.LeftUp);
+            }
             else if (downConnectionScore == 34)
             {
                 TryRemoveCornerFiller(tile, TileCorner.LeftDown);
@@ -545,7 +549,6 @@ public class TileCornerFillerRegister
             }
             else if (rightConnectionScore == 25)
             {
-                TryAddCornerFiller(tile, TileCorner.LeftDown);
                 TryRemoveCornerFiller(tile.Neighbours[ObjectDirection.Right], TileCorner.LeftDown);
             }
             else if (rightConnectionScore == 31)
@@ -611,6 +614,7 @@ public class TileCornerFillerRegister
             else if (leftConnectionScore == 21)
             {
                 TryRemoveCornerFiller(tile.Neighbours[ObjectDirection.Left], TileCorner.RightDown);
+                TryRemoveCornerFiller(tile, TileCorner.LeftDown);
             }
             else if (leftConnectionScore == 23)
             {
@@ -638,7 +642,7 @@ public class TileCornerFillerRegister
             else if (rightConnectionScore == 25)
             {
                 TryRemoveCornerFiller(tile.Neighbours[ObjectDirection.Right], TileCorner.LeftDown);
-                TryRemoveCornerFiller(tile, TileCorner.LeftUp);
+                TryRemoveCornerFiller(tile, TileCorner.RightDown);
                 TryAddCornerFiller(tile, TileCorner.RightUp);
             }
             else if (rightConnectionScore == 31)
