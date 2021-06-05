@@ -49,7 +49,7 @@ public class EditorGridModificationPanel : MonoBehaviour, IEditorModificationPan
 
     public bool ValidateNumericInput(string input)
     {
-        if (int.TryParse(input, out int result)) return true;
+        if (int.TryParse(input.Trim(), out int result)) return true;
 
         Logger.Warning("Could not parse the input '{0}'. Make sure to only give numeric values.", input);
         return false;

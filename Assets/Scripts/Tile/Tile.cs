@@ -99,7 +99,7 @@ public abstract class Tile : MonoBehaviour
 
     public void TryRemoveCornerFiller(TileCorner tileCorner)
     {
-        Logger.Warning("Try to remove corner filler");
+        Logger.Warning($"Try to remove corner filler at {GridLocation.X}, {GridLocation.Y} in the {tileCorner} corner");
         TileCornerFiller cornerFiller = TryGetCornerFiller(tileCorner);
 
         if (cornerFiller)

@@ -79,6 +79,10 @@ public class EditorMazeTileBackgroundPlacer : MazeTileBackgroundPlacer<EditorMaz
         UpdatePathConnectionsOnNeighbours();
         UpdateGroundConnectionsOnNeighbours(new MazeLevelDefaultGroundType());
 
+        // Place corner fillers
+        TileCornerFillerRegister.TryPlaceCornerFillers(Tile);
+        TileCornerFillerRegister.TryPlaceCornerFillersForNeighbours(Tile);
+
         return mazeTileBaseWater;
     }
 
