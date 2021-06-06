@@ -10,6 +10,8 @@ public class SerialisableTile
 
     public List<SerialisableTileAttribute> TileAttributes;
     public List<SerialisableTileBackground> TileBackgrounds;
+    public List<SerialisableTileCornerFiller> TileCornerFillers;
+
     public SerialisableGridLocation GridLocation;
 
     public List<SerialisableGridLocation> TilesToTransform;
@@ -20,6 +22,7 @@ public class SerialisableTile
         MainMaterial = SerialiseMainMaterial(tile);
         TileAttributes = SerialiseTileAttributes(tile);
         TileBackgrounds = SerialiseTileBackgrounds(tile);
+        TileCornerFillers = SerialiseTileCornerFillers(tile);
 
         GridLocation = new SerialisableGridLocation(tile.GridLocation.X, tile.GridLocation.Y);
 
@@ -30,12 +33,18 @@ public class SerialisableTile
         }
     }
 
-    public SerialisableTile(string id, SerialisableTileMainMaterial mainMaterial, List<SerialisableTileAttribute> tileAttributes, List<SerialisableTileBackground> tileBackgrounds, int gridLocationX, int gridLocationY)
+    public SerialisableTile(string id,
+        SerialisableTileMainMaterial mainMaterial,
+        List<SerialisableTileAttribute> tileAttributes,
+        List<SerialisableTileBackground> tileBackgrounds,
+        List<SerialisableTileCornerFiller> tileCornerFillers,
+        int gridLocationX, int gridLocationY)
     {
         Id = id;
         MainMaterial = mainMaterial;
         TileAttributes = tileAttributes;
         TileBackgrounds = tileBackgrounds;
+        TileCornerFillers = tileCornerFillers;
         GridLocation = new SerialisableGridLocation(gridLocationX, gridLocationY);
     }
 
@@ -77,6 +86,20 @@ public class SerialisableTile
         }
 
         return tilebackgrounds;
+    }
+
+    private List<SerialisableTileCornerFiller> SerialiseTileCornerFillers(Tile tile)
+    {
+        List<SerialisableTileCornerFiller> tileCornerFillers = new List<SerialisableTileCornerFiller>();
+
+        foreach (TileCornerFiller tileCornerFiller in tile.GetCornerFillers())
+        {
+            SerialisableTileCornerFiller serialisableTileCornerFiller = CreateSerialisableTileCornerFiller(tileCornerFiller);
+
+            tileCornerFillers.Add(serialisableTileCornerFiller);
+        }
+
+        return tileCornerFillers;
     }
 
     private List<SerialisableGridLocation> SerialiseTilesToTransform(List<EditorMazeTile> tilesToTransform)
@@ -181,5 +204,12 @@ public class SerialisableTile
             Logger.Error($"Could not serialise the tile attribute {tileAttribute.GetType()}");
             return null;
         }
+    }
+
+    private SerialisableTileCornerFiller CreateSerialisableTileCornerFiller(TileCornerFiller tileCornerFiller)
+    {
+        SerialisableTileCornerFiller serialisableTileCornerFiller =
+            new SerialisableTileCornerFiller(tileCornerFiller.TileCorner.ToString());
+        return serialisableTileCornerFiller;
     }
 }

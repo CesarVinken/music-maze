@@ -70,6 +70,11 @@ public abstract class Tile : MonoBehaviour
         return _tileBackgrounds;
     }
 
+    public List<TileCornerFiller> GetCornerFillers()
+    {
+        return _tileCornerFillers;
+    }
+
     public void RemoveBackground(ITileBackground tileBackground)
     {
         _tileBackgrounds.Remove(tileBackground);

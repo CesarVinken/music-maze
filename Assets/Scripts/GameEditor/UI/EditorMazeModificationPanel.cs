@@ -71,6 +71,7 @@ public class EditorMazeModificationPanel : EditorGridModificationPanel
                 GridLocation gridLocation = new GridLocation(i, j);
                 List<SerialisableTileAttribute> tileAttributes = new List<SerialisableTileAttribute>();
                 List<SerialisableTileBackground> tileBackgrounds = new List<SerialisableTileBackground>();
+                List<SerialisableTileCornerFiller> tileCornerFillers = new List<SerialisableTileCornerFiller>();
 
                 SerialisableTileMainMaterial mainMaterial = new SerialisableTileMainMaterial("GroundMainMaterial", new SerialisableLandMaterial());
 
@@ -95,7 +96,7 @@ public class EditorMazeModificationPanel : EditorGridModificationPanel
                     tileBackgrounds.Add(new SerialisableTileBackground(baseBackground.GetType().ToString(), baseBackground));
                 }
 
-                SerialisableTile tile = new SerialisableTile(tileId, mainMaterial, tileAttributes, tileBackgrounds, gridLocation.X, gridLocation.Y);
+                SerialisableTile tile = new SerialisableTile(tileId, mainMaterial, tileAttributes, tileBackgrounds, tileCornerFillers, gridLocation.X, gridLocation.Y);
                 tiles.Add(tile);
             }
         }

@@ -133,6 +133,7 @@ public class EditorOverworldModificationPanel : EditorGridModificationPanel
 
                 List<SerialisableTileAttribute> tileAttributes = new List<SerialisableTileAttribute>();
                 List<SerialisableTileBackground> tileBackgrounds = new List<SerialisableTileBackground>();
+                List<SerialisableTileCornerFiller> tileCornerFillers = new List<SerialisableTileCornerFiller>();
 
                 SerialisableTileBaseGround baseBackground = TryAddBaseBackgroundForNewOverworld(tileBackgrounds, tileAttributes);
 
@@ -141,7 +142,7 @@ public class EditorOverworldModificationPanel : EditorGridModificationPanel
                     tileBackgrounds.Add(new SerialisableTileBackground(baseBackground.GetType().ToString(), baseBackground));
                 }
 
-                SerialisableTile tile = new SerialisableTile(tileId, mainMaterial, tileAttributes, tileBackgrounds, gridLocation.X, gridLocation.Y);
+                SerialisableTile tile = new SerialisableTile(tileId, mainMaterial, tileAttributes, tileBackgrounds, tileCornerFillers, gridLocation.X, gridLocation.Y);
                 tiles.Add(tile);
             }
         }
