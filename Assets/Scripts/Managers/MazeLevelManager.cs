@@ -26,6 +26,7 @@ public class MazeLevelManager : MonoBehaviour, IOnEventCallback
     [SerializeField] private GameObject _playerOnlyPrefab;
     [SerializeField] private GameObject _playerSpawnpointPrefab;
     [SerializeField] private GameObject _enemySpawnpointPrefab;
+    [SerializeField] private GameObject _cornerFillerPrefab;
 
     public int NumberOfUnmarkedTiles = -1;
 
@@ -60,6 +61,8 @@ public class MazeLevelManager : MonoBehaviour, IOnEventCallback
                 return _tileBaseWaterPrefab;
             case Type path when path == typeof(MazeTilePath):
                 return _tilePathPrefab;
+            case Type cornerFiller when cornerFiller == typeof(TileCornerFiller):
+                return _cornerFillerPrefab;
             default:
                 Logger.Error($"Could not find a prefab for the tile background type of {typeof(T)}");
                 return null;
@@ -77,6 +80,7 @@ public class MazeLevelManager : MonoBehaviour, IOnEventCallback
         Guard.CheckIsNull(_playerOnlyPrefab, "PlayerOnlyPrefab", gameObject);
         Guard.CheckIsNull(_playerSpawnpointPrefab, "PlayerSpawnpointPrefab", gameObject);
         Guard.CheckIsNull(_enemySpawnpointPrefab, "EnemySpawnpointPrefab", gameObject);
+        Guard.CheckIsNull(_cornerFillerPrefab, "CornerFillerPrefab", gameObject);
 
         Instance = this;
     }

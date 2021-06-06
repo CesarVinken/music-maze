@@ -1,4 +1,6 @@
 ﻿
+using UnityEngine;
+
 public class InGameMazeTileBackgroundPlacer : MazeTileBackgroundPlacer<InGameMazeTile>
 {
     private InGameMazeTile _tile;

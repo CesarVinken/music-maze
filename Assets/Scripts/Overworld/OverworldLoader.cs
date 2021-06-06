@@ -53,7 +53,7 @@ public class OverworldLoader : MonoBehaviour
 
     public static string GetAllOverworldNamesForPrint(string printLine = "")
     {
-        foreach (string overworldName in Directory.GetFiles(Application.streamingAssetsPath + "overworld", "*.json"))
+        foreach (string overworldName in Directory.GetFiles(Application.streamingAssetsPath + "\\overworld", "*.json"))
         {
             string[] fileNameParts = overworldName.Split('\\');
             string[] fileNameWithoutExtention = fileNameParts[fileNameParts.Length - 1].Split('.');

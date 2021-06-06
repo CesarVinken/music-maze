@@ -70,4 +70,17 @@ public class MazeTileBackgroundPlacer<T> : TileBackgroundPlacer<T> where T : Maz
 
         return background;
     }
+
+    public void PlaceCornerFiler(TileCorner tileCorner)
+    {
+        //create cornerfiller
+        GameObject backgroundGO = GameObject.Instantiate(MazeLevelManager.Instance.GetTileBackgroundPrefab<TileCornerFiller>(), Tile.BackgroundsContainer);
+        TileCornerFiller cornerFiller = backgroundGO.GetComponent<TileCornerFiller>();
+
+        cornerFiller.SetTile(Tile);
+        cornerFiller.WithType(new MazeLevelDefaultGroundType());
+        cornerFiller.WithCorner(tileCorner); // pick sprite based on corner
+
+        Tile.AddCornerFiller(cornerFiller);
+    }
 }

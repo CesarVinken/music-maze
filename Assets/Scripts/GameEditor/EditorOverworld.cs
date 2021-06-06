@@ -61,6 +61,7 @@ public class EditorOverworld : Overworld, IEditorLevel
 
             AddTileAttributes(serialisableTile, tile);
             AddBackgroundSprites(serialisableTile, tile);
+            AddCornerFillers(serialisableTile, tile);
 
             ITileMainMaterial mainMaterial = AddMainMaterial(serialisableTile);
             tile.SetMainMaterial(mainMaterial);
@@ -164,6 +165,23 @@ public class EditorOverworld : Overworld, IEditorLevel
         {
             Logger.Error($"Unknown SerialisableTileMainMaterial {serialisableMainMaterial.MainMaterialType}");
             return null;
+        }
+    }
+
+    private void AddCornerFillers(SerialisableTile serialisableTile, EditorOverworldTile tile)
+    {
+        EditorOverworldTileBackgroundPlacer tileBackgroundPlacer = new EditorOverworldTileBackgroundPlacer(tile);   // corner filler is also an IBackground
+
+        foreach (SerialisableTileCornerFiller serialisableTileCornerFiller in serialisableTile.TileCornerFillers)
+        {
+            if (Enum.TryParse(serialisableTileCornerFiller.TileCorner, out TileCorner tileCorner))
+            {
+                tileBackgroundPlacer.PlaceCornerFiler(tileCorner);
+            }
+            else
+            {
+                Logger.Error($"Could not parse the TileCorner value{serialisableTileCornerFiller.TileCorner}");
+            }
         }
     }
 }

@@ -89,7 +89,6 @@ public class EditorMazeTileBackgroundPlacer : MazeTileBackgroundPlacer<EditorMaz
     public void PlaceCoveringBaseWater()
     {
         Tile.SetMainMaterial(new WaterMainMaterial());
-        Logger.Log("Place a water tile without updating neighbours or removing land tiles.");
 
         GameObject waterGO = GameObject.Instantiate(MazeLevelManager.Instance.GetTileBackgroundPrefab<MazeTileBaseWater>(), Tile.BackgroundsContainer);
         MazeTileBaseWater mazeTileBaseWater = waterGO.GetComponent<MazeTileBaseWater>();

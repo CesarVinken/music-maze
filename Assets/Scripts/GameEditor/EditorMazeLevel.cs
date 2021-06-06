@@ -60,6 +60,7 @@ public class EditorMazeLevel : MazeLevel, IEditorLevel
 
             AddTileAttributes(serialisableTile, tile);
             AddBackgroundSprites(serialisableTile, tile);
+            AddCornerFillers(serialisableTile, tile);
 
             TilesByLocation.Add(tile.GridLocation, tile);
 
@@ -205,5 +206,22 @@ public class EditorMazeLevel : MazeLevel, IEditorLevel
         }
 
         return tilesToTransform;
+    }
+
+    private void AddCornerFillers(SerialisableTile serialisableTile, EditorMazeTile tile)
+    {
+        EditorMazeTileBackgroundPlacer tileBackgroundPlacer = new EditorMazeTileBackgroundPlacer(tile);   // corner filler is also an IBackground
+
+        foreach (SerialisableTileCornerFiller serialisableTileCornerFiller in serialisableTile.TileCornerFillers)
+        {
+            if (Enum.TryParse(serialisableTileCornerFiller.TileCorner, out TileCorner tileCorner))
+            {
+                tileBackgroundPlacer.PlaceCornerFiler(tileCorner);
+            }
+            else
+            {
+                Logger.Error($"Could not parse the TileCorner value{serialisableTileCornerFiller.TileCorner}");
+            }
+        }
     }
 }

@@ -59,6 +59,7 @@ public class InGameMazeLevel : MazeLevel, IInGameLevel
 
             AddTileAttributes(serialisableTile, tile);
             AddBackgroundSprites(serialisableTile, tile);
+            AddCornerFillers(serialisableTile, tile);
 
             TilesByLocation.Add(tile.GridLocation, tile);
 
@@ -96,7 +97,7 @@ public class InGameMazeLevel : MazeLevel, IInGameLevel
         }
     }
 
-    public void AddTileAttributes(SerialisableTile serialisableTile, InGameMazeTile tile)
+    private void AddTileAttributes(SerialisableTile serialisableTile, InGameMazeTile tile)
     {
         InGameMazeTileAttributePlacer tileAttributePlacer = new InGameMazeTileAttributePlacer(tile);
 
@@ -133,7 +134,7 @@ public class InGameMazeLevel : MazeLevel, IInGameLevel
         }
     }
 
-    public void AddBackgroundSprites(SerialisableTile serialisableTile, InGameMazeTile tile)
+    private void AddBackgroundSprites(SerialisableTile serialisableTile, InGameMazeTile tile)
     {
         InGameMazeTileBackgroundPlacer tileBackgroundPlacer = new InGameMazeTileBackgroundPlacer(tile);
 
@@ -158,6 +159,23 @@ public class InGameMazeLevel : MazeLevel, IInGameLevel
             else
             {
                 Logger.Error($"Unknown TileBackgroundId {serialisableTileBackground.TileBackgroundId}");
+            }
+        }
+    }
+
+    private void AddCornerFillers(SerialisableTile serialisableTile, InGameMazeTile tile)
+    {
+        InGameMazeTileBackgroundPlacer tileBackgroundPlacer = new InGameMazeTileBackgroundPlacer(tile);   // corner filler is also an IBackground
+
+        foreach (SerialisableTileCornerFiller serialisableTileCornerFiller in serialisableTile.TileCornerFillers)
+        {
+            if (Enum.TryParse(serialisableTileCornerFiller.TileCorner, out TileCorner tileCorner))
+            {
+                tileBackgroundPlacer.PlaceCornerFiler(tileCorner);
+            }
+            else
+            {
+                Logger.Error($"Could not parse the TileCorner value{serialisableTileCornerFiller.TileCorner}");
             }
         }
     }

@@ -75,4 +75,17 @@ public class OverworldTileBackgroundPlacer<T> : TileBackgroundPlacer<T> where T 
 
         return baseBackground;
     }
+
+    public void PlaceCornerFiler(TileCorner tileCorner)
+    {
+        //create cornerfiller
+        GameObject backgroundGO = GameObject.Instantiate(OverworldManager.Instance.GetTileBackgroundPrefab<TileCornerFiller>(), Tile.BackgroundsContainer);
+        TileCornerFiller cornerFiller = backgroundGO.GetComponent<TileCornerFiller>();
+
+        cornerFiller.SetTile(Tile);
+        cornerFiller.WithType(new OverworldDefaultGroundType());
+        cornerFiller.WithCorner(tileCorner); // pick sprite based on corner
+
+        Tile.AddCornerFiller(cornerFiller);
+    }
 }

@@ -59,6 +59,7 @@ public class InGameOverworld : Overworld, IInGameLevel
 
             AddTileAttributes(serialisableTile, tile);
             AddBackgroundSprites(serialisableTile, tile);
+            AddCornerFillers(serialisableTile, tile);
 
             TilesByLocation.Add(tile.GridLocation, tile);
 
@@ -76,7 +77,7 @@ public class InGameOverworld : Overworld, IInGameLevel
         }
     }
 
-    public void AddTileAttributes(SerialisableTile serialisableTile, InGameOverworldTile tile)
+    private void AddTileAttributes(SerialisableTile serialisableTile, InGameOverworldTile tile)
     {
         InGameOverworldTileAttributePlacer tileAttributePlacer = new InGameOverworldTileAttributePlacer(tile);
 
@@ -101,7 +102,7 @@ public class InGameOverworld : Overworld, IInGameLevel
         }
     }
 
-    public void AddBackgroundSprites(SerialisableTile serialisableTile, InGameOverworldTile tile)
+    private void AddBackgroundSprites(SerialisableTile serialisableTile, InGameOverworldTile tile)
     {
         InGameOverworldTileBackgroundPlacer tileBackgroundPlacer = new InGameOverworldTileBackgroundPlacer(tile);
 
@@ -127,6 +128,22 @@ public class InGameOverworld : Overworld, IInGameLevel
             else
             {
                 Logger.Error($"Unknown background of type {type}");
+            }
+        }
+    }
+
+    private void AddCornerFillers(SerialisableTile serialisableTile, InGameOverworldTile tile)
+    {
+        InGameOverworldTileBackgroundPlacer tileBackgroundPlacer = new InGameOverworldTileBackgroundPlacer(tile);   // corner filler is also an IBackground
+
+        foreach (SerialisableTileCornerFiller serialisableTileCornerFiller in serialisableTile.TileCornerFillers)
+        {
+            if(Enum.TryParse(serialisableTileCornerFiller.TileCorner, out TileCorner tileCorner)){
+                tileBackgroundPlacer.PlaceCornerFiler(tileCorner);
+            }
+            else
+            {
+                Logger.Error($"Could not parse the TileCorner value{serialisableTileCornerFiller.TileCorner}");
             }
         }
     }
