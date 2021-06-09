@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class MainScreenOverlayCanvas : MonoBehaviour
@@ -70,6 +71,16 @@ public class MainScreenOverlayCanvas : MonoBehaviour
 
             rt1.offsetMax = new Vector2(fullCanvasWidth / -2, rt2.offsetMin.y);
             rt2.offsetMin = new Vector2(fullCanvasWidth / 2, rt2.offsetMin.y);
+        }
+    }
+
+    public void BlackOutSquaresToClear()
+    {
+        for (int i = 0; i < BlackOutSquares.Count; i++)
+        {
+            IEnumerator clearBlackOutSquareCoroutine = BlackOutSquares[i].ToClear();
+
+            StartCoroutine(clearBlackOutSquareCoroutine); 
         }
     }
 

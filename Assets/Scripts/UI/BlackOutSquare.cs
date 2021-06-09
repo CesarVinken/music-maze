@@ -18,10 +18,6 @@ public class BlackOutSquare : MonoBehaviour
 
     public BlackStatus BlackStatus;
 
-    public void Awake()
-    {
-        ResetToDefault();
-    }
 
     public IEnumerator ToBlack()
     {
