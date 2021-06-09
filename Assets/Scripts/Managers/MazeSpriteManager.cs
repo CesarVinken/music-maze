@@ -15,6 +15,8 @@ public class MazeSpriteManager : SpriteManager
     public Sprite[] BushColourful;
     public Sprite[] DefaultMazeTileWater;
     public Sprite[] DefaultMazeTileWaterColourful;
+    public Sprite[] WoodenBridge;
+    public Sprite[] WoodenBridgeColourful;
 
     [Space(10)]
     [Header("Player graphics")]
@@ -37,6 +39,8 @@ public class MazeSpriteManager : SpriteManager
         Guard.CheckLength(BushColourful, "BushColourful");
         Guard.CheckLength(DefaultMazeTileWater, "DefaultMazeTileWater");
         Guard.CheckLength(DefaultMazeTileWaterColourful, "DefaultMazeTileWaterColourful");
+        Guard.CheckLength(WoodenBridge, "WoodenBridge");
+        Guard.CheckLength(WoodenBridgeColourful, "WoodenBridgeColourful");
 
         Guard.CheckLength(Player1TileMarker, "Player1TileMarker");
         Guard.CheckLength(Player2TileMarker, "Player2TileMarker");

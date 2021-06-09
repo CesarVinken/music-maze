@@ -1,36 +1,36 @@
-﻿using System.Collections;
+using System.Collections;
 using UnityEngine;
 
-public class PlayerOnly : MonoBehaviour, ITileAttribute, ITransformable
+public class BridgePiece : MonoBehaviour, ITileAttribute, ITransformable
 {
     public Tile Tile;
-    public string ParentId; 
-    
-    public PlayerOnlyType PlayerOnlyType;
+    public string ParentId;
+
+    public BridgeType BridgeType;
+    public BridgePieceDirection BridgePieceDirection;
 
     [SerializeField] private TileSpriteContainer _tileSpriteContainer;
 
-    private int _sortingOrderBase = 500; // MAKE SURE that tile should be in front of tile marker and path layers AND player
-    private const float _sortingOrderCalculationOffset = .5f;
-    private int _sortingOrder;
+    private int _sortingOrderBase = 500; 
+    private int _sortingOrder; // TODO: Back piece should be behind characters, front piece should be in front of characters.
+
     public int SortingOrderBase { get => _sortingOrderBase; set => _sortingOrderBase = value; }
 
     public void Awake()
     {
         Guard.CheckIsNull(_tileSpriteContainer, "_tileSpriteContainer", gameObject);
 
-        if (PlayerOnlyType == PlayerOnlyType.Bush)
-        {
-            _tileSpriteContainer.SetSprite(MazeSpriteManager.Instance.Bush[0]);
-        }
-
-        _sortingOrder = (int)(_sortingOrderBase - transform.position.y - _sortingOrderCalculationOffset) * 10 + 1;
-        _tileSpriteContainer.SetSortingOrder(_sortingOrder); // plus 1 should place it before a character when it is on the same y as the character
+        _sortingOrder = (int)(_sortingOrderBase - transform.position.y) * 10 + 1;
     }
 
-    public void WithPlayerOnlyType(PlayerOnlyType playerOnlyType)
+    public void WithBridgeType(BridgeType bridgeType)
     {
-        PlayerOnlyType = playerOnlyType;
+        BridgeType = bridgeType;
+    }
+
+    public void WithBridgePieceDirection(BridgePieceDirection bridgePieceDirection)
+    {
+        BridgePieceDirection = bridgePieceDirection;
     }
 
     public void Remove()
@@ -50,15 +50,15 @@ public class PlayerOnly : MonoBehaviour, ITileAttribute, ITransformable
     public void TriggerTransformation()
     {
 
-        if (PlayerOnlyType == PlayerOnlyType.Bush)
+        if (BridgeType == BridgeType.Wooden)
         {
-            Sprite colourfulSprite = MazeSpriteManager.Instance.BushColourful[0];
+            Sprite colourfulSprite = MazeSpriteManager.Instance.WoodenBridgeColourful[0];
             IEnumerator transformToColourful = TransformToColourful(colourfulSprite);
             StartCoroutine(transformToColourful);
         }
         else
         {
-            Logger.Error($"Colourful mode not implemented for PlayerOnlyType {PlayerOnlyType}");
+            Logger.Error($"Colourful mode not implemented for BridgeType {BridgeType}");
         }
     }
 

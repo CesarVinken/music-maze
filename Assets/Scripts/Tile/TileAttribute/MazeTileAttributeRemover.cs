@@ -89,6 +89,17 @@ public class MazeTileAttributeRemover : TileAttributeRemover
         playerOnlyAttribute.Remove();
     }
 
+    public void RemoveBridgePiece(BridgePiece bridgePieceAttribute = null)
+    {
+        if (bridgePieceAttribute == null)
+            bridgePieceAttribute = (BridgePiece)_tile.GetAttributes().FirstOrDefault(attribute => attribute is BridgePiece);
+       
+        if (bridgePieceAttribute == null) return;
+
+        _tile.RemoveAttribute(bridgePieceAttribute);
+        bridgePieceAttribute.Remove();
+    }
+
     public void Remove(ITileAttribute attribute)
     {
         switch (attribute.GetType())
@@ -107,6 +118,9 @@ public class MazeTileAttributeRemover : TileAttributeRemover
                 break;
             case Type t when t == typeof(PlayerOnly):
                 RemovePlayerOnlyAttribute(attribute as PlayerOnly);
+                break;
+            case Type t when t == typeof(BridgePiece):
+                RemoveBridgePiece(attribute as BridgePiece);
                 break;
             default:
                 Logger.Error($"Does not know how to remove attribute with type {attribute.GetType()}");

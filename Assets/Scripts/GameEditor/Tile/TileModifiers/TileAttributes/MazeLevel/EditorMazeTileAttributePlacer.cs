@@ -114,4 +114,13 @@ public class EditorMazeTileAttributePlacer : MazeTileAttributePlacer<EditorMazeT
         Tile.AddAttribute(playerSpawnpoint);
     }
 
+    public void CreateBridgePiece(BridgePieceDirection bridgePieceDirection)
+    {
+        BridgePiece bridgePiece = (BridgePiece)InstantiateTileAttributeGO<BridgePiece>();
+
+        Tile.SetWalkable(true);
+        Logger.Log("TODO: do something with Bridge Piece Direction selection");
+        Logger.Log("TODO: make walkable bridge work");
+        Tile.AddAttribute(bridgePiece);
+    }
 }

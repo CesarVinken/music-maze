@@ -26,6 +26,8 @@ public class MazeLevelManager : MonoBehaviour, IOnEventCallback
     [SerializeField] private GameObject _playerOnlyPrefab;
     [SerializeField] private GameObject _playerSpawnpointPrefab;
     [SerializeField] private GameObject _enemySpawnpointPrefab;
+    [SerializeField] private GameObject _bridgePiecePrefab;
+
     [SerializeField] private GameObject _cornerFillerPrefab;
 
     public int NumberOfUnmarkedTiles = -1;
@@ -44,6 +46,8 @@ public class MazeLevelManager : MonoBehaviour, IOnEventCallback
                 return _playerSpawnpointPrefab;
             case Type enemySpawnpoint when enemySpawnpoint == typeof(EnemySpawnpoint):
                 return _enemySpawnpointPrefab;
+            case Type bridgePiecePrefab when bridgePiecePrefab == typeof(BridgePiece):
+                return _bridgePiecePrefab;
 
             default:
                 Logger.Error($"Could not find a prefab for the tile attribute type of {typeof(T)}");
@@ -81,6 +85,7 @@ public class MazeLevelManager : MonoBehaviour, IOnEventCallback
         Guard.CheckIsNull(_playerSpawnpointPrefab, "PlayerSpawnpointPrefab", gameObject);
         Guard.CheckIsNull(_enemySpawnpointPrefab, "EnemySpawnpointPrefab", gameObject);
         Guard.CheckIsNull(_cornerFillerPrefab, "CornerFillerPrefab", gameObject);
+        Guard.CheckIsNull(_bridgePiecePrefab, "BridgePiecePrefab", gameObject);
 
         Instance = this;
     }
