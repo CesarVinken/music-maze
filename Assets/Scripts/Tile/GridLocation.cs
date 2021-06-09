@@ -10,7 +10,6 @@ public struct GridLocation
 
     public static float OffsetToTileMiddle = 0.5f;
 
-
     public GridLocation(int gridX, int gridY) // x and y are not necessarily equal to grid coordinates!
     {
         X = gridX;

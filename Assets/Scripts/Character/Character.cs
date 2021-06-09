@@ -9,6 +9,10 @@ public class Character : MonoBehaviour
 {
     public CharacterBlueprint CharacterBlueprint;
     public GridLocation StartingPosition;
+
+    public GridLocation CurrentGridLocation;
+    public TargetLocation TargetGridLocation;
+
     public GameObject CharacterBody;
     protected ICharacter _characterType;
 

@@ -11,7 +11,7 @@ public enum Direction
 
 public class CameraController : MonoBehaviour
 {
-    private float _panSpeed = 0.01f;
+    private float _panSpeed = 0.011f;
     private bool _focussedOnPlayer = false;
     public static Dictionary<Direction, float> PanLimits = new Dictionary<Direction, float> { };
 
@@ -36,8 +36,6 @@ public class CameraController : MonoBehaviour
     {
         if(GameManager.Instance.CurrentGameLevel != null)
             SetPanLimits(GameManager.Instance.CurrentGameLevel.LevelBounds);
-
-        //CalculateCameraPosition();
     }
 
     public void EnableCamera()
@@ -63,8 +61,6 @@ public class CameraController : MonoBehaviour
         {
             return;
         }
-
-        //CalculateCameraPosition();
     }
 
     public void SetPanLimits(GridLocation levelBounds)
@@ -84,12 +80,16 @@ public class CameraController : MonoBehaviour
             PanLimits.Add(Direction.Up, levelBounds.Y - 3f);  // should depend on the furthest upper edge of the maze level.Never less than 4.
             PanLimits.Add(Direction.Right, levelBounds.X - 6f);// should depend on the furthest right edge of the maze level  Never less than 8.
             PanLimits.Add(Direction.Down, 4f); // should (with this zoom level) always have 4 as lowest boundary down. Should always be => 4
-            PanLimits.Add(Direction.Left, 11f); // should (with this zoom level) always have 8 as the left most boundary. Should always be => 8
+            PanLimits.Add(Direction.Left, 7f); // should (with this zoom level) always have 8 as the left most boundary. Should always be => 8
         }
 
         // Set minima for small levels
-        if (PanLimits[Direction.Up] < PanLimits[Direction.Down]) PanLimits[Direction.Up] = PanLimits[Direction.Down];
-        if (PanLimits[Direction.Right] < PanLimits[Direction.Left]) PanLimits[Direction.Right] = PanLimits[Direction.Left];
+        //if (PanLimits[Direction.Up] < PanLimits[Direction.Down]) PanLimits[Direction.Up] = PanLimits[Direction.Down];
+        if (PanLimits[Direction.Right] < PanLimits[Direction.Left])
+        {
+            PanLimits[Direction.Left] = levelBounds.X / 2;
+            PanLimits[Direction.Right] = levelBounds.X / 2;
+        }
     }
 
     public void FocusOnPlayer(PlayerCharacter player)

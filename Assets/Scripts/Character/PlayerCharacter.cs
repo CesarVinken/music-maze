@@ -4,6 +4,18 @@ using System.Collections;
 using CharacterType;
 using System.Collections.Generic;
 
+public struct TargetLocation
+{
+    public GridLocation TargetGridLocation;
+    public ObjectDirection TargetDirection;
+
+    public TargetLocation(GridLocation targetGridLocation, ObjectDirection targetDirection)
+    {
+        TargetGridLocation = targetGridLocation;
+        TargetDirection = targetDirection;
+    }
+}
+
 public class PlayerCharacter : Character
 {
     [Space(10)]
@@ -17,7 +29,7 @@ public class PlayerCharacter : Character
     [SerializeField] protected GameObject _selectionIndicatorPrefab = null;
     [SerializeField] protected GameObject _selectionIndicatorGO = null;
 
-    public GridLocation CurrentGridLocation;
+
 
     protected bool _isPressingPointerForSeconds = false;
     protected float _pointerPresserTimer = 1;
@@ -130,10 +142,8 @@ public class PlayerCharacter : Character
                 MoveCharacter();
             }
         }
-        else if (GameRules.GamePlayerType == GamePlayerType.SplitScreenMultiplayer)
+        else // Case: Clients in multiplayer network game
         {
-            HandleKeyboardInput();
-
             if (HasCalculatedTarget)
             {
                 MoveCharacter();
@@ -293,7 +303,6 @@ public class PlayerCharacter : Character
         if (IsCalculatingPath) return;
 
         GridLocation currentGridLocation = GridLocation.VectorToGrid(transform.position);
-        GridLocation targetGridLocation = currentGridLocation;
 
         //Order character to go to another tile
         _animationHandler.SetDirection(direction);
@@ -301,29 +310,29 @@ public class PlayerCharacter : Character
         switch (direction)
         {
             case ObjectDirection.Down:
-                targetGridLocation = new GridLocation(currentGridLocation.X, currentGridLocation.Y - 1);
+                TargetGridLocation = new TargetLocation(new GridLocation(currentGridLocation.X, currentGridLocation.Y - 1), ObjectDirection.Down);
                 break;
             case ObjectDirection.Left:
-                targetGridLocation = new GridLocation(currentGridLocation.X - 1, currentGridLocation.Y);
+                TargetGridLocation = new TargetLocation(new GridLocation(currentGridLocation.X - 1, currentGridLocation.Y), ObjectDirection.Left);
                 break;
             case ObjectDirection.Right:
-                targetGridLocation = new GridLocation(currentGridLocation.X + 1, currentGridLocation.Y);
+                TargetGridLocation = new TargetLocation(new GridLocation(currentGridLocation.X + 1, currentGridLocation.Y), ObjectDirection.Right);
                 break;
             case ObjectDirection.Up:
-                targetGridLocation = new GridLocation(currentGridLocation.X, currentGridLocation.Y + 1);
+                TargetGridLocation = new TargetLocation(new GridLocation(currentGridLocation.X, currentGridLocation.Y + 1), ObjectDirection.Up);
                 break;
             default:
                 Logger.Warning("Unhandled locomotion direction {0}", direction);
-                break;
+                return;
         }
-        if (!ValidateTarget(targetGridLocation))
+        if (!ValidateTarget(TargetGridLocation.TargetGridLocation))
         {
             // This prevents the character from displaying locomotion animation when walking into an unwalkable tile
             _animationHandler.SetLocomotion(false);
             return;
         }
         //Logger.Warning("Start path!");
-        Vector3 newDestinationTarget = SetNewLocomotionTarget(GridLocation.GridToVector(targetGridLocation));
+        Vector3 newDestinationTarget = SetNewLocomotionTarget(GridLocation.GridToVector(TargetGridLocation.TargetGridLocation));
         IsCalculatingPath = true;
 
         _seeker.StartPath(transform.position, newDestinationTarget, _characterPath.OnPathCalculated);

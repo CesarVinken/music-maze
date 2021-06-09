@@ -1,6 +1,6 @@
 ﻿public interface IPlatformConfiguration
 {
-    float CameraZoomLevel
+    float CameraZoomLevel // 'Size'
     {
         get;
         set;

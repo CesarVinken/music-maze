@@ -50,6 +50,7 @@ public class EnemyCharacter : Character
             PhotonView.IsMine))
         {
             SetNextTarget();
+            //_characterPath.GetNodesOfPath();
         }
 
         if (HasCalculatedTarget)
@@ -92,6 +93,7 @@ public class EnemyCharacter : Character
         // Known issue: The enemy will not plot a path to the actual location of the player, because the player's pathfinding node on the grid is already taken by the player. Thus the enemy will try to move next to the player 
 
         _seeker.StartPath(transform.position, playerVectorLocation, _characterPath.OnPathCalculated);
+
         Logger.Log(Logger.Pathfinding, $"The enemy {gameObject.name} is now going to the location of player {randomPlayer.gameObject.name} at {randomPlayer.CurrentGridLocation.X},{randomPlayer.CurrentGridLocation.Y}");
     }
 
