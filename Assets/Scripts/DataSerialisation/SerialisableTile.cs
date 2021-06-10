@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using UnityEngine;
 
 [Serializable]
 public class SerialisableTile
@@ -193,11 +192,18 @@ public class SerialisableTile
             SerialisableEnemySpawnpointAttribute serialisableEnemySpawnpointAttribute = new SerialisableEnemySpawnpointAttribute();
             return serialisableEnemySpawnpointAttribute;
         }
-        if (tileAttribute.GetType() == typeof(MazeLevelEntry))
+        else if (tileAttribute.GetType() == typeof(MazeLevelEntry))
         {
             MazeLevelEntry mazeLevelEntry = tileAttribute as MazeLevelEntry;
             SerialisableMazeLevelEntryAttribute serialisableMazeLevelEntryAttribute = new SerialisableMazeLevelEntryAttribute(mazeLevelEntry.MazeLevelName);
             return serialisableMazeLevelEntryAttribute;
+        }
+        else if (tileAttribute.GetType() == typeof(BridgePiece))
+        {
+            BridgePiece bridgePiece = tileAttribute as BridgePiece;
+
+            SerialisableBridgePieceAttribute serialisableBridgePieceAttribute = new SerialisableBridgePieceAttribute(bridgePiece.BridgePieceDirection);
+            return serialisableBridgePieceAttribute;
         }
         else
         {

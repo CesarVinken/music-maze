@@ -52,6 +52,17 @@ public class MazeTileAttributePlacer<T> : TileAttributePlacer<T> where T : MazeT
         Tile.AddAttribute(playerOnly);
     }
 
+    public void PlaceBridgePiece(BridgeType bridgeType, BridgePieceDirection bridgePieceDirection)
+    {
+        BridgePiece bridgePiece = (BridgePiece)InstantiateTileAttributeGO<BridgePiece>();
+        bridgePiece.WithBridgeType(bridgeType);
+        bridgePiece.WithBridgePieceDirection(bridgePieceDirection);
+
+        Tile.SetWalkable(true);
+        Tile.TryMakeMarkable(false);
+        Tile.AddAttribute(bridgePiece);
+    }
+
     public void PlaceTileObstacleVariation(TileObstacle tileObstacle)
     {
         //return only connections that were updated

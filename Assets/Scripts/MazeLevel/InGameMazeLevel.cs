@@ -127,6 +127,19 @@ public class InGameMazeLevel : MazeLevel, IInGameLevel
             {
                 tileAttributePlacer.PlaceEnemySpawnpoint();
             }
+            else if (type.Equals(typeof(SerialisableBridgePieceAttribute)))
+            {
+                SerialisableBridgePieceAttribute serialisableBridgePieceAttribute = (SerialisableBridgePieceAttribute)JsonUtility.FromJson(serialisableTileAttribute.SerialisedData, type);
+
+                if (Enum.TryParse(serialisableBridgePieceAttribute.BridgePieceDirection, out BridgePieceDirection bridgePieceDirection))
+                {
+                    tileAttributePlacer.PlaceBridgePiece(BridgeType.Wooden, bridgePieceDirection);
+                }
+                else
+                {
+                    Logger.Error($"Could not parse the BridgePieceDirection value{serialisableBridgePieceAttribute.BridgePieceDirection}");
+                }
+            }
             else
             {
                 Logger.Error($"Unknown tile attribute of type {type}");
