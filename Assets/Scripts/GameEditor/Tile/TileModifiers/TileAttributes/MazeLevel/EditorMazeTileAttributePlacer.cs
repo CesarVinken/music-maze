@@ -117,6 +117,8 @@ public class EditorMazeTileAttributePlacer : MazeTileAttributePlacer<EditorMazeT
     public void CreateBridgePiece(BridgePieceDirection bridgePieceDirection)
     {
         BridgePiece bridgePiece = (BridgePiece)InstantiateTileAttributeGO<BridgePiece>();
+        bridgePiece.WithBridgePieceDirection(bridgePieceDirection);
+        bridgePiece.WithBridgeType(BridgeType.Wooden);
 
         Tile.SetWalkable(true);
         Logger.Log("TODO: do something with Bridge Piece Direction selection");

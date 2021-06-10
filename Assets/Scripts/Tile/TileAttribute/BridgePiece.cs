@@ -31,6 +31,19 @@ public class BridgePiece : MonoBehaviour, ITileAttribute, ITransformable
     public void WithBridgePieceDirection(BridgePieceDirection bridgePieceDirection)
     {
         BridgePieceDirection = bridgePieceDirection;
+
+        if(bridgePieceDirection == BridgePieceDirection.Horizontal)
+        {
+            _tileSpriteContainer.SetSprite(MazeSpriteManager.Instance.WoodenBridge[0]);
+        }
+        else if(bridgePieceDirection == BridgePieceDirection.Vertical)
+        {
+            _tileSpriteContainer.SetSprite(MazeSpriteManager.Instance.WoodenBridge[1]);
+        }
+        else
+        {
+            Logger.Error($"Have no sprite set up for the direction {bridgePieceDirection}");
+        }
     }
 
     public void Remove()
