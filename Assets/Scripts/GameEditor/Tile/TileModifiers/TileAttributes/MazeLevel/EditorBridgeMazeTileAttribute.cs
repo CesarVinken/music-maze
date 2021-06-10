@@ -48,6 +48,6 @@ public class EditorBridgeMazeTileAttribute : EditorMazeTileAttributeModifier, IW
 
     public override Sprite GetSprite()
     {
-        return EditorCanvasUI.Instance.TileAttributeIcons[0];
+        return EditorCanvasUI.Instance.TileAttributeIcons[6];
     }
 }

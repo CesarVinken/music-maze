@@ -50,16 +50,16 @@ public class TileCornerFiller : MonoBehaviour, ITileBackground
         switch (TileCorner)
         {
             case TileCorner.RightUp:
-                _sprite = OverworldSpriteManager.Instance.DefaultOverworldTileBackground[36];
+                _sprite = GameManager.Instance.SpriteManager.DefaultTileCornerFiller[0];
                 break;
             case TileCorner.RightDown:
-                _sprite = OverworldSpriteManager.Instance.DefaultOverworldTileBackground[37];
+                _sprite = GameManager.Instance.SpriteManager.DefaultTileCornerFiller[1];
                 break;
             case TileCorner.LeftDown:
-                _sprite = OverworldSpriteManager.Instance.DefaultOverworldTileBackground[38];
+                _sprite = GameManager.Instance.SpriteManager.DefaultTileCornerFiller[2];
                 break;
             case TileCorner.LeftUp:
-                _sprite = OverworldSpriteManager.Instance.DefaultOverworldTileBackground[39];
+                _sprite = GameManager.Instance.SpriteManager.DefaultTileCornerFiller[3];
                 break;
             default:
                 break;

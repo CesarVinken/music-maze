@@ -45,7 +45,7 @@ public class InGameOverworld : Overworld, IInGameLevel
         for (int i = 0; i < overworldData.Tiles.Count; i++)
         {
             SerialisableTile serialisableTile = overworldData.Tiles[i];
-            GameObject tileGO = GameObject.Instantiate(OverworldManager.Instance.InGameTilePrefab, _overworldContainer.transform);
+            GameObject tileGO = GameObject.Instantiate(OverworldGameplayManager.Instance.InGameTilePrefab, _overworldContainer.transform);
 
             InGameOverworldTile tile = tileGO.GetComponent<InGameOverworldTile>();
 

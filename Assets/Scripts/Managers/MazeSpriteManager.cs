@@ -45,5 +45,7 @@ public class MazeSpriteManager : SpriteManager
         Guard.CheckLength(Player1TileMarker, "Player1TileMarker");
         Guard.CheckLength(Player2TileMarker, "Player2TileMarker");
         Guard.CheckLength(PlayerTileMarkerEdge, "PlayerTileMarkerEdge");
+
+        GameManager.Instance.SpriteManager = this;
     }
 }

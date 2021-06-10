@@ -5,7 +5,7 @@ public class OverworldTileAttributePlacer<T> : TileAttributePlacer<T> where T : 
 
     public override ITileAttribute InstantiateTileAttributeGO<U>()
     {
-        GameObject tileAttributeGO = GameObject.Instantiate(OverworldManager.Instance.GetTileAttributePrefab<U>(), Tile.transform);
+        GameObject tileAttributeGO = GameObject.Instantiate(OverworldGameplayManager.Instance.GetTileAttributePrefab<U>(), Tile.transform);
         return tileAttributeGO.GetComponent<U>();
     }
 

@@ -13,7 +13,7 @@ public class EditorOverworldTileAttributePlacer : OverworldTileAttributePlacer<E
 
     public override ITileAttribute InstantiateTileAttributeGO<U>()
     {
-        GameObject tileAttributeGO = GameObject.Instantiate(OverworldManager.Instance.GetTileAttributePrefab<U>(), Tile.transform);
+        GameObject tileAttributeGO = GameObject.Instantiate(OverworldGameplayManager.Instance.GetTileAttributePrefab<U>(), Tile.transform);
         return tileAttributeGO.GetComponent<U>();
     }
 
@@ -34,7 +34,7 @@ public class EditorOverworldTileAttributePlacer : OverworldTileAttributePlacer<E
         Tile.SetWalkable(true);
         Tile.AddAttribute(mazeLevelEntry);
 
-        OverworldManager.Instance.EditorOverworld.MazeEntries.Add(mazeLevelEntry);
+        OverworldGameplayManager.Instance.EditorOverworld.MazeEntries.Add(mazeLevelEntry);
 
         ScreenSpaceOverworldEditorElements.Instance.InstantiateMazeLevelEntryName(mazeLevelEntry);
         return mazeLevelEntry;

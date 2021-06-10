@@ -5,9 +5,9 @@ using System;
 using System.Collections;
 using UnityEngine;
 
-public class OverworldManager : MonoBehaviour, IOnEventCallback
+public class OverworldGameplayManager : MonoBehaviour, IOnEventCallback, IGameplayManager
 {
-    public static OverworldManager Instance;
+    public static OverworldGameplayManager Instance;
 
     public InGameOverworld Overworld;
     public EditorOverworld EditorOverworld;
@@ -34,6 +34,7 @@ public class OverworldManager : MonoBehaviour, IOnEventCallback
         Guard.CheckIsNull(_mazeLevelEntryPrefab, "MazeLevelEntryPrefab", gameObject);
         Guard.CheckIsNull(_cornerFillerPrefab, "CornerFillerPrefab", gameObject);
 
+        GameManager.Instance.GameplayManager = this;
         MazeLevelInvitation.PendingInvitation = false;
     }
 

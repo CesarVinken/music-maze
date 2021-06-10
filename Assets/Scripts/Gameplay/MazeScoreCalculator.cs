@@ -72,7 +72,7 @@ public class MazeScoreCalculator
     private void CountTileMarkerScores()
     {
         Dictionary<PlayerNumber, int> tempPlayerScores = new Dictionary<PlayerNumber, int>();
-        List<InGameMazeTile> markedTiles = MazeLevelManager.Instance.Level.Tiles.Where(t => t.PlayerMark != null).ToList();
+        List<InGameMazeTile> markedTiles = MazeLevelGameplayManager.Instance.Level.Tiles.Where(t => t.PlayerMark != null).ToList();
 
         int playerMarkScorePlayer1 = 0;
         int playerMarkScorePlayer2 = 0;

@@ -9,7 +9,7 @@ public class MazeTileBackgroundPlacer<T> : TileBackgroundPlacer<T> where T : Maz
     // Called in game when we already have the connection score
     public override void PlacePath(IPathType mazeTilePathType, TileConnectionScoreInfo pathConnectionScoreInfo)
     {
-        GameObject mazeTilePathGO = GameObject.Instantiate(MazeLevelManager.Instance.GetTileBackgroundPrefab<MazeTilePath>(), Tile.BackgroundsContainer);
+        GameObject mazeTilePathGO = GameObject.Instantiate(MazeLevelGameplayManager.Instance.GetTileBackgroundPrefab<MazeTilePath>(), Tile.BackgroundsContainer);
         MazeTilePath mazeTilePath = mazeTilePathGO.GetComponent<MazeTilePath>();
         mazeTilePath.WithType(mazeTilePathType as IBackgroundType);
         mazeTilePath.WithConnectionScoreInfo(pathConnectionScoreInfo);
@@ -21,7 +21,7 @@ public class MazeTileBackgroundPlacer<T> : TileBackgroundPlacer<T> where T : Maz
 
     public override void PlaceGround(IBaseBackgroundType groundType, TileConnectionScoreInfo connectionScoreInfo)
     {
-        GameObject groundGO = GameObject.Instantiate(MazeLevelManager.Instance.GetTileBackgroundPrefab<MazeTileBaseGround>(), Tile.BackgroundsContainer);
+        GameObject groundGO = GameObject.Instantiate(MazeLevelGameplayManager.Instance.GetTileBackgroundPrefab<MazeTileBaseGround>(), Tile.BackgroundsContainer);
         MazeTileBaseGround mazeTileBaseGround = groundGO.GetComponent<MazeTileBaseGround>();
         mazeTileBaseGround.WithType(groundType);
         mazeTileBaseGround.WithConnectionScoreInfo(connectionScoreInfo);
@@ -32,7 +32,7 @@ public class MazeTileBackgroundPlacer<T> : TileBackgroundPlacer<T> where T : Maz
 
     public override void PlaceWater(IBaseBackgroundType waterType, TileConnectionScoreInfo pathConnectionScoreInfo)
     {
-        GameObject waterGO = GameObject.Instantiate(MazeLevelManager.Instance.GetTileBackgroundPrefab<MazeTileBaseWater>(), Tile.BackgroundsContainer);
+        GameObject waterGO = GameObject.Instantiate(MazeLevelGameplayManager.Instance.GetTileBackgroundPrefab<MazeTileBaseWater>(), Tile.BackgroundsContainer);
         MazeTileBaseWater mazeTileBaseWater = waterGO.GetComponent<MazeTileBaseWater>();
         mazeTileBaseWater.WithType(waterType);
         mazeTileBaseWater.SetTile(Tile);
@@ -62,7 +62,7 @@ public class MazeTileBackgroundPlacer<T> : TileBackgroundPlacer<T> where T : Maz
         U oldBackground = (U)Tile.GetBackgrounds().FirstOrDefault(b => b is U);
         if (oldBackground != null) return oldBackground;
 
-        GameObject backgroundGO = GameObject.Instantiate(MazeLevelManager.Instance.GetTileBackgroundPrefab<U>(), Tile.BackgroundsContainer);
+        GameObject backgroundGO = GameObject.Instantiate(MazeLevelGameplayManager.Instance.GetTileBackgroundPrefab<U>(), Tile.BackgroundsContainer);
         U background = backgroundGO.GetComponent<U>();
  
         background.SetTile(Tile);
@@ -74,7 +74,7 @@ public class MazeTileBackgroundPlacer<T> : TileBackgroundPlacer<T> where T : Maz
     public void PlaceCornerFiler(TileCorner tileCorner)
     {
         //create cornerfiller
-        GameObject backgroundGO = GameObject.Instantiate(MazeLevelManager.Instance.GetTileBackgroundPrefab<TileCornerFiller>(), Tile.BackgroundsContainer);
+        GameObject backgroundGO = GameObject.Instantiate(MazeLevelGameplayManager.Instance.GetTileBackgroundPrefab<TileCornerFiller>(), Tile.BackgroundsContainer);
         TileCornerFiller cornerFiller = backgroundGO.GetComponent<TileCornerFiller>();
 
         cornerFiller.SetTile(Tile);

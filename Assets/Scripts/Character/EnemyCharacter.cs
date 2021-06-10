@@ -107,7 +107,7 @@ public class EnemyCharacter : Character
     private Tile GetRandomTileTarget()
     {
         //MazeLevelManager mazeLevelManager = GameManager.Instance.
-        List<InGameMazeTile> walkableTiles = MazeLevelManager.Instance.GetTiles().Where(tile => tile.Walkable).ToList();
+        List<InGameMazeTile> walkableTiles = MazeLevelGameplayManager.Instance.GetTiles().Where(tile => tile.Walkable).ToList();
 
         //TODO remove current tile from walkable tiles
         //TODO pick random

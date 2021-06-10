@@ -205,9 +205,9 @@ public class OverworldCharacterManager : MonoBehaviourPunCallbacks, ICharacterMa
 
     private GridLocation GetSpawnLocation(PlayerNumber playerNumber, InGameOverworld level)
     {
-        for (int i = 0; i < OverworldManager.Instance.Overworld.MazeEntries.Count; i++)
+        for (int i = 0; i < OverworldGameplayManager.Instance.Overworld.MazeEntries.Count; i++)
         {
-            MazeLevelEntry mazeLevelEntry = OverworldManager.Instance.Overworld.MazeEntries[i];
+            MazeLevelEntry mazeLevelEntry = OverworldGameplayManager.Instance.Overworld.MazeEntries[i];
             if (mazeLevelEntry.MazeLevelName == PersistentGameManager.LastMazeLevelName)
             {
                 return mazeLevelEntry.Tile.GridLocation;

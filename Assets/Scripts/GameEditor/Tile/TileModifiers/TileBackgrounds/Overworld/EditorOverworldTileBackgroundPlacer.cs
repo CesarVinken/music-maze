@@ -20,7 +20,7 @@ public class EditorOverworldTileBackgroundPlacer : OverworldTileBackgroundPlacer
 
         TileConnectionScoreInfo pathConnectionScore = NeighbourTileCalculator.MapNeighbourPathsOfTile(Tile, overworldTilePathType);
 
-        GameObject overworldTilePathGO = GameObject.Instantiate(OverworldManager.Instance.GetTileBackgroundPrefab<OverworldTilePath>(), Tile.BackgroundsContainer);
+        GameObject overworldTilePathGO = GameObject.Instantiate(OverworldGameplayManager.Instance.GetTileBackgroundPrefab<OverworldTilePath>(), Tile.BackgroundsContainer);
         OverworldTilePath overworldTilePath = overworldTilePathGO.GetComponent<OverworldTilePath>();
         overworldTilePath.WithType(overworldTilePathType as IBackgroundType);
         overworldTilePath.WithConnectionScoreInfo(pathConnectionScore);
@@ -48,7 +48,7 @@ public class EditorOverworldTileBackgroundPlacer : OverworldTileBackgroundPlacer
         else if (existingGround == null)
         {
             //There are some connections and no ground sprite. Create ground sprite.
-            GameObject backgroundGO = GameObject.Instantiate(OverworldManager.Instance.GetTileBackgroundPrefab<OverworldTileBaseGround>(), Tile.BackgroundsContainer);
+            GameObject backgroundGO = GameObject.Instantiate(OverworldGameplayManager.Instance.GetTileBackgroundPrefab<OverworldTileBaseGround>(), Tile.BackgroundsContainer);
             OverworldTileBaseGround baseBackground = backgroundGO.GetComponent<OverworldTileBaseGround>();
 
             baseBackground.SetTile(Tile);
@@ -61,7 +61,7 @@ public class EditorOverworldTileBackgroundPlacer : OverworldTileBackgroundPlacer
             existingGround.WithConnectionScoreInfo(newLandConnectionScoreInfo);
         }
 
-        GameObject waterGO = GameObject.Instantiate(OverworldManager.Instance.GetTileBackgroundPrefab<OverworldTileBaseWater>(), Tile.BackgroundsContainer);
+        GameObject waterGO = GameObject.Instantiate(OverworldGameplayManager.Instance.GetTileBackgroundPrefab<OverworldTileBaseWater>(), Tile.BackgroundsContainer);
         OverworldTileBaseWater overworldTileBaseWater = waterGO.GetComponent<OverworldTileBaseWater>();
         overworldTileBaseWater.SetTile(Tile);
 
@@ -85,7 +85,7 @@ public class EditorOverworldTileBackgroundPlacer : OverworldTileBackgroundPlacer
         Tile.SetMainMaterial(new WaterMainMaterial());
         Logger.Log("Place a water tile without updating neighbours or removing land tiles.");
 
-        GameObject waterGO = GameObject.Instantiate(OverworldManager.Instance.GetTileBackgroundPrefab<OverworldTileBaseWater>(), Tile.BackgroundsContainer);
+        GameObject waterGO = GameObject.Instantiate(OverworldGameplayManager.Instance.GetTileBackgroundPrefab<OverworldTileBaseWater>(), Tile.BackgroundsContainer);
         OverworldTileBaseWater mazeTileBaseWater = waterGO.GetComponent<OverworldTileBaseWater>();
         mazeTileBaseWater.SetTile(Tile);
 
@@ -97,7 +97,7 @@ public class EditorOverworldTileBackgroundPlacer : OverworldTileBackgroundPlacer
         Tile.SetMainMaterial(new GroundMainMaterial());
 
         Logger.Log("Place a base ground tile will connections on all sides.");
-        GameObject backgroundGO = GameObject.Instantiate(OverworldManager.Instance.GetTileBackgroundPrefab<OverworldTileBaseGround>(), Tile.BackgroundsContainer);
+        GameObject backgroundGO = GameObject.Instantiate(OverworldGameplayManager.Instance.GetTileBackgroundPrefab<OverworldTileBaseGround>(), Tile.BackgroundsContainer);
         OverworldTileBaseGround baseBackground = backgroundGO.GetComponent<OverworldTileBaseGround>();
 
         baseBackground.SetTile(Tile);
@@ -156,7 +156,7 @@ public class EditorOverworldTileBackgroundPlacer : OverworldTileBackgroundPlacer
 
                 if (existingGroundTile) continue;
                 
-                GameObject backgroundGO = GameObject.Instantiate(OverworldManager.Instance.GetTileBackgroundPrefab<OverworldTileBaseGround>(), neighbour.Value.BackgroundsContainer);
+                GameObject backgroundGO = GameObject.Instantiate(OverworldGameplayManager.Instance.GetTileBackgroundPrefab<OverworldTileBaseGround>(), neighbour.Value.BackgroundsContainer);
                 OverworldTileBaseGround baseBackground = backgroundGO.GetComponent<OverworldTileBaseGround>();
 
                 baseBackground.SetTile(neighbour.Value);
@@ -208,7 +208,7 @@ public class EditorOverworldTileBackgroundPlacer : OverworldTileBackgroundPlacer
             else if (existingGround == null)
             {
                 //There are some connections and no ground sprite. Add ground sprite.
-                GameObject backgroundGO = GameObject.Instantiate(OverworldManager.Instance.GetTileBackgroundPrefab<OverworldTileBaseGround>(), neighbourTile.BackgroundsContainer);
+                GameObject backgroundGO = GameObject.Instantiate(OverworldGameplayManager.Instance.GetTileBackgroundPrefab<OverworldTileBaseGround>(), neighbourTile.BackgroundsContainer);
                 OverworldTileBaseGround baseBackground = backgroundGO.GetComponent<OverworldTileBaseGround>();
 
                 baseBackground.SetTile(Tile);

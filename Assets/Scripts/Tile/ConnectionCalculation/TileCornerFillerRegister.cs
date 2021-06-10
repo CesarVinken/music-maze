@@ -874,7 +874,7 @@ public class TileCornerFillerRegister
         Logger.Warning($"TryAddCornerFiller on {tile.GridLocation.X}, {tile.GridLocation.Y} in the corner {tileCorner}");
 
         //create cornerfiller
-        GameObject backgroundGO = GameObject.Instantiate(OverworldManager.Instance.GetTileBackgroundPrefab<TileCornerFiller>(), tile.BackgroundsContainer);
+        GameObject backgroundGO = GameObject.Instantiate(GameManager.Instance.GameplayManager.GetTileBackgroundPrefab<TileCornerFiller>(), tile.BackgroundsContainer);
         TileCornerFiller cornerFiller = backgroundGO.GetComponent<TileCornerFiller>();
 
         cornerFiller.SetTile(tile);

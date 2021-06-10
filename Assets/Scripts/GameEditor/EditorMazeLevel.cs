@@ -46,7 +46,7 @@ public class EditorMazeLevel : MazeLevel, IEditorLevel
         for (int i = 0; i < mazeLevelData.Tiles.Count; i++)
         {
             SerialisableTile serialisableTile = mazeLevelData.Tiles[i];
-            GameObject tileGO = GameObject.Instantiate(MazeLevelManager.Instance.EditorTilePrefab, _mazeContainer.transform);
+            GameObject tileGO = GameObject.Instantiate(MazeLevelGameplayManager.Instance.EditorTilePrefab, _mazeContainer.transform);
 
             EditorMazeTile tile = tileGO.GetComponent<EditorMazeTile>();
             tile.SetGridLocation(serialisableTile.GridLocation.X, serialisableTile.GridLocation.Y);

@@ -59,12 +59,12 @@ public class OverworldPlayerCharacter : PlayerCharacter
         if (GameRules.GamePlayerType == GamePlayerType.SinglePlayer)
         {
             PersistentGameManager.SetCurrentSceneName(mazeName);
-            OverworldManager.Instance.LoadMaze();
+            OverworldGameplayManager.Instance.LoadMaze();
         }
         else if (GameRules.GamePlayerType == GamePlayerType.SplitScreenMultiplayer)
         {
             PersistentGameManager.SetCurrentSceneName(mazeName);
-            OverworldManager.Instance.LoadMaze();
+            OverworldGameplayManager.Instance.LoadMaze();
         }
         else
         {
@@ -94,7 +94,7 @@ public class OverworldPlayerCharacter : PlayerCharacter
 
     public override bool ValidateTarget(GridLocation targetGridLocation)
     {
-        if (OverworldManager.Instance.Overworld.TilesByLocation.TryGetValue(targetGridLocation, out Tile tile))
+        if (OverworldGameplayManager.Instance.Overworld.TilesByLocation.TryGetValue(targetGridLocation, out Tile tile))
         {
             if (tile.Walkable)
                 return true;

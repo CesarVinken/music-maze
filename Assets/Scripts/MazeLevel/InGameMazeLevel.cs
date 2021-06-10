@@ -45,7 +45,7 @@ public class InGameMazeLevel : MazeLevel, IInGameLevel
         for (int i = 0; i < mazeLevelData.Tiles.Count; i++)
         {
             SerialisableTile serialisableTile = mazeLevelData.Tiles[i];
-            GameObject tileGO = GameObject.Instantiate(MazeLevelManager.Instance.InGameTilePrefab, _mazeContainer.transform);
+            GameObject tileGO = GameObject.Instantiate(MazeLevelGameplayManager.Instance.InGameTilePrefab, _mazeContainer.transform);
 
             InGameMazeTile tile = tileGO.GetComponent<InGameMazeTile>();
 

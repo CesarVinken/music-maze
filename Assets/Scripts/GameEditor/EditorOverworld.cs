@@ -48,7 +48,7 @@ public class EditorOverworld : Overworld, IEditorLevel
         for (int i = 0; i < overworldData.Tiles.Count; i++)
         {
             SerialisableTile serialisableTile = overworldData.Tiles[i];
-            GameObject tileGO = GameObject.Instantiate(OverworldManager.Instance.EditorTilePrefab, _overworldContainer.transform);
+            GameObject tileGO = GameObject.Instantiate(OverworldGameplayManager.Instance.EditorTilePrefab, _overworldContainer.transform);
 
             EditorOverworldTile tile = tileGO.GetComponent<EditorOverworldTile>();
             tile.SetGridLocation(serialisableTile.GridLocation.X, serialisableTile.GridLocation.Y);

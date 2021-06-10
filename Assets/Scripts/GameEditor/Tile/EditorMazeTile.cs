@@ -13,9 +13,9 @@ public class EditorMazeTile : MazeTile
 
     public void RemoveTileAsBeautificationTrigger()
     {
-        for (int i = 0; i < MazeLevelManager.Instance.EditorLevel.Tiles.Count; i++)
+        for (int i = 0; i < MazeLevelGameplayManager.Instance.EditorLevel.Tiles.Count; i++)
         {
-            EditorMazeTile tile = MazeLevelManager.Instance.EditorLevel.Tiles[i];
+            EditorMazeTile tile = MazeLevelGameplayManager.Instance.EditorLevel.Tiles[i];
             if (tile.BeautificationTriggerers.Contains(this))
             {
                 tile.BeautificationTriggerers.Remove(this);

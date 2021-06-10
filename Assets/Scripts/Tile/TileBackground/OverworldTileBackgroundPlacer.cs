@@ -10,7 +10,7 @@ public class OverworldTileBackgroundPlacer<T> : TileBackgroundPlacer<T> where T 
     // Called in game when we already have the connection score
     public override void PlacePath(IPathType tilePathType, TileConnectionScoreInfo pathConnectionScoreInfo)
     {
-        GameObject overworldTilePathGO = GameObject.Instantiate(OverworldManager.Instance.GetTileBackgroundPrefab<OverworldTilePath>(), Tile.BackgroundsContainer);
+        GameObject overworldTilePathGO = GameObject.Instantiate(OverworldGameplayManager.Instance.GetTileBackgroundPrefab<OverworldTilePath>(), Tile.BackgroundsContainer);
         OverworldTilePath overworldTilePath = overworldTilePathGO.GetComponent<OverworldTilePath>();
         overworldTilePath.WithType(tilePathType as IBackgroundType);
         overworldTilePath.WithConnectionScoreInfo(pathConnectionScoreInfo);
@@ -21,7 +21,7 @@ public class OverworldTileBackgroundPlacer<T> : TileBackgroundPlacer<T> where T 
 
     public override void PlaceGround(IBaseBackgroundType groundType, TileConnectionScoreInfo connectionScoreInfo)
     {
-        GameObject groundGO = GameObject.Instantiate(OverworldManager.Instance.GetTileBackgroundPrefab<OverworldTileBaseGround>(), Tile.BackgroundsContainer);
+        GameObject groundGO = GameObject.Instantiate(OverworldGameplayManager.Instance.GetTileBackgroundPrefab<OverworldTileBaseGround>(), Tile.BackgroundsContainer);
         OverworldTileBaseGround mazeTileBaseGround = groundGO.GetComponent<OverworldTileBaseGround>();
         mazeTileBaseGround.WithType(groundType);
         mazeTileBaseGround.WithConnectionScoreInfo(connectionScoreInfo);
@@ -36,7 +36,7 @@ public class OverworldTileBackgroundPlacer<T> : TileBackgroundPlacer<T> where T 
         {
             Logger.Warning($"Set water HAMASDKQ");
         }
-        GameObject waterGO = GameObject.Instantiate(OverworldManager.Instance.GetTileBackgroundPrefab<OverworldTileBaseWater>(), Tile.BackgroundsContainer);
+        GameObject waterGO = GameObject.Instantiate(OverworldGameplayManager.Instance.GetTileBackgroundPrefab<OverworldTileBaseWater>(), Tile.BackgroundsContainer);
         OverworldTileBaseWater overworldTileBaseWater = waterGO.GetComponent<OverworldTileBaseWater>();
         overworldTileBaseWater.WithType(waterType);
         overworldTileBaseWater.SetTile(Tile);
@@ -67,7 +67,7 @@ public class OverworldTileBackgroundPlacer<T> : TileBackgroundPlacer<T> where T 
 
         if (oldBackground != null) return oldBackground;
 
-        GameObject baseBackgroundGO = GameObject.Instantiate(OverworldManager.Instance.GetTileBackgroundPrefab<U>(), Tile.BackgroundsContainer);
+        GameObject baseBackgroundGO = GameObject.Instantiate(OverworldGameplayManager.Instance.GetTileBackgroundPrefab<U>(), Tile.BackgroundsContainer);
         U baseBackground = baseBackgroundGO.GetComponent<U>();
 
         baseBackground.SetTile(Tile);
@@ -79,7 +79,7 @@ public class OverworldTileBackgroundPlacer<T> : TileBackgroundPlacer<T> where T 
     public void PlaceCornerFiler(TileCorner tileCorner)
     {
         //create cornerfiller
-        GameObject backgroundGO = GameObject.Instantiate(OverworldManager.Instance.GetTileBackgroundPrefab<TileCornerFiller>(), Tile.BackgroundsContainer);
+        GameObject backgroundGO = GameObject.Instantiate(OverworldGameplayManager.Instance.GetTileBackgroundPrefab<TileCornerFiller>(), Tile.BackgroundsContainer);
         TileCornerFiller cornerFiller = backgroundGO.GetComponent<TileCornerFiller>();
 
         cornerFiller.SetTile(Tile);

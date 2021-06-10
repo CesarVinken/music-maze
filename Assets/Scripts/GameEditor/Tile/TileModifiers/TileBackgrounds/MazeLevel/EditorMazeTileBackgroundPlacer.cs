@@ -20,7 +20,7 @@ public class EditorMazeTileBackgroundPlacer : MazeTileBackgroundPlacer<EditorMaz
 
         TileConnectionScoreInfo pathConnectionScore = NeighbourTileCalculator.MapNeighbourPathsOfTile(Tile, mazeTilePathType);
 
-        GameObject mazeTilePathGO = GameObject.Instantiate(MazeLevelManager.Instance.GetTileBackgroundPrefab<MazeTilePath>(), Tile.BackgroundsContainer);
+        GameObject mazeTilePathGO = GameObject.Instantiate(MazeLevelGameplayManager.Instance.GetTileBackgroundPrefab<MazeTilePath>(), Tile.BackgroundsContainer);
         MazeTilePath mazeTilePath = mazeTilePathGO.GetComponent<MazeTilePath>();
         mazeTilePath.WithType(mazeTilePathType as IBackgroundType);
         mazeTilePath.WithConnectionScoreInfo(pathConnectionScore);
@@ -54,7 +54,7 @@ public class EditorMazeTileBackgroundPlacer : MazeTileBackgroundPlacer<EditorMaz
         else if(existingGround == null)
         {
             //There are some connections and no ground sprite. Add ground sprite.
-            GameObject backgroundGO = GameObject.Instantiate(MazeLevelManager.Instance.GetTileBackgroundPrefab<MazeTileBaseGround>(), Tile.BackgroundsContainer);
+            GameObject backgroundGO = GameObject.Instantiate(MazeLevelGameplayManager.Instance.GetTileBackgroundPrefab<MazeTileBaseGround>(), Tile.BackgroundsContainer);
             MazeTileBaseGround baseBackground = backgroundGO.GetComponent<MazeTileBaseGround>();
 
             baseBackground.SetTile(Tile);
@@ -67,7 +67,7 @@ public class EditorMazeTileBackgroundPlacer : MazeTileBackgroundPlacer<EditorMaz
             existingGround.WithConnectionScoreInfo(newLandConnectionScoreInfo);
         }
 
-        GameObject waterGO = GameObject.Instantiate(MazeLevelManager.Instance.GetTileBackgroundPrefab<MazeTileBaseWater>(), Tile.BackgroundsContainer);
+        GameObject waterGO = GameObject.Instantiate(MazeLevelGameplayManager.Instance.GetTileBackgroundPrefab<MazeTileBaseWater>(), Tile.BackgroundsContainer);
         MazeTileBaseWater mazeTileBaseWater = waterGO.GetComponent<MazeTileBaseWater>();
         mazeTileBaseWater.SetTile(Tile);
 
@@ -90,7 +90,7 @@ public class EditorMazeTileBackgroundPlacer : MazeTileBackgroundPlacer<EditorMaz
     {
         Tile.SetMainMaterial(new WaterMainMaterial());
 
-        GameObject waterGO = GameObject.Instantiate(MazeLevelManager.Instance.GetTileBackgroundPrefab<MazeTileBaseWater>(), Tile.BackgroundsContainer);
+        GameObject waterGO = GameObject.Instantiate(MazeLevelGameplayManager.Instance.GetTileBackgroundPrefab<MazeTileBaseWater>(), Tile.BackgroundsContainer);
         MazeTileBaseWater mazeTileBaseWater = waterGO.GetComponent<MazeTileBaseWater>();
         mazeTileBaseWater.SetTile(Tile);
 
@@ -103,7 +103,7 @@ public class EditorMazeTileBackgroundPlacer : MazeTileBackgroundPlacer<EditorMaz
         Tile.SetMainMaterial(new GroundMainMaterial());
 
         Logger.Log("Place a base ground tile will connections on all sides.");
-        GameObject backgroundGO = GameObject.Instantiate(MazeLevelManager.Instance.GetTileBackgroundPrefab<MazeTileBaseGround>(), Tile.BackgroundsContainer);
+        GameObject backgroundGO = GameObject.Instantiate(MazeLevelGameplayManager.Instance.GetTileBackgroundPrefab<MazeTileBaseGround>(), Tile.BackgroundsContainer);
         MazeTileBaseGround baseBackground = backgroundGO.GetComponent<MazeTileBaseGround>();
 
         baseBackground.SetTile(Tile);
@@ -165,7 +165,7 @@ public class EditorMazeTileBackgroundPlacer : MazeTileBackgroundPlacer<EditorMaz
 
                 if (existingGroundTile) continue;
 
-                GameObject backgroundGO = GameObject.Instantiate(MazeLevelManager.Instance.GetTileBackgroundPrefab<MazeTileBaseGround>(), neighbour.Value.BackgroundsContainer);
+                GameObject backgroundGO = GameObject.Instantiate(MazeLevelGameplayManager.Instance.GetTileBackgroundPrefab<MazeTileBaseGround>(), neighbour.Value.BackgroundsContainer);
                 MazeTileBaseGround baseGround = backgroundGO.GetComponent<MazeTileBaseGround>();
                
                 baseGround.SetTile(neighbour.Value);
@@ -217,7 +217,7 @@ public class EditorMazeTileBackgroundPlacer : MazeTileBackgroundPlacer<EditorMaz
             else if (existingGround == null)
             {
                 //There are some connections and no ground sprite. Add ground sprite.
-                GameObject backgroundGO = GameObject.Instantiate(MazeLevelManager.Instance.GetTileBackgroundPrefab<MazeTileBaseGround>(), neighbourTile.BackgroundsContainer);
+                GameObject backgroundGO = GameObject.Instantiate(MazeLevelGameplayManager.Instance.GetTileBackgroundPrefab<MazeTileBaseGround>(), neighbourTile.BackgroundsContainer);
                 MazeTileBaseGround baseBackground = backgroundGO.GetComponent<MazeTileBaseGround>();
 
                 baseBackground.SetTile(Tile);

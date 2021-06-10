@@ -24,7 +24,7 @@ public class LoadCommand : CommandProcedure
 
     public void LoadMazeLevel(List<string> arguments)
     {
-        if (MazeLevelManager.Instance == null)
+        if (MazeLevelGameplayManager.Instance == null)
         {
             if (PersistentGameManager.CurrentSceneType == SceneType.Overworld)
             {

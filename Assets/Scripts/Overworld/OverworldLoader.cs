@@ -25,14 +25,14 @@ public class OverworldLoader : MonoBehaviour
         }
 
         // Make checks such as if there are starting locations for the players
-        OverworldManager.Instance.UnloadOverworld();
-        OverworldManager.Instance.SetupOverworld(overworldData); // sets new Overworld in OverworldManager
+        OverworldGameplayManager.Instance.UnloadOverworld();
+        OverworldGameplayManager.Instance.SetupOverworld(overworldData); // sets new Overworld in OverworldManager
     }
 
     public static void LoadOverworldForEditor(OverworldData overworldData)
     {
-        OverworldManager.Instance.UnloadOverworld();
-        OverworldManager.Instance.SetupOverworldForEditor(overworldData); // sets up the level without instantiating characters etc.
+        OverworldGameplayManager.Instance.UnloadOverworld();
+        OverworldGameplayManager.Instance.SetupOverworldForEditor(overworldData); // sets up the level without instantiating characters etc.
     }
 
     public static bool OverworldExists(string overworldName)

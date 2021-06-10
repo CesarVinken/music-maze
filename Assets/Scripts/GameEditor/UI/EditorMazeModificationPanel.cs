@@ -57,7 +57,7 @@ public class EditorMazeModificationPanel : EditorGridModificationPanel
         Logger.Log("Generate tile grid with a width of {0} and a height of {1}", _gridWidth, _gridHeight);
 
         // remove everything from the currently loaded level
-        MazeLevelManager.Instance.UnloadLevel();
+        MazeLevelGameplayManager.Instance.UnloadLevel();
 
         // Create a new level from scratch with a obstacle ring at the edges
         List<SerialisableTile> tiles = new List<SerialisableTile>();
@@ -115,7 +115,7 @@ public class EditorMazeModificationPanel : EditorGridModificationPanel
             return;
         }
 
-        if (MazeLevelManager.Instance.EditorLevel == null)
+        if (MazeLevelGameplayManager.Instance.EditorLevel == null)
         {
             Logger.Warning(Logger.Datawriting, "Please first generate a level before saving.");
             return;
@@ -137,7 +137,7 @@ public class EditorMazeModificationPanel : EditorGridModificationPanel
 
     private void SaveMazeLevelData()
     {
-        MazeLevelData mazeLevelData = new MazeLevelData(MazeLevelManager.Instance.EditorLevel).WithName(_mazeName);
+        MazeLevelData mazeLevelData = new MazeLevelData(MazeLevelGameplayManager.Instance.EditorLevel).WithName(_mazeName);
         JsonMazeLevelFileWriter fileWriter = new JsonMazeLevelFileWriter();
         fileWriter.SerialiseData(mazeLevelData);
     }
@@ -154,7 +154,7 @@ public class EditorMazeModificationPanel : EditorGridModificationPanel
 
         if (mazeLevelNameExists)
         {
-            MazeLevelManager.Instance.UnloadLevel();
+            MazeLevelGameplayManager.Instance.UnloadLevel();
 
             MazeLevelData mazeLevelData = MazeLevelLoader.LoadMazeLevelData(_mazeName);
             MazeLevelLoader.LoadMazeLevelForEditor(mazeLevelData);
@@ -319,9 +319,9 @@ public class EditorMazeModificationPanel : EditorGridModificationPanel
 
     private void CheckForTilesWithoutTransformationTriggerers()
     {
-        for (int i = 0; i < MazeLevelManager.Instance.EditorLevel.Tiles.Count; i++)
+        for (int i = 0; i < MazeLevelGameplayManager.Instance.EditorLevel.Tiles.Count; i++)
         {
-            EditorMazeTile tile = MazeLevelManager.Instance.EditorLevel.Tiles[i];
+            EditorMazeTile tile = MazeLevelGameplayManager.Instance.EditorLevel.Tiles[i];
 
             if(!tile.Markable && tile.BeautificationTriggerers.Count == 0)
             {

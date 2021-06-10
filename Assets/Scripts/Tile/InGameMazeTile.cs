@@ -21,7 +21,7 @@ public class InGameMazeTile : MazeTile
 
             if (!Markable) return;
 
-            MazeLevelManager.Instance.SetTileMarker(this, player);
+            MazeLevelGameplayManager.Instance.SetTileMarker(this, player);
         }
     }
 

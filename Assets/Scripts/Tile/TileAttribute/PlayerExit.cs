@@ -25,7 +25,7 @@ public class PlayerExit : TileObstacle, ITileAttribute, ITileConnectable
     {
         if (!EditorManager.InEditor)
         {
-            MazeLevelManager.Instance.Level.MazeExits.Add(this);
+            MazeLevelGameplayManager.Instance.Level.MazeExits.Add(this);
         }
     }
 

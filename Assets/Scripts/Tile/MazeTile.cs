@@ -25,13 +25,13 @@ public class MazeTile : Tile, IMazeLevel
 
         if (!Markable) return;
 
-        if (MazeLevelManager.Instance.NumberOfUnmarkedTiles == -1)
+        if (MazeLevelGameplayManager.Instance.NumberOfUnmarkedTiles == -1)
         {
-            MazeLevelManager.Instance.NumberOfUnmarkedTiles = 1;
+            MazeLevelGameplayManager.Instance.NumberOfUnmarkedTiles = 1;
         }
         else
         {
-            MazeLevelManager.Instance.NumberOfUnmarkedTiles++;
+            MazeLevelGameplayManager.Instance.NumberOfUnmarkedTiles++;
         }
     }
 

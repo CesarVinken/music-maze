@@ -57,9 +57,9 @@ public class OverworldTileAttributeRemover : TileAttributeRemover
         _tile.RemoveAttribute(mazeLevelEntry);
         mazeLevelEntry.Remove();
 
-        if (OverworldManager.Instance != null && OverworldManager.Instance.EditorOverworld != null)
+        if (OverworldGameplayManager.Instance != null && OverworldGameplayManager.Instance.EditorOverworld != null)
         {
-            OverworldManager.Instance.EditorOverworld.MazeEntries.Remove(mazeLevelEntry);
+            OverworldGameplayManager.Instance.EditorOverworld.MazeEntries.Remove(mazeLevelEntry);
             ScreenSpaceOverworldEditorElements.Instance.RemoveMazeLevelEntryName(mazeLevelEntry);
         }
     }

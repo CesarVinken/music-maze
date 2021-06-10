@@ -14,7 +14,7 @@ public class EditorMazeTileAttributePlacer : MazeTileAttributePlacer<EditorMazeT
 
     public override ITileAttribute InstantiateTileAttributeGO<U>()
     {
-        GameObject tileAttributeGO = GameObject.Instantiate(MazeLevelManager.Instance.GetTileAttributePrefab<U>(), Tile.transform);
+        GameObject tileAttributeGO = GameObject.Instantiate(MazeLevelGameplayManager.Instance.GetTileAttributePrefab<U>(), Tile.transform);
         return tileAttributeGO.GetComponent<U>();
     }
 

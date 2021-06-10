@@ -25,6 +25,6 @@ public class EnemySpawnpoint : CharacterSpawnpoint
         
         CharacterBlueprint = new CharacterBlueprint(EnemyType);
 
-        MazeLevelManager.Instance.Level.EnemyCharacterSpawnpoints.Add(this);
+        MazeLevelGameplayManager.Instance.Level.EnemyCharacterSpawnpoints.Add(this);
     }
 }

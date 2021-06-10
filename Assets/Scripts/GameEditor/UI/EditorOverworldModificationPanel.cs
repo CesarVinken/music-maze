@@ -26,7 +26,7 @@ public class EditorOverworldModificationPanel : EditorGridModificationPanel
             return;
         }
 
-        if (OverworldManager.Instance.EditorOverworld == null)
+        if (OverworldGameplayManager.Instance.EditorOverworld == null)
         {
             Logger.Warning(Logger.Datawriting, "Please first generate an overworld before saving.");
             return;
@@ -46,7 +46,7 @@ public class EditorOverworldModificationPanel : EditorGridModificationPanel
 
     private void SaveOverworldData()
     {
-        OverworldData overworldData = new OverworldData(OverworldManager.Instance.EditorOverworld).WithName(_overworldName);
+        OverworldData overworldData = new OverworldData(OverworldGameplayManager.Instance.EditorOverworld).WithName(_overworldName);
         JsonOverworldFileWriter fileWriter = new JsonOverworldFileWriter();
         fileWriter.SerialiseData(overworldData);
     }
@@ -117,7 +117,7 @@ public class EditorOverworldModificationPanel : EditorGridModificationPanel
         Logger.Log("Generate tile grid with a width of {0} and a height of {1}", _gridWidth, _gridHeight);
 
         // remove everything from the currently loaded level
-        OverworldManager.Instance.UnloadOverworld();
+        OverworldGameplayManager.Instance.UnloadOverworld();
 
         // Create a new level from scratch with a obstacle ring at the edges
         List<SerialisableTile> tiles = new List<SerialisableTile>();

@@ -102,7 +102,7 @@ public class MazePlayerCharacter : PlayerCharacter
 
     public override bool ValidateTarget(GridLocation targetGridLocation)
     {
-        if (MazeLevelManager.Instance.Level.TilesByLocation.TryGetValue(targetGridLocation, out Tile tile))
+        if (MazeLevelGameplayManager.Instance.Level.TilesByLocation.TryGetValue(targetGridLocation, out Tile tile))
         {
             if (tile.Walkable)
                 return true;

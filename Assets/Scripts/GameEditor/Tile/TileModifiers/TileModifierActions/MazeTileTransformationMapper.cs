@@ -10,9 +10,9 @@ public class MazeTileTransformationMapper
         Logger.Log("generate tile transformation map");
         //go over all tiles and if tile is non-markable, empty transformation trigger list and assign transformation triggers based on adjacent tiles
 
-        for (int i = 0; i < MazeLevelManager.Instance.EditorLevel.Tiles.Count; i++)
+        for (int i = 0; i < MazeLevelGameplayManager.Instance.EditorLevel.Tiles.Count; i++)
         {
-            EditorMazeTile tile = MazeLevelManager.Instance.EditorLevel.Tiles[i];
+            EditorMazeTile tile = MazeLevelGameplayManager.Instance.EditorLevel.Tiles[i];
             if (tile.Markable || tile.GetAttributes().OfType<PlayerSpawnpoint>().Any()) continue;
 
             tile.BeautificationTriggerers.Clear();

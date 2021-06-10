@@ -28,7 +28,7 @@ public class SerialisableTile
 
         if(tile is IMazeLevel)
         {
-            List<EditorMazeTile> tilesToTransform = MazeLevelManager.Instance.EditorLevel.FindTilesToTransform(tile as EditorMazeTile);
+            List<EditorMazeTile> tilesToTransform = MazeLevelGameplayManager.Instance.EditorLevel.FindTilesToTransform(tile as EditorMazeTile);
             TilesToTransform = SerialiseTilesToTransform(tilesToTransform);
         }
     }

@@ -26,13 +26,13 @@ public static class MazeLevelLoader
         }
 
         // Make checks such as if there are starting locations for the players
-        MazeLevelManager.Instance.UnloadLevel();
-        MazeLevelManager.Instance.SetupLevel(mazeLevelData); // sets new Level in MazeLevelManager
+        MazeLevelGameplayManager.Instance.UnloadLevel();
+        MazeLevelGameplayManager.Instance.SetupLevel(mazeLevelData); // sets new Level in MazeLevelManager
     }
 
     public static void LoadMazeLevelForEditor(MazeLevelData mazeLevelData)
     {
-        MazeLevelManager.Instance.SetupLevelForEditor(mazeLevelData); // sets up the level without instantiating characters etc.
+        MazeLevelGameplayManager.Instance.SetupLevelForEditor(mazeLevelData); // sets up the level without instantiating characters etc.
     }
 
     public static bool MazeLevelExists(string mazeLevelName)
@@ -83,7 +83,7 @@ public static class MazeLevelLoader
 
             if (!levelNameData.IsPlayable) continue;
 
-            if (levelNameData.LevelName == MazeLevelManager.Instance?.Level?.Name) continue;
+            if (levelNameData.LevelName == MazeLevelGameplayManager.Instance?.Level?.Name) continue;
 
             playableLevelNames.Add(levelNameData.LevelName);
         }

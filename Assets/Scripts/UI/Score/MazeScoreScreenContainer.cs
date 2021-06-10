@@ -106,7 +106,7 @@ public class MazeScoreScreenContainer : MonoBehaviour
         _mazeScoreCalculator.ResetMazeLevelScore();
         _mazeScoreCalculator.CalculateScores();
 
-        _subtitleLabel.text = $"You escaped from {MazeLevelManager.Instance.Level.Name}";
+        _subtitleLabel.text = $"You escaped from {MazeLevelGameplayManager.Instance.Level.Name}";
 
         ShowScore(_mazeScoreCalculator.PlayerMazeScores);
     }
@@ -201,7 +201,7 @@ public class MazeScoreScreenContainer : MonoBehaviour
         _screenIsOpen = false;
 
         string overworldName = "default";
-        MazeLevelManager.Instance.LoadOverworld(overworldName);
+        MazeLevelGameplayManager.Instance.LoadOverworld(overworldName);
     }
 
     public void ToNextLevel()
@@ -219,7 +219,7 @@ public class MazeScoreScreenContainer : MonoBehaviour
         string pickedLevel = GameManager.Instance.PlayableLevelNames[randomIndex];
         Logger.Log($"Load next random level: {pickedLevel}");
 
-        MazeLevelManager.Instance.LoadNextLevel(pickedLevel); // triggers load next level event for both players
+        MazeLevelGameplayManager.Instance.LoadNextLevel(pickedLevel); // triggers load next level event for both players
     }
 
     public void OpenScoreScreenPanel()

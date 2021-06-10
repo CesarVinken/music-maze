@@ -7,9 +7,9 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-public class MazeLevelManager : MonoBehaviour, IOnEventCallback
+public class MazeLevelGameplayManager : MonoBehaviour, IOnEventCallback, IGameplayManager
 {
-    public static MazeLevelManager Instance;
+    public static MazeLevelGameplayManager Instance;
     public InGameMazeLevel Level;
     public EditorMazeLevel EditorLevel;
 
@@ -88,6 +88,7 @@ public class MazeLevelManager : MonoBehaviour, IOnEventCallback
         Guard.CheckIsNull(_bridgePiecePrefab, "BridgePiecePrefab", gameObject);
 
         Instance = this;
+        GameManager.Instance.GameplayManager = this;
     }
 
     private void OnEnable()

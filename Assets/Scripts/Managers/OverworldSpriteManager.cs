@@ -16,5 +16,7 @@ public class OverworldSpriteManager : SpriteManager
         Guard.CheckLength(DefaultOverworldTileBackground, "DefaultOverworldTileBackground");
         Guard.CheckLength(Path, "Path");
         Guard.CheckLength(DefaultOverworldTileWater, "DefaultOverworldTileWater");
+
+        GameManager.Instance.SpriteManager = this;
     }
 }

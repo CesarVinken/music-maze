@@ -36,6 +36,8 @@ public class GameManager : MonoBehaviourPunCallbacks
     public List<string> PlayableLevelNames = new List<string>();
 
     public ICharacterManager CharacterManager;
+    public IGameplayManager GameplayManager;
+    public SpriteManager SpriteManager;
 
     public void Awake()
     {
@@ -124,7 +126,7 @@ public class GameManager : MonoBehaviourPunCallbacks
 
                     OverworldLoader.LoadOverworld(startUpOverworldData);
 
-                    if (OverworldManager.Instance.Overworld == null)
+                    if (OverworldGameplayManager.Instance.Overworld == null)
                     {
                         Logger.Log(Logger.Initialisation, "No overworld loaded on startup. Returning");
                         return;
