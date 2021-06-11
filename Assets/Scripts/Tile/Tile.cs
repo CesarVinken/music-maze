@@ -65,6 +65,43 @@ public abstract class Tile : MonoBehaviour
         _tileBackgrounds.Add(tileBackground);
     }
 
+    public void AddBridgeEdge(BridgeEdge bridgeEdge)
+    {
+        _tileAttributes.Add(bridgeEdge);
+    }
+
+    public List<BridgeEdge> GetBridgeEdges()
+    {
+        List<BridgeEdge> bridgeEdges = new List<BridgeEdge>();
+        for (int i = 0; i < _tileAttributes.Count; i++)
+        {
+            if (_tileAttributes[i] is BridgeEdge)
+            {
+                bridgeEdges.Add(_tileAttributes[i] as BridgeEdge);
+            }
+        }
+        return bridgeEdges;
+    }
+
+    public BridgeEdge GetBridgeEdge(Direction edgeSide)
+    {
+        List<BridgeEdge> bridgeEdges = GetBridgeEdges();
+
+        for (int i = 0; i < bridgeEdges.Count; i++)
+        {
+            if(bridgeEdges[i].EdgeSide == edgeSide)
+            {
+                return bridgeEdges[i];
+            }
+        }
+        return null;
+    }
+
+    public void RemoveBridgeEdge(BridgeEdge bridgeEdge)
+    {
+        _tileAttributes.Remove(bridgeEdge);
+    }
+
     public List<ITileBackground> GetBackgrounds()
     {
         return _tileBackgrounds;
@@ -120,10 +157,8 @@ public abstract class Tile : MonoBehaviour
 
         if (tilePath == null)
         {
-            //Logger.Log($"did NOT find a tile path on {GridLocation.X},{GridLocation.Y}");
             return null;
         }
-        //Logger.Log($"found tile path {tilePath.TilePathType} on {GridLocation.X},{GridLocation.Y} with score {tilePath.ConnectionScore}");
         return tilePath;
     }
 
@@ -161,6 +196,18 @@ public abstract class Tile : MonoBehaviour
         }
 
         return cornerFiller;
+    }
+
+    public BridgePiece TryGetBridgePiece()
+    {
+        BridgePiece bridgePiece = (BridgePiece)_tileAttributes.FirstOrDefault(attribute => attribute is BridgePiece);
+
+        if (bridgePiece == null)
+        {
+            return null;
+        }
+
+        return bridgePiece;
     }
 
     public void InitialiseTileBackgrounds()

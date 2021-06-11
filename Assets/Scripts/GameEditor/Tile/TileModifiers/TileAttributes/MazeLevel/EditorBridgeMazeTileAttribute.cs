@@ -22,7 +22,6 @@ public class EditorBridgeMazeTileAttribute : EditorMazeTileAttributeModifier, IW
         if (bridgePiece == null)
         {
             tileAttributePlacer.CreateBridgePiece(BridgePieceDirection.Horizontal);
-            return;
         }
         else if(bridgePiece.BridgePieceDirection == BridgePieceDirection.Horizontal)
         {

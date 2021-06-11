@@ -57,6 +57,7 @@ public class MazeTileAttributePlacer<T> : TileAttributePlacer<T> where T : MazeT
         BridgePiece bridgePiece = (BridgePiece)InstantiateTileAttributeGO<BridgePiece>();
         bridgePiece.WithBridgeType(bridgeType);
         bridgePiece.WithBridgePieceDirection(bridgePieceDirection);
+        bridgePiece.SetSprite();
 
         Tile.SetWalkable(true);
         Tile.TryMakeMarkable(false);

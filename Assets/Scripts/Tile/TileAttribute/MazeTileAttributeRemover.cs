@@ -96,6 +96,8 @@ public class MazeTileAttributeRemover : TileAttributeRemover
        
         if (bridgePieceAttribute == null) return;
 
+        bridgePieceAttribute.RemoveObsoleteBridgeEdges();
+
         _tile.RemoveAttribute(bridgePieceAttribute);
         bridgePieceAttribute.Remove();
     }
