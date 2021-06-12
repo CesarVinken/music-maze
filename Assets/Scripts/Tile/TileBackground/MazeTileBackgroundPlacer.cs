@@ -40,6 +40,7 @@ public class MazeTileBackgroundPlacer<T> : TileBackgroundPlacer<T> where T : Maz
         Tile.SetMainMaterial(new WaterMainMaterial());
         Tile.AddBackground(mazeTileBaseWater);
         Tile.TryMakeMarkable(false);
+
         Tile.SetWalkable(false);
     }
 
@@ -53,6 +54,7 @@ public class MazeTileBackgroundPlacer<T> : TileBackgroundPlacer<T> where T : Maz
             case Type mazeTileBaseWater when mazeTileBaseWater == typeof(MazeTileBaseWater):
                 Tile.SetMainMaterial(new WaterMainMaterial());
                 Tile.SetWalkable(false);
+
                 break;
             default:
                 Logger.Error($"Unexpected type {typeof(U)}");

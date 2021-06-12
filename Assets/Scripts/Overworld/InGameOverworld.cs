@@ -57,8 +57,8 @@ public class InGameOverworld : Overworld, IInGameLevel
 
             Tiles.Add(tile);
 
-            AddTileAttributes(serialisableTile, tile);
             AddBackgroundSprites(serialisableTile, tile);
+            AddTileAttributes(serialisableTile, tile);
             AddCornerFillers(serialisableTile, tile);
 
             TilesByLocation.Add(tile.GridLocation, tile);

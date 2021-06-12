@@ -62,6 +62,12 @@ public class MazeTileAttributePlacer<T> : TileAttributePlacer<T> where T : MazeT
         Tile.SetWalkable(true);
         Tile.TryMakeMarkable(false);
         Tile.AddAttribute(bridgePiece);
+
+        TileWater tileWater = Tile.TryGetTileWater();
+        if (tileWater)
+        {
+            tileWater.SetWalkabilityForBridge(bridgePieceDirection);
+        }
     }
 
     public void PlaceBridgeEdge(BridgeType bridgeType, Direction edgeSide)

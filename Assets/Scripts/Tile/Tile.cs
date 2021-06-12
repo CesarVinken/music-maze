@@ -12,7 +12,7 @@ public enum TileCorner
 
 public abstract class Tile : MonoBehaviour
 {
-    private bool _walkable = true;
+    [SerializeField] private bool _walkable = true;
     public Transform BackgroundsContainer;
     public string TileId;
 

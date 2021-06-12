@@ -35,4 +35,21 @@ public class TileWater : MonoBehaviour, ITileBackground
         ParentId = tile.TileId;
         _spriteRenderer.sortingOrder = SpriteManager.BaseWaterSortingOrder;
     }
+
+    public void MakeUnwalkable()
+    {
+        gameObject.layer = 8; // set layer to Unwalkable, which is layer 8. Should not be hardcoded
+    }
+
+    public void SetWalkabilityForBridge(BridgePieceDirection walkDirection)
+    {
+        if (walkDirection == BridgePieceDirection.Horizontal)
+        {
+            gameObject.layer = 6; // set layer to Horizontal Walkability
+        }
+        else
+        {
+            gameObject.layer = 7; // set layer to Vertical Walkability
+        }
+    }
 }
