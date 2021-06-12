@@ -52,6 +52,8 @@ public class InGameMazeTile : MazeTile
         for (int i = 0; i < _tileAttributes.Count; i++)
         {
             ITransformable attribute = _tileAttributes[i] as ITransformable;
+            if (attribute is BridgeEdge) continue; // Bridge edges should not be transformed with the tile, but with the connected bridge piece
+
             if (attribute != null)
             {
                 attribute.TriggerTransformation();

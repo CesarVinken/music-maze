@@ -11,7 +11,7 @@ public class BridgeEdge : MonoBehaviour, ITileAttribute, ITransformable
     public BridgePiece BridgePieceConnection;
 
     [SerializeField] private TileSpriteContainer _tileSpriteContainer;
-    private int _sortingOrderBase = 500;
+    private int _sortingOrderBase = 0;
     private int _sortingOrder;
 
     public int SortingOrderBase { get => _sortingOrderBase; set => _sortingOrderBase = value; }
@@ -19,8 +19,6 @@ public class BridgeEdge : MonoBehaviour, ITileAttribute, ITransformable
     public void Awake()
     {
         Guard.CheckIsNull(_tileSpriteContainer, "_tileSpriteContainer", gameObject);
-
-        _sortingOrder = (int)(_sortingOrderBase - transform.position.y) * 10 + 1;
     }
 
     public void Remove()
@@ -79,7 +77,6 @@ public class BridgeEdge : MonoBehaviour, ITileAttribute, ITransformable
 
     public void TriggerTransformation()
     {
-
         if (BridgeType == BridgeType.Wooden)
         {
             Sprite colourfulSprite;

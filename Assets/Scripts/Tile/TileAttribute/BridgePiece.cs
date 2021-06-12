@@ -14,7 +14,7 @@ public class BridgePiece : MonoBehaviour, ITileAttribute, ITransformable
 
     public List<BridgeEdge> BridgeEdgeConnections = new List<BridgeEdge>();
 
-    private int _sortingOrderBase = 500; 
+    private int _sortingOrderBase = 0; 
     private int _sortingOrder; // TODO: Back piece should be behind characters, front piece should be in front of characters.
 
     public int SortingOrderBase { get => _sortingOrderBase; set => _sortingOrderBase = value; }
@@ -22,8 +22,6 @@ public class BridgePiece : MonoBehaviour, ITileAttribute, ITransformable
     public void Awake()
     {
         Guard.CheckIsNull(_tileSpriteContainer, "_tileSpriteContainer", gameObject);
-
-        _sortingOrder = (int)(_sortingOrderBase - transform.position.y) * 10 + 1;
     }
 
     public void WithBridgeType(BridgeType bridgeType)
