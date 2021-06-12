@@ -93,10 +93,33 @@ public class NeighbourTileCalculator
 
             Logger.Warning($"Neighbour at {neighbour.Value.GridLocation.X},{neighbour.Value.GridLocation.Y} is {neighbour.Key} of {tile.GridLocation.X},{tile.GridLocation.Y}.");
             
+            // Check if the neighbour has a connection which is a path or a bridge
             TilePath tilePath = neighbour.Value.TryGetTilePath();
             if (tilePath == null || tilePath.TilePathType?.GetType() != pathType.GetType())
             {
-                continue;
+                BridgePiece bridgePiece = neighbour.Value.TryGetBridgePiece();
+                if (bridgePiece == null)
+                {
+                    continue;
+                }
+
+                bool hasBridgeConnection = false;
+
+                if ((neighbour.Key == ObjectDirection.Right || neighbour.Key == ObjectDirection.Left) &&
+                    bridgePiece.BridgePieceDirection == BridgePieceDirection.Horizontal)
+                {
+                    hasBridgeConnection = true;
+                }
+                else if ((neighbour.Key == ObjectDirection.Down || neighbour.Key == ObjectDirection.Up) &&
+                    bridgePiece.BridgePieceDirection == BridgePieceDirection.Vertical)
+                {
+                    hasBridgeConnection = true;
+                }
+
+                if (hasBridgeConnection == false)
+                {
+                    continue;
+                }
             }
 
             if (neighbour.Key == ObjectDirection.Right)

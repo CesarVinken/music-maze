@@ -120,12 +120,27 @@ public class EditorMazeTileAttributePlacer : MazeTileAttributePlacer<EditorMazeT
         bridgePiece.WithBridgePieceDirection(bridgePieceDirection);
         bridgePiece.WithBridgeType(BridgeType.Wooden);
         bridgePiece.SetSprite();
-        bridgePiece.SetTile(Tile);
+        bridgePiece.SetTile(_tile);
         bridgePiece.HandleBridgeEdges();
 
-        Tile.SetWalkable(true);
+        _tile.SetWalkable(true);
 
-        Logger.Log("TODO: make walkable bridge work");
-        Tile.AddAttribute(bridgePiece);
+        _tile.AddAttribute(bridgePiece);
+
+        //Update path connections of neighbours
+        foreach (KeyValuePair<ObjectDirection, Tile> neighbour in _tile.Neighbours)
+        {
+            if (!neighbour.Value) continue;
+
+            TilePath mazeTilePathOnNeighbour = neighbour.Value.TryGetTilePath();
+
+            if (mazeTilePathOnNeighbour == null) continue;
+
+            int oldConnectionScoreOnNeighbour = mazeTilePathOnNeighbour.ConnectionScore;
+            TileConnectionScoreInfo mazeTilePathConnectionScoreOnNeighbourInfo = NeighbourTileCalculator.MapNeighbourPathsOfTile(neighbour.Value, mazeTilePathOnNeighbour.TilePathType);
+
+            //update connection score on neighbour
+            mazeTilePathOnNeighbour.WithConnectionScoreInfo(mazeTilePathConnectionScoreOnNeighbourInfo);
+        }
     }
 }

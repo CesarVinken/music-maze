@@ -108,16 +108,17 @@ public class BridgePiece : MonoBehaviour, ITileAttribute, ITransformable
             switch (neighbour.Key)
             {
                 case ObjectDirection.Down:
-                    neighbour.Value.GetBridgeEdge(Direction.Up)?.Remove();
+                    neighbour.Value?.GetBridgeEdge(Direction.Up)?.Remove();
                     break;
                 case ObjectDirection.Left:
-                    neighbour.Value.GetBridgeEdge(Direction.Right)?.Remove();
+                    neighbour.Value?.GetBridgeEdge(Direction.Right)?.Remove();
                     break;
                 case ObjectDirection.Right:
-                    neighbour.Value.GetBridgeEdge(Direction.Left)?.Remove();
+                    Logger.Warning($"neighbour.Value?.GetBridgeEdge(Direction.Left) {neighbour.Value?.GetBridgeEdge(Direction.Left)}");
+                    neighbour.Value?.GetBridgeEdge(Direction.Left)?.Remove();
                     break;
                 case ObjectDirection.Up:
-                    neighbour.Value.GetBridgeEdge(Direction.Down)?.Remove();
+                    neighbour.Value?.GetBridgeEdge(Direction.Down)?.Remove();
                     break;
                 default:
                     break;

@@ -100,6 +100,22 @@ public class MazeTileAttributeRemover : TileAttributeRemover
 
         _tile.RemoveAttribute(bridgePieceAttribute);
         bridgePieceAttribute.Remove();
+
+        //Update path connections of neighbours
+        foreach (KeyValuePair<ObjectDirection, Tile> neighbour in _tile.Neighbours)
+        {
+            if (!neighbour.Value) continue;
+
+            TilePath mazeTilePathOnNeighbour = neighbour.Value.TryGetTilePath();
+
+            if (mazeTilePathOnNeighbour == null) continue;
+
+            int oldConnectionScoreOnNeighbour = mazeTilePathOnNeighbour.ConnectionScore;
+            TileConnectionScoreInfo mazeTilePathConnectionScoreOnNeighbourInfo = NeighbourTileCalculator.MapNeighbourPathsOfTile(neighbour.Value, mazeTilePathOnNeighbour.TilePathType);
+
+            //update connection score on neighbour
+            mazeTilePathOnNeighbour.WithConnectionScoreInfo(mazeTilePathConnectionScoreOnNeighbourInfo);
+        }
     }
 
     public void Remove(ITileAttribute attribute)

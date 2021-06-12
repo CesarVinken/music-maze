@@ -107,6 +107,8 @@ public class EditorMazeLevel : MazeLevel, IEditorLevel
             EditorMazeTile tile = Tiles[k];
             tile.AddNeighbours(this);
         }
+
+        ConnectBridgeEdgesToTheirBridgePieces();
     }
 
     public void AddTileAttributes(SerialisableTile serialisableTile, EditorMazeTile tile)
@@ -245,6 +247,49 @@ public class EditorMazeLevel : MazeLevel, IEditorLevel
             else
             {
                 Logger.Error($"Could not parse the TileCorner value{serialisableTileCornerFiller.TileCorner}");
+            }
+        }
+    }
+
+    private void ConnectBridgeEdgesToTheirBridgePieces()
+    {
+        for (int i = 0; i < Tiles.Count; i++)
+        {
+            EditorMazeTile tile = Tiles[i];
+            List<BridgeEdge> bridgeEdges = tile.GetBridgeEdges();
+            for (int j = 0; j < bridgeEdges.Count; j++)
+            {
+                Direction edgeSide = bridgeEdges[j].EdgeSide;
+                EditorMazeTile neighbourTile = null;
+
+                switch (edgeSide)
+                {
+                    case Direction.Up:
+                        neighbourTile = tile.Neighbours[ObjectDirection.Up] as EditorMazeTile;
+                        break;
+                    case Direction.Right:
+                        neighbourTile = tile.Neighbours[ObjectDirection.Right] as EditorMazeTile;
+                        break;
+                    case Direction.Down:
+                        neighbourTile = tile.Neighbours[ObjectDirection.Down] as EditorMazeTile;
+                        break;
+                    case Direction.Left:
+                        neighbourTile = tile.Neighbours[ObjectDirection.Left] as EditorMazeTile;
+                        break;
+                    default:
+                        break;
+                }
+
+                if (neighbourTile)
+                {
+                    BridgePiece bridgePiece = neighbourTile.TryGetBridgePiece();
+                    if (bridgePiece == null)
+                    {
+                        Logger.Error($"Expected but could not find bridge piece at {neighbourTile.GridLocation.X}, {neighbourTile.GridLocation.Y}.");
+                        return;
+                    }
+                    bridgeEdges[j].WithBridgePieceConnection(bridgePiece);
+                }
             }
         }
     }
