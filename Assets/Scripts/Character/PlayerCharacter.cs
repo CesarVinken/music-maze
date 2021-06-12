@@ -198,41 +198,46 @@ public class PlayerCharacter : Character
         float angle = Vector2.SignedAngle(Vector2.up, direction) * -1;
 
         new GridLocation(CurrentGridLocation.X, CurrentGridLocation.Y);
+        ObjectDirection moveDirection = ObjectDirection.Right;
+
         if (angle <= -135)  // go down
         {
             newLocomotionTarget = new GridLocation(CurrentGridLocation.X, CurrentGridLocation.Y - 1);
+            moveDirection = ObjectDirection.Down;
         }
         else if (angle <= -45) // go left
         {
             newLocomotionTarget = new GridLocation(CurrentGridLocation.X - 1, CurrentGridLocation.Y);
+            moveDirection = ObjectDirection.Left;
         }
         else if (angle <= 45) // go up
         {
             newLocomotionTarget = new GridLocation(CurrentGridLocation.X, CurrentGridLocation.Y + 1);
+            moveDirection = ObjectDirection.Up;
         }
         else if (angle <= 135) // go right
         {
             newLocomotionTarget = new GridLocation(CurrentGridLocation.X + 1, CurrentGridLocation.Y);
+            moveDirection = ObjectDirection.Right;
         }
         else // go down
         {
             newLocomotionTarget = new GridLocation(CurrentGridLocation.X, CurrentGridLocation.Y - 1);
+            moveDirection = ObjectDirection.Down;
         }
 
-        SetPointerLocomotionTarget(GridLocation.GridToVector(newLocomotionTarget));
+        SetPointerLocomotionTarget(GridLocation.GridToVector(newLocomotionTarget), moveDirection);
     }
 
-    private void SetPointerLocomotionTarget(Vector2 target)
+    private void SetPointerLocomotionTarget(Vector2 target, ObjectDirection moveDirection)
     {
         GridLocation targetGridLocation = GridLocation.FindClosestGridTile(target);
         //Logger.Log("The closest grid tile is {0},{1}", targetGridLocation.X, targetGridLocation.Y);
-        if (!ValidateTarget(targetGridLocation)) return;
+        if (!ValidateTarget(targetGridLocation, moveDirection)) return;
 
         Vector2 gridVectorTarget = GridLocation.GridToVector(targetGridLocation);
 
-        GridLocation currentGridLocation = GridLocation.FindClosestGridTile(transform.position);
-
-        if (currentGridLocation.X == targetGridLocation.X && currentGridLocation.Y == targetGridLocation.Y) return;
+        if (CurrentGridLocation.X == targetGridLocation.X && CurrentGridLocation.Y == targetGridLocation.Y) return;
 
         if (!_animationHandler.InLocomotion)
             _animationHandler.SetLocomotion(true);
@@ -325,7 +330,7 @@ public class PlayerCharacter : Character
                 Logger.Warning("Unhandled locomotion direction {0}", direction);
                 return;
         }
-        if (!ValidateTarget(TargetGridLocation.TargetGridLocation))
+        if (!ValidateTarget(TargetGridLocation.TargetGridLocation, direction))
         {
             // This prevents the character from displaying locomotion animation when walking into an unwalkable tile
             _animationHandler.SetLocomotion(false);

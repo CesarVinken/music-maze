@@ -100,12 +100,55 @@ public class MazePlayerCharacter : PlayerCharacter
         TimesCaught++;
     }
 
-    public override bool ValidateTarget(GridLocation targetGridLocation)
+    public override bool ValidateTarget(GridLocation targetGridLocation, ObjectDirection direction)
     {
-        if (MazeLevelGameplayManager.Instance.Level.TilesByLocation.TryGetValue(targetGridLocation, out Tile tile))
+        if (MazeLevelGameplayManager.Instance.Level.TilesByLocation.TryGetValue(targetGridLocation, out Tile targetTile))
         {
-            if (tile.Walkable)
-                return true;
+            if (targetTile.Walkable)
+            {
+                Tile currentTile = MazeLevelGameplayManager.Instance.Level.TilesByLocation[CurrentGridLocation];
+                BridgePiece bridgePieceOnCurrentTile = currentTile.TryGetBridgePiece();
+                BridgePiece bridgePieceOnTarget = targetTile.TryGetBridgePiece(); // optimisation: keep bridge locations of the level in a separate list, so we don't have to go over all the tiles in the level
+
+                // there are no bridges involved
+                if (bridgePieceOnCurrentTile == null && bridgePieceOnTarget == null)
+                {
+                    return true;
+                }
+
+                // We go in the correct bridge direction
+                if (bridgePieceOnCurrentTile && bridgePieceOnTarget)
+                {
+                    if (bridgePieceOnCurrentTile.BridgePieceDirection == BridgePieceDirection.Horizontal &&
+                        bridgePieceOnCurrentTile.BridgePieceDirection == BridgePieceDirection.Horizontal &&
+                        (direction == ObjectDirection.Left || direction == ObjectDirection.Right))
+                    {
+                        return true;
+                    }
+
+                    if (bridgePieceOnCurrentTile.BridgePieceDirection == BridgePieceDirection.Vertical &&
+                        bridgePieceOnCurrentTile.BridgePieceDirection == BridgePieceDirection.Vertical &&
+                        (direction == ObjectDirection.Up || direction == ObjectDirection.Down))
+                    {
+                        return true;
+                    }
+                    return false;
+                }
+
+                if ((bridgePieceOnCurrentTile?.BridgePieceDirection == BridgePieceDirection.Horizontal ||
+                    bridgePieceOnTarget?.BridgePieceDirection == BridgePieceDirection.Horizontal) &&
+                    (direction == ObjectDirection.Left || direction == ObjectDirection.Right))
+                {
+                    return true;
+                }
+
+                if ((bridgePieceOnCurrentTile?.BridgePieceDirection == BridgePieceDirection.Vertical ||
+                    bridgePieceOnTarget?.BridgePieceDirection == BridgePieceDirection.Vertical) &&
+                    (direction == ObjectDirection.Up || direction == ObjectDirection.Down))
+                {
+                    return true;
+                }
+            }
         }
         return false;
     }

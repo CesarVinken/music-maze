@@ -93,7 +93,7 @@ public class NeighbourTileCalculator
 
             Logger.Warning($"Neighbour at {neighbour.Value.GridLocation.X},{neighbour.Value.GridLocation.Y} is {neighbour.Key} of {tile.GridLocation.X},{tile.GridLocation.Y}.");
             
-            // Check if the neighbour has a connection which is a path or a bridge
+            // Check if the neighbour has a connection which is a PATH or a BRIDGE
             TilePath tilePath = neighbour.Value.TryGetTilePath();
             if (tilePath == null || tilePath.TilePathType?.GetType() != pathType.GetType())
             {

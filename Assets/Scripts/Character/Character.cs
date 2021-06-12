@@ -115,6 +115,11 @@ public class Character : MonoBehaviour
         }
     }
 
+    public virtual bool ValidateTarget(GridLocation targetGridLocation, ObjectDirection direction)
+    {
+        return false;
+    }
+
     public virtual bool ValidateTarget(GridLocation targetGridLocation)
     {
         return false;
