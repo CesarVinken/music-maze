@@ -14,6 +14,18 @@ public class EditorMazeTileBeautificationTriggerer : EditorMazeTileTransformatio
         return Sprite;
     }
 
+    public override void RemoveAllTriggerersFromTile()
+    {
+        if (SelectedTile)
+        {
+            for (int i = SelectedTile.BeautificationTriggerers.Count - 1; i >= 0; i--)
+            {
+                SelectedTile.BeautificationTriggerers[i].SetTileOverlayImage(TileOverlayMode.Empty);
+                SelectedTile.BeautificationTriggerers.Remove(SelectedTile.BeautificationTriggerers[i]);
+            }
+        }
+    }
+
     public void SetSelectedTile(EditorMazeTile tile)
     {
         if (SelectedTile != null)
@@ -56,25 +68,37 @@ public class EditorMazeTileBeautificationTriggerer : EditorMazeTileTransformatio
 
     public override void HandleBeautificationTriggerPlacement(EditorMazeTile tile)
     {
-        if (tile.Markable || tile.GetAttributes().OfType<PlayerSpawnpoint>().Any())
+        Logger.Log("HandleBeautificationTriggerPlacement");
+        // Markable tiles are triggerers, so are bridge tiles
+        if (tile.Markable || tile.GetAttributes().OfType<PlayerSpawnpoint>().Any() || tile.TryGetBridgePiece() != null)
         {
+            Logger.Log($"we're in. tile.TryGetBridgePiece() == null? {tile.TryGetBridgePiece() == null}");
             // if we have a tile selected, add the markable tile as triggerer
             if (SelectedTile != null)
             {
+                Logger.Log("SelectedTile");
                 if (SelectedTile.BeautificationTriggerers.Contains(tile))
                 {
+                    Logger.Log("SelectedTile.BeautificationTriggerers.Contains(tile)");
                     tile.SetTileOverlayImage(TileOverlayMode.Empty);
                     SelectedTile.BeautificationTriggerers.Remove(tile);
                 }
                 else
                 {
+                    Logger.Log("else");
                     tile.SetTileOverlayImage(TileOverlayMode.Blue); // blue = triggerer
                     SelectedTile.BeautificationTriggerers.Add(tile);
                 }
             }
+            else
+            {
+                //SetSelectedTile(tile);
+                Logger.Log("NO SelectedTile");
+            }
         }
         else
         {
+            Logger.Log("SetSelectedTile");
             SetSelectedTile(tile);
         }
     }

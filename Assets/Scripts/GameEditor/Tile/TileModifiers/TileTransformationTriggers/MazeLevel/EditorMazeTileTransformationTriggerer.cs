@@ -1,5 +1,5 @@
-﻿using System.Linq;
-using UnityEngine;
+﻿using UnityEngine;
+
 public class EditorMazeTileTransformationTriggerer : EditorTileTransformationModifier
 {
     public override string Name { get; set; }
@@ -17,6 +17,10 @@ public class EditorMazeTileTransformationTriggerer : EditorTileTransformationMod
 
     }
     public virtual void HandleBeautificationTriggerPlacement(EditorMazeTile tile)
+    {
+    }
+
+    public override void RemoveAllTriggerersFromTile()
     {
     }
 

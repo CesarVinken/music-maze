@@ -77,6 +77,10 @@ public class EditorTileSelector : MonoBehaviour
                 PlaceTileModifier();
             }
         }
+        if (Input.GetKeyDown(KeyCode.Backspace))
+        {
+            PerformDeletionAction();
+        }
     }
 
     public void UpdateCurrentSelectedLocation(int xChange, int yChange)
@@ -225,5 +229,21 @@ public class EditorTileSelector : MonoBehaviour
         if (transformationTriggerer == null) Logger.Error($"Could not find the transformationTriggerer type {transformationTriggerer.GetType()}");
 
         transformationTriggerer.HandleBeautificationTriggerPlacement(tile);
+    }
+
+    private void PerformDeletionAction()
+    {
+        Logger.Log("Try to perform deletion key action");
+        EditorTileModifierCategory editorTileModifierType = EditorManager.SelectedTileModifierCategory;
+        EditorSelectedTileModifierContainer selectedTileModifierContainer = EditorCanvasUI.Instance.SelectedTileModifierContainer;
+
+        if (editorTileModifierType == EditorTileModifierCategory.TransformationTriggerer)
+        {
+            List<IEditorTileModifier> transformationTriggerers = selectedTileModifierContainer.CurrentlyAvailableTileModifiers[EditorTileModifierCategory.TransformationTriggerer];
+            EditorTileTransformationModifier transformationTriggerer = transformationTriggerers[EditorManager.SelectedTileTransformationTriggererIndex] as EditorTileTransformationModifier;
+
+            if (transformationTriggerer == null) Logger.Error($"Could not find the transformationTriggerer type {transformationTriggerer.GetType()}");
+            transformationTriggerer.RemoveAllTriggerersFromTile();
+        }
     }
 }

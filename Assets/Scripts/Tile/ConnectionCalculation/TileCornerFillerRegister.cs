@@ -14,7 +14,6 @@ public class TileCornerFillerRegister
     public static void TryPlaceCornerFillers(Tile tile)
     {
         if (tile == null) return;
-        Logger.Warning($"CheckForCornerFillers on location {tile.GridLocation.X}, {tile.GridLocation.Y}");
         TileBaseGround existingGround = tile.TryGetTileGround();
 
         if (existingGround == null)
@@ -115,7 +114,6 @@ public class TileCornerFillerRegister
             }
             return;
         }
-        Logger.Log($"existingGround.ConnectionScore if {tile.GridLocation.X}, {tile.GridLocation.Y} is {existingGround.ConnectionScore}");
 
         if (existingGround.ConnectionScore == 17)
         {
@@ -871,7 +869,6 @@ public class TileCornerFillerRegister
         {
             return;
         }
-        Logger.Warning($"TryAddCornerFiller on {tile.GridLocation.X}, {tile.GridLocation.Y} in the corner {tileCorner}");
 
         //create cornerfiller
         GameObject backgroundGO = GameObject.Instantiate(GameManager.Instance.GameplayManager.GetTileBackgroundPrefab<TileCornerFiller>(), tile.BackgroundsContainer);

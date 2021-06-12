@@ -10,6 +10,7 @@ public abstract class EditorTileTransformationModifier : IEditorTileModifier
     public abstract void InstantiateModifierActions();
     public abstract void DestroyModifierActions();
 
+    public abstract void RemoveAllTriggerersFromTile();
     public abstract void HandleBeautificationTriggerPlacement<T>(T tile) where T : Tile;
     public abstract void UnsetSelectedTile();
 }

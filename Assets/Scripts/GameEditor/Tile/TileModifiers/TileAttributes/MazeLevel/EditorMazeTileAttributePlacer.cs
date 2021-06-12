@@ -32,8 +32,8 @@ public class EditorMazeTileAttributePlacer : MazeTileAttributePlacer<EditorMazeT
         playerExit.WithObstacleType(obstacleType);
         playerExit.WithConnectionScoreInfo(obstacleConnectionScore);
 
-        //Tile.SetWalkable(false);
-        //Tile.TryMakeMarkable(false);
+        Tile.SetWalkable(false);
+        Tile.TryMakeMarkable(false);
 
         Logger.Log("Add player exit to maze tile attribute list");
         Tile.AddAttribute(playerExit);
@@ -66,8 +66,8 @@ public class EditorMazeTileAttributePlacer : MazeTileAttributePlacer<EditorMazeT
         tileObstacle.WithObstacleType(obstacleType);
         tileObstacle.WithConnectionScoreInfo(obstacleConnectionScore);
 
-        //Tile.SetWalkable(false);
-        //Tile.TryMakeMarkable(false);
+        Tile.SetWalkable(false);
+        Tile.TryMakeMarkable(false);
         Tile.AddAttribute(tileObstacle);
 
         // If we now have obstacle connections on all sides, remove the backgrounds
@@ -108,8 +108,8 @@ public class EditorMazeTileAttributePlacer : MazeTileAttributePlacer<EditorMazeT
     {
         PlayerSpawnpoint playerSpawnpoint = (PlayerSpawnpoint)InstantiateTileAttributeGO<PlayerSpawnpoint>();
 
-        //Tile.SetWalkable(true);
-        //Tile.TryMakeMarkable(false);
+        Tile.SetWalkable(true);
+        Tile.TryMakeMarkable(false);
 
         Tile.AddAttribute(playerSpawnpoint);
     }
@@ -123,7 +123,7 @@ public class EditorMazeTileAttributePlacer : MazeTileAttributePlacer<EditorMazeT
         bridgePiece.SetTile(Tile);
         bridgePiece.HandleBridgeEdges();
 
-        //Tile.SetWalkable(true);
+        Tile.SetWalkable(true);
 
         Logger.Log("TODO: make walkable bridge work");
         Tile.AddAttribute(bridgePiece);
