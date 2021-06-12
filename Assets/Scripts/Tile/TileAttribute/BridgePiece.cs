@@ -11,7 +11,6 @@ public class BridgePiece : MonoBehaviour, ITileAttribute, ITransformable
     public BridgePieceDirection BridgePieceDirection;
 
     [SerializeField] private TileSpriteContainer _tileSpriteContainer;
-    [SerializeField] private GameObject _bridgeEdgePrefab;
 
     private int _sortingOrderBase = 500; 
     private int _sortingOrder; // TODO: Back piece should be behind characters, front piece should be in front of characters.
@@ -21,7 +20,6 @@ public class BridgePiece : MonoBehaviour, ITileAttribute, ITransformable
     public void Awake()
     {
         Guard.CheckIsNull(_tileSpriteContainer, "_tileSpriteContainer", gameObject);
-        Guard.CheckIsNull(_bridgeEdgePrefab, "_bridgeEdgePrefab", gameObject);
 
         _sortingOrder = (int)(_sortingOrderBase - transform.position.y) * 10 + 1;
     }
@@ -66,85 +64,19 @@ public class BridgePiece : MonoBehaviour, ITileAttribute, ITransformable
         ParentId = tile.TileId;
     }
 
-    public void HandleBridgeEntrances()
+    public void HandleBridgeEdges()
     {
         RemoveObsoleteBridgeEdges();
 
         if(BridgePieceDirection == BridgePieceDirection.Horizontal)
         {
-            Tile tileLeft = Tile.Neighbours[ObjectDirection.Left];
-
-            if (tileLeft != null)
-            {
-                if (tileLeft.TryGetBridgePiece() == null)
-                {
-                    GameObject bridgeEdgeGO = GameObject.Instantiate(_bridgeEdgePrefab, tileLeft.transform);
-
-                    BridgeEdge bridgeEdge = bridgeEdgeGO.GetComponent<BridgeEdge>();
-                    bridgeEdge.WithBridgeEdgeSide(Direction.Right);
-                    bridgeEdge.WithBridgeType(BridgeType.Wooden);
-                    bridgeEdge.SetSprite();
-                    bridgeEdge.SetTile(tileLeft);
-
-                    tileLeft.AddBridgeEdge(bridgeEdge);
-                }
-            }
-
-            Tile tileRight = Tile.Neighbours[ObjectDirection.Right];
-
-            if (tileRight != null)
-            {
-                if (tileRight.TryGetBridgePiece() == null)
-                {
-                    GameObject bridgeEdgeGO = GameObject.Instantiate(_bridgeEdgePrefab, tileRight.transform);
-
-                    BridgeEdge bridgeEdge = bridgeEdgeGO.GetComponent<BridgeEdge>();
-                    bridgeEdge.WithBridgeEdgeSide(Direction.Left);
-                    bridgeEdge.WithBridgeType(BridgeType.Wooden);
-                    bridgeEdge.SetSprite();
-                    bridgeEdge.SetTile(tileRight);
-
-                    tileRight.AddBridgeEdge(bridgeEdge);
-                }
-            }
+            Tile.AddBridgeEdge(ObjectDirection.Left, Direction.Right);
+            Tile.AddBridgeEdge(ObjectDirection.Right, Direction.Left);
         }
         else if(BridgePieceDirection == BridgePieceDirection.Vertical)
         {
-            Tile tileDown = Tile.Neighbours[ObjectDirection.Down];
-
-            if (tileDown != null)
-            {
-                if (tileDown.TryGetBridgePiece() == null)
-                {
-                    GameObject bridgeEdgeGO = GameObject.Instantiate(_bridgeEdgePrefab, tileDown.transform);
-
-                    BridgeEdge bridgeEdge = bridgeEdgeGO.GetComponent<BridgeEdge>();
-                    bridgeEdge.WithBridgeEdgeSide(Direction.Up);
-                    bridgeEdge.WithBridgeType(BridgeType.Wooden);
-                    bridgeEdge.SetSprite();
-                    bridgeEdge.SetTile(tileDown);
-
-                    tileDown.AddBridgeEdge(bridgeEdge);
-                }
-            }
-
-            Tile tileUp = Tile.Neighbours[ObjectDirection.Up];
-
-            if (tileUp != null)
-            {
-                if (tileUp.TryGetBridgePiece() == null)
-                {
-                    GameObject bridgeEdgeGO = GameObject.Instantiate(_bridgeEdgePrefab, tileUp.transform);
-
-                    BridgeEdge bridgeEdge = bridgeEdgeGO.GetComponent<BridgeEdge>();
-                    bridgeEdge.WithBridgeEdgeSide(Direction.Down);
-                    bridgeEdge.WithBridgeType(BridgeType.Wooden);
-                    bridgeEdge.SetSprite();
-                    bridgeEdge.SetTile(tileUp);
-
-                    tileUp.AddBridgeEdge(bridgeEdge);
-                }
-            }
+            Tile.AddBridgeEdge(ObjectDirection.Down, Direction.Up);
+            Tile.AddBridgeEdge(ObjectDirection.Up, Direction.Down);
         }
     }
 

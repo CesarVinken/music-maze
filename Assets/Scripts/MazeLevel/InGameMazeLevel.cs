@@ -140,6 +140,18 @@ public class InGameMazeLevel : MazeLevel, IInGameLevel
                     Logger.Error($"Could not parse the BridgePieceDirection value{serialisableBridgePieceAttribute.BridgePieceDirection}");
                 }
             }
+            else if (type.Equals(typeof(SerialisableBridgeEdgeAttribute)))
+            {
+                SerialisableBridgeEdgeAttribute serialisableBridgeEdgeAttribute = (SerialisableBridgeEdgeAttribute)JsonUtility.FromJson(serialisableTileAttribute.SerialisedData, type);
+                if (Enum.TryParse(serialisableBridgeEdgeAttribute.BridgeEdgeSide, out Direction bridgeEdgeSide))
+                {
+                    tileAttributePlacer.PlaceBridgeEdge(BridgeType.Wooden, bridgeEdgeSide);
+                }
+                else
+                {
+                    Logger.Error($"Could not parse the BridgeEdgeSide value{serialisableBridgeEdgeAttribute.BridgeEdgeSide}");
+                }
+            }
             else
             {
                 Logger.Error($"Unknown tile attribute of type {type}");

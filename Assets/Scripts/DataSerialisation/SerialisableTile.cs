@@ -58,11 +58,13 @@ public class SerialisableTile
 
         foreach (ITileAttribute tileAttribute in tile.GetAttributes())
         {
-            ISerialisableTileAttribute iSerialisableTileAttribute = CreateSerialisableTileAttribute(tileAttribute);
+            ISerialisableTileAttribute iSerialisableTileAttribute = CreateSerialisableTileAttribute(tile, tileAttribute);
+            string attributeType = iSerialisableTileAttribute.GetType().ToString();
 
             SerialisableTileAttribute serialisableTileAttribute = new SerialisableTileAttribute(
-                iSerialisableTileAttribute.GetType().ToString(), iSerialisableTileAttribute
-                );
+                attributeType,
+                iSerialisableTileAttribute
+            );
 
             tileAttributes.Add(serialisableTileAttribute);
         }
@@ -159,7 +161,7 @@ public class SerialisableTile
         }
     }
 
-    private ISerialisableTileAttribute CreateSerialisableTileAttribute(ITileAttribute tileAttribute)
+    private ISerialisableTileAttribute CreateSerialisableTileAttribute(Tile tile, ITileAttribute tileAttribute)
     {
         if (tileAttribute.GetType() == typeof(TileObstacle))
         {
@@ -201,9 +203,17 @@ public class SerialisableTile
         else if (tileAttribute.GetType() == typeof(BridgePiece))
         {
             BridgePiece bridgePiece = tileAttribute as BridgePiece;
+            BridgePieceDirection bridgePieceDirection = bridgePiece.BridgePieceDirection;
 
-            SerialisableBridgePieceAttribute serialisableBridgePieceAttribute = new SerialisableBridgePieceAttribute(bridgePiece.BridgePieceDirection);
+            SerialisableBridgePieceAttribute serialisableBridgePieceAttribute = new SerialisableBridgePieceAttribute(bridgePieceDirection);
             return serialisableBridgePieceAttribute;
+        }
+        else if (tileAttribute.GetType() == typeof(BridgeEdge))
+        {
+            BridgeEdge bridgeEdge = tileAttribute as BridgeEdge;
+            
+            SerialisableBridgeEdgeAttribute serialisableBridgeEdgeAttribute = new SerialisableBridgeEdgeAttribute(bridgeEdge.EdgeSide);
+            return serialisableBridgeEdgeAttribute;
         }
         else
         {

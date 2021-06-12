@@ -121,7 +121,7 @@ public class EditorMazeTileAttributePlacer : MazeTileAttributePlacer<EditorMazeT
         bridgePiece.WithBridgeType(BridgeType.Wooden);
         bridgePiece.SetSprite();
         bridgePiece.SetTile(Tile);
-        bridgePiece.HandleBridgeEntrances();
+        bridgePiece.HandleBridgeEdges();
 
         Tile.SetWalkable(true);
 

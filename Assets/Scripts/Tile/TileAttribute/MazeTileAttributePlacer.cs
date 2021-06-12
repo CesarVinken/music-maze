@@ -64,6 +64,16 @@ public class MazeTileAttributePlacer<T> : TileAttributePlacer<T> where T : MazeT
         Tile.AddAttribute(bridgePiece);
     }
 
+    public void PlaceBridgeEdge(BridgeType bridgeType, Direction edgeSide)
+    {
+        BridgeEdge bridgeEdge = (BridgeEdge)InstantiateTileAttributeGO<BridgeEdge>();
+        bridgeEdge.WithBridgeEdgeSide(edgeSide);
+        bridgeEdge.WithBridgeType(bridgeType);
+        bridgeEdge.SetSprite();
+
+        Tile.AddBridgeEdge(bridgeEdge);
+    }
+
     public void PlaceTileObstacleVariation(TileObstacle tileObstacle)
     {
         //return only connections that were updated
@@ -75,5 +85,4 @@ public class MazeTileAttributePlacer<T> : TileAttributePlacer<T> where T : MazeT
             updatedObstacleConnections[i].WithConnectionScoreInfo(new TileConnectionScoreInfo(updatedObstacleConnections[i].ConnectionScore, updatedObstacleConnections[i].SpriteNumber));
         }
     }
-
 }

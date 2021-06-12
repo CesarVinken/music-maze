@@ -266,4 +266,25 @@ public abstract class Tile : MonoBehaviour
             Neighbours.Add(ObjectDirection.Up, null);
         }
     }
+
+    public void AddBridgeEdge(ObjectDirection neighbourSide, Direction edgeSide)
+    {
+        Tile neighbourTile = Neighbours[neighbourSide];
+
+        if (neighbourTile != null)
+        {
+            if (neighbourTile.TryGetBridgePiece() == null)
+            {
+                GameObject bridgeEdgeGO = GameObject.Instantiate(GameManager.Instance.GameplayManager.GetTileAttributePrefab<BridgeEdge>(), neighbourTile.transform);
+
+                BridgeEdge bridgeEdge = bridgeEdgeGO.GetComponent<BridgeEdge>();
+                bridgeEdge.WithBridgeEdgeSide(edgeSide);
+                bridgeEdge.WithBridgeType(BridgeType.Wooden);
+                bridgeEdge.SetSprite();
+                bridgeEdge.SetTile(neighbourTile);
+
+                neighbourTile.AddBridgeEdge(bridgeEdge);
+            }
+        }
+    }
 }
