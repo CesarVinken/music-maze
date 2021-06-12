@@ -12,6 +12,8 @@ public class BridgePiece : MonoBehaviour, ITileAttribute, ITransformable
 
     [SerializeField] private TileSpriteContainer _tileSpriteContainer;
 
+    public List<BridgeEdge> BridgeEdgeConnections = new List<BridgeEdge>();
+
     private int _sortingOrderBase = 500; 
     private int _sortingOrder; // TODO: Back piece should be behind characters, front piece should be in front of characters.
 
@@ -50,6 +52,16 @@ public class BridgePiece : MonoBehaviour, ITileAttribute, ITransformable
         }
     }
 
+    public void AddBridgeEdgeConnection(BridgeEdge bridgeEdge)
+    {
+        BridgeEdgeConnections.Add(bridgeEdge);
+    }
+
+    public void RemoveBridgeEdgeConnection(BridgeEdge bridgeEdge)
+    {
+        BridgeEdgeConnections.Remove(bridgeEdge);
+    }
+
     public void Remove()
     {
         Destroy(this);
@@ -70,13 +82,13 @@ public class BridgePiece : MonoBehaviour, ITileAttribute, ITransformable
 
         if(BridgePieceDirection == BridgePieceDirection.Horizontal)
         {
-            Tile.AddBridgeEdge(ObjectDirection.Left, Direction.Right);
-            Tile.AddBridgeEdge(ObjectDirection.Right, Direction.Left);
+            Tile.AddBridgeEdge(this, ObjectDirection.Left, Direction.Right);
+            Tile.AddBridgeEdge(this, ObjectDirection.Right, Direction.Left);
         }
         else if(BridgePieceDirection == BridgePieceDirection.Vertical)
         {
-            Tile.AddBridgeEdge(ObjectDirection.Down, Direction.Up);
-            Tile.AddBridgeEdge(ObjectDirection.Up, Direction.Down);
+            Tile.AddBridgeEdge(this, ObjectDirection.Down, Direction.Up);
+            Tile.AddBridgeEdge(this, ObjectDirection.Up, Direction.Down);
         }
     }
 
@@ -120,9 +132,20 @@ public class BridgePiece : MonoBehaviour, ITileAttribute, ITransformable
 
         if (BridgeType == BridgeType.Wooden)
         {
-            Sprite colourfulSprite = MazeSpriteManager.Instance.WoodenBridgeColourful[0];
-            IEnumerator transformToColourful = TransformToColourful(colourfulSprite);
+            Sprite colourfulBridgePieceSprite = MazeSpriteManager.Instance.WoodenBridgeColourful[0];
+            if(BridgePieceDirection == BridgePieceDirection.Vertical)
+            {
+                colourfulBridgePieceSprite = MazeSpriteManager.Instance.WoodenBridgeColourful[1];
+            }
+
+            IEnumerator transformToColourful = TransformToColourful(colourfulBridgePieceSprite);
             StartCoroutine(transformToColourful);
+
+            for (int i = 0; i < BridgeEdgeConnections.Count; i++)
+            {
+                BridgeEdge connectedBridgeEdge = BridgeEdgeConnections[i];
+                connectedBridgeEdge.TriggerTransformation();
+            }
         }
         else
         {

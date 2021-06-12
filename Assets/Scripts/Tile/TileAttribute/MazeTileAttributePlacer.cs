@@ -76,6 +76,7 @@ public class MazeTileAttributePlacer<T> : TileAttributePlacer<T> where T : MazeT
         bridgeEdge.WithBridgeEdgeSide(edgeSide);
         bridgeEdge.WithBridgeType(bridgeType);
         bridgeEdge.SetSprite();
+        bridgeEdge.SetTile(Tile);
 
         Tile.AddBridgeEdge(bridgeEdge);
     }

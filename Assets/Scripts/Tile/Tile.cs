@@ -266,7 +266,7 @@ public abstract class Tile : MonoBehaviour
         }
     }
 
-    public void AddBridgeEdge(ObjectDirection neighbourSide, Direction edgeSide)
+    public void AddBridgeEdge(BridgePiece bridgePieceConnection, ObjectDirection neighbourSide, Direction edgeSide)
     {
         Tile neighbourTile = Neighbours[neighbourSide];
 
@@ -279,6 +279,7 @@ public abstract class Tile : MonoBehaviour
                 BridgeEdge bridgeEdge = bridgeEdgeGO.GetComponent<BridgeEdge>();
                 bridgeEdge.WithBridgeEdgeSide(edgeSide);
                 bridgeEdge.WithBridgeType(BridgeType.Wooden);
+                bridgeEdge.WithBridgePieceConnection(bridgePieceConnection);
                 bridgeEdge.SetSprite();
                 bridgeEdge.SetTile(neighbourTile);
 

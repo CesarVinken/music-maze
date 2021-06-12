@@ -68,37 +68,30 @@ public class EditorMazeTileBeautificationTriggerer : EditorMazeTileTransformatio
 
     public override void HandleBeautificationTriggerPlacement(EditorMazeTile tile)
     {
-        Logger.Log("HandleBeautificationTriggerPlacement");
         // Markable tiles are triggerers, so are bridge tiles
         if (tile.Markable || tile.GetAttributes().OfType<PlayerSpawnpoint>().Any() || tile.TryGetBridgePiece() != null)
         {
-            Logger.Log($"we're in. tile.TryGetBridgePiece() == null? {tile.TryGetBridgePiece() == null}");
             // if we have a tile selected, add the markable tile as triggerer
             if (SelectedTile != null)
             {
-                Logger.Log("SelectedTile");
                 if (SelectedTile.BeautificationTriggerers.Contains(tile))
                 {
-                    Logger.Log("SelectedTile.BeautificationTriggerers.Contains(tile)");
                     tile.SetTileOverlayImage(TileOverlayMode.Empty);
                     SelectedTile.BeautificationTriggerers.Remove(tile);
                 }
                 else
                 {
-                    Logger.Log("else");
                     tile.SetTileOverlayImage(TileOverlayMode.Blue); // blue = triggerer
                     SelectedTile.BeautificationTriggerers.Add(tile);
                 }
             }
             else
             {
-                //SetSelectedTile(tile);
-                Logger.Log("NO SelectedTile");
+                //
             }
         }
         else
         {
-            Logger.Log("SetSelectedTile");
             SetSelectedTile(tile);
         }
     }
