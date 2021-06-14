@@ -120,14 +120,14 @@ public class MazePlayerCharacter : PlayerCharacter
                 if (bridgePieceOnCurrentTile && bridgePieceOnTarget)
                 {
                     if (bridgePieceOnCurrentTile.BridgePieceDirection == BridgePieceDirection.Horizontal &&
-                        bridgePieceOnCurrentTile.BridgePieceDirection == BridgePieceDirection.Horizontal &&
+                        bridgePieceOnTarget.BridgePieceDirection == BridgePieceDirection.Horizontal &&
                         (direction == ObjectDirection.Left || direction == ObjectDirection.Right))
                     {
                         return true;
                     }
 
                     if (bridgePieceOnCurrentTile.BridgePieceDirection == BridgePieceDirection.Vertical &&
-                        bridgePieceOnCurrentTile.BridgePieceDirection == BridgePieceDirection.Vertical &&
+                        bridgePieceOnTarget.BridgePieceDirection == BridgePieceDirection.Vertical &&
                         (direction == ObjectDirection.Up || direction == ObjectDirection.Down))
                     {
                         return true;

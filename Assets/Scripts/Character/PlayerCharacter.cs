@@ -420,7 +420,7 @@ public class PlayerCharacter : Character
                 PlayerNumber = PlayerNumber.Player2;
             }
         }
-        Logger.Log($"We set the player number to {PlayerNumber}");
+        Logger.Log(Logger.Initialisation, $"We set the player number to {PlayerNumber}");
     }
 
     // Should be here and not in manager.

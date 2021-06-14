@@ -43,7 +43,7 @@ public class Character : MonoBehaviour
     [SerializeField] private Transform _characterPathTransform;
     [SerializeField] protected CharacterAnimationHandler _animationHandler;
     [SerializeField] protected CharacterPath _characterPath;   // change back to protected
-    [SerializeField] protected Seeker _seeker;
+    [SerializeField] public Seeker _seeker;
 
     [Space(10)]
     [Header("Networking")]

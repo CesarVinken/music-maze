@@ -9,6 +9,7 @@ public class EnemyCharacter : Character
 {
     private MazeCharacterManager _characterManager;
     private bool _isInitialised = false;
+    private GridLocation _currentNodeLocation;
 
     private ICharacter _enemyType = null;
 
@@ -50,11 +51,63 @@ public class EnemyCharacter : Character
             PhotonView.IsMine))
         {
             SetNextTarget();
-            //_characterPath.GetNodesOfPath();
+
+            Pathfinding.GraphNode nextNode = _characterPath.GetNextNode();
+
+            if (nextNode != null)
+            {
+                Vector3 nextNodeVectorPosition = (Vector3)nextNode.position;
+                _currentNodeLocation = new GridLocation((int)nextNodeVectorPosition.x, (int)nextNodeVectorPosition.y);
+            }
         }
 
         if (HasCalculatedTarget)
         {
+            ////Validate if movement to current target is valid.Eg, should not walk up on a horizontal bridge.
+            Pathfinding.GraphNode currentNode = _characterPath.GetCurrentNode();
+            Vector3 currentNodeVectorPosition = (Vector3)currentNode.position;
+            GridLocation currentNodeGridLocation = GridLocation.VectorToGrid(currentNodeVectorPosition);
+
+            if (currentNodeGridLocation.X != CurrentGridLocation.X || currentNodeGridLocation.Y != CurrentGridLocation.Y) // we have a new current grid location: we moved to a new node!
+            {
+                CurrentGridLocation = currentNodeGridLocation;
+                Logger.Warning($"CurrentGridLocation {CurrentGridLocation.X}, {CurrentGridLocation.Y}");
+                Pathfinding.GraphNode nextNode = _characterPath.GetNextNode();
+
+                if (nextNode == null) return;
+
+                Vector3 nextNodeVectorPosition = (Vector3)nextNode.position;
+                GridLocation nextNodeGridLocation = new GridLocation((int)nextNodeVectorPosition.x, (int)nextNodeVectorPosition.y);
+
+                ObjectDirection moveDirection = ObjectDirection.Down;
+                if (nextNodeGridLocation.X > currentNodeGridLocation.X)
+                {
+                    moveDirection = ObjectDirection.Right;
+                }
+                else if (nextNodeGridLocation.X < currentNodeGridLocation.X)
+                {
+                    moveDirection = ObjectDirection.Left;
+                }
+                else if (nextNodeGridLocation.Y > currentNodeGridLocation.Y)
+                {
+                    moveDirection = ObjectDirection.Up;
+                }
+                else if (nextNodeGridLocation.Y > currentNodeGridLocation.Y)
+                {
+                    moveDirection = ObjectDirection.Down;
+                }
+
+                // if the next node is not a valid target, we need the enemy to go somewhere else.
+                if (!ValidateTarget(nextNodeGridLocation, moveDirection))
+                {
+                    Logger.Warning("Could not validate target. CAnnot cross bridge like that");
+                    //SetNextTarget();
+
+                    // force enemy to go change path by going to the place where it already is
+                    _seeker.StartPath(transform.position, new Vector2(CurrentGridLocation.X, CurrentGridLocation.Y), _characterPath.OnPathCalculated);
+                    return;
+                }
+            }
             MoveCharacter();
         }
     }
@@ -132,5 +185,70 @@ public class EnemyCharacter : Character
     {
         //TODO: when maze level is completed, do not stop locomotion, but switch, if it exists, to an enemy idle animation
         FreezeCharacter();
+    }
+
+    public override bool ValidateTarget(GridLocation targetGridLocation, ObjectDirection direction)
+    {
+        if (MazeLevelGameplayManager.Instance.Level.TilesByLocation.TryGetValue(targetGridLocation, out Tile targetTile))
+        {
+            if (targetTile.Walkable)
+            {
+                Tile currentTile = MazeLevelGameplayManager.Instance.Level.TilesByLocation[CurrentGridLocation];
+                BridgePiece bridgePieceOnCurrentTile = currentTile.TryGetBridgePiece();
+                BridgePiece bridgePieceOnTarget = targetTile.TryGetBridgePiece(); // optimisation: keep bridge locations of the level in a separate list, so we don't have to go over all the tiles in the level
+                //Logger.Log($"CURRENT TILE {currentTile.GridLocation.X}, {currentTile.GridLocation.Y}. TARGET TILE {targetTile.GridLocation.X}, {targetTile.GridLocation.Y}");
+                // there are no bridges involved
+                if (bridgePieceOnCurrentTile == null && bridgePieceOnTarget == null)
+                {
+                    //Logger.Log("both bridges are null");
+                    return true;
+                }
+
+                bool isBridgePieceOnCurrentTile = bridgePieceOnCurrentTile != null;
+                bool isBridgePieceOnTarget = bridgePieceOnTarget != null;
+                Logger.Log($"CURRENT TILE {currentTile.GridLocation.X}, {currentTile.GridLocation.Y}. Bridge? {isBridgePieceOnCurrentTile}. TARGET TILE {targetTile.GridLocation.X}, {targetTile.GridLocation.Y}. Bridge? {isBridgePieceOnTarget}. Direction: {direction}");
+                // Make sure we go in the correct bridge direction
+                if (bridgePieceOnCurrentTile && bridgePieceOnTarget)
+                {
+                    //Logger.Log($"Current tile location is a bridge: {bridgePieceOnCurrentTile.Tile.GridLocation.X}, {bridgePieceOnCurrentTile.Tile.GridLocation.Y}. Next bridge tile is at {bridgePieceOnTarget.Tile.GridLocation.X}, {bridgePieceOnTarget.Tile.GridLocation.Y}");
+                    if (bridgePieceOnCurrentTile.BridgePieceDirection == BridgePieceDirection.Horizontal &&
+                        bridgePieceOnTarget.BridgePieceDirection == BridgePieceDirection.Horizontal &&
+                        (direction == ObjectDirection.Left || direction == ObjectDirection.Right))
+                    {
+                        Logger.Log("return trye gereee");
+                        return true;
+                    }
+
+                    if (bridgePieceOnCurrentTile.BridgePieceDirection == BridgePieceDirection.Vertical &&
+                        bridgePieceOnTarget.BridgePieceDirection == BridgePieceDirection.Vertical &&
+                        (direction == ObjectDirection.Up || direction == ObjectDirection.Down))
+                    {
+                        //Logger.Log("return trye hereee");
+                        return true;
+                    }
+                    Logger.Log("not allowed.");
+                    return false;
+                }
+
+                if ((bridgePieceOnCurrentTile?.BridgePieceDirection == BridgePieceDirection.Horizontal ||
+                    bridgePieceOnTarget?.BridgePieceDirection == BridgePieceDirection.Horizontal) &&
+                    (direction == ObjectDirection.Left || direction == ObjectDirection.Right))
+                {
+                    //Logger.Log("return TRUE gereee");
+                    return true;
+                }
+
+                if ((bridgePieceOnCurrentTile?.BridgePieceDirection == BridgePieceDirection.Vertical ||
+                    bridgePieceOnTarget?.BridgePieceDirection == BridgePieceDirection.Vertical) &&
+                    (direction == ObjectDirection.Up || direction == ObjectDirection.Down))
+                {
+                    //Logger.Log("return TRUE Hereee");
+                    return true;
+                }
+                //Logger.Log("return false");
+                return false;
+            }
+        }
+        return false;
     }
 }

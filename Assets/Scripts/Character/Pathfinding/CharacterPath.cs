@@ -1,6 +1,7 @@
 ﻿using Pathfinding;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class CharacterPath : AILerp
@@ -21,8 +22,29 @@ public class CharacterPath : AILerp
 
     public void OnPathCalculated(Path p)
     {
+        canMove = true;
         Character.IsCalculatingPath = false; // Move to Character.function
         Character.SetHasCalculatedTarget(true);
+    }
+
+    private ObjectDirection CalculateMoveDirection(GridLocation currentNodeGridLocation, GridLocation nextNodeGridLocation)
+    {
+        if (nextNodeGridLocation.X > currentNodeGridLocation.X)
+        {
+            return ObjectDirection.Right;
+        }
+        else if (nextNodeGridLocation.X < currentNodeGridLocation.X)
+        {
+            return ObjectDirection.Left;
+        }
+        else if (nextNodeGridLocation.Y > currentNodeGridLocation.Y)
+        {
+            return ObjectDirection.Up;
+        }
+        else // (nextNodeGridLocation.Y > currentNodeGridLocation.Y)
+        {
+            return ObjectDirection.Down;
+        }
     }
 
     public List<GraphNode> GetNodesOfPath()
@@ -35,8 +57,26 @@ public class CharacterPath : AILerp
             GraphNode nextNodee = path.path[i];
             //Logger.Warning($"The node {i} on the path is {((Vector3)nextNodee.position).x}, {((Vector3)nextNodee.position).y}");
         }
-        //GraphNode nextNode = path.path[interpolator.segmentIndex + 1];
+        GraphNode nextNode = path.path[interpolator.segmentIndex + 1];
         //Logger.Warning($"The next node on the path is {((Vector3)nextNode.position).x}, {((Vector3)nextNode.position).y}");
         return path.path;
+    }
+
+
+    public GraphNode GetCurrentNode()
+    {
+        GraphNode nextNode = path.path[interpolator.segmentIndex];
+        return nextNode;
+    }
+
+    public GraphNode GetNextNode()
+    {
+        if(path?.path?.Count > 1)
+        {
+            GraphNode nextNode = path.path[interpolator.segmentIndex + 1];
+            return nextNode;
+        }
+
+        return null;
     }
 }
