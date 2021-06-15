@@ -180,13 +180,26 @@ public class OverworldGameplayManager : MonoBehaviour, IOnEventCallback, IGamepl
         if (GameRules.GamePlayerType == GamePlayerType.SinglePlayer ||
             GameRules.GamePlayerType == GamePlayerType.SplitScreenMultiplayer)
         {
-            PhotonNetwork.LoadLevel("Maze");
+            IEnumerator loadLevelCoroutine = LoadLevelCoroutine("Maze");
+            StartCoroutine(loadLevelCoroutine);
         }
         else
         {
             LoadNextMazeLevelEvent loadNextLevelEvent = new LoadNextMazeLevelEvent();
             loadNextLevelEvent.SendLoadNextMazeLevelEvent("default");
         }
+    }
+
+    private IEnumerator LoadLevelCoroutine(string levelName)
+    {
+        MainScreenOverlayCanvas.Instance.BlackOutSquaresToBlack();
+
+        while (MainScreenOverlayCanvas.Instance.BlackOutSquares[0].BlackStatus != BlackStatus.Black)
+        {
+            yield return null;
+        }
+
+        PhotonNetwork.LoadLevel(levelName);
     }
 
     public void OnEvent(EventData photonEvent)
@@ -200,7 +213,8 @@ public class OverworldGameplayManager : MonoBehaviour, IOnEventCallback, IGamepl
             PersistentGameManager.SetCurrentSceneName(mazeName);
             Logger.Log("received event to load maze");
 
-            PhotonNetwork.LoadLevel("Maze");
+            IEnumerator loadLevelCoroutine = LoadLevelCoroutine("Maze");
+            StartCoroutine(loadLevelCoroutine);
 
         } else if(eventCode == PlayerSendsMazeLevelInvitationEvent.PlayerSendsMazeLevelInvitationEventCode)
         {

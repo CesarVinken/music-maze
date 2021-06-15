@@ -92,15 +92,13 @@ public class OverworldPlayerCharacter : PlayerCharacter
         }
     }
 
-    public override bool ValidateTarget(GridLocation targetGridLocation)
-    {
-        if (OverworldGameplayManager.Instance.Overworld.TilesByLocation.TryGetValue(targetGridLocation, out Tile tile))
-        {
-            if (tile.Walkable)
-                return true;
-        }
-        return false;
-    }
-
-   
+    //public override bool ValidateTarget(GridLocation targetGridLocation)
+    //{
+    //    if (OverworldGameplayManager.Instance.Overworld.TilesByLocation.TryGetValue(targetGridLocation, out Tile tile))
+    //    {
+    //        if (tile.Walkable)
+    //            return true;
+    //    }
+    //    return false;
+    //}   
 }

@@ -233,7 +233,7 @@ public class PlayerCharacter : Character
     {
         GridLocation targetGridLocation = GridLocation.FindClosestGridTile(target);
         //Logger.Log("The closest grid tile is {0},{1}", targetGridLocation.X, targetGridLocation.Y);
-        if (!ValidateTarget(targetGridLocation, moveDirection)) return;
+        if (!ValidateTarget(new TargetLocation(targetGridLocation, moveDirection))) return;
 
         Vector2 gridVectorTarget = GridLocation.GridToVector(targetGridLocation);
 
@@ -315,22 +315,23 @@ public class PlayerCharacter : Character
         switch (direction)
         {
             case ObjectDirection.Down:
-                TargetGridLocation = new TargetLocation(new GridLocation(currentGridLocation.X, currentGridLocation.Y - 1), ObjectDirection.Down);
+                TargetGridLocation = new TargetLocation(new GridLocation(currentGridLocation.X, currentGridLocation.Y - 1), direction);
                 break;
             case ObjectDirection.Left:
-                TargetGridLocation = new TargetLocation(new GridLocation(currentGridLocation.X - 1, currentGridLocation.Y), ObjectDirection.Left);
+                TargetGridLocation = new TargetLocation(new GridLocation(currentGridLocation.X - 1, currentGridLocation.Y), direction);
                 break;
             case ObjectDirection.Right:
-                TargetGridLocation = new TargetLocation(new GridLocation(currentGridLocation.X + 1, currentGridLocation.Y), ObjectDirection.Right);
+                TargetGridLocation = new TargetLocation(new GridLocation(currentGridLocation.X + 1, currentGridLocation.Y), direction);
                 break;
             case ObjectDirection.Up:
-                TargetGridLocation = new TargetLocation(new GridLocation(currentGridLocation.X, currentGridLocation.Y + 1), ObjectDirection.Up);
+                TargetGridLocation = new TargetLocation(new GridLocation(currentGridLocation.X, currentGridLocation.Y + 1), direction);
                 break;
             default:
                 Logger.Warning("Unhandled locomotion direction {0}", direction);
                 return;
         }
-        if (!ValidateTarget(TargetGridLocation.TargetGridLocation, direction))
+
+        if (!ValidateTarget(TargetGridLocation))
         {
             // This prevents the character from displaying locomotion animation when walking into an unwalkable tile
             _animationHandler.SetLocomotion(false);
@@ -455,5 +456,68 @@ public class PlayerCharacter : Character
 
         gameObject.name = Name;
         Logger.Warning($"Set name of character to {Name}");
+    }
+
+    public override bool ValidateTarget(TargetLocation targetLocation)
+    {
+        if (GameManager.Instance.CurrentGameLevel.TilesByLocation.TryGetValue(targetLocation.TargetGridLocation, out Tile targetTile))
+        {
+            ObjectDirection direction = targetLocation.TargetDirection;
+
+            if (targetTile.Walkable)
+            {
+                Tile currentTile = GameManager.Instance.CurrentGameLevel.TilesByLocation[CurrentGridLocation];
+                BridgePiece bridgePieceOnCurrentTile = currentTile.TryGetBridgePiece();
+                BridgePiece bridgePieceOnTarget = targetTile.TryGetBridgePiece(); // optimisation: keep bridge locations of the level in a separate list, so we don't have to go over all the tiles in the level
+
+                // there are no bridges involved
+                if (bridgePieceOnCurrentTile == null && bridgePieceOnTarget == null)
+                {
+
+                    return true;
+                }
+
+                // Make sure we go in the correct bridge direction
+                if (bridgePieceOnCurrentTile && bridgePieceOnTarget)
+                {
+
+                    if (bridgePieceOnCurrentTile.BridgePieceDirection == BridgePieceDirection.Horizontal &&
+                        bridgePieceOnTarget.BridgePieceDirection == BridgePieceDirection.Horizontal &&
+                        (direction == ObjectDirection.Left || direction == ObjectDirection.Right))
+                    {
+
+                        return true;
+                    }
+
+                    if (bridgePieceOnCurrentTile.BridgePieceDirection == BridgePieceDirection.Vertical &&
+                        bridgePieceOnTarget.BridgePieceDirection == BridgePieceDirection.Vertical &&
+                        (direction == ObjectDirection.Up || direction == ObjectDirection.Down))
+                    {
+                        return true;
+                    }
+
+                    return false;
+                }
+
+                if ((bridgePieceOnCurrentTile?.BridgePieceDirection == BridgePieceDirection.Horizontal ||
+                    bridgePieceOnTarget?.BridgePieceDirection == BridgePieceDirection.Horizontal) &&
+                    (direction == ObjectDirection.Left || direction == ObjectDirection.Right))
+                {
+                    //Logger.Log("return TRUE gereee");
+                    return true;
+                }
+
+                if ((bridgePieceOnCurrentTile?.BridgePieceDirection == BridgePieceDirection.Vertical ||
+                    bridgePieceOnTarget?.BridgePieceDirection == BridgePieceDirection.Vertical) &&
+                    (direction == ObjectDirection.Up || direction == ObjectDirection.Down))
+                {
+                    //Logger.Log("return TRUE Hereee");
+                    return true;
+                }
+                //Logger.Log("return false");
+                return false;
+            }
+        }
+        return false;
     }
 }

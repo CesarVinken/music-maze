@@ -33,7 +33,6 @@ public class MazeLevelEntry : MonoBehaviour, ITileAttribute
             _occupyingPlayers[0].PerformMazeLevelEntryAction(MazeLevelName);
             return;
         }
-        Logger.Warning("TODO FOR SPLIT SCREEN");
         // MULTIPLAYER
         for (int i = 0; i < _occupyingPlayers.Count; i++)
         {

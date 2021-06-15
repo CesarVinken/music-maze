@@ -80,7 +80,17 @@ public class MainScreenOverlayCanvas : MonoBehaviour
         {
             IEnumerator clearBlackOutSquareCoroutine = BlackOutSquares[i].ToClear();
 
-            StartCoroutine(clearBlackOutSquareCoroutine); 
+            StartCoroutine(clearBlackOutSquareCoroutine);
+        }
+    }
+
+    public void BlackOutSquaresToBlack()
+    {
+        for (int i = 0; i < BlackOutSquares.Count; i++)
+        {
+            IEnumerator darkenBlackOutSquareCoroutine = BlackOutSquares[i].ToBlack();
+
+            StartCoroutine(darkenBlackOutSquareCoroutine);
         }
     }
 

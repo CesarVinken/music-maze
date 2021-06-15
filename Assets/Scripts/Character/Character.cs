@@ -115,15 +115,15 @@ public class Character : MonoBehaviour
         }
     }
 
-    public virtual bool ValidateTarget(GridLocation targetGridLocation, ObjectDirection direction)
+    public virtual bool ValidateTarget(TargetLocation targetGridLocation)
     {
         return false;
     }
 
-    public virtual bool ValidateTarget(GridLocation targetGridLocation)
-    {
-        return false;
-    }
+    //public virtual bool ValidateTarget(GridLocation targetGridLocation)
+    //{
+    //    return false;
+    //}
 
     // set character to current spawnpoint and reset pathfinder
     public void ResetCharacterPosition()

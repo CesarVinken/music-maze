@@ -235,7 +235,9 @@ public class MazeLevelGameplayManager : MonoBehaviour, IOnEventCallback, IGamepl
         {
             PersistentGameManager.SetLastMazeLevelName(PersistentGameManager.CurrentSceneName);
             PersistentGameManager.SetCurrentSceneName(overworldName);
-            PhotonNetwork.LoadLevel("Overworld");
+
+            IEnumerator loadLevelCoroutine = LoadOverworldCoroutine("Overworld");
+            StartCoroutine(loadLevelCoroutine);
         }
         else
         {
@@ -256,16 +258,43 @@ public class MazeLevelGameplayManager : MonoBehaviour, IOnEventCallback, IGamepl
                 Logger.Error($"Could not load maze level data for the randomly picked maze level {pickedLevel}");
             }
 
-            UnloadLevel();
-            SetupLevel(levelData);
-
-            MazeScoreScreenContainer.Instance.CloseScoreScreenPanel();
+            IEnumerator loadLevelCoroutine = LoadLevelCoroutine("Maze", levelData);
+            StartCoroutine(loadLevelCoroutine);
         }
         else
         {
             LoadNextMazeLevelEvent loadNextLevelEvent = new LoadNextMazeLevelEvent();
             loadNextLevelEvent.SendLoadNextMazeLevelEvent(pickedLevel);
         }
+    }
+
+    private IEnumerator LoadOverworldCoroutine(string overworldName)
+    {
+        MainScreenOverlayCanvas.Instance.BlackOutSquaresToBlack();
+
+        while (MainScreenOverlayCanvas.Instance.BlackOutSquares[0].BlackStatus != BlackStatus.Black)
+        {
+            yield return null;
+        }
+
+        PhotonNetwork.LoadLevel(overworldName);
+    }
+
+    private IEnumerator LoadLevelCoroutine(string levelName, MazeLevelData levelData)
+    {
+        MainScreenOverlayCanvas.Instance.BlackOutSquaresToBlack();
+
+        while (MainScreenOverlayCanvas.Instance.BlackOutSquares[0].BlackStatus != BlackStatus.Black)
+        {
+            yield return null;
+        }
+        UnloadLevel();
+
+        MazeScoreScreenContainer.Instance.CloseScoreScreenPanel();
+
+        SetupLevel(levelData);
+
+        MainScreenOverlayCanvas.Instance.BlackOutSquaresToClear();
     }
 
     public void OnEvent(EventData photonEvent)
@@ -304,9 +333,9 @@ public class MazeLevelGameplayManager : MonoBehaviour, IOnEventCallback, IGamepl
             }
 
             PersistentGameManager.SetCurrentSceneName(pickedLevel);
-            MazeLevelLoader.LoadMazeLevel(mazeLevelData);
 
-            MazeScoreScreenContainer.Instance.CloseScoreScreenPanel();
+            IEnumerator loadLevelCoroutine = LoadOverworldCoroutine("Overworld");
+            StartCoroutine(loadLevelCoroutine);
         } else if (eventCode == LoadOverworldEvent.LoadOverworldEventCode)
         {
             object[] data = (object[])photonEvent.CustomData;
@@ -314,7 +343,9 @@ public class MazeLevelGameplayManager : MonoBehaviour, IOnEventCallback, IGamepl
 
             PersistentGameManager.SetLastMazeLevelName(PersistentGameManager.CurrentSceneName);
             PersistentGameManager.SetCurrentSceneName(PersistentGameManager.OverworldName);
-            PhotonNetwork.LoadLevel("Overworld");
+
+            IEnumerator loadLevelCoroutine = LoadOverworldCoroutine("Overworld");
+            StartCoroutine(loadLevelCoroutine);
         }
     }
 

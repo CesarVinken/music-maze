@@ -100,10 +100,11 @@ public class MazePlayerCharacter : PlayerCharacter
         TimesCaught++;
     }
 
-    public override bool ValidateTarget(GridLocation targetGridLocation, ObjectDirection direction)
+    public override bool ValidateTarget(TargetLocation targetLocation)
     {
-        if (MazeLevelGameplayManager.Instance.Level.TilesByLocation.TryGetValue(targetGridLocation, out Tile targetTile))
+        if (MazeLevelGameplayManager.Instance.Level.TilesByLocation.TryGetValue(targetLocation.TargetGridLocation, out Tile targetTile))
         {
+            ObjectDirection direction = targetLocation.TargetDirection;
             if (targetTile.Walkable)
             {
                 Tile currentTile = MazeLevelGameplayManager.Instance.Level.TilesByLocation[CurrentGridLocation];
