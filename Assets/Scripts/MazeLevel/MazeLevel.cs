@@ -4,7 +4,8 @@ using UnityEngine;
 public class MazeLevel : IGameScene<Tile>
 {
     public string Name { get; set; }
-    public List<Tile> Tiles { get; set; }
+    protected List<Tile> _tiles = new List<Tile>();
+    public List<Tile> Tiles { get => _tiles; set => _tiles = value; }
 
     protected GridLocation _levelBounds = new GridLocation(0, 0);
     public GridLocation LevelBounds { get => _levelBounds; set => _levelBounds = value; }

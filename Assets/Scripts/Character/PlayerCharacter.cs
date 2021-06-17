@@ -2,7 +2,6 @@
 using Photon.Pun;
 using System.Collections;
 using CharacterType;
-using System.Collections.Generic;
 
 public struct TargetLocation
 {
@@ -28,8 +27,6 @@ public class PlayerCharacter : Character
 
     [SerializeField] protected GameObject _selectionIndicatorPrefab = null;
     [SerializeField] protected GameObject _selectionIndicatorGO = null;
-
-
 
     protected bool _isPressingPointerForSeconds = false;
     protected float _pointerPresserTimer = 1;
@@ -72,7 +69,7 @@ public class PlayerCharacter : Character
 
     public virtual void Start()
     {
-        _characterPath.CharacterReachesTarget += OnTargetReached;
+        _pathfinding = new Pathfinding(this);
     }
 
     public virtual void Update()
@@ -150,7 +147,7 @@ public class PlayerCharacter : Character
             }
         }
 
-        if (_characterPath.reachedEndOfPath && IsMoving)
+        if (PathToTarget.Count == 0 && IsMoving)
         {
             Logger.Log("player reached target");
             OnTargetReached();
@@ -231,8 +228,9 @@ public class PlayerCharacter : Character
 
     private void SetPointerLocomotionTarget(Vector2 target, ObjectDirection moveDirection)
     {
+        Logger.Warning($"SetPointerLocomotionTarget to target {target.x}, {target.y} in the direction {moveDirection}");
         GridLocation targetGridLocation = GridLocation.FindClosestGridTile(target);
-        //Logger.Log("The closest grid tile is {0},{1}", targetGridLocation.X, targetGridLocation.Y);
+
         if (!ValidateTarget(new TargetLocation(targetGridLocation, moveDirection))) return;
 
         Vector2 gridVectorTarget = GridLocation.GridToVector(targetGridLocation);
@@ -242,15 +240,13 @@ public class PlayerCharacter : Character
         if (!_animationHandler.InLocomotion)
             _animationHandler.SetLocomotion(true);
 
-        if (!_characterPath.canSearch)
-        {
-            _characterPath.isStopped = false;
-            _characterPath.canSearch = true;
-        }
-
-        Vector3 newDestinationTarget = SetNewLocomotionTarget(gridVectorTarget);
         IsCalculatingPath = true;
-        _seeker.StartPath(transform.position, newDestinationTarget, _characterPath.OnPathCalculated);
+
+        PathToTarget = _pathfinding.FindNodePath(CurrentGridLocation, targetGridLocation);
+        PathToTarget.RemoveAt(0);
+
+        IsCalculatingPath = false;
+        SetHasCalculatedTarget(true);
     }
 
     private void HandleKeyboardInput()
@@ -337,19 +333,21 @@ public class PlayerCharacter : Character
             _animationHandler.SetLocomotion(false);
             return;
         }
-        //Logger.Warning("Start path!");
-        Vector3 newDestinationTarget = SetNewLocomotionTarget(GridLocation.GridToVector(TargetGridLocation.TargetGridLocation));
-        IsCalculatingPath = true;
 
-        _seeker.StartPath(transform.position, newDestinationTarget, _characterPath.OnPathCalculated);
+        //Logger.Warning("Start path!");
+        //Vector3 newDestinationTarget = SetNewLocomotionTarget(GridLocation.GridToVector(TargetGridLocation.TargetGridLocation));
+        IsCalculatingPath = true;
+        Logger.Log($"TryStartCharacterMovement. {CurrentGridLocation.X},{CurrentGridLocation.Y} to {TargetGridLocation.TargetGridLocation.X}, {TargetGridLocation.TargetGridLocation.Y}");
+        PathToTarget = _pathfinding.FindNodePath(CurrentGridLocation, TargetGridLocation.TargetGridLocation);
+        Logger.Log($"Found a path of {PathToTarget.Count} pieces");
+        PathToTarget.RemoveAt(0);
+
+        //_seeker.StartPath(transform.position, newDestinationTarget, _characterPath.OnPathCalculated);
+        IsCalculatingPath = false;
+        SetHasCalculatedTarget(true);
 
         if (!_animationHandler.InLocomotion)
             _animationHandler.SetLocomotion(true);
-    }
-
-    public void UpdateCurrentGridLocation(GridLocation gridLocation)
-    {
-        CurrentGridLocation = gridLocation;
     }
 
     private bool IsPressingMovementKey()
@@ -372,8 +370,9 @@ public class PlayerCharacter : Character
         return false;
     }
 
-    public void OnTargetReached()
+    public override void OnTargetReached()
     {
+        Logger.Warning("Target reached.");
         SetHasCalculatedTarget(false);
 
         if (!IsPressingMovementKey() && !_isPressingPointerForSeconds)
@@ -473,7 +472,6 @@ public class PlayerCharacter : Character
                 // there are no bridges involved
                 if (bridgePieceOnCurrentTile == null && bridgePieceOnTarget == null)
                 {
-
                     return true;
                 }
 
@@ -485,7 +483,6 @@ public class PlayerCharacter : Character
                         bridgePieceOnTarget.BridgePieceDirection == BridgePieceDirection.Horizontal &&
                         (direction == ObjectDirection.Left || direction == ObjectDirection.Right))
                     {
-
                         return true;
                     }
 
@@ -503,7 +500,6 @@ public class PlayerCharacter : Character
                     bridgePieceOnTarget?.BridgePieceDirection == BridgePieceDirection.Horizontal) &&
                     (direction == ObjectDirection.Left || direction == ObjectDirection.Right))
                 {
-                    //Logger.Log("return TRUE gereee");
                     return true;
                 }
 
@@ -511,10 +507,8 @@ public class PlayerCharacter : Character
                     bridgePieceOnTarget?.BridgePieceDirection == BridgePieceDirection.Vertical) &&
                     (direction == ObjectDirection.Up || direction == ObjectDirection.Down))
                 {
-                    //Logger.Log("return TRUE Hereee");
                     return true;
                 }
-                //Logger.Log("return false");
                 return false;
             }
         }

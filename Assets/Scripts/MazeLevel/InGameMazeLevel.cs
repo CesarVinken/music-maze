@@ -4,9 +4,6 @@ using UnityEngine;
 
 public class InGameMazeLevel : MazeLevel, IInGameLevel
 {
-    private List<InGameMazeTile> _tiles = new List<InGameMazeTile>();
-    public new List<InGameMazeTile> Tiles { get => _tiles; set => _tiles = value; }
-
     public InGameMazeLevel()
     {
 
@@ -78,7 +75,7 @@ public class InGameMazeLevel : MazeLevel, IInGameLevel
             {
                 for (int j = 0; j < Tiles.Count; j++)
                 {
-                    InGameMazeTile tile = Tiles[j];
+                    InGameMazeTile tile = Tiles[j] as InGameMazeTile;
                     if (item.Value[i].X == tile.GridLocation.X && item.Value[i].Y == tile.GridLocation.Y)
                     {
                         tilesToTransform.Add(tile);
@@ -92,7 +89,7 @@ public class InGameMazeLevel : MazeLevel, IInGameLevel
 
         for (int k = 0; k < Tiles.Count; k++)
         {
-            InGameMazeTile tile = Tiles[k];
+            InGameMazeTile tile = Tiles[k] as InGameMazeTile;
             tile.AddNeighbours(this);
         }
 
@@ -211,7 +208,7 @@ public class InGameMazeLevel : MazeLevel, IInGameLevel
     {
         for (int i = 0; i < Tiles.Count; i++)
         {
-            InGameMazeTile tile = Tiles[i];
+            InGameMazeTile tile = Tiles[i] as InGameMazeTile;
             List<BridgeEdge> bridgeEdges =  tile.GetBridgeEdges();
             for (int j = 0; j < bridgeEdges.Count; j++)
             {

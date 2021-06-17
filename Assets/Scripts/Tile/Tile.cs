@@ -19,6 +19,7 @@ public abstract class Tile : MonoBehaviour
     public GridLocation GridLocation;
 
     public Dictionary<ObjectDirection, Tile> Neighbours = new Dictionary<ObjectDirection, Tile>();
+    public Dictionary<ObjectDirection, PathNode> PathNodeNeighbours = new Dictionary<ObjectDirection, PathNode>();
 
     public ITileMainMaterial TileMainMaterial;
 
@@ -26,13 +27,19 @@ public abstract class Tile : MonoBehaviour
     protected List<ITileBackground> _tileBackgrounds = new List<ITileBackground>();
     protected List<TileCornerFiller> _tileCornerFillers = new List<TileCornerFiller>();
 
+    public PathNode PathNode;
+
     public bool Walkable { get => _walkable; protected set => _walkable = value; }
 
     public void Awake()
     {
         Guard.CheckIsNull(BackgroundsContainer, "BackgroundsContainer", gameObject);
+        //Guard.CheckIsNull(PathNode, "PathNode", gameObject);
 
         if (transform.position.y < 0) Logger.Error("There is a tile at {0},{1}. Tiles cannot have negative Y values", transform.position.x, transform.position.y);
+
+        PathNode = new PathNode();
+        PathNode.SetTile(this);
     }
 
     public void Start()
@@ -209,6 +216,18 @@ public abstract class Tile : MonoBehaviour
         return bridgePiece;
     }
 
+    public PlayerOnly TryGetPlayerOnly()
+    {
+        PlayerOnly playerOnly = (PlayerOnly)_tileAttributes.FirstOrDefault(attribute => attribute is PlayerOnly);
+
+        if (playerOnly == null)
+        {
+            return null;
+        }
+
+        return playerOnly;
+    }
+
     public void InitialiseTileBackgrounds()
     {
         for (int i = 0; i < _tileBackgrounds.Count; i++)
@@ -227,38 +246,58 @@ public abstract class Tile : MonoBehaviour
 
     public void AddNeighbours<T>(T level) where T : IGameScene<Tile>
     {
-        //Add Right
+        //Add RIGHT
         if (GridLocation.X < level.LevelBounds.X)
         {
-            Neighbours.Add(ObjectDirection.Right, level.TilesByLocation[new GridLocation(GridLocation.X + 1, GridLocation.Y)]);
+            Tile tile = level.TilesByLocation[new GridLocation(GridLocation.X + 1, GridLocation.Y)];
+            Neighbours.Add(ObjectDirection.Right, tile);
+            if (Walkable && tile.Walkable)
+            {
+                PathNodeNeighbours.Add(ObjectDirection.Right, tile.PathNode);
+            }
         } 
         else
         {
             Neighbours.Add(ObjectDirection.Right, null);
         }
 
-        //Add Down
+        //Add DOWN
         if (GridLocation.Y > 0)
         {
-            Neighbours.Add(ObjectDirection.Down, level.TilesByLocation[new GridLocation(GridLocation.X, GridLocation.Y - 1)]);
+            Tile tile = level.TilesByLocation[new GridLocation(GridLocation.X, GridLocation.Y - 1)];
+            Neighbours.Add(ObjectDirection.Down, tile);
+            if (Walkable && tile.Walkable)
+            {
+                PathNodeNeighbours.Add(ObjectDirection.Down, tile.PathNode);
+            }
         }
         else
         {
             Neighbours.Add(ObjectDirection.Down, null);
         }
-        //Add Left
+        //Add LEFT
         if (GridLocation.X > 0)
         {
-            Neighbours.Add(ObjectDirection.Left, level.TilesByLocation[new GridLocation(GridLocation.X - 1, GridLocation.Y)]);
+            Tile tile = level.TilesByLocation[new GridLocation(GridLocation.X - 1, GridLocation.Y)];
+            Neighbours.Add(ObjectDirection.Left, tile);
+            if (Walkable && tile.Walkable)
+            {
+                PathNodeNeighbours.Add(ObjectDirection.Left, tile.PathNode);
+            }
         }
         else
         {
             Neighbours.Add(ObjectDirection.Left, null);
         }
-        //Add Up
+        //Add UP
         if (GridLocation.Y < level.LevelBounds.Y)
         {
-            Neighbours.Add(ObjectDirection.Up, level.TilesByLocation[new GridLocation(GridLocation.X, GridLocation.Y + 1)]);
+            Tile tile = level.TilesByLocation[new GridLocation(GridLocation.X, GridLocation.Y + 1)];
+            Neighbours.Add(ObjectDirection.Up, tile);
+            if (Walkable && tile.Walkable)
+            {
+                PathNodeNeighbours.Add(ObjectDirection.Up, tile.PathNode);
+            }
         }
         else
         {

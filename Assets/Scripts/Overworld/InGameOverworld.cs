@@ -4,8 +4,8 @@ using UnityEngine;
 
 public class InGameOverworld : Overworld, IInGameLevel
 {
-    private List<InGameOverworldTile> _tiles = new List<InGameOverworldTile>();
-    public new List<InGameOverworldTile> Tiles { get => _tiles; set => _tiles = value; }
+    //private List<InGameOverworldTile> _tiles = new List<InGameOverworldTile>();
+    //public new List<InGameOverworldTile> Tiles { get => _tiles; set => _tiles = value; }
 
     public InGameOverworld()
     {
@@ -16,7 +16,6 @@ public class InGameOverworld : Overworld, IInGameLevel
     {
         Name = overworldData.Name;
         GameManager.Instance.CurrentGameLevel = this;
-
         if (TilesContainer.Instance != null)
         {
             GameObject.Destroy(TilesContainer.Instance.gameObject);
@@ -72,7 +71,7 @@ public class InGameOverworld : Overworld, IInGameLevel
 
         for (int k = 0; k < Tiles.Count; k++)
         {
-            InGameOverworldTile tile = Tiles[k];
+            InGameOverworldTile tile = Tiles[k] as InGameOverworldTile;
             tile.AddNeighbours(this);
         }
     }

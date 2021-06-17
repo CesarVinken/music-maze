@@ -18,7 +18,7 @@ public class OverworldPlayerCharacter : PlayerCharacter
     {
         base.Start();
 
-        //transform the player's starting tile and surrounding tiles
+        // transform the player's starting tile and surrounding tiles
         InGameOverworldTile currentTile = GameManager.Instance.CurrentGameLevel.TilesByLocation[StartingPosition] as InGameOverworldTile;
         CurrentGridLocation = currentTile.GridLocation;
     }
@@ -29,7 +29,6 @@ public class OverworldPlayerCharacter : PlayerCharacter
             return;
         
         base.Update();
-
 
         if (OccupiedMazeLevelEntry != null && (GameRules.GamePlayerType == GamePlayerType.SinglePlayer || 
             GameRules.GamePlayerType == GamePlayerType.SplitScreenMultiplayer ||
@@ -91,14 +90,4 @@ public class OverworldPlayerCharacter : PlayerCharacter
             MazeLevelInvitation.PendingInvitation = true;
         }
     }
-
-    //public override bool ValidateTarget(GridLocation targetGridLocation)
-    //{
-    //    if (OverworldGameplayManager.Instance.Overworld.TilesByLocation.TryGetValue(targetGridLocation, out Tile tile))
-    //    {
-    //        if (tile.Walkable)
-    //            return true;
-    //    }
-    //    return false;
-    //}   
 }

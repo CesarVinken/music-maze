@@ -1,5 +1,4 @@
-﻿using Pathfinding;
-using Photon.Pun;
+﻿using Photon.Pun;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -40,10 +39,9 @@ public class Character : MonoBehaviour
 
     public bool IsCalculatingPath = false;
 
-    [SerializeField] private Transform _characterPathTransform;
     [SerializeField] protected CharacterAnimationHandler _animationHandler;
-    [SerializeField] protected CharacterPath _characterPath;   // change back to protected
-    [SerializeField] public Seeker _seeker;
+    protected Pathfinding _pathfinding;
+    public List<PathNode> PathToTarget = new List<PathNode>();
 
     [Space(10)]
     [Header("Networking")]
@@ -54,11 +52,9 @@ public class Character : MonoBehaviour
     {
         Guard.CheckIsNull(_bodyRenderer, "_bodyRenderer", gameObject);
         Guard.CheckIsNull(_animationHandler, "_animationHandler", gameObject);
-        Guard.CheckIsNull(_characterPath, "_characterPath", gameObject);
-        Guard.CheckIsNull(_seeker, "_seeker", gameObject);
 
         _speed = _baseSpeed;
-        _characterPathTransform = _characterPath.transform;
+        PathToTarget = new List<PathNode>();
     }
 
     public void LateUpdate()
@@ -82,36 +78,57 @@ public class Character : MonoBehaviour
         character.StartingPosition = gridLocation;
     }
 
-    protected Vector3 SetNewLocomotionTarget(Vector2 gridVectorTarget)
-    {
-        float offsetToTileMiddle = GridLocation.OffsetToTileMiddle;
-        return new Vector3(gridVectorTarget.x + offsetToTileMiddle, gridVectorTarget.y + offsetToTileMiddle);
-    }
-
     public void MoveCharacter()
     {
-        transform.position = _characterPathTransform.position;
-        float directionRotation = _characterPath.rotation.eulerAngles.z;
+        PathNode nextNode = PathToTarget[0];
+        GridLocation nextGridLocation = nextNode.Tile.GridLocation;
+        GridLocation currentGridLocation = CurrentGridLocation;
 
-        if (directionRotation == 0)
+        Vector3 moveDir;
+        ObjectDirection direction = ObjectDirection.Right;
+        if (nextGridLocation.X > currentGridLocation.X)
         {
-            _animationHandler.SetDirection(ObjectDirection.Up);
+            direction = ObjectDirection.Right;
+            _animationHandler.SetDirection(direction);
         }
-        else if (directionRotation == 90)
+        else if (nextGridLocation.X < currentGridLocation.X)
         {
-            _animationHandler.SetDirection(ObjectDirection.Left);
+            direction = ObjectDirection.Left;
+            _animationHandler.SetDirection(direction);
         }
-        else if (directionRotation == 180)
+        else if (nextGridLocation.Y > currentGridLocation.Y)
         {
-            _animationHandler.SetDirection(ObjectDirection.Down);
+            direction = ObjectDirection.Up;
+            _animationHandler.SetDirection(direction);
         }
-        else if (directionRotation == 270)
+        else if (nextGridLocation.Y < currentGridLocation.Y)
         {
-            _animationHandler.SetDirection(ObjectDirection.Right);
+            direction = ObjectDirection.Down;
+            _animationHandler.SetDirection(direction);
         }
-        else
+
+        Vector2 targetVector2Pos = GridLocation.GridToVector(nextGridLocation);
+
+        moveDir = (new Vector3(targetVector2Pos.x + GridLocation.OffsetToTileMiddle, targetVector2Pos.y + GridLocation.OffsetToTileMiddle, transform.position.z) - transform.position).normalized;
+        float speed = 2.5f;
+       
+        transform.position = transform.position + moveDir * speed * Time.deltaTime;
+
+        // Character reaches a tile grid location (its middle)
+        if((direction == ObjectDirection.Right && transform.position.x > targetVector2Pos.x + GridLocation.OffsetToTileMiddle) ||
+            (direction == ObjectDirection.Left && transform.position.x < targetVector2Pos.x + GridLocation.OffsetToTileMiddle) ||
+            (direction == ObjectDirection.Down && transform.position.y < targetVector2Pos.y + GridLocation.OffsetToTileMiddle) ||
+            direction == ObjectDirection.Up && transform.position.y > targetVector2Pos.y + GridLocation.OffsetToTileMiddle) 
         {
-            Logger.Warning("Unexpected movement direction {0}", directionRotation);
+            CurrentGridLocation = nextGridLocation;
+            PathToTarget.RemoveAt(0);
+            //Logger.Log($"New Grid location{currentGridLocation.X}, {currentGridLocation.Y}. Remaining path length is {PathToTarget.Count}");
+            if(PathToTarget.Count == 0)
+            {
+                OnTargetReached(); 
+            }
+
+            return;
         }
     }
 
@@ -120,21 +137,15 @@ public class Character : MonoBehaviour
         return false;
     }
 
-    //public virtual bool ValidateTarget(GridLocation targetGridLocation)
-    //{
-    //    return false;
-    //}
-
     // set character to current spawnpoint and reset pathfinder
     public void ResetCharacterPosition()
     {
-        _characterPath.SetPath(null);
         SetHasCalculatedTarget(false);
         _animationHandler.SetLocomotion(false);
 
-        Logger.Warning("Starting position for {0} is {1},{2}", gameObject.name, gameObject.GetComponent<PlayerCharacter>().StartingPosition.X, gameObject.GetComponent<PlayerCharacter>().StartingPosition.Y);
+        //Logger.Warning("Starting position for {0} is {1},{2}", gameObject.name, gameObject.GetComponent<PlayerCharacter>().StartingPosition.X, gameObject.GetComponent<PlayerCharacter>().StartingPosition.Y);
         GameManager.Instance.CharacterManager.PutCharacterOnGrid(gameObject, GridLocation.GridToVector(StartingPosition));
-        _characterPathTransform.position = transform.position;
+        CurrentGridLocation = StartingPosition;
     }
 
     public IEnumerator RespawnPlayerCharacter(PlayerCharacter character, float freezeTime)
@@ -166,7 +177,7 @@ public class Character : MonoBehaviour
         ResetCharacterPosition();
         CharacterBody.SetActive(true);
 
-        //Screem back to clear
+        //Screen back to clear
         IEnumerator toClearCoroutine = blackOutSquare.ToClear();
 
         StartCoroutine(toClearCoroutine);
@@ -195,5 +206,11 @@ public class Character : MonoBehaviour
     public void UnfreezeCharacter()
     {
         IsFrozen = false;
+    }
+
+    public virtual void OnTargetReached()
+    {
+        PathToTarget.Clear();
+        SetHasCalculatedTarget(false);
     }
 }

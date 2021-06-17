@@ -4,7 +4,8 @@ using UnityEngine;
 public class Overworld : IGameScene<Tile>
 {
     public string Name { get; set; }
-    public List<Tile> Tiles { get; set; }
+    protected  List<Tile> _tiles = new List<Tile>(); 
+    public List<Tile> Tiles { get => _tiles; set => _tiles = value; }
 
     public List<MazeLevelEntry> MazeEntries = new List<MazeLevelEntry>();
 

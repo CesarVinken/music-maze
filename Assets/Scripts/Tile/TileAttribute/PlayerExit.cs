@@ -1,4 +1,5 @@
 ﻿using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class PlayerExit : TileObstacle, ITileAttribute, ITileConnectable
@@ -94,6 +95,36 @@ public class PlayerExit : TileObstacle, ITileAttribute, ITileConnectable
         tile.SetWalkable(true);
         IsOpen = true;
 
+        // Update pathfinding so that it can include this exit
+        //tile.PathNode = new PathNode();
+        //tile.PathNode.SetTile(tile);
+
+        foreach (KeyValuePair<ObjectDirection, Tile> item in tile.Neighbours)
+        {
+            if (item.Value?.PathNode != null && item.Value.Walkable)
+            {
+                tile.PathNodeNeighbours[item.Key] = item.Value.PathNode;
+
+                switch (item.Key)
+                {
+                    case ObjectDirection.Down:
+                        item.Value.PathNodeNeighbours[ObjectDirection.Up] = tile.PathNode;
+                        break;
+                    case ObjectDirection.Left:
+                        item.Value.PathNodeNeighbours[ObjectDirection.Right] = tile.PathNode;
+                        break;
+                    case ObjectDirection.Right:
+                        item.Value.PathNodeNeighbours[ObjectDirection.Left] = tile.PathNode;
+                        break;
+                    case ObjectDirection.Up:
+                        item.Value.PathNodeNeighbours[ObjectDirection.Down] = tile.PathNode;
+                        break;
+                    default:
+                        break;
+                }
+            }
+        }
+
         _tileSpriteContainer.SetSprite(MazeSpriteManager.Instance.DefaultDoorColourful[SpriteNumber - 1 + 3]); // + 3 to get to the 'open' version of the sprite
         _secondaryTileSpriteContainer.SetSprite(MazeSpriteManager.Instance.DefaultDoorColourful[_secondarySpriteNumber - 1 + 3]);
         
@@ -101,7 +132,7 @@ public class PlayerExit : TileObstacle, ITileAttribute, ITileConnectable
         _tileSpriteContainer.gameObject.layer = 9;
 
         // Refresh pathfinding. TODO: only refresh tile for pathfinding and not the whole graph.
-        AstarPath.active.Scan();
+        //AstarPath.active.Scan();
     }
 
     public void CloseExit()
@@ -117,7 +148,21 @@ public class PlayerExit : TileObstacle, ITileAttribute, ITileConnectable
         _tileSpriteContainer.gameObject.layer = 8;
 
         // Refresh pathfinding. TODO: only refresh tile for pathfinding and not the whole graph.
-        AstarPath.active.Scan();
+
+        foreach (KeyValuePair<ObjectDirection, Tile> neighbourTileItem in tile.Neighbours)
+        {
+            foreach (KeyValuePair<ObjectDirection, PathNode> item in neighbourTileItem.Value.PathNodeNeighbours)
+            {
+                if(item.Value == tile.PathNode)
+                {
+                    neighbourTileItem.Value.PathNodeNeighbours.Remove(item.Key);
+                }
+            }
+        }
+        tile.PathNodeNeighbours.Clear();
+        //tile.PathNode = null;
+
+        //AstarPath.active.Scan();
     }  
 
     public IEnumerator TransformToColourful(Sprite colourfulSprite, Sprite secondaryColourfulSprite)

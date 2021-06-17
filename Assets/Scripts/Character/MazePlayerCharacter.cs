@@ -42,12 +42,14 @@ public class MazePlayerCharacter : PlayerCharacter
         //transform the player's starting tile and surrounding tiles
         InGameMazeTile currentTile = GameManager.Instance.CurrentGameLevel.TilesByLocation[StartingPosition] as InGameMazeTile;
 
-        if(currentTile == null)
+        if (currentTile == null)
         {
             Logger.Error($"Current tile at {StartingPosition.X},{StartingPosition.Y} is null");
         }
 
         currentTile.TriggerTransformations();
+        CurrentGridLocation = currentTile.GridLocation;
+        MazeLevelGameplayManager.Instance.SetTileMarker(currentTile, this);
     }
 
     public void OnCollisionEnter2D(Collision2D collision)

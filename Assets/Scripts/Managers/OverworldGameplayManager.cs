@@ -107,8 +107,8 @@ public class OverworldGameplayManager : MonoBehaviour, IOnEventCallback, IGamepl
         CameraManager.Instance.SetPanLimits(Overworld.LevelBounds);
         CameraManager.Instance.FocusCamerasOnPlayer();
 
-        AstarPath.active.Scan();    // We should only scan once all the tiles are loaded with their correct (walkable) attributes and obstacles
-        yield return new WaitForSeconds(.4f);
+        //AstarPath.active.Scan();    // We should only scan once all the tiles are loaded with their correct (walkable) attributes and obstacles
+        //yield return new WaitForSeconds(.4f);
 
         // start movement of all actors that depend on the updated pathfinding only after the scan.
         GameManager.Instance.CharacterManager.UnfreezeCharacters();
@@ -118,7 +118,7 @@ public class OverworldGameplayManager : MonoBehaviour, IOnEventCallback, IGamepl
     {
         for (int i = 0; i < Overworld.Tiles.Count; i++)
         {
-            InGameOverworldTile tile = Overworld.Tiles[i];
+            InGameOverworldTile tile = Overworld.Tiles[i] as InGameOverworldTile;
             tile.InitialiseTileAttributes();
         }
     }
