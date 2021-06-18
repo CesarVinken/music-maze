@@ -11,7 +11,7 @@ public class EditorCanvasUI : MonoBehaviour
     [SerializeField] private GameObject _gameEditorWorldPrefab;
 
     public Sprite DefaultIcon;
-    public Sprite[] TileMainMaterialIcons;
+    public Sprite[] TileMainModifierCategoryIcons;
     public Sprite[] TileAttributeIcons;
 
     public EditorMazeModificationPanel MazeModificationPanel;

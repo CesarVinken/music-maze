@@ -39,7 +39,7 @@ public class EditorSelectedMazeTileModifierContainer : EditorSelectedTileModifie
         UsedTileModifierCategories.Add(EditorTileModifierCategory.Attribute);
         UsedTileModifierCategories.Add(EditorTileModifierCategory.TransformationTriggerer);
 
-        SetCurrentlyAvailableModifiers(new EditorMazeTileGroundMaterial());
+        SetCurrentlyAvailableModifierCategories(new EditorMazeTileGroundModifierCategory());
     }
 
     public void Start()
@@ -106,8 +106,8 @@ public class EditorSelectedMazeTileModifierContainer : EditorSelectedTileModifie
     private void SetInitialModifierValues()
     {
         Logger.Log("Set initial value");
-        EditorManager.SelectedTileMainMaterialModifierIndex = 0;
-        EditorCanvasUI.Instance.SelectedTileModifierContainer.SetCurrentlyAvailableModifiers(new EditorMazeTileGroundMaterial());
+        EditorManager.SelectedTileMainModifierCategoryIndex = 0;
+        EditorCanvasUI.Instance.SelectedTileModifierContainer.SetCurrentlyAvailableModifierCategories(new EditorMazeTileGroundModifierCategory());
 
         SetSelectedTileModifierCategory(EditorTileModifierCategory.Background);
         SetSelectedTileModifier(0);//Set selected modifier to Background -> Path 

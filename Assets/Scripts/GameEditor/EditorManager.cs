@@ -15,7 +15,7 @@ public static class EditorManager
     public static EditorTileModifierCategory SelectedTileModifierCategory;
     public static IEditorTileModifierType SelectedTileModifier;
 
-    public static int SelectedTileMainMaterialModifierIndex;
+    public static int SelectedTileMainModifierCategoryIndex;
     public static int SelectedTileAttributeModifierIndex;
     public static int SelectedTileBackgroundModifierIndex;
     public static int SelectedTileTransformationTriggererIndex;

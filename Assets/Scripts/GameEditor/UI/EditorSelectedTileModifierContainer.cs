@@ -67,16 +67,16 @@ public abstract class EditorSelectedTileModifierContainer : MonoBehaviour
         UsedTileModifierCategories.Clear();
     }
 
-    public void SetCurrentlyAvailableModifiers(EditorTileMainMaterialModifier mainMaterialModifier)
+    public void SetCurrentlyAvailableModifierCategories(EditorTileMainModifierCategory mainTileModifierCategory)
     {
         CurrentlyAvailableTileModifiers.Clear();
 
-        if (mainMaterialModifier is EditorMazeTileGroundMaterial || mainMaterialModifier is EditorOverworldGroundMaterial)
+        if (mainTileModifierCategory is EditorMazeTileGroundModifierCategory || mainTileModifierCategory is EditorOverworldGroundModifierCategory)
         {
             Logger.Log("SetCurrentlyAvailableModifiers for ground");
             SetCurrentlyAvailableGroundModifiers();
         }
-        else if(mainMaterialModifier is EditorMazeTileWaterMaterial || mainMaterialModifier is EditorOverworldWaterMaterial)
+        else if(mainTileModifierCategory is EditorMazeTileWaterModifierCategory || mainTileModifierCategory is EditorOverworldWaterModifierCategory)
         {
             Logger.Log("SetCurrentlyAvailableModifiers for water");
             SetCurrentlyAvailableWaterModifiers();

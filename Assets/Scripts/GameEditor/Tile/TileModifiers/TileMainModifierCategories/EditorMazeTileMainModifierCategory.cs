@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-public abstract class EditorMazeTileMainMaterialModifier : EditorTileMainMaterialModifier
+public abstract class EditorMazeTileMainModifierCategory : EditorTileMainModifierCategory
 {
     public override string Name { get; set; }
     private Sprite _sprite = EditorCanvasUI.Instance.DefaultIcon;
@@ -10,12 +10,4 @@ public abstract class EditorMazeTileMainMaterialModifier : EditorTileMainMateria
     {
         return Sprite;
     }
-
-    public override void PlaceMainMaterial<T>(T tile)
-    {
-        PlaceMainMaterial(tile as EditorMazeTile);
-    }
-
-    public virtual void PlaceMainMaterial(EditorMazeTile tile)
-    { }
 }

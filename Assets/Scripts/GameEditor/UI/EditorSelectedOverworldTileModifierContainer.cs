@@ -32,7 +32,7 @@ public class EditorSelectedOverworldTileModifierContainer : EditorSelectedTileMo
         UsedTileModifierCategories.Add(EditorTileModifierCategory.Background);
         UsedTileModifierCategories.Add(EditorTileModifierCategory.Attribute);
 
-        SetCurrentlyAvailableModifiers(new EditorMazeTileGroundMaterial());
+        SetCurrentlyAvailableModifierCategories(new EditorMazeTileGroundModifierCategory());
     }
 
     public void Start()
@@ -90,8 +90,8 @@ public class EditorSelectedOverworldTileModifierContainer : EditorSelectedTileMo
 
     private void SetInitialModifierValues()
     {
-        EditorManager.SelectedTileMainMaterialModifierIndex = 0;
-        EditorCanvasUI.Instance.SelectedTileModifierContainer.SetCurrentlyAvailableModifiers(new EditorOverworldGroundMaterial());
+        EditorManager.SelectedTileMainModifierCategoryIndex = 0;
+        EditorCanvasUI.Instance.SelectedTileModifierContainer.SetCurrentlyAvailableModifierCategories(new EditorOverworldGroundModifierCategory());
 
         SetSelectedTileModifierCategory(EditorTileModifierCategory.Background);
         SetSelectedTileModifier(0);//Set selected modifier to Background -> Path 

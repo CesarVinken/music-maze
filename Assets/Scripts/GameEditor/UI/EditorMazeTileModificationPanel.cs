@@ -9,9 +9,9 @@ public class EditorMazeTileModificationPanel : MonoBehaviour, IEditorTileModific
 
     [SerializeField] private Transform _tileModifierActionsContainer;
     [SerializeField] private Dropdown _selectedMainMaterialDropdown;
-    [SerializeField] private List<EditorTileMainMaterialModifier> _editorTileMainMaterials = new List<EditorTileMainMaterialModifier>();
+    [SerializeField] private List<EditorTileMainModifierCategory> _editorTileMainModifierCategories = new List<EditorTileMainModifierCategory>();
 
-    public List<EditorTileMainMaterialModifier> EditorTileMainMaterials { get => _editorTileMainMaterials; set => _editorTileMainMaterials = value; }
+    public List<EditorTileMainModifierCategory> EditorTileMainModifierCategories { get => _editorTileMainModifierCategories; set => _editorTileMainModifierCategories = value; }
     public Transform TileModifierActionsContainer { get => _tileModifierActionsContainer; set => _tileModifierActionsContainer = value; }
     public Dropdown SelectedMainMaterialDropdown { get => _selectedMainMaterialDropdown; set => _selectedMainMaterialDropdown = value; }
 
@@ -25,10 +25,10 @@ public class EditorMazeTileModificationPanel : MonoBehaviour, IEditorTileModific
 
     public void Start()
     {
-        EditorTileMainMaterials.Add(new EditorMazeTileGroundMaterial());
-        EditorTileMainMaterials.Add(new EditorMazeTileWaterMaterial());
+        EditorTileMainModifierCategories.Add(new EditorMazeTileGroundModifierCategory());
+        EditorTileMainModifierCategories.Add(new EditorMazeTileWaterModifierCategory());
 
-        EditorManager.SelectedTileMainMaterialModifierIndex = 0;   // set to Ground material by default
+        EditorManager.SelectedTileMainModifierCategoryIndex = 0;   // set to Ground material by default
 
         InitialiseDropdown();
     }
@@ -60,21 +60,21 @@ public class EditorMazeTileModificationPanel : MonoBehaviour, IEditorTileModific
         
         List<OptionData> options = new List<OptionData>();
 
-        for (int i = 0; i < EditorTileMainMaterials.Count; i++)
+        for (int i = 0; i < EditorTileMainModifierCategories.Count; i++)
         {
-            EditorTileMainMaterialModifier mainMaterialModifier = EditorTileMainMaterials[i];
-            options.Add(new OptionData(mainMaterialModifier.Sprite));
+            EditorTileMainModifierCategory mainModifierCategory = EditorTileMainModifierCategories[i];
+            options.Add(new OptionData(mainModifierCategory.Sprite));
         }
         _selectedMainMaterialDropdown.AddOptions(options);
     }
 
     private void DropdownValueChanged(Dropdown change)
     {
-        EditorTileMainMaterialModifier mainMaterialModifier = EditorTileMainMaterials[change.value];
-        Logger.Warning("New Dropdown Value : " + mainMaterialModifier.Name);
+        EditorTileMainModifierCategory mainModifierCategory = EditorTileMainModifierCategories[change.value];
+        Logger.Warning("New Dropdown Value : " + mainModifierCategory.Name);
 
-        EditorManager.SelectedTileMainMaterialModifierIndex = change.value;
+        EditorManager.SelectedTileMainModifierCategoryIndex = change.value;
 
-        EditorCanvasUI.Instance.SelectedTileModifierContainer.SetCurrentlyAvailableModifiers(mainMaterialModifier);
+        EditorCanvasUI.Instance.SelectedTileModifierContainer.SetCurrentlyAvailableModifierCategories(mainModifierCategory);
     }
 }
