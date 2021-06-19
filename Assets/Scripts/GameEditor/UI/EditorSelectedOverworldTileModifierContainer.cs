@@ -91,7 +91,7 @@ public class EditorSelectedOverworldTileModifierContainer : EditorSelectedTileMo
     private void SetInitialModifierValues()
     {
         EditorManager.SelectedTileMainModifierCategoryIndex = 0;
-        EditorCanvasUI.Instance.SelectedTileModifierContainer.SetCurrentlyAvailableModifierCategories(new EditorOverworldGroundModifierCategory());
+        EditorCanvasUI.Instance.SelectedTileModifierContainer.SetCurrentlyAvailableModifierCategories(new EditorOverworldTileGroundModifierCategory());
 
         SetSelectedTileModifierCategory(EditorTileModifierCategory.Background);
         SetSelectedTileModifier(0);//Set selected modifier to Background -> Path 

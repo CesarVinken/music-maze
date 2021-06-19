@@ -71,15 +71,24 @@ public abstract class EditorSelectedTileModifierContainer : MonoBehaviour
     {
         CurrentlyAvailableTileModifiers.Clear();
 
-        if (mainTileModifierCategory is EditorMazeTileGroundModifierCategory || mainTileModifierCategory is EditorOverworldGroundModifierCategory)
+        if (mainTileModifierCategory is EditorMazeTileGroundModifierCategory || mainTileModifierCategory is EditorOverworldTileGroundModifierCategory)
         {
             Logger.Log("SetCurrentlyAvailableModifiers for ground");
             SetCurrentlyAvailableGroundModifiers();
         }
-        else if(mainTileModifierCategory is EditorMazeTileWaterModifierCategory || mainTileModifierCategory is EditorOverworldWaterModifierCategory)
+        else if(mainTileModifierCategory is EditorMazeTileWaterModifierCategory || mainTileModifierCategory is EditorOverworldTileWaterModifierCategory)
         {
             Logger.Log("SetCurrentlyAvailableModifiers for water");
             SetCurrentlyAvailableWaterModifiers();
+        }
+        else if (mainTileModifierCategory is EditorMazeTileAreaModifierCategory || mainTileModifierCategory is EditorOverworldTileAreaModifierCategory)
+        {
+            Logger.Log("SetCurrentlyAvailableModifiers for areas");
+            SetCurrentlyAvailableAreaModifiers();
+        }
+        else
+        {
+            Logger.Error($"Unknown modifier category {mainTileModifierCategory}");
         }
     }
 
@@ -156,4 +165,10 @@ public abstract class EditorSelectedTileModifierContainer : MonoBehaviour
         EditorCanvasUI.Instance.SelectedTileModifierContainer.SetSelectedTileModifierCategory(EditorTileModifierCategory.Background);
         EditorCanvasUI.Instance.SelectedTileModifierContainer.SetSelectedTileModifier(0);
     }
+
+    private void SetCurrentlyAvailableAreaModifiers()
+    {
+        Logger.Log("Todo!");
+    }
+
 }

@@ -27,6 +27,7 @@ public class EditorMazeTileModificationPanel : MonoBehaviour, IEditorTileModific
     {
         EditorTileMainModifierCategories.Add(new EditorMazeTileGroundModifierCategory());
         EditorTileMainModifierCategories.Add(new EditorMazeTileWaterModifierCategory());
+        EditorTileMainModifierCategories.Add(new EditorMazeTileAreaModifierCategory());
 
         EditorManager.SelectedTileMainModifierCategoryIndex = 0;   // set to Ground material by default
 

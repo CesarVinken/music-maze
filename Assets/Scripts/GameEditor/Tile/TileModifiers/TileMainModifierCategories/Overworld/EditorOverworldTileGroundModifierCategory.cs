@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-public class EditorOverworldGroundModifierCategory : EditorOverworldTileMainModifierCategory
+public class EditorOverworldTileGroundModifierCategory : EditorOverworldTileMainModifierCategory
 {
     public override string Name => "Ground";
 

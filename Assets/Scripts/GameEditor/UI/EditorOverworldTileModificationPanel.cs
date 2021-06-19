@@ -24,8 +24,9 @@ public class EditorOverworldTileModificationPanel : MonoBehaviour, IEditorTileMo
 
     public void Start()
     {
-        EditorTileMainModifierCategories.Add(new EditorMazeTileGroundModifierCategory());
-        EditorTileMainModifierCategories.Add(new EditorMazeTileWaterModifierCategory());
+        EditorTileMainModifierCategories.Add(new EditorOverworldTileGroundModifierCategory());
+        EditorTileMainModifierCategories.Add(new EditorOverworldTileWaterModifierCategory());
+        EditorTileMainModifierCategories.Add(new EditorOverworldTileAreaModifierCategory());
 
         EditorManager.SelectedTileMainModifierCategoryIndex = 0;   // set to Ground material by default
 
