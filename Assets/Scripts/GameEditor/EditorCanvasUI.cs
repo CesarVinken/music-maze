@@ -22,6 +22,7 @@ public class EditorCanvasUI : MonoBehaviour
     [Header("Tile Modifier Actions")]
     public GameObject AssignMazeLevelEntryPrefab;
     public GameObject GenerateTileTransformationMapPrefab;
+    public GameObject HandleTileAreaPrefab;
 
     public void Awake()
     {
@@ -37,6 +38,7 @@ public class EditorCanvasUI : MonoBehaviour
 
         Guard.CheckIsNull(AssignMazeLevelEntryPrefab, "AssignMazeLevelEntryPrefab");
         Guard.CheckIsNull(GenerateTileTransformationMapPrefab, "GenerateTileTransformationMapPrefab");
+        Guard.CheckIsNull(HandleTileAreaPrefab, "HandleTileAreaPrefab");
 
         GameObject.DontDestroyOnLoad(gameObject);
 

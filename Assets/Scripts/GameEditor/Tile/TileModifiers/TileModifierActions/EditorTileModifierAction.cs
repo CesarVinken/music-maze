@@ -13,6 +13,9 @@ public class EditorTileModifierAction : MonoBehaviour
             case TileModifierActionType.GenerateTileTransformationMap:
                 MazeTileTransformationMapper.GenerateTileTransformationMap();
                 break;
+            case TileModifierActionType.CreateNewTileAreaEntry:
+                NewTileAreaEntryCreator.CreateNewTileAreaEntry();
+                break;
             default:
                 Logger.Error("Action type was not yet implemented");
                 break;

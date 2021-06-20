@@ -19,6 +19,7 @@ public static class EditorManager
     public static int SelectedTileAttributeModifierIndex;
     public static int SelectedTileBackgroundModifierIndex;
     public static int SelectedTileTransformationTriggererIndex;
+    public static int SelectedTileAreaModifierIndex;
 
     public static void ToggleEditorMode()
     {

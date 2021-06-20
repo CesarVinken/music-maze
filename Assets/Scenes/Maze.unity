@@ -1577,7 +1577,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 7
+  m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &786270577
 GameObject:
@@ -2392,12 +2392,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1219160387}
   m_CullTransparentMesh: 0
---- !u!1 &1254919226 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 1084785654888183773, guid: fdb67c62a9402ec4383fa7408d277599,
-    type: 3}
-  m_PrefabInstance: {fileID: 1586089277}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1262183107
 GameObject:
   m_ObjectHideFlags: 0
@@ -2931,97 +2925,8 @@ Transform:
   m_Children:
   - {fileID: 1016344782}
   m_Father: {fileID: 0}
-  m_RootOrder: 6
+  m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1001 &1586089277
-PrefabInstance:
-  m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    m_TransformParent: {fileID: 0}
-    m_Modifications:
-    - target: {fileID: 1084785654888183763, guid: fdb67c62a9402ec4383fa7408d277599,
-        type: 3}
-      propertyPath: m_RootOrder
-      value: 5
-      objectReference: {fileID: 0}
-    - target: {fileID: 1084785654888183763, guid: fdb67c62a9402ec4383fa7408d277599,
-        type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1084785654888183763, guid: fdb67c62a9402ec4383fa7408d277599,
-        type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1084785654888183763, guid: fdb67c62a9402ec4383fa7408d277599,
-        type: 3}
-      propertyPath: m_LocalPosition.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1084785654888183763, guid: fdb67c62a9402ec4383fa7408d277599,
-        type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 1084785654888183763, guid: fdb67c62a9402ec4383fa7408d277599,
-        type: 3}
-      propertyPath: m_LocalRotation.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1084785654888183763, guid: fdb67c62a9402ec4383fa7408d277599,
-        type: 3}
-      propertyPath: m_LocalRotation.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1084785654888183763, guid: fdb67c62a9402ec4383fa7408d277599,
-        type: 3}
-      propertyPath: m_LocalRotation.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1084785654888183763, guid: fdb67c62a9402ec4383fa7408d277599,
-        type: 3}
-      propertyPath: m_LocalEulerAnglesHint.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1084785654888183763, guid: fdb67c62a9402ec4383fa7408d277599,
-        type: 3}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1084785654888183763, guid: fdb67c62a9402ec4383fa7408d277599,
-        type: 3}
-      propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1084785654888183772, guid: fdb67c62a9402ec4383fa7408d277599,
-        type: 3}
-      propertyPath: m_Enabled
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 1084785654888183772, guid: fdb67c62a9402ec4383fa7408d277599,
-        type: 3}
-      propertyPath: data.dataString
-      value: UEsDBBQAAAgIAAAYIez3DDfCXAIAAAAFAAALACQAZ3JhcGgwLmpzb24KACAAAAAAAAEAGAAAgD7V3rGdAQCAPtXesZ0BAIA+1d6xnQF1VEtz2jAQ/iuMziVjSADTW0sI6SGPCe3k4ouQ1liDLHn0CBCG/96VbGOHTk8s+327++1DPhGhbAXMabMygj9pDuT7gASbfBt04CMc6FartfiElvMuuCsCiUbOG3VCo38UwqwuwRnBfqitDOQEnV6JXJtyybew0NZZdOdUWkDIaBeiFbpOA3LAn+E8hBzRGs+C9YnWPBmc0WSgHJiOOp60zElDrHleMUnLCngQ3dEnbeJJTVPYTsMI0pmWUthGC3HHKva6rgowEJrlgmJrsX6gFyC2hQvF+7EveW7BNX0berwXBidUJyU/dT22ktpdLeuDSg+xgWmUVCd9+gcfjiKcG10+tnVHSajhCsF2b/TIqHW9ufbd91+Fe7Wnckc3Et4LUM96ZbRXHEFnfAj1Fsb33d9La4sC2K7z11KvnL7qxt1Oe3QzS9PR7Xx6uxwms2ZRoaFzHMVhIUW5Cfybu9qxljrOPh4CGNzSL1Qfz8Q2edEbJP2x8Jtu+/fUAA/CWIdQ07IKWjfam0AlD2iENTDvFtooMP0EFSgq3fEV07jrfV5h/496oOHlNMUbrH0QVyHR3fGT5Ap61fvL5myh909gixfvpFDQjT0AzzinhVaqPjf7FQxRa29yyvoStl7wr3dGkg3PeZKmszThwFk6THO4Y+N8OpnxZEantyQeolDYJ5WvtdBmPLg11ZVVeHTtB2WwMrSKp88N3a/EZ6l7AoXK9ZoZAPVSZ2j1WTBYBF8oX3KBA1qDc0LFfZNTRqRmO+DZJVEWW10enKFZlyUjlfjQLngysohfkIycyfkvUEsDBBQAAAgIAAAYIeyc1NuEXgIAAAAFAAALACQAZ3JhcGgxLmpzb24KACAAAAAAAAEAGAAAgD7V3rGdAQCAPtXesZ0BAIA+1d6xnQFlVMly4jAQ/RVK5yGFIcYwtxmHkDlkqZCpXHwRchurkCWXlgBJ8e/Tkm3sMCea16+7Xy/yF+HS1MCs0mvN80eVA/k5It4mP0a98wGOdKfkhn9Cx3nnuS09iQbOK7VcIR75MKMqsJqzX3InPHmCoJO8ULpa5TtIlbEG4YIKA+jSyvpoidDXiBzxZ7z0ISe0pom3PtFaTkZnNBlIC7qnTuOOGbfEhuckE7SqIfeie3rcJY4bmsR2WoaXzpQQ3LRaiD3VodeU1sZhJ0jIOcXeggDPL4HvSuurD4Ofi8KAbRvX9HTHNY6oyUp+q2ZuFTX7RtcHFc7XSeaLoKlJ+viffxwFd6FV9dDVjSa+hi0527/SE6PGDgY7hO++C3fyQMWebgW8lyCf1ForJ3N0Wu18qDMwvev/XlpLS2D7Hm+kXoGu7ufdjTu6SRaLaLacz1bjSdJuyjd0DqM4poJXW8+/uW2AjVBh+OESQOOa/qD6cCemzYuol/TXwBvdDQ+qddxzbSy62pal17pVTnsquUfDr4E5myotIaBtAzVIKuzpBbPY63Ve+QZVrzz31L+ctnbr6x7EVUiAe/5kcuV6UYfL4kypDo9gymdnBZfQi/aOJxxTqqRsrm04ki5s43RB2SBs53j+/cwIpTM6p3ESs2g5zwsYR2gls8UiZtMpu03mJNwhl9gnFS+N0HY8uDTZJ5d4c90HZbTWtA6Xn2t6WPPPSg1GzmWhNkwDyOcmw0U4aCyCLzRf5RwHtAFruQzrJl8ZEYrtIc8uibLQ6epoNc36LBmp+YeyHslIGr4gGTmT8z9QSwMEFAAACAgAABgh7A5xbd+KAAAAtgAAAAkAJABtZXRhLmpzb24KACAAAAAAAAEAGAAAgD7V3rGdAQCAPtXesZ0BAIA+1d6xnQFtjU0OgjAQha9CuhZSCm1HL8DOuDcsxs4UurCQgibGeHfbuHX3/vK9t3hy2sISxanqG9W0+lCJKeE6bzlRxTwCFX0V8kaeJIAFSUwOavDcO+WNtiQtmk7kOWKHBrXVrj0a8ly3WdkOQDulXG+NGPNqf618xjv/wBfcZx8ihTg1Qwo0lP8C+1+Mny9QSwECLQAUAAAICAAAGCHs9ww3wlwCAAAABQAACwAkAAAAAAAAAAAAAAAAAAAAZ3JhcGgwLmpzb24KACAAAAAAAAEAGAAAgD7V3rGdAQCAPtXesZ0BAIA+1d6xnQFQSwECLQAUAAAICAAAGCHsnNTbhF4CAAAABQAACwAkAAAAAAAAAAAAAACpAgAAZ3JhcGgxLmpzb24KACAAAAAAAAEAGAAAgD7V3rGdAQCAPtXesZ0BAIA+1d6xnQFQSwECLQAUAAAICAAAGCHsDnFt34oAAAC2AAAACQAkAAAAAAAAAAAAAABUBQAAbWV0YS5qc29uCgAgAAAAAAABABgAAIA+1d6xnQEAgD7V3rGdAQCAPtXesZ0BUEsFBgAAAAADAAMAFQEAACkGAAAAAA==
-      objectReference: {fileID: 0}
-    - target: {fileID: 1084785654888183772, guid: fdb67c62a9402ec4383fa7408d277599,
-        type: 3}
-      propertyPath: prioritizeGraphs
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 1084785654888183773, guid: fdb67c62a9402ec4383fa7408d277599,
-        type: 3}
-      propertyPath: m_Name
-      value: PathfindingSystem
-      objectReference: {fileID: 0}
-    - target: {fileID: 1084785654888183773, guid: fdb67c62a9402ec4383fa7408d277599,
-        type: 3}
-      propertyPath: m_IsActive
-      value: 1
-      objectReference: {fileID: 0}
-    m_RemovedComponents: []
-  m_SourcePrefab: {fileID: 100100000, guid: fdb67c62a9402ec4383fa7408d277599, type: 3}
 --- !u!1 &1679013102
 GameObject:
   m_ObjectHideFlags: 0
@@ -4102,7 +4007,7 @@ PrefabInstance:
         type: 3}
       propertyPath: AstarGO
       value: 
-      objectReference: {fileID: 1254919226}
+      objectReference: {fileID: 0}
     - target: {fileID: 9155724151073738243, guid: f5dd3dc015884b245a265e281dfb9ea7,
         type: 3}
       propertyPath: _thisSceneType

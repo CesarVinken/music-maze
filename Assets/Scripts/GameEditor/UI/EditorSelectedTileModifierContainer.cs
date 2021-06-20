@@ -8,10 +8,12 @@ public abstract class EditorSelectedTileModifierContainer : MonoBehaviour
     protected EditorTileAttributeSelector _editorTileAttributeSelector;
     protected EditorTileBackgroundSelector _editorTileBackgroundSelector;
     protected EditorTileTransformationTriggererSelector _editorTileTransformationTriggererSelector;
+    protected EditorTileAreaModifierSelector _editorTileAreaModifierSelector;
 
     public List<EditorTileAttributeModifier> EditorTileAttributes = new List<EditorTileAttributeModifier>();
     public List<EditorTileBackgroundModifier> EditorTileBackgrounds = new List<EditorTileBackgroundModifier>();
     public List<EditorTileTransformationModifier> EditorTileTransformationTriggerers = new List<EditorTileTransformationModifier>();
+    public List<EditorTileAreaModifier> EditorTileAreaModifiers = new List<EditorTileAreaModifier>();
 
     public List<EditorTileModifierCategory> UsedTileModifierCategories = new List<EditorTileModifierCategory>();
 
@@ -52,6 +54,10 @@ public abstract class EditorSelectedTileModifierContainer : MonoBehaviour
         {
             _editorTileTransformationTriggererSelector.SetSelectedModifier(modifierIndex);
         }
+        else if (EditorManager.SelectedTileModifierCategory == EditorTileModifierCategory.Area)
+        {
+            _editorTileAreaModifierSelector.SetSelectedModifier(modifierIndex);
+        }
         else
         {
             Logger.Error("Unknown modifier type");
@@ -63,6 +69,7 @@ public abstract class EditorSelectedTileModifierContainer : MonoBehaviour
         EditorTileAttributes.Clear();
         EditorTileBackgrounds.Clear();
         EditorTileTransformationTriggerers.Clear();
+        EditorTileAreaModifiers.Clear();
 
         UsedTileModifierCategories.Clear();
     }
@@ -168,7 +175,15 @@ public abstract class EditorSelectedTileModifierContainer : MonoBehaviour
 
     private void SetCurrentlyAvailableAreaModifiers()
     {
-        Logger.Log("Todo!");
-    }
+        List<IEditorTileModifier> currentlyAvailableAreaModifiers = new List<IEditorTileModifier>();
+        for (int i = 0; i < EditorTileAreaModifiers.Count; i++)
+        {       
+            currentlyAvailableAreaModifiers.Add(EditorTileAreaModifiers[i]);       
+        }
+        CurrentlyAvailableTileModifiers.Add(EditorTileModifierCategory.Area, currentlyAvailableAreaModifiers);
 
+        // initial value for area: 
+        EditorCanvasUI.Instance.SelectedTileModifierContainer.SetSelectedTileModifierCategory(EditorTileModifierCategory.Area);
+        EditorCanvasUI.Instance.SelectedTileModifierContainer.SetSelectedTileModifier(0);
+    }
 }

@@ -16,6 +16,7 @@ public class EditorSelectedMazeTileModifierContainer : EditorSelectedTileModifie
         _editorTileAttributeSelector = new EditorTileAttributeSelector(this);
         _editorTileBackgroundSelector = new EditorTileBackgroundSelector(this);
         _editorTileTransformationTriggererSelector = new EditorTileTransformationTriggererSelector(this);
+        _editorTileAreaModifierSelector = new EditorTileAreaModifierSelector(this);
 
         EditorTileAttributes.Add(new EditorObstacleTileAttribute());
         EditorTileAttributes.Add(new EditorPlayerExitTileAttribute());
@@ -35,9 +36,15 @@ public class EditorSelectedMazeTileModifierContainer : EditorSelectedTileModifie
 
         EditorManager.SelectedTileTransformationTriggererIndex = 0;
 
+        EditorTileAreaModifiers.Add(new EditorMazeTileTileAreaModifier());
+
+        EditorManager.SelectedTileAreaModifierIndex = 0;
+
+
         UsedTileModifierCategories.Add(EditorTileModifierCategory.Background);
         UsedTileModifierCategories.Add(EditorTileModifierCategory.Attribute);
         UsedTileModifierCategories.Add(EditorTileModifierCategory.TransformationTriggerer);
+        UsedTileModifierCategories.Add(EditorTileModifierCategory.Area);
 
         SetCurrentlyAvailableModifierCategories(new EditorMazeTileGroundModifierCategory());
     }
@@ -75,6 +82,10 @@ public class EditorSelectedMazeTileModifierContainer : EditorSelectedTileModifie
         {
             _editorTileTransformationTriggererSelector.SwitchSelectedModifier(-1);
         }
+        else if (EditorManager.SelectedTileModifierCategory == EditorTileModifierCategory.Area)
+        {
+            _editorTileAreaModifierSelector.SwitchSelectedModifier(-1);
+        }
         else
         {
             // Not known type
@@ -95,6 +106,10 @@ public class EditorSelectedMazeTileModifierContainer : EditorSelectedTileModifie
         else if (EditorManager.SelectedTileModifierCategory == EditorTileModifierCategory.TransformationTriggerer)
         {
             _editorTileTransformationTriggererSelector.SwitchSelectedModifier(1);
+        }
+        else if (EditorManager.SelectedTileModifierCategory == EditorTileModifierCategory.Area)
+        {
+            _editorTileAreaModifierSelector.SwitchSelectedModifier(1);
         }
         else
         {
