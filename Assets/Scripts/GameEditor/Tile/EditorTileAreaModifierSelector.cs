@@ -7,37 +7,11 @@ public class EditorTileAreaModifierSelector : EditorTileModifierSelector
 
     public override void SwitchSelectedModifier(int newValue)
     {
-        EditorTileModifierCategory currentCategory = EditorTileModifierCategory.Area;
-        EditorSelectedTileModifierContainer selectedTileModifierContainer = EditorCanvasUI.Instance.SelectedTileModifierContainer;
-
-        if (EditorModificationPanelContainer.Instance.SelectedPanel is IEditorTileModificationPanel)
-        {
-            IEditorTileModificationPanel selectedPanel = EditorModificationPanelContainer.Instance.SelectedPanel as IEditorTileModificationPanel;
-            selectedPanel.DestroyModifierActions();
-        }
-
         int selectedModifierIndex = EditorManager.SelectedTileAreaModifierIndex;
         int newIndex = selectedModifierIndex + newValue;
 
-        if (newIndex < 0)
-        {
-            EditorTileModifierCategory previousEditorTileModifierCategory = PreviousEditorTileModfierCategory(currentCategory);
-
-            int modifierCount = selectedTileModifierContainer.CurrentlyAvailableTileModifiers[previousEditorTileModifierCategory].Count;
-
-            int lastAvailableIndex = modifierCount - 1;
-
-            selectedTileModifierContainer.SetSelectedTileModifierCategory(previousEditorTileModifierCategory);
-            selectedTileModifierContainer.SetSelectedTileModifier(lastAvailableIndex);
-        }
-        else if (newIndex >= _editorSelectedModifierContainer.CurrentlyAvailableTileModifiers[EditorTileModifierCategory.Area].Count)
-        {
-            EditorTileModifierCategory nextEditorTileModifierCategory = NextEditorTileModfierCategory(currentCategory);
-
-            selectedTileModifierContainer.SetSelectedTileModifierCategory(nextEditorTileModifierCategory);
-            selectedTileModifierContainer.SetSelectedTileModifier(0);
-        }
-        else
+        SwitchSelectedModifier(newIndex, EditorTileModifierCategory.Area);
+        if (newIndex >= 0 && newIndex < _editorSelectedModifierContainer.CurrentlyAvailableTileModifiers[EditorTileModifierCategory.Area].Count)
         {
             SetSelectedModifier(newIndex);
         }

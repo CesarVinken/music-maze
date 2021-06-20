@@ -6,37 +6,11 @@ public class EditorTileAttributeSelector : EditorTileModifierSelector
 
     public override void SwitchSelectedModifier(int newValue)
     {
-        EditorTileModifierCategory currentCategory = EditorTileModifierCategory.Attribute;
-        EditorSelectedTileModifierContainer selectedTileModifierContainer = EditorCanvasUI.Instance.SelectedTileModifierContainer;
+        int selectedModifierIndex = EditorManager.SelectedTileAttributeModifierIndex;
+        int newIndex = selectedModifierIndex + newValue;
 
-        if (EditorModificationPanelContainer.Instance.SelectedPanel is IEditorTileModificationPanel)
-        {
-            IEditorTileModificationPanel selectedPanel = EditorModificationPanelContainer.Instance.SelectedPanel as IEditorTileModificationPanel;
-            selectedPanel.DestroyModifierActions();
-        }
-
-        int selectedAttributeIndex = EditorManager.SelectedTileAttributeModifierIndex;
-        int newIndex = selectedAttributeIndex + newValue;
-
-        if (newIndex < 0)
-        {
-            EditorTileModifierCategory previousEditorTileModifierCategory = PreviousEditorTileModfierCategory(currentCategory);
-
-            int modifierCount = selectedTileModifierContainer.CurrentlyAvailableTileModifiers[previousEditorTileModifierCategory].Count;
-
-            int lastAvailableIndex = modifierCount - 1;
-
-            selectedTileModifierContainer.SetSelectedTileModifierCategory(previousEditorTileModifierCategory);
-            selectedTileModifierContainer.SetSelectedTileModifier(lastAvailableIndex);
-        }
-        else if (newIndex >= _editorSelectedModifierContainer.CurrentlyAvailableTileModifiers[EditorTileModifierCategory.Attribute].Count)
-        {
-            EditorTileModifierCategory nextEditorTileModifierCategory = NextEditorTileModfierCategory(currentCategory);
-
-            selectedTileModifierContainer.SetSelectedTileModifierCategory(nextEditorTileModifierCategory);
-            selectedTileModifierContainer.SetSelectedTileModifier(0);
-        }
-        else
+        SwitchSelectedModifier(newIndex, EditorTileModifierCategory.Attribute);
+        if (newIndex >= 0 && newIndex < _editorSelectedModifierContainer.CurrentlyAvailableTileModifiers[EditorTileModifierCategory.Attribute].Count)
         {
             SetSelectedModifier(newIndex);
         }

@@ -233,7 +233,6 @@ public class EditorTileSelector : MonoBehaviour
 
     private void PerformDeletionAction()
     {
-        Logger.Log("Try to perform deletion key action");
         EditorTileModifierCategory editorTileModifierType = EditorManager.SelectedTileModifierCategory;
         EditorSelectedTileModifierContainer selectedTileModifierContainer = EditorCanvasUI.Instance.SelectedTileModifierContainer;
 

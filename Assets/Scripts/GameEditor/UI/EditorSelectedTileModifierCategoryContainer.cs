@@ -1,4 +1,5 @@
-﻿using System.Text.RegularExpressions;
+﻿using System.Collections.Generic;
+using System.Text.RegularExpressions;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -44,10 +45,25 @@ public class EditorSelectedTileModifierCategoryContainer : MonoBehaviour
             selectedPanel.DestroyModifierActions();
         }
 
-        EditorTileModifierCategory previousEditorTileModifierCategory = PreviousEditorTileModfierCategory(currentCategory);
+        EditorTileModifierCategory previousEditorTileModifierCategory = PreviousEditorTileModifierCategory(currentCategory);
 
-        selectedTileModifierContainer.SetSelectedTileModifierCategory(previousEditorTileModifierCategory);
-        selectedTileModifierContainer.SetSelectedTileModifier(0);
+        bool landedAtCategory = false;
+
+        while (!landedAtCategory)
+        {
+            if (selectedTileModifierContainer.CurrentlyAvailableTileModifiers.TryGetValue(previousEditorTileModifierCategory, out List<IEditorTileModifier> editorTileModifiers))
+            {
+                selectedTileModifierContainer.SetSelectedTileModifierCategory(previousEditorTileModifierCategory);
+                selectedTileModifierContainer.SetSelectedTileModifier(0);
+                landedAtCategory = true;
+            }
+            else
+            {
+                // there are no modifiers in the previous category. Try the category before that
+                EditorTileModifierCategory lastQueriedModifierCategory = previousEditorTileModifierCategory;
+                previousEditorTileModifierCategory = PreviousEditorTileModifierCategory(lastQueriedModifierCategory);
+            }
+        }
     }
 
     public void SelectNextModifierCategory()
@@ -60,19 +76,35 @@ public class EditorSelectedTileModifierCategoryContainer : MonoBehaviour
         EditorTileModifierCategory currentCategory = EditorManager.SelectedTileModifierCategory;
         EditorSelectedTileModifierContainer selectedTileModifierContainer = EditorCanvasUI.Instance.SelectedTileModifierContainer;
 
+
         if (EditorModificationPanelContainer.Instance.SelectedPanel is IEditorTileModificationPanel)
         {
             IEditorTileModificationPanel selectedPanel = EditorModificationPanelContainer.Instance.SelectedPanel as IEditorTileModificationPanel;
             selectedPanel.DestroyModifierActions();
         }
 
-        EditorTileModifierCategory nextEditorTileModifierCategory = NextEditorTileModfierCategory(currentCategory);
+        EditorTileModifierCategory nextEditorTileModifierCategory = NextEditorTileModifierCategory(currentCategory);
 
-        selectedTileModifierContainer.SetSelectedTileModifierCategory(nextEditorTileModifierCategory);
-        selectedTileModifierContainer.SetSelectedTileModifier(0);
+        bool landedAtCategory = false;
+
+        while (!landedAtCategory)
+        {
+            if (selectedTileModifierContainer.CurrentlyAvailableTileModifiers.TryGetValue(nextEditorTileModifierCategory, out List<IEditorTileModifier> editorTileModifiers))
+            {
+                selectedTileModifierContainer.SetSelectedTileModifierCategory(nextEditorTileModifierCategory);
+                selectedTileModifierContainer.SetSelectedTileModifier(0);
+                landedAtCategory = true;
+            }
+            else
+            {
+                // there are no modifiers in the next category. Try the category after that
+                EditorTileModifierCategory lastQueriedModifierCategory = nextEditorTileModifierCategory;
+                nextEditorTileModifierCategory = NextEditorTileModifierCategory(lastQueriedModifierCategory);
+            }
+        }
     }
 
-    protected EditorTileModifierCategory PreviousEditorTileModfierCategory(EditorTileModifierCategory currentTileModifierCategory)
+    protected EditorTileModifierCategory PreviousEditorTileModifierCategory(EditorTileModifierCategory currentTileModifierCategory)
     {
         EditorSelectedTileModifierContainer selectedTileModifierContainer = EditorCanvasUI.Instance.SelectedTileModifierContainer;
 
@@ -85,7 +117,7 @@ public class EditorSelectedTileModifierCategoryContainer : MonoBehaviour
         return selectedTileModifierContainer.UsedTileModifierCategories[selectedTileModifierContainer.UsedTileModifierCategories.Count - 1];
     }
 
-    protected EditorTileModifierCategory NextEditorTileModfierCategory(EditorTileModifierCategory currentTileModifierCategory)
+    protected EditorTileModifierCategory NextEditorTileModifierCategory(EditorTileModifierCategory currentTileModifierCategory)
     {
         EditorSelectedTileModifierContainer selectedTileModifierContainer = EditorCanvasUI.Instance.SelectedTileModifierContainer;
 

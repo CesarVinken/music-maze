@@ -6,36 +6,11 @@ public class EditorTileBackgroundSelector : EditorTileModifierSelector
 
     public override void SwitchSelectedModifier(int newValue)
     {
-        EditorTileModifierCategory currentCategory = EditorTileModifierCategory.Background;
-        EditorSelectedTileModifierContainer selectedTileModifierContainer = EditorCanvasUI.Instance.SelectedTileModifierContainer;
+        int selectedModifierIndex = EditorManager.SelectedTileBackgroundModifierIndex;
+        int newIndex = selectedModifierIndex + newValue;
 
-        if (EditorModificationPanelContainer.Instance.SelectedPanel is IEditorTileModificationPanel)
-        {
-            IEditorTileModificationPanel selectedPanel = EditorModificationPanelContainer.Instance.SelectedPanel as IEditorTileModificationPanel;
-            selectedPanel.DestroyModifierActions();
-        }
-
-        int selectedBackgroundIndex = EditorManager.SelectedTileBackgroundModifierIndex;
-        int newIndex = selectedBackgroundIndex + newValue;
-
-        if (newIndex < 0)
-        {
-            EditorTileModifierCategory previousEditorTileModifierCategory = PreviousEditorTileModfierCategory(currentCategory);
-            int modifierCount = selectedTileModifierContainer.CurrentlyAvailableTileModifiers[previousEditorTileModifierCategory].Count;
-
-            EditorCanvasUI.Instance.SelectedTileModifierContainer.SetSelectedTileModifierCategory(previousEditorTileModifierCategory);
-
-            int lastAvailableIndex = modifierCount - 1;
-            EditorCanvasUI.Instance.SelectedTileModifierContainer.SetSelectedTileModifier(lastAvailableIndex);
-        }
-        else if (newIndex >= _editorSelectedModifierContainer.CurrentlyAvailableTileModifiers[EditorTileModifierCategory.Background].Count)
-        {
-            EditorTileModifierCategory nextEditorTileModifierCategory = NextEditorTileModfierCategory(currentCategory);
-
-            EditorCanvasUI.Instance.SelectedTileModifierContainer.SetSelectedTileModifierCategory(nextEditorTileModifierCategory);
-            EditorCanvasUI.Instance.SelectedTileModifierContainer.SetSelectedTileModifier(0);
-        }
-        else
+        SwitchSelectedModifier(newIndex, EditorTileModifierCategory.Background);
+        if (newIndex >= 0 && newIndex < _editorSelectedModifierContainer.CurrentlyAvailableTileModifiers[EditorTileModifierCategory.Background].Count)
         {
             SetSelectedModifier(newIndex);
         }
