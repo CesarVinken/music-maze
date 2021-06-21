@@ -10,6 +10,8 @@ public class TileAreaActionHandler : MonoBehaviour
     public Transform TileAreaContainer;
     public List<EditorTileAreaEntry> TileAreaEntries = new List<EditorTileAreaEntry>();
 
+    public EditorTileAreaEntry SelectedTileAreaEntry = null;
+
     public void Awake()
     {
         Guard.CheckIsNull(TileAreaEntryPrefab, "TileAreaEntryPrefab");
@@ -25,5 +27,35 @@ public class TileAreaActionHandler : MonoBehaviour
         EditorTileAreaEntry tileAreaEntry = tileAreaEntryGO.GetComponent<EditorTileAreaEntry>();
 
         TileAreaEntries.Add(tileAreaEntry);
+
+        SelectTileAreaEntry(tileAreaEntry);
+    }
+
+    public void SelectTileAreaEntry(EditorTileAreaEntry tileAreaEntry)
+    {
+        if(SelectedTileAreaEntry != null)
+        {
+            if(SelectedTileAreaEntry == tileAreaEntry)
+            {
+                return;
+            }
+            else
+            {
+                SelectedTileAreaEntry.Deselect();
+                SelectedTileAreaEntry = null;
+            }
+        }
+
+        SelectedTileAreaEntry = tileAreaEntry;
+        tileAreaEntry.Select();
+    }
+
+    public void DeselectTileAreaEntry(EditorTileAreaEntry tileAreaEntry)
+    {
+        if(SelectedTileAreaEntry != null && SelectedTileAreaEntry == tileAreaEntry)
+        {
+            SelectedTileAreaEntry = null;
+            tileAreaEntry.Deselect();
+        }
     }
 }

@@ -158,9 +158,15 @@ public class EditorTileSelector : MonoBehaviour
             EditorTileTransformationModifier transformationTriggerer = transformationTriggerers[EditorManager.SelectedTileTransformationTriggererIndex] as EditorTileTransformationModifier;
             PlaceTransformationTriggerer(tile, transformationTriggerer);
         }
+        else if (editorTileModifierType == EditorTileModifierCategory.Area)
+        {
+            List<IEditorTileModifier> areaModifiers = selectedTileModifierContainer.CurrentlyAvailableTileModifiers[EditorTileModifierCategory.Area];
+            EditorTileAreaModifier tileAreaModifier = areaModifiers[EditorManager.SelectedTileAreaModifierIndex] as EditorTileAreaModifier;
+            AddToSelectedArea(tile, tileAreaModifier);
+        }
         else
         {
-            Logger.Error("EditorMazeTileModifierType not yet implemented");
+            Logger.Error($"EditorMazeTileModifierType {editorTileModifierType} not yet implemented");
         }
     }
 
@@ -229,6 +235,11 @@ public class EditorTileSelector : MonoBehaviour
         if (transformationTriggerer == null) Logger.Error($"Could not find the transformationTriggerer type {transformationTriggerer.GetType()}");
 
         transformationTriggerer.HandleBeautificationTriggerPlacement(tile);
+    }
+
+    private void AddToSelectedArea(Tile tile, EditorTileAreaModifier areaModifier)
+    {
+        Logger.Log("TO BE IMPLEMENTED");
     }
 
     private void PerformDeletionAction()
