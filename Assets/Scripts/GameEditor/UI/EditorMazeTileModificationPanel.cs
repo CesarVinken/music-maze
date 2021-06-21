@@ -71,6 +71,8 @@ public class EditorMazeTileModificationPanel : MonoBehaviour, IEditorTileModific
 
     private void DropdownValueChanged(Dropdown change)
     {
+        if (EditorManager.SelectedTileMainModifierCategoryIndex == change.value) return;
+
         EditorTileMainModifierCategory mainModifierCategory = EditorTileMainModifierCategories[change.value];
         Logger.Warning("New Dropdown Value : " + mainModifierCategory.Name);
 

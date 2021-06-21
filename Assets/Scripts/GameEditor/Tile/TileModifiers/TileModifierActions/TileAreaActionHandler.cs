@@ -19,12 +19,30 @@ public class TileAreaActionHandler : MonoBehaviour
         Guard.CheckIsNull(TileAreaContainer, "TileAreaContainer", gameObject);
 
         Instance = this;
+
+        TileAreaEntries.Clear();
+
+        LoadExistingTileAreas();
+    }
+
+    public void LoadExistingTileAreas()
+    {
+        List<TileArea> existingTileAreas = GameManager.Instance.CurrentEditorLevel.TileAreas;
+
+        for (int i = 0; i < existingTileAreas.Count; i++)
+        {
+            GameObject tileAreaEntryGO = GameObject.Instantiate(TileAreaEntryPrefab, TileAreaContainer);
+            EditorTileAreaEntry tileAreaEntry = tileAreaEntryGO.GetComponent<EditorTileAreaEntry>();
+            tileAreaEntry.SetName(existingTileAreas[i].Name);
+
+            TileAreaEntries.Add(tileAreaEntry);
+        }
     }
 
     public void CreateNewTileAreaEntry()
     {
         GameObject tileAreaEntryGO = GameObject.Instantiate(TileAreaEntryPrefab, TileAreaContainer);
-        EditorTileAreaEntry tileAreaEntry = tileAreaEntryGO.GetComponent<EditorTileAreaEntry>();
+        EditorTileAreaEntry tileAreaEntry = tileAreaEntryGO.GetComponent<EditorTileAreaEntry>().WithTileAreaComponent();
 
         TileAreaEntries.Add(tileAreaEntry);
 

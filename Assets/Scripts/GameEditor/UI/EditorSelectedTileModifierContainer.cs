@@ -78,6 +78,12 @@ public abstract class EditorSelectedTileModifierContainer : MonoBehaviour
     {
         CurrentlyAvailableTileModifiers.Clear();
 
+        if (EditorModificationPanelContainer.Instance.SelectedPanel is IEditorTileModificationPanel)
+        {
+            IEditorTileModificationPanel selectedPanel = EditorModificationPanelContainer.Instance.SelectedPanel as IEditorTileModificationPanel;
+            selectedPanel.DestroyModifierActions();
+        }
+
         if (mainTileModifierCategory is EditorMazeTileGroundModifierCategory || mainTileModifierCategory is EditorOverworldTileGroundModifierCategory)
         {
             Logger.Log("SetCurrentlyAvailableModifiers for ground");

@@ -7,6 +7,9 @@ public class MazeLevel : IGameScene<Tile>
     protected List<Tile> _tiles = new List<Tile>();
     public List<Tile> Tiles { get => _tiles; set => _tiles = value; }
 
+    protected List<TileArea> _tileAreas = new List<TileArea>();
+    public List<TileArea> TileAreas { get => _tileAreas; set => _tileAreas = value; }
+
     protected GridLocation _levelBounds = new GridLocation(0, 0);
     public GridLocation LevelBounds { get => _levelBounds; set => _levelBounds = value; }
 
@@ -15,7 +18,8 @@ public class MazeLevel : IGameScene<Tile>
 
     public List<PlayerExit> MazeExits = new List<PlayerExit>();
 
-    private Dictionary<PlayerNumber, CharacterSpawnpoint> _playerCharacterSpawnpoints = new Dictionary<PlayerNumber, CharacterSpawnpoint>();
+
+private Dictionary<PlayerNumber, CharacterSpawnpoint> _playerCharacterSpawnpoints = new Dictionary<PlayerNumber, CharacterSpawnpoint>();
     public Dictionary<PlayerNumber, CharacterSpawnpoint> PlayerCharacterSpawnpoints { get => _playerCharacterSpawnpoints; set => _playerCharacterSpawnpoints = value;}
 
     public List<CharacterSpawnpoint> EnemyCharacterSpawnpoints = new List<CharacterSpawnpoint>();

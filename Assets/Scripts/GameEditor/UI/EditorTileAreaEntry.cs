@@ -1,12 +1,8 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class EditorTileAreaEntry : MonoBehaviour
 {
-
-
     [SerializeField] private Text _tileAreaEntryNameText;
     [SerializeField] private GameObject _textAreaEntryNameGO;
     [SerializeField] private Image _textAreaEntrySelectionImage;
@@ -15,6 +11,8 @@ public class EditorTileAreaEntry : MonoBehaviour
     
     [SerializeField] private GameObject _saveNewNameButton;
     [SerializeField] private GameObject _editNameButton;
+
+    private TileArea _tileArea;
 
     private bool _isSelected = false;
 
@@ -34,6 +32,13 @@ public class EditorTileAreaEntry : MonoBehaviour
         _editNameButton.SetActive(true);
     }
 
+    public EditorTileAreaEntry WithTileAreaComponent()
+    {
+        _tileArea = new TileArea("New area");
+        GameManager.Instance.CurrentEditorLevel.TileAreas.Add(_tileArea);
+        return this;
+    }
+
     public void EditName()
     {
         _tileAreaEntryInputField.text = _tileAreaEntryNameText.text;
@@ -46,13 +51,20 @@ public class EditorTileAreaEntry : MonoBehaviour
         _tileAreaEntryInputField.ActivateInputField();
     }
 
+    public void SetName(string name)
+    {
+        _tileAreaEntryNameText.text = name;
+    }
+
     public void SaveNewName()
     {
-        _tileAreaEntryNameText.text = _tileAreaEntryInputField.text;
+        SetName(_tileAreaEntryInputField.text);
         _tileAreaEntryInputField.gameObject.SetActive(false);
         _textAreaEntryNameGO.SetActive(true);
         _saveNewNameButton.SetActive(false);
         _editNameButton.SetActive(true);
+
+        _tileArea.UpdateName(_tileAreaEntryNameText.text);
     }
 
     public void Delete()
@@ -60,6 +72,8 @@ public class EditorTileAreaEntry : MonoBehaviour
         TileAreaActionHandler.Instance.DeselectTileAreaEntry(this);
 
         TileAreaActionHandler.Instance.TileAreaEntries.Remove(this);
+
+        GameManager.Instance.CurrentEditorLevel.TileAreas.Remove(_tileArea);
 
         GameObject.Destroy(gameObject);
         GameObject.Destroy(this);

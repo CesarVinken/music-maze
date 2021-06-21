@@ -7,6 +7,9 @@ public class Overworld : IGameScene<Tile>
     protected  List<Tile> _tiles = new List<Tile>(); 
     public List<Tile> Tiles { get => _tiles; set => _tiles = value; }
 
+    protected List<TileArea> _tileAreas = new List<TileArea>();
+    public List<TileArea> TileAreas { get => _tileAreas; set => _tileAreas = value; }
+
     public List<MazeLevelEntry> MazeEntries = new List<MazeLevelEntry>();
 
     protected GridLocation _levelBounds = new GridLocation(0, 0);
@@ -19,5 +22,4 @@ public class Overworld : IGameScene<Tile>
     public Dictionary<PlayerNumber, CharacterSpawnpoint> PlayerCharacterSpawnpoints { get => _playerCharacterSpawnpoints; set => _playerCharacterSpawnpoints = value; }
 
     protected GameObject _overworldContainer;
-
 }
