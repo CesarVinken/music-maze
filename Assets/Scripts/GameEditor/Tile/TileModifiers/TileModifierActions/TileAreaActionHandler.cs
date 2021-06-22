@@ -25,6 +25,11 @@ public class TileAreaActionHandler : MonoBehaviour
         LoadExistingTileAreas();
     }
 
+    public void OnDestroy()
+    {
+        DeselectTileAreaEntry(SelectedTileAreaEntry);
+    }
+
     public void LoadExistingTileAreas()
     {
         List<TileArea> existingTileAreas = GameManager.Instance.CurrentEditorLevel.TileAreas;
@@ -66,14 +71,37 @@ public class TileAreaActionHandler : MonoBehaviour
 
         SelectedTileAreaEntry = tileAreaEntry;
         tileAreaEntry.Select();
+
+        for (int i = 0; i < GameManager.Instance.CurrentEditorLevel.Tiles.Count; i++)
+        {
+            if(PersistentGameManager.CurrentSceneType == SceneType.Maze)
+            {
+                EditorMazeTile tile = GameManager.Instance.CurrentEditorLevel.Tiles[i] as EditorMazeTile;
+
+                if (tile.GetTileArea(tileAreaEntry.TileArea) != null)
+                {
+                    tile.SetTileOverlayImage(TileOverlayMode.Blue);
+                }
+            }
+        }
+        
     }
 
     public void DeselectTileAreaEntry(EditorTileAreaEntry tileAreaEntry)
     {
-        if(SelectedTileAreaEntry != null && SelectedTileAreaEntry == tileAreaEntry)
+        if (SelectedTileAreaEntry != null && SelectedTileAreaEntry == tileAreaEntry)
         {
             SelectedTileAreaEntry = null;
             tileAreaEntry.Deselect();
+
+            for (int i = 0; i < GameManager.Instance.CurrentEditorLevel.Tiles.Count; i++)
+            {
+                if (PersistentGameManager.CurrentSceneType == SceneType.Maze)
+                {
+                    EditorMazeTile tile = GameManager.Instance.CurrentEditorLevel.Tiles[i] as EditorMazeTile;
+                    tile.SetTileOverlayImage(TileOverlayMode.Empty);
+                }    
+            }
         }
     }
 }

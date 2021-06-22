@@ -184,7 +184,7 @@ public class MazeLevelGameplayManager : MonoBehaviour, IOnEventCallback, IGamepl
     {
         for (int i = 0; i < EditorLevel.Tiles.Count; i++)
         {
-            EditorMazeTile tile = EditorLevel.Tiles[i];
+            EditorMazeTile tile = EditorLevel.Tiles[i] as EditorMazeTile;
             tile.InitialiseTileAttributes();
         }
     }
@@ -193,7 +193,7 @@ public class MazeLevelGameplayManager : MonoBehaviour, IOnEventCallback, IGamepl
     {
         for (int i = 0; i < EditorLevel.Tiles.Count; i++)
         {
-            EditorMazeTile tile = EditorLevel.Tiles[i];
+            EditorMazeTile tile = EditorLevel.Tiles[i] as EditorMazeTile;
             tile.InitialiseTileBackgrounds();
         }
     }

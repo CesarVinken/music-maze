@@ -4,8 +4,8 @@ using UnityEngine;
 
 public class EditorMazeLevel : MazeLevel, IEditorLevel
 {
-    private List<EditorMazeTile> _tiles = new List<EditorMazeTile>();
-    public new List<EditorMazeTile> Tiles { get => _tiles; set => _tiles = value; }
+    //private new List<EditorMazeTile> _tiles = new List<EditorMazeTile>();
+    //public new List<EditorMazeTile> Tiles { get => _tiles; set => _tiles = value; }
 
     public EditorMazeLevel()
     {
@@ -94,7 +94,7 @@ public class EditorMazeLevel : MazeLevel, IEditorLevel
         {
             for (int i = 0; i < Tiles.Count; i++)
             {
-                EditorMazeTile tile = Tiles[i];
+                EditorMazeTile tile = Tiles[i] as EditorMazeTile;
                 if(item.Key.X == tile.GridLocation.X && item.Key.Y == tile.GridLocation.Y)
                 {
                     tile.BeautificationTriggerers = item.Value;
@@ -104,7 +104,7 @@ public class EditorMazeLevel : MazeLevel, IEditorLevel
 
         for (int k = 0; k < Tiles.Count; k++)
         {
-            EditorMazeTile tile = Tiles[k];
+            EditorMazeTile tile = Tiles[k] as EditorMazeTile;
             tile.AddNeighbours(this);
         }
 
@@ -225,9 +225,10 @@ public class EditorMazeLevel : MazeLevel, IEditorLevel
 
         for (int i = 0; i < Tiles.Count; i++)
         {
-            if (Tiles[i].BeautificationTriggerers.Contains(transformationTriggererTile))
+            EditorMazeTile tile = Tiles[i] as EditorMazeTile;
+            if (tile.BeautificationTriggerers.Contains(transformationTriggererTile))
             {
-                tilesToTransform.Add(Tiles[i]);
+                tilesToTransform.Add(tile);
             }
         }
 
@@ -255,7 +256,7 @@ public class EditorMazeLevel : MazeLevel, IEditorLevel
     {
         for (int i = 0; i < Tiles.Count; i++)
         {
-            EditorMazeTile tile = Tiles[i];
+            EditorMazeTile tile = Tiles[i] as EditorMazeTile;
             List<BridgeEdge> bridgeEdges = tile.GetBridgeEdges();
             for (int j = 0; j < bridgeEdges.Count; j++)
             {

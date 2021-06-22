@@ -7,6 +7,7 @@ public class MazeLevelData
 {
     public string Name = "";
     public List<SerialisableTile> Tiles = new List<SerialisableTile>();
+    public List<SerialisableTileArea> TileAreas = new List<SerialisableTileArea>();
 
     public MazeLevelData()
     {
@@ -19,6 +20,12 @@ public class MazeLevelData
         {
             SerialisableTile tile = new SerialisableTile(level.Tiles[i]);
             Tiles.Add(tile);
+        }
+
+        for (int j = 0; j < level.TileAreas.Count; j++)
+        {
+            SerialisableTileArea tileArea = new SerialisableTileArea(level.TileAreas[j]);
+            TileAreas.Add(tileArea);
         }
     }
 

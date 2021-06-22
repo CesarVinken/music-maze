@@ -9,13 +9,11 @@ public class EditorMazeTile : MazeTile
 
     public List<EditorMazeTile> BeautificationTriggerers = new List<EditorMazeTile>(); // used in the editor for non-markable tiles and lists their triggerer.
 
-
-
     public void RemoveTileAsBeautificationTrigger()
     {
         for (int i = 0; i < MazeLevelGameplayManager.Instance.EditorLevel.Tiles.Count; i++)
         {
-            EditorMazeTile tile = MazeLevelGameplayManager.Instance.EditorLevel.Tiles[i];
+            EditorMazeTile tile = MazeLevelGameplayManager.Instance.EditorLevel.Tiles[i] as EditorMazeTile;
             if (tile.BeautificationTriggerers.Contains(this))
             {
                 tile.BeautificationTriggerers.Remove(this);

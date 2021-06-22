@@ -12,7 +12,7 @@ public class MazeTileTransformationMapper
 
         for (int i = 0; i < MazeLevelGameplayManager.Instance.EditorLevel.Tiles.Count; i++)
         {
-            EditorMazeTile tile = MazeLevelGameplayManager.Instance.EditorLevel.Tiles[i];
+            EditorMazeTile tile = MazeLevelGameplayManager.Instance.EditorLevel.Tiles[i] as EditorMazeTile;
             if (tile.Markable || tile.GetAttributes().OfType<PlayerSpawnpoint>().Any()) continue;
 
             tile.BeautificationTriggerers.Clear();

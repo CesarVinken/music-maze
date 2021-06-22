@@ -10,6 +10,7 @@ public class SerialisableTile
     public List<SerialisableTileAttribute> TileAttributes;
     public List<SerialisableTileBackground> TileBackgrounds;
     public List<SerialisableTileCornerFiller> TileCornerFillers;
+    public List<string> TileAreaIds;
 
     public SerialisableGridLocation GridLocation;
 
@@ -22,6 +23,7 @@ public class SerialisableTile
         TileAttributes = SerialiseTileAttributes(tile);
         TileBackgrounds = SerialiseTileBackgrounds(tile);
         TileCornerFillers = SerialiseTileCornerFillers(tile);
+        TileAreaIds = SerialiseTileAreaIds(tile);
 
         GridLocation = new SerialisableGridLocation(tile.GridLocation.X, tile.GridLocation.Y);
 
@@ -101,6 +103,19 @@ public class SerialisableTile
         }
 
         return tileCornerFillers;
+    }
+
+    private List<string> SerialiseTileAreaIds(Tile tile)
+    {
+        List<string> tileAreaIds = new List<string>();
+        List<TileArea> tileAreas = tile.GetTileAreas();
+
+        for (int i = 0; i < tileAreas.Count; i++)
+        {
+            tileAreaIds.Add(tileAreas[i].Id);
+        }
+
+        return tileAreaIds;
     }
 
     private List<SerialisableGridLocation> SerialiseTilesToTransform(List<EditorMazeTile> tilesToTransform)

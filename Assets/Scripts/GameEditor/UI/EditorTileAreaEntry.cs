@@ -12,7 +12,7 @@ public class EditorTileAreaEntry : MonoBehaviour
     [SerializeField] private GameObject _saveNewNameButton;
     [SerializeField] private GameObject _editNameButton;
 
-    private TileArea _tileArea;
+    public TileArea TileArea { get; private set; }
 
     private bool _isSelected = false;
 
@@ -34,8 +34,8 @@ public class EditorTileAreaEntry : MonoBehaviour
 
     public EditorTileAreaEntry WithTileAreaComponent()
     {
-        _tileArea = new TileArea("New area");
-        GameManager.Instance.CurrentEditorLevel.TileAreas.Add(_tileArea);
+        TileArea = new TileArea("New area");
+        GameManager.Instance.CurrentEditorLevel.TileAreas.Add(TileArea);
         return this;
     }
 
@@ -64,7 +64,7 @@ public class EditorTileAreaEntry : MonoBehaviour
         _saveNewNameButton.SetActive(false);
         _editNameButton.SetActive(true);
 
-        _tileArea.UpdateName(_tileAreaEntryNameText.text);
+        TileArea.UpdateName(_tileAreaEntryNameText.text);
     }
 
     public void Delete()
@@ -73,7 +73,7 @@ public class EditorTileAreaEntry : MonoBehaviour
 
         TileAreaActionHandler.Instance.TileAreaEntries.Remove(this);
 
-        GameManager.Instance.CurrentEditorLevel.TileAreas.Remove(_tileArea);
+        GameManager.Instance.CurrentEditorLevel.TileAreas.Remove(TileArea);
 
         GameObject.Destroy(gameObject);
         GameObject.Destroy(this);

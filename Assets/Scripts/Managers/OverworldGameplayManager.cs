@@ -127,7 +127,7 @@ public class OverworldGameplayManager : MonoBehaviour, IOnEventCallback, IGamepl
     {
         for (int i = 0; i < EditorOverworld.Tiles.Count; i++)
         {
-            EditorOverworldTile tile = EditorOverworld.Tiles[i];
+            EditorOverworldTile tile = EditorOverworld.Tiles[i] as EditorOverworldTile;
             tile.InitialiseTileAttributes();
         }
     }
@@ -136,7 +136,7 @@ public class OverworldGameplayManager : MonoBehaviour, IOnEventCallback, IGamepl
     {
         for (int i = 0; i < EditorOverworld.Tiles.Count; i++)
         {
-            EditorOverworldTile tile = EditorOverworld.Tiles[i];
+            EditorOverworldTile tile = EditorOverworld.Tiles[i] as EditorOverworldTile;
             tile.InitialiseTileBackgrounds();
         }
     }

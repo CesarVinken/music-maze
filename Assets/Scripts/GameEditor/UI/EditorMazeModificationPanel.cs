@@ -321,7 +321,7 @@ public class EditorMazeModificationPanel : EditorGridModificationPanel
     {
         for (int i = 0; i < MazeLevelGameplayManager.Instance.EditorLevel.Tiles.Count; i++)
         {
-            EditorMazeTile tile = MazeLevelGameplayManager.Instance.EditorLevel.Tiles[i];
+            EditorMazeTile tile = MazeLevelGameplayManager.Instance.EditorLevel.Tiles[i] as EditorMazeTile;
 
             if(!tile.Markable && tile.BeautificationTriggerers.Count == 0)
             {

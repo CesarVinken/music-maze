@@ -4,8 +4,8 @@ using UnityEngine;
 
 public class EditorOverworld : Overworld, IEditorLevel
 {
-    private List<EditorOverworldTile> _tiles = new List<EditorOverworldTile>();
-    public new List<EditorOverworldTile> Tiles { get => _tiles; set => _tiles = value; }
+    //private new List<EditorOverworldTile> _tiles = new List<EditorOverworldTile>();
+    //public new List<EditorOverworldTile> Tiles { get => _tiles; set => _tiles = value; }
 
     public List<string> MazeLevelNames = new List<string>();
     
@@ -75,7 +75,7 @@ public class EditorOverworld : Overworld, IEditorLevel
 
         for (int k = 0; k < Tiles.Count; k++)
         {
-            EditorOverworldTile tile = Tiles[k];
+            EditorOverworldTile tile = Tiles[k] as EditorOverworldTile;
             tile.AddNeighbours(this);
         }
     }

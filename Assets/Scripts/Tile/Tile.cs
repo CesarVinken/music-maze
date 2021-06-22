@@ -26,6 +26,7 @@ public abstract class Tile : MonoBehaviour
     protected List<ITileAttribute> _tileAttributes = new List<ITileAttribute>();
     protected List<ITileBackground> _tileBackgrounds = new List<ITileBackground>();
     protected List<TileCornerFiller> _tileCornerFillers = new List<TileCornerFiller>();
+    protected List<TileArea> _tileAreas = new List<TileArea>();
 
     public PathNode PathNode;
 
@@ -34,7 +35,6 @@ public abstract class Tile : MonoBehaviour
     public void Awake()
     {
         Guard.CheckIsNull(BackgroundsContainer, "BackgroundsContainer", gameObject);
-        //Guard.CheckIsNull(PathNode, "PathNode", gameObject);
 
         if (transform.position.y < 0) Logger.Error("There is a tile at {0},{1}. Tiles cannot have negative Y values", transform.position.x, transform.position.y);
 
@@ -117,6 +117,36 @@ public abstract class Tile : MonoBehaviour
     public List<TileCornerFiller> GetCornerFillers()
     {
         return _tileCornerFillers;
+    }
+
+    public void AddTileArea(TileArea tileArea)
+    {
+        _tileAreas.Add(tileArea);
+    }
+
+    public TileArea GetTileArea(TileArea tileArea)
+    {
+        List<TileArea> tileAreas = GetTileAreas();
+
+        for (int i = 0; i < tileAreas.Count; i++)
+        {
+            if (tileAreas[i] == tileArea)
+            {
+                return tileAreas[i];
+            }
+        }
+        return null;
+    }
+
+
+    public List<TileArea> GetTileAreas()
+    {
+        return _tileAreas;
+    }
+
+    public void RemoveTileArea(TileArea tileArea)
+    {
+        _tileAreas.Remove(tileArea);
     }
 
     public void RemoveBackground(ITileBackground tileBackground)

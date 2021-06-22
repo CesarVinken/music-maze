@@ -22,9 +22,29 @@ public class EditorMazeTileTileAreaModifier : EditorTileAreaModifier
         GameObject.Instantiate(EditorCanvasUI.Instance.HandleTileAreaPrefab, EditorMazeTileModificationPanel.Instance.TileModifierActionsContainer);
     }
 
-
-    public override void SetSelectedTile()
+    public override void SetSelectedTile<T>(T tile)
     {
-        throw new System.NotImplementedException();
+        SetSelectedTile(tile as EditorMazeTile);
+    }
+
+    public void SetSelectedTile(EditorMazeTile tile)
+    {
+        TileArea selectedTileArea = TileAreaActionHandler.Instance.SelectedTileAreaEntry?.TileArea;
+
+        if(selectedTileArea == null)
+        {
+            return;
+        }
+
+        if(tile.GetTileArea(selectedTileArea) == null)
+        {
+            tile.SetTileOverlayImage(TileOverlayMode.Blue);
+            tile.AddTileArea(selectedTileArea);
+        }
+        else
+        {
+            tile.SetTileOverlayImage(TileOverlayMode.Empty);
+            tile.RemoveTileArea(selectedTileArea);
+        }
     }
 }

@@ -26,6 +26,8 @@ public class EditorMazeTileBeautificationTriggerer : EditorMazeTileTransformatio
         }
     }
 
+
+
     public void SetSelectedTile(EditorMazeTile tile)
     {
         if (SelectedTile != null)

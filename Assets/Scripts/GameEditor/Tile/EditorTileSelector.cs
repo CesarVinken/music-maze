@@ -239,7 +239,9 @@ public class EditorTileSelector : MonoBehaviour
 
     private void AddToSelectedArea(Tile tile, EditorTileAreaModifier areaModifier)
     {
-        Logger.Log("TO BE IMPLEMENTED");
+        if (areaModifier == null) Logger.Error($"Could not find the areaModifier type {areaModifier.GetType()}");
+
+        areaModifier.SetSelectedTile(tile);
     }
 
     private void PerformDeletionAction()
