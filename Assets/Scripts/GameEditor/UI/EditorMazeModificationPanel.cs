@@ -144,6 +144,7 @@ public class EditorMazeModificationPanel : EditorGridModificationPanel
 
     public void LoadMaze()
     {
+        Logger.Log("Load maze (in editor)");
         if (string.IsNullOrWhiteSpace(_mazeName))
         {
             Logger.Warning(Logger.Datawriting, "In order to save the maze level, please fill in a maze name");
@@ -157,8 +158,14 @@ public class EditorMazeModificationPanel : EditorGridModificationPanel
             MazeLevelGameplayManager.Instance.UnloadLevel();
 
             MazeLevelData mazeLevelData = MazeLevelLoader.LoadMazeLevelData(_mazeName);
-            MazeLevelLoader.LoadMazeLevelForEditor(mazeLevelData);
+            MazeLevelLoader.LoadMazeLevelForEditor(mazeLevelData); 
         }
+
+        EditorSelectedMazeTileModifierContainer selectedTileModifierContainer = EditorCanvasUI.Instance.SelectedTileModifierContainer as EditorSelectedMazeTileModifierContainer;
+        selectedTileModifierContainer?.SetInitialModifierValues();
+
+        EditorMazeTileModificationPanel.Instance?.Reset();
+        EditorMazeTileModificationPanel.Instance?.DestroyModifierActions();
     }
 
     private void AddMazeToMazeList()

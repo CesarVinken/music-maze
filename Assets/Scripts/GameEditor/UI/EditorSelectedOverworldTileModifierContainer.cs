@@ -11,7 +11,7 @@ public class EditorSelectedOverworldTileModifierContainer : EditorSelectedTileMo
 
         EditorCanvasUI.Instance.SelectedTileModifierContainer = this;
 
-        Reset();
+        ResetLists();
 
         _editorTileAttributeSelector = new EditorTileAttributeSelector(this);
         _editorTileBackgroundSelector = new EditorTileBackgroundSelector(this);
@@ -88,7 +88,7 @@ public class EditorSelectedOverworldTileModifierContainer : EditorSelectedTileMo
         }
     }
 
-    private void SetInitialModifierValues()
+    public void SetInitialModifierValues()
     {
         EditorManager.SelectedTileMainModifierCategoryIndex = 0;
         EditorCanvasUI.Instance.SelectedTileModifierContainer.SetCurrentlyAvailableModifierCategories(new EditorOverworldTileGroundModifierCategory());

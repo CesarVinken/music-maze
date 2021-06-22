@@ -6,11 +6,6 @@ public class EditorMazeTileTileAreaModifier : EditorTileAreaModifier
 
     public override Sprite Sprite { get; set; }
 
-    public override void DestroyModifierActions()
-    {
-        throw new System.NotImplementedException();
-    }
-
     public override Sprite GetSprite()
     {
         return EditorCanvasUI.Instance.DefaultIcon;
@@ -29,6 +24,7 @@ public class EditorMazeTileTileAreaModifier : EditorTileAreaModifier
 
     public void SetSelectedTile(EditorMazeTile tile)
     {
+        Logger.Log("Set selected tile");
         TileArea selectedTileArea = TileAreaActionHandler.Instance.SelectedTileAreaEntry?.TileArea;
 
         if(selectedTileArea == null)
@@ -38,11 +34,13 @@ public class EditorMazeTileTileAreaModifier : EditorTileAreaModifier
 
         if(tile.GetTileArea(selectedTileArea) == null)
         {
+            Logger.Log("set selected tile. Overlay mode blue");
             tile.SetTileOverlayImage(TileOverlayMode.Blue);
             tile.AddTileArea(selectedTileArea);
         }
         else
         {
+            Logger.Log("unset selected tile. Overlay mode Empty");
             tile.SetTileOverlayImage(TileOverlayMode.Empty);
             tile.RemoveTileArea(selectedTileArea);
         }

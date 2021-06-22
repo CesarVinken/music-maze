@@ -121,6 +121,7 @@ public class MazeLevelGameplayManager : MonoBehaviour, IOnEventCallback, IGamepl
     {
         EditorLevel = EditorMazeLevel.Create(mazeLevelData);
 
+
         InitialiseEditorTileBackgrounds();
         InitialiseEditorTileAttributes();
 

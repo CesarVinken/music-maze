@@ -61,7 +61,7 @@ public class EditorOverworldModificationPanel : EditorGridModificationPanel
 
     public void LoadOverworld()
     {
-        Logger.Log("Load overworld");
+        Logger.Log("Load overworld (in editor)");
         if (string.IsNullOrWhiteSpace(_overworldName))
         {
             Logger.Warning(Logger.Datawriting, "In order to save the overworld, please fill in an overworld name");
@@ -75,6 +75,12 @@ public class EditorOverworldModificationPanel : EditorGridModificationPanel
             OverworldData overworldData = OverworldLoader.LoadOverworldData(_overworldName);
             OverworldLoader.LoadOverworldForEditor(overworldData);
         }
+
+        EditorSelectedOverworldTileModifierContainer selectedTileModifierContainer = EditorCanvasUI.Instance.SelectedTileModifierContainer as EditorSelectedOverworldTileModifierContainer;
+        selectedTileModifierContainer.SetInitialModifierValues();
+
+        EditorOverworldTileModificationPanel.Instance?.Reset();
+        EditorOverworldTileModificationPanel.Instance?.DestroyModifierActions();
     }
 
     public void SetOverworldName(string input)

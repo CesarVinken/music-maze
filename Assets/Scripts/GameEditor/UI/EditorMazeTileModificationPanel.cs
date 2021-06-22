@@ -44,6 +44,18 @@ public class EditorMazeTileModificationPanel : MonoBehaviour, IEditorTileModific
         gameObject.SetActive(false);
     }
 
+    public void Reset()
+    {
+        _selectedMainMaterialDropdown.value = 0;
+
+        EditorTileMainModifierCategory mainModifierCategory = EditorTileMainModifierCategories[0];
+        Logger.Warning("New Dropdown Value : " + mainModifierCategory.Name);
+
+        EditorManager.SelectedTileMainModifierCategoryIndex = 0;
+
+        EditorCanvasUI.Instance.SelectedTileModifierContainer.SetCurrentlyAvailableModifierCategories(mainModifierCategory);
+    }
+
     public void DestroyModifierActions()
     {
         foreach (Transform action in TileModifierActionsContainer)

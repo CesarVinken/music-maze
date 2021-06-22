@@ -22,10 +22,10 @@ public class MazeLevelData
             Tiles.Add(tile);
         }
 
-        for (int j = 0; j < level.TileAreas.Count; j++)
+        foreach (KeyValuePair<string, TileArea> item in level.TileAreas)
         {
-            SerialisableTileArea tileArea = new SerialisableTileArea(level.TileAreas[j]);
-            TileAreas.Add(tileArea);
+            SerialisableTileArea tileArea = new SerialisableTileArea(item.Value);
+            TileAreas.Add(tileArea);        
         }
     }
 

@@ -11,7 +11,7 @@ public class EditorSelectedMazeTileModifierContainer : EditorSelectedTileModifie
 
         EditorCanvasUI.Instance.SelectedTileModifierContainer = this;
 
-        Reset();
+        ResetLists();
 
         _editorTileAttributeSelector = new EditorTileAttributeSelector(this);
         _editorTileBackgroundSelector = new EditorTileBackgroundSelector(this);
@@ -118,9 +118,8 @@ public class EditorSelectedMazeTileModifierContainer : EditorSelectedTileModifie
         }
     }
 
-    private void SetInitialModifierValues()
+    public void SetInitialModifierValues()
     {
-        Logger.Log("Set initial value");
         EditorManager.SelectedTileMainModifierCategoryIndex = 0;
         EditorCanvasUI.Instance.SelectedTileModifierContainer.SetCurrentlyAvailableModifierCategories(new EditorMazeTileGroundModifierCategory());
 

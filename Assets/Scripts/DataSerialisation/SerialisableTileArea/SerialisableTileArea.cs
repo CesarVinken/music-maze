@@ -1,3 +1,6 @@
+using System;
+
+[Serializable]
 public class SerialisableTileArea
 {
     public string Id;

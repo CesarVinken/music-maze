@@ -20,9 +20,9 @@ public class OverworldData
             Tiles.Add(tile);
         }
 
-        for (int j = 0; j < overworld.TileAreas.Count; j++)
+        foreach (KeyValuePair<string, TileArea> item in overworld.TileAreas)
         {
-            SerialisableTileArea tileArea = new SerialisableTileArea(overworld.TileAreas[j]);
+            SerialisableTileArea tileArea = new SerialisableTileArea(item.Value);
             TileAreas.Add(tileArea);
         }
     }

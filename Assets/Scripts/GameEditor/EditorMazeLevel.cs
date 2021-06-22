@@ -4,9 +4,6 @@ using UnityEngine;
 
 public class EditorMazeLevel : MazeLevel, IEditorLevel
 {
-    //private new List<EditorMazeTile> _tiles = new List<EditorMazeTile>();
-    //public new List<EditorMazeTile> Tiles { get => _tiles; set => _tiles = value; }
-
     public EditorMazeLevel()
     {
 
@@ -30,6 +27,7 @@ public class EditorMazeLevel : MazeLevel, IEditorLevel
         _mazeContainer.AddComponent<TilesContainer>();
         _mazeContainer.SetActive(true);
 
+        InitialiseEditorTileAreas(mazeLevelData);
         BuildTiles(mazeLevelData);
     }
 
@@ -37,6 +35,15 @@ public class EditorMazeLevel : MazeLevel, IEditorLevel
     {
         Logger.Log(Logger.Initialisation, $"Set up new Maze Level '<color={ConsoleConfiguration.HighlightColour}>{mazeLevelData.Name}</color>'");
         return new EditorMazeLevel(mazeLevelData);
+    }
+
+    private void InitialiseEditorTileAreas(MazeLevelData mazeLevelData)
+    {
+        for (int i = 0; i < mazeLevelData.TileAreas.Count; i++)
+        {
+            SerialisableTileArea serialisableTileArea = mazeLevelData.TileAreas[i];
+            TileAreas[serialisableTileArea.Id] = new TileArea(serialisableTileArea);
+        }
     }
 
     public void BuildTiles(MazeLevelData mazeLevelData)
@@ -61,6 +68,7 @@ public class EditorMazeLevel : MazeLevel, IEditorLevel
             AddTileAttributes(serialisableTile, tile);
             AddBackgroundSprites(serialisableTile, tile);
             AddCornerFillers(serialisableTile, tile);
+            AddTileAreas(serialisableTile, tile);
 
             TilesByLocation.Add(tile.GridLocation, tile);
 
@@ -111,7 +119,7 @@ public class EditorMazeLevel : MazeLevel, IEditorLevel
         ConnectBridgeEdgesToTheirBridgePieces();
     }
 
-    public void AddTileAttributes(SerialisableTile serialisableTile, EditorMazeTile tile)
+    private void AddTileAttributes(SerialisableTile serialisableTile, EditorMazeTile tile)
     {
         EditorMazeTileAttributePlacer tileAttributePlacer = new EditorMazeTileAttributePlacer(tile);
 
@@ -172,7 +180,7 @@ public class EditorMazeLevel : MazeLevel, IEditorLevel
         }
     }
 
-    public void AddBackgroundSprites(SerialisableTile serialisableTile, EditorMazeTile tile)
+    private void AddBackgroundSprites(SerialisableTile serialisableTile, EditorMazeTile tile)
     {
         EditorMazeTileBackgroundPlacer tileBackgroundPlacer = new EditorMazeTileBackgroundPlacer(tile);
 
@@ -291,6 +299,19 @@ public class EditorMazeLevel : MazeLevel, IEditorLevel
                     }
                     bridgeEdges[j].WithBridgePieceConnection(bridgePiece);
                 }
+            }
+        }
+    }
+
+    private void AddTileAreas(SerialisableTile serialisableTile, EditorMazeTile tile)
+    {
+        for (int i = 0; i < serialisableTile.TileAreaIds?.Count; i++)
+        {
+            string tileAreaId = serialisableTile.TileAreaIds[i];
+
+            if(TileAreas.TryGetValue(tileAreaId, out TileArea tileArea))
+            {
+                tile.AddTileArea(tileArea);
             }
         }
     }

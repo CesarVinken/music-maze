@@ -64,7 +64,7 @@ public abstract class EditorSelectedTileModifierContainer : MonoBehaviour
         }
     }
 
-    public void Reset()
+    public void ResetLists()
     {
         EditorTileAttributes.Clear();
         EditorTileBackgrounds.Clear();

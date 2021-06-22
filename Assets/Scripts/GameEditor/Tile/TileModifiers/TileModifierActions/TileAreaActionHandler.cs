@@ -32,14 +32,14 @@ public class TileAreaActionHandler : MonoBehaviour
 
     public void LoadExistingTileAreas()
     {
-        List<TileArea> existingTileAreas = GameManager.Instance.CurrentEditorLevel.TileAreas;
+        Dictionary<string, TileArea> existingTileAreas = GameManager.Instance.CurrentEditorLevel.TileAreas;
 
-        for (int i = 0; i < existingTileAreas.Count; i++)
+        foreach (KeyValuePair<string, TileArea> item in existingTileAreas)
         {
             GameObject tileAreaEntryGO = GameObject.Instantiate(TileAreaEntryPrefab, TileAreaContainer);
-            EditorTileAreaEntry tileAreaEntry = tileAreaEntryGO.GetComponent<EditorTileAreaEntry>();
-            tileAreaEntry.SetName(existingTileAreas[i].Name);
+            EditorTileAreaEntry tileAreaEntry = tileAreaEntryGO.GetComponent<EditorTileAreaEntry>().WithTileAreaComponent(item.Value);
 
+            tileAreaEntry.SetName(item.Value.Name);
             TileAreaEntries.Add(tileAreaEntry);
         }
     }
@@ -47,7 +47,7 @@ public class TileAreaActionHandler : MonoBehaviour
     public void CreateNewTileAreaEntry()
     {
         GameObject tileAreaEntryGO = GameObject.Instantiate(TileAreaEntryPrefab, TileAreaContainer);
-        EditorTileAreaEntry tileAreaEntry = tileAreaEntryGO.GetComponent<EditorTileAreaEntry>().WithTileAreaComponent();
+        EditorTileAreaEntry tileAreaEntry = tileAreaEntryGO.GetComponent<EditorTileAreaEntry>().WithNewTileAreaComponent();
 
         TileAreaEntries.Add(tileAreaEntry);
 
@@ -72,6 +72,7 @@ public class TileAreaActionHandler : MonoBehaviour
         SelectedTileAreaEntry = tileAreaEntry;
         tileAreaEntry.Select();
 
+        // show all tiles that are already part of this area with a blue overlay
         for (int i = 0; i < GameManager.Instance.CurrentEditorLevel.Tiles.Count; i++)
         {
             if(PersistentGameManager.CurrentSceneType == SceneType.Maze)

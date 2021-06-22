@@ -7,8 +7,8 @@ public class Overworld : IGameScene<Tile>
     protected  List<Tile> _tiles = new List<Tile>(); 
     public List<Tile> Tiles { get => _tiles; set => _tiles = value; }
 
-    protected List<TileArea> _tileAreas = new List<TileArea>();
-    public List<TileArea> TileAreas { get => _tileAreas; set => _tileAreas = value; }
+    protected Dictionary<string, TileArea> _tileAreas = new Dictionary<string, TileArea>();
+    public Dictionary<string, TileArea> TileAreas { get => _tileAreas; set => _tileAreas = value; }
 
     public List<MazeLevelEntry> MazeEntries = new List<MazeLevelEntry>();
 

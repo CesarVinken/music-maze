@@ -7,14 +7,20 @@ public class TileArea
     public string Id { get; private set; }
     public List<Tile> Tiles = new List<Tile>();
 
-    public TileArea(string name)
+    public TileArea(string tileAreaName)
     {
-        Name = name;
+        Name = tileAreaName;
         Id = Guid.NewGuid().ToString();
     }
 
-    public void UpdateName(string name)
+    public TileArea(SerialisableTileArea serialisableTileArea)
     {
-        Name = name;
+        Name = serialisableTileArea.Name;
+        Id = serialisableTileArea.Id;
+    }
+
+    public void UpdateName(string tileAreaName)
+    {
+        Name = tileAreaName;
     }
 }

@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -32,10 +33,17 @@ public class EditorTileAreaEntry : MonoBehaviour
         _editNameButton.SetActive(true);
     }
 
-    public EditorTileAreaEntry WithTileAreaComponent()
-    {
+    public EditorTileAreaEntry WithNewTileAreaComponent()
+    {    
         TileArea = new TileArea("New area");
-        GameManager.Instance.CurrentEditorLevel.TileAreas.Add(TileArea);
+        GameManager.Instance.CurrentEditorLevel.TileAreas.Add(TileArea.Id, TileArea);
+
+        return this;
+    }
+
+    public EditorTileAreaEntry WithTileAreaComponent(TileArea tileArea)
+    {
+        TileArea = tileArea;
         return this;
     }
 
@@ -58,13 +66,15 @@ public class EditorTileAreaEntry : MonoBehaviour
 
     public void SaveNewName()
     {
-        SetName(_tileAreaEntryInputField.text);
+        string newName = _tileAreaEntryInputField.text;
+        SetName(newName);
+
         _tileAreaEntryInputField.gameObject.SetActive(false);
         _textAreaEntryNameGO.SetActive(true);
         _saveNewNameButton.SetActive(false);
         _editNameButton.SetActive(true);
 
-        TileArea.UpdateName(_tileAreaEntryNameText.text);
+        TileArea.UpdateName(newName);
     }
 
     public void Delete()
@@ -73,7 +83,7 @@ public class EditorTileAreaEntry : MonoBehaviour
 
         TileAreaActionHandler.Instance.TileAreaEntries.Remove(this);
 
-        GameManager.Instance.CurrentEditorLevel.TileAreas.Remove(TileArea);
+        GameManager.Instance.CurrentEditorLevel.TileAreas.Remove(TileArea.Id);
 
         GameObject.Destroy(gameObject);
         GameObject.Destroy(this);
