@@ -1,4 +1,3 @@
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -124,13 +123,11 @@ public class TileAreaToEnemySpawnpointAssigner : MonoBehaviour
         {
             Logger.Log("did not find the area in the list, so we add it");
 
-            selectedTile.AddTileArea(tileAreaInList);
             enemySpawnpoint.TileAreas.Add(tileArea);
         }
         else
         {
             Logger.Log($"The currently selected tile area is {tileAreaInList.Name}");
-            selectedTile.RemoveTileArea(tileAreaInList);
             enemySpawnpoint.TileAreas.Remove(tileArea);
         }
         
