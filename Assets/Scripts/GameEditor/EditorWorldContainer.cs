@@ -30,7 +30,7 @@ public class EditorWorldContainer : MonoBehaviour
 
     public void ShowTileSelector()
     {
-        _editorTileSelector.CurrentSelectedLocation = new GridLocation(0, 0);
+        _editorTileSelector.CurrentlySelectedTile = GameManager.Instance.CurrentEditorLevel.TilesByLocation[new GridLocation(0, 0)];
         _editorTileSelectorGO.SetActive(true);
     }
 

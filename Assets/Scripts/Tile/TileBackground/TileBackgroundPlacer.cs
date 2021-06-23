@@ -34,4 +34,5 @@ public abstract class TileBackgroundPlacer<T> where T : Tile
     }
 
     public abstract U PlaceBackground<U>() where U : ITileBackground;
+    public abstract void PlaceCornerFiler(TileCorner tileCorner);
 }

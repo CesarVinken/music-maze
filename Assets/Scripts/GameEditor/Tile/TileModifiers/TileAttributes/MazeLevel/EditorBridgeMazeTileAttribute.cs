@@ -21,12 +21,12 @@ public class EditorBridgeMazeTileAttribute : EditorMazeTileAttributeModifier, IW
         BridgePiece bridgePiece = (BridgePiece)tile.GetAttributes().FirstOrDefault(attribute => (attribute is BridgePiece));
         if (bridgePiece == null)
         {
-            tileAttributePlacer.CreateBridgePiece(BridgePieceDirection.Horizontal);
+            tileAttributePlacer.PlaceBridgePiece(BridgePieceDirection.Horizontal);
         }
         else if(bridgePiece.BridgePieceDirection == BridgePieceDirection.Horizontal)
         {
             tileAttributeRemover.RemoveBridgePiece();
-            tileAttributePlacer.CreateBridgePiece(BridgePieceDirection.Vertical);
+            tileAttributePlacer.PlaceBridgePiece(BridgePieceDirection.Vertical);
         }
         else
         {

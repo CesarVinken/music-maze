@@ -32,5 +32,7 @@ public class EditorTileTransformationTriggererSelector : EditorTileModifierSelec
         EditorManager.SelectedTileTransformationTriggererIndex = modifierIndex;
 
         transformationTrigger.InstantiateModifierActions();
+
+        EditorManager.SelectedTileModifier = transformationTrigger;
     }
 }

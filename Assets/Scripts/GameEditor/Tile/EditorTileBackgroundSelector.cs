@@ -30,5 +30,7 @@ public class EditorTileBackgroundSelector : EditorTileModifierSelector
         _editorSelectedModifierContainer.SelectedModifierLabel.text = GetSelectedModifierLabel(background.Name);
         _editorSelectedModifierContainer.SelectedModifierSprite.sprite = background.GetSprite();
         EditorManager.SelectedTileBackgroundModifierIndex = modifierIndex;
+
+        EditorManager.SelectedTileModifier = background;
     }
 }

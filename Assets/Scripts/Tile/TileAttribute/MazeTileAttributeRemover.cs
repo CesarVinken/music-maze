@@ -75,6 +75,7 @@ public class MazeTileAttributeRemover : TileAttributeRemover
         if (enemySpawnpoint == null) return;
         
         _tile.RemoveAttribute(enemySpawnpoint);
+        MazeLevelGameplayManager.Instance.EnemyCharacterSpawnpoints.Remove(enemySpawnpoint);
         enemySpawnpoint.Remove();
     }
 

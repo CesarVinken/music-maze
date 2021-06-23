@@ -23,6 +23,7 @@ public class EditorCanvasUI : MonoBehaviour
     public GameObject AssignMazeLevelEntryPrefab;
     public GameObject GenerateTileTransformationMapPrefab;
     public GameObject HandleTileAreaPrefab;
+    public GameObject AssignTileAreasToEnemySpawnpointPrefab;
 
     public void Awake()
     {
@@ -39,6 +40,7 @@ public class EditorCanvasUI : MonoBehaviour
         Guard.CheckIsNull(AssignMazeLevelEntryPrefab, "AssignMazeLevelEntryPrefab");
         Guard.CheckIsNull(GenerateTileTransformationMapPrefab, "GenerateTileTransformationMapPrefab");
         Guard.CheckIsNull(HandleTileAreaPrefab, "HandleTileAreaPrefab");
+        Guard.CheckIsNull(AssignTileAreasToEnemySpawnpointPrefab, "AssignTileAreasToEnemySpawnpointPrefab");
 
         GameObject.DontDestroyOnLoad(gameObject);
 
@@ -58,8 +60,6 @@ public class EditorCanvasUI : MonoBehaviour
     {
         EditorModeStatusTextGO.SetActive(true);
         gameObject.SetActive(true);
-
-        EditorWorldContainer.Instance.ShowTileSelector();
     }
 
     public void CloseEditor()

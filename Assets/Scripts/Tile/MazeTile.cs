@@ -52,6 +52,12 @@ public class MazeTile : Tile, IMazeLevel
         return tileObstacle;
     }
 
+    public EnemySpawnpoint TryGetEnemySpawnpoint()
+    {
+        EnemySpawnpoint enemySpawnpoint = (EnemySpawnpoint)_tileAttributes.FirstOrDefault(attribute => attribute is EnemySpawnpoint);
+        return enemySpawnpoint;
+    }
+
     public void TryMakeMarkable(bool isMarkable)
     {
         MazeTilePath mazeTilePath = (MazeTilePath)_tileBackgrounds.FirstOrDefault(background => background is MazeTilePath);

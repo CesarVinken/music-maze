@@ -35,7 +35,7 @@ public class MazeTileAttributePlacer<T> : TileAttributePlacer<T> where T : MazeT
         Tile.AddAttribute(tileObstacle);
     }
 
-    public void PlaceEnemySpawnpoint()
+    public virtual void PlaceEnemySpawnpoint()
     {
         EnemySpawnpoint enemySpawnpoint = (EnemySpawnpoint)InstantiateTileAttributeGO<EnemySpawnpoint>();
 

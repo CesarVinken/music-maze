@@ -18,7 +18,7 @@ public class EditorMazeTileAttributePlacer : MazeTileAttributePlacer<EditorMazeT
         return tileAttributeGO.GetComponent<U>();
     }
 
-    public void CreatePlayerExit(ObstacleType obstacleType)
+    public void PlacePlayerExit(ObstacleType obstacleType)
     {
         if (_tile.TileMainMaterial.GetType() != typeof(GroundMainMaterial))
         {
@@ -56,7 +56,7 @@ public class EditorMazeTileAttributePlacer : MazeTileAttributePlacer<EditorMazeT
         }
     }
 
-    public void CreateTileObstacle(ObstacleType obstacleType)
+    public void PlaceTileObstacle(ObstacleType obstacleType)
     {
         // check connections of this tile
         TileConnectionScoreInfo obstacleConnectionScore = NeighbourTileCalculator.MapNeighbourObstaclesOfTile(Tile, obstacleType);
@@ -104,6 +104,17 @@ public class EditorMazeTileAttributePlacer : MazeTileAttributePlacer<EditorMazeT
         }
     }
 
+    public override void PlaceEnemySpawnpoint()
+    {
+        EnemySpawnpoint enemySpawnpoint = (EnemySpawnpoint)InstantiateTileAttributeGO<EnemySpawnpoint>();
+
+        Tile.SetWalkable(true);
+        Tile.TryMakeMarkable(true);
+        Tile.AddAttribute(enemySpawnpoint);
+
+        MazeLevelGameplayManager.Instance.EnemyCharacterSpawnpoints.Add(enemySpawnpoint);
+    }
+
     public void PlacePlayerSpawnpoint()
     {
         PlayerSpawnpoint playerSpawnpoint = (PlayerSpawnpoint)InstantiateTileAttributeGO<PlayerSpawnpoint>();
@@ -114,7 +125,7 @@ public class EditorMazeTileAttributePlacer : MazeTileAttributePlacer<EditorMazeT
         Tile.AddAttribute(playerSpawnpoint);
     }
 
-    public void CreateBridgePiece(BridgePieceDirection bridgePieceDirection)
+    public void PlaceBridgePiece(BridgePieceDirection bridgePieceDirection)
     {
         BridgePiece bridgePiece = (BridgePiece)InstantiateTileAttributeGO<BridgePiece>();
         bridgePiece.WithBridgePieceDirection(bridgePieceDirection);

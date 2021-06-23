@@ -73,7 +73,7 @@ public class MazeTileBackgroundPlacer<T> : TileBackgroundPlacer<T> where T : Maz
         return background;
     }
 
-    public void PlaceCornerFiler(TileCorner tileCorner)
+    public override void PlaceCornerFiler(TileCorner tileCorner)
     {
         //create cornerfiller
         GameObject backgroundGO = GameObject.Instantiate(MazeLevelGameplayManager.Instance.GetTileBackgroundPrefab<TileCornerFiller>(), Tile.BackgroundsContainer);

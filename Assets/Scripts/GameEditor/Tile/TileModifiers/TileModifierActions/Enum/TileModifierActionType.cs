@@ -1,8 +1,7 @@
 ﻿public enum TileModifierActionType
 {
     AssignMazeLevelEntry,
+    AssignTileAreaToEnemySpawnpoint,
     GenerateTileTransformationMap,
     CreateNewTileAreaEntry,
-    DeleteTileAreaEntry,
-    RenameTileAreaEntry
 }

@@ -16,6 +16,9 @@ public class EditorTileModifierAction : MonoBehaviour
             case TileModifierActionType.CreateNewTileAreaEntry:
                 NewTileAreaEntryCreator.CreateNewTileAreaEntry();
                 break;
+            case TileModifierActionType.AssignTileAreaToEnemySpawnpoint:
+                TileAreaToEnemySpawnpointAssigner.AssignTileAreaToEnemySpawnpoint();
+                break;
             default:
                 Logger.Error("Action type was not yet implemented");
                 break;

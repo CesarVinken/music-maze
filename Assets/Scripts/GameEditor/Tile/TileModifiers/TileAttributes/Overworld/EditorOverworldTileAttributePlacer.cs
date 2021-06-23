@@ -25,7 +25,7 @@ public class EditorOverworldTileAttributePlacer : OverworldTileAttributePlacer<E
         // When we place the entry from a LoadOverworld situation, we already have a maze level name from the file data.
         if(mazeLevelName == "")
         {
-            mazeLevelName = MazeLevelEntryAssigner.Instance.GetCurentDropdownSelection();
+            mazeLevelName = MazeLevelEntryAssigner.Instance.GetCurrentDropdownSelection();
             Logger.Warning(mazeLevelName);
         }
 

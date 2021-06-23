@@ -6,14 +6,14 @@ public class EditorTileSelector : MonoBehaviour
 {
     public static EditorTileSelector Instance;
 
-    private GridLocation _currentSelectedLocation;
-    public GridLocation CurrentSelectedLocation
+    private Tile _currentSelectedTile;
+    public Tile CurrentlySelectedTile
     {
-        get { return _currentSelectedLocation; }
+        get { return _currentSelectedTile; }
         set
         {
-            _currentSelectedLocation = value;
-            transform.position = new Vector2(_currentSelectedLocation.X, _currentSelectedLocation.Y);
+            _currentSelectedTile = value;
+            transform.position = new Vector2(_currentSelectedTile.GridLocation.X, _currentSelectedTile.GridLocation.Y);
 
             _lineRenderer.SetPosition(0, new Vector3(transform.position.x, transform.position.y, -1));
             _lineRenderer.SetPosition(1, new Vector3(transform.position.x + 1, transform.position.y, -1));
@@ -34,7 +34,7 @@ public class EditorTileSelector : MonoBehaviour
 
     public void Start()
     {
-        CurrentSelectedLocation = new GridLocation(0, 0);
+        CurrentlySelectedTile = GameManager.Instance.CurrentEditorLevel.TilesByLocation[new GridLocation(0, 0)];
     }
 
     void Update()
@@ -67,7 +67,7 @@ public class EditorTileSelector : MonoBehaviour
         }
         if (Input.GetKeyDown(KeyCode.Return))
         {
-            Logger.Log("Do something to tile {0}, {1}", CurrentSelectedLocation.X, CurrentSelectedLocation.Y);
+            Logger.Log("Do something to tile {0}, {1}", CurrentlySelectedTile.GridLocation.X, CurrentlySelectedTile.GridLocation.Y);
             if (Input.GetKey(KeyCode.LeftShift) || Input.GetKey(KeyCode.RightShift))
             {
                 PlaceTileModifierVariation();
@@ -85,14 +85,29 @@ public class EditorTileSelector : MonoBehaviour
 
     public void UpdateCurrentSelectedLocation(int xChange, int yChange)
     {
-        int tempXPosition = _currentSelectedLocation.X + xChange;
-        int tempYPosition = _currentSelectedLocation.Y + yChange;
+        int tempXPosition = _currentSelectedTile.GridLocation.X + xChange;
+        int tempYPosition = _currentSelectedTile.GridLocation.Y + yChange;
 
-        GridLocation selectedTileLocation = new GridLocation(tempXPosition, tempYPosition);
+        if (GameManager.Instance.CurrentEditorLevel.TilesByLocation.TryGetValue(new GridLocation(tempXPosition, tempYPosition), out Tile selectedTile))
+        {
+            if (!IsValidGridLocationToSelect(selectedTile.GridLocation)) return;
+        }
+        else
+        {
+            return;
+        }
 
-        if (!IsValidGridLocationToSelect(selectedTileLocation)) return;
+        CurrentlySelectedTile = selectedTile;
 
-        CurrentSelectedLocation = selectedTileLocation;
+        UpdateEditorUIForSelectedLocation();
+    }
+
+    private void UpdateEditorUIForSelectedLocation()
+    {
+        if(EditorManager.SelectedTileModifier != null && EditorManager.SelectedTileModifier is EditorEnemySpawnpointTileAttribute)
+        {
+            TileAreaToEnemySpawnpointAssigner.Instance?.CheckForEnemySpawnpointOnTile();
+        }
     }
 
     private void SelectTileWithMouse()
@@ -104,11 +119,17 @@ public class EditorTileSelector : MonoBehaviour
         }
 
         Vector3 mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-        GridLocation selectedTileLocation = GridLocation.FindClosestGridTile(mousePosition);
+        if(GameManager.Instance.CurrentEditorLevel.TilesByLocation.TryGetValue(GridLocation.FindClosestGridTile(mousePosition), out Tile selectedTile))
+        {
+            if (!IsValidGridLocationToSelect(selectedTile.GridLocation)) return;
+        }
+        else
+        {
+            return;
+        }
 
-        if (!IsValidGridLocationToSelect(selectedTileLocation)) return;
-
-        CurrentSelectedLocation = selectedTileLocation;
+        CurrentlySelectedTile = selectedTile;
+        UpdateEditorUIForSelectedLocation();
     }
 
     private bool IsValidGridLocationToSelect(GridLocation selectedTileLocation)
@@ -138,7 +159,7 @@ public class EditorTileSelector : MonoBehaviour
         EditorTileModifierCategory editorTileModifierType = EditorManager.SelectedTileModifierCategory;
         EditorSelectedTileModifierContainer selectedTileModifierContainer = EditorCanvasUI.Instance.SelectedTileModifierContainer;
 
-        GameManager.Instance.CurrentEditorLevel.TilesByLocation.TryGetValue(CurrentSelectedLocation, out Tile tile);
+        GameManager.Instance.CurrentEditorLevel.TilesByLocation.TryGetValue(CurrentlySelectedTile.GridLocation, out Tile tile);
 
         if (editorTileModifierType == EditorTileModifierCategory.Attribute)
         {
@@ -185,7 +206,7 @@ public class EditorTileSelector : MonoBehaviour
         }
 
         EditorTileModifierCategory editorMazeTileModifierCategory = EditorManager.SelectedTileModifierCategory;
-        GameManager.Instance.CurrentEditorLevel.TilesByLocation.TryGetValue(CurrentSelectedLocation, out Tile tile);
+        GameManager.Instance.CurrentEditorLevel.TilesByLocation.TryGetValue(CurrentlySelectedTile.GridLocation, out Tile tile);
         EditorSelectedTileModifierContainer selectedTileModifierContainer = EditorCanvasUI.Instance.SelectedTileModifierContainer;
 
         if (editorMazeTileModifierCategory == EditorTileModifierCategory.Attribute)

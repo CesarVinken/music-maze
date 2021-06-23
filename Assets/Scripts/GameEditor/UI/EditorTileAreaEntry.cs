@@ -85,6 +85,14 @@ public class EditorTileAreaEntry : MonoBehaviour
 
         GameManager.Instance.CurrentEditorLevel.TileAreas.Remove(TileArea.Id);
 
+        //Delete this tile area from any existing enemy spawnpoints
+        for (int i = 0; i < MazeLevelGameplayManager.Instance.EnemyCharacterSpawnpoints.Count; i++)
+        {
+            Logger.Warning("remove tile area");
+            EnemySpawnpoint enemySpawnpoint = MazeLevelGameplayManager.Instance.EnemyCharacterSpawnpoints[i];
+            enemySpawnpoint.TileAreas.Remove(TileArea);
+        }
+        
         GameObject.Destroy(gameObject);
         GameObject.Destroy(this);
     }

@@ -11,7 +11,7 @@ public class InGameOverworldTileBackgroundPlacer : OverworldTileBackgroundPlacer
         Tile = tile;
     }
 
-    public void PlaceCornerFiler(TileCorner tileCorner)
+    public override void PlaceCornerFiler(TileCorner tileCorner)
     {
         //create cornerfiller
         GameObject backgroundGO = GameObject.Instantiate(OverworldGameplayManager.Instance.GetTileBackgroundPrefab<TileCornerFiller>(), _tile.BackgroundsContainer);

@@ -14,7 +14,7 @@ public class MazeLevelGameplayManager : MonoBehaviour, IOnEventCallback, IGamepl
     public EditorMazeLevel EditorLevel;
 
     public List<CharacterSpawnpoint> PlayerCharacterSpawnpoints = new List<CharacterSpawnpoint>();
-    public List<CharacterSpawnpoint> EnemyCharacterSpawnpoints = new List<CharacterSpawnpoint>();
+    public List<EnemySpawnpoint> EnemyCharacterSpawnpoints = new List<EnemySpawnpoint>();
 
     public GameObject EditorTilePrefab;
     public GameObject InGameTilePrefab;

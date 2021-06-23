@@ -31,6 +31,8 @@ public class EditorTileAttributeSelector : EditorTileModifierSelector
         _editorSelectedModifierContainer.SelectedModifierSprite.sprite = attribute.GetSprite();
         EditorManager.SelectedTileAttributeModifierIndex = modifierIndex;
 
+        EditorManager.SelectedTileModifier = attribute;
+
         attribute.InstantiateModifierActions();
     }
 }

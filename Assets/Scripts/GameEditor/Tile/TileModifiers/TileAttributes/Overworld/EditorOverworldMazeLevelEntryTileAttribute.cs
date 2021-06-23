@@ -37,6 +37,6 @@ public class EditorOverworldMazeLevelEntryTileAttribute : EditorOverworldTileAtt
     public override void InstantiateModifierActions()
     {
         Logger.Log("Load actions for triggerer");
-        GameObject.Instantiate(EditorCanvasUI.Instance.AssignMazeLevelEntryPrefab, EditorOverworldTileModificationPanel.Instance.TileModifierActionsContainer);
+        GameObject.Instantiate(EditorCanvasUI.Instance.AssignTileAreasToEnemySpawnpointPrefab, EditorOverworldTileModificationPanel.Instance.TileModifierActionsContainer);
     }
 }

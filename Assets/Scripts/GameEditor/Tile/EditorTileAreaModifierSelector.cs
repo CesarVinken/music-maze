@@ -33,5 +33,7 @@ public class EditorTileAreaModifierSelector : EditorTileModifierSelector
         EditorManager.SelectedTileAreaModifierIndex = modifierIndex;
 
         areaModifier.InstantiateModifierActions();
+
+        EditorManager.SelectedTileModifier = areaModifier;
     }
 }

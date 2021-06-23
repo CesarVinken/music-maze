@@ -13,7 +13,7 @@ public static class EditorManager
     }
 
     public static EditorTileModifierCategory SelectedTileModifierCategory;
-    public static IEditorTileModifierType SelectedTileModifier;
+    public static IEditorTileModifier SelectedTileModifier;
 
     public static int SelectedTileMainModifierCategoryIndex;
     public static int SelectedTileAttributeModifierIndex;
@@ -36,7 +36,7 @@ public static class EditorManager
         _inEditor = true;
         EditorCanvasUI.Instance.InitialiseEditor();
         EditorWorldContainer.Instance.InitialiseEditor();
-        Logger.Log($"Our current scene type is {PersistentGameManager.CurrentSceneType}. We are opening the editor");
+
         switch (PersistentGameManager.CurrentSceneType)
         {
             case SceneType.Overworld:
@@ -54,6 +54,8 @@ public static class EditorManager
         {
             CameraManager.Instance.CreateOneCamera();
         }
+
+        EditorWorldContainer.Instance.ShowTileSelector();
     }
 
     public static void CloseEditor()

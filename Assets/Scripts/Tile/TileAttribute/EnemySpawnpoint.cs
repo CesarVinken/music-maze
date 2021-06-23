@@ -1,9 +1,11 @@
 ﻿using CharacterType;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class EnemySpawnpoint : CharacterSpawnpoint
 {
     [SerializeField] private Sprite _enemySpawnpointSprite;
+    public List<TileArea> TileAreas = new List<TileArea>();
 
     // TODO:: Implement way to customise type for different enemy spawnpoints
     private ICharacter EnemyType = new EvilViolin();
@@ -21,7 +23,6 @@ public class EnemySpawnpoint : CharacterSpawnpoint
         GridLocation = GridLocation.VectorToGrid(transform.position);
 
         if (EditorManager.InEditor) return;
-
         
         CharacterBlueprint = new CharacterBlueprint(EnemyType);
 

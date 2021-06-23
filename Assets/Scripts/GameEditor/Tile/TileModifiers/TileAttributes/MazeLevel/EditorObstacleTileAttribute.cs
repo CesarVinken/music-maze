@@ -26,7 +26,7 @@ public class EditorObstacleTileAttribute : EditorMazeTileAttributeModifier, IGro
             MazeTileBackgroundRemover tileBackgroundRemover = new MazeTileBackgroundRemover(tile);
             tileBackgroundRemover.RemovePath();
 
-            tileAttributePlacer.CreateTileObstacle(ObstacleType.Bush);
+            tileAttributePlacer.PlaceTileObstacle(ObstacleType.Bush);
             return;
         }
 

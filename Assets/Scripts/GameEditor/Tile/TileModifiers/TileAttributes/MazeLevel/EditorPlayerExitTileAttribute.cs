@@ -24,7 +24,7 @@ public class EditorPlayerExitTileAttribute : EditorMazeTileAttributeModifier, IG
             tileAttributeRemover.RemoveTileObstacle();
 
             Logger.Warning(Logger.Editor, $"Now place player exit at {tile.GridLocation.X}, {tile.GridLocation.Y}");
-            tileAttributePlacer.CreatePlayerExit(ObstacleType.Bush); 
+            tileAttributePlacer.PlacePlayerExit(ObstacleType.Bush); 
             return;
         }
 
