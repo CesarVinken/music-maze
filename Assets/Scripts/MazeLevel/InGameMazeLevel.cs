@@ -26,6 +26,7 @@ public class InGameMazeLevel : MazeLevel, IInGameLevel
         _mazeContainer.AddComponent<TilesContainer>();
         _mazeContainer.SetActive(true);
 
+        InitialiseEditorTileAreas(mazeLevelData);
         BuildTiles(mazeLevelData);
     }
 
@@ -35,7 +36,17 @@ public class InGameMazeLevel : MazeLevel, IInGameLevel
         return new InGameMazeLevel(mazeLevelData);
     }
 
-    public void BuildTiles(MazeLevelData mazeLevelData)
+    protected override void InitialiseEditorTileAreas(MazeLevelData mazeLevelData)
+    {
+        for (int i = 0; i < mazeLevelData.TileAreas.Count; i++)
+        {
+            SerialisableTileArea serialisableTileArea = mazeLevelData.TileAreas[i];
+            TileArea newTileArea = new TileArea(serialisableTileArea);
+            TileAreas.Add(newTileArea.Id, newTileArea);
+        }
+    }
+
+    public override void BuildTiles(MazeLevelData mazeLevelData)
     {
         Dictionary<InGameMazeTile, List<SerialisableGridLocation>> TileTransformationGridLocationByTile = new Dictionary<InGameMazeTile, List<SerialisableGridLocation>>();
 
@@ -57,6 +68,7 @@ public class InGameMazeLevel : MazeLevel, IInGameLevel
             AddBackgroundSprites(serialisableTile, tile);
             AddTileAttributes(serialisableTile, tile);
             AddCornerFillers(serialisableTile, tile);
+            AddTileAreas(serialisableTile, tile);
 
             TilesByLocation.Add(tile.GridLocation, tile);
 
@@ -124,7 +136,8 @@ public class InGameMazeLevel : MazeLevel, IInGameLevel
             }
             else if (type.Equals(typeof(SerialisableEnemySpawnpointAttribute)))
             {
-                tileAttributePlacer.PlaceEnemySpawnpoint();
+                SerialisableEnemySpawnpointAttribute serialisableEnemySpawnpointAttribute = (SerialisableEnemySpawnpointAttribute)JsonUtility.FromJson(serialisableTileAttribute.SerialisedData, type);
+                tileAttributePlacer.PlaceEnemySpawnpoint(serialisableEnemySpawnpointAttribute.TileAreaIds, TileAreas);
             }
             else if (type.Equals(typeof(SerialisableBridgePieceAttribute)))
             {
@@ -243,6 +256,19 @@ public class InGameMazeLevel : MazeLevel, IInGameLevel
                     }
                     bridgeEdges[j].WithBridgePieceConnection(bridgePiece);
                 }
+            }
+        }
+    }
+
+    private void AddTileAreas(SerialisableTile serialisableTile, MazeTile tile)
+    {
+        for (int i = 0; i < serialisableTile.TileAreaIds?.Count; i++)
+        {
+            string tileAreaId = serialisableTile.TileAreaIds[i];
+
+            if (TileAreas.TryGetValue(tileAreaId, out TileArea tileArea))
+            {
+                tile.AddTileArea(tileArea);
             }
         }
     }

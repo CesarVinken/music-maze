@@ -13,6 +13,14 @@ public class EnemyCharacter : Character
 
     private ICharacter _enemyType = null;
 
+    private List<TileArea> _tileAreas = new List<TileArea>();
+    private List<Tile> _accessibleTiles = new List<Tile>();
+
+    public void SetTileAreas(List<TileArea> tileAreas)
+    {
+        _tileAreas = tileAreas;
+    }
+
     public override void Awake()
     {
         base.Awake();
@@ -36,6 +44,8 @@ public class EnemyCharacter : Character
         CurrentGridLocation = StartingPosition;
 
         _isInitialised = true;
+
+        AssignAccessibleTiles();
     }
 
     public void Update()
@@ -63,16 +73,65 @@ public class EnemyCharacter : Character
         }
     }
 
+    public void SetSpawnpoint(Character character, EnemySpawnpoint spawnpoint)
+    {
+        character.Spawnpoint = spawnpoint;
+        character.StartingPosition = spawnpoint.GridLocation;
+    }
+
+    public void SetTileAreas()
+    {
+        EnemySpawnpoint spawnpoint = Spawnpoint as EnemySpawnpoint;
+        if (spawnpoint == null)
+        {
+            Logger.Error("spawnpoint is not an enemy spawnpoint");
+        }
+
+        _tileAreas.Clear();
+
+        for (int i = 0; i < spawnpoint.TileAreas.Count; i++)
+        {
+            _tileAreas.Add(spawnpoint.TileAreas[i]);
+        }
+    }
+
     private void SetNextTarget()
     {
         IsCalculatingPath = true;
+
+        // EVALUATE:: 
+        // maybe the random choice to follow the player or not should happen BEFORE checking if the players are reachable
+
+        // Check if any of the players is in an area that can be reached by this enemy
+        Dictionary<PlayerNumber, MazePlayerCharacter> playerCharacters = GameManager.Instance.CharacterManager.GetPlayers< MazePlayerCharacter>();
+
+        List<PlayerNumber> reachablePlayers = new List<PlayerNumber>();
+
+        foreach (KeyValuePair<PlayerNumber, MazePlayerCharacter> item in playerCharacters)
+        {
+            GridLocation currentPlayerLocation = item.Value.CurrentGridLocation;
+            Tile currentPlayerLocationTile = GameManager.Instance.CurrentGameLevel.TilesByLocation[currentPlayerLocation];
+
+            if (_accessibleTiles.Contains(currentPlayerLocationTile))
+            {
+                reachablePlayers.Add(item.Key);
+            }
+        }
+        //Logger.Log($"Number of reachable players is: {reachablePlayers.Count}");
+        if(reachablePlayers.Count == 0)
+        {
+            SetRandomTarget();
+            return;
+        }
+
         int RandomMax = 20;
         int RandomNumber = UnityEngine.Random.Range(1, RandomMax + 1);
-        float targetPlayerChance = 0.25f; // 25% chance to go chase a player
+
+        float targetPlayerChance = 0.30f; // 30% chance to go chase a player
 
         if (RandomNumber <= targetPlayerChance * RandomMax) 
         {
-            TargetPlayer();
+            TargetPlayer(reachablePlayers);
         }
         else
         {
@@ -80,18 +139,16 @@ public class EnemyCharacter : Character
         }
     }
 
-    private void TargetPlayer()
+    private void TargetPlayer(List<PlayerNumber> reachablePlayers)
     {
         //Randomly pick one of the players
-        int randomNumber = UnityEngine.Random.Range(0, _characterManager.GetPlayers<MazePlayerCharacter>().Count);
+        int randomNumber = UnityEngine.Random.Range(0, reachablePlayers.Count);
 
-        PlayerCharacter randomPlayer = randomNumber == 0 ?
-            _characterManager.GetPlayerCharacter<MazePlayerCharacter>(PlayerNumber.Player1):
-            _characterManager.GetPlayerCharacter<MazePlayerCharacter>(PlayerNumber.Player1);
+        PlayerCharacter randomPlayer = _characterManager.GetPlayerCharacter<MazePlayerCharacter>(reachablePlayers[randomNumber]);
 
         IsCalculatingPath = true;
         GridLocation playerGridLocation = randomPlayer.CurrentGridLocation;
-        Logger.Log($"Set Player target ({playerGridLocation.X}, {playerGridLocation.Y} )");
+        Logger.Log($"Set Player {randomPlayer.PlayerNumber} target ({playerGridLocation.X}, {playerGridLocation.Y} )");
         PathToTarget = _pathfinding.FindNodePath(CurrentGridLocation, playerGridLocation);
 
         IsCalculatingPath = false;
@@ -126,7 +183,7 @@ public class EnemyCharacter : Character
         }
         else
         {
-            Logger.Log($"Current Tile: {CurrentGridLocation.X} {CurrentGridLocation.Y}. To remove: {PathToTarget[0].Tile.GridLocation.X}, {PathToTarget[0].Tile.GridLocation.Y}");
+            //Logger.Log($"Current Tile: {CurrentGridLocation.X} {CurrentGridLocation.Y}. To remove: {PathToTarget[0].Tile.GridLocation.X}, {PathToTarget[0].Tile.GridLocation.Y}");
              PathToTarget.RemoveAt(0);
 
             SetHasCalculatedTarget(true);
@@ -136,11 +193,11 @@ public class EnemyCharacter : Character
         }
     }
 
-    private Tile GetRandomTileTarget()
+    private void AssignAccessibleTiles()
     {
         List<Tile> allTiles = MazeLevelGameplayManager.Instance.GetTiles();
-        List<Tile> tilesForRandomPick = new List<Tile>();
-        
+        List<Tile> accessibleTiles = new List<Tile>(); ;
+
         for (int i = 0; i < allTiles.Count; i++)
         {
             Tile tile = allTiles[i];
@@ -149,11 +206,30 @@ public class EnemyCharacter : Character
 
             if (tile.TryGetPlayerOnly()) continue;
 
-            tilesForRandomPick.Add(tile);
+            // if no tile areas are assigned to an enemy, pick random from ALL tiles
+            if (_tileAreas.Count == 0)
+            {
+                accessibleTiles.Add(tile);
+            }
+            else
+            {
+                for (int j = 0; j < _tileAreas.Count; j++)
+                {
+                    List<TileArea> tileAreasOnTile = tile.GetTileAreas();
+                    if (tileAreasOnTile.Contains(_tileAreas[j]))
+                    {
+                        accessibleTiles.Add(tile);
+                    }
+                }
+            }
         }
+        _accessibleTiles = accessibleTiles;
+    }
 
-        int random = UnityEngine.Random.Range(0, tilesForRandomPick.Count);
-        return tilesForRandomPick[random];
+    private Tile GetRandomTileTarget()
+    {
+        int random = UnityEngine.Random.Range(0, _accessibleTiles.Count);
+        return _accessibleTiles[random];
     }
 
     private IEnumerator SpendIdleTimeCoroutine()

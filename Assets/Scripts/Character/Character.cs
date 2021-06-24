@@ -8,6 +8,7 @@ public class Character : MonoBehaviour
 {
     public CharacterBlueprint CharacterBlueprint;
     public GridLocation StartingPosition;
+    public CharacterSpawnpoint Spawnpoint;
 
     public GridLocation CurrentGridLocation;
     public TargetLocation TargetGridLocation;
@@ -73,9 +74,10 @@ public class Character : MonoBehaviour
         _animationHandler.SetAnimationControllerForCharacterType(_characterType);
     }
 
-    public void SetStartingPosition(Character character, GridLocation gridLocation)
+    public virtual void SetStartingPoint(Character character, GridLocation startingPosition, CharacterSpawnpoint spawnpoint)
     {
-        character.StartingPosition = gridLocation;
+        character.Spawnpoint = spawnpoint;
+        character.StartingPosition = startingPosition;
     }
 
     public void MoveCharacter()

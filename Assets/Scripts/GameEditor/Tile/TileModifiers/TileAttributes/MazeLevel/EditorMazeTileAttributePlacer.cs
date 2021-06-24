@@ -104,7 +104,7 @@ public class EditorMazeTileAttributePlacer : MazeTileAttributePlacer<EditorMazeT
         }
     }
 
-    public override void PlaceEnemySpawnpoint()
+    public override void PlaceEnemySpawnpoint(List<string> tileAreaIds = null, Dictionary<string, TileArea> globalTileAreas = null)
     {
         EnemySpawnpoint enemySpawnpoint = (EnemySpawnpoint)InstantiateTileAttributeGO<EnemySpawnpoint>();
 
@@ -113,6 +113,15 @@ public class EditorMazeTileAttributePlacer : MazeTileAttributePlacer<EditorMazeT
         Tile.AddAttribute(enemySpawnpoint);
 
         MazeLevelGameplayManager.Instance.EnemyCharacterSpawnpoints.Add(enemySpawnpoint);
+
+        if (tileAreaIds != null && globalTileAreas != null)
+        {
+            for (int i = 0; i < tileAreaIds.Count; i++)
+            {
+                TileArea tileArea = globalTileAreas[tileAreaIds[i]];
+                enemySpawnpoint.AddTileArea(tileArea);
+            }
+        }
     }
 
     public void PlacePlayerSpawnpoint()

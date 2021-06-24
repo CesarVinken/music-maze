@@ -28,4 +28,14 @@ public class EnemySpawnpoint : CharacterSpawnpoint
 
         MazeLevelGameplayManager.Instance.Level.EnemyCharacterSpawnpoints.Add(this);
     }
+
+    public void AddTileArea(TileArea tileArea)
+    {
+        TileAreas.Add(tileArea);
+    }
+
+    public void RemoveTileArea(TileArea tileArea)
+    {
+        TileAreas.Remove(tileArea);
+    }
 }

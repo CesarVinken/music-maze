@@ -37,16 +37,17 @@ public class EditorMazeLevel : MazeLevel, IEditorLevel
         return new EditorMazeLevel(mazeLevelData);
     }
 
-    private void InitialiseEditorTileAreas(MazeLevelData mazeLevelData)
+    protected override void InitialiseEditorTileAreas(MazeLevelData mazeLevelData)
     {
         for (int i = 0; i < mazeLevelData.TileAreas.Count; i++)
         {
             SerialisableTileArea serialisableTileArea = mazeLevelData.TileAreas[i];
-            TileAreas[serialisableTileArea.Id] = new TileArea(serialisableTileArea);
+            TileArea newTileArea = new TileArea(serialisableTileArea);
+            TileAreas.Add(newTileArea.Id, newTileArea);
         }
     }
 
-    public void BuildTiles(MazeLevelData mazeLevelData)
+    public override void BuildTiles(MazeLevelData mazeLevelData)
     {
         Dictionary<SerialisableGridLocation, List<EditorMazeTile>> TileTransformationTriggererByGridLocation = new Dictionary<SerialisableGridLocation, List<EditorMazeTile>>();
 
@@ -147,7 +148,8 @@ public class EditorMazeLevel : MazeLevel, IEditorLevel
             }
             else if (type.Equals(typeof(SerialisableEnemySpawnpointAttribute)))
             {
-                tileAttributePlacer.PlaceEnemySpawnpoint();
+                SerialisableEnemySpawnpointAttribute serialisableEnemySpawnpointAttribute = (SerialisableEnemySpawnpointAttribute)JsonUtility.FromJson(serialisableTileAttribute.SerialisedData, type);
+                tileAttributePlacer.PlaceEnemySpawnpoint(serialisableEnemySpawnpointAttribute.TileAreaIds, TileAreas);
             }
             else if (type.Equals(typeof(SerialisableBridgePieceAttribute)))
             {

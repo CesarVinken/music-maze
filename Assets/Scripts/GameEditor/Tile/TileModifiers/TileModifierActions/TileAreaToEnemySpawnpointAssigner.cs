@@ -123,12 +123,12 @@ public class TileAreaToEnemySpawnpointAssigner : MonoBehaviour
         {
             Logger.Log("did not find the area in the list, so we add it");
 
-            enemySpawnpoint.TileAreas.Add(tileArea);
+            enemySpawnpoint.AddTileArea(tileArea);
         }
         else
         {
             Logger.Log($"The currently selected tile area is {tileAreaInList.Name}");
-            enemySpawnpoint.TileAreas.Remove(tileArea);
+            enemySpawnpoint.RemoveTileArea(tileArea);
         }
         
         _assignedAreasText.text = GenerateAssignedAreasText(enemySpawnpoint);

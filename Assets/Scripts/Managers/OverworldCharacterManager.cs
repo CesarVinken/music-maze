@@ -110,9 +110,13 @@ public class OverworldCharacterManager : MonoBehaviourPunCallbacks, ICharacterMa
 
         PlayerCharacter playerCharacter = characterGO.GetComponent<PlayerCharacter>();
         playerCharacter.CharacterBlueprint = character;
-
+        
         playerCharacter.FreezeCharacter();
-        playerCharacter.SetStartingPosition(playerCharacter, gridLocation);
+        playerCharacter.SetStartingPoint(
+            playerCharacter as Character,
+            gridLocation,
+            GameManager.Instance.CurrentGameLevel.PlayerCharacterSpawnpoints[playerCharacter.PlayerNumber]
+        );
 
         CharacterBundle characterBundle = new CharacterBundle(playerCharacter, characterGO);
         return characterBundle;

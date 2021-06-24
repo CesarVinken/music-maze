@@ -65,7 +65,7 @@ public class MazeCharacterManager : MonoBehaviourPunCallbacks, ICharacterManager
         {
             Debug.Log("Instantiating Player 1");
 
-            CharacterBundle PlayerBundle = SpawnCharacter(new CharacterBlueprint(new Emmon()), level.PlayerCharacterSpawnpoints[PlayerNumber.Player1].GridLocation);
+            CharacterBundle PlayerBundle = SpawnCharacter(new CharacterBlueprint(new Emmon()), level.PlayerCharacterSpawnpoints[PlayerNumber.Player1]);
             Player1GO = PlayerBundle.CharacterGO;
             SpawnEnemies();
         }
@@ -73,10 +73,10 @@ public class MazeCharacterManager : MonoBehaviourPunCallbacks, ICharacterManager
         {
             Debug.Log("Instantiating Players");
 
-            CharacterBundle Player1Bundle = SpawnCharacter(new CharacterBlueprint(new Emmon()), level.PlayerCharacterSpawnpoints[PlayerNumber.Player1].GridLocation);
+            CharacterBundle Player1Bundle = SpawnCharacter(new CharacterBlueprint(new Emmon()), level.PlayerCharacterSpawnpoints[PlayerNumber.Player1]);
             Player1GO = Player1Bundle.CharacterGO;
 
-            CharacterBundle Player2Bundle = SpawnCharacter(new CharacterBlueprint(new Fae()), level.PlayerCharacterSpawnpoints[PlayerNumber.Player2].GridLocation);
+            CharacterBundle Player2Bundle = SpawnCharacter(new CharacterBlueprint(new Fae()), level.PlayerCharacterSpawnpoints[PlayerNumber.Player2]);
             Player2GO = Player2Bundle.CharacterGO;
 
             SpawnEnemies();
@@ -85,15 +85,15 @@ public class MazeCharacterManager : MonoBehaviourPunCallbacks, ICharacterManager
         {
             Debug.Log("Instantiating Player 2");
 
-            CharacterBundle PlayerBundle = SpawnCharacter(new CharacterBlueprint(new Fae()), level.PlayerCharacterSpawnpoints[PlayerNumber.Player2].GridLocation);
+            CharacterBundle PlayerBundle = SpawnCharacter(new CharacterBlueprint(new Fae()), level.PlayerCharacterSpawnpoints[PlayerNumber.Player2]);
             Player2GO = PlayerBundle.CharacterGO;
         }
     }
 
-    private CharacterBundle SpawnCharacter(CharacterBlueprint character, GridLocation gridLocation)
+    private CharacterBundle SpawnCharacter(CharacterBlueprint character, CharacterSpawnpoint spawnpoint)
     {
         string prefabName = GetPrefabNameByCharacter(character);
-        Vector2 startPosition = GetCharacterGridPosition(GridLocation.GridToVector(gridLocation)); // start position is grid position plus grid tile offset
+        Vector2 startPosition = GetCharacterGridPosition(GridLocation.GridToVector(spawnpoint.GridLocation)); // start position is grid position plus grid tile offset
 
         GameObject characterGO = null;
 
@@ -115,7 +115,7 @@ public class MazeCharacterManager : MonoBehaviourPunCallbacks, ICharacterManager
 
 
             playerCharacter.FreezeCharacter();
-            playerCharacter.SetStartingPosition(playerCharacter, gridLocation);
+            playerCharacter.SetStartingPoint(playerCharacter, spawnpoint.GridLocation, spawnpoint);
 
             CharacterBundle characterBundle = new CharacterBundle(playerCharacter, characterGO);
             return characterBundle;
@@ -133,7 +133,8 @@ public class MazeCharacterManager : MonoBehaviourPunCallbacks, ICharacterManager
             }
 
             EnemyCharacter enemyCharacter = characterGO.GetComponent<EnemyCharacter>();
-            enemyCharacter.SetStartingPosition(enemyCharacter, gridLocation);
+            enemyCharacter.SetSpawnpoint(enemyCharacter, spawnpoint as EnemySpawnpoint);
+            enemyCharacter.SetTileAreas();
             enemyCharacter.FreezeCharacter();
             enemyCharacter.CharacterBlueprint = character;
 
@@ -150,7 +151,7 @@ public class MazeCharacterManager : MonoBehaviourPunCallbacks, ICharacterManager
 
         for (int i = 0; i < level.EnemyCharacterSpawnpoints.Count; i++)
         {
-            CharacterBundle enemy = SpawnCharacter(level.EnemyCharacterSpawnpoints[i].CharacterBlueprint, level.EnemyCharacterSpawnpoints[i].GridLocation);
+            CharacterBundle enemy = SpawnCharacter(level.EnemyCharacterSpawnpoints[i].CharacterBlueprint, level.EnemyCharacterSpawnpoints[i]);
             enemy.CharacterGO.name = "The Enemy";
         }
     }

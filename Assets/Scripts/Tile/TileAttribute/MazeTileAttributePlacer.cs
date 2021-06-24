@@ -35,13 +35,24 @@ public class MazeTileAttributePlacer<T> : TileAttributePlacer<T> where T : MazeT
         Tile.AddAttribute(tileObstacle);
     }
 
-    public virtual void PlaceEnemySpawnpoint()
+    public virtual void PlaceEnemySpawnpoint(List<string> tileAreaIds = null, Dictionary<string, TileArea> globalTileAreas = null)
     {
         EnemySpawnpoint enemySpawnpoint = (EnemySpawnpoint)InstantiateTileAttributeGO<EnemySpawnpoint>();
 
         Tile.SetWalkable(true);
         Tile.TryMakeMarkable(true);
         Tile.AddAttribute(enemySpawnpoint);
+
+        MazeLevelGameplayManager.Instance.EnemyCharacterSpawnpoints.Add(enemySpawnpoint);
+
+        if (tileAreaIds != null && globalTileAreas != null)
+        {
+            for (int i = 0; i < tileAreaIds.Count; i++)
+            {
+                TileArea tileArea = globalTileAreas[tileAreaIds[i]];
+                enemySpawnpoint.AddTileArea(tileArea);
+            }
+        }
     }
 
     public void PlacePlayerOnlyAttribute(PlayerOnlyType playerOnlyType)

@@ -19,12 +19,16 @@ public class MazeLevel : IGameScene<Tile>
     public List<PlayerExit> MazeExits = new List<PlayerExit>();
 
 
-private Dictionary<PlayerNumber, CharacterSpawnpoint> _playerCharacterSpawnpoints = new Dictionary<PlayerNumber, CharacterSpawnpoint>();
+    private Dictionary<PlayerNumber, CharacterSpawnpoint> _playerCharacterSpawnpoints = new Dictionary<PlayerNumber, CharacterSpawnpoint>();
     public Dictionary<PlayerNumber, CharacterSpawnpoint> PlayerCharacterSpawnpoints { get => _playerCharacterSpawnpoints; set => _playerCharacterSpawnpoints = value;}
 
     public List<CharacterSpawnpoint> EnemyCharacterSpawnpoints = new List<CharacterSpawnpoint>();
 
     protected GameObject _mazeContainer;
+
+    public virtual void BuildTiles(MazeLevelData mazeLevelData) { }
+    protected virtual void InitialiseEditorTileAreas(MazeLevelData mazeLevelData) { }
+
 }
 
 public struct CharacterStartLocation

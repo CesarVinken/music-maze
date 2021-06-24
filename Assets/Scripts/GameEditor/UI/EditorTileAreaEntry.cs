@@ -90,7 +90,7 @@ public class EditorTileAreaEntry : MonoBehaviour
         {
             Logger.Warning("remove tile area");
             EnemySpawnpoint enemySpawnpoint = MazeLevelGameplayManager.Instance.EnemyCharacterSpawnpoints[i];
-            enemySpawnpoint.TileAreas.Remove(TileArea);
+            enemySpawnpoint.RemoveTileArea(TileArea);
         }
         
         GameObject.Destroy(gameObject);
