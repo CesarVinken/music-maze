@@ -457,7 +457,7 @@ public class PlayerCharacter : Character
         Logger.Warning($"Set name of character to {Name}");
     }
 
-    public override bool ValidateTarget(TargetLocation targetLocation)
+    public bool ValidateTarget(TargetLocation targetLocation)
     {
         if (GameManager.Instance.CurrentGameLevel.TilesByLocation.TryGetValue(targetLocation.TargetGridLocation, out Tile targetTile))
         {

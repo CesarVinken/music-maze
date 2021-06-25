@@ -42,6 +42,7 @@ public class Pathfinding {
         closedList = new List<PathNode>();
 
         // go through all nodes. LATER: go through all nodes of a particular area, to filter out number of available nodes.
+        // Because it seems like currently a path from tile A in accessible zone to tile B in an accessible zone could be calculated outside of the area
         for (int x = 0; x < AllPathNodes.Count; x++)
         {
             PathNode pathNode = AllPathNodes[x];
@@ -74,11 +75,18 @@ public class Pathfinding {
                     continue;
                 }
 
+                // restrictions for Enemies
                 if(_character is EnemyCharacter)
                 {
                     if (neighbourNode.Tile.TryGetPlayerOnly())
                     {
                         closedList.Add(neighbourNode);
+                        continue;
+                    }
+
+                    //restrictions for walking on bridges in the right direction
+                    if (!ValidateForBridge(currentNode, neighbourNode, item.Key))
+                    {
                         continue;
                     }
                 }
@@ -144,4 +152,58 @@ public class Pathfinding {
         return lowestFCostNode;
     }
 
+    public bool ValidateForBridge(PathNode currentNode, PathNode targetNode, ObjectDirection direction)
+    {
+        Tile targetTile = targetNode.Tile;
+        Tile currentTile = currentNode.Tile;
+
+        if (targetTile.Walkable)
+        {
+            BridgePiece bridgePieceOnCurrentTile = currentTile.TryGetBridgePiece();
+            BridgePiece bridgePieceOnTarget = targetTile.TryGetBridgePiece(); // optimisation: keep bridge locations of the level in a separate list, so we don't have to go over all the tiles in the level
+
+            // there are no bridges involved
+            if (bridgePieceOnCurrentTile == null && bridgePieceOnTarget == null)
+            {
+                return true;
+            }
+
+            // Make sure we go in the correct bridge direction
+            if (bridgePieceOnCurrentTile && bridgePieceOnTarget)
+            {
+
+                if (bridgePieceOnCurrentTile.BridgePieceDirection == BridgePieceDirection.Horizontal &&
+                    bridgePieceOnTarget.BridgePieceDirection == BridgePieceDirection.Horizontal &&
+                    (direction == ObjectDirection.Left || direction == ObjectDirection.Right))
+                {
+                    return true;
+                }
+
+                if (bridgePieceOnCurrentTile.BridgePieceDirection == BridgePieceDirection.Vertical &&
+                    bridgePieceOnTarget.BridgePieceDirection == BridgePieceDirection.Vertical &&
+                    (direction == ObjectDirection.Up || direction == ObjectDirection.Down))
+                {
+                    return true;
+                }
+
+                return false;
+            }
+
+            if ((bridgePieceOnCurrentTile?.BridgePieceDirection == BridgePieceDirection.Horizontal ||
+                bridgePieceOnTarget?.BridgePieceDirection == BridgePieceDirection.Horizontal) &&
+                (direction == ObjectDirection.Left || direction == ObjectDirection.Right))
+            {
+                return true;
+            }
+
+            if ((bridgePieceOnCurrentTile?.BridgePieceDirection == BridgePieceDirection.Vertical ||
+                bridgePieceOnTarget?.BridgePieceDirection == BridgePieceDirection.Vertical) &&
+                (direction == ObjectDirection.Up || direction == ObjectDirection.Down))
+            {
+                return true;
+            }
+            return false;
+        }
+        return false;
+    }
 }

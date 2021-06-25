@@ -134,11 +134,6 @@ public class Character : MonoBehaviour
         }
     }
 
-    public virtual bool ValidateTarget(TargetLocation targetGridLocation)
-    {
-        return false;
-    }
-
     // set character to current spawnpoint and reset pathfinder
     public void ResetCharacterPosition()
     {
