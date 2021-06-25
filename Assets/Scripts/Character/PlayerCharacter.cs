@@ -24,6 +24,7 @@ public class PlayerCharacter : Character
     public PlayerNumber PlayerNumber = PlayerNumber.Player1;
     public Tile LastTile;
     public string Name;
+    protected TargetLocation TargetGridLocation;
 
     [SerializeField] protected GameObject _selectionIndicatorPrefab = null;
     [SerializeField] protected GameObject _selectionIndicatorGO = null;

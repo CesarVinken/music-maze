@@ -20,7 +20,7 @@ public class OverworldPlayerCharacter : PlayerCharacter
 
         // transform the player's starting tile and surrounding tiles
         InGameOverworldTile currentTile = GameManager.Instance.CurrentGameLevel.TilesByLocation[StartingPosition] as InGameOverworldTile;
-        CurrentGridLocation = currentTile.GridLocation;
+        SetCurrentGridLocation(currentTile.GridLocation);
     }
 
     public override void Update()

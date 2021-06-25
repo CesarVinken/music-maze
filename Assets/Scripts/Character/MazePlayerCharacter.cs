@@ -48,7 +48,8 @@ public class MazePlayerCharacter : PlayerCharacter
         }
 
         currentTile.TriggerTransformations();
-        CurrentGridLocation = currentTile.GridLocation;
+        SetCurrentGridLocation(currentTile.GridLocation);
+
         MazeLevelGameplayManager.Instance.SetTileMarker(currentTile, this);
     }
 

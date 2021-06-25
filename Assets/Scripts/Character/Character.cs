@@ -10,8 +10,7 @@ public class Character : MonoBehaviour
     public GridLocation StartingPosition;
     public CharacterSpawnpoint Spawnpoint;
 
-    public GridLocation CurrentGridLocation;
-    public TargetLocation TargetGridLocation;
+    public GridLocation CurrentGridLocation { get; private set; }
 
     public GameObject CharacterBody;
     protected ICharacter _characterType;
@@ -122,11 +121,12 @@ public class Character : MonoBehaviour
             (direction == ObjectDirection.Down && transform.position.y < targetVector2Pos.y + GridLocation.OffsetToTileMiddle) ||
             direction == ObjectDirection.Up && transform.position.y > targetVector2Pos.y + GridLocation.OffsetToTileMiddle) 
         {
-            CurrentGridLocation = nextGridLocation;
+            SetCurrentGridLocation(nextGridLocation);
             PathToTarget.RemoveAt(0);
             //Logger.Log($"New Grid location{currentGridLocation.X}, {currentGridLocation.Y}. Remaining path length is {PathToTarget.Count}");
             if(PathToTarget.Count == 0)
             {
+
                 OnTargetReached(); 
             }
 
@@ -142,7 +142,13 @@ public class Character : MonoBehaviour
 
         //Logger.Warning("Starting position for {0} is {1},{2}", gameObject.name, gameObject.GetComponent<PlayerCharacter>().StartingPosition.X, gameObject.GetComponent<PlayerCharacter>().StartingPosition.Y);
         GameManager.Instance.CharacterManager.PutCharacterOnGrid(gameObject, GridLocation.GridToVector(StartingPosition));
-        CurrentGridLocation = StartingPosition;
+        SetCurrentGridLocation(StartingPosition);
+    }
+
+    public void SetCurrentGridLocation(GridLocation newGridLocation)
+    {
+        CurrentGridLocation = newGridLocation;
+        //Logger.Log($"Current gridlocation is now : {CurrentGridLocation.X}, {CurrentGridLocation.Y}");
     }
 
     public IEnumerator RespawnPlayerCharacter(PlayerCharacter character, float freezeTime)

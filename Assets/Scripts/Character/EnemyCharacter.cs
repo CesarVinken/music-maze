@@ -3,6 +3,7 @@ using Photon.Pun;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class EnemyCharacter : Character
@@ -41,7 +42,7 @@ public class EnemyCharacter : Character
 
         SetCharacterType(_enemyType);
 
-        CurrentGridLocation = StartingPosition;
+        SetCurrentGridLocation(StartingPosition);
 
         _isInitialised = true;
 
@@ -173,6 +174,7 @@ public class EnemyCharacter : Character
     {
         IsCalculatingPath = true;
         GridLocation randomGridLocation = GetRandomTileTarget().GridLocation;
+        Logger.Log($"current location of enemy is ({CurrentGridLocation.X}, {CurrentGridLocation.Y} )");
         Logger.Log($"Set random target ({randomGridLocation.X}, {randomGridLocation.Y} )");
         PathToTarget = _pathfinding.FindNodePath(CurrentGridLocation, randomGridLocation);
 
@@ -228,8 +230,14 @@ public class EnemyCharacter : Character
 
     private Tile GetRandomTileTarget()
     {
-        int random = UnityEngine.Random.Range(0, _accessibleTiles.Count);
-        return _accessibleTiles[random];
+        List<Tile> possibleRandomTargets = new List<Tile>(_accessibleTiles.ToList());
+        
+        Tile currentEnemyLocationTile = GameManager.Instance.CurrentGameLevel.TilesByLocation[CurrentGridLocation];
+
+        possibleRandomTargets.Remove(currentEnemyLocationTile);
+
+        int random = UnityEngine.Random.Range(0, possibleRandomTargets.Count);
+        return possibleRandomTargets[random];
     }
 
     private IEnumerator SpendIdleTimeCoroutine()
