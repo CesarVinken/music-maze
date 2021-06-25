@@ -340,7 +340,6 @@ public class PlayerCharacter : Character
         IsCalculatingPath = true;
         Logger.Log($"TryStartCharacterMovement. {CurrentGridLocation.X},{CurrentGridLocation.Y} to {TargetGridLocation.TargetGridLocation.X}, {TargetGridLocation.TargetGridLocation.Y}");
         PathToTarget = _pathfinding.FindNodePath(CurrentGridLocation, TargetGridLocation.TargetGridLocation);
-        Logger.Log($"Found a path of {PathToTarget.Count} pieces");
         PathToTarget.RemoveAt(0);
 
         //_seeker.StartPath(transform.position, newDestinationTarget, _characterPath.OnPathCalculated);

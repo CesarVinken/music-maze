@@ -16,6 +16,7 @@ public class EnemyCharacter : Character
 
     private List<TileArea> _tileAreas = new List<TileArea>();
     private List<Tile> _accessibleTiles = new List<Tile>();
+    private PlayerAsTarget _playerAsTarget = null;
 
     public void SetTileAreas(List<TileArea> tileAreas)
     {
@@ -32,6 +33,8 @@ public class EnemyCharacter : Character
 
         _enemyType = new EvilViolin();
         _characterManager.Enemies.Add(this);
+
+        _playerAsTarget = null;
     }
 
     public void Start()
@@ -41,7 +44,6 @@ public class EnemyCharacter : Character
         GameManager.Instance.CompleteMazeLevelEvent += OnMazeLevelCompleted;
 
         SetCharacterType(_enemyType);
-
         SetCurrentGridLocation(StartingPosition);
 
         _isInitialised = true;
@@ -125,18 +127,35 @@ public class EnemyCharacter : Character
             return;
         }
 
-        int RandomMax = 20;
-        int RandomNumber = UnityEngine.Random.Range(1, RandomMax + 1);
-
-        float targetPlayerChance = 0.30f; // 30% chance to go chase a player
-
-        if (RandomNumber <= targetPlayerChance * RandomMax) 
+        int randomOutOfHundred = UnityEngine.Random.Range(1, 101);
+        Logger.Log(randomOutOfHundred);
+        if (_playerAsTarget != null)
         {
-            TargetPlayer(reachablePlayers);
+            int targetPlayerAgainChance = 75; // if we just chased a player, 75% chance to go chase a player again!
+            if (randomOutOfHundred <= targetPlayerAgainChance)
+            {
+                TargetPlayer(reachablePlayers);
+                //Logger.Warning("Target player AGAIN");
+            }
+            else
+            {
+                SetRandomTarget();
+            }
         }
         else
         {
-            SetRandomTarget();
+            int targetPlayerChance = 30; // 30% chance to go chase a player
+
+            if (randomOutOfHundred <= targetPlayerChance)
+            {
+                TargetPlayer(reachablePlayers);
+                //Logger.Warning("Target player FOR THE FIRST TIME!");
+            }
+            else
+            {
+                SetRandomTarget();
+            }
+
         }
     }
 
@@ -167,11 +186,14 @@ public class EnemyCharacter : Character
                 _animationHandler.SetLocomotion(true);
         }
 
+        _playerAsTarget = new PlayerAsTarget(randomPlayer, playerGridLocation);
+
         Logger.Log(Logger.Pathfinding, $"The enemy {gameObject.name} is now going to the location of player {randomPlayer.gameObject.name} at {randomPlayer.CurrentGridLocation.X},{randomPlayer.CurrentGridLocation.Y}");
     }
 
     private void SetRandomTarget()
     {
+        _playerAsTarget = null;
         IsCalculatingPath = true;
         GridLocation randomGridLocation = GetRandomTileTarget().GridLocation;
         Logger.Log($"current location of enemy is ({CurrentGridLocation.X}, {CurrentGridLocation.Y} )");
