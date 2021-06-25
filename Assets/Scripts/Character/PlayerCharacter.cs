@@ -65,7 +65,7 @@ public class PlayerCharacter : Character
 
         base.Awake();
 
-        _pointerPresserTimer = _pointerPresserDelay;        
+        _pointerPresserTimer = 0;        
     }
 
     public virtual void Start()
@@ -229,7 +229,7 @@ public class PlayerCharacter : Character
 
     private void SetPointerLocomotionTarget(Vector2 target, ObjectDirection moveDirection)
     {
-        Logger.Warning($"SetPointerLocomotionTarget to target {target.x}, {target.y} in the direction {moveDirection}");
+        //Logger.Warning($"SetPointerLocomotionTarget to target {target.x}, {target.y} in the direction {moveDirection}");
         GridLocation targetGridLocation = GridLocation.FindClosestGridTile(target);
 
         if (!ValidateTarget(new TargetLocation(targetGridLocation, moveDirection))) return;
@@ -373,7 +373,7 @@ public class PlayerCharacter : Character
 
     public override void OnTargetReached()
     {
-        Logger.Warning("Target reached.");
+        //Logger.Warning("Target reached.");
         SetHasCalculatedTarget(false);
 
         if (!IsPressingMovementKey() && !_isPressingPointerForSeconds)
