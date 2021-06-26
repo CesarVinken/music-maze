@@ -21,6 +21,7 @@ public class EditorPlayerExitTileAttribute : EditorMazeTileAttributeModifier, IG
             tileAttributeRemover.RemoveEnemySpawnpoint();
             tileAttributeRemover.RemovePlayerOnlyAttribute();
             tileAttributeRemover.RemovePlayerSpawnpoint();
+            tileAttributeRemover.RemoveMusicInstrumentCase();
             tileAttributeRemover.RemoveTileObstacle();
 
             Logger.Warning(Logger.Editor, $"Now place player exit at {tile.GridLocation.X}, {tile.GridLocation.Y}");

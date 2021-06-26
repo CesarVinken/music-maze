@@ -28,6 +28,7 @@ public class MazeLevelGameplayManager : MonoBehaviour, IOnEventCallback, IGamepl
     [SerializeField] private GameObject _enemySpawnpointPrefab;
     [SerializeField] private GameObject _bridgePiecePrefab;
     [SerializeField] private GameObject _bridgeEdgePrefab;
+    [SerializeField] private GameObject _musicInstrumentCasePrefab;
 
     [SerializeField] private GameObject _cornerFillerPrefab;
 
@@ -51,7 +52,8 @@ public class MazeLevelGameplayManager : MonoBehaviour, IOnEventCallback, IGamepl
                 return _bridgePiecePrefab;
             case Type bridgeEdgePrefab when bridgeEdgePrefab == typeof(BridgeEdge):
                 return _bridgeEdgePrefab;
-
+            case Type musicInstrumentCasePrefab when musicInstrumentCasePrefab == typeof(MusicInstrumentCase):
+                return _musicInstrumentCasePrefab;
             default:
                 Logger.Error($"Could not find a prefab for the tile attribute type of {typeof(T)}");
                 return null ;
@@ -89,6 +91,7 @@ public class MazeLevelGameplayManager : MonoBehaviour, IOnEventCallback, IGamepl
         Guard.CheckIsNull(_enemySpawnpointPrefab, "EnemySpawnpointPrefab", gameObject);
         Guard.CheckIsNull(_cornerFillerPrefab, "CornerFillerPrefab", gameObject);
         Guard.CheckIsNull(_bridgePiecePrefab, "BridgePiecePrefab", gameObject);
+        Guard.CheckIsNull(_musicInstrumentCasePrefab, "MusicInstrumentCasePrefab", gameObject);
         Guard.CheckIsNull(_bridgeEdgePrefab, "BridgeEdgePrefab", gameObject);
 
         Instance = this;

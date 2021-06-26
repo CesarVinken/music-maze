@@ -119,6 +119,17 @@ public class MazeTileAttributeRemover : TileAttributeRemover
         }
     }
 
+    public void RemoveMusicInstrumentCase(MusicInstrumentCase musicInstrumentCase = null)
+    {
+        if (musicInstrumentCase == null)
+            musicInstrumentCase = (MusicInstrumentCase)_tile.GetAttributes().FirstOrDefault(attribute => attribute is MusicInstrumentCase);
+
+        if (musicInstrumentCase == null) return;
+
+        _tile.RemoveAttribute(musicInstrumentCase);
+        musicInstrumentCase.Remove();
+    }
+
     public void Remove(ITileAttribute attribute)
     {
         switch (attribute.GetType())
@@ -140,6 +151,9 @@ public class MazeTileAttributeRemover : TileAttributeRemover
                 break;
             case Type t when t == typeof(BridgePiece):
                 RemoveBridgePiece(attribute as BridgePiece);
+                break;
+            case Type t when t == typeof(MusicInstrumentCase):
+                RemoveMusicInstrumentCase(attribute as MusicInstrumentCase);
                 break;
             default:
                 Logger.Error($"Does not know how to remove attribute with type {attribute.GetType()}");

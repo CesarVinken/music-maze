@@ -25,6 +25,7 @@ public class EditorEnemySpawnpointTileAttribute : EditorMazeTileAttributeModifie
             tileAttributeRemover.RemovePlayerOnlyAttribute();
             tileAttributeRemover.RemovePlayerSpawnpoint();
             tileAttributeRemover.RemoveTileObstacle();
+            tileAttributeRemover.RemoveMusicInstrumentCase();
 
             tileAttributePlacer.PlaceEnemySpawnpoint();
 

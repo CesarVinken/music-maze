@@ -95,10 +95,6 @@ public class PlayerExit : TileObstacle, ITileAttribute, ITileConnectable
         tile.SetWalkable(true);
         IsOpen = true;
 
-        // Update pathfinding so that it can include this exit
-        //tile.PathNode = new PathNode();
-        //tile.PathNode.SetTile(tile);
-
         foreach (KeyValuePair<ObjectDirection, Tile> item in tile.Neighbours)
         {
             if (item.Value?.PathNode != null && item.Value.Walkable)
@@ -130,9 +126,6 @@ public class PlayerExit : TileObstacle, ITileAttribute, ITileConnectable
         
         gameObject.layer = 9; // set layer to PlayerOnly, which is layer 9. Should not be hardcoded
         _tileSpriteContainer.gameObject.layer = 9;
-
-        // Refresh pathfinding. TODO: only refresh tile for pathfinding and not the whole graph.
-        //AstarPath.active.Scan();
     }
 
     public void CloseExit()
@@ -147,8 +140,6 @@ public class PlayerExit : TileObstacle, ITileAttribute, ITileConnectable
         gameObject.layer = 8; // set layer to Unwalkable, which is layer 8. Should not be hardcoded
         _tileSpriteContainer.gameObject.layer = 8;
 
-        // Refresh pathfinding. TODO: only refresh tile for pathfinding and not the whole graph.
-
         foreach (KeyValuePair<ObjectDirection, Tile> neighbourTileItem in tile.Neighbours)
         {
             foreach (KeyValuePair<ObjectDirection, PathNode> item in neighbourTileItem.Value.PathNodeNeighbours)
@@ -160,9 +151,6 @@ public class PlayerExit : TileObstacle, ITileAttribute, ITileConnectable
             }
         }
         tile.PathNodeNeighbours.Clear();
-        //tile.PathNode = null;
-
-        //AstarPath.active.Scan();
     }  
 
     public IEnumerator TransformToColourful(Sprite colourfulSprite, Sprite secondaryColourfulSprite)

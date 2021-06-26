@@ -163,4 +163,14 @@ public class EditorMazeTileAttributePlacer : MazeTileAttributePlacer<EditorMazeT
             mazeTilePathOnNeighbour.WithConnectionScoreInfo(mazeTilePathConnectionScoreOnNeighbourInfo);
         }
     }
+
+    public void PlaceMusicInstrumentCase()
+    {
+        MusicInstrumentCase musicInstrumentCase = (MusicInstrumentCase)InstantiateTileAttributeGO<MusicInstrumentCase>();
+        //musicInstrumentCase.SetSprite();
+        musicInstrumentCase.SetTile(_tile);
+
+        _tile.AddAttribute(musicInstrumentCase);
+
+    }
 }
