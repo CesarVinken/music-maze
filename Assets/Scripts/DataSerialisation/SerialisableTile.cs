@@ -227,9 +227,14 @@ public class SerialisableTile
         else if (tileAttribute.GetType() == typeof(BridgeEdge))
         {
             BridgeEdge bridgeEdge = tileAttribute as BridgeEdge;
-            
+
             SerialisableBridgeEdgeAttribute serialisableBridgeEdgeAttribute = new SerialisableBridgeEdgeAttribute(bridgeEdge.EdgeSide);
             return serialisableBridgeEdgeAttribute;
+        }
+        else if (tileAttribute.GetType() == typeof(MusicInstrumentCase))
+        {
+            SerialisableMusicInstrumentCaseAttribute serialisableMusicInstrumentCaseAttribute = new SerialisableMusicInstrumentCaseAttribute();
+            return serialisableMusicInstrumentCaseAttribute;
         }
         else
         {

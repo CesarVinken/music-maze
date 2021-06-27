@@ -9,9 +9,12 @@ public class EditorMusicInstrumentCaseTileAttribute : EditorMazeTileAttributeMod
 
     public override void PlaceAttribute(EditorMazeTile tile)
     {
-        if (tile.TileMainMaterial.GetType() != typeof(GroundMainMaterial))
+        if (tile.TileMainMaterial.GetType() == typeof(WaterMainMaterial))
         {
-            return;
+            if(tile.TryGetBridgePiece() == null)
+            {
+                return;
+            }
         }
 
         EditorMazeTileAttributePlacer tileAttributePlacer = new EditorMazeTileAttributePlacer(tile);

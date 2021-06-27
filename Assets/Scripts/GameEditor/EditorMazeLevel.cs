@@ -175,6 +175,10 @@ public class EditorMazeLevel : MazeLevel, IEditorLevel
                     Logger.Error($"Could not parse the BridgeEdgeSide value{serialisableBridgeEdgeAttribute.BridgeEdgeSide}");
                 }
             }
+            else if (type.Equals(typeof(SerialisableMusicInstrumentCaseAttribute)))
+            {
+                tileAttributePlacer.PlaceMusicInstrumentCase();
+            }
             else
             {
                 Logger.Error($"Unknown tile attribute with type {type}");

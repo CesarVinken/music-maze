@@ -7,18 +7,26 @@ public class MusicInstrumentCase : MonoBehaviour, ITileAttribute
     public string ParentId;
 
     [SerializeField] protected SpriteRenderer _spriteRenderer;
-    [SerializeField] private Sprite _musicInstrumentCaseSprite;
+    [SerializeField] private Sprite[] _musicInstrumentCaseSprites;
 
     private int _sortingOrderBase = 500;
     public int SortingOrderBase { get => _sortingOrderBase; set => _sortingOrderBase = value; }
 
     public void Awake()
     {
-        Guard.CheckIsNull(_musicInstrumentCaseSprite, "_musicInstrumentCaseSprite", gameObject);
+        if(_musicInstrumentCaseSprites.Length == 0)
+        {
+            Logger.Error("Could not find MusicInstrumentCaseSprites");
+        }
+        Guard.CheckIsNull(_musicInstrumentCaseSprites, "_musicInstrumentCaseSprite", gameObject);
 
-        _spriteRenderer.sprite = _musicInstrumentCaseSprite;
+        _spriteRenderer.sprite = _musicInstrumentCaseSprites[0];
     }
 
+    public void OpenCase()
+    {
+        _spriteRenderer.sprite = _musicInstrumentCaseSprites[1];
+    }
 
     public void Remove()
     {
