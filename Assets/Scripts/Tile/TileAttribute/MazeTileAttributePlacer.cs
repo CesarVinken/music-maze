@@ -103,4 +103,11 @@ public class MazeTileAttributePlacer<T> : TileAttributePlacer<T> where T : MazeT
             updatedObstacleConnections[i].WithConnectionScoreInfo(new TileConnectionScoreInfo(updatedObstacleConnections[i].ConnectionScore, updatedObstacleConnections[i].SpriteNumber));
         }
     }
+
+    public void PlaceMusicInstrumentCase()
+    {
+        MusicInstrumentCase musicInstrumentCase = (MusicInstrumentCase)InstantiateTileAttributeGO<MusicInstrumentCase>();
+
+        Tile.AddAttribute(musicInstrumentCase);
+    }
 }

@@ -164,6 +164,10 @@ public class InGameMazeLevel : MazeLevel, IInGameLevel
                     Logger.Error($"Could not parse the BridgeEdgeSide value{serialisableBridgeEdgeAttribute.BridgeEdgeSide}");
                 }
             }
+            else if (type.Equals(typeof(SerialisableMusicInstrumentCaseAttribute)))
+            {
+                tileAttributePlacer.PlaceMusicInstrumentCase();
+            }
             else
             {
                 Logger.Error($"Unknown tile attribute of type {type}");

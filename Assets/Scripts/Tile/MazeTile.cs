@@ -58,6 +58,12 @@ public class MazeTile : Tile, IMazeLevel
         return enemySpawnpoint;
     }
 
+    public MusicInstrumentCase TryGetMusicInstrumentCase()
+    {
+        MusicInstrumentCase musicInstrumentCase = (MusicInstrumentCase)_tileAttributes.FirstOrDefault(attribute => attribute is MusicInstrumentCase);
+        return musicInstrumentCase;
+    }
+
     public void TryMakeMarkable(bool isMarkable)
     {
         MazeTilePath mazeTilePath = (MazeTilePath)_tileBackgrounds.FirstOrDefault(background => background is MazeTilePath);

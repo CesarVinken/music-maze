@@ -9,6 +9,9 @@ public class InGameMazeTile : MazeTile
     {
         if (!Walkable) return;
 
+
+        MusicInstrumentCase musicInstrumentCase = TryGetMusicInstrumentCase();
+
         PlayerCharacter player = collision.gameObject.GetComponent<PlayerCharacter>();
         if (player != null)
         {
@@ -22,7 +25,22 @@ public class InGameMazeTile : MazeTile
             if (!Markable) return;
 
             MazeLevelGameplayManager.Instance.SetTileMarker(this, player);
+
+            if (musicInstrumentCase != null)
+            {
+                musicInstrumentCase.PlayerCollisionOnTile(player);
+            }
         }
+        else
+        {
+            if (musicInstrumentCase != null)
+            {
+                EnemyCharacter enemy = collision.gameObject.GetComponent<EnemyCharacter>();
+                musicInstrumentCase.EnemyCollisinOnTie(enemy);
+            }
+        }
+
+
     }
 
     public void AddTilesToTransform(List<InGameMazeTile> tilesToTransform)
