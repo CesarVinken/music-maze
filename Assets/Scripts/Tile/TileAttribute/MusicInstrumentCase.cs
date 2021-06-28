@@ -46,8 +46,14 @@ public class MusicInstrumentCase : MonoBehaviour, ITileAttribute
     {
         if (_isOpen && enemy != null)
         {
+            // an already started enemy should not be affected
+            if(enemy.ChasingState == ChasingState.Startled)
+            {
+                return;
+            }
             Logger.Log($"enemy {enemy.CharacterBlueprint.CharacterType} entered tile {Tile.GridLocation.X}, {Tile.GridLocation.Y} with an OPENED music instrument case");
 
+            enemy.BecomeStartled();
         }
     }
 

@@ -18,6 +18,9 @@ public class MazeLevelGameplayManager : MonoBehaviour, IOnEventCallback, IGamepl
 
     public GameObject EditorTilePrefab;
     public GameObject InGameTilePrefab;
+
+    [SerializeField] private GameObject _loopedAnimationEffectPrefab;
+
     [SerializeField] private GameObject _tileBaseGroundPrefab;
     [SerializeField] private GameObject _tileBaseWaterPrefab;
     [SerializeField] private GameObject _tilePathPrefab;
@@ -33,6 +36,18 @@ public class MazeLevelGameplayManager : MonoBehaviour, IOnEventCallback, IGamepl
     [SerializeField] private GameObject _cornerFillerPrefab;
 
     public int NumberOfUnmarkedTiles = -1;
+
+    public GameObject GetEffectAnimationPrefab(AnimationEffect animationEffect)
+    {
+        switch (animationEffect)
+        {
+            case AnimationEffect.StartledSpinner:
+                return _loopedAnimationEffectPrefab;
+            default:
+                Logger.Error($"No prefab was set up for animationEffect {animationEffect}");
+                return null;
+        }
+    }
 
     public GameObject GetTileAttributePrefab<T>() where T : ITileAttribute
     {
@@ -80,6 +95,8 @@ public class MazeLevelGameplayManager : MonoBehaviour, IOnEventCallback, IGamepl
 
     public void Awake()
     {
+        Guard.CheckIsNull(_loopedAnimationEffectPrefab, "_loopedAnimationEffectPrefab", gameObject);
+
         Guard.CheckIsNull(EditorTilePrefab, "EditorTilePrefab", gameObject);
         Guard.CheckIsNull(InGameTilePrefab, "InGameTilePrefab", gameObject);
         Guard.CheckIsNull(_tileBaseGroundPrefab, "TileBaseBackgroundPrefab", gameObject);

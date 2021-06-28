@@ -13,10 +13,15 @@ public class EnemyCharacter : Character
     private bool _isIdling = false;
 
     private ICharacter _enemyType = null;
+    private ChasingState _chasingState = ChasingState.Loitering;
 
     private List<TileArea> _tileAreas = new List<TileArea>();
     private List<Tile> _accessibleTiles = new List<Tile>();
     private PlayerAsTarget _playerAsTarget = null;
+
+    const float STARTLED_TIME = 4f; // in seconds
+
+    public ChasingState ChasingState { get => _chasingState; private set => _chasingState = value; }
 
     public void SetTileAreas(List<TileArea> tileAreas)
     {
@@ -49,6 +54,8 @@ public class EnemyCharacter : Character
         _isInitialised = true;
 
         AssignAccessibleTiles();
+
+        SetChasingState(ChasingState.Active);
     }
 
     public void Update()
@@ -74,6 +81,11 @@ public class EnemyCharacter : Character
         {
             MoveCharacter();
         }
+    }
+
+    public void SetChasingState(ChasingState chasingState)
+    {
+        ChasingState = chasingState;
     }
 
     public void SetSpawnpoint(Character character, EnemySpawnpoint spawnpoint)
@@ -157,6 +169,28 @@ public class EnemyCharacter : Character
             }
 
         }
+    }
+
+    public void BecomeStartled()
+    {
+        StartCoroutine(StartleCoroutine());
+    }
+
+    private IEnumerator StartleCoroutine()
+    {
+        SetChasingState(ChasingState.Startled);
+        GameObject startledSpinnerPrefab = MazeLevelGameplayManager.Instance.GetEffectAnimationPrefab(AnimationEffect.StartledSpinner);
+        GameObject startledSpinningEffectGO = GameObject.Instantiate(startledSpinnerPrefab, transform);
+        Vector3 spawnPosition = new Vector3(startledSpinningEffectGO.transform.parent.position.x - 0.5f, startledSpinningEffectGO.transform.parent.position.y + 0.1f, startledSpinningEffectGO.transform.parent.position.z);
+        startledSpinningEffectGO.transform.position = spawnPosition;
+
+        EffectController startledSpinningEffectController = startledSpinningEffectGO.GetComponent<EffectController>();
+        startledSpinningEffectController.PlayEffectLoop(AnimationEffect.StartledSpinner);
+
+        yield return new WaitForSeconds(STARTLED_TIME);
+        Destroy(startledSpinningEffectController);
+        Destroy(startledSpinningEffectGO);
+        SetChasingState(ChasingState.Active); //TODO: if in the meantime the level finishes, interrupt coroutine and set player to loitering
     }
 
     private void TargetPlayer(List<PlayerNumber> reachablePlayers)
