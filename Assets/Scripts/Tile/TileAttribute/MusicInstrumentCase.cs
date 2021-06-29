@@ -68,6 +68,13 @@ public class MusicInstrumentCase : MonoBehaviour, ITileAttribute
         _isOpen = true;
 
         yield return new WaitForSeconds(OPEN_CASE_LIFETIME);
+        GameObject smokeExplosionPrefab = MazeLevelGameplayManager.Instance.GetEffectAnimationPrefab(AnimationEffect.SmokeExplosion);
+        GameObject smokeExplosionGO = GameObject.Instantiate(smokeExplosionPrefab, SceneObjectManager.Instance.transform);
+        Vector3 spawnPosition = GridLocation.GridToVector(Tile.GridLocation);
+        smokeExplosionGO.transform.position = spawnPosition;
+
+        EffectController smokExplosionEffectController = smokeExplosionGO.GetComponent<EffectController>();
+        smokExplosionEffectController.PlayEffect(AnimationEffect.SmokeExplosion);
 
         Destroy(gameObject);
     }

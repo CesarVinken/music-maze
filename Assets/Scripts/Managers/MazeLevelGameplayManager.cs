@@ -20,6 +20,7 @@ public class MazeLevelGameplayManager : MonoBehaviour, IOnEventCallback, IGamepl
     public GameObject InGameTilePrefab;
 
     [SerializeField] private GameObject _loopedAnimationEffectPrefab;
+    [SerializeField] private GameObject _oneTimeAnimationEffectPrefab;
 
     [SerializeField] private GameObject _tileBaseGroundPrefab;
     [SerializeField] private GameObject _tileBaseWaterPrefab;
@@ -43,6 +44,8 @@ public class MazeLevelGameplayManager : MonoBehaviour, IOnEventCallback, IGamepl
         {
             case AnimationEffect.StartledSpinner:
                 return _loopedAnimationEffectPrefab;
+            case AnimationEffect.SmokeExplosion:
+                return _oneTimeAnimationEffectPrefab;
             default:
                 Logger.Error($"No prefab was set up for animationEffect {animationEffect}");
                 return null;

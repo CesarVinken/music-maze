@@ -1,11 +1,5 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-
-public enum AnimationEffect
-{
-    StartledSpinner
-}
 
 public class EffectController : MonoBehaviour
 {
@@ -27,5 +21,24 @@ public class EffectController : MonoBehaviour
                 Logger.Error($"Nothing implemented for the animation effect {animationEffect}");
                 break;
         }
+    }
+
+    public void PlayEffect(AnimationEffect animationEffect)
+    {
+        switch (animationEffect)
+        {
+            case AnimationEffect.SmokeExplosion:
+                StartCoroutine(DestroyAfterCoroutine(3f));
+                break;
+            default:
+                Logger.Error($"Nothing implemented for the animation effect {animationEffect}");
+                break;
+        }
+    }
+
+    private IEnumerator DestroyAfterCoroutine(float time)
+    {
+        yield return new WaitForSeconds(time);
+        Destroy(gameObject);
     }
 }
