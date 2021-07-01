@@ -19,7 +19,9 @@ public class EnemyCharacter : Character
     private List<Tile> _accessibleTiles = new List<Tile>();
     private PlayerAsTarget _playerAsTarget = null;
 
-    const float STARTLED_TIME = 4f; // in seconds
+    const float STARTLED_FULL_STRENGTH_LIFETIME = 5f;
+    const float BLINKING_SPEED = 0.4f;
+    const float BLINKING_LIFETIME = 5f;
 
     public ChasingState ChasingState { get => _chasingState; private set => _chasingState = value; }
 
@@ -186,8 +188,23 @@ public class EnemyCharacter : Character
 
         EffectController startledSpinningEffectController = startledSpinningEffectGO.GetComponent<EffectController>();
         startledSpinningEffectController.PlayEffectLoop(AnimationEffect.StartledSpinner);
+        SpriteRenderer spriteRenderer = startledSpinningEffectController.SpriteRenderer;
 
-        yield return new WaitForSeconds(STARTLED_TIME);
+        yield return new WaitForSeconds(STARTLED_FULL_STRENGTH_LIFETIME);
+
+        float blinkingTimer = 0;
+        float alphaValue = 0;
+        
+        while (blinkingTimer <= BLINKING_LIFETIME)
+        {
+            alphaValue = spriteRenderer.color.a == 0 ? 1 : 0;
+            Color changedAlphaColour = new Color(spriteRenderer.color.r, spriteRenderer.color.g, spriteRenderer.color.b, alphaValue);
+            spriteRenderer.color = changedAlphaColour;
+
+            yield return new WaitForSeconds(BLINKING_SPEED);
+            blinkingTimer++;
+        }
+
         Destroy(startledSpinningEffectController);
         Destroy(startledSpinningEffectGO);
         SetChasingState(ChasingState.Active); //TODO: if in the meantime the level finishes, interrupt coroutine and set player to loitering

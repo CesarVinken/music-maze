@@ -4,10 +4,12 @@ using UnityEngine;
 public class EffectController : MonoBehaviour
 {
     [SerializeField] private Animator _animator;
+    public SpriteRenderer SpriteRenderer;
 
     public void Awake()
     {
         Guard.CheckIsNull(_animator, "_animator", gameObject);
+        Guard.CheckIsNull(SpriteRenderer, "SpriteRenderer", gameObject);
     }
 
     public void PlayEffectLoop(AnimationEffect animationEffect)

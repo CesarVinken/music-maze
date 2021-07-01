@@ -10,13 +10,15 @@ public class MusicInstrumentCase : MonoBehaviour, ITileAttribute
     [SerializeField] protected SpriteRenderer _spriteRenderer;
     [SerializeField] private Sprite[] _musicInstrumentCaseSprites;
 
-    private bool _isOpen;
+    private bool _isOpen = false;
 
     private int _sortingOrderBase = 500;
     public int SortingOrderBase { get => _sortingOrderBase; set => _sortingOrderBase = value; }
 
     // in seconds
-    const float OPEN_CASE_LIFETIME = 10f;
+    const float OPEN_CASE_FULL_STRENGTH_LIFETIME = 6f;
+    const float BLINKING_SPEED = 0.4f;
+    const float BLINKING_LIFETIME = 4f;
 
     public void Awake()
     {
@@ -24,7 +26,7 @@ public class MusicInstrumentCase : MonoBehaviour, ITileAttribute
         {
             Logger.Error("Could not find MusicInstrumentCaseSprites");
         }
-        
+
         Guard.CheckIsNull(_musicInstrumentCaseSprites, "_musicInstrumentCaseSprite", gameObject);
 
         _isOpen = false;
@@ -63,11 +65,25 @@ public class MusicInstrumentCase : MonoBehaviour, ITileAttribute
 
     private IEnumerator OpenedCaseCoroutine()
     {
-
         _spriteRenderer.sprite = _musicInstrumentCaseSprites[1];
         _isOpen = true;
 
-        yield return new WaitForSeconds(OPEN_CASE_LIFETIME);
+        yield return new WaitForSeconds(OPEN_CASE_FULL_STRENGTH_LIFETIME);
+
+        float blinkingTimer = 0;
+        float alphaValue = 0;
+
+
+        while (blinkingTimer <= BLINKING_LIFETIME)
+        {
+            alphaValue = _spriteRenderer.color.a == 0 ? 1 : 0;
+            Color changedAlphaColour = new Color(_spriteRenderer.color.r, _spriteRenderer.color.g, _spriteRenderer.color.b, alphaValue);
+            _spriteRenderer.color = changedAlphaColour;
+
+            yield return new WaitForSeconds(BLINKING_SPEED);
+            blinkingTimer++;
+        }
+
         GameObject smokeExplosionPrefab = MazeLevelGameplayManager.Instance.GetEffectAnimationPrefab(AnimationEffect.SmokeExplosion);
         GameObject smokeExplosionGO = GameObject.Instantiate(smokeExplosionPrefab, SceneObjectManager.Instance.transform);
         Vector3 spawnPosition = GridLocation.GridToVector(Tile.GridLocation);
@@ -82,7 +98,6 @@ public class MusicInstrumentCase : MonoBehaviour, ITileAttribute
     private void OpenCase()
     {
         StartCoroutine(OpenedCaseCoroutine());
-
     }
 
     public void Remove()
