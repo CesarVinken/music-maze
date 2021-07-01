@@ -18,6 +18,7 @@ public class MazeScoreScreenContainer : MonoBehaviour
     [SerializeField] private Text _player1Label;
     [SerializeField] private Text _player1MarkedTilesScoreLabel;
     [SerializeField] private Text _player1TimesCaughtScoreLabel;
+    [SerializeField] private Text _player1TimesEnemyStartledScoreLabel;
     [SerializeField] private Text _player1FirstFinishScoreLabel;
     [SerializeField] private Text _player1MazeTotalScoreLabel;
     [SerializeField] private Text _player1TotalScoreLabel;
@@ -26,6 +27,7 @@ public class MazeScoreScreenContainer : MonoBehaviour
     [SerializeField] private Text _player2MarkedTilesScoreLabel;
     [SerializeField] private Text _player2FirstFinishScoreLabel;
     [SerializeField] private Text _player2TimesCaughtScoreLabel;
+    [SerializeField] private Text _player2TimesEnemyStartledScoreLabel;
     [SerializeField] private Text _player2MazeTotalScoreLabel;
     [SerializeField] private Text _player2TotalScoreLabel;
 
@@ -48,12 +50,14 @@ public class MazeScoreScreenContainer : MonoBehaviour
         Guard.CheckIsNull(_player1Label, "Player1Label", gameObject);
         Guard.CheckIsNull(_player1MarkedTilesScoreLabel, "Player1MarkedTilesScoreLabel", gameObject);
         Guard.CheckIsNull(_player1TimesCaughtScoreLabel, "Player1TimesCaughtScoreLabel", gameObject);
+        Guard.CheckIsNull(_player1TimesEnemyStartledScoreLabel, "Player1TimesEnemyStartledScoreLabel", gameObject);
         Guard.CheckIsNull(_player1FirstFinishScoreLabel, "Player1FirstFinishScoreLabel", gameObject);
         Guard.CheckIsNull(_player1TotalScoreLabel, "Player1TotalScoreLabel", gameObject);
 
         Guard.CheckIsNull(_player2Label, "Player2Label", gameObject);
         Guard.CheckIsNull(_player2MarkedTilesScoreLabel, "Player2MarkedTilesScoreLabel", gameObject);
         Guard.CheckIsNull(_player2TimesCaughtScoreLabel, "Player2TimesCaughtScoreLabel", gameObject);
+        Guard.CheckIsNull(_player2TimesEnemyStartledScoreLabel, "Player2TimesEnemyStartledScoreLabel", gameObject);
         Guard.CheckIsNull(_player2FirstFinishScoreLabel, "Player2FinishedFirstScoreLabel", gameObject);
         Guard.CheckIsNull(_player2TotalScoreLabel, "Player2TotalScoreLabel", gameObject);
         Guard.CheckIsNull(_waitingForNextLevelLabel, "WaitingForNextLevelLabel", gameObject);
@@ -120,6 +124,7 @@ public class MazeScoreScreenContainer : MonoBehaviour
                 _player1Label.text = GameManager.Instance.CharacterManager.GetPlayerCharacter<PlayerCharacter>(PlayerNumber.Player1).name;
                 _player1MarkedTilesScoreLabel.text = playerScores[PlayerNumber.Player1].TileMarkScore.ToString();
                 _player1TimesCaughtScoreLabel.text = playerScores[PlayerNumber.Player1].PlayerCaughtScore.ToString();
+                _player1TimesEnemyStartledScoreLabel.text = playerScores[PlayerNumber.Player1].EnemiesStartledScore.ToString();
                 _player1FirstFinishScoreLabel.text = playerScores[PlayerNumber.Player1].FinishFirstBonusScore.ToString();
 
                 _player1MazeTotalScoreLabel.text = playerScores[PlayerNumber.Player1].MazeScore.ToString();
@@ -128,6 +133,7 @@ public class MazeScoreScreenContainer : MonoBehaviour
                 _player1Label.gameObject.SetActive(true);
                 _player1MarkedTilesScoreLabel.gameObject.SetActive(true);
                 _player1TimesCaughtScoreLabel.gameObject.SetActive(true);
+                _player1TimesEnemyStartledScoreLabel.gameObject.SetActive(true);
                 _player1FirstFinishScoreLabel.gameObject.SetActive(true);
                 _player1MazeTotalScoreLabel.gameObject.SetActive(true);
                 _player1TotalScoreLabel.gameObject.SetActive(true);
@@ -137,6 +143,7 @@ public class MazeScoreScreenContainer : MonoBehaviour
                 _player2Label.text = GameManager.Instance.CharacterManager.GetPlayerCharacter<PlayerCharacter>(PlayerNumber.Player2).name;
                 _player2MarkedTilesScoreLabel.text = playerScores[PlayerNumber.Player2].TileMarkScore.ToString();
                 _player2TimesCaughtScoreLabel.text = playerScores[PlayerNumber.Player2].PlayerCaughtScore.ToString();
+                _player2TimesEnemyStartledScoreLabel.text = playerScores[PlayerNumber.Player2].EnemiesStartledScore.ToString();
                 _player2FirstFinishScoreLabel.text = playerScores[PlayerNumber.Player2].FinishFirstBonusScore.ToString();
 
                 _player2MazeTotalScoreLabel.text = playerScores[PlayerNumber.Player2].MazeScore.ToString();
@@ -145,6 +152,7 @@ public class MazeScoreScreenContainer : MonoBehaviour
                 _player2Label.gameObject.SetActive(true);
                 _player2MarkedTilesScoreLabel.gameObject.SetActive(true);
                 _player2TimesCaughtScoreLabel.gameObject.SetActive(true);
+                _player2TimesEnemyStartledScoreLabel.gameObject.SetActive(true);
                 _player2FirstFinishScoreLabel.gameObject.SetActive(true);
                 _player2MazeTotalScoreLabel.gameObject.SetActive(true);
                 _player2TotalScoreLabel.gameObject.SetActive(true);
@@ -156,6 +164,7 @@ public class MazeScoreScreenContainer : MonoBehaviour
             _player2Label.gameObject.SetActive(false);
             _player2MarkedTilesScoreLabel.gameObject.SetActive(false);
             _player2TimesCaughtScoreLabel.gameObject.SetActive(false);
+            _player2TimesEnemyStartledScoreLabel.gameObject.SetActive(false);
             _player2MazeTotalScoreLabel.gameObject.SetActive(false);
             _player2TotalScoreLabel.gameObject.SetActive(false);
 

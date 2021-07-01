@@ -11,6 +11,7 @@ public class MusicInstrumentCase : MonoBehaviour, ITileAttribute
     [SerializeField] private Sprite[] _musicInstrumentCaseSprites;
 
     private bool _isOpen = false;
+    private MazePlayerCharacter _caseOpener;
 
     private int _sortingOrderBase = 500;
     public int SortingOrderBase { get => _sortingOrderBase; set => _sortingOrderBase = value; }
@@ -34,7 +35,7 @@ public class MusicInstrumentCase : MonoBehaviour, ITileAttribute
         _spriteRenderer.sprite = _musicInstrumentCaseSprites[0];
     }
 
-    public void PlayerCollisionOnTile(PlayerCharacter player)
+    public void PlayerCollisionOnTile(MazePlayerCharacter player)
     {
         if (player != null)
         {
@@ -43,7 +44,7 @@ public class MusicInstrumentCase : MonoBehaviour, ITileAttribute
             Logger.Log("{0} entered tile {1},{2} with music instrument case", player.Name, Tile.GridLocation.X, Tile.GridLocation.Y);
             if (GameRules.GamePlayerType == GamePlayerType.NetworkMultiplayer && !player.PhotonView.IsMine) return;
 
-            OpenCase();
+            OpenCase(player);
             return;
         }
     }
@@ -60,6 +61,7 @@ public class MusicInstrumentCase : MonoBehaviour, ITileAttribute
             Logger.Log($"enemy {enemy.CharacterBlueprint.CharacterType} entered tile {Tile.GridLocation.X}, {Tile.GridLocation.Y} with an OPENED music instrument case");
 
             enemy.BecomeStartled();
+            _caseOpener.MadeEnemyListenToMusicInstrument();
         }
     }
 
@@ -72,7 +74,6 @@ public class MusicInstrumentCase : MonoBehaviour, ITileAttribute
 
         float blinkingTimer = 0;
         float alphaValue = 0;
-
 
         while (blinkingTimer <= BLINKING_LIFETIME)
         {
@@ -95,8 +96,9 @@ public class MusicInstrumentCase : MonoBehaviour, ITileAttribute
         Destroy(gameObject);
     }
 
-    private void OpenCase()
+    private void OpenCase(MazePlayerCharacter player)
     {
+        _caseOpener = player;
         StartCoroutine(OpenedCaseCoroutine());
     }
 

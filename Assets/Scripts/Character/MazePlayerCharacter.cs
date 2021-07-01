@@ -11,7 +11,8 @@ public class MazePlayerCharacter : PlayerCharacter
     public event Action PlayerExitsEvent;
     public event Action PlayerCaughtEvent;
 
-    public int TimesCaught = 0;
+    public int TimesCaughtByEnemy = 0;
+    public int TimesMadeEnemyListenToMusicInstrument = 0;
 
     public override void Awake()
     {
@@ -60,7 +61,10 @@ public class MazePlayerCharacter : PlayerCharacter
         EnemyCharacter enemy = collision.gameObject.GetComponent<EnemyCharacter>();
         if (enemy != null)
         {
-            PlayerCaughtEvent?.Invoke();
+            if(enemy.ChasingState != ChasingState.Startled)
+            {
+                PlayerCaughtEvent?.Invoke();
+            }
         }
     }
 
@@ -100,6 +104,11 @@ public class MazePlayerCharacter : PlayerCharacter
     [PunRPC] // the part all clients need to be informed about
     private void PunRPCCaughtByEnemy()
     {
-        TimesCaught++;
+        TimesCaughtByEnemy++;
+    }
+
+    public void MadeEnemyListenToMusicInstrument()
+    {
+        TimesMadeEnemyListenToMusicInstrument++;
     }
 }

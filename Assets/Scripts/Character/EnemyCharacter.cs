@@ -135,7 +135,8 @@ public class EnemyCharacter : Character
             }
         }
         //Logger.Log($"Number of reachable players is: {reachablePlayers.Count}");
-        if(reachablePlayers.Count == 0)
+        if(ChasingState == ChasingState.Startled ||
+            reachablePlayers.Count == 0)
         {
             SetRandomTarget();
             return;
@@ -169,7 +170,6 @@ public class EnemyCharacter : Character
             {
                 SetRandomTarget();
             }
-
         }
     }
 
@@ -181,6 +181,7 @@ public class EnemyCharacter : Character
     private IEnumerator StartleCoroutine()
     {
         SetChasingState(ChasingState.Startled);
+
         GameObject startledSpinnerPrefab = MazeLevelGameplayManager.Instance.GetEffectAnimationPrefab(AnimationEffect.StartledSpinner);
         GameObject startledSpinningEffectGO = GameObject.Instantiate(startledSpinnerPrefab, transform);
         Vector3 spawnPosition = new Vector3(startledSpinningEffectGO.transform.parent.position.x - 0.5f, startledSpinningEffectGO.transform.parent.position.y + 0.1f, startledSpinningEffectGO.transform.parent.position.z);

@@ -12,13 +12,11 @@ public class InGameMazeTile : MazeTile
 
         MusicInstrumentCase musicInstrumentCase = TryGetMusicInstrumentCase();
 
-        PlayerCharacter player = collision.gameObject.GetComponent<PlayerCharacter>();
+        MazePlayerCharacter player = collision.gameObject.GetComponent<MazePlayerCharacter>();
         if (player != null)
         {
             //Logger.Log("{0} entered tile {1},{2}", player.name, GridLocation.X, GridLocation.Y);
             if (GameRules.GamePlayerType == GamePlayerType.NetworkMultiplayer && !player.PhotonView.IsMine) return;
-
-            //player.UpdateCurrentGridLocation(GridLocation);
 
             if (PlayerMarkRenderer.sprite != null) return;
 
@@ -39,8 +37,6 @@ public class InGameMazeTile : MazeTile
                 musicInstrumentCase.EnemyCollisinOnTie(enemy);
             }
         }
-
-
     }
 
     public void AddTilesToTransform(List<InGameMazeTile> tilesToTransform)
