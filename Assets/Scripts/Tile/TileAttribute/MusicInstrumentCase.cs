@@ -42,7 +42,7 @@ public class MusicInstrumentCase : MonoBehaviour, ITileAttribute
             if (_isOpen) return;
 
             Logger.Log("{0} entered tile {1},{2} with music instrument case", player.Name, Tile.GridLocation.X, Tile.GridLocation.Y);
-            if (GameRules.GamePlayerType == GamePlayerType.NetworkMultiplayer && !player.PhotonView.IsMine) return;
+            //if (GameRules.GamePlayerType == GamePlayerType.NetworkMultiplayer && !player.PhotonView.IsMine) return;
 
             OpenCase(player);
             return;
@@ -58,7 +58,10 @@ public class MusicInstrumentCase : MonoBehaviour, ITileAttribute
             {
                 return;
             }
-            Logger.Log($"enemy {enemy.CharacterBlueprint.CharacterType} entered tile {Tile.GridLocation.X}, {Tile.GridLocation.Y} with an OPENED music instrument case");
+            if(GameRules.GamePlayerType != GamePlayerType.NetworkMultiplayer || enemy.PhotonView?.IsMine == true)
+            {
+                Logger.Log($"enemy {enemy.CharacterBlueprint.CharacterType} entered tile {Tile.GridLocation.X}, {Tile.GridLocation.Y} with an OPENED music instrument case");
+            }
 
             enemy.BecomeStartled();
             _caseOpener.MadeEnemyListenToMusicInstrument();

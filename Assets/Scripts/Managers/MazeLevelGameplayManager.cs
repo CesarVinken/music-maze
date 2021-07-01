@@ -252,6 +252,34 @@ public class MazeLevelGameplayManager : MonoBehaviour, IOnEventCallback, IGamepl
         }
     }
 
+    public void PlayerCollisionWithMusicInstrumentCase(InGameMazeTile tile, MazePlayerCharacter player, MusicInstrumentCase musicInstrumentCase)
+    {
+        if (GameRules.GamePlayerType == GamePlayerType.SinglePlayer ||
+            GameRules.GamePlayerType == GamePlayerType.SplitScreenMultiplayer)
+        { 
+            musicInstrumentCase.PlayerCollisionOnTile(player);
+        }
+        else // network multiplayer
+        {
+            PlayerCollidesWithMusicInstrumentCaseEvent playerCollidesWithMusicInstrumentCaseEvent = new PlayerCollidesWithMusicInstrumentCaseEvent();
+            playerCollidesWithMusicInstrumentCaseEvent.SendPlayerCollidesWithMusicInstrumentCaseEvent(tile.GridLocation, player);
+        }
+    }
+
+    public void EnemyCollisionWithMusicInstrumentCase(InGameMazeTile tile, EnemyCharacter enemy, MusicInstrumentCase musicInstrumentCase)
+    {
+        if (GameRules.GamePlayerType == GamePlayerType.SinglePlayer ||
+       GameRules.GamePlayerType == GamePlayerType.SplitScreenMultiplayer)
+        {
+            musicInstrumentCase.EnemyCollisinOnTie(enemy);
+        }
+        else // network multiplayer
+        {
+            EnemyCollidesWithMusicInstrumentCaseEvent enemyCollidesWithMusicInstrumentCaseEvent = new EnemyCollidesWithMusicInstrumentCaseEvent();
+            enemyCollidesWithMusicInstrumentCaseEvent.SendEnemyCollidesWithMusicInstrumentCaseEvent(tile.GridLocation, enemy);
+        }
+    }
+
     public void LoadOverworld(string overworldName = "default")
     {
         if (GameRules.GamePlayerType == GamePlayerType.SinglePlayer ||
@@ -324,6 +352,7 @@ public class MazeLevelGameplayManager : MonoBehaviour, IOnEventCallback, IGamepl
     public void OnEvent(EventData photonEvent)
     {
         byte eventCode = photonEvent.Code;
+
         if (eventCode == PlayerMarksTileEvent.PlayerMarksTileEventCode)
         {
             object[] data = (object[])photonEvent.CustomData;
@@ -370,6 +399,44 @@ public class MazeLevelGameplayManager : MonoBehaviour, IOnEventCallback, IGamepl
 
             IEnumerator loadLevelCoroutine = LoadOverworldCoroutine("Overworld");
             StartCoroutine(loadLevelCoroutine);
+        } else if (eventCode == PlayerCollidesWithMusicInstrumentCaseEvent.PlayerCollidesWithMusicInstrumentCaseEventCode)
+        {
+            object[] data = (object[])photonEvent.CustomData;
+            GridLocation tileLocation = new GridLocation((int)data[0], (int)data[1]);
+            PlayerNumber playerNumber = (PlayerNumber)data[2];
+
+            InGameMazeTile tile = Level.TilesByLocation[tileLocation] as InGameMazeTile;
+
+            MusicInstrumentCase musicInstrumentCase = (MusicInstrumentCase)tile.GetAttributes().FirstOrDefault(attribute => attribute is MusicInstrumentCase);
+            if (musicInstrumentCase == null)
+            {
+                Logger.Error("Could not find musicInstrumentCase");
+            }
+
+            MazePlayerCharacter player = GameManager.Instance.CharacterManager.GetPlayers<MazePlayerCharacter>()[playerNumber];
+            musicInstrumentCase.PlayerCollisionOnTile(player);
+        } else if (eventCode == EnemyCollidesWithMusicInstrumentCaseEvent.EnemyCollidesWithMusicInstrumentCaseEventCode)
+        {
+            object[] data = (object[])photonEvent.CustomData;
+            GridLocation tileLocation = new GridLocation((int)data[0], (int)data[1]);
+            int enemyId = (int)data[2];
+
+            InGameMazeTile tile = Level.TilesByLocation[tileLocation] as InGameMazeTile;
+
+            MusicInstrumentCase musicInstrumentCase = (MusicInstrumentCase)tile.GetAttributes().FirstOrDefault(attribute => attribute is MusicInstrumentCase);
+            if (musicInstrumentCase == null)
+            {
+                Logger.Error("Could not find musicInstrumentCase");
+            }
+
+            MazeCharacterManager characterManager = GameManager.Instance.CharacterManager as MazeCharacterManager;
+
+            EnemyCharacter enemyCharacter = characterManager.Enemies.FirstOrDefault(enemy => enemy.PhotonView.ViewID == enemyId);
+            if(enemyCharacter == null)
+            {
+                Logger.Error("Could not find enemy character");
+            }
+            musicInstrumentCase.EnemyCollisinOnTie(enemyCharacter);
         }
     }
 

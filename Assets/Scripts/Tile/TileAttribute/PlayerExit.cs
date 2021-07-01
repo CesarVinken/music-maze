@@ -155,6 +155,8 @@ public class PlayerExit : TileObstacle, ITileAttribute, ITileConnectable
 
     public IEnumerator TransformToColourful(Sprite colourfulSprite, Sprite secondaryColourfulSprite)
     {
+        bool exitWasOpen = IsOpen;
+
         TileSpriteContainer transformedPrimarySpriteContainer = TileSpriteContainerPool.Instance.Get();
         transformedPrimarySpriteContainer.transform.SetParent(transform);
         transformedPrimarySpriteContainer.SetSprite(colourfulSprite);
@@ -183,6 +185,12 @@ public class PlayerExit : TileObstacle, ITileAttribute, ITileConnectable
             transformedPrimarySpriteContainer.SetRendererAlpha(alphaAmount);
             transformedSecondarySpriteContainer.SetRendererAlpha(alphaAmount);
 
+            // this is supposed to fix a bug in which in multiplayer the gate doesn't look opened
+            if(exitWasOpen && IsOpen)
+            {
+                _tileSpriteContainer.SetSprite(MazeSpriteManager.Instance.DefaultDoorColourful[SpriteNumber - 1 + 3]); // + 3 to get to the 'open' version of the sprite
+                _secondaryTileSpriteContainer.SetSprite(MazeSpriteManager.Instance.DefaultDoorColourful[_secondarySpriteNumber - 1 + 3]);
+            }
             yield return null;
         }
 

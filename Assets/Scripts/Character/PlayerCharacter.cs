@@ -20,7 +20,6 @@ public class PlayerCharacter : Character
     [Space(10)]
 
     public KeyboardInput KeyboardInput = KeyboardInput.None;
-    public int PlayerNoInGame = 1;  // in multiplayer on multiple computers there can be a player 1 and player 2, while both use their Player1 keyboard input
     public PlayerNumber PlayerNumber = PlayerNumber.Player1;
     public Tile LastTile;
     public string Name;
@@ -39,29 +38,11 @@ public class PlayerCharacter : Character
         SetPlayerNumber();
 
         GameManager.Instance.CharacterManager.AddPlayer(PlayerNumber, this); // do here and not in manager.
-        int playerCount = GameManager.Instance.CharacterManager.GetPlayerCount();
 
         // TODO: character type should not depend on Player Number, but on which character the player chose when starting the game
         AssignCharacterType(); // relies on player number
         SetPlayerName(); // relies on player type
-
-        if (PersistentGameManager.CurrentPlatform == Platform.PC)
-        {
-            if (playerCount == 1)
-            {
-                KeyboardInput = KeyboardInput.Player1;
-                PlayerNoInGame = 1; // Q: Does it make sense to keep variable PlayerNoInGame?
-            }
-            else if (playerCount == 2)
-            {
-                KeyboardInput = KeyboardInput.Player2;
-                PlayerNoInGame = 2;
-            }
-            else
-            {
-                Logger.Warning("There are {0} players in the level. There can be max 2 players in a level", playerCount);
-            }
-        }
+        SetPlayerKeyboardInput();
 
         base.Awake();
 
@@ -252,7 +233,7 @@ public class PlayerCharacter : Character
 
     private void HandleKeyboardInput()
     {
-        if (PlayerNoInGame == 1)
+        if (KeyboardInput == KeyboardInput.Player1)
         {
             if (Input.GetKey(GameManager.Instance.KeyboardConfiguration.Player1Up))
             {
@@ -271,8 +252,7 @@ public class PlayerCharacter : Character
                 TryStartCharacterMovement(ObjectDirection.Left);
             }
         }
-
-        if (PlayerNoInGame == 2)
+        else if (KeyboardInput == KeyboardInput.Player2)
         {
             if (Input.GetKey(GameManager.Instance.KeyboardConfiguration.Player2Up))
             {
@@ -290,6 +270,10 @@ public class PlayerCharacter : Character
             {
                 TryStartCharacterMovement(ObjectDirection.Left);
             }
+        }
+        else
+        {
+
         }
     }
 
@@ -352,14 +336,14 @@ public class PlayerCharacter : Character
 
     private bool IsPressingMovementKey()
     {
-        if (PlayerNoInGame == 1)
+        if (KeyboardInput == KeyboardInput.Player1)
         {
             if (Input.GetKey(GameManager.Instance.KeyboardConfiguration.Player1Up)) return true;
             if (Input.GetKey(GameManager.Instance.KeyboardConfiguration.Player1Right)) return true;
             if (Input.GetKey(GameManager.Instance.KeyboardConfiguration.Player1Down)) return true;
             if (Input.GetKey(GameManager.Instance.KeyboardConfiguration.Player1Left)) return true;
         }
-        if (PlayerNoInGame == 2)
+        if (KeyboardInput == KeyboardInput.Player2)
         {
             if (Input.GetKey(GameManager.Instance.KeyboardConfiguration.Player2Up)) return true;
             if (Input.GetKey(GameManager.Instance.KeyboardConfiguration.Player2Right)) return true;
@@ -454,7 +438,7 @@ public class PlayerCharacter : Character
         }
 
         gameObject.name = Name;
-        Logger.Warning($"Set name of character to {Name}");
+        Logger.Warning($"Set name of {PlayerNumber} character to {Name}");
     }
 
     public bool ValidateTarget(TargetLocation targetLocation)
@@ -513,5 +497,38 @@ public class PlayerCharacter : Character
             }
         }
         return false;
+    }
+
+    private void SetPlayerKeyboardInput()
+    {
+        int playerCount = GameManager.Instance.CharacterManager.GetPlayerCount();
+        if (PersistentGameManager.CurrentPlatform == Platform.PC)
+        {
+            if (GameRules.GamePlayerType == GamePlayerType.SinglePlayer)
+            {
+                KeyboardInput = KeyboardInput.Player1;
+            }
+            else if (GameRules.GamePlayerType == GamePlayerType.NetworkMultiplayer)
+            {
+                KeyboardInput = KeyboardInput.Player1;
+            }
+            else if (GameRules.GamePlayerType == GamePlayerType.SplitScreenMultiplayer)
+            {
+
+                if (playerCount == 1)
+                {
+                    KeyboardInput = KeyboardInput.Player1;
+                }
+                else if (playerCount == 2)
+                {
+                    KeyboardInput = KeyboardInput.Player2;
+                }
+            }
+
+            else
+            {
+                Logger.Warning($"There are {playerCount} players in the level. There can be max 2 players in a level");
+            }
+        }
     }
 }

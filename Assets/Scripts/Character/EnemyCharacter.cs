@@ -8,6 +8,7 @@ using UnityEngine;
 
 public class EnemyCharacter : Character
 {
+    public string Id;
     private MazeCharacterManager _characterManager;
     private bool _isInitialised = false;
     private bool _isIdling = false;
@@ -143,7 +144,7 @@ public class EnemyCharacter : Character
         }
 
         int randomOutOfHundred = UnityEngine.Random.Range(1, 101);
-        Logger.Log(randomOutOfHundred);
+
         if (_playerAsTarget != null)
         {
             int targetPlayerAgainChance = 75; // if we just chased a player, 75% chance to go chase a player again!

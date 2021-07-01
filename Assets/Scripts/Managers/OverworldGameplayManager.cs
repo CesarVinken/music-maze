@@ -48,7 +48,6 @@ public class OverworldGameplayManager : MonoBehaviour, IOnEventCallback, IGamepl
         PhotonNetwork.RemoveCallbackTarget(this);
     }
 
-
     public void UnloadOverworld()
     {
         if (Overworld == null) return;

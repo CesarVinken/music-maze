@@ -9,7 +9,6 @@ public class InGameMazeTile : MazeTile
     {
         if (!Walkable) return;
 
-
         MusicInstrumentCase musicInstrumentCase = TryGetMusicInstrumentCase();
 
         MazePlayerCharacter player = collision.gameObject.GetComponent<MazePlayerCharacter>();
@@ -26,7 +25,7 @@ public class InGameMazeTile : MazeTile
 
             if (musicInstrumentCase != null)
             {
-                musicInstrumentCase.PlayerCollisionOnTile(player);
+                MazeLevelGameplayManager.Instance.PlayerCollisionWithMusicInstrumentCase(this, player, musicInstrumentCase);
             }
         }
         else
@@ -34,7 +33,10 @@ public class InGameMazeTile : MazeTile
             if (musicInstrumentCase != null)
             {
                 EnemyCharacter enemy = collision.gameObject.GetComponent<EnemyCharacter>();
-                musicInstrumentCase.EnemyCollisinOnTie(enemy);
+
+                if (GameRules.GamePlayerType == GamePlayerType.NetworkMultiplayer && !enemy.PhotonView.IsMine) return;
+
+                MazeLevelGameplayManager.Instance.EnemyCollisionWithMusicInstrumentCase(this, enemy, musicInstrumentCase);
             }
         }
     }
