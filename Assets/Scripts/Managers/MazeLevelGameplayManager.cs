@@ -21,6 +21,7 @@ public class MazeLevelGameplayManager : MonoBehaviour, IOnEventCallback, IGamepl
 
     [SerializeField] private GameObject _loopedAnimationEffectPrefab;
     [SerializeField] private GameObject _oneTimeAnimationEffectPrefab;
+    [SerializeField] private GameObject _notesPlayMusicEffectPrefab;
 
     [SerializeField] private GameObject _tileBaseGroundPrefab;
     [SerializeField] private GameObject _tileBaseWaterPrefab;
@@ -42,6 +43,8 @@ public class MazeLevelGameplayManager : MonoBehaviour, IOnEventCallback, IGamepl
     {
         switch (animationEffect)
         {
+            case AnimationEffect.NotesPlayMusic:
+                return _notesPlayMusicEffectPrefab;
             case AnimationEffect.StartledSpinner:
                 return _loopedAnimationEffectPrefab;
             case AnimationEffect.SmokeExplosion:
@@ -98,7 +101,9 @@ public class MazeLevelGameplayManager : MonoBehaviour, IOnEventCallback, IGamepl
 
     public void Awake()
     {
+        Guard.CheckIsNull(_oneTimeAnimationEffectPrefab, "_oneTimeAnimationEffectPrefab", gameObject);
         Guard.CheckIsNull(_loopedAnimationEffectPrefab, "_loopedAnimationEffectPrefab", gameObject);
+        Guard.CheckIsNull(_notesPlayMusicEffectPrefab, "_notesPlayMusicEffectPrefab", gameObject);
 
         Guard.CheckIsNull(EditorTilePrefab, "EditorTilePrefab", gameObject);
         Guard.CheckIsNull(InGameTilePrefab, "InGameTilePrefab", gameObject);

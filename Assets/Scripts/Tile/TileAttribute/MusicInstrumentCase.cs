@@ -73,6 +73,15 @@ public class MusicInstrumentCase : MonoBehaviour, ITileAttribute
         _spriteRenderer.sprite = _musicInstrumentCaseSprites[1];
         _isOpen = true;
 
+        GameObject notesPlayMusicPrefab = MazeLevelGameplayManager.Instance.GetEffectAnimationPrefab(AnimationEffect.NotesPlayMusic);
+        GameObject notesPlayMusicGO = GameObject.Instantiate(notesPlayMusicPrefab, SceneObjectManager.Instance.transform);
+        Vector3 tileVectorPosition = GridLocation.GridToVector(Tile.GridLocation);
+        Vector3 notesSpawnPosition = new Vector3(tileVectorPosition.x + 0.22f, tileVectorPosition.y + 0.2f, tileVectorPosition.z);
+        notesPlayMusicGO.transform.position = notesSpawnPosition;
+
+        EffectController notesPlayMusicEffectController = notesPlayMusicGO.GetComponent<EffectController>();
+
+
         yield return new WaitForSeconds(OPEN_CASE_FULL_STRENGTH_LIFETIME);
 
         float blinkingTimer = 0;
@@ -90,13 +99,14 @@ public class MusicInstrumentCase : MonoBehaviour, ITileAttribute
 
         GameObject smokeExplosionPrefab = MazeLevelGameplayManager.Instance.GetEffectAnimationPrefab(AnimationEffect.SmokeExplosion);
         GameObject smokeExplosionGO = GameObject.Instantiate(smokeExplosionPrefab, SceneObjectManager.Instance.transform);
-        Vector3 spawnPosition = GridLocation.GridToVector(Tile.GridLocation);
-        smokeExplosionGO.transform.position = spawnPosition;
+        Vector3 smokeSpawnPosition = GridLocation.GridToVector(Tile.GridLocation);
+        smokeExplosionGO.transform.position = smokeSpawnPosition;
 
         EffectController smokExplosionEffectController = smokeExplosionGO.GetComponent<EffectController>();
         smokExplosionEffectController.PlayEffect(AnimationEffect.SmokeExplosion);
 
         Destroy(gameObject);
+        Destroy(notesPlayMusicGO);
     }
 
     private void OpenCase(MazePlayerCharacter player)
