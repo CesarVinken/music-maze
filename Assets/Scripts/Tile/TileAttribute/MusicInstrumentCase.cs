@@ -92,6 +92,7 @@ public class MusicInstrumentCase : MonoBehaviour, ITileAttribute
             alphaValue = _spriteRenderer.color.a == 0 ? 1 : 0;
             Color changedAlphaColour = new Color(_spriteRenderer.color.r, _spriteRenderer.color.g, _spriteRenderer.color.b, alphaValue);
             _spriteRenderer.color = changedAlphaColour;
+            notesPlayMusicEffectController.SpriteRenderer.color = changedAlphaColour;
 
             yield return new WaitForSeconds(BLINKING_SPEED);
             blinkingTimer++;

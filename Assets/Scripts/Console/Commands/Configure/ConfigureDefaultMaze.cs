@@ -25,10 +25,11 @@ public class ConfigureDefaultMaze : IConfigureCommand
             }
 
             MazeLevelLoader.ReplaceMazeLevel(sanatisedLevelName, "default");
+
+            Console.Instance.PrintToReportText($"{sanatisedLevelName} is now the default maze level.");
         }
         catch (System.Exception)
         {
-
             throw;
         }
         

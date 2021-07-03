@@ -130,9 +130,17 @@ public class EnemyCharacter : Character
             GridLocation currentPlayerLocation = item.Value.CurrentGridLocation;
             Tile currentPlayerLocationTile = GameManager.Instance.CurrentGameLevel.TilesByLocation[currentPlayerLocation];
 
+            // A player is not reachable if it is on the same tile as the enemy (for example, after a player was just caught)
+            if (CurrentGridLocation.X == currentPlayerLocation.X && CurrentGridLocation.Y == currentPlayerLocation.Y) continue;
+
             if (_accessibleTiles.Contains(currentPlayerLocationTile))
             {
                 reachablePlayers.Add(item.Key);
+            }
+
+            // We had a player as target, but the player is no longer reachable. In that case, empty _playerAsTarget so that it does not affect choises in regards to the next target chodie
+            if (_playerAsTarget != null && !reachablePlayers.Contains(_playerAsTarget.TargettedPlayer.PlayerNumber)) {
+                _playerAsTarget = null;
             }
         }
         //Logger.Log($"Number of reachable players is: {reachablePlayers.Count}");
@@ -150,7 +158,9 @@ public class EnemyCharacter : Character
             int targetPlayerAgainChance = 75; // if we just chased a player, 75% chance to go chase a player again!
             if (randomOutOfHundred <= targetPlayerAgainChance)
             {
-                TargetPlayer(reachablePlayers);
+                // If we get herem we established earlier that the targetPlayer is still reachable. In that case, only offer that player as follow up target
+                List<PlayerNumber> currentlyTargettedPlayer = new List<PlayerNumber> { _playerAsTarget.TargettedPlayer.PlayerNumber };
+                TargetPlayer(currentlyTargettedPlayer);
                 //Logger.Warning("Target player AGAIN");
             }
             else

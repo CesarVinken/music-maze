@@ -4,7 +4,9 @@ using UnityEngine;
 public class EffectController : MonoBehaviour
 {
     [SerializeField] private Animator _animator;
-    public SpriteRenderer SpriteRenderer;
+    [SerializeField] private SpriteRenderer _spriteRenderer;
+
+    public SpriteRenderer SpriteRenderer { get => _spriteRenderer; private set => _spriteRenderer = value; }
 
     public void Awake()
     {
