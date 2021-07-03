@@ -10,18 +10,17 @@ public class InGameMazeTile : MazeTile
         if (!Walkable) return;
 
         MusicInstrumentCase musicInstrumentCase = TryGetMusicInstrumentCase();
-
         MazePlayerCharacter player = collision.gameObject.GetComponent<MazePlayerCharacter>();
+
         if (player != null)
         {
-            //Logger.Log("{0} entered tile {1},{2}", player.name, GridLocation.X, GridLocation.Y);
             if (GameRules.GamePlayerType == GamePlayerType.NetworkMultiplayer && !player.PhotonView.IsMine) return;
 
-            if (PlayerMarkRenderer.sprite != null) return;
-
-            if (!Markable) return;
-
-            MazeLevelGameplayManager.Instance.SetTileMarker(this, player);
+            // Try to mark the tile
+            if (PlayerMarkRenderer.sprite == null && Markable)
+            {
+                MazeLevelGameplayManager.Instance.SetTileMarker(this, player);
+            }
 
             if (musicInstrumentCase != null)
             {
