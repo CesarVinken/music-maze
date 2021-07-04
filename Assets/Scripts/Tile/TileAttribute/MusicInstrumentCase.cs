@@ -82,7 +82,6 @@ public class MusicInstrumentCase : MonoBehaviour, ITileAttribute
 
         EffectController notesPlayMusicEffectController = notesPlayMusicGO.GetComponent<EffectController>();
 
-
         yield return new WaitForSeconds(OPEN_CASE_FULL_STRENGTH_LIFETIME);
 
         float blinkingTimer = 0;
@@ -104,8 +103,8 @@ public class MusicInstrumentCase : MonoBehaviour, ITileAttribute
         Vector3 smokeSpawnPosition = GridLocation.GridToVector(Tile.GridLocation);
         smokeExplosionGO.transform.position = smokeSpawnPosition;
 
-        EffectController smokExplosionEffectController = smokeExplosionGO.GetComponent<EffectController>();
-        smokExplosionEffectController.PlayEffect(AnimationEffect.SmokeExplosion);
+        EffectController smokeExplosionEffectController = smokeExplosionGO.GetComponent<EffectController>();
+        smokeExplosionEffectController.PlayEffect(AnimationEffect.SmokeExplosion);
 
         Destroy(gameObject);
         Destroy(notesPlayMusicGO);

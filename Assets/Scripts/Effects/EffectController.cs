@@ -6,6 +6,9 @@ public class EffectController : MonoBehaviour
     [SerializeField] private Animator _animator;
     [SerializeField] private SpriteRenderer _spriteRenderer;
 
+    public const int SmokeExplosion1AnimationId = 1;
+    public const int EmmonCaughtAnimationId = 2;
+
     public SpriteRenderer SpriteRenderer { get => _spriteRenderer; private set => _spriteRenderer = value; }
 
     public void Awake()
@@ -32,7 +35,12 @@ public class EffectController : MonoBehaviour
     {
         switch (animationEffect)
         {
+            case AnimationEffect.EmmonCaught:
+                _animator.SetInteger("AnimationId", 2);
+                StartCoroutine(DestroyAfterCoroutine(3f));
+                break;
             case AnimationEffect.SmokeExplosion:
+                _animator.SetInteger("AnimationId", 1);
                 StartCoroutine(DestroyAfterCoroutine(3f));
                 break;
             default:

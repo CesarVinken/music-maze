@@ -86,17 +86,17 @@ public class MazePlayerCharacter : PlayerCharacter
         if (GameRules.GamePlayerType == GamePlayerType.SinglePlayer ||
             GameRules.GamePlayerType == GamePlayerType.SplitScreenMultiplayer)
         {
-            PunRPCCaughtByEnemy();
+            //PunRPCCaughtByEnemy();
+            TimesCaughtByEnemy++;
+
+            IEnumerator coroutine = this.RespawnPlayerCharacter(this);
+            StartCoroutine(coroutine);
         }
         else
         {
             PhotonView.RPC("PunRPCCaughtByEnemy", RpcTarget.All);
         }
 
-        float freezeTime = 2.0f;
-
-        IEnumerator coroutine = this.RespawnPlayerCharacter(this, freezeTime);
-        StartCoroutine(coroutine);
 
         _isPressingPointerForSeconds = false;
     }
@@ -105,6 +105,9 @@ public class MazePlayerCharacter : PlayerCharacter
     private void PunRPCCaughtByEnemy()
     {
         TimesCaughtByEnemy++;
+
+        IEnumerator coroutine = this.RespawnPlayerCharacter(this);
+        StartCoroutine(coroutine);
     }
 
     public void MadeEnemyListenToMusicInstrument()
