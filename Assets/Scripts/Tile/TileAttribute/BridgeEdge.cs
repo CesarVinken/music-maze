@@ -11,7 +11,7 @@ public class BridgeEdge : MonoBehaviour, ITileAttribute, ITransformable
     public BridgePiece BridgePieceConnection;
 
     [SerializeField] private TileSpriteContainer _tileSpriteContainer;
-    private int _sortingOrderBase = 0;
+    private int _sortingOrderBase;
     private int _sortingOrder;
 
     public int SortingOrderBase { get => _sortingOrderBase; set => _sortingOrderBase = value; }
@@ -19,6 +19,8 @@ public class BridgeEdge : MonoBehaviour, ITileAttribute, ITransformable
     public void Awake()
     {
         Guard.CheckIsNull(_tileSpriteContainer, "_tileSpriteContainer", gameObject);
+
+        _sortingOrderBase = SpriteSortingOrderRegister.BridgeEdge;
     }
 
     public void Remove()

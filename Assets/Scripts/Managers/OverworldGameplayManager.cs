@@ -102,14 +102,9 @@ public class OverworldGameplayManager : MonoBehaviour, IOnEventCallback, IGamepl
         GameManager.Instance.CharacterManager.SpawnCharacters(); //Q? Can we move this up here?
         yield return new WaitForSeconds(.2f); // This waiting time should be dealt with more efficiently. Currently it is there to make sure that the characters are spawned in
         MainScreenOverlayCanvas.Instance.BlackOutSquaresToClear();
-        //GameManager.Instance.CharacterManager.SpawnCharacters();
         CameraManager.Instance.SetPanLimits(Overworld.LevelBounds);
         CameraManager.Instance.FocusCamerasOnPlayer();
 
-        //AstarPath.active.Scan();    // We should only scan once all the tiles are loaded with their correct (walkable) attributes and obstacles
-        //yield return new WaitForSeconds(.4f);
-
-        // start movement of all actors that depend on the updated pathfinding only after the scan.
         GameManager.Instance.CharacterManager.UnfreezeCharacters();
     }
 

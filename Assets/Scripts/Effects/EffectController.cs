@@ -12,6 +12,7 @@ public class EffectController : MonoBehaviour
     {
         Guard.CheckIsNull(_animator, "_animator", gameObject);
         Guard.CheckIsNull(SpriteRenderer, "SpriteRenderer", gameObject);
+        _spriteRenderer.sortingOrder = SpriteSortingOrderRegister.EffectController;
     }
 
     public void PlayEffectLoop(AnimationEffect animationEffect)

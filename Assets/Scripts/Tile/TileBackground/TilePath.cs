@@ -47,6 +47,6 @@ public class TilePath : MonoBehaviour, ITileConnectable
 
         Tile = tile;
         ParentId = tile.TileId;
-        _spriteRenderer.sortingOrder = SpriteManager.PathSortingOrder;
+        _spriteRenderer.sortingOrder = SpriteSortingOrderRegister.PathSortingOrder;
     }
 }

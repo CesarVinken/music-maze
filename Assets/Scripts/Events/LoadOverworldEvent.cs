@@ -3,7 +3,7 @@ using Photon.Pun;
 using Photon.Realtime;
 using UnityEngine;
 
-public class LoadOverworldEvent : MonoBehaviour
+public class LoadOverworldEvent
 {
     public const byte LoadOverworldEventCode = 3;
 

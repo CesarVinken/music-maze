@@ -33,7 +33,7 @@ public class TileWater : MonoBehaviour, ITileBackground
 
         Tile = tile;
         ParentId = tile.TileId;
-        _spriteRenderer.sortingOrder = SpriteManager.BaseWaterSortingOrder;
+        _spriteRenderer.sortingOrder = SpriteSortingOrderRegister.BaseWaterSortingOrder;
     }
 
     public void MakeUnwalkable()

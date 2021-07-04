@@ -10,7 +10,7 @@ public class PlayerOnly : MonoBehaviour, ITileAttribute, ITransformable
 
     [SerializeField] private TileSpriteContainer _tileSpriteContainer;
 
-    private int _sortingOrderBase = 500; // MAKE SURE that tile should be in front of tile marker and path layers AND player
+    private int _sortingOrderBase; // MAKE SURE that tile should be in front of tile marker and path layers AND player
     private const float _sortingOrderCalculationOffset = .5f;
     private int _sortingOrder;
     public int SortingOrderBase { get => _sortingOrderBase; set => _sortingOrderBase = value; }
@@ -24,6 +24,7 @@ public class PlayerOnly : MonoBehaviour, ITileAttribute, ITransformable
             _tileSpriteContainer.SetSprite(MazeSpriteManager.Instance.Bush[0]);
         }
 
+        _sortingOrderBase = SpriteSortingOrderRegister.PlayerOnly;
         _sortingOrder = (int)(_sortingOrderBase - transform.position.y - _sortingOrderCalculationOffset) * 10 + 1;
         _tileSpriteContainer.SetSortingOrder(_sortingOrder); // plus 1 should place it before a character when it is on the same y as the character
     }

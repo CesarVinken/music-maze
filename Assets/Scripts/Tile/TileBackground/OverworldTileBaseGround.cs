@@ -7,7 +7,7 @@
         Tile = tile;
         ParentId = tile.TileId;
 
-        _sortingOrder = OverworldSpriteManager.BaseGroundSortingOrder;
+        _sortingOrder = SpriteSortingOrderRegister.BaseGroundSortingOrder;
         _tileSpriteContainer.SetSortingOrder(_sortingOrder);
     }
 

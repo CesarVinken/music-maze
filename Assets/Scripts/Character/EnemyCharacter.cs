@@ -195,7 +195,7 @@ public class EnemyCharacter : Character
 
         GameObject startledSpinnerPrefab = MazeLevelGameplayManager.Instance.GetEffectAnimationPrefab(AnimationEffect.StartledSpinner);
         GameObject startledSpinningEffectGO = GameObject.Instantiate(startledSpinnerPrefab, transform);
-        Vector3 spawnPosition = new Vector3(startledSpinningEffectGO.transform.parent.position.x - 0.5f, startledSpinningEffectGO.transform.parent.position.y + 0.1f, startledSpinningEffectGO.transform.parent.position.z);
+        Vector3 spawnPosition = new Vector3(startledSpinningEffectGO.transform.parent.position.x - 0.5f, startledSpinningEffectGO.transform.parent.position.y + 0.16f, startledSpinningEffectGO.transform.parent.position.z);
         startledSpinningEffectGO.transform.position = spawnPosition;
 
         EffectController startledSpinningEffectController = startledSpinningEffectGO.GetComponent<EffectController>();

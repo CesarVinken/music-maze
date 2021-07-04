@@ -13,7 +13,7 @@ public class MusicInstrumentCase : MonoBehaviour, ITileAttribute
     private bool _isOpen = false;
     private MazePlayerCharacter _caseOpener;
 
-    private int _sortingOrderBase = 500;
+    private int _sortingOrderBase;
     public int SortingOrderBase { get => _sortingOrderBase; set => _sortingOrderBase = value; }
 
     // in seconds
@@ -33,6 +33,7 @@ public class MusicInstrumentCase : MonoBehaviour, ITileAttribute
         _isOpen = false;
 
         _spriteRenderer.sprite = _musicInstrumentCaseSprites[0];
+        _spriteRenderer.sortingOrder = SpriteSortingOrderRegister.MusicInstrumentCase;
     }
 
     public void PlayerCollisionOnTile(MazePlayerCharacter player)
@@ -49,7 +50,7 @@ public class MusicInstrumentCase : MonoBehaviour, ITileAttribute
         }
     }
 
-    public void EnemyCollisinOnTie(EnemyCharacter enemy)
+    public void EnemyCollisinOnTile(EnemyCharacter enemy)
     {
         if (_isOpen && enemy != null)
         {

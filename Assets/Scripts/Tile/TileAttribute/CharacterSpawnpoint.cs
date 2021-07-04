@@ -12,7 +12,7 @@ public class CharacterSpawnpoint : MonoBehaviour, ITileAttribute
 
     [SerializeField] protected SpriteRenderer _spriteRenderer;
 
-    private int _sortingOrderBase = 500;
+    private int _sortingOrderBase;
     private const float _sortingOrderCalculationOffset = .5f;
 
     public int SortingOrderBase { get => _sortingOrderBase; set => _sortingOrderBase = value; }
@@ -23,6 +23,7 @@ public class CharacterSpawnpoint : MonoBehaviour, ITileAttribute
 
         CharacterBlueprint = new CharacterBlueprint(new Emmon());
 
+        _sortingOrderBase = SpriteSortingOrderRegister.Spawnpoint;
         _spriteRenderer.sortingOrder = (int)(_sortingOrderBase - transform.position.y - _sortingOrderCalculationOffset) * 10;
     }
 

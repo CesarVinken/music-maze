@@ -168,10 +168,6 @@ public class MazeLevelGameplayManager : MonoBehaviour, IOnEventCallback, IGamepl
         CameraManager.Instance.SetPanLimits(Level.LevelBounds);
         CameraManager.Instance.FocusCamerasOnPlayer();
 
-        //AstarPath.active.Scan();    // We should only scan once all the tiles are loaded with their correct (walkable) attributes and obstacles
-        //yield return new WaitForSeconds(.4f);
-
-        // start movement of all actors that depend on the updated pathfinding only after the scan.
         GameManager.Instance.CharacterManager.UnfreezeCharacters();
 
         HandleSpawnpointMarkability();
@@ -276,7 +272,7 @@ public class MazeLevelGameplayManager : MonoBehaviour, IOnEventCallback, IGamepl
         if (GameRules.GamePlayerType == GamePlayerType.SinglePlayer ||
        GameRules.GamePlayerType == GamePlayerType.SplitScreenMultiplayer)
         {
-            musicInstrumentCase.EnemyCollisinOnTie(enemy);
+            musicInstrumentCase.EnemyCollisinOnTile(enemy);
         }
         else // network multiplayer
         {
@@ -441,7 +437,7 @@ public class MazeLevelGameplayManager : MonoBehaviour, IOnEventCallback, IGamepl
             {
                 Logger.Error("Could not find enemy character");
             }
-            musicInstrumentCase.EnemyCollisinOnTie(enemyCharacter);
+            musicInstrumentCase.EnemyCollisinOnTile(enemyCharacter);
         }
     }
 

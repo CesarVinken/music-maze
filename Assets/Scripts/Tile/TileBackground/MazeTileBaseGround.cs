@@ -10,7 +10,7 @@ public class MazeTileBaseGround : TileBaseGround, ITransformable
         Tile = tile;
         ParentId = tile.TileId;
 
-        _sortingOrder = MazeSpriteManager.BaseGroundSortingOrder;
+        _sortingOrder = SpriteSortingOrderRegister.BaseGroundSortingOrder;
         _tileSpriteContainer.SetSortingOrder(_sortingOrder);
     }
 

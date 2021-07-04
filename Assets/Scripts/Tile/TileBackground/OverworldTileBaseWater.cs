@@ -13,7 +13,7 @@ public class OverworldTileBaseWater : TileWater, ITileBackground
         Tile = tile;
         ParentId = tile.TileId;
 
-        _sortingOrder = SpriteManager.BaseWaterSortingOrder;
+        _sortingOrder = SpriteSortingOrderRegister.BaseWaterSortingOrder;
         _tileSpriteContainer.SetSortingOrder(_sortingOrder);
 
         Sprite sprite = OverworldSpriteManager.Instance.DefaultOverworldTileWater[0];

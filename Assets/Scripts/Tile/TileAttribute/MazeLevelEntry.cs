@@ -5,7 +5,7 @@ public class MazeLevelEntry : MonoBehaviour, ITileAttribute
 {
     [SerializeField] private SpriteRenderer _spriteRenderer;
 
-    private int _sortingOrderBase = 500;
+    private int _sortingOrderBase;
     public int SortingOrderBase { get => _sortingOrderBase; set => _sortingOrderBase = value; }
 
     public Tile Tile;
@@ -18,6 +18,7 @@ public class MazeLevelEntry : MonoBehaviour, ITileAttribute
     {
         Guard.CheckIsNull(_spriteRenderer, "_spriteRenderer", gameObject);
 
+        _sortingOrderBase = SpriteSortingOrderRegister.MazeLevelEntry;
         _spriteRenderer.sortingOrder = (int)(_sortingOrderBase - transform.position.y) * 10;
     }
 

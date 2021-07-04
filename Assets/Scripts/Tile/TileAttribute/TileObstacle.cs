@@ -13,7 +13,7 @@ public class TileObstacle : MonoBehaviour, ITileAttribute, ITileConnectable, ITr
     private int _connectionScore = -1;
     private int _spriteNumber = -1;
 
-    private int _sortingOrderBase = 500;
+    private int _sortingOrderBase;
     private const float _sortingOrderCalculationOffset = 1.5f;
     protected int _sortingOrder;
 
@@ -31,6 +31,7 @@ public class TileObstacle : MonoBehaviour, ITileAttribute, ITileConnectable, ITr
             _tileSpriteContainer.SetSprite(MazeSpriteManager.Instance.DefaultWall[0]);
         }
 
+        _sortingOrderBase = SpriteSortingOrderRegister.TileObstacle;
         _sortingOrder = (int)(_sortingOrderBase - transform.position.y - _sortingOrderCalculationOffset) * 10;
         _tileSpriteContainer.SetSortingOrder(_sortingOrder);
     }
