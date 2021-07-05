@@ -6,9 +6,9 @@ using UnityEngine.UI;
 
 public class EditorMazeModificationPanel : EditorGridModificationPanel
 {
-    private string _mazeName = "";
-
     [SerializeField] private InputField _mazeNameInputField;
+
+    private string _mazeName = "";
 
     public new void Awake()
     {

@@ -17,6 +17,17 @@ public class EditorOverworldModificationPanel : EditorGridModificationPanel
         Guard.CheckIsNull(_overworldNameInputField, "_overworldNameInputField", gameObject);
     }
 
+    public void SetOverworldName(string input)
+    {
+        if (string.IsNullOrEmpty(input))
+        {
+            _overworldNameInputField.text = "";
+            return;
+        }
+
+        _overworldName = input;
+    }
+
     public void SaveOverworld()
     {
         Logger.Log("Save overworld");
@@ -81,17 +92,6 @@ public class EditorOverworldModificationPanel : EditorGridModificationPanel
 
         EditorOverworldTileModificationPanel.Instance?.Reset();
         EditorOverworldTileModificationPanel.Instance?.DestroyModifierActions();
-    }
-
-    public void SetOverworldName(string input)
-    {
-        if (string.IsNullOrEmpty(input))
-        {
-            _overworldNameInputField.text = "";
-            return;
-        }
-
-        _overworldName = input;
     }
 
     public void GenerateTiles()

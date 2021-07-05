@@ -47,11 +47,11 @@ public class EditorGridModificationPanel : MonoBehaviour, IEditorModificationPan
         _gridHeight = int.Parse(input);
     }
 
-    public bool ValidateNumericInput(string input)
+    private bool ValidateNumericInput(string input)
     {
         if (int.TryParse(input.Trim(), out int result)) return true;
 
-        Logger.Warning("Could not parse the input '{0}'. Make sure to only give numeric values.", input);
+        Logger.Warning($"Could not parse the input '{input}'. Make sure to only give numeric values.");
         return false;
     }
 }
