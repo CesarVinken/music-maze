@@ -1,4 +1,5 @@
-﻿using Photon.Pun;
+﻿using CharacterType;
+using Photon.Pun;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -151,59 +152,7 @@ public class Character : MonoBehaviour
         //Logger.Log($"Current gridlocation is now : {CurrentGridLocation.X}, {CurrentGridLocation.Y}");
     }
 
-    public IEnumerator RespawnPlayerCharacter(PlayerCharacter character)
-    {
-        // play caught animation
-        // TODO: use different animations for Emmon and Fae
-        GameObject emmonCaughtPrefab = MazeLevelGameplayManager.Instance.GetEffectAnimationPrefab(AnimationEffect.EmmonCaught);
-        GameObject emmonCaughtPGO = GameObject.Instantiate(emmonCaughtPrefab, SceneObjectManager.Instance.transform);
-        Vector3 emmonCaughtSpawnPosition = character.transform.position;
-        emmonCaughtPGO.transform.position = emmonCaughtSpawnPosition;
-
-        EffectController emmonCaughtPGOEffectController = emmonCaughtPGO.GetComponent<EffectController>();
-        emmonCaughtPGOEffectController.PlayEffect(AnimationEffect.EmmonCaught);
-
-        //int blackScreenNo = 0;
-        //if (GameRules.GamePlayerType == GamePlayerType.SplitScreenMultiplayer &&
-        //character.PlayerNumber == PlayerNumber.Player2)
-        //{
-        //    blackScreenNo = 1;
-        //}
-        //BlackOutSquare blackOutSquare = MainScreenOverlayCanvas.Instance.BlackOutSquares[blackScreenNo];
-
-        //if (blackOutSquare == null)
-        //{
-        //    Logger.Error($"Could not find blackout square for player {blackScreenNo + 1}");
-        //}
-
-        character.FreezeCharacter();
-        CharacterBody.SetActive(false); // TODO make character animation for appearing and disappearing of character, rather than turning the GO off and on
-
-        ResetCharacterPosition();
-
-        float waitTime = 1.4f;
-        yield return new WaitForSeconds(waitTime);
-
-        //// Screen to black
-        //IEnumerator toBlackCoroutine = blackOutSquare.ToBlack();
-
-        //StartCoroutine(toBlackCoroutine);
-        //while (blackOutSquare.BlackStatus == BlackStatus.InTransition)
-        //{
-        //    yield return null;
-        //}
-        CharacterBody.SetActive(true);
-
-        //Screen back to clear
-        //IEnumerator toClearCoroutine = blackOutSquare.ToClear();
-
-        //StartCoroutine(toClearCoroutine);
-        //while (blackOutSquare.BlackStatus == BlackStatus.InTransition)
-        //{
-        //    yield return null;
-        //}
-        character.UnfreezeCharacter();
-    }
+    
 
     public void SetHasCalculatedTarget(bool hasCalculatedTarget)
     {        

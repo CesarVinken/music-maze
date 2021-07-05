@@ -151,6 +151,76 @@ public class PlayerCharacter : Character
         }
     }
 
+    private AnimationEffect GetAnimationEffectForPlayerChaught()
+    {
+        if(_characterType is Emmon)
+        {
+            return AnimationEffect.EmmonCaught;
+        }
+        else if(_characterType is Fae)
+        {
+            return AnimationEffect.FaeCaught;
+        }
+        Logger.Error($"Could not find animation for characterType {_characterType}");
+        return AnimationEffect.EmmonCaught;
+    }
+
+    protected IEnumerator RespawnPlayerCharacter(PlayerCharacter character)
+    {
+        // play caught animation
+        AnimationEffect animationEffect = GetAnimationEffectForPlayerChaught();
+
+        GameObject emmonCaughtPrefab = MazeLevelGameplayManager.Instance.GetEffectAnimationPrefab(animationEffect);
+        GameObject emmonCaughtPGO = GameObject.Instantiate(emmonCaughtPrefab, SceneObjectManager.Instance.transform);
+        Vector3 emmonCaughtSpawnPosition = character.transform.position;
+        emmonCaughtPGO.transform.position = emmonCaughtSpawnPosition;
+
+        EffectController emmonCaughtPGOEffectController = emmonCaughtPGO.GetComponent<EffectController>();
+
+        emmonCaughtPGOEffectController.PlayEffect(animationEffect);
+
+        //int blackScreenNo = 0;
+        //if (GameRules.GamePlayerType == GamePlayerType.SplitScreenMultiplayer &&
+        //character.PlayerNumber == PlayerNumber.Player2)
+        //{
+        //    blackScreenNo = 1;
+        //}
+        //BlackOutSquare blackOutSquare = MainScreenOverlayCanvas.Instance.BlackOutSquares[blackScreenNo];
+
+        //if (blackOutSquare == null)
+        //{
+        //    Logger.Error($"Could not find blackout square for player {blackScreenNo + 1}");
+        //}
+
+        character.FreezeCharacter();
+        CharacterBody.SetActive(false); // TODO make character animation for appearing and disappearing of character, rather than turning the GO off and on
+
+        ResetCharacterPosition();
+
+        float waitTime = 1.4f;
+        yield return new WaitForSeconds(waitTime);
+
+        //// Screen to black
+        //IEnumerator toBlackCoroutine = blackOutSquare.ToBlack();
+
+        //StartCoroutine(toBlackCoroutine);
+        //while (blackOutSquare.BlackStatus == BlackStatus.InTransition)
+        //{
+        //    yield return null;
+        //}
+        CharacterBody.SetActive(true);
+
+        //Screen back to clear
+        //IEnumerator toClearCoroutine = blackOutSquare.ToClear();
+
+        //StartCoroutine(toClearCoroutine);
+        //while (blackOutSquare.BlackStatus == BlackStatus.InTransition)
+        //{
+        //    yield return null;
+        //}
+        character.UnfreezeCharacter();
+    }
+
     private IEnumerator RunPointerPresserTimer()
     {
         while (_pointerPresserTimer < _pointerPresserDelay)

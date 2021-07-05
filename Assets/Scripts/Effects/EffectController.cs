@@ -39,6 +39,10 @@ public class EffectController : MonoBehaviour
                 _animator.SetInteger("AnimationId", 2);
                 StartCoroutine(DestroyAfterCoroutine(3f));
                 break;
+            case AnimationEffect.FaeCaught:
+                _animator.SetInteger("AnimationId", 3);
+                StartCoroutine(DestroyAfterCoroutine(3f));
+                break;
             case AnimationEffect.SmokeExplosion:
                 _animator.SetInteger("AnimationId", 1);
                 StartCoroutine(DestroyAfterCoroutine(3f));

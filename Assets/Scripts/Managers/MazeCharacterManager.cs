@@ -113,7 +113,6 @@ public class MazeCharacterManager : MonoBehaviourPunCallbacks, ICharacterManager
             PlayerCharacter playerCharacter = characterGO.GetComponent<PlayerCharacter>();
             playerCharacter.CharacterBlueprint = character;
 
-
             playerCharacter.FreezeCharacter();
             playerCharacter.SetStartingPoint(playerCharacter, spawnpoint.GridLocation, spawnpoint);
 
