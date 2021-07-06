@@ -10,7 +10,7 @@ public class JsonOverworldListFileWriter : IJsonFileWriter
     public void SerialiseData<T>(T levelNamesData)
     {
         _levelNamesData = levelNamesData as OverworldNamesData;
-        _path = Path.Combine(Application.dataPath, "StreamingAssets", "maze", "levels.json");
+        _path = Path.Combine(Application.dataPath, "StreamingAssets", "overworld", "levels.json");
 
         string jsonLevelNamesData = JsonUtility.ToJson(_levelNamesData, true).ToString();
 
