@@ -33,7 +33,6 @@ public class EditorOverworld : Overworld, IEditorLevel
         _overworldContainer.SetActive(true);
 
         BuildTiles(overworldData);
-
         MazeLevelNames = MazeLevelLoader.GetAllPlayableLevelNames();
     }
 
@@ -100,7 +99,8 @@ public class EditorOverworld : Overworld, IEditorLevel
             }
             else if (type.Equals(typeof(SerialisableTileBaseWater)))
             {
-                tileBackgroundPlacer.PlaceBackground<OverworldTileBaseWater>();
+                tileBackgroundPlacer.PlaceCoveringBaseWater();
+                //tileBackgroundPlacer.PlaceBackground<OverworldTileBaseWater>();
             }
             else
             {

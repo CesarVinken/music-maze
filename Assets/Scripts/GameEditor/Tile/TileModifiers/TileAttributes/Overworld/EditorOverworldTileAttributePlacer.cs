@@ -26,7 +26,6 @@ public class EditorOverworldTileAttributePlacer : OverworldTileAttributePlacer<E
         if(mazeLevelName == "")
         {
             mazeLevelName = MazeLevelEntryAssigner.Instance.GetCurrentDropdownSelection();
-            Logger.Warning(mazeLevelName);
         }
 
         mazeLevelEntry.MazeLevelName = mazeLevelName;

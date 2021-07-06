@@ -19,7 +19,7 @@ public class MazeLevelEntryAssigner : MonoBehaviour
         _mazeLevelNamesDropdown.ClearOptions();
 
         List<OptionData> options = new List<OptionData>();
-
+        
         for (int i = 0; i < OverworldGameplayManager.Instance.EditorOverworld.MazeLevelNames.Count; i++)
         {
             string levelName = OverworldGameplayManager.Instance.EditorOverworld.MazeLevelNames[i];
@@ -61,6 +61,11 @@ public class MazeLevelEntryAssigner : MonoBehaviour
 
     public string GetCurrentDropdownSelection()
     {
+        if (_mazeLevelNamesDropdown.options.Count == 0)
+        {
+            return "";
+        }
+
         return _mazeLevelNamesDropdown.options[_mazeLevelNamesDropdown.value].text;
     }
 }

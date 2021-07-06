@@ -88,7 +88,7 @@ public class EditorOverworldModificationPanel : EditorGridModificationPanel
         }
 
         EditorSelectedOverworldTileModifierContainer selectedTileModifierContainer = EditorCanvasUI.Instance.SelectedTileModifierContainer as EditorSelectedOverworldTileModifierContainer;
-        selectedTileModifierContainer.SetInitialModifierValues();
+        selectedTileModifierContainer?.SetInitialModifierValues();
 
         EditorOverworldTileModificationPanel.Instance?.Reset();
         EditorOverworldTileModificationPanel.Instance?.DestroyModifierActions();
