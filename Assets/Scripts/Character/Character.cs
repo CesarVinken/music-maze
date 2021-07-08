@@ -152,7 +152,17 @@ public class Character : MonoBehaviour
         //Logger.Log($"Current gridlocation is now : {CurrentGridLocation.X}, {CurrentGridLocation.Y}");
     }
 
-    
+    protected void SetBodyAlpha(float alphaValue)
+    {
+        SpriteRenderer spriteRenderer = CharacterBody.GetComponent<SpriteRenderer>();
+        if (spriteRenderer == null)
+        {
+            Logger.Error("could not find a sprite renderer on the character body");
+        }
+
+        Color newColor = new Color(spriteRenderer.color.r, spriteRenderer.color.g, spriteRenderer.color.b, alphaValue);
+        spriteRenderer.color = newColor;
+    }
 
     public void SetHasCalculatedTarget(bool hasCalculatedTarget)
     {        

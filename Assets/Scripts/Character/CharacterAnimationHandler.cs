@@ -3,7 +3,7 @@ using Photon.Pun;
 
 public class CharacterAnimationHandler : MonoBehaviour
 {
-    public Animator Animator;
+    [SerializeField] private Animator _animator;
 
     private bool _inLocomotion = false;
     public bool InLocomotion
@@ -13,7 +13,7 @@ public class CharacterAnimationHandler : MonoBehaviour
         {
             Logger.Log(Logger.Locomotion, "Set InLocomotion for animation to {0}", value);
             _inLocomotion = value;
-            Animator.SetBool("Locomotion", _inLocomotion);
+            _animator.SetBool("Locomotion", _inLocomotion);
         }
     }
 
@@ -21,20 +21,20 @@ public class CharacterAnimationHandler : MonoBehaviour
 
     public void Awake()
     {
-        if (Animator == null)
+        if (_animator == null)
         {
-            Animator = GetComponent<Animator>();
+            _animator = GetComponent<Animator>();
         }
 
-        Guard.CheckIsNull(Animator, "Animator", gameObject);
+        Guard.CheckIsNull(_animator, "Animator", gameObject);
 
-        if (Animator == null)
+        if (_animator == null)
             _photonAnimatorView = GetComponent<PhotonAnimatorView>();
     }
 
     public void SetAnimationControllerForCharacterType(ICharacter characterType)
     {
-        Animator.runtimeAnimatorController = characterType.GetAnimationController();
+        _animator.runtimeAnimatorController = characterType.GetAnimationController();
 
         //if (GameRules.GamePlayerType == GamePlayerType.NetworkMultiPlayer)
         //{
@@ -47,12 +47,12 @@ public class CharacterAnimationHandler : MonoBehaviour
 
     public void SetHorizontal(float speed)
     {
-        Animator.SetFloat("Horizontal", speed);
+        _animator.SetFloat("Horizontal", speed);
     }
 
     public void SetVertical(float speed)
     {
-        Animator.SetFloat("Vertical", speed);
+        _animator.SetFloat("Vertical", speed);
     }
 
     public void SetLocomotion(bool value)
@@ -84,5 +84,10 @@ public class CharacterAnimationHandler : MonoBehaviour
                 Logger.Warning("Unhandled locomotion direction {0}", direction);
                 break;
         }
+    }
+
+    public void TriggerSpawning()
+    {
+        _animator.SetTrigger("Spawn");
     }
 }

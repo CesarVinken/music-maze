@@ -179,45 +179,21 @@ public class PlayerCharacter : Character
 
         emmonCaughtPGOEffectController.PlayEffect(animationEffect);
 
-        //int blackScreenNo = 0;
-        //if (GameRules.GamePlayerType == GamePlayerType.SplitScreenMultiplayer &&
-        //character.PlayerNumber == PlayerNumber.Player2)
-        //{
-        //    blackScreenNo = 1;
-        //}
-        //BlackOutSquare blackOutSquare = MainScreenOverlayCanvas.Instance.BlackOutSquares[blackScreenNo];
-
-        //if (blackOutSquare == null)
-        //{
-        //    Logger.Error($"Could not find blackout square for player {blackScreenNo + 1}");
-        //}
-
         character.FreezeCharacter();
-        CharacterBody.SetActive(false); // TODO make character animation for appearing and disappearing of character, rather than turning the GO off and on
+        CharacterBody.SetActive(false);
+        SetBodyAlpha(0); // make body transparent before respawning
 
         ResetCharacterPosition();
 
         float waitTime = 1.4f;
         yield return new WaitForSeconds(waitTime);
 
-        //// Screen to black
-        //IEnumerator toBlackCoroutine = blackOutSquare.ToBlack();
-
-        //StartCoroutine(toBlackCoroutine);
-        //while (blackOutSquare.BlackStatus == BlackStatus.InTransition)
-        //{
-        //    yield return null;
-        //}
+        _animationHandler.TriggerSpawning();
         CharacterBody.SetActive(true);
 
-        //Screen back to clear
-        //IEnumerator toClearCoroutine = blackOutSquare.ToClear();
+        float spawnAnimationLength = 0.44f;
+        yield return new WaitForSeconds(spawnAnimationLength);
 
-        //StartCoroutine(toClearCoroutine);
-        //while (blackOutSquare.BlackStatus == BlackStatus.InTransition)
-        //{
-        //    yield return null;
-        //}
         character.UnfreezeCharacter();
     }
 
