@@ -6,9 +6,9 @@ using System.Text.RegularExpressions;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class LaunchGameUI : MonoBehaviourPunCallbacks, IOnEventCallback
+public class GameRoomUI : MonoBehaviourPunCallbacks, IOnEventCallback
 {
-    public static LaunchGameUI Instance;
+    //public static GameRoomUI Instance;
 
     [SerializeField] private Launcher _launcher;
     [SerializeField] private Text _player1Name = null;
@@ -20,7 +20,7 @@ public class LaunchGameUI : MonoBehaviourPunCallbacks, IOnEventCallback
 
     public void Awake()
     {
-        Instance = this;
+        //Instance = this;
 
         Guard.CheckIsNull(_launcher, "_launcher", gameObject);
         Guard.CheckIsNull(_player1Name, "_player1Name", gameObject);

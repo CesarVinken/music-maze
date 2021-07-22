@@ -24,28 +24,30 @@ namespace Photon.Pun.Demo.PunBasics
         [SerializeField] private Text _errorText = null;
 
         [Space(5)]
-        [SerializeField] private GameObject _roomJoinUI = null;
-        [SerializeField] private InputField _playerNameField = null;
-        [SerializeField] private InputField _roomNameField = null;
-        [SerializeField] private GameObject _joinRoomButtonGO = null;
 
         [Space(5)]
-        [SerializeField] private LaunchGameUI _launchGameUI = null;
+        [SerializeField] private GameObject _roomJoinUI = null;
+
+        [Space(5)]
+        [SerializeField] private WelcomeUI _welcomeUI = null;
+        [SerializeField] private GameListUI _gameListUI = null;
+        [SerializeField] private GameRoomUI _launchGameUI = null;
+
         [SerializeField] private GameObject _splitScreenButtonGO = null;
 
-        string playerName = "";
+        public string PlayerName = "";
         public string RoomName = "";
-
         public void Awake()
         {
-            Guard.CheckIsNull(_playerNameField, "_playerNameField", gameObject);
-            Guard.CheckIsNull(_roomNameField, "_roomNameField", gameObject);
             Guard.CheckIsNull(_playerStatus, "_playerStatus", gameObject);
-            Guard.CheckIsNull(_playerNameField, "_playerNameField", gameObject);
             Guard.CheckIsNull(_errorText, "_errorText", gameObject);
 
+            Guard.CheckIsNull(_welcomeUI, "_welcomeUI", gameObject);
+
+            Guard.CheckIsNull(_gameListUI, "_gameListUI", gameObject);
+            Guard.CheckIsNull(_launchGameUI, "_launchGameUI", gameObject);
+
             Guard.CheckIsNull(_roomJoinUI, "_roomJoinUI", gameObject);
-            Guard.CheckIsNull(_joinRoomButtonGO, "_joinRoomButtonGO", gameObject);
             Guard.CheckIsNull(_splitScreenButtonGO, "_splitScreenButtonGO", gameObject);
 
             PhotonNetwork.AutomaticallySyncScene = true;
@@ -70,27 +72,27 @@ namespace Photon.Pun.Demo.PunBasics
             ConnectToPhoton();
         }
 
-        private void Update()
-        {
-            if(Input.GetKeyDown(KeyCode.Tab))
-            {
-                Logger.Log(EventSystem.current.currentSelectedGameObject.name);
-                if (EventSystem.current.currentSelectedGameObject.Equals(_playerNameField.gameObject))
-                {
-                    EventSystem.current.SetSelectedGameObject(_roomNameField.gameObject);
-                }
-                else if(EventSystem.current.currentSelectedGameObject.Equals(_roomNameField.gameObject))
-                {
-                    EventSystem.current.SetSelectedGameObject(_joinRoomButtonGO);
-                }
-            }
-        }
+        //private void Update()
+        //{
+        //    if(Input.GetKeyDown(KeyCode.Tab))
+        //    {
+        //        Logger.Log(EventSystem.current.currentSelectedGameObject.name);
+        //        if (EventSystem.current.currentSelectedGameObject.Equals(_playerNameField.gameObject))
+        //        {
+        //            EventSystem.current.SetSelectedGameObject(_roomNameField.gameObject);
+        //        }
+        //        else if(EventSystem.current.currentSelectedGameObject.Equals(_roomNameField.gameObject))
+        //        {
+        //            EventSystem.current.SetSelectedGameObject(_joinRoomButtonGO);
+        //        }
+        //    }
+        //}
 
         public void SetPlayerName(string name)
         {
             SetErrorText("");
             
-            playerName = name;
+            PlayerName = name;
         }
 
         public void SetRoomName(string name)
@@ -107,16 +109,18 @@ namespace Photon.Pun.Demo.PunBasics
             PhotonNetwork.ConnectUsingSettings();
         }
 
-        public void JoinRoom()
+
+        public void JoinGameRoom()
         {
             SetErrorText("");
+            RoomName = "Temp name"; // TODO: clicking Host game should trigger input field for game name
 
             if (PhotonNetwork.IsConnected)
             {
-                PhotonNetwork.LocalPlayer.NickName = playerName;
-                Debug.Log("PhotonNetwork.IsConnected! | Trying to Create/Join Room " + _roomNameField.text);
+                PhotonNetwork.LocalPlayer.NickName = PlayerName;
+                Debug.Log("PhotonNetwork.IsConnected! | Trying to Create/Join Room " + RoomName);
 
-                if (string.IsNullOrWhiteSpace(playerName))
+                if (string.IsNullOrWhiteSpace(PlayerName))
                 {
                     SetErrorText("Please fill in a name");
                     Debug.LogWarning("Could not go to game room because no game name was given.");
@@ -133,10 +137,18 @@ namespace Photon.Pun.Demo.PunBasics
                     return;
                 }
 
+                _welcomeUI.TurnOff();
+
                 RoomOptions roomOptions = new RoomOptions();
                 TypedLobby typedLobby = new TypedLobby(RoomName, LobbyType.Default);
                 PhotonNetwork.JoinOrCreateRoom(RoomName, roomOptions, typedLobby);
             }
+        }
+
+        public void OpenGameList()
+        {
+            _welcomeUI.TurnOff();
+            _gameListUI.TurnOn();
         }
 
         public override void OnConnected()
@@ -144,16 +156,20 @@ namespace Photon.Pun.Demo.PunBasics
             base.OnConnected();
             _connectionStatus.text = "Connected to Music Maze!";
             _connectionStatus.color = Color.green;
-            _roomJoinUI.SetActive(true);
-            _launchGameUI.TurnOff();
+            //_roomJoinUI.SetActive(true);
 
-            EventSystem.current.SetSelectedGameObject(_playerNameField.gameObject);
+            _launchGameUI.TurnOff();
+            _gameListUI.TurnOff();
+
+            _welcomeUI.TurnOn();
+            //EventSystem.current.SetSelectedGameObject(_playerNameField.gameObject);
         }
 
         public override void OnDisconnected(DisconnectCause cause)
         {
             _roomJoinUI.SetActive(false);
             _launchGameUI.TurnOff();
+            _gameListUI.TurnOff();
 
             _connectionStatus.text = "Disconnected. Please check your internet connection and restart.";
             _connectionStatus.color = Color.red;
@@ -165,8 +181,8 @@ namespace Photon.Pun.Demo.PunBasics
         {
             _roomJoinUI.SetActive(false);
             _launchGameUI.TurnOn();
-            _playerNameField.readOnly = true;
-            _roomNameField.readOnly = true;
+            //_playerNameField.readOnly = true;
+            //_roomNameField.readOnly = true;
         }
 
         public void SetErrorText(string errorText)

@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 public class GameTypeSetter : MonoBehaviour
 {
-    [SerializeField] private LaunchGameUI _launchGameUI;
+    [SerializeField] private GameRoomUI _launchGameUI;
 
     public void TurnOn()
     {

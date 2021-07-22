@@ -191,7 +191,7 @@ public class PlayerCharacter : Character
         _animationHandler.TriggerSpawning();
         CharacterBody.SetActive(true);
 
-        float spawnAnimationLength = 0.44f;
+        float spawnAnimationLength = 0.5f;
         yield return new WaitForSeconds(spawnAnimationLength);
 
         character.UnfreezeCharacter();
