@@ -4,7 +4,7 @@ using Photon.Realtime;
 
 public class EnemyCollidesWithMusicInstrumentCaseEvent
 {
-    public const byte EnemyCollidesWithMusicInstrumentCaseEventCode = 8;
+    public byte Code = EventCode.EnemyCollidesWithMusicInstrumentCaseEventCode;
 
     public void SendEnemyCollidesWithMusicInstrumentCaseEvent(GridLocation tileLocation, EnemyCharacter enemyCharacter)
     {
@@ -14,7 +14,7 @@ public class EnemyCollidesWithMusicInstrumentCaseEvent
             enemyCharacter.PhotonView.ViewID
         };
         RaiseEventOptions raiseEventOptions = new RaiseEventOptions { Receivers = ReceiverGroup.All };
-        PhotonNetwork.RaiseEvent(EnemyCollidesWithMusicInstrumentCaseEventCode, content, raiseEventOptions, SendOptions.SendReliable);
+        PhotonNetwork.RaiseEvent(Code, content, raiseEventOptions, SendOptions.SendReliable);
         Logger.Log("sent EnemyCollidesWithMusicInstrumentCaseEvent");
     }
 }

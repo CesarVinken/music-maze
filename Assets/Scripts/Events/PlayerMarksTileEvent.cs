@@ -4,7 +4,7 @@ using Photon.Realtime;
 
 public class PlayerMarksTileEvent
 {
-    public const byte PlayerMarksTileEventCode = 1;
+    public byte Code = EventCode.PlayerMarksTileEventCode;
 
     public void SendPlayerMarksTileEvent(GridLocation tileLocation, PlayerCharacter playerCharacter)
     {
@@ -14,6 +14,6 @@ public class PlayerMarksTileEvent
             playerCharacter.PlayerNumber
         };
         RaiseEventOptions raiseEventOptions = new RaiseEventOptions { Receivers = ReceiverGroup.All };
-        PhotonNetwork.RaiseEvent(PlayerMarksTileEventCode, content, raiseEventOptions, SendOptions.SendReliable);
+        PhotonNetwork.RaiseEvent(Code, content, raiseEventOptions, SendOptions.SendReliable);
     }
 }

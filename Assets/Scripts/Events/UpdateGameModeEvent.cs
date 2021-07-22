@@ -4,7 +4,7 @@ using Photon.Realtime;
 
 public class UpdateGameModeEvent
 {
-    public const byte UpdateGameModeEventCode = 4;
+    public byte Code = EventCode.UpdateGameModeEventCode;
 
     public void SendUpdateGameModeEvent(GameMode gameMode)
     {
@@ -13,6 +13,6 @@ public class UpdateGameModeEvent
             gameMode.ToString()
         };
         RaiseEventOptions raiseEventOptions = new RaiseEventOptions { Receivers = ReceiverGroup.All };
-        PhotonNetwork.RaiseEvent(UpdateGameModeEventCode, content, raiseEventOptions, SendOptions.SendReliable);
+        PhotonNetwork.RaiseEvent(Code, content, raiseEventOptions, SendOptions.SendReliable);
     }
 }

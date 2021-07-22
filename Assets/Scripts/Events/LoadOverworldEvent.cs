@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class LoadOverworldEvent
 {
-    public const byte LoadOverworldEventCode = 3;
+    public byte Code = EventCode.LoadOverworldEventCode;
 
     public void SendLoadOverworldEvent(string overworldName = "default")
     {
@@ -14,6 +14,6 @@ public class LoadOverworldEvent
             overworldName
         };
         RaiseEventOptions raiseEventOptions = new RaiseEventOptions { Receivers = ReceiverGroup.All };
-        PhotonNetwork.RaiseEvent(LoadOverworldEventCode, content, raiseEventOptions, SendOptions.SendReliable);
+        PhotonNetwork.RaiseEvent(Code, content, raiseEventOptions, SendOptions.SendReliable);
     }
 }

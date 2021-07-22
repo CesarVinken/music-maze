@@ -4,7 +4,7 @@ using Photon.Realtime;
 
 public class PlayerRejectsMazeLevelInvitationEvent
 {
-    public const byte PlayerRejectsMazeLevelInvitationEventCode = 6;
+    public byte Code = EventCode.PlayerRejectsMazeLevelInvitationEventCode;
 
     public void SendPlayerRejectsMazeLevelInvitationEvent(string rejector, string mazeName)
     {
@@ -13,7 +13,7 @@ public class PlayerRejectsMazeLevelInvitationEvent
             mazeName
         };
         RaiseEventOptions raiseEventOptions = new RaiseEventOptions { Receivers = ReceiverGroup.Others };
-        PhotonNetwork.RaiseEvent(PlayerRejectsMazeLevelInvitationEventCode, content, raiseEventOptions, SendOptions.SendReliable);
+        PhotonNetwork.RaiseEvent(Code, content, raiseEventOptions, SendOptions.SendReliable);
         Logger.Log("PlayerRejectsMazeLevelInvitationEvent");
     }
 }

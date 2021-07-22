@@ -199,7 +199,7 @@ public class OverworldGameplayManager : MonoBehaviour, IOnEventCallback, IGamepl
     public void OnEvent(EventData photonEvent)
     {
         byte eventCode = photonEvent.Code;
-        if (eventCode == LoadNextMazeLevelEvent.LoadNextMazeLevelEventCode)
+        if (eventCode == EventCode.LoadNextMazeLevelEventCode)
         {
             object[] data = (object[])photonEvent.CustomData;
             string mazeName = (string)data[0];
@@ -210,7 +210,7 @@ public class OverworldGameplayManager : MonoBehaviour, IOnEventCallback, IGamepl
             IEnumerator loadLevelCoroutine = LoadLevelCoroutine("Maze");
             StartCoroutine(loadLevelCoroutine);
 
-        } else if(eventCode == PlayerSendsMazeLevelInvitationEvent.PlayerSendsMazeLevelInvitationEventCode)
+        } else if(eventCode == EventCode.PlayerSendsMazeLevelInvitationEventCode)
         {
             object[] data = (object[])photonEvent.CustomData;
             string invitorName = (string)data[0];
@@ -221,7 +221,7 @@ public class OverworldGameplayManager : MonoBehaviour, IOnEventCallback, IGamepl
             MazeLevelInvitation.PendingInvitation = true;
 
             OverworldMainScreenOverlayCanvas.Instance.ShowMazeInvitation(invitorName, mazeName);
-        } else if(eventCode == PlayerRejectsMazeLevelInvitationEvent.PlayerRejectsMazeLevelInvitationEventCode)
+        } else if(eventCode == EventCode.PlayerRejectsMazeLevelInvitationEventCode)
         {
             object[] data = (object[])photonEvent.CustomData;
             string rejectorName = (string)data[0];

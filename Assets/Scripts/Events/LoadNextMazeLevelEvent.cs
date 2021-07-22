@@ -4,7 +4,7 @@ using Photon.Realtime;
 
 public class LoadNextMazeLevelEvent
 {
-    public const byte LoadNextMazeLevelEventCode = 2;
+    public byte Code = EventCode.LoadNextMazeLevelEventCode;
 
     public void SendLoadNextMazeLevelEvent(string levelName)
     {
@@ -12,7 +12,7 @@ public class LoadNextMazeLevelEvent
             levelName
         };
         RaiseEventOptions raiseEventOptions = new RaiseEventOptions { Receivers = ReceiverGroup.All };
-        PhotonNetwork.RaiseEvent(LoadNextMazeLevelEventCode, content, raiseEventOptions, SendOptions.SendReliable);
+        PhotonNetwork.RaiseEvent(Code, content, raiseEventOptions, SendOptions.SendReliable);
         Logger.Log("SendLoadNextMazeLevelEvent");
     }
 }
