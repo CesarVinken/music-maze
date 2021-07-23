@@ -14,6 +14,7 @@ namespace Photon.Pun.Demo.PunBasics
         private byte maxPlayersPerRoom = 2;
 
         string gameVersion = "1";
+        private readonly string _connectionStatusMessage = "    Connection Status: ";
 
         [Space(10)]
         [Header("Custom Variables")]
@@ -29,6 +30,7 @@ namespace Photon.Pun.Demo.PunBasics
         [SerializeField] private GameObject _roomJoinUI = null;
 
         [Space(5)]
+        [SerializeField] private LoginUI _loginUI = null;
         [SerializeField] private WelcomeUI _welcomeUI = null;
         [SerializeField] private GameListUI _gameListUI = null;
         [SerializeField] private GameRoomUI _launchGameUI = null;
@@ -37,6 +39,7 @@ namespace Photon.Pun.Demo.PunBasics
 
         public string PlayerName = "";
         public string RoomName = "";
+
         public void Awake()
         {
             Guard.CheckIsNull(_playerStatus, "_playerStatus", gameObject);
@@ -68,25 +71,40 @@ namespace Photon.Pun.Demo.PunBasics
 
             _roomJoinUI.SetActive(false);
             _launchGameUI.TurnOff();
+            _loginUI.TurnOn();
 
-            ConnectToPhoton();
+            //ConnectToPhoton();
         }
 
-        //private void Update()
-        //{
-        //    if(Input.GetKeyDown(KeyCode.Tab))
-        //    {
-        //        Logger.Log(EventSystem.current.currentSelectedGameObject.name);
-        //        if (EventSystem.current.currentSelectedGameObject.Equals(_playerNameField.gameObject))
-        //        {
-        //            EventSystem.current.SetSelectedGameObject(_roomNameField.gameObject);
-        //        }
-        //        else if(EventSystem.current.currentSelectedGameObject.Equals(_roomNameField.gameObject))
-        //        {
-        //            EventSystem.current.SetSelectedGameObject(_joinRoomButtonGO);
-        //        }
-        //    }
-        //}
+        private void Update()
+        {
+            _connectionStatus.text = _connectionStatusMessage + PhotonNetwork.NetworkClientState;
+
+            //    if(Input.GetKeyDown(KeyCode.Tab))
+            //    {
+            //        Logger.Log(EventSystem.current.currentSelectedGameObject.name);
+            //        if (EventSystem.current.currentSelectedGameObject.Equals(_playerNameField.gameObject))
+            //        {
+            //            EventSystem.current.SetSelectedGameObject(_roomNameField.gameObject);
+            //        }
+            //        else if(EventSystem.current.currentSelectedGameObject.Equals(_roomNameField.gameObject))
+            //        {
+            //            EventSystem.current.SetSelectedGameObject(_joinRoomButtonGO);
+            //        }
+            //    }
+        }
+
+        public override void OnConnectedToMaster()
+        {
+            Debug.Log("OnConnectedToMaster");
+            //this.SetActivePanel(SelectionPanel.name);
+            //base.OnConnected();
+            //_connectionStatus.text = "Connected to Music Maze!";
+            _connectionStatus.color = Color.green;
+            //_roomJoinUI.SetActive(true);
+
+            ShowMainUI();
+        }
 
         public void SetPlayerName(string name)
         {
@@ -102,13 +120,17 @@ namespace Photon.Pun.Demo.PunBasics
             RoomName = name;
         }
 
-        void ConnectToPhoton()
+        public void HostGame()
         {
-            _connectionStatus.text = "Connecting...";
-            PhotonNetwork.GameVersion = gameVersion;
-            PhotonNetwork.ConnectUsingSettings();
-        }
+            string roomName = "temp room name";
+            roomName = (roomName.Equals(string.Empty)) ? "Room " + Random.Range(1000, 10000) : roomName;
 
+            RoomOptions options = new RoomOptions { MaxPlayers = 2, PlayerTtl = 10000 };
+
+            PhotonNetwork.CreateRoom(roomName, options, null);
+
+            _welcomeUI.TurnOff();
+        }
 
         public void JoinGameRoom()
         {
@@ -156,13 +178,11 @@ namespace Photon.Pun.Demo.PunBasics
             base.OnConnected();
             _connectionStatus.text = "Connected to Music Maze!";
             _connectionStatus.color = Color.green;
-            //_roomJoinUI.SetActive(true);
 
             _launchGameUI.TurnOff();
             _gameListUI.TurnOff();
 
             _welcomeUI.TurnOn();
-            //EventSystem.current.SetSelectedGameObject(_playerNameField.gameObject);
         }
 
         public override void OnDisconnected(DisconnectCause cause)
@@ -179,6 +199,7 @@ namespace Photon.Pun.Demo.PunBasics
 
         public override void OnJoinedRoom()
         {
+            Logger.Log("OnJoinedRoom");
             _roomJoinUI.SetActive(false);
             _launchGameUI.TurnOn();
             //_playerNameField.readOnly = true;
@@ -239,6 +260,22 @@ namespace Photon.Pun.Demo.PunBasics
 
             GameLaunchAction launcher = new GameLaunchAction();
             launcher.Launch();
+        }
+
+        public void ShowMainUI()
+        {
+            _loginUI.TurnOff();
+            _launchGameUI.TurnOff();
+            _gameListUI.TurnOff();
+            _welcomeUI.TurnOn();
+        }
+
+        public void ShowGameListUI()
+        {
+            _loginUI.TurnOff();
+            _launchGameUI.TurnOff();
+            _gameListUI.TurnOn();
+            _welcomeUI.TurnOff();
         }
     }
 }

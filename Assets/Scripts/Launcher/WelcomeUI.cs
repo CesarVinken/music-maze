@@ -1,32 +1,27 @@
+using Photon.Pun;
 using Photon.Pun.Demo.PunBasics;
+using Photon.Realtime;
 using UnityEngine;
-using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 public class WelcomeUI : MonoBehaviour
 {
-    //public static WelcomeUI Instance;
     [SerializeField] private Launcher _launcher;
 
     [SerializeField] private GameObject _hostGameButtonGO = null;
     [SerializeField] private GameObject _joinGameButtonGO = null;
 
-    [SerializeField] private InputField _playerNameField = null;
     [SerializeField] private InputField _roomNameField = null;
 
     public void Awake()
     {
-        Guard.CheckIsNull(_playerNameField, "_playerNameField", gameObject);
-        //Guard.CheckIsNull(_roomNameField, "_roomNameField", gameObject);
-
         Guard.CheckIsNull(_hostGameButtonGO, "_hostGameButtonGO", gameObject);
         Guard.CheckIsNull(_joinGameButtonGO, "_joinGameButtonGO", gameObject);
     }
 
-    // WelcomeUI is turned on by the launcher as soon as we are connected
     public void TurnOn()
     {
-        EventSystem.current.SetSelectedGameObject(_playerNameField.gameObject);
+        gameObject.SetActive(true);
     }
 
     public void TurnOff()
@@ -52,8 +47,7 @@ public class WelcomeUI : MonoBehaviour
 
     public void HostGame()
     {
-        //Create new game romo
-        _launcher.JoinGameRoom();
+        _launcher.HostGame();
     }
 
     public void JoinGame()

@@ -90,7 +90,7 @@ public class GameRoomUI : MonoBehaviourPunCallbacks, IOnEventCallback
     public void OnEvent(EventData photonEvent)
     {
         byte eventCode = photonEvent.Code;
-        if (eventCode == UpdateGameModeEvent.UpdateGameModeEventCode)
+        if (eventCode == EventCode.UpdateGameModeEventCode)
         {
             Logger.Log("received an update game mode event");
             object[] data = (object[])photonEvent.CustomData;
@@ -103,5 +103,23 @@ public class GameRoomUI : MonoBehaviourPunCallbacks, IOnEventCallback
     {
         newName = Regex.Replace(newName, "([a-z])([A-Z])", "$1 $2"); 
         _gameTypeReadonlyLabel.text = newName;
+    }
+
+    public void BackToMain()
+    {
+        PhotonNetwork.LeaveRoom();
+        _launcher.ShowMainUI();
+    }
+
+    public override void OnCreateRoomFailed(short returnCode, string message)
+    {
+        Logger.Warning("Failed to create room");
+        _launcher.ShowMainUI();
+    }
+
+    public override void OnJoinRoomFailed(short returnCode, string message)
+    {
+        Logger.Warning("Failed to join room");
+        _launcher.ShowGameListUI();
     }
 }
