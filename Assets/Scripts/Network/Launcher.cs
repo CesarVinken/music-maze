@@ -2,6 +2,7 @@
 using UnityEngine.UI;
 using Photon.Realtime;
 using UnityEngine.EventSystems;
+using System.Collections;
 
 namespace Photon.Pun.Demo.PunBasics
 {
@@ -72,26 +73,12 @@ namespace Photon.Pun.Demo.PunBasics
             _roomJoinUI.SetActive(false);
             _launchGameUI.TurnOff();
             _loginUI.TurnOn();
-
-            //ConnectToPhoton();
         }
 
         private void Update()
         {
             _connectionStatus.text = _connectionStatusMessage + PhotonNetwork.NetworkClientState;
 
-            //    if(Input.GetKeyDown(KeyCode.Tab))
-            //    {
-            //        Logger.Log(EventSystem.current.currentSelectedGameObject.name);
-            //        if (EventSystem.current.currentSelectedGameObject.Equals(_playerNameField.gameObject))
-            //        {
-            //            EventSystem.current.SetSelectedGameObject(_roomNameField.gameObject);
-            //        }
-            //        else if(EventSystem.current.currentSelectedGameObject.Equals(_roomNameField.gameObject))
-            //        {
-            //            EventSystem.current.SetSelectedGameObject(_joinRoomButtonGO);
-            //        }
-            //    }
         }
 
         public override void OnConnectedToMaster()
@@ -100,7 +87,7 @@ namespace Photon.Pun.Demo.PunBasics
             //this.SetActivePanel(SelectionPanel.name);
             //base.OnConnected();
             //_connectionStatus.text = "Connected to Music Maze!";
-            _connectionStatus.color = Color.green;
+            //_connectionStatus.color = Color.green;
             //_roomJoinUI.SetActive(true);
 
             ShowMainUI();
@@ -202,13 +189,31 @@ namespace Photon.Pun.Demo.PunBasics
             Logger.Log("OnJoinedRoom");
             _roomJoinUI.SetActive(false);
             _launchGameUI.TurnOn();
-            //_playerNameField.readOnly = true;
-            //_roomNameField.readOnly = true;
         }
 
         public void SetErrorText(string errorText)
         {
+            StartCoroutine(SetErrorTextCoroutine());
             _errorText.text = errorText;
+        }
+
+        private IEnumerator SetErrorTextCoroutine()
+        {
+            yield return new WaitForSeconds(2f);
+
+            float alphaAmount = 1;
+            float fadeSpeed = 1.2f;
+            Color color = _errorText.color;
+
+            while (alphaAmount > 0)
+            {
+                alphaAmount = alphaAmount - (fadeSpeed * Time.deltaTime);
+
+                _errorText.color = new Color(color.r, color.g, color.b, alphaAmount);
+                yield return null;
+            }
+            _errorText.text = "";
+            _errorText.color = new Color(color.r, color.g, color.b, 1);
         }
 
         public void SetPlayerStatusText(string statusText)
@@ -264,6 +269,8 @@ namespace Photon.Pun.Demo.PunBasics
 
         public void ShowMainUI()
         {
+            SetPlayerStatusText("");
+
             _loginUI.TurnOff();
             _launchGameUI.TurnOff();
             _gameListUI.TurnOff();
@@ -272,6 +279,8 @@ namespace Photon.Pun.Demo.PunBasics
 
         public void ShowGameListUI()
         {
+            SetPlayerStatusText("");
+
             _loginUI.TurnOff();
             _launchGameUI.TurnOff();
             _gameListUI.TurnOn();

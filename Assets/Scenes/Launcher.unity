@@ -539,18 +539,18 @@ MonoBehaviour:
       m_Calls: []
   m_FontData:
     m_Font: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 0}
-    m_FontSize: 44
+    m_FontSize: 46
     m_FontStyle: 0
     m_BestFit: 0
     m_MinSize: 10
-    m_MaxSize: 44
+    m_MaxSize: 46
     m_Alignment: 4
     m_AlignByGeometry: 0
     m_RichText: 1
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Single Player Test
+  m_Text: Single Player
 --- !u!222 &235561214
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -1648,10 +1648,10 @@ MonoBehaviour:
     m_SelectOnRight: {fileID: 0}
   m_Transition: 1
   m_Colors:
-    m_NormalColor: {r: 0.31764707, g: 0.3372549, b: 0.38431376, a: 1}
-    m_HighlightedColor: {r: 0.87843144, g: 0.48235297, b: 0, a: 1}
-    m_PressedColor: {r: 0.7843138, g: 0.7843138, b: 0.7843138, a: 1}
-    m_SelectedColor: {r: 0.87843144, g: 0.48235297, b: 0, a: 1}
+    m_NormalColor: {r: 1, g: 1, b: 1, a: 1}
+    m_HighlightedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
+    m_PressedColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 1}
+    m_SelectedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
     m_DisabledColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 0.5019608}
     m_ColorMultiplier: 1
     m_FadeDuration: 0.1
@@ -1671,8 +1671,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1812422320}
-        m_TargetAssemblyTypeName: WelcomeUI, Scripts
+      - m_Target: {fileID: 735028022}
+        m_TargetAssemblyTypeName: Photon.Pun.Demo.PunBasics.Launcher, Scripts
         m_MethodName: HostGame
         m_Mode: 1
         m_Arguments:
@@ -1703,7 +1703,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 0}
+  m_Sprite: {fileID: 10905, guid: 0000000000000000f000000000000000, type: 0}
   m_Type: 1
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -1734,11 +1734,11 @@ RectTransform:
   m_Children:
   - {fileID: 1362905317}
   m_Father: {fileID: 1812422319}
-  m_RootOrder: 0
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 50, y: -45}
+  m_AnchoredPosition: {x: 50, y: -141}
   m_SizeDelta: {x: 340, y: 90}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &762019196
@@ -2187,10 +2187,10 @@ MonoBehaviour:
     m_SelectOnRight: {fileID: 0}
   m_Transition: 1
   m_Colors:
-    m_NormalColor: {r: 0.31764707, g: 0.3372549, b: 0.38431376, a: 1}
-    m_HighlightedColor: {r: 0.87843144, g: 0.48235297, b: 0, a: 1}
-    m_PressedColor: {r: 0.7843138, g: 0.7843138, b: 0.7843138, a: 1}
-    m_SelectedColor: {r: 0.87843144, g: 0.48235297, b: 0, a: 1}
+    m_NormalColor: {r: 1, g: 1, b: 1, a: 1}
+    m_HighlightedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
+    m_PressedColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 1}
+    m_SelectedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
     m_DisabledColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 0.5019608}
     m_ColorMultiplier: 1
     m_FadeDuration: 0.1
@@ -2210,9 +2210,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1812422320}
-        m_TargetAssemblyTypeName: WelcomeUI, Scripts
-        m_MethodName: JoinGame
+      - m_Target: {fileID: 735028022}
+        m_TargetAssemblyTypeName: Photon.Pun.Demo.PunBasics.Launcher, Scripts
+        m_MethodName: ShowGameListUI
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -2242,7 +2242,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 0}
+  m_Sprite: {fileID: 10905, guid: 0000000000000000f000000000000000, type: 0}
   m_Type: 1
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -2273,11 +2273,11 @@ RectTransform:
   m_Children:
   - {fileID: 1969721534}
   m_Father: {fileID: 1812422319}
-  m_RootOrder: 1
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 50, y: -141}
+  m_AnchoredPosition: {x: 50, y: -237}
   m_SizeDelta: {x: 340, y: 90}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &1081879980
@@ -2581,7 +2581,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: 0.19215688, g: 0.19215688, b: 0.19215688, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -2855,18 +2855,18 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1679547078}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 235561212}
-  m_Father: {fileID: 1888381632}
-  m_RootOrder: 7
+  m_Father: {fileID: 1812422319}
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 223, y: 64}
-  m_SizeDelta: {x: 400, y: 80}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 50, y: -45}
+  m_SizeDelta: {x: 340, y: 90}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1679547080
 MonoBehaviour:
@@ -2994,7 +2994,7 @@ RectTransform:
   m_Children:
   - {fileID: 2101122713}
   m_Father: {fileID: 1888381632}
-  m_RootOrder: 8
+  m_RootOrder: 7
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
@@ -3308,6 +3308,7 @@ RectTransform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
+  - {fileID: 1679547079}
   - {fileID: 761856339}
   - {fileID: 1066203398}
   m_Father: {fileID: 1888381632}
@@ -3801,7 +3802,6 @@ RectTransform:
   - {fileID: 243588735}
   - {fileID: 2005158914}
   - {fileID: 1954930839}
-  - {fileID: 1679547079}
   - {fileID: 1727883650}
   m_Father: {fileID: 1172224676}
   m_RootOrder: 0
@@ -4119,7 +4119,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: 0.19215688, g: 0.19215688, b: 0.19215688, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1

@@ -1,14 +1,11 @@
 using Photon.Pun;
 using Photon.Pun.Demo.PunBasics;
 using Photon.Realtime;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class GameListUI : MonoBehaviourPunCallbacks
 {
-    //public static GameListUI Instance;
-
     [SerializeField] private Launcher _launcher;
 
     [SerializeField] private GameObject _roomListPanel;
@@ -23,8 +20,6 @@ public class GameListUI : MonoBehaviourPunCallbacks
 
     public void Awake()
     {
-        //Instance = this;
-
         Guard.CheckIsNull(_launcher, "_launcher", gameObject);
 
         PhotonNetwork.AutomaticallySyncScene = true;
@@ -55,7 +50,6 @@ public class GameListUI : MonoBehaviourPunCallbacks
     {
         _launcher.LaunchMultiplayerGame();
     }
-
 
     private void ClearRoomListView()
     {
@@ -120,6 +114,7 @@ public class GameListUI : MonoBehaviourPunCallbacks
 
     public override void OnLeftLobby()
     {
+        Logger.Log("Left lobby");
         _cachedRoomList.Clear();
         ClearRoomListView();
     }
@@ -134,7 +129,6 @@ public class GameListUI : MonoBehaviourPunCallbacks
 
     public void BackToMain()
     {
-        Logger.Log("TODO: Back to main");
         if (PhotonNetwork.InLobby)
         {
             PhotonNetwork.LeaveLobby();
@@ -150,11 +144,7 @@ public class GameListUI : MonoBehaviourPunCallbacks
             Logger.Log("join the lobby");
             PhotonNetwork.JoinLobby();
         }
-
-        //SetActivePanel(RoomListPanel.name);
     }
-
-
 
     public override void OnCreateRoomFailed(short returnCode, string message)
     {
@@ -162,4 +152,20 @@ public class GameListUI : MonoBehaviourPunCallbacks
         _launcher.ShowMainUI();
     }
 
+    public override void OnJoinRoomFailed(short returnCode, string message)
+    {
+        if(returnCode == 32765)
+        {
+            _launcher.SetErrorText("Could not join game because the game was full");
+            if (!PhotonNetwork.InLobby)
+            {
+                Logger.Log("join the lobby");
+                PhotonNetwork.JoinLobby();
+            }
+        }
+        else
+        {
+            Logger.Error($"Join Room failed with return code {returnCode} and message {message}");
+        }
+    }
 }
