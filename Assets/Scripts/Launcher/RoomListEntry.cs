@@ -9,7 +9,7 @@ public class RoomListEntry : MonoBehaviour
     public Text RoomPlayersText;
     public Button JoinRoomButton;
 
-    private string _roomName;
+    private string _roomId;
     private byte _currentPlayers;
     private Launcher _launcher;
 
@@ -17,24 +17,18 @@ public class RoomListEntry : MonoBehaviour
     {
         JoinRoomButton.onClick.AddListener(() =>
         {
-            //if(_currentPlayers == 2)
-            //{
-            //    _launcher.SetErrorText("Room is full");
-            //    return;
-            //}
-
             if (PhotonNetwork.InLobby)
             {
                 PhotonNetwork.LeaveLobby();
             }
 
-            PhotonNetwork.JoinRoom(_roomName);
+            PhotonNetwork.JoinRoom(_roomId);
         });
     }
 
-    public void Initialize(string name, byte currentPlayers, byte maxPlayers, Launcher launcher)
+    public void Initialize(string id, string name, byte currentPlayers, byte maxPlayers, Launcher launcher)
     {
-        _roomName = name;
+        _roomId = id;
         _currentPlayers = currentPlayers;
 
         if(currentPlayers == 2)
@@ -47,5 +41,11 @@ public class RoomListEntry : MonoBehaviour
         }
         RoomNameText.text = name;
         RoomPlayersText.text = currentPlayers + " / " + maxPlayers;
+    }
+
+    public void UpdateRoomName(string newRoomName)
+    {
+        // We do not update the _fixedRoomName because this is used as an identifier of the room by photon and will after creation not be updated.
+        RoomNameText.text = newRoomName;
     }
 }

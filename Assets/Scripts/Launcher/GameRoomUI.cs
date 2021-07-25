@@ -13,6 +13,9 @@ public class GameRoomUI : MonoBehaviourPunCallbacks, IOnEventCallback
     [SerializeField] private Text _player2Name = null;
     [SerializeField] private GameObject _launchGameButtonGO = null;
 
+    [SerializeField] private InputField _roomNameInputField = null;
+    [SerializeField] private Button _updateRoomNameButton = null;
+
     [SerializeField] private GameTypeSetter _gameTypeDropdown = null;
     [SerializeField] private Text _gameTypeReadonlyLabel = null;
 
@@ -24,6 +27,9 @@ public class GameRoomUI : MonoBehaviourPunCallbacks, IOnEventCallback
         Guard.CheckIsNull(_launcher, "_launcher", gameObject);
         Guard.CheckIsNull(_player1Name, "_player1Name", gameObject);
         Guard.CheckIsNull(_player2Name, "_player2Name", gameObject);
+
+        Guard.CheckIsNull(_roomNameInputField, "_roomNameInputField", gameObject);
+        Guard.CheckIsNull(_updateRoomNameButton, "_updateRoomNameButton", gameObject);
 
         Guard.CheckIsNull(_launchGameButtonGO, "_gameTypeDropdown", gameObject);
         Guard.CheckIsNull(_gameTypeReadonlyLabel, "_gameTypeReadonlyLabel", gameObject);
@@ -45,6 +51,10 @@ public class GameRoomUI : MonoBehaviourPunCallbacks, IOnEventCallback
             Logger.Log("{0} joined the rumble", PhotonNetwork.PlayerList[0].NickName);
             _launchGameButtonGO.SetActive(true);
 
+            _updateRoomNameButton.gameObject.SetActive(false);
+            _roomNameInputField.text = PhotonNetwork.CurrentRoom.CustomProperties["Name"].ToString();
+            _roomNameInputField.interactable = true;
+
             _gameTypeReadonlyLabel.gameObject.SetActive(false);
             _gameTypeDropdown.TurnOn();
 
@@ -57,11 +67,27 @@ public class GameRoomUI : MonoBehaviourPunCallbacks, IOnEventCallback
             _gameTypeDropdown.TurnOff();
             _launchGameButtonGO.SetActive(false);
 
+            _updateRoomNameButton.gameObject.SetActive(false);
+            _roomNameInputField.text = PhotonNetwork.CurrentRoom.Id;
+            _roomNameInputField.interactable = false;
+
             Logger.Log("{0} joined the rumble", PhotonNetwork.PlayerList[1].NickName);
 
             _launcher.SetPlayerStatusText("Connected to " + _launcher.RoomName + ". Waiting for " + PhotonNetwork.MasterClient.NickName + " to launch the game..");
             _player1Name.text = PhotonNetwork.MasterClient.NickName;
             _player2Name.text = "<color=green>" + PhotonNetwork.PlayerList[1].NickName + "</color>";
+        }
+    }
+
+    public void OnUpdateRoomNameInputFieldValue()
+    {
+        if(_roomNameInputField.text != _launcher.RoomName)
+        {
+            _updateRoomNameButton.gameObject.SetActive(true);
+        }
+        else
+        {
+            _updateRoomNameButton.gameObject.SetActive(false);
         }
     }
 
@@ -81,6 +107,9 @@ public class GameRoomUI : MonoBehaviourPunCallbacks, IOnEventCallback
             Logger.Log("Tell the client about the current game mode");
             UpdateGameModeEvent updateGameModeEvent = new UpdateGameModeEvent();
             updateGameModeEvent.SendUpdateGameModeEvent(GameRules.GameMode);
+
+            //UpdateRoomNameEvent updateRoomNameEvent = new UpdateRoomNameEvent();
+            //updateRoomNameEvent.SendUpdateGameNameEvent(_launcher.RoomName);
         }
     }
 
@@ -111,6 +140,15 @@ public class GameRoomUI : MonoBehaviourPunCallbacks, IOnEventCallback
             PlayerMessagePanel playerMessagePanel = gameAbandonedMessageGO.GetComponent<PlayerMessagePanel>();
             playerMessagePanel.ShowMessage(message, PlayerNumber.Player1);
         }
+        else if (eventCode == EventCode.UpdateRoomNameEventCode)
+        {
+            Logger.Log("received an update room name event");
+            object[] data = (object[])photonEvent.CustomData;
+
+            string newRoomName = (string)data[0];
+            _launcher.SetRoomName(newRoomName);
+            _roomNameInputField.text = newRoomName;
+        }
     }
 
     public void UpdateGameTypeLabel(string newName)
@@ -125,7 +163,6 @@ public class GameRoomUI : MonoBehaviourPunCallbacks, IOnEventCallback
         {
             if (PhotonNetwork.IsMasterClient)
             {
-                Logger.Log("The Host is leaving, inform clients to leave too.");
                 HostLeavesGameEvent hostLeavesGameEvent = new HostLeavesGameEvent();
                 hostLeavesGameEvent.SendHostLeavesGameEvent();
             }
@@ -156,5 +193,21 @@ public class GameRoomUI : MonoBehaviourPunCallbacks, IOnEventCallback
             _launcher.SetPlayerStatusText("Connected to " + _launcher.RoomName + ". Waiting for a second player...");
             _player2Name.text = "";            
         }
+    }
+
+    // called when the host picks the update room name button
+    public void UpdateRoomName()
+    {
+        string newRoomName = _roomNameInputField.text;
+
+        PhotonNetwork.CurrentRoom.SetCustomProperties(new Hashtable { { "Name", newRoomName } });
+
+        _launcher.SetRoomName(newRoomName);
+
+        // update client about new room name
+        UpdateRoomNameEvent updateRoomNameEvent = new UpdateRoomNameEvent();
+        updateRoomNameEvent.SendUpdateGameNameEvent(newRoomName);
+
+        _updateRoomNameButton.gameObject.SetActive(false);
     }
 }

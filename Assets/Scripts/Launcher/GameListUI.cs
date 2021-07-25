@@ -68,24 +68,24 @@ public class GameListUI : MonoBehaviourPunCallbacks
             // Remove room from cached room list if it got closed, became invisible or was marked as removed
             if (!info.IsOpen || !info.IsVisible || info.RemovedFromList)
             {
-                if (_cachedRoomList.ContainsKey(info.Name))
+                if (_cachedRoomList.ContainsKey(info.Id))
                 {
-                    _cachedRoomList.Remove(info.Name);
+                    _cachedRoomList.Remove(info.Id);
                 }
 
                 continue;
             }
 
             // Update cached room info
-            if (_cachedRoomList.ContainsKey(info.Name))
+            if (_cachedRoomList.ContainsKey(info.Id))
             {
-                _cachedRoomList[info.Name] = info;
+                _cachedRoomList[info.Id] = info;
             }
 
             // Add new room info to cache
             else
             {
-                _cachedRoomList.Add(info.Name, info);
+                _cachedRoomList.Add(info.Id, info);
             }
         }
 
@@ -94,14 +94,17 @@ public class GameListUI : MonoBehaviourPunCallbacks
 
     private void UpdateRoomListView()
     {
+        Logger.Log("UpdateRoomListView");
         foreach (RoomInfo info in _cachedRoomList.Values)
         {
+            Logger.Log($"Id of this room: {info.Id}. Name of this room: {info.CustomProperties["Name"]}");
+            string roomName = info.CustomProperties["Name"].ToString();
             GameObject entry = Instantiate(_roomListEntryPrefab);
             entry.transform.SetParent(_roomListContent.transform);
             entry.transform.localScale = Vector3.one;
-            entry.GetComponent<RoomListEntry>().Initialize(info.Name, (byte)info.PlayerCount, info.MaxPlayers, _launcher);
+            entry.GetComponent<RoomListEntry>().Initialize(info.Id, roomName, (byte)info.PlayerCount, info.MaxPlayers, _launcher);
 
-            _roomListEntries.Add(info.Name, entry);
+            _roomListEntries.Add(info.Id, entry);
         }
     }
 
