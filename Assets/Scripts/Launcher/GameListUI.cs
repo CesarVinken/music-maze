@@ -99,7 +99,7 @@ public class GameListUI : MonoBehaviourPunCallbacks
             GameObject entry = Instantiate(_roomListEntryPrefab);
             entry.transform.SetParent(_roomListContent.transform);
             entry.transform.localScale = Vector3.one;
-            entry.GetComponent<RoomListEntry>().Initialize(info.Name, (byte)info.PlayerCount, info.MaxPlayers);
+            entry.GetComponent<RoomListEntry>().Initialize(info.Name, (byte)info.PlayerCount, info.MaxPlayers, _launcher);
 
             _roomListEntries.Add(info.Name, entry);
         }
@@ -154,18 +154,23 @@ public class GameListUI : MonoBehaviourPunCallbacks
 
     public override void OnJoinRoomFailed(short returnCode, string message)
     {
-        if(returnCode == 32765)
+        if (returnCode == 32765)
         {
             _launcher.SetErrorText("Could not join game because the game was full");
-            if (!PhotonNetwork.InLobby)
-            {
-                Logger.Log("join the lobby");
-                PhotonNetwork.JoinLobby();
-            }
+        }
+        else if (returnCode == 32758)
+        {
+            _launcher.SetErrorText("Could not join game because the game was abandoned");
         }
         else
         {
             Logger.Error($"Join Room failed with return code {returnCode} and message {message}");
+        }
+
+        if (!PhotonNetwork.InLobby)
+        {
+            Logger.Log("join the lobby");
+            PhotonNetwork.JoinLobby();
         }
     }
 }

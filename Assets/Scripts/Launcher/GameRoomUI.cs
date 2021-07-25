@@ -73,7 +73,7 @@ public class GameRoomUI : MonoBehaviourPunCallbacks, IOnEventCallback
         Logger.Log("{0} joined the rumble", newPlayer.NickName);
 
         _player2Name.text = newPlayer.NickName;
-
+        
         if (PhotonNetwork.IsMasterClient)
         {
             Logger.Log("Tell the client about the current game mode");
@@ -107,7 +107,11 @@ public class GameRoomUI : MonoBehaviourPunCallbacks, IOnEventCallback
 
     public void BackToMain()
     {
-        PhotonNetwork.LeaveRoom();
+        if (PhotonNetwork.InRoom)
+        {
+            // This takes a while to update
+            PhotonNetwork.LeaveRoom(true);
+        }
         _launcher.ShowMainUI();
     }
 
@@ -121,5 +125,33 @@ public class GameRoomUI : MonoBehaviourPunCallbacks, IOnEventCallback
     {
         Logger.Warning("Failed to join room");
         _launcher.ShowGameListUI();
+    }
+
+    public override void OnPlayerLeftRoom(Player otherPlayer)
+    {
+        Logger.Log($"Other player with NickName '{otherPlayer.NickName}' left room");
+
+        if (PhotonNetwork.IsMasterClient)
+        {
+            // the client left, reopen the second spot for the game
+            Logger.Log($"PhotonNetwork.CurrentRoom.PlayerCount {PhotonNetwork.CurrentRoom.PlayerCount}");
+            _launcher.SetPlayerStatusText("Connected to " + _launcher.RoomName + ". Waiting for a second player...");
+            _player2Name.text = "";
+            
+        }
+        else
+        {
+            // the host left, let the client leave as well.
+            BackToMain();
+
+            // Show message to inform the client what happened
+        }
+
+    }
+
+
+    public override void OnLeftRoom()
+    {
+
     }
 }
