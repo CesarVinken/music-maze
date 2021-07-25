@@ -2748,6 +2748,9 @@ MonoBehaviour:
   _launchGameButtonGO: {fileID: 1896142838}
   _gameTypeDropdown: {fileID: 621356086}
   _gameTypeReadonlyLabel: {fileID: 1804965167}
+  _playerMessagePrefab: {fileID: 5222908463777228736, guid: 3d521374ecabdf747aefce2c0fd9dd62,
+    type: 3}
+  _UIControlsGO: {fileID: 1888381631}
 --- !u!1 &1582890671
 GameObject:
   m_ObjectHideFlags: 0

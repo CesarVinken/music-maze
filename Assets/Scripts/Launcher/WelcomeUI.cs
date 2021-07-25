@@ -1,6 +1,4 @@
-using Photon.Pun;
 using Photon.Pun.Demo.PunBasics;
-using Photon.Realtime;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -27,22 +25,6 @@ public class WelcomeUI : MonoBehaviour
     public void TurnOff()
     {
         gameObject.SetActive(false);
-    }
-
-    private void Update()
-    {
-        //if (Input.GetKeyDown(KeyCode.Tab))
-        //{
-        //    Logger.Log(EventSystem.current.currentSelectedGameObject.name);
-        //    if (EventSystem.current.currentSelectedGameObject.Equals(_playerNameField.gameObject))
-        //    {
-        //        EventSystem.current.SetSelectedGameObject(_roomNameField.gameObject);
-        //    }
-        //    else if (EventSystem.current.currentSelectedGameObject.Equals(_roomNameField.gameObject))
-        //    {
-        //        EventSystem.current.SetSelectedGameObject(_joinRoomButtonGO);
-        //    }
-        //}
     }
 
     public void HostGame()

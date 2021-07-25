@@ -8,4 +8,5 @@ public static class EventCode
     public const byte PlayerRejectsMazeLevelInvitationEventCode = 6;
     public const byte PlayerCollidesWithMusicInstrumentCaseEventCode = 7;
     public const byte EnemyCollidesWithMusicInstrumentCaseEventCode = 8;
+    public const byte HostLeavesGameEventCode = 9;
 }

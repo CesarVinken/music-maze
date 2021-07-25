@@ -8,8 +8,6 @@ using UnityEngine.UI;
 
 public class GameRoomUI : MonoBehaviourPunCallbacks, IOnEventCallback
 {
-    //public static GameRoomUI Instance;
-
     [SerializeField] private Launcher _launcher;
     [SerializeField] private Text _player1Name = null;
     [SerializeField] private Text _player2Name = null;
@@ -18,16 +16,20 @@ public class GameRoomUI : MonoBehaviourPunCallbacks, IOnEventCallback
     [SerializeField] private GameTypeSetter _gameTypeDropdown = null;
     [SerializeField] private Text _gameTypeReadonlyLabel = null;
 
+    [SerializeField] private GameObject _playerMessagePrefab = null;
+    [SerializeField] private GameObject _UIControlsGO = null;
+
     public void Awake()
     {
-        //Instance = this;
-
         Guard.CheckIsNull(_launcher, "_launcher", gameObject);
         Guard.CheckIsNull(_player1Name, "_player1Name", gameObject);
         Guard.CheckIsNull(_player2Name, "_player2Name", gameObject);
 
         Guard.CheckIsNull(_launchGameButtonGO, "_gameTypeDropdown", gameObject);
         Guard.CheckIsNull(_gameTypeReadonlyLabel, "_gameTypeReadonlyLabel", gameObject);
+
+        Guard.CheckIsNull(_playerMessagePrefab, "_playerMessagePrefab", gameObject);
+        Guard.CheckIsNull(_UIControlsGO, "_welcomeUIGO", gameObject);
 
         PhotonNetwork.AutomaticallySyncScene = true;
 
@@ -97,6 +99,18 @@ public class GameRoomUI : MonoBehaviourPunCallbacks, IOnEventCallback
 
             UpdateGameTypeLabel((string)data[0]);
         }
+        else if (eventCode == EventCode.HostLeavesGameEventCode)
+        {
+            Logger.Log("received a HostLeavesGameEventCode event");
+            // the host left, let the client leave as well.
+            BackToMain();
+
+            // Show message to inform the client what happened
+            string message = "The host has left the game. Return to menu.";
+            GameObject gameAbandonedMessageGO = GameObject.Instantiate(_playerMessagePrefab, _UIControlsGO.transform);
+            PlayerMessagePanel playerMessagePanel = gameAbandonedMessageGO.GetComponent<PlayerMessagePanel>();
+            playerMessagePanel.ShowMessage(message, PlayerNumber.Player1);
+        }
     }
 
     public void UpdateGameTypeLabel(string newName)
@@ -109,6 +123,13 @@ public class GameRoomUI : MonoBehaviourPunCallbacks, IOnEventCallback
     {
         if (PhotonNetwork.InRoom)
         {
+            if (PhotonNetwork.IsMasterClient)
+            {
+                Logger.Log("The Host is leaving, inform clients to leave too.");
+                HostLeavesGameEvent hostLeavesGameEvent = new HostLeavesGameEvent();
+                hostLeavesGameEvent.SendHostLeavesGameEvent();
+            }
+
             // This takes a while to update
             PhotonNetwork.LeaveRoom(true);
         }
@@ -129,29 +150,11 @@ public class GameRoomUI : MonoBehaviourPunCallbacks, IOnEventCallback
 
     public override void OnPlayerLeftRoom(Player otherPlayer)
     {
-        Logger.Log($"Other player with NickName '{otherPlayer.NickName}' left room");
-
         if (PhotonNetwork.IsMasterClient)
         {
             // the client left, reopen the second spot for the game
-            Logger.Log($"PhotonNetwork.CurrentRoom.PlayerCount {PhotonNetwork.CurrentRoom.PlayerCount}");
             _launcher.SetPlayerStatusText("Connected to " + _launcher.RoomName + ". Waiting for a second player...");
-            _player2Name.text = "";
-            
+            _player2Name.text = "";            
         }
-        else
-        {
-            // the host left, let the client leave as well.
-            BackToMain();
-
-            // Show message to inform the client what happened
-        }
-
-    }
-
-
-    public override void OnLeftRoom()
-    {
-
     }
 }
