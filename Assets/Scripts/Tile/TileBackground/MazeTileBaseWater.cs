@@ -17,14 +17,44 @@ public class MazeTileBaseWater : TileWater, ITileBackground, ITransformable
         _sortingOrder = SpriteSortingOrderRegister.BaseWaterSortingOrder;
         _tileSpriteContainer.SetSortingOrder(_sortingOrder);
 
-        Sprite sprite = MazeSpriteManager.Instance.DefaultMazeTileWater[0];
+        _currentWaterSpriteNumber = 0;
+         Sprite sprite = MazeSpriteManager.Instance.DefaultMazeTileWater[_currentWaterSpriteNumber];
         _tileSpriteContainer.SetSprite(sprite);
+
+        IEnumerator animateWaterCoroutine = AnimateWater();
+        StartCoroutine(animateWaterCoroutine);
     }
 
     public void TriggerTransformation()
     {
         IEnumerator transformToColourful = TransformToColourful();
         StartCoroutine(transformToColourful);
+    }
+
+    private IEnumerator AnimateWater()
+    {
+        _animateWater = true;
+        yield return new WaitForSeconds(1);
+
+        while (_animateWater)
+        {
+            _currentWaterSpriteNumber = GetNextWaterSpriteNumber();
+            _tileSpriteContainer.SetSprite(MazeSpriteManager.Instance.DefaultMazeTileWater[_currentWaterSpriteNumber]);
+
+            yield return new WaitForSeconds(1);
+        }
+    }
+
+    private int GetNextWaterSpriteNumber()
+    {
+        if(_currentWaterSpriteNumber < MazeSpriteManager.Instance.DefaultMazeTileWater.Length - 1)
+        {
+            return _currentWaterSpriteNumber + 1;
+        }
+        else
+        {
+            return 0;
+        }
     }
 
     public IEnumerator TransformToColourful()
@@ -54,4 +84,5 @@ public class MazeTileBaseWater : TileWater, ITileBackground, ITransformable
         TileSpriteContainerPool.Instance.ReturnToPool(_tileSpriteContainer);
         _tileSpriteContainer = transformedSpriteContainer;
     }
+
 }

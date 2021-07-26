@@ -11,10 +11,10 @@ public class TileWater : MonoBehaviour, ITileBackground
     [SerializeField] protected SpriteRenderer _spriteRenderer;
 
     protected int _connectionScore = -1;
-    protected int _spriteNumber = -1;
+    protected int _currentWaterSpriteNumber = 0;
+    protected bool _animateWater = false;
 
     public int ConnectionScore { get => _connectionScore; set => _connectionScore = value; }
-    public int SpriteNumber { get => _spriteNumber; set => _spriteNumber = value; }
 
     public void WithType(IBackgroundType tileWaterType)
     {
@@ -51,5 +51,10 @@ public class TileWater : MonoBehaviour, ITileBackground
         {
             gameObject.layer = 7; // set layer to Vertical Walkability
         }
+    }
+
+    public void StopWaterAnimation()
+    {
+        _animateWater = false;
     }
 }
