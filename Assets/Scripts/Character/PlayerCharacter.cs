@@ -24,9 +24,7 @@ public class PlayerCharacter : Character
     public Tile LastTile;
     public string Name;
     protected TargetLocation TargetGridLocation;
-
-    [SerializeField] protected GameObject _selectionIndicatorPrefab = null;
-    [SerializeField] protected GameObject _selectionIndicatorGO = null;
+    [SerializeField] protected BoxCollider2D _playerCollider;
 
     protected bool _isPressingPointerForSeconds = false;
     protected float _pointerPresserTimer = 1;
@@ -34,7 +32,8 @@ public class PlayerCharacter : Character
 
     public override void Awake()
     {
-        Guard.CheckIsNull(_selectionIndicatorPrefab, "_selectionIndicatorPrefab", gameObject);
+        Guard.CheckIsNull(_playerCollider, "_playerCollider", gameObject);
+        
         SetPlayerNumber();
 
         GameManager.Instance.CharacterManager.AddPlayer(PlayerNumber, this); // do here and not in manager.

@@ -28,18 +28,6 @@ public class MazePlayerCharacter : PlayerCharacter
         PlayerExitsEvent += OnPlayerExit;
         PlayerCaughtEvent += OnPlayerCaught;
 
-        if (GameRules.GamePlayerType == GamePlayerType.SinglePlayer || 
-            GameRules.GamePlayerType == GamePlayerType.SplitScreenMultiplayer ||
-            PhotonView.IsMine)
-        {
-            _selectionIndicatorGO = Instantiate(_selectionIndicatorPrefab, SceneObjectManager.Instance.CharactersGO);
-
-            SelectionIndicator selectionIndicator = _selectionIndicatorGO.GetComponent<SelectionIndicator>();
-            selectionIndicator.Setup(transform, this);
-
-            SceneObjectManager.Instance.SceneObjects.Add(_selectionIndicatorGO);
-        }
-
         //transform the player's starting tile and surrounding tiles
         InGameMazeTile currentTile = GameManager.Instance.CurrentGameLevel.TilesByLocation[StartingPosition] as InGameMazeTile;
 
@@ -77,8 +65,11 @@ public class MazePlayerCharacter : PlayerCharacter
     {
         FreezeCharacter();
         HasReachedExit = true;
+
         Logger.Log($"{gameObject.name} reached the exit");
+
         CharacterBody.SetActive(false);
+        _playerCollider.enabled = false;
     }
 
     public void OnPlayerCaught()

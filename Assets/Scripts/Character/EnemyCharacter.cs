@@ -130,8 +130,12 @@ public class EnemyCharacter : Character
             GridLocation currentPlayerLocation = item.Value.CurrentGridLocation;
             Tile currentPlayerLocationTile = GameManager.Instance.CurrentGameLevel.TilesByLocation[currentPlayerLocation];
 
+            // a player is not reachable if they already finished
+            if (item.Value.HasReachedExit) continue;
+
             // A player is not reachable if it is on the same tile as the enemy (for example, after a player was just caught)
             if (CurrentGridLocation.X == currentPlayerLocation.X && CurrentGridLocation.Y == currentPlayerLocation.Y) continue;
+
 
             if (_accessibleTiles.Contains(currentPlayerLocationTile))
             {
