@@ -2,6 +2,7 @@
 using Photon.Pun;
 using Photon.Pun.Demo.PunBasics;
 using Photon.Realtime;
+using System.Collections.Generic;
 using System.Text.RegularExpressions;
 using UnityEngine;
 using UnityEngine.UI;
@@ -21,6 +22,12 @@ public class GameRoomUI : MonoBehaviourPunCallbacks, IOnEventCallback
 
     [SerializeField] private GameObject _playerMessagePrefab = null;
     [SerializeField] private GameObject _UIControlsGO = null;
+
+    // All the characters the players can choose
+    public static List<string> AvailableCharacters = new List<string>() {
+        "Emmon",
+        "Fae"
+    };
 
     public void Awake()
     {
@@ -98,6 +105,7 @@ public class GameRoomUI : MonoBehaviourPunCallbacks, IOnEventCallback
 
     public void TurnOff()
     {
+        _updateRoomNameButton.gameObject.SetActive(false);
         gameObject.SetActive(false);
     }
 
@@ -113,8 +121,17 @@ public class GameRoomUI : MonoBehaviourPunCallbacks, IOnEventCallback
             UpdateGameModeEvent updateGameModeEvent = new UpdateGameModeEvent();
             updateGameModeEvent.SendUpdateGameModeEvent(GameRules.GameMode);
 
-            //UpdateRoomNameEvent updateRoomNameEvent = new UpdateRoomNameEvent();
-            //updateRoomNameEvent.SendUpdateGameNameEvent(_launcher.RoomName);
+            string currentPlayer1Character = _player1Entry.GetCharacterName();
+            PlayerPicksPlayableCharacterEvent player1PicksPlayableCharacterEvent = new PlayerPicksPlayableCharacterEvent();
+            player1PicksPlayableCharacterEvent.SendPlayerPicksPlayableCharacterEvent("1", currentPlayer1Character);
+            
+            
+            string player2CharacterToPick = RoomPlayerEntry.GetNextCharacter(currentPlayer1Character);
+            _player2Entry.PickCharacter(player2CharacterToPick);
+            PlayerPicksPlayableCharacterEvent player2PicksPlayableCharacterEvent = new PlayerPicksPlayableCharacterEvent();
+            player2PicksPlayableCharacterEvent.SendPlayerPicksPlayableCharacterEvent("2", player2CharacterToPick);
+
+
         }
     }
 
@@ -154,6 +171,23 @@ public class GameRoomUI : MonoBehaviourPunCallbacks, IOnEventCallback
             _launcher.SetRoomName(newRoomName);
             _roomNameInputField.text = newRoomName;
         }
+        else if(eventCode == EventCode.PlayerPicksPlayableCharacterEventCode)
+        {
+            Logger.Log("received an update picked character event");
+            object[] data = (object[])photonEvent.CustomData;
+
+            string playerNumber = (string)data[0];
+            string newCharacterName = (string)data[1];
+
+            if (playerNumber == "1")
+            {
+                _player1Entry.PickCharacter(newCharacterName);
+            }
+            else if(playerNumber == "2")
+            {
+                _player2Entry.PickCharacter(newCharacterName);
+            }
+        }
     }
 
     public void UpdateGameTypeLabel(string newName)
@@ -171,6 +205,10 @@ public class GameRoomUI : MonoBehaviourPunCallbacks, IOnEventCallback
                 HostLeavesGameEvent hostLeavesGameEvent = new HostLeavesGameEvent();
                 hostLeavesGameEvent.SendHostLeavesGameEvent();
             }
+
+            _player1Entry.ResetEntryOfPlayer();
+            _player2Entry.ResetEntryOfPlayer();
+            ResetPickableCharacters();
 
             // This takes a while to update
             PhotonNetwork.LeaveRoom(true);
@@ -196,7 +234,7 @@ public class GameRoomUI : MonoBehaviourPunCallbacks, IOnEventCallback
         {
             // the client left, reopen the second spot for the game
             _launcher.SetPlayerStatusText("Connected to " + _launcher.RoomName + ". Waiting for a second player...");
-            _player2Entry.SetPlayerName("");   
+            _player2Entry.ResetEntryOfPlayer();
         }
     }
 
@@ -214,5 +252,13 @@ public class GameRoomUI : MonoBehaviourPunCallbacks, IOnEventCallback
         updateRoomNameEvent.SendUpdateGameNameEvent(newRoomName);
 
         _updateRoomNameButton.gameObject.SetActive(false);
+    }
+
+    private void ResetPickableCharacters()
+    {
+        AvailableCharacters = new List<string>() {
+            "Emmon",
+            "Fae"
+        };
     }
 }

@@ -11,4 +11,5 @@ public static class EventCode
     public const byte HostLeavesGameEventCode = 9;
     public const byte UpdateRoomNameEventCode = 10;
     public const byte UpdateGameModeEventCode = 11;
+    public const byte PlayerPicksPlayableCharacterEventCode = 12;
 }

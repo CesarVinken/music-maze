@@ -596,7 +596,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 1961941179}
         m_TargetAssemblyTypeName: RoomPlayerEntry, Scripts
-        m_MethodName: PickNextCharacter
+        m_MethodName: ClickAvatarButton
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -1853,7 +1853,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 981545594}
         m_TargetAssemblyTypeName: RoomPlayerEntry, Scripts
-        m_MethodName: PickNextCharacter
+        m_MethodName: ClickAvatarButton
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -5188,7 +5188,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c14418263f9b67e4e808cd61a401da4c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  PlayerNumber: 0
+  PlayerNumber: 1
   _playerPickButton: {fileID: 130665812}
   _playerPickImage: {fileID: 130665810}
   _playerName: {fileID: 195234344}

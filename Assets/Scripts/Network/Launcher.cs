@@ -118,7 +118,7 @@ namespace Photon.Pun.Demo.PunBasics
             SetRoomName($"{PlayerName}'s game");
             //roomName = (roomName.Equals(string.Empty)) ? "Room " + Random.Range(1000, 10000) : roomName;
 
-            RoomOptions options = new RoomOptions { MaxPlayers = 2, PlayerTtl = 10000 };
+            RoomOptions options = new RoomOptions { MaxPlayers = 2, PlayerTtl = 10000, EmptyRoomTtl = 0 };
             ExitGames.Client.Photon.Hashtable customProperties = new ExitGames.Client.Photon.Hashtable();
             customProperties.Add("Name", RoomName);
 
@@ -129,39 +129,6 @@ namespace Photon.Pun.Demo.PunBasics
 
             _welcomeUI.TurnOff();
         }
-
-        //public void JoinGameRoom()
-        //{
-        //    SetErrorText("");
-
-        //    if (PhotonNetwork.IsConnected)
-        //    {
-        //        PhotonNetwork.LocalPlayer.NickName = PlayerName;
-        //        Debug.Log("PhotonNetwork.IsConnected! | Trying to Create/Join Room " + RoomName);
-
-        //        if (string.IsNullOrWhiteSpace(PlayerName))
-        //        {
-        //            SetErrorText("Please fill in a name");
-        //            Debug.LogWarning("Could not go to game room because no game name was given.");
-
-        //            EventSystem.current.SetSelectedGameObject(null);
-        //            return;
-        //        }
-        //        if (string.IsNullOrWhiteSpace(RoomName))
-        //        {
-        //            Debug.LogWarning("Could not go to game room because no game name was given.");
-
-        //            EventSystem.current.SetSelectedGameObject(null);
-        //            return;
-        //        }
-
-        //        _welcomeUI.TurnOff();
-
-        //        RoomOptions roomOptions = new RoomOptions();
-        //        TypedLobby typedLobby = new TypedLobby(RoomName, LobbyType.Default);
-        //        PhotonNetwork.JoinOrCreateRoom(RoomName, roomOptions, typedLobby);
-        //    }
-        //}
 
         public void OpenGameList()
         {
