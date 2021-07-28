@@ -9,8 +9,8 @@ using UnityEngine.UI;
 public class GameRoomUI : MonoBehaviourPunCallbacks, IOnEventCallback
 {
     [SerializeField] private Launcher _launcher;
-    [SerializeField] private Text _player1Name = null;
-    [SerializeField] private Text _player2Name = null;
+    [SerializeField] private RoomPlayerEntry _player1Entry = null;
+    [SerializeField] private RoomPlayerEntry _player2Entry = null;
     [SerializeField] private GameObject _launchGameButtonGO = null;
 
     [SerializeField] private InputField _roomNameInputField = null;
@@ -25,8 +25,9 @@ public class GameRoomUI : MonoBehaviourPunCallbacks, IOnEventCallback
     public void Awake()
     {
         Guard.CheckIsNull(_launcher, "_launcher", gameObject);
-        Guard.CheckIsNull(_player1Name, "_player1Name", gameObject);
-        Guard.CheckIsNull(_player2Name, "_player2Name", gameObject);
+
+        Guard.CheckIsNull(_player1Entry, "_player1Entry", gameObject);
+        Guard.CheckIsNull(_player2Entry, "_player2Entry", gameObject);
 
         Guard.CheckIsNull(_roomNameInputField, "_roomNameInputField", gameObject);
         Guard.CheckIsNull(_updateRoomNameButton, "_updateRoomNameButton", gameObject);
@@ -59,7 +60,8 @@ public class GameRoomUI : MonoBehaviourPunCallbacks, IOnEventCallback
             _gameTypeDropdown.TurnOn();
 
             _launcher.SetPlayerStatusText("You created a new Game Room");
-            _player1Name.text = "<color=green>" + PhotonNetwork.MasterClient.NickName + "</color>";
+            _player1Entry.SetPlayerName("<color=green>" + PhotonNetwork.MasterClient.NickName + "</color>");
+            _player1Entry.PickCharacter("Emmon");
         }
         else
         {
@@ -74,8 +76,11 @@ public class GameRoomUI : MonoBehaviourPunCallbacks, IOnEventCallback
             Logger.Log("{0} joined the rumble", PhotonNetwork.PlayerList[1].NickName);
 
             _launcher.SetPlayerStatusText("Connected to " + _launcher.RoomName + ". Waiting for " + PhotonNetwork.MasterClient.NickName + " to launch the game..");
-            _player1Name.text = PhotonNetwork.MasterClient.NickName;
-            _player2Name.text = "<color=green>" + PhotonNetwork.PlayerList[1].NickName + "</color>";
+            _player1Entry.SetPlayerName(PhotonNetwork.MasterClient.NickName);
+            _player2Entry.SetPlayerName("<color=green>" + PhotonNetwork.PlayerList[1].NickName + "</color>");
+
+            //  TÖDO: get selected palyer character from host
+            // TODO: send selected player character to host
         }
     }
 
@@ -100,7 +105,7 @@ public class GameRoomUI : MonoBehaviourPunCallbacks, IOnEventCallback
     {
         Logger.Log("{0} joined the rumble", newPlayer.NickName);
 
-        _player2Name.text = newPlayer.NickName;
+        _player2Entry.SetPlayerName(newPlayer.NickName);
         
         if (PhotonNetwork.IsMasterClient)
         {
@@ -191,7 +196,7 @@ public class GameRoomUI : MonoBehaviourPunCallbacks, IOnEventCallback
         {
             // the client left, reopen the second spot for the game
             _launcher.SetPlayerStatusText("Connected to " + _launcher.RoomName + ". Waiting for a second player...");
-            _player2Name.text = "";            
+            _player2Entry.SetPlayerName("");   
         }
     }
 
