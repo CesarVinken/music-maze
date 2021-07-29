@@ -67,6 +67,18 @@ public class GameManager : MonoBehaviourPunCallbacks
         }
 
         PersistentGameManager.CurrentSceneType = _thisSceneType;
+
+        if(GameRules.GamePlayerType == GamePlayerType.NetworkMultiplayer)
+        {
+            PersistentGameManager.PlayerCharacterNames[PlayerNumber.Player1] = PhotonNetwork.PlayerList[0].CustomProperties["c"].ToString();
+            PersistentGameManager.PlayerCharacterNames[PlayerNumber.Player2] = PhotonNetwork.PlayerList[1].CustomProperties["c"].ToString();
+        }
+        else
+        {
+            PersistentGameManager.PlayerCharacterNames[PlayerNumber.Player1] = "Emmon";
+            PersistentGameManager.PlayerCharacterNames[PlayerNumber.Player2] = "Fae";
+        }
+
         Logger.Warning($"We set the game type to {GameRules.GamePlayerType} in a {PersistentGameManager.CurrentSceneType} scene. The scene loading origin is {PersistentGameManager.SceneLoadOrigin}");
 
         if (Application.isMobilePlatform)

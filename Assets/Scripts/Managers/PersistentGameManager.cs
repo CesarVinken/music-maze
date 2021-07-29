@@ -15,6 +15,8 @@ public static class PersistentGameManager
     public static string OverworldName { get => _overworldName; private set => _overworldName = value; }
     public static string LastMazeLevelName { get => _originMazeLevelName; private set => _originMazeLevelName = value; }
 
+    public static Dictionary<PlayerNumber, string> PlayerCharacterNames = new Dictionary<PlayerNumber, string>();
+
     public static void SetCurrentSceneName(string currentMazeLevelName)
     {
         _currentMazeLevelName = currentMazeLevelName;

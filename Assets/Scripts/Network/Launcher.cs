@@ -39,7 +39,7 @@ namespace Photon.Pun.Demo.PunBasics
         [SerializeField] private GameObject _splitScreenButtonGO = null;
 
         public string PlayerName { get; private set; }
-    public string RoomName { get; private set; }
+        public string RoomName { get; private set; }
 
         public void Awake()
         {
@@ -204,7 +204,6 @@ namespace Photon.Pun.Demo.PunBasics
             if (PhotonNetwork.CurrentRoom.PlayerCount > 1)
             {
                 GameRules.SetGamePlayerType(GamePlayerType.NetworkMultiplayer);
-
                 GameLaunchAction launcher = new GameLaunchAction();
                 launcher.Launch();
             }

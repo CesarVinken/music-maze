@@ -48,6 +48,11 @@ public class OverworldCharacterManager : MonoBehaviourPunCallbacks, ICharacterMa
     {
         Logger.Log("Spawn characters...");
 
+        //Logger.Warning("****");
+        //Logger.Warning($"Character Name for player 1 {PhotonNetwork.PlayerList[0].CustomProperties["c"]}");
+        //Logger.Warning($"Character Name for player 2 {PhotonNetwork.PlayerList[1].CustomProperties["c"]}");
+        //Logger.Warning("****");
+
         InGameOverworld level = GameManager.Instance.CurrentGameLevel as InGameOverworld;
 
         if (level == null) return;
@@ -59,12 +64,13 @@ public class OverworldCharacterManager : MonoBehaviourPunCallbacks, ICharacterMa
 
         if (PhotonNetwork.IsMasterClient || GameRules.GamePlayerType == GamePlayerType.SinglePlayer)
         {
-            Logger.Log(Logger.Initialisation, "Instantiating Player 1");
+            string characterName = PersistentGameManager.PlayerCharacterNames[PlayerNumber.Player1];
+            Logger.Log(Logger.Initialisation, $"Instantiating '{characterName}' Player 1");
 
             GridLocation spawnLocation = GetSpawnLocation(PlayerNumber.Player1, level);
             //TODO: Set which character spawns with which spawnpoint.
             CharacterBundle PlayerBundle = SpawnCharacter(
-                new CharacterBlueprint(new Emmon()),
+                new CharacterBlueprint(GetCharacterToSpawn(characterName)),
                 spawnLocation);
             Player1GO = PlayerBundle.CharacterGO;
         }
@@ -79,10 +85,11 @@ public class OverworldCharacterManager : MonoBehaviourPunCallbacks, ICharacterMa
         }
         else
         {
-            Logger.Log(Logger.Initialisation, "Instantiating Player 2");
+            string characterName = PersistentGameManager.PlayerCharacterNames[PlayerNumber.Player2];
+            Logger.Log(Logger.Initialisation, $"Instantiating '{characterName}' Player 2");
 
             GridLocation spawnLocation = GetSpawnLocation(PlayerNumber.Player2, level);
-            CharacterBundle PlayerBundle = SpawnCharacter(new CharacterBlueprint(new Fae()), spawnLocation);
+            CharacterBundle PlayerBundle = SpawnCharacter(new CharacterBlueprint(GetCharacterToSpawn(characterName)), spawnLocation);
 
             //TODO: Set which character spawns with which spawnpoint.
             //CharacterBundle PlayerBundle = SpawnCharacter(level.PlayerCharacterSpawnpoints[PlayerNumber.Player2].CharacterBlueprint, spawnLocation);
@@ -193,6 +200,21 @@ public class OverworldCharacterManager : MonoBehaviourPunCallbacks, ICharacterMa
                 gridVectorLocation.x + GridLocation.OffsetToTileMiddle,
                 gridVectorLocation.y + GridLocation.OffsetToTileMiddle
             );
+    }
+
+    private ICharacter GetCharacterToSpawn(string characterName)
+    {
+        switch (characterName)
+        {
+            case "Emmon":
+                return new Emmon();
+            case "Fae":
+                return new Fae();
+            default:
+                Logger.Error($"Cannot spawn a character with the name {characterName}");
+                return null;
+        }
+
     }
 
     public PlayerNumber GetOurPlayerCharacter()

@@ -137,12 +137,12 @@ public class PlayerCharacter : Character
 
     public void AssignCharacterType()
     {
-        switch (PlayerNumber)
+        switch (PersistentGameManager.PlayerCharacterNames[PlayerNumber])
         {
-            case PlayerNumber.Player1:
+            case "Emmon":
                 SetCharacterType(new Emmon());
                 break;
-            case PlayerNumber.Player2:
+            case "Fae":
                 SetCharacterType(new Fae());
                 break;
             default:

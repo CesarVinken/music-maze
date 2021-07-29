@@ -66,9 +66,12 @@ public class GameRoomUI : MonoBehaviourPunCallbacks, IOnEventCallback
             _gameTypeReadonlyLabel.gameObject.SetActive(false);
             _gameTypeDropdown.TurnOn();
 
+            string defaultCharacterName = "Emmon";
             _launcher.SetPlayerStatusText("You created a new Game Room");
             _player1Entry.SetPlayerName("<color=green>" + PhotonNetwork.MasterClient.NickName + "</color>");
-            _player1Entry.PickCharacter("Emmon");
+            _player1Entry.PickCharacter(defaultCharacterName);
+
+            UpdateCharacterNameForHashtable(1);
         }
         else
         {
@@ -125,13 +128,29 @@ public class GameRoomUI : MonoBehaviourPunCallbacks, IOnEventCallback
             PlayerPicksPlayableCharacterEvent player1PicksPlayableCharacterEvent = new PlayerPicksPlayableCharacterEvent();
             player1PicksPlayableCharacterEvent.SendPlayerPicksPlayableCharacterEvent("1", currentPlayer1Character);
             
-            
             string player2CharacterToPick = RoomPlayerEntry.GetNextCharacter(currentPlayer1Character);
             _player2Entry.PickCharacter(player2CharacterToPick);
             PlayerPicksPlayableCharacterEvent player2PicksPlayableCharacterEvent = new PlayerPicksPlayableCharacterEvent();
             player2PicksPlayableCharacterEvent.SendPlayerPicksPlayableCharacterEvent("2", player2CharacterToPick);
 
+            UpdateCharacterNameForHashtable(2);
+        }
+    }
 
+    // TODO: If we make a "Ready" state for the player, we only have to call this function once
+    private void UpdateCharacterNameForHashtable(int playerNumber)
+    {
+        if(playerNumber == 1)
+        {
+            ExitGames.Client.Photon.Hashtable hashtable = new ExitGames.Client.Photon.Hashtable();
+            hashtable.Add("c", _player1Entry.GetCharacterName()); // c stands for CharacterName
+            PhotonNetwork.PlayerList[0].SetCustomProperties(hashtable);
+        }
+        else if(playerNumber == 2)
+        {
+            ExitGames.Client.Photon.Hashtable hashtable = new ExitGames.Client.Photon.Hashtable();
+            hashtable.Add("c", _player2Entry.GetCharacterName()); // c stands for CharacterName
+            PhotonNetwork.PlayerList[1].SetCustomProperties(hashtable);
         }
     }
 
@@ -182,10 +201,12 @@ public class GameRoomUI : MonoBehaviourPunCallbacks, IOnEventCallback
             if (playerNumber == "1")
             {
                 _player1Entry.PickCharacter(newCharacterName);
+                UpdateCharacterNameForHashtable(1);
             }
             else if(playerNumber == "2")
             {
                 _player2Entry.PickCharacter(newCharacterName);
+                UpdateCharacterNameForHashtable(2);
             }
         }
     }

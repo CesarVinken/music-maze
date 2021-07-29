@@ -29,8 +29,6 @@ public class RoomPlayerEntry : MonoBehaviourPunCallbacks
         _characterName = "";
     }
 
-
-
     public void SetPlayerName(string playerName)
     {
         _playerName.text = playerName;
