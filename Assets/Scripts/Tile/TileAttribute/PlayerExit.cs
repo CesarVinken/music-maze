@@ -180,6 +180,7 @@ public class PlayerExit : TileObstacle, ITileAttribute, ITileConnectable
         float fadeSpeed = 1f;
         float alphaAmount = 0;
 
+        // Fade in new image
         while (alphaAmount < 1)
         {
             alphaAmount = alphaAmount + (fadeSpeed * Time.deltaTime);
@@ -192,6 +193,15 @@ public class PlayerExit : TileObstacle, ITileAttribute, ITileConnectable
                 _tileSpriteContainer.SetSprite(MazeSpriteManager.Instance.DefaultDoorColourful[SpriteNumber - 1 + 3]); // + 3 to get to the 'open' version of the sprite
                 _secondaryTileSpriteContainer.SetSprite(MazeSpriteManager.Instance.DefaultDoorColourful[_secondarySpriteNumber - 1 + 3]);
             }
+            yield return null;
+        }
+
+        // Fade out old image
+        while (alphaAmount > 0)
+        {
+            alphaAmount = alphaAmount - (fadeSpeed * Time.deltaTime);
+            _tileSpriteContainer.SetRendererAlpha(alphaAmount);
+            _secondaryTileSpriteContainer.SetRendererAlpha(alphaAmount);
             yield return null;
         }
 

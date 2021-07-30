@@ -105,6 +105,14 @@ public class TileObstacle : MonoBehaviour, ITileAttribute, ITileConnectable, ITr
             yield return null;
         }
 
+        // Fade out old image
+        while (alphaAmount > 0)
+        {
+            alphaAmount = alphaAmount - (fadeSpeed * Time.deltaTime);
+            _tileSpriteContainer.SetRendererAlpha(alphaAmount);
+            yield return null;
+        }
+
         TileSpriteContainerPool.Instance.ReturnToPool(_tileSpriteContainer);
         _tileSpriteContainer = transformedSpriteContainer;
     }
