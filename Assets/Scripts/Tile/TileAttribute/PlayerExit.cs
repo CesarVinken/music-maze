@@ -9,7 +9,7 @@ public class PlayerExit : TileObstacle, ITileAttribute, ITileConnectable
     [SerializeField] private TileSpriteContainer _secondaryTileSpriteContainer; // this sprite always comes in front of things, such as the lower half of a door that is viewed from the side.
 
     private int _secondarySpriteNumber;
-    private int _secondaryGateSpriteSortingOrderBase = 501; // should be in front of tile marker and path layers
+    private int _secondaryGateSpriteSortingOrderBase; // should be in front of tile marker and path layers. Should also be in front of the primary sprite renderer
     private const float _secondaryGateSpriteSortingOrderCalculationOffset = .5f;
     private int _secondarySpriteSortingOrder;
 
@@ -20,6 +20,8 @@ public class PlayerExit : TileObstacle, ITileAttribute, ITileConnectable
         Guard.CheckIsNull(_secondaryTileSpriteContainer, "TileSpriteContainer", gameObject);
 
         base.Awake();
+
+        _secondaryGateSpriteSortingOrderBase = SpriteSortingOrderRegister.TileObstacle + 1; // this sprite always comes in front of things, such as the lower half of a door that is viewed from the side.
     }
 
     public void Start()
@@ -56,7 +58,6 @@ public class PlayerExit : TileObstacle, ITileAttribute, ITileConnectable
             _secondarySpriteSortingOrder = (int)(_secondaryGateSpriteSortingOrderBase - transform.position.y - _secondaryGateSpriteSortingOrderCalculationOffset) * 10;
             _secondaryTileSpriteContainer.SetSortingOrder(_secondarySpriteSortingOrder);
         }
-
     }
 
     public void OnCollisionEnter2D(Collision2D collision)
@@ -168,13 +169,13 @@ public class PlayerExit : TileObstacle, ITileAttribute, ITileConnectable
         TileSpriteContainer transformedSecondarySpriteContainer = TileSpriteContainerPool.Instance.Get();
         transformedSecondarySpriteContainer.transform.SetParent(transform);
         transformedSecondarySpriteContainer.SetSprite(secondaryColourfulSprite);
-        transformedSecondarySpriteContainer.SetSortingOrder(_sortingOrder);
+        transformedSecondarySpriteContainer.SetSortingOrder(_secondarySpriteSortingOrder);
         transformedSecondarySpriteContainer.gameObject.SetActive(true);
         transformedSecondarySpriteContainer.gameObject.layer = _secondaryTileSpriteContainer.gameObject.layer;
         transformedSecondarySpriteContainer.transform.position = transform.position;
 
         _tileSpriteContainer.SetSortingOrder(_sortingOrder - 1);
-        _secondaryTileSpriteContainer.SetSortingOrder(_sortingOrder - 1);
+        _secondaryTileSpriteContainer.SetSortingOrder(_secondarySpriteSortingOrder - 1);
 
         float fadeSpeed = 1f;
         float alphaAmount = 0;

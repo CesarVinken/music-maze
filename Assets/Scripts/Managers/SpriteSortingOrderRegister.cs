@@ -4,6 +4,7 @@ public static class SpriteSortingOrderRegister
     public const int MazeLevelEntry = 500;
     public const int TileObstacle = 500;
     public const int PlayerOnly = 500;
+    public const int PlayerExitSecondaryRenderer = 501;
 
     public const int EffectController = 20;
     public const int MusicInstrumentCase = 10;
