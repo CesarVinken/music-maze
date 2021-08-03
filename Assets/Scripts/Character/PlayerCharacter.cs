@@ -77,7 +77,7 @@ public class PlayerCharacter : Character
 
                 if (!IsPressingMovementKey() && !HasCalculatedTarget)
                 {
-                    _animationHandler.SetLocomotion(false);
+                    _animationHandler.SetIdle();
                     IsMoving = false;
                 }
             }
@@ -86,7 +86,7 @@ public class PlayerCharacter : Character
             {
                 if (!HasCalculatedTarget)
                 {
-                    _animationHandler.SetLocomotion(false);
+                    _animationHandler.SetIdle();
                     IsMoving = false;
                 }
             }
@@ -105,7 +105,7 @@ public class PlayerCharacter : Character
 
                     if (!IsPressingMovementKey())
                     {
-                        _animationHandler.SetLocomotion(false);
+                        _animationHandler.SetIdle();
                     }
                     IsMoving = false;
                 }
@@ -360,7 +360,7 @@ public class PlayerCharacter : Character
         if (!ValidateTarget(TargetGridLocation))
         {
             // This prevents the character from displaying locomotion animation when walking into an unwalkable tile
-            _animationHandler.SetLocomotion(false);
+            _animationHandler.SetIdle();
             return;
         }
 
@@ -404,7 +404,7 @@ public class PlayerCharacter : Character
 
         if (!IsPressingMovementKey() && !_isPressingPointerForSeconds)
         {
-            _animationHandler.SetLocomotion(false);
+            _animationHandler.SetIdle();
         }
         IsMoving = false;
     }

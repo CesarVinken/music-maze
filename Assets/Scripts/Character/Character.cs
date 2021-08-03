@@ -139,7 +139,7 @@ public class Character : MonoBehaviour
     public void ResetCharacterPosition()
     {
         SetHasCalculatedTarget(false);
-        _animationHandler.SetLocomotion(false);
+        _animationHandler.SetIdle();
 
         //Logger.Warning("Starting position for {0} is {1},{2}", gameObject.name, gameObject.GetComponent<PlayerCharacter>().StartingPosition.X, gameObject.GetComponent<PlayerCharacter>().StartingPosition.Y);
         GameManager.Instance.CharacterManager.PutCharacterOnGrid(gameObject, GridLocation.GridToVector(StartingPosition));
@@ -188,5 +188,10 @@ public class Character : MonoBehaviour
     {
         PathToTarget.Clear();
         SetHasCalculatedTarget(false);
+    }
+
+    public ICharacter GetCharacterType()
+    {
+        return _characterType;
     }
 }
