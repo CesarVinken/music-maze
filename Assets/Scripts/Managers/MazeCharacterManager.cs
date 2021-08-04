@@ -151,7 +151,7 @@ public class MazeCharacterManager : MonoBehaviourPunCallbacks, ICharacterManager
         for (int i = 0; i < level.EnemyCharacterSpawnpoints.Count; i++)
         {
             CharacterBundle enemy = SpawnCharacter(level.EnemyCharacterSpawnpoints[i].CharacterBlueprint, level.EnemyCharacterSpawnpoints[i]);
-            enemy.CharacterGO.name = "The Enemy";
+            enemy.CharacterGO.name = $"The Enemy {i}";
         }
     }
 

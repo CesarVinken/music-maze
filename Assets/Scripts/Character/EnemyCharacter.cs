@@ -263,8 +263,9 @@ public class EnemyCharacter : Character
         _playerAsTarget = null;
         IsCalculatingPath = true;
         GridLocation randomGridLocation = GetRandomTileTarget().GridLocation;
-        Logger.Log($"current location of enemy is ({CurrentGridLocation.X}, {CurrentGridLocation.Y} )");
-        Logger.Log($"Set random target ({randomGridLocation.X}, {randomGridLocation.Y} )");
+
+        Logger.Log($"current location of {gameObject.name} is ({CurrentGridLocation.X}, {CurrentGridLocation.Y} ). Set random target ({randomGridLocation.X}, {randomGridLocation.Y} )  ");
+
         PathToTarget = _pathfinding.FindNodePath(CurrentGridLocation, randomGridLocation);
 
         IsCalculatingPath = false;
@@ -344,8 +345,8 @@ public class EnemyCharacter : Character
     {
         Vector3 roundedVectorPosition = new Vector3((float)Math.Round(transform.position.x - GridLocation.OffsetToTileMiddle), (float)Math.Round(transform.position.y - GridLocation.OffsetToTileMiddle));
         transform.position = new Vector3(roundedVectorPosition.x + GridLocation.OffsetToTileMiddle, roundedVectorPosition.y + GridLocation.OffsetToTileMiddle, 0);
+        //Logger.Log($"{gameObject.name} reached target. Current grid location is {CurrentGridLocation.X}, {CurrentGridLocation.Y}. Rounded position is {roundedVectorPosition.x}, {roundedVectorPosition.y}");
 
-        _animationHandler.SetLocomotion(false);
         SetHasCalculatedTarget(false);
     }
 
