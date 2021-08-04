@@ -7,7 +7,6 @@ public static class EditorManager
         get { return _inEditor; }
         set
         {
-
             _inEditor = value;
         }
     }

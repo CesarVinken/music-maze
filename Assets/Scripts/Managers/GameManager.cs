@@ -186,6 +186,7 @@ public class GameManager : MonoBehaviourPunCallbacks
                 else
                 {
                     Logger.Log("create empty grid");
+
                     EditorCanvasUI.Instance.MazeModificationPanel.GenerateTiles();
                 }
                 break;

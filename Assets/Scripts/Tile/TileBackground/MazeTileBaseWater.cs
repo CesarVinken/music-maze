@@ -21,6 +21,11 @@ public class MazeTileBaseWater : TileWater, ITileBackground, ITransformable
          Sprite sprite = MazeSpriteManager.Instance.DefaultMazeTileWater[_currentWaterSpriteNumber];
         _tileSpriteContainer.SetSprite(sprite);
 
+        if (EditorManager.InEditor)
+        {
+            return;
+        }
+
         IEnumerator animateWaterCoroutine = AnimateWater();
         StartCoroutine(animateWaterCoroutine);
     }

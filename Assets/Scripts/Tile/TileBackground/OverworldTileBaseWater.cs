@@ -20,6 +20,11 @@ public class OverworldTileBaseWater : TileWater, ITileBackground
         Sprite sprite = OverworldSpriteManager.Instance.DefaultOverworldTileWater[0];
         _tileSpriteContainer.SetSprite(sprite);
 
+        if (EditorManager.InEditor)
+        {
+            return;
+        }
+
         IEnumerator animateWaterCoroutine = AnimateWater();
         StartCoroutine(animateWaterCoroutine);
     }
