@@ -352,7 +352,7 @@ public class EnemyCharacter : Character
 
     public void OnMazeLevelCompleted()
     {
-        //TODO: when maze level is completed, do not stop locomotion, but switch, if it exists, to an enemy idle animation
         FreezeCharacter();
+        _animationHandler.SetLocomotion(false);
     }
 }
