@@ -62,4 +62,11 @@ public class OverworldLoader : MonoBehaviour
 
         return printLine;
     }
+
+    public static OverworldNamesData GetAllOverworldNamesData()
+    {
+        OverworldNamesData overworldNamesData = new JsonOverworldListFileReader().ReadData<OverworldNamesData>();
+
+        return overworldNamesData;
+    }
 }

@@ -17,8 +17,8 @@ public class MazeLevelInfo : IInfoCommand
 
             string sanatisedLevelName = arguments[0].ToLower().Replace(" ", "-");
 
-            MazeLevelData mazeLevelData = GetMazeLevelData(sanatisedLevelName);
             MazeLevelNameData mazeLevelName = GetMazeLevelNameData(sanatisedLevelName);
+            MazeLevelData mazeLevelData = GetMazeLevelData(sanatisedLevelName);
 
             bool isPlayable = GetIsPlayable(mazeLevelName);
             GridLocation mazeLevelBounds = GetMazeLevelBounds(mazeLevelData);
@@ -46,7 +46,7 @@ public class MazeLevelInfo : IInfoCommand
 
         if (!levelExists)
         {
-            string message = $"Could not find a maze level with the name '<color={sanatisedLevelName}>info maze</color>'.\n";
+            string message = $"Could not find a maze level with the name '<color=>{sanatisedLevelName}</color>'.\n";
             throw new MazeLevelNameNotFoundConsoleException(message);
         }
 
@@ -61,7 +61,7 @@ public class MazeLevelInfo : IInfoCommand
 
         if (mazeLevelName == null)
         {
-            string message = $"Could not find a maze level with the name '<color={sanatisedLevelName}>info maze</color>' in the level list.\n";
+            string message = $"Could not find a maze level with the name '<color={ConsoleConfiguration.HighlightColour}>info maze</color>' in the level list.\n";
             throw new MazeLevelNameNotFoundConsoleException(message);
         }
 

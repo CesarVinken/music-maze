@@ -13,10 +13,8 @@ public class ConfigureScore : IConfigureCommand
                 message = $"<color={ConsoleConfiguration.ErrorColour}>The command '</color><color={ConsoleConfiguration.HighlightColour}>configure score</color><color={ConsoleConfiguration.ErrorColour}>' needs additional arguments.</color>\nMake sure that the 3rd argument has the number or name of the player you want to configure, and that the 4th argument contains the player's new score.\n For example 'configure score 1 200'.\n";
                 Logger.Warning(message);
 
-                //message += ConfigureCommand.GetConfigurableArguments();
                 throw new NotEnoughArgumentsConsoleException(message);
             }
-
 
             PlayerNumber playerNumber = TryGetPlayerFromArgument(arguments[0]);
             if(!int.TryParse(arguments[1], out int newScore))

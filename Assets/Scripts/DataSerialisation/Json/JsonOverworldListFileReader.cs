@@ -18,7 +18,6 @@ public class JsonOverworldListFileReader : IJsonFileReader
         }
         else
         {
-
             if (!File.Exists(filePath))
             {
                 Logger.Warning("File doesn't exist. Creating a new overworlds.json file.");

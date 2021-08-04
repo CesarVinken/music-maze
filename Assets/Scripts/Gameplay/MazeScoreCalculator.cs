@@ -30,8 +30,8 @@ public struct PlayerMazeScore
 public class MazeScoreCalculator
 {
     public const int MarkedTileValue = 10;
-    public const int EnemyMadeListenToMusicValue = 10;
-    public const int PlayerCaughtPenaltyValue = 10;
+    public const int EnemyMadeListenToMusicValue = 50;
+    public const int PlayerCaughtPenaltyValue = 20;
 
     public Dictionary<PlayerNumber, PlayerMazeScore> PlayerMazeScores = new Dictionary<PlayerNumber, PlayerMazeScore>();
 

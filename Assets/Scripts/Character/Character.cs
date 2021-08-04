@@ -148,7 +148,7 @@ public class Character : MonoBehaviour
 
     public void SetCurrentGridLocation(GridLocation newGridLocation)
     {
-        //if(_characterType is EnemyCharacter)
+        //if (_characterType is EnemyCharacter)
         //{
         //    Logger.Warning($"Updated current grid location for {gameObject.name} to {newGridLocation.X}, {newGridLocation.Y}");
         //}

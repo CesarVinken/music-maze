@@ -15,6 +15,6 @@ public class JsonMazeLevelListFileWriter : IJsonFileWriter
         string jsonLevelNamesData = JsonUtility.ToJson(_levelNamesData, true).ToString();
 
         File.WriteAllText(_path, jsonLevelNamesData);
-        Logger.Log(Logger.Datawriting, "Wrote level list to file");
+        Logger.Log(Logger.Datawriting, "Wrote maze level list to file");
     }
 }

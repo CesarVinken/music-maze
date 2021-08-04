@@ -1,5 +1,6 @@
-﻿using UnityEngine;
+﻿using System;
 
+[Serializable]
 public class OverworldNameData
 {
     public string OverworldName = "";

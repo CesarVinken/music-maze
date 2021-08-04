@@ -45,7 +45,7 @@ public class EditorOverworldModificationPanel : EditorGridModificationPanel
 
         if (_overworldName == "overworlds")
         {
-            Logger.Warning(Logger.Datawriting, "A maze level cannot have the name 'levels', as this is already the name of the file that lists all the maze levels");
+            Logger.Warning(Logger.Datawriting, "An overworld cannot have the name 'overworlds', as this is already the name of the file that lists all the overworlds");
             return;
         }
 

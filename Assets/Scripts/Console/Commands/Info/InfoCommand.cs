@@ -12,6 +12,15 @@ public class InfoCommand : CommandProcedure
             case "maze":
                 GetInfo(new MazeLevelInfo(), arguments);
                 break;
+            case "maze-list":
+                GetInfo(new MazeLevelListInfo(), arguments);
+                break;
+            case "overworld":
+                GetInfo(new OverworldInfo(), arguments);
+                break;
+            case "overworld-list":
+                GetInfo(new OverworldListInfo(), arguments);
+                break;
             default:
                 Console.Instance.PrintToReportText("Unknown info command " + infoObject);
                 break;
@@ -27,7 +36,10 @@ public class InfoCommand : CommandProcedure
     public override void Help()
     {
         string printLine = "Request info about things. Currently known keywords are:\n";
-        printLine += "-maze\n";
+        printLine += "- maze\n";
+        printLine += "- maze-list\n";
+        printLine += "- overworld\n";
+        printLine += "- overworld-list\n";
         printLine += "\n";
         Console.Instance.PrintToReportText(printLine);
     }
