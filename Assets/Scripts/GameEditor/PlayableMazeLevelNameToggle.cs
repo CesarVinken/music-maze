@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.UI;
 
 public class PlayableMazeLevelNameToggle : MonoBehaviour
@@ -27,5 +25,26 @@ public class PlayableMazeLevelNameToggle : MonoBehaviour
     {
         _levelNameData.IsPlayable = isPlayable;
         Logger.Log($"Toggled playability of the maze level {_levelNameData.LevelName} to {isPlayable}");
+    }
+
+    public void DeleteMazeLevel()
+    {
+        Logger.Log($"Delete {_levelNameData.LevelName}");
+
+        string sanatisedLevelName = _levelNameData.LevelName.ToLower().Replace(" ", "-");
+
+        bool levelExists = MazeLevelLoader.MazeLevelExists(sanatisedLevelName);
+
+        if (!levelExists)
+        {
+            return;
+        }
+
+        JsonMazeLevelFileWriter.DeleteFile(sanatisedLevelName);
+
+        MazeLevelNamesData levelNamesData = new MazeLevelNamesData(sanatisedLevelName);
+        levelNamesData.DeleteLevelName(sanatisedLevelName);
+
+        Destroy(gameObject);
     }
 }
