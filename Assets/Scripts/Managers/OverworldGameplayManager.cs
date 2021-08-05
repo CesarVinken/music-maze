@@ -50,26 +50,35 @@ public class OverworldGameplayManager : MonoBehaviour, IOnEventCallback, IGamepl
 
     public void UnloadOverworld()
     {
-        if (Overworld == null) return;
-
-        if (TilesContainer.Instance)
+        if (Overworld != null)
         {
-            Destroy(TilesContainer.Instance.gameObject);
+            if (TilesContainer.Instance)
+            {
+                Destroy(TilesContainer.Instance.gameObject);
+            }
+
+            TilesContainer.Instance = null;
+
+            GameManager.Instance.CharacterManager.UnloadCharacters();
+            SceneObjectManager.Instance.UnloadSceneObjects();
+
+
+            Logger.Log(Logger.Initialisation, "Unload Overworld {0}", Overworld);
+
+            Overworld.Tiles.Clear();
+            Overworld.TilesByLocation.Clear();
+            Overworld.MazeEntries.Clear();
+
+            CameraManager.Instance.ResetCameras();
+            Overworld = null;
+        }
+        else if(EditorOverworld != null)
+        {
+            ScreenSpaceOverworldEditorElements.Instance.CleanOut();
+
+            EditorOverworld = null;
         }
 
-        TilesContainer.Instance = null;
-
-        GameManager.Instance.CharacterManager.UnloadCharacters();
-        SceneObjectManager.Instance.UnloadSceneObjects();
-
-        Logger.Log(Logger.Initialisation, "Unload Overworld {0}", Overworld);
-
-        Overworld.Tiles.Clear();
-        Overworld.TilesByLocation.Clear();
-        Overworld.MazeEntries.Clear();
-
-        CameraManager.Instance.ResetCameras();
-        Overworld = null;
     }
 
     public void SetupOverworld(OverworldData overworldData)
@@ -86,7 +95,7 @@ public class OverworldGameplayManager : MonoBehaviour, IOnEventCallback, IGamepl
 
     public void SetupOverworldForEditor(OverworldData overworldData)
     {
-        EditorOverworld = EditorOverworld.Create(overworldData);
+        EditorOverworld.Create(overworldData);
 
         InitialiseEditorTileBackgrounds();
         InitialiseEditorTileAttributes();

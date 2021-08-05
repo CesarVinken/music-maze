@@ -16,6 +16,7 @@ public class EditorOverworld : Overworld, IEditorLevel
 
     public EditorOverworld(OverworldData overworldData)
     {
+        OverworldGameplayManager.Instance.EditorOverworld = this;
         GameManager.Instance.CurrentEditorLevel = this;
 
         Name = overworldData.Name;

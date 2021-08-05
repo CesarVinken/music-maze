@@ -31,7 +31,6 @@ public class OverworldLoader : MonoBehaviour
 
     public static void LoadOverworldForEditor(OverworldData overworldData)
     {
-        OverworldGameplayManager.Instance.UnloadOverworld();
         OverworldGameplayManager.Instance.SetupOverworldForEditor(overworldData); // sets up the level without instantiating characters etc.
     }
 

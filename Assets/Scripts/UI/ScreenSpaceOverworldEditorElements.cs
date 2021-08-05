@@ -71,7 +71,7 @@ public class ScreenSpaceOverworldEditorElements : MonoBehaviour
 
     public void CreateEditorIssue(GridLocation spawnLocation, string issueDescription, EditorIssueType editorIssueType)
     {
-        Logger.Log("Create editor issue");
+        Logger.Warning("Create editor issue");
         Vector3 spawnLocationVector = GridLocation.GridToVector(spawnLocation);
 
         GameObject editorIssueGO = GameObject.Instantiate(_editorIssuePrefab, transform);
@@ -99,5 +99,20 @@ public class ScreenSpaceOverworldEditorElements : MonoBehaviour
             }
         }
         return false;
+    }
+
+    public void CleanOut()
+    {
+        for (int i = 0; i < _editorIssues.Count; i++)
+        {
+            _editorIssues[i].Delete();
+        }
+        _editorIssues.Clear();
+
+        for (int j = 0; j < _mazeEntryNames.Count; j++)
+        {
+            _mazeEntryNames[j].Destroy();
+        }
+        _mazeEntryNames.Clear();
     }
 }

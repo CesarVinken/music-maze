@@ -81,6 +81,8 @@ public class EditorOverworldModificationPanel : EditorGridModificationPanel
 
         bool overworldNameExists = OverworldLoader.OverworldExists(_overworldName);
 
+        OverworldGameplayManager.Instance.UnloadOverworld();
+
         if (overworldNameExists)
         {
             OverworldData overworldData = OverworldLoader.LoadOverworldData(_overworldName);
