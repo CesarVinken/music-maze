@@ -46,7 +46,7 @@ public class MazeLevelInfo : IInfoCommand
 
         if (!levelExists)
         {
-            string message = $"Could not find a maze level with the name '<color=>{sanatisedLevelName}</color>'.\n";
+            string message = $"Could not find a maze level with the name '<color={ConsoleConfiguration.HighlightColour}>{sanatisedLevelName}</color>'.\n";
             throw new MazeLevelNameNotFoundConsoleException(message);
         }
 

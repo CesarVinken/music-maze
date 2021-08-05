@@ -212,10 +212,11 @@ public class Console : MonoBehaviour
     {
         Commands.Add(ConsoleCommand.AddCommand("add", 1, new AddCommand()));
         Commands.Add(ConsoleCommand.AddCommand("close", new CloseConsoleCommand()));
-        Commands.Add(ConsoleCommand.AddCommand("help", 0, 1, new HelpCommand()));
-        Commands.Add(ConsoleCommand.AddCommand("load", 1, 2, new LoadCommand()));
-        Commands.Add(ConsoleCommand.AddCommand("editor", 0, 1, new EditorCommand()));
         Commands.Add(ConsoleCommand.AddCommand("configure", 2, 4, new ConfigureCommand()));
+        Commands.Add(ConsoleCommand.AddCommand("delete", 1, 2, new DeleteCommand()));
+        Commands.Add(ConsoleCommand.AddCommand("editor", 0, 1, new EditorCommand()));
+        Commands.Add(ConsoleCommand.AddCommand("help", 0, 1, new HelpCommand()));
         Commands.Add(ConsoleCommand.AddCommand("info", 1, 2, new InfoCommand()));
+        Commands.Add(ConsoleCommand.AddCommand("load", 1, 2, new LoadCommand()));
     }
 }

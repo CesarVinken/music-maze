@@ -17,4 +17,13 @@ public class JsonMazeLevelFileWriter : IJsonFileWriter
 
         File.WriteAllText(_path, jsonDataString);
     }
+
+    public static void DeleteFile(string mazeLevelName)
+    {
+        Directory.CreateDirectory(Path.Combine(Application.dataPath, "StreamingAssets", "maze"));
+
+        string path = Path.Combine(Application.dataPath, "StreamingAssets", "maze", mazeLevelName + ".json");
+
+        File.Delete(path);
+    }
 }

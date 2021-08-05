@@ -36,6 +36,32 @@ public class MazeLevelNamesData
         return this;
     }
 
+    public string DeleteLevelName(string mazeLevelName)
+    {
+        MazeLevelNamesData oldData = new JsonMazeLevelListFileReader().ReadData<MazeLevelNamesData>();
+
+        if (oldData != null)
+        {
+            LevelNames = oldData.LevelNames;
+        } else
+        {
+            return "Could not find maze level names data.\n\n";
+        }
+
+        if (!LevelNameExists(mazeLevelName))
+        {
+            return $"Could not find a maze level with the name '<color={ConsoleConfiguration.HighlightColour}>{mazeLevelName}</color> in the list. Could not delete '<color={ConsoleConfiguration.HighlightColour}>{mazeLevelName}</color> from levels.json.\n\n";
+        }
+
+        MazeLevelNameData levelNameData = LevelNames.FirstOrDefault(l => l.LevelName == mazeLevelName);
+        LevelNames.Remove(levelNameData);
+
+        JsonMazeLevelListFileWriter fileWriter = new JsonMazeLevelListFileWriter();
+        fileWriter.SerialiseData(this);
+
+        return $"Removed maze level name '<color={ConsoleConfiguration.HighlightColour}>{mazeLevelName}</color> from list of mazes.\n\n";
+    }
+
     public bool LevelNameExists(string levelName)
     {
         MazeLevelNameData levelNameData = LevelNames.FirstOrDefault(l => l.LevelName == levelName);
