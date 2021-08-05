@@ -62,9 +62,15 @@ public class MazeLevelNamesData
         return $"Removed maze level name '<color={ConsoleConfiguration.HighlightColour}>{mazeLevelName}</color> from list of mazes.\n\n";
     }
 
-    public bool LevelNameExists(string levelName)
+    public static bool LevelNameExists(string levelName, List<MazeLevelNameData> levelNamesData = null)
     {
-        MazeLevelNameData levelNameData = LevelNames.FirstOrDefault(l => l.LevelName == levelName);
+        if(levelNamesData == null)
+        {
+            MazeLevelNamesData existingData = new JsonMazeLevelListFileReader().ReadData<MazeLevelNamesData>();
+            levelNamesData = existingData.LevelNames;
+        }
+
+        MazeLevelNameData levelNameData = levelNamesData.FirstOrDefault(l => l.LevelName == levelName);
 
         if(levelNameData == null)
         {

@@ -372,6 +372,8 @@ MonoBehaviour:
   _mazeEntryNameContainer: {fileID: 304605043}
   _editorMazeLevelEntryNamePrefab: {fileID: 6880799787337684031, guid: bc86a03f46d7d61438b015a12f99a1ad,
     type: 3}
+  _editorIssuePrefab: {fileID: 1509912463892067208, guid: 655353d8af5865541aca748e63c1a6a2,
+    type: 3}
 --- !u!1 &642978719
 GameObject:
   m_ObjectHideFlags: 0

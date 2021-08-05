@@ -62,6 +62,8 @@ public class OverworldTileAttributeRemover : TileAttributeRemover
             OverworldGameplayManager.Instance.EditorOverworld.MazeEntries.Remove(mazeLevelEntry);
             ScreenSpaceOverworldEditorElements.Instance.RemoveMazeLevelEntryName(mazeLevelEntry);
         }
+
+        ScreenSpaceOverworldEditorElements.Instance.TrySolveEditorIssue(EditorIssueType.MazeLevelMissing, _tile.GridLocation);
     }
 
     public void Remove(ITileAttribute attribute)

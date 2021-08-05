@@ -131,9 +131,16 @@ public class EditorOverworld : Overworld, IEditorLevel
             }
             else if (type.Equals(typeof(SerialisableMazeLevelEntryAttribute)))
             {
-               SerialisableMazeLevelEntryAttribute serialisableMazeLevelEntryAttribute = (SerialisableMazeLevelEntryAttribute)JsonUtility.FromJson(serialisableTileAttribute.SerialisedData, type);
-               MazeLevelEntry mazeLevelEntry = tileAttributePlacer.PlaceMazeLevelEntry(serialisableMazeLevelEntryAttribute.MazeLevelName);
-               MazeEntries.Add(mazeLevelEntry);
+                SerialisableMazeLevelEntryAttribute serialisableMazeLevelEntryAttribute = (SerialisableMazeLevelEntryAttribute)JsonUtility.FromJson(serialisableTileAttribute.SerialisedData, type);
+                string mazeName = serialisableMazeLevelEntryAttribute.MazeLevelName;
+                MazeLevelEntry mazeLevelEntry = tileAttributePlacer.PlaceMazeLevelEntry(mazeName);
+                MazeEntries.Add(mazeLevelEntry);
+
+                bool levelNameExists = MazeLevelNamesData.LevelNameExists(mazeName);
+                if (!levelNameExists)
+                {
+                    ScreenSpaceOverworldEditorElements.Instance.CreateEditorIssue(tile.GridLocation, $"The maze level '{mazeName}' is missing", EditorIssueType.MazeLevelMissing);
+                }
             }
             //else if (tileAttributeId == SerialisableTileAttribute.PlayerOnlyAttributeCode)
             //{

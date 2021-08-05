@@ -4,8 +4,9 @@ using UnityEngine.UI;
 public class EditorMazeLevelEntryName : MonoBehaviour
 {
     [SerializeField] private Text _mazeEntryNameText;
-    public MazeLevelEntry MazeLevelEntry { get; private set; }
     private Vector3 _worldPosition;
+
+    public MazeLevelEntry MazeLevelEntry { get; private set; }
 
     private void Awake()
     {

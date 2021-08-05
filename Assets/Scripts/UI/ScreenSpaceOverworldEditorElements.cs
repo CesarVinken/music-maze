@@ -1,5 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 
 public class ScreenSpaceOverworldEditorElements : MonoBehaviour
@@ -10,6 +9,9 @@ public class ScreenSpaceOverworldEditorElements : MonoBehaviour
     private List<EditorMazeLevelEntryName> _mazeEntryNames = new List<EditorMazeLevelEntryName>();
 
     [SerializeField] private GameObject _editorMazeLevelEntryNamePrefab;
+    [SerializeField] private GameObject _editorIssuePrefab;
+
+    private List<EditorIssueUI> _editorIssues = new List<EditorIssueUI>();
 
     private void Awake()
     {
@@ -17,6 +19,7 @@ public class ScreenSpaceOverworldEditorElements : MonoBehaviour
 
         Guard.CheckIsNull(_mazeEntryNameContainer, "_mazeEntryNameContainer", gameObject);
         Guard.CheckIsNull(_editorMazeLevelEntryNamePrefab, "_editorMazeLevelEntryNamePrefab", gameObject);
+        Guard.CheckIsNull(_editorIssuePrefab, "EditorIssuePrefab", gameObject);
     }
 
     public void InstantiateMazeLevelEntryName(MazeLevelEntry mazeLevelEntry)
@@ -64,5 +67,37 @@ public class ScreenSpaceOverworldEditorElements : MonoBehaviour
                 break;
             }
         }
+    }
+
+    public void CreateEditorIssue(GridLocation spawnLocation, string issueDescription, EditorIssueType editorIssueType)
+    {
+        Logger.Log("Create editor issue");
+        Vector3 spawnLocationVector = GridLocation.GridToVector(spawnLocation);
+
+        GameObject editorIssueGO = GameObject.Instantiate(_editorIssuePrefab, transform);
+
+        EditorIssueUI editorIssue = editorIssueGO.GetComponent<EditorIssueUI>();
+        editorIssue.SetGridLocation(spawnLocation);
+        editorIssue.SetWorldPosition(new Vector2(spawnLocationVector.x, spawnLocationVector.y - .7f));
+        editorIssue.SetDescription(issueDescription);
+        editorIssue.SetEditorIssueType(editorIssueType);
+        _editorIssues.Add(editorIssue);
+    }
+
+    public bool TrySolveEditorIssue(EditorIssueType editorIssueType, GridLocation issueLocation)
+    {
+        for (int i = 0; i < _editorIssues.Count; i++)
+        {
+            EditorIssueUI editorIssue = _editorIssues[i];
+            if (editorIssue.EditorIssueType != editorIssueType) continue;
+
+            if(editorIssue.EditorIssueGridLocation.X == issueLocation.X && editorIssue.EditorIssueGridLocation.Y == issueLocation.Y)
+            {
+                _editorIssues.Remove(editorIssue);
+                editorIssue.Delete();
+                return true;
+            }
+        }
+        return false;
     }
 }

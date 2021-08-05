@@ -7,7 +7,6 @@ public class EditorWorldContainer : MonoBehaviour
     [SerializeField] private GameObject _editorTileSelectorGO;
     [SerializeField] private EditorTileSelector _editorTileSelector;
 
-
     private void Awake()
     {
         Instance = this;
