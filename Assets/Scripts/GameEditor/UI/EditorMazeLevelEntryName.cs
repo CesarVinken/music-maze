@@ -5,10 +5,22 @@ public class EditorMazeLevelEntryName : MonoBehaviour
 {
     [SerializeField] private Text _mazeEntryNameText;
     public MazeLevelEntry MazeLevelEntry { get; private set; }
+    private Vector3 _worldPosition;
 
     private void Awake()
     {
         Guard.CheckIsNull(_mazeEntryNameText, "_mazeEntryNameText", gameObject);
+    }
+
+    public void Update()
+    {
+        Vector3 screenPos = Camera.main.WorldToScreenPoint(_worldPosition);
+        transform.position = screenPos;
+    }
+
+    public void SetWorldPosition(Vector3 worldPosition)
+    {
+        _worldPosition = worldPosition;
     }
 
     public void SetText(string text)

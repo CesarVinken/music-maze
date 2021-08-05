@@ -21,11 +21,14 @@ public class ScreenSpaceOverworldEditorElements : MonoBehaviour
 
     public void InstantiateMazeLevelEntryName(MazeLevelEntry mazeLevelEntry)
     {
-        GameObject mazeLevelEntryGO = Instantiate(_editorMazeLevelEntryNamePrefab, _mazeEntryNameContainer.transform);
-        mazeLevelEntryGO.transform.position = new Vector2(mazeLevelEntry.Tile.transform.position.x + 1.2f, mazeLevelEntry.Tile.transform.position.y + 0.5f);
-        EditorMazeLevelEntryName editorMazeLevelEntryName = mazeLevelEntryGO.GetComponent<EditorMazeLevelEntryName>();
+        Vector3 mazeEntryPos = mazeLevelEntry.Tile.transform.position;
 
-        if(editorMazeLevelEntryName == null)
+        GameObject mazeLevelEntryNameGO = Instantiate(_editorMazeLevelEntryNamePrefab, _mazeEntryNameContainer.transform);
+
+        EditorMazeLevelEntryName editorMazeLevelEntryName = mazeLevelEntryNameGO.GetComponent<EditorMazeLevelEntryName>();
+        editorMazeLevelEntryName.SetWorldPosition(new Vector2(mazeEntryPos.x + 1.2f, mazeEntryPos.y + 0.5f));
+
+        if (editorMazeLevelEntryName == null)
         {
             Logger.Error("Could not find EditorMazeLevelEntryName script on game object");
         }
