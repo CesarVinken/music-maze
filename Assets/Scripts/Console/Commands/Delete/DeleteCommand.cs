@@ -13,7 +13,7 @@ public class DeleteCommand : CommandProcedure
                 Delete(new DeleteMazeLevel(), arguments);
                 break;
             case "overworld":
-                //Delete(new DeleteOverworld(), arguments);
+                Delete(new DeleteOverworld(), arguments);
                 break;
             default:
                 Console.Instance.PrintToReportText("Unknown delete command " + infoObject);

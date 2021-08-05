@@ -17,4 +17,11 @@ public class JsonOverworldFileWriter : IJsonFileWriter
 
         File.WriteAllText(_path, jsonDataString);
     }
+
+    public static void DeleteFile(string overworldName)
+    {
+        string path = Path.Combine(Application.dataPath, "StreamingAssets", "overworld", overworldName + ".json");
+
+        File.Delete(path);
+    }
 }

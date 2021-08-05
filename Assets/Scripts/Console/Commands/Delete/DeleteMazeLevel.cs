@@ -8,7 +8,7 @@ public class DeleteMazeLevel : IDeleteCommand
         {
             if (arguments.Count < 1)
             {
-                string message = "The command '<color=" + ConsoleConfiguration.HighlightColour + ">delete maze</color>' needs an additional argument with the name of the maze level you want to delete.\n";
+                string message = "The command '<color=" + ConsoleConfiguration.HighlightColour + ">delete maze</color>' needs an additional argument with the name of the maze level that you want to delete.\n";
                 Logger.Warning(message);
 
                 throw new NotEnoughArgumentsConsoleException(message);
@@ -20,7 +20,7 @@ public class DeleteMazeLevel : IDeleteCommand
 
             infoString += DeleteMazeLevelFile(sanatisedLevelName);
             infoString += DeleteMazeLevelFromMazeNamesList(sanatisedLevelName);
-            infoString += $"Deletion of maze '<color={ConsoleConfiguration.HighlightColour}>{sanatisedLevelName}</color> complete.'\n\n";
+            infoString += $"Deletion of maze '<color={ConsoleConfiguration.HighlightColour}>{sanatisedLevelName}</color> completed.'\n\n";
 
             return infoString;
         }
