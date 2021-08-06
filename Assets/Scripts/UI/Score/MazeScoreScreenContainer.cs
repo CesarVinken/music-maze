@@ -73,7 +73,7 @@ public class MazeScoreScreenContainer : MonoBehaviour
 
     public void Start()
     {
-        GameManager.Instance.CompleteMazeLevelEvent += OnMazeLevelCompleted;
+        MazeLevelGameplayManager.Instance.CompleteMazeLevelEvent += OnMazeLevelCompleted;
     }
 
     public void Update()

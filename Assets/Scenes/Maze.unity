@@ -1574,12 +1574,12 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 785657463}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -640, y: -350, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
-  m_Father: {fileID: 0}
-  m_RootOrder: 6
+  m_Father: {fileID: 800624757}
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &786270577
 GameObject:
@@ -1669,6 +1669,7 @@ GameObject:
   - component: {fileID: 800624755}
   - component: {fileID: 800624754}
   - component: {fileID: 800624753}
+  - component: {fileID: 800624758}
   m_Layer: 5
   m_Name: Canvas - Screen Space - Overlay
   m_TagString: Untagged
@@ -1770,6 +1771,7 @@ RectTransform:
   - {fileID: 2041238811}
   - {fileID: 451462792}
   - {fileID: 81165050}
+  - {fileID: 785657466}
   m_Father: {fileID: 0}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -1778,6 +1780,20 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 0}
+--- !u!114 &800624758
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 800624752}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 85cda727b39bf8d4ca077aceeff6936a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _exitsAreOpenMessagePrefab: {fileID: 1630679862561145300, guid: fe8a55bdadff99b4c8a96f9303e3f8dd,
+    type: 3}
 --- !u!1 &835873984
 GameObject:
   m_ObjectHideFlags: 0

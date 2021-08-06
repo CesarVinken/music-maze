@@ -16,6 +16,9 @@ public class MazeLevelGameplayManager : MonoBehaviour, IOnEventCallback, IGamepl
     public List<CharacterSpawnpoint> PlayerCharacterSpawnpoints = new List<CharacterSpawnpoint>();
     public List<EnemySpawnpoint> EnemyCharacterSpawnpoints = new List<EnemySpawnpoint>();
 
+    public event Action CompleteMazeLevelEvent;
+    public event Action AllPathsAreMarkedEvent;
+
     public GameObject EditorTilePrefab;
     public GameObject InGameTilePrefab;
 
@@ -125,6 +128,11 @@ public class MazeLevelGameplayManager : MonoBehaviour, IOnEventCallback, IGamepl
 
         Instance = this;
         GameManager.Instance.GameplayManager = this;
+    }
+
+    public void Start()
+    {
+        AllPathsAreMarkedEvent += OnAllPathsAreMarked;
     }
 
     private void OnEnable()
@@ -462,7 +470,7 @@ public class MazeLevelGameplayManager : MonoBehaviour, IOnEventCallback, IGamepl
         }
     }
 
-    public void OpenExit()
+    public void OnAllPathsAreMarked()
     {
         for (int i = 0; i < Level.MazeExits.Count; i++)
         {
@@ -499,7 +507,7 @@ public class MazeLevelGameplayManager : MonoBehaviour, IOnEventCallback, IGamepl
 
         if (NumberOfUnmarkedTiles == 0)
         {
-            OpenExit();
+            TriggerEndGame();
             Logger.Warning(Logger.Level, "Open exits!");
         }
     }
@@ -532,5 +540,20 @@ public class MazeLevelGameplayManager : MonoBehaviour, IOnEventCallback, IGamepl
             MazeTile spawnpoint2Tile = Level.PlayerCharacterSpawnpoints[PlayerNumber.Player2].Tile as MazeTile;
             spawnpoint2Tile.TryMakeMarkable(true);
         }
+    }
+
+    /// <summary>
+    /// EVENT INVOcATION
+    /// </summary>
+
+    // end game happens when all paths have been marked
+    public void TriggerEndGame()
+    {
+        AllPathsAreMarkedEvent.Invoke();
+    }
+
+    public void CompleteMazeLevel()
+    {
+        CompleteMazeLevelEvent.Invoke();
     }
 }

@@ -49,7 +49,7 @@ public class EnemyCharacter : Character
     {
         _pathfinding = new Pathfinding(this);
 
-        GameManager.Instance.CompleteMazeLevelEvent += OnMazeLevelCompleted;
+        MazeLevelGameplayManager.Instance.CompleteMazeLevelEvent += OnMazeLevelCompleted;
 
         SetCharacterType(_enemyType);
         SetCurrentGridLocation(StartingPosition);

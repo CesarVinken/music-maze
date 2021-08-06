@@ -31,8 +31,6 @@ public class GameManager : MonoBehaviourPunCallbacks
 
     [SerializeField] private SceneType _thisSceneType;
 
-    public event Action CompleteMazeLevelEvent;
-
     public List<string> PlayableLevelNames = new List<string>();
 
     public ICharacterManager CharacterManager;
@@ -217,10 +215,5 @@ public class GameManager : MonoBehaviourPunCallbacks
         Logger.Score.enableLogs = true;
         Logger.Time.enableLogs = false;
         Logger.UI.enableLogs = false;
-    }
-
-    public void CompleteMazeLevel()
-    {
-        CompleteMazeLevelEvent.Invoke();
     }
 }
