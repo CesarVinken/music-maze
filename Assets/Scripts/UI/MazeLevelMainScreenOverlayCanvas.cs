@@ -22,13 +22,30 @@ public class MazeLevelMainScreenOverlayCanvas : MonoBehaviour
 
     public void OnAllPathsAreMarked()
     {
-        IEnumerator spawnExitsAreOpenMessageRoutine = SpawnExitsAreOpenMessage();
-        StartCoroutine(spawnExitsAreOpenMessageRoutine);
+        if(GameRules.GamePlayerType == GamePlayerType.SinglePlayer || GameRules.GamePlayerType == GamePlayerType.NetworkMultiplayer)
+        {
+            Vector3 spawnPosition = new Vector3(Screen.width / 2, Screen.height / 2);
+            IEnumerator spawnExitsAreOpenMessageRoutine = SpawnExitsAreOpenMessage(spawnPosition);
+            StartCoroutine(spawnExitsAreOpenMessageRoutine);
+        }
+        else // split screen requires two texts
+        {
+            Vector3 spawnPosition1 = new Vector3(Screen.width / 4, Screen.height / 2);
+            Vector3 spawnPosition2 = new Vector3(Screen.width - Screen.width / 4, Screen.height / 2);
+
+            IEnumerator spawnExitsAreOpenMessage1Routine = SpawnExitsAreOpenMessage(spawnPosition1);
+            IEnumerator spawnExitsAreOpenMessage2Routine = SpawnExitsAreOpenMessage(spawnPosition2);
+
+            StartCoroutine(spawnExitsAreOpenMessage1Routine);
+            StartCoroutine(spawnExitsAreOpenMessage2Routine);
+        }
     }
 
-    public IEnumerator SpawnExitsAreOpenMessage()
+    public IEnumerator SpawnExitsAreOpenMessage(Vector3 spawnPosition)
     {
         GameObject exitsAreOpenMessageGO = Instantiate(_exitsAreOpenMessagePrefab, transform);
+        exitsAreOpenMessageGO.transform.position = spawnPosition;
+
         Text exitsAreOpenMessageText = exitsAreOpenMessageGO.GetComponent<Text>();
         float alphaAmount = 1;
         float fullAlphaTime = 1.5f;
