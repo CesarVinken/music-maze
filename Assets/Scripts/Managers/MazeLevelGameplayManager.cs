@@ -48,6 +48,8 @@ public class MazeLevelGameplayManager : MonoBehaviour, IOnEventCallback, IGamepl
         {
             case AnimationEffect.EmmonCaught:
                 return _oneTimeAnimationEffectPrefab;
+            case AnimationEffect.ExitOpenExplosion:
+                return _oneTimeAnimationEffectPrefab;
             case AnimationEffect.FaeCaught:
                 return _oneTimeAnimationEffectPrefab;
             case AnimationEffect.NotesPlayMusic:

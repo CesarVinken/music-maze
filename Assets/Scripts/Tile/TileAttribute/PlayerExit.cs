@@ -127,6 +127,8 @@ public class PlayerExit : TileObstacle, ITileAttribute, ITileConnectable
         
         gameObject.layer = 9; // set layer to PlayerOnly, which is layer 9. Should not be hardcoded
         _tileSpriteContainer.gameObject.layer = 9;
+
+        TriggerOpenExitEffect();
     }
 
     public void CloseExit()
@@ -213,5 +215,16 @@ public class PlayerExit : TileObstacle, ITileAttribute, ITileConnectable
 
         _tileSpriteContainer = transformedPrimarySpriteContainer;
         _secondaryTileSpriteContainer = transformedSecondarySpriteContainer;
+    }
+
+    private void TriggerOpenExitEffect()
+    {
+        GameObject exitOpenEffectPrefab = MazeLevelGameplayManager.Instance.GetEffectAnimationPrefab(AnimationEffect.ExitOpenExplosion);
+        GameObject exitOpenEffectGO = GameObject.Instantiate(exitOpenEffectPrefab, SceneObjectManager.Instance.transform);
+        Vector3 effectSpawnPosition = GridLocation.GridToVector(Tile.GridLocation);
+        exitOpenEffectGO.transform.position = new Vector3(effectSpawnPosition.x + 0.5f, effectSpawnPosition.y + 0.5f);
+
+        EffectController exitOpenEffectController = exitOpenEffectGO.GetComponent<EffectController>();
+        exitOpenEffectController.PlayEffect(AnimationEffect.ExitOpenExplosion);
     }
 }

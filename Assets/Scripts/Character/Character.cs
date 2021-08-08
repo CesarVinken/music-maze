@@ -8,8 +8,8 @@ using UnityEngine;
 public class Character : MonoBehaviour
 {
     public CharacterBlueprint CharacterBlueprint;
-    public GridLocation StartingPosition;
     public CharacterSpawnpoint Spawnpoint;
+    public GridLocation StartingPosition;
 
     public GridLocation CurrentGridLocation { get; private set; }
 

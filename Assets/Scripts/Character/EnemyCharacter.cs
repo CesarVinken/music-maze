@@ -24,6 +24,8 @@ public class EnemyCharacter : Character
     const float BLINKING_SPEED = 0.4f;
     const float BLINKING_LIFETIME = 5f;
 
+    [SerializeField] private Vector2 _temporaryTargetPositionField; // Temporary. To track down bug that sometimes freezes Enemy movement
+
     public ChasingState ChasingState { get => _chasingState; private set => _chasingState = value; }
 
     public void SetTileAreas(List<TileArea> tileAreas)
@@ -254,6 +256,7 @@ public class EnemyCharacter : Character
         }
 
         _playerAsTarget = new PlayerAsTarget(randomPlayer, playerGridLocation);
+        _temporaryTargetPositionField = GridLocation.GridToVector(randomPlayer.CurrentGridLocation);
 
         Logger.Log(Logger.Pathfinding, $"The enemy {gameObject.name} is now going to the location of player {randomPlayer.gameObject.name} at {randomPlayer.CurrentGridLocation.X},{randomPlayer.CurrentGridLocation.Y}");
     }
@@ -265,6 +268,7 @@ public class EnemyCharacter : Character
         GridLocation randomGridLocation = GetRandomTileTarget().GridLocation;
 
         Logger.Log($"current location of {gameObject.name} is ({CurrentGridLocation.X}, {CurrentGridLocation.Y} ). Set random target ({randomGridLocation.X}, {randomGridLocation.Y} )  ");
+        _temporaryTargetPositionField = GridLocation.GridToVector(randomGridLocation);
 
         PathToTarget = _pathfinding.FindNodePath(CurrentGridLocation, randomGridLocation);
 
