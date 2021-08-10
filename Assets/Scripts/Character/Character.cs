@@ -116,18 +116,19 @@ public class Character : MonoBehaviour
        
         transform.position = transform.position + moveDir * speed * Time.deltaTime;
 
+        float roundingDifference = 0.000f; // Sometimes the character would overstep the target threshold (eg. 2.5f) by a tiny amount (eg. 0.00001). Then the character would get stuck.
+
         // Character reaches a tile grid location (its middle)
-        if((direction == ObjectDirection.Right && transform.position.x > targetVector2Pos.x + GridLocation.OffsetToTileMiddle) ||
-            (direction == ObjectDirection.Left && transform.position.x < targetVector2Pos.x + GridLocation.OffsetToTileMiddle) ||
-            (direction == ObjectDirection.Down && transform.position.y < targetVector2Pos.y + GridLocation.OffsetToTileMiddle) ||
-            direction == ObjectDirection.Up && transform.position.y > targetVector2Pos.y + GridLocation.OffsetToTileMiddle) 
+        if((direction == ObjectDirection.Right && transform.position.x >= targetVector2Pos.x + GridLocation.OffsetToTileMiddle - roundingDifference) ||
+            (direction == ObjectDirection.Left && transform.position.x <= targetVector2Pos.x + GridLocation.OffsetToTileMiddle + roundingDifference) ||
+            (direction == ObjectDirection.Down && transform.position.y <= targetVector2Pos.y + GridLocation.OffsetToTileMiddle + roundingDifference) ||
+            direction == ObjectDirection.Up && transform.position.y >= targetVector2Pos.y + GridLocation.OffsetToTileMiddle - roundingDifference) 
         {
             SetCurrentGridLocation(nextGridLocation);
+
             PathToTarget.RemoveAt(0);
-            //Logger.Log($"New Grid location{currentGridLocation.X}, {currentGridLocation.Y}. Remaining path length is {PathToTarget.Count}");
             if(PathToTarget.Count == 0)
             {
-
                 OnTargetReached(); 
             }
 

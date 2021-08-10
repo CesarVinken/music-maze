@@ -505,7 +505,7 @@ public class MazeLevelGameplayManager : MonoBehaviour, IOnEventCallback, IGamepl
     private void HandleNumberOfUnmarkedTiles()
     {
         NumberOfUnmarkedTiles--;
-        Logger.Log(Logger.Level,"{0} unmarked tiles left", NumberOfUnmarkedTiles);
+//        Logger.Log(Logger.Level,"{0} unmarked tiles left", NumberOfUnmarkedTiles);
 
         if (NumberOfUnmarkedTiles == 0)
         {
