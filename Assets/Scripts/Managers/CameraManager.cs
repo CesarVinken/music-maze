@@ -72,13 +72,13 @@ public class CameraManager : MonoBehaviour
         CameraController splitScreenCameraOne = splitScreenCameraOneGO.GetComponent<CameraController>();
         Camera splitScreenCameraOneCamera = splitScreenCameraOneGO.GetComponent<Camera>();
         splitScreenCameraOneCamera.rect = new Rect(0, 0, 0.5f, 1);
-        splitScreenCameraOne.SetZoomLevel(GameManager.Instance.Configuration.CameraZoomLevel);
+        splitScreenCameraOne.SetZoomLevel(GameManager.Instance.Configuration.DefaultCameraZoomLevel);
 
         GameObject splitScreenCameraTwoGO = Instantiate(_cameraPrefab, transform);
         CameraController splitScreenCameraTwo = splitScreenCameraTwoGO.GetComponent<CameraController>();
         Camera splitScreenCameraTwoCamera = splitScreenCameraTwoGO.GetComponent<Camera>();
         splitScreenCameraTwoCamera.rect = new Rect(0.5f, 0, 1, 1);
-        splitScreenCameraTwo.SetZoomLevel(GameManager.Instance.Configuration.CameraZoomLevel);
+        splitScreenCameraTwo.SetZoomLevel(GameManager.Instance.Configuration.DefaultCameraZoomLevel);
 
         CameraControllers.Add(splitScreenCameraOne);
         CameraControllers.Add(splitScreenCameraTwo);
@@ -100,7 +100,7 @@ public class CameraManager : MonoBehaviour
         CameraController soleCamera = mainCamera.GetComponent<CameraController>();
         Camera soleCameraCamera = soleCamera.GetComponent<Camera>();
         soleCameraCamera.rect.Set(0, 0, 1, 1);
-        soleCamera.SetZoomLevel(GameManager.Instance.Configuration.CameraZoomLevel);
+        soleCamera.SetZoomLevel(GameManager.Instance.Configuration.DefaultCameraZoomLevel);
 
         CameraControllers.Add(soleCamera);
 

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 public enum Direction
@@ -12,6 +13,10 @@ public enum Direction
 public class CameraController : MonoBehaviour
 {
     private float _panSpeed = 0.011f;
+    private float _zoomSpeed = 4f;
+    private float _zoomMin; // TODO: Move to PlatformConfiguration
+    private float _zoomMax = 10f; // TODO: Move to PlatformConfiguration 
+
     private bool _focussedOnPlayer = false;
     public static Dictionary<Direction, float> PanLimits = new Dictionary<Direction, float> { };
 
@@ -23,7 +28,8 @@ public class CameraController : MonoBehaviour
 
     private Vector3 _dragOrigin;    //for camera dragging in editor
     public PlayerNumber PlayerNumberForCamera;
-
+    float desiredZoomLevel;
+private bool _isZooming = false;
     public void Awake()
     {
         _camera = GetComponent<Camera>();
@@ -36,6 +42,9 @@ public class CameraController : MonoBehaviour
     {
         if(GameManager.Instance.CurrentGameLevel != null)
             SetPanLimits(GameManager.Instance.CurrentGameLevel.LevelBounds);
+
+        _zoomMin = GameManager.Instance.Configuration.DefaultCameraZoomLevel;
+        desiredZoomLevel = _camera.orthographicSize;
     }
 
     public void EnableCamera()
@@ -111,6 +120,11 @@ public class CameraController : MonoBehaviour
 
         if (!_focussedOnPlayer) return;
 
+        if(GameRules.GamePlayerType != GamePlayerType.SplitScreenMultiplayer)
+        {
+            HandleZoom();
+        }
+
         CalculateCameraPosition();
     }
 
@@ -146,6 +160,42 @@ public class CameraController : MonoBehaviour
         cameraPosition.y = Mathf.Clamp(cameraPosition.y, PanLimits[Direction.Down], PanLimits[Direction.Up]);
 
         transform.position = new Vector3(cameraPosition.x, cameraPosition.y, -10);
+    }
+
+    public void HandleZoom()
+    {
+        float currentZoomLevel = _camera.orthographicSize;
+
+        // Stop zooming if the difference with the desired zoom level is neglectible 
+        if(Math.Abs(currentZoomLevel - desiredZoomLevel) < 0.01f){
+            desiredZoomLevel = currentZoomLevel;
+        }
+
+        if(desiredZoomLevel != _camera.orthographicSize)
+        {
+            float newZoomLevel = Mathf.Lerp(currentZoomLevel, desiredZoomLevel, _zoomSpeed * Time.deltaTime);
+            _camera.orthographicSize = Mathf.Clamp(newZoomLevel, _zoomMin, _zoomMax);
+        }
+
+        if(Input.GetKey(KeyCode.O) || Input.GetAxis("Mouse ScrollWheel") > 0f){
+            desiredZoomLevel = desiredZoomLevel + 0.4f;
+            if(desiredZoomLevel > currentZoomLevel + 1f){
+                desiredZoomLevel = currentZoomLevel + 1f;
+            }
+             if(desiredZoomLevel > _zoomMax){
+                desiredZoomLevel = _zoomMax;
+            }
+        }
+        else if(Input.GetKey(KeyCode.P) || Input.GetAxis("Mouse ScrollWheel") < 0f){
+            desiredZoomLevel =  desiredZoomLevel - 0.4f;
+            if(desiredZoomLevel < currentZoomLevel - 1f){
+                desiredZoomLevel = currentZoomLevel - 1;
+            }
+            if(desiredZoomLevel < _zoomMin){
+                desiredZoomLevel = _zoomMin;
+            }
+        }
+
     }
 
     public void HandleMiddleMousePanning()

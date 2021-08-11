@@ -116,7 +116,7 @@ public class Character : MonoBehaviour
        
         transform.position = transform.position + moveDir * speed * Time.deltaTime;
 
-        float roundingDifference = 0.000f; // Sometimes the character would overstep the target threshold (eg. 2.5f) by a tiny amount (eg. 0.00001). Then the character would get stuck.
+        float roundingDifference = 0.0001f; // Sometimes the character would overstep the target threshold (eg. 2.5f) by a tiny amount (eg. 0.00001). Then the character would get stuck.
 
         // Character reaches a tile grid location (its middle)
         if((direction == ObjectDirection.Right && transform.position.x >= targetVector2Pos.x + GridLocation.OffsetToTileMiddle - roundingDifference) ||
