@@ -94,7 +94,7 @@ public class PlayerCharacter : Character
             if ((PersistentGameManager.CurrentPlatform == Platform.PC && Input.GetMouseButtonDown(0) && _pointerPresserTimer == 0) ||
             (PersistentGameManager.CurrentPlatform == Platform.Android && Input.touchCount == 1 && Input.GetTouch(0).phase == TouchPhase.Began && _pointerPresserTimer == 0))
             {
-                if(!CameraController.IsZooming)
+                if(CameraController.CurrentZoom != ZoomAction.PlayerZoom)
                 {
                     Logger.Log(PersistentGameManager.CurrentPlatform);
                     StartCoroutine(RunPointerPresserTimer());
@@ -114,7 +114,7 @@ public class PlayerCharacter : Character
                     }
                     IsMoving = false;
                 }
-                else if(!CameraController.IsZooming)
+                else if(CameraController.CurrentZoom != ZoomAction.PlayerZoom)
                 {                
                     CheckPointerInput();
                 }
@@ -216,9 +216,9 @@ public class PlayerCharacter : Character
     private void CheckPointerInput()
     {
         if (HasCalculatedTarget) return;
-        Logger.Log($"Touch count {Input.touchCount}");
+        // Logger.Log($"Touch count {Input.touchCount}");
 
-        if(Input.touchCount != 1) return;
+        if(PersistentGameManager.CurrentPlatform == Platform.Android && Input.touchCount != 1) return;
 
         Vector2 tempFingerPosition = GetPointerPosition();
         GridLocation closestGridLocation = GridLocation.FindClosestGridTile(tempFingerPosition);

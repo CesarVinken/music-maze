@@ -7,6 +7,14 @@ public enum ZoomType
     ZoomIn,
     ZoomOut
 }
+
+public enum ZoomAction
+{
+    AutoZoom,
+    NoZoom,
+    PlayerZoom
+}
+
 public enum Direction
 {
     Up,
@@ -34,8 +42,9 @@ public class CameraController : MonoBehaviour
     private Vector3 _dragOrigin;    //for camera dragging in editor
     private float _desiredZoomLevel;
     public PlayerNumber PlayerNumberForCamera;
-    public static bool IsZooming = false;
-    private float _zoomInCooldownTime = 4f; // after how much time do we start zooming in back to the default level
+    public static ZoomAction CurrentZoom = ZoomAction.NoZoom;
+    private float _zoomInCooldownTimeThreshold = 4f; // after how much time do we start zooming in back to the default level
+    private float _zoomInCooldownTime = 4f; // 
     private bool _isCooldownFromZoomToDefault = false;
 
     public void Awake()
@@ -180,13 +189,24 @@ public class CameraController : MonoBehaviour
 
         // Stop zooming if the difference with the desired zoom level is neglectible 
         if(Math.Abs(currentZoomLevel - _desiredZoomLevel) < 0.01f){
-            _desiredZoomLevel = currentZoomLevel;
+            if(currentZoomLevel < _zoomMin + 0.01f )
+            {
+                _desiredZoomLevel = _zoomMin;
+                _camera.orthographicSize = _zoomMin;
+                CurrentZoom = ZoomAction.NoZoom;
+            }
+            else 
+            {
+                _desiredZoomLevel = currentZoomLevel;
+                CurrentZoom = ZoomAction.NoZoom;
+            }
         }
 
         if(_desiredZoomLevel != _camera.orthographicSize)
         {
             float newZoomLevel = Mathf.Lerp(currentZoomLevel, _desiredZoomLevel, _zoomSpeed * Time.deltaTime);
             _camera.orthographicSize = Mathf.Clamp(newZoomLevel, _zoomMin, _zoomMax);
+            // IsZooming = true;
         }
 
         if(PersistentGameManager.CurrentPlatform == Platform.PC)
@@ -194,48 +214,83 @@ public class CameraController : MonoBehaviour
             // Zoom out
             if(Input.GetKey(KeyCode.O) || Input.GetAxis("Mouse ScrollWheel") > 0f)
             {
-                Zoom(ZoomType.ZoomOut);
+                HandlePlayerZooming(ZoomType.ZoomOut);
             }
             else if(Input.GetKey(KeyCode.P) || Input.GetAxis("Mouse ScrollWheel") < 0f) // Zoom in
             {
-                Zoom(ZoomType.ZoomIn);
+                HandlePlayerZooming(ZoomType.ZoomIn);
+            }
+            else 
+            {
+                HandleAutoZoomInToBase();
             }
         }
         else // ANDROID
         {
             if (Input.touchCount == 2)
             {
-                // get current touch positions
+                // Get current touch positions
                 Touch touchOne = Input.GetTouch(0);
                 Touch touchTwo = Input.GetTouch(1);
 
-                // get touch position from the previous frame
+                // Get touch position from the previous frame
                 Vector2 touchOnePrevious = touchOne.position - touchOne.deltaPosition;
                 Vector2 touchTwoPrevious = touchTwo.position - touchTwo.deltaPosition;
 
                 float oldTouchDistance = Vector2.Distance (touchOnePrevious, touchTwoPrevious);
                 float currentTouchDistance = Vector2.Distance (touchOne.position, touchTwo.position);
 
-                // get offset value
+                // Get movement offset value
                 float deltaDistance = oldTouchDistance - currentTouchDistance;
-                if(deltaDistance > 1)
+
+                // Don't react to small movements
+                if(deltaDistance <= 2.5f && deltaDistance >= -2.5f)
                 {
-                    Zoom (ZoomType.ZoomOut);
+                    return;
+                }
+                Logger.Log($"deltaDistance {deltaDistance}");
+                if(deltaDistance > 0)
+                {
+                    HandlePlayerZooming (ZoomType.ZoomOut);
                 }
                 else 
                 {
-                    Zoom (ZoomType.ZoomIn);
+                    HandlePlayerZooming (ZoomType.ZoomIn);
                 }
             }
-            else {
-                IsZooming = false; // TODO Should not be checked every frame
+            else 
+            {
+                HandleAutoZoomInToBase();
             }
         }
     }
 
-    private void Zoom(ZoomType zoomType)
+    private void HandleAutoZoomInToBase()
     {
-        IsZooming = true;
+        if(_desiredZoomLevel != _zoomMin &&
+            CurrentZoom != ZoomAction.NoZoom){ // only when we are not touching AND there is no auto zoomin going on
+            SetZoomingToNoZoom(); // start the process that will eventually zoom back to base level
+        }
+
+        if(_zoomInCooldownTime < _zoomInCooldownTimeThreshold)
+        {
+            _zoomInCooldownTime += 1f * Time.deltaTime;
+        }
+        else {
+            if(_camera.orthographicSize > _zoomMin && _desiredZoomLevel != _zoomMin)
+            {
+                _desiredZoomLevel = _zoomMin;
+            }
+        }
+    }
+
+    private void SetZoomingToNoZoom(){
+        CurrentZoom = ZoomAction.NoZoom;
+        _zoomInCooldownTime = 0f;
+    }
+
+    private void HandlePlayerZooming(ZoomType zoomType)
+    {
         float currentZoomLevel = _camera.orthographicSize;
 
         if(zoomType == ZoomType.ZoomOut) // zoom out
@@ -260,6 +315,8 @@ public class CameraController : MonoBehaviour
         else if(_desiredZoomLevel > _zoomMax){
             _desiredZoomLevel = _zoomMax;
         }
+
+        CurrentZoom = ZoomAction.PlayerZoom;
     }
 
     public void HandleMiddleMousePanning()
