@@ -3663,6 +3663,9 @@ MonoBehaviour:
   m_OnEndEdit:
     m_PersistentCalls:
       m_Calls: []
+  m_OnSubmit:
+    m_PersistentCalls:
+      m_Calls: []
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls:
@@ -5753,7 +5756,6 @@ GameObject:
   - component: {fileID: 2108401497}
   - component: {fileID: 2108401496}
   - component: {fileID: 2108401495}
-  - component: {fileID: 2108401494}
   m_Layer: 5
   m_Name: PlayerNameInput
   m_TagString: Untagged
@@ -5782,18 +5784,6 @@ RectTransform:
   m_AnchoredPosition: {x: -130, y: -120}
   m_SizeDelta: {x: -260, y: 80}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &2108401494
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2108401492}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c22ee30e9b2b34fe38b62e48c7d79dfa, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &2108401495
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5846,6 +5836,9 @@ MonoBehaviour:
   m_CharacterValidation: 0
   m_CharacterLimit: 0
   m_OnEndEdit:
+    m_PersistentCalls:
+      m_Calls: []
+  m_OnSubmit:
     m_PersistentCalls:
       m_Calls: []
   m_OnValueChanged:

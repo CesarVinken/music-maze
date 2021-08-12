@@ -2,6 +2,11 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+public enum ZoomType
+{
+    ZoomIn,
+    ZoomOut
+}
 public enum Direction
 {
     Up,
@@ -13,9 +18,9 @@ public enum Direction
 public class CameraController : MonoBehaviour
 {
     private float _panSpeed = 0.011f;
-    private float _zoomSpeed = 4f;
-    private float _zoomMin; // TODO: Move to PlatformConfiguration
-    private float _zoomMax = 10f; // TODO: Move to PlatformConfiguration 
+    private float _zoomSpeed;
+    private float _zoomMin;
+    private float _zoomMax;
 
     private bool _focussedOnPlayer = false;
     public static Dictionary<Direction, float> PanLimits = new Dictionary<Direction, float> { };
@@ -27,9 +32,12 @@ public class CameraController : MonoBehaviour
     private float _maxYPercentageBoundary = 70f;
 
     private Vector3 _dragOrigin;    //for camera dragging in editor
+    private float _desiredZoomLevel;
     public PlayerNumber PlayerNumberForCamera;
-    float desiredZoomLevel;
-private bool _isZooming = false;
+    public static bool IsZooming = false;
+    private float _zoomInCooldownTime = 4f; // after how much time do we start zooming in back to the default level
+    private bool _isCooldownFromZoomToDefault = false;
+
     public void Awake()
     {
         _camera = GetComponent<Camera>();
@@ -44,7 +52,11 @@ private bool _isZooming = false;
             SetPanLimits(GameManager.Instance.CurrentGameLevel.LevelBounds);
 
         _zoomMin = GameManager.Instance.Configuration.DefaultCameraZoomLevel;
-        desiredZoomLevel = _camera.orthographicSize;
+        _zoomMax = GameManager.Instance.Configuration.MaximumCameraZoomLevel;
+        _zoomSpeed = GameManager.Instance.Configuration.ZoomSpeed;
+
+        _desiredZoomLevel = _camera.orthographicSize;
+        Logger.Warning($"_desiredZoomLevel = {_desiredZoomLevel}");
     }
 
     public void EnableCamera()
@@ -167,35 +179,87 @@ private bool _isZooming = false;
         float currentZoomLevel = _camera.orthographicSize;
 
         // Stop zooming if the difference with the desired zoom level is neglectible 
-        if(Math.Abs(currentZoomLevel - desiredZoomLevel) < 0.01f){
-            desiredZoomLevel = currentZoomLevel;
+        if(Math.Abs(currentZoomLevel - _desiredZoomLevel) < 0.01f){
+            _desiredZoomLevel = currentZoomLevel;
         }
 
-        if(desiredZoomLevel != _camera.orthographicSize)
+        if(_desiredZoomLevel != _camera.orthographicSize)
         {
-            float newZoomLevel = Mathf.Lerp(currentZoomLevel, desiredZoomLevel, _zoomSpeed * Time.deltaTime);
+            float newZoomLevel = Mathf.Lerp(currentZoomLevel, _desiredZoomLevel, _zoomSpeed * Time.deltaTime);
             _camera.orthographicSize = Mathf.Clamp(newZoomLevel, _zoomMin, _zoomMax);
         }
 
-        if(Input.GetKey(KeyCode.O) || Input.GetAxis("Mouse ScrollWheel") > 0f){
-            desiredZoomLevel = desiredZoomLevel + 0.4f;
-            if(desiredZoomLevel > currentZoomLevel + 1f){
-                desiredZoomLevel = currentZoomLevel + 1f;
+        if(PersistentGameManager.CurrentPlatform == Platform.PC)
+        {
+            // Zoom out
+            if(Input.GetKey(KeyCode.O) || Input.GetAxis("Mouse ScrollWheel") > 0f)
+            {
+                Zoom(ZoomType.ZoomOut);
             }
-             if(desiredZoomLevel > _zoomMax){
-                desiredZoomLevel = _zoomMax;
+            else if(Input.GetKey(KeyCode.P) || Input.GetAxis("Mouse ScrollWheel") < 0f) // Zoom in
+            {
+                Zoom(ZoomType.ZoomIn);
             }
         }
-        else if(Input.GetKey(KeyCode.P) || Input.GetAxis("Mouse ScrollWheel") < 0f){
-            desiredZoomLevel =  desiredZoomLevel - 0.4f;
-            if(desiredZoomLevel < currentZoomLevel - 1f){
-                desiredZoomLevel = currentZoomLevel - 1;
+        else // ANDROID
+        {
+            if (Input.touchCount == 2)
+            {
+                // get current touch positions
+                Touch touchOne = Input.GetTouch(0);
+                Touch touchTwo = Input.GetTouch(1);
+
+                // get touch position from the previous frame
+                Vector2 touchOnePrevious = touchOne.position - touchOne.deltaPosition;
+                Vector2 touchTwoPrevious = touchTwo.position - touchTwo.deltaPosition;
+
+                float oldTouchDistance = Vector2.Distance (touchOnePrevious, touchTwoPrevious);
+                float currentTouchDistance = Vector2.Distance (touchOne.position, touchTwo.position);
+
+                // get offset value
+                float deltaDistance = oldTouchDistance - currentTouchDistance;
+                if(deltaDistance > 1)
+                {
+                    Zoom (ZoomType.ZoomOut);
+                }
+                else 
+                {
+                    Zoom (ZoomType.ZoomIn);
+                }
             }
-            if(desiredZoomLevel < _zoomMin){
-                desiredZoomLevel = _zoomMin;
+            else {
+                IsZooming = false; // TODO Should not be checked every frame
             }
+        }
+    }
+
+    private void Zoom(ZoomType zoomType)
+    {
+        IsZooming = true;
+        float currentZoomLevel = _camera.orthographicSize;
+
+        if(zoomType == ZoomType.ZoomOut) // zoom out
+        { 
+            _desiredZoomLevel = _desiredZoomLevel - 0.4f;
+        }
+        else if(zoomType == ZoomType.ZoomIn) // zoom in
+        { 
+            _desiredZoomLevel = _desiredZoomLevel + 0.4f;
         }
 
+        if(_desiredZoomLevel > currentZoomLevel + 1f){
+            _desiredZoomLevel = currentZoomLevel + 1f;
+        }
+        else if(_desiredZoomLevel < currentZoomLevel - 1f){
+           _desiredZoomLevel = currentZoomLevel - 1f;
+        }
+
+        if(_desiredZoomLevel < _zoomMin){
+            _desiredZoomLevel = _zoomMin;
+        }
+        else if(_desiredZoomLevel > _zoomMax){
+            _desiredZoomLevel = _zoomMax;
+        }
     }
 
     public void HandleMiddleMousePanning()

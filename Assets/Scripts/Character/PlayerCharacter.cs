@@ -91,12 +91,17 @@ public class PlayerCharacter : Character
                 }
             }
 
-            if (Input.GetMouseButtonDown(0) && _pointerPresserTimer == 0)
+            if ((PersistentGameManager.CurrentPlatform == Platform.PC && Input.GetMouseButtonDown(0) && _pointerPresserTimer == 0) ||
+            (PersistentGameManager.CurrentPlatform == Platform.Android && Input.touchCount == 1 && Input.GetTouch(0).phase == TouchPhase.Began && _pointerPresserTimer == 0))
             {
-                StartCoroutine(RunPointerPresserTimer());
+                if(!CameraController.IsZooming)
+                {
+                    Logger.Log(PersistentGameManager.CurrentPlatform);
+                    StartCoroutine(RunPointerPresserTimer());
+                }
             }
 
-            if (_isPressingPointerForSeconds) //only check after we are pressing for x seconds
+            if (_isPressingPointerForSeconds) //only check for the click/tap after we are pressing for x seconds
             {
                 if (!Input.GetMouseButton(0))
                 {
@@ -109,8 +114,8 @@ public class PlayerCharacter : Character
                     }
                     IsMoving = false;
                 }
-                else
-                {
+                else if(!CameraController.IsZooming)
+                {                
                     CheckPointerInput();
                 }
             }
@@ -211,8 +216,11 @@ public class PlayerCharacter : Character
     private void CheckPointerInput()
     {
         if (HasCalculatedTarget) return;
+        Logger.Log($"Touch count {Input.touchCount}");
 
-        Vector2 tempFingerPosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+        if(Input.touchCount != 1) return;
+
+        Vector2 tempFingerPosition = GetPointerPosition();
         GridLocation closestGridLocation = GridLocation.FindClosestGridTile(tempFingerPosition);
 
         if (closestGridLocation.X == CurrentGridLocation.X && closestGridLocation.Y == CurrentGridLocation.Y) return;
@@ -251,6 +259,18 @@ public class PlayerCharacter : Character
         }
 
         SetPointerLocomotionTarget(GridLocation.GridToVector(newLocomotionTarget), moveDirection);
+    }
+
+    private Vector2 GetPointerPosition()
+    {
+        if(PersistentGameManager.CurrentPlatform == Platform.Android)
+        {
+            return Camera.main.ScreenToWorldPoint(Input.touches[0].position);
+        }
+        else 
+        {
+            return Camera.main.ScreenToWorldPoint(Input.mousePosition);
+        }
     }
 
     private void SetPointerLocomotionTarget(Vector2 target, ObjectDirection moveDirection)
