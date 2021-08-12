@@ -11,7 +11,7 @@ public enum Direction
 
 public class CameraController : MonoBehaviour
 {
-    private float _panSpeed = 0.011f;
+    private float _panSpeed = 0.0125f;
 
     private bool _focussedOnPlayer = false;
     public static Dictionary<Direction, float> PanLimits = new Dictionary<Direction, float> { };

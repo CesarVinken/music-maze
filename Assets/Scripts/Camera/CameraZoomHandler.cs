@@ -12,14 +12,14 @@ public class CameraZoomHandler
     private float _zoomInCooldownTime = 4f; // 
     private bool _isCooldownFromZoomToDefault = false;
     private Camera _camera;
-
+    private float _velocity = 0f;
     public CameraZoomHandler(Camera camera)
     {
         _camera = camera;
 
         _zoomMin = GameManager.Instance.Configuration.DefaultCameraZoomLevel;
         _zoomMax = GameManager.Instance.Configuration.MaximumCameraZoomLevel;
-        _zoomSpeed = GameManager.Instance.Configuration.ZoomSpeed;
+        _zoomSpeed = GameManager.Instance.Configuration.DefaultZoomSpeed;
 
         _desiredZoomLevel = _camera.orthographicSize;
         Logger.Warning($"_desiredZoomLevel = {_desiredZoomLevel}");
@@ -45,7 +45,8 @@ public class CameraZoomHandler
 
         if(_desiredZoomLevel != _camera.orthographicSize)
         {
-            float newZoomLevel = Mathf.Lerp(currentZoomLevel, _desiredZoomLevel, _zoomSpeed * Time.deltaTime);
+            float smoothTime = 0.2f;
+            float newZoomLevel = Mathf.SmoothDamp(currentZoomLevel, _desiredZoomLevel, ref _velocity, smoothTime, _zoomSpeed * Time.deltaTime * 100);
             _camera.orthographicSize = Mathf.Clamp(newZoomLevel, _zoomMin, _zoomMax);
         }
 
@@ -91,11 +92,11 @@ public class CameraZoomHandler
                 Logger.Log($"deltaDistance {deltaDistance}");
                 if(deltaDistance > 0)
                 {
-                    HandlePlayerZooming (ZoomType.ZoomOut);
+                    HandlePlayerZooming (ZoomType.ZoomIn);
                 }
                 else 
                 {
-                    HandlePlayerZooming (ZoomType.ZoomIn);
+                    HandlePlayerZooming (ZoomType.ZoomOut);
                 }
             }
             else 
@@ -120,6 +121,7 @@ public class CameraZoomHandler
             if(_camera.orthographicSize > _zoomMin && _desiredZoomLevel != _zoomMin)
             {
                 _desiredZoomLevel = _zoomMin;
+                _zoomSpeed = 0.6f;
             }
         }
     }
@@ -127,6 +129,7 @@ public class CameraZoomHandler
     private void SetZoomingToNoZoom(){
         CameraController.CurrentZoom = ZoomAction.NoZoom;
         _zoomInCooldownTime = 0f;
+        _velocity = 0f;
     }
 
     private void HandlePlayerZooming(ZoomType zoomType)
@@ -135,11 +138,11 @@ public class CameraZoomHandler
 
         if(zoomType == ZoomType.ZoomOut) // zoom out
         { 
-            _desiredZoomLevel = _desiredZoomLevel - 0.4f;
+            _desiredZoomLevel = _desiredZoomLevel - 1f;
         }
         else if(zoomType == ZoomType.ZoomIn) // zoom in
         { 
-            _desiredZoomLevel = _desiredZoomLevel + 0.4f;
+            _desiredZoomLevel = _desiredZoomLevel + 1f;
         }
 
         if(_desiredZoomLevel > currentZoomLevel + 1f){
@@ -156,6 +159,7 @@ public class CameraZoomHandler
             _desiredZoomLevel = _zoomMax;
         }
 
+        _zoomSpeed = GameManager.Instance.Configuration.DefaultZoomSpeed;
         CameraController.CurrentZoom = ZoomAction.PlayerZoom;
     }
 }
