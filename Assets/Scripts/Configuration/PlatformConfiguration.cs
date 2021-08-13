@@ -17,16 +17,6 @@
         get;
         set;
     }
-    //float PanSpeed
-    //{
-    //    get;
-    //    set;
-    //}
-    //float ZoomModifierSpeed
-    //{
-    //    get;
-    //    set;
-    //}
 }
 
 public class AndroidConfiguration : IPlatformConfiguration

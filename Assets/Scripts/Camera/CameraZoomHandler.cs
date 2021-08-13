@@ -10,7 +10,6 @@ public class CameraZoomHandler
     private float _desiredZoomLevel;
     private float _zoomInCooldownTimeThreshold = 4f; // after how much time do we start zooming in back to the default level
     private float _zoomInCooldownTime = 4f; // 
-    private bool _isCooldownFromZoomToDefault = false;
     private Camera _camera;
     private float _velocity = 0f;
     public CameraZoomHandler(Camera camera)
@@ -46,7 +45,7 @@ public class CameraZoomHandler
         if(_desiredZoomLevel != _camera.orthographicSize)
         {
             float smoothTime = 0.2f;
-            float newZoomLevel = Mathf.SmoothDamp(currentZoomLevel, _desiredZoomLevel, ref _velocity, smoothTime, _zoomSpeed * Time.deltaTime * 100);
+            float newZoomLevel = Mathf.SmoothDamp(currentZoomLevel, _desiredZoomLevel, ref _velocity, smoothTime, _zoomSpeed * 100 * Time.deltaTime);
             _camera.orthographicSize = Mathf.Clamp(newZoomLevel, _zoomMin, _zoomMax);
         }
 
@@ -89,7 +88,7 @@ public class CameraZoomHandler
                 {
                     return;
                 }
-                Logger.Log($"deltaDistance {deltaDistance}");
+
                 if(deltaDistance > 0)
                 {
                     HandlePlayerZooming (ZoomType.ZoomIn);
@@ -121,7 +120,7 @@ public class CameraZoomHandler
             if(_camera.orthographicSize > _zoomMin && _desiredZoomLevel != _zoomMin)
             {
                 _desiredZoomLevel = _zoomMin;
-                _zoomSpeed = 0.6f;
+                _zoomSpeed = 1f;
             }
         }
     }
