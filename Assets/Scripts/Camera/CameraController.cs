@@ -14,7 +14,7 @@ public class CameraController : MonoBehaviour
     private float _panSpeed = 175f;
 
     private bool _focussedOnPlayer = false;
-    public static Dictionary<Direction, float> PanLimits = new Dictionary<Direction, float> { };
+    //public static Dictionary<Direction, float> PanLimits = new Dictionary<Direction, float> { };
 
     [SerializeField] private Camera _camera;
     [SerializeField] private Transform _player;
@@ -29,18 +29,23 @@ public class CameraController : MonoBehaviour
     private CameraZoomHandler _cameraZoomHander;
     private Vector3 _velocity = Vector3.zero;
 
+    private float _panLimitRight;
+    private float _panLimitBottom;
+    private float _panLimitLeft;
+    private float _panLimitTop;
+
     public void Awake()
     {
         _camera = GetComponent<Camera>();
 
-        if (GameManager.Instance.CurrentGameLevel != null)
-            SetPanLimits(GameManager.Instance.CurrentGameLevel.LevelBounds);
+        //if (GameManager.Instance.CurrentGameLevel != null)
+        //    SetPanLimits(GameManager.Instance.CurrentGameLevel.LevelBounds);
     }
 
     public void Start()
     {
-        if(GameManager.Instance.CurrentGameLevel != null)
-            SetPanLimits(GameManager.Instance.CurrentGameLevel.LevelBounds);
+        //if(GameManager.Instance.CurrentGameLevel != null)
+        //    SetPanLimits(GameManager.Instance.CurrentGameLevel.LevelBounds);
 
         _cameraZoomHander = new CameraZoomHandler(_camera);
     }
@@ -64,38 +69,34 @@ public class CameraController : MonoBehaviour
     {
         _focussedOnPlayer = false;
 
-        if(!PanLimits.ContainsKey(Direction.Left) || !PanLimits.ContainsKey(Direction.Right) || !PanLimits.ContainsKey(Direction.Down) || !PanLimits.ContainsKey(Direction.Up))
-        {
-            return;
-        }
+        //if(!PanLimits.ContainsKey(Direction.Left) || !PanLimits.ContainsKey(Direction.Right) || !PanLimits.ContainsKey(Direction.Down) || !PanLimits.ContainsKey(Direction.Up))
+        //{
+        //    return;
+        //}
     }
 
     public void SetPanLimits(GridLocation levelBounds)
     {
-        PanLimits.Clear();
+        Vector3 leftBottomCameraPos = _camera.ViewportToWorldPoint(new Vector3(1, 1, 0));
+        //Vector3 rightTopCameraPos = _camera.ViewportToWorldPoint(new Vector3(0, 0, 0));
+        float halfScreenWidth = leftBottomCameraPos.x;
+        float halfScreenHeight = leftBottomCameraPos.y;
+        float xPadding = 3f;
+        float yPadding = 3f;
+        float levelWidth = levelBounds.X;
+        float levelHeight = levelBounds.Y;
 
-        //TODO. the - .. value is currently hardcoded but would not work with different screen sizes or zoom levels
-        if (GameRules.GamePlayerType == GamePlayerType.SplitScreenMultiplayer)
-        {
-            PanLimits.Add(Direction.Up, levelBounds.Y);  // should depend on the furthest upper edge of the maze level.Never less than 4.
-            PanLimits.Add(Direction.Right, levelBounds.X - 3f);// should depend on the furthest right edge of the maze level  Never less than 8.
-            PanLimits.Add(Direction.Down, 1f); // should (with this zoom level) always have 4 as lowest boundary down. Should always be => 4
-            PanLimits.Add(Direction.Left, 3f); // should (with this zoom level) always have 8 as the left most boundary. Should always be => 8
-        }
-        else
-        {
-            PanLimits.Add(Direction.Up, levelBounds.Y - 3f);  // should depend on the furthest upper edge of the maze level.Never less than 4.
-            PanLimits.Add(Direction.Right, levelBounds.X - 6f);// should depend on the furthest right edge of the maze level  Never less than 8.
-            PanLimits.Add(Direction.Down, 4f); // should (with this zoom level) always have 4 as lowest boundary down. Should always be => 4
-            PanLimits.Add(Direction.Left, 7f); // should (with this zoom level) always have 8 as the left most boundary. Should always be => 8
-        }
+        _panLimitRight = levelWidth - halfScreenWidth + xPadding;
+        _panLimitBottom = halfScreenHeight - yPadding;
+        _panLimitLeft = halfScreenWidth - xPadding;
+        _panLimitTop = levelHeight - halfScreenHeight + yPadding;
 
         // Set minima for small levels
         //if (PanLimits[Direction.Up] < PanLimits[Direction.Down]) PanLimits[Direction.Up] = PanLimits[Direction.Down];
-        if (PanLimits[Direction.Right] < PanLimits[Direction.Left])
+        if (_panLimitRight < _panLimitLeft)
         {
-            PanLimits[Direction.Left] = levelBounds.X / 2;
-            PanLimits[Direction.Right] = levelBounds.X / 2;
+            _panLimitLeft = levelWidth / 2;
+            _panLimitRight = levelWidth / 2;
         }
     }
 
@@ -107,8 +108,37 @@ public class CameraController : MonoBehaviour
         PlayerNumberForCamera = player.PlayerNumber;
 
         Vector2 desiredCameraPosition = new Vector3(_player.position.x, _player.position.y, -10f);
-        desiredCameraPosition.x = Mathf.Clamp(desiredCameraPosition.x, PanLimits[Direction.Left], PanLimits[Direction.Right]);
-        desiredCameraPosition.y = Mathf.Clamp(desiredCameraPosition.y, PanLimits[Direction.Down], PanLimits[Direction.Up]);
+
+        SetPanLimits(MazeLevelGameplayManager.Instance.Level.LevelBounds);
+        //Vector3 leftBottomCameraPos = _camera.ViewportToWorldPoint(new Vector3(1, 1, 0));
+        ////Vector3 rightTopCameraPos = _camera.ViewportToWorldPoint(new Vector3(0, 0, 0));
+        //float halfScreenWidth = leftBottomCameraPos.x;
+        //float halfScreenHeight = leftBottomCameraPos.y;
+        //float xPadding = 3f;
+        //float yPadding = 3f;
+        //float levelWidth = MazeLevelGameplayManager.Instance.Level.LevelBounds.X;
+        //float levelHeight = MazeLevelGameplayManager.Instance.Level.LevelBounds.Y;
+
+        //_panLimitRight = levelWidth - halfScreenWidth + xPadding;
+        //_panLimitBottom = halfScreenHeight - yPadding;
+        //_panLimitLeft = halfScreenWidth - xPadding;
+        //_panLimitTop = levelHeight - halfScreenHeight + yPadding;
+
+        //// Set minima for small levels
+        ////if (PanLimits[Direction.Up] < PanLimits[Direction.Down]) PanLimits[Direction.Up] = PanLimits[Direction.Down];
+        //if (_panLimitRight < _panLimitLeft)
+        //{
+        //    _panLimitLeft = levelWidth / 2;
+        //    _panLimitRight = levelWidth / 2;
+        //}
+
+        //PanLimits.Add(Direction.Up, levelHeight - halfScreenHeight + yPadding);  // should depend on the furthest upper edge of the maze level.Never less than 4.
+        //PanLimits.Add(Direction.Right, levelWidth - halfScreenWidth + xPadding);// should depend on the furthest right edge of the maze level  Never less than 8.
+        //PanLimits.Add(Direction.Down, halfScreenHeight - yPadding); // should (with this zoom level) always have 4 as lowest boundary down. Should always be => 4
+        //PanLimits.Add(Direction.Left, halfScreenWidth - xPadding); // should (with this zoom level) always have 8 as the left most boundary. Should always be => 8
+
+        desiredCameraPosition.x = Mathf.Clamp(desiredCameraPosition.x, _panLimitLeft, _panLimitRight);
+        desiredCameraPosition.y = Mathf.Clamp(desiredCameraPosition.y, _panLimitBottom, _panLimitTop);
 
         transform.position = new Vector3(desiredCameraPosition.x, desiredCameraPosition.y, -10f);
     }
@@ -122,7 +152,7 @@ public class CameraController : MonoBehaviour
 
         if (!_focussedOnPlayer) return;
 
-        if(GameRules.GamePlayerType != GamePlayerType.SplitScreenMultiplayer)
+        if (GameRules.GamePlayerType != GamePlayerType.SplitScreenMultiplayer)
         {
             _cameraZoomHander.HandleZoom();
         }
@@ -149,9 +179,9 @@ public class CameraController : MonoBehaviour
             desiredCameraPosition = new Vector3(_player.position.x, _player.position.y, -10);
         }
 
-        desiredCameraPosition.x = Mathf.Clamp(desiredCameraPosition.x, PanLimits[Direction.Left], PanLimits[Direction.Right]);
-        desiredCameraPosition.y = Mathf.Clamp(desiredCameraPosition.y, PanLimits[Direction.Down], PanLimits[Direction.Up]);
-        Logger.Log(_velocity);
+        desiredCameraPosition.x = Mathf.Clamp(desiredCameraPosition.x, _panLimitLeft, _panLimitRight);
+        desiredCameraPosition.y = Mathf.Clamp(desiredCameraPosition.y, _panLimitBottom, _panLimitTop);
+
         transform.position = Vector3.SmoothDamp(transform.position, new Vector3(desiredCameraPosition.x, desiredCameraPosition.y, -10), ref _velocity, 1f, _panSpeed * Time.deltaTime);
     }
 
@@ -170,8 +200,8 @@ public class CameraController : MonoBehaviour
         Vector3 cameraPosition = transform.position;
         cameraPosition += new Vector3(-distance.x, -distance.y, 0);
 
-        cameraPosition.x = Mathf.Clamp(cameraPosition.x, PanLimits[Direction.Left], PanLimits[Direction.Right]);
-        cameraPosition.y = Mathf.Clamp(cameraPosition.y, PanLimits[Direction.Down], PanLimits[Direction.Up]);
+        cameraPosition.x = Mathf.Clamp(cameraPosition.x, _panLimitLeft, _panLimitRight);
+        cameraPosition.y = Mathf.Clamp(cameraPosition.y, _panLimitBottom, _panLimitTop);
 
         transform.position = new Vector3(cameraPosition.x, cameraPosition.y, transform.position.z);
     }

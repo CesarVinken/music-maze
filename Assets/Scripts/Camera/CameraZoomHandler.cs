@@ -10,8 +10,10 @@ public class CameraZoomHandler
     private float _desiredZoomLevel;
     private float _zoomInCooldownTimeThreshold = 4f; // after how much time do we start zooming in back to the default level
     private float _zoomInCooldownTime = 4f; // 
-    private Camera _camera;
     private float _velocity = 0f;
+
+    private Camera _camera;
+
     public CameraZoomHandler(Camera camera)
     {
         _camera = camera;
@@ -44,9 +46,7 @@ public class CameraZoomHandler
 
         if(_desiredZoomLevel != _camera.orthographicSize)
         {
-            float smoothTime = 0.2f;
-            float newZoomLevel = Mathf.SmoothDamp(currentZoomLevel, _desiredZoomLevel, ref _velocity, smoothTime, _zoomSpeed * 100 * Time.deltaTime);
-            _camera.orthographicSize = Mathf.Clamp(newZoomLevel, _zoomMin, _zoomMax);
+            ExecuteZooming(currentZoomLevel);
         }
 
         if(PersistentGameManager.CurrentPlatform == Platform.PC)
@@ -103,6 +103,53 @@ public class CameraZoomHandler
                 HandleAutoZoomInToBase();
             }
         }
+    }
+
+    private void ExecuteZooming(float currentZoomLevel)
+    {
+        // if we want to zoom out, check if there is space to zoom out further
+        if (_desiredZoomLevel > _camera.orthographicSize)
+        {
+            Vector3 lowerLeftCornerView = _camera.ViewportToWorldPoint(new Vector3(0, 0, 0));
+            Vector3 upperLeftCornerView = _camera.ViewportToWorldPoint(new Vector3(0, 1, 0));
+            Vector3 lowerRightCornerView = _camera.ViewportToWorldPoint(new Vector3(1, 0, 0));
+
+            //float halfScreenWidth = (lowerRightCornerView.x - lowerLeftCornerView.x) / 2;
+            //float halfScreenHeight = (upperLeftCornerView.y - lowerLeftCornerView.y) / 2;
+            float xPadding = 3f;
+            float yPadding = 3f;
+            float levelWidth = MazeLevelGameplayManager.Instance.Level.LevelBounds.X;
+            float levelHeight = MazeLevelGameplayManager.Instance.Level.LevelBounds.Y;
+
+            Logger.Log($"Camera transform x = {_camera.transform.position.x}. the left corner in view is: {lowerLeftCornerView.x}. Right corner in view is {lowerRightCornerView.x}. Right max is {levelWidth + xPadding}");
+
+            if (lowerLeftCornerView.x <= -xPadding)
+            {
+                Logger.Warning($"Too far to the left. lowerLeftCornerView.x = {lowerLeftCornerView.x}. The limit is {-xPadding}");
+                return;
+            }
+            if (lowerRightCornerView.x >= levelWidth + xPadding)
+            {
+                Logger.Warning($"Too far to the right. lowerRightCornerView.x = {lowerRightCornerView.x}. The limit is {levelWidth + xPadding}");
+                return;
+            }
+
+            if (lowerLeftCornerView.y <= -yPadding)
+            {
+                Logger.Warning($"Too far to the bottom. lowerLeftCornerView.y = {lowerLeftCornerView.y}. The limit is {-yPadding}");
+                return;
+            }
+            if (upperLeftCornerView.y >= levelWidth + yPadding)
+            {
+                Logger.Warning($"Too far to the top. upperLeftCornerView.y = {upperLeftCornerView.y}. The limit is {levelHeight + yPadding}");
+                return;
+            }
+
+        }
+
+        float smoothTime = 0.2f;
+        float newZoomLevel = Mathf.SmoothDamp(currentZoomLevel, _desiredZoomLevel, ref _velocity, smoothTime, _zoomSpeed * 100 * Time.deltaTime);
+        _camera.orthographicSize = Mathf.Clamp(newZoomLevel, _zoomMin, _zoomMax);
     }
 
     private void HandleAutoZoomInToBase()

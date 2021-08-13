@@ -36,9 +36,9 @@ public class EditorMazeModificationPanel : EditorGridModificationPanel
             return;
         }
 
-        if (_gridWidth > 25)
+        if (_gridWidth > 28)
         {
-            Logger.Warning(Logger.Level, "Cannot generate a tile grid with a width of {0}. The maximum generatable grid width is 20", _gridWidth);
+            Logger.Warning(Logger.Level, "Cannot generate a tile grid with a width of {0}. The maximum generatable grid width is 28", _gridWidth);
             return;
         }
 
@@ -48,9 +48,9 @@ public class EditorMazeModificationPanel : EditorGridModificationPanel
             return;
         }
 
-        if (_gridHeight > 25)
+        if (_gridHeight > 28)
         {
-            Logger.Warning(Logger.Level, "Cannot generate a tile grid with a height of {0}. The maximum generatable grid height is 20", _gridHeight);
+            Logger.Warning(Logger.Level, "Cannot generate a tile grid with a height of {0}. The maximum generatable grid height is 28", _gridHeight);
             return;
         }
 
