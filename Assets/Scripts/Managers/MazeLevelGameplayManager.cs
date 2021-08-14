@@ -169,7 +169,7 @@ public class MazeLevelGameplayManager : MonoBehaviour, IOnEventCallback, IGamepl
 
         MainScreenOverlayCanvas.Instance.ResetBlackOutSquares();
         CameraManager.Instance.ResetCameras();
-        CameraManager.Instance.SetPanLimits(EditorLevel.LevelBounds);
+        CameraManager.Instance.SetPanLimits();
     }
 
     public IEnumerator ScanCoroutine()
@@ -179,7 +179,7 @@ public class MazeLevelGameplayManager : MonoBehaviour, IOnEventCallback, IGamepl
         MainScreenOverlayCanvas.Instance.BlackOutSquaresToClear();
         GameManager.Instance.CharacterManager.SpawnCharacters();
 
-        CameraManager.Instance.SetPanLimits(Level.LevelBounds);
+        CameraManager.Instance.SetPanLimits();
         CameraManager.Instance.FocusCamerasOnPlayer();
 
         GameManager.Instance.CharacterManager.UnfreezeCharacters();

@@ -6,7 +6,13 @@
         set;
     }
 
-    float DefaultZoomSpeed
+    float CameraZoomSpeed
+    {
+        get;
+        set;
+    }
+
+    float CameraAutoZoomSpeed
     {
         get;
         set;
@@ -23,40 +29,40 @@ public class AndroidConfiguration : IPlatformConfiguration
 {
     private float _defaultCameraZoomLevel;
     private float _maximumCameraZoomLevel;
-    private float _defaultZoomSpeed;
-  //private float _panSpeed;
+    private float _cameraZoomSpeed;
+    private float _cameraAutoZoomSpeed;
 
     public AndroidConfiguration()
     {
         DefaultCameraZoomLevel = 4f;
         MaximumCameraZoomLevel = 10f;
-        DefaultZoomSpeed = 8f;
-        //    PanSpeed = 1.3f;
+        CameraZoomSpeed = 8f;
+        CameraAutoZoomSpeed = 0.30f;
     }
 
     public float DefaultCameraZoomLevel { get { return _defaultCameraZoomLevel; } set { _defaultCameraZoomLevel = value; } }
     public float MaximumCameraZoomLevel { get { return _maximumCameraZoomLevel; } set { _maximumCameraZoomLevel = value; } }
-    public float DefaultZoomSpeed { get { return _defaultZoomSpeed; } set { _defaultZoomSpeed = value; } }
-    //public float PanSpeed { get { return _panSpeed; } set { _panSpeed = value; } }
+    public float CameraZoomSpeed { get { return _cameraZoomSpeed; } set { _cameraZoomSpeed = value; } }
+    public float CameraAutoZoomSpeed { get { return _cameraAutoZoomSpeed; } set { _cameraAutoZoomSpeed = value; } }
 }
 
 public class PCConfiguration : IPlatformConfiguration
 {
     private float _defaultCameraZoomLevel;
     private float _maximumCameraZoomLevel;
-    private float _defaultZoomSpeed;
-    //private float _panSpeed;
+    private float _cameraZoomSpeed;
+    private float _cameraAutoZoomSpeed;
 
     public PCConfiguration()
     {
         DefaultCameraZoomLevel = 7f;
         MaximumCameraZoomLevel = 12f;
-        DefaultZoomSpeed = 4f;
-        //    PanSpeed = 10f;
+        CameraZoomSpeed = 4f;
+        CameraAutoZoomSpeed = 0.55f;
     }
 
     public float DefaultCameraZoomLevel { get { return _defaultCameraZoomLevel; } set { _defaultCameraZoomLevel = value; } }
     public float MaximumCameraZoomLevel { get { return _maximumCameraZoomLevel; } set { _maximumCameraZoomLevel = value; } }
-    public float DefaultZoomSpeed { get { return _defaultZoomSpeed; } set { _defaultZoomSpeed = value; } }
-  //public float PanSpeed { get { return _panSpeed; } set { _panSpeed = value; } }
+    public float CameraZoomSpeed { get { return _cameraZoomSpeed; } set { _cameraZoomSpeed = value; } }
+    public float CameraAutoZoomSpeed { get { return _cameraAutoZoomSpeed; } set { _cameraAutoZoomSpeed = value; } }
 }

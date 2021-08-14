@@ -51,11 +51,11 @@ public class CameraManager : MonoBehaviour
         }
     }
 
-    public void SetPanLimits(GridLocation levelBounds)
+    public void SetPanLimits()
     {
         for (int i = 0; i < CameraControllers.Count; i++)
         {
-            CameraControllers[i].SetPanLimits(levelBounds);
+            CameraControllers[i].SetPanLimits();
         }
     }
 

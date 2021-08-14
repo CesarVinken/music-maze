@@ -13,14 +13,16 @@ public class CameraZoomHandler
     private float _velocity = 0f;
 
     private Camera _camera;
+    private CameraController _cameraController;
 
-    public CameraZoomHandler(Camera camera)
+    public CameraZoomHandler(Camera camera, CameraController cameraController)
     {
         _camera = camera;
+        _cameraController = cameraController;
 
         _zoomMin = GameManager.Instance.Configuration.DefaultCameraZoomLevel;
         _zoomMax = GameManager.Instance.Configuration.MaximumCameraZoomLevel;
-        _zoomSpeed = GameManager.Instance.Configuration.DefaultZoomSpeed;
+        _zoomSpeed = GameManager.Instance.Configuration.CameraZoomSpeed;
 
         _desiredZoomLevel = _camera.orthographicSize;
         Logger.Warning($"_desiredZoomLevel = {_desiredZoomLevel}");
@@ -107,6 +109,8 @@ public class CameraZoomHandler
 
     private void ExecuteZooming(float currentZoomLevel)
     {
+        _cameraController.SetPanLimits();
+
         // if we want to zoom out, check if there is space to zoom out further
         if (_desiredZoomLevel > _camera.orthographicSize)
         {
@@ -114,37 +118,29 @@ public class CameraZoomHandler
             Vector3 upperLeftCornerView = _camera.ViewportToWorldPoint(new Vector3(0, 1, 0));
             Vector3 lowerRightCornerView = _camera.ViewportToWorldPoint(new Vector3(1, 0, 0));
 
-            //float halfScreenWidth = (lowerRightCornerView.x - lowerLeftCornerView.x) / 2;
-            //float halfScreenHeight = (upperLeftCornerView.y - lowerLeftCornerView.y) / 2;
             float xPadding = 3f;
             float yPadding = 3f;
-            float levelWidth = MazeLevelGameplayManager.Instance.Level.LevelBounds.X;
-            float levelHeight = MazeLevelGameplayManager.Instance.Level.LevelBounds.Y;
 
-            Logger.Log($"Camera transform x = {_camera.transform.position.x}. the left corner in view is: {lowerLeftCornerView.x}. Right corner in view is {lowerRightCornerView.x}. Right max is {levelWidth + xPadding}");
+            float levelWidth = GameManager.Instance.CurrentEditorLevel == null ? GameManager.Instance.CurrentGameLevel.LevelBounds.X : GameManager.Instance.CurrentEditorLevel.LevelBounds.X;
+            float levelHeight = GameManager.Instance.CurrentEditorLevel == null ? GameManager.Instance.CurrentGameLevel.LevelBounds.Y : GameManager.Instance.CurrentEditorLevel.LevelBounds.Y;
 
-            if (lowerLeftCornerView.x <= -xPadding)
-            {
-                Logger.Warning($"Too far to the left. lowerLeftCornerView.x = {lowerLeftCornerView.x}. The limit is {-xPadding}");
-                return;
-            }
-            if (lowerRightCornerView.x >= levelWidth + xPadding)
-            {
-                Logger.Warning($"Too far to the right. lowerRightCornerView.x = {lowerRightCornerView.x}. The limit is {levelWidth + xPadding}");
-                return;
-            }
+            //Logger.Log($"Camera transform x = {_camera.transform.position.x}. the current left corner in view is: {lowerLeftCornerView.x}. The current right corner in view is {lowerRightCornerView.x}. Right max is {levelWidth + xPadding}");
 
-            if (lowerLeftCornerView.y <= -yPadding)
+            if (lowerLeftCornerView.x <= -xPadding && // Too far to the left.
+                lowerRightCornerView.x >= levelWidth + xPadding) // Too far to the right
             {
-                Logger.Warning($"Too far to the bottom. lowerLeftCornerView.y = {lowerLeftCornerView.y}. The limit is {-yPadding}");
-                return;
-            }
-            if (upperLeftCornerView.y >= levelWidth + yPadding)
-            {
-                Logger.Warning($"Too far to the top. upperLeftCornerView.y = {upperLeftCornerView.y}. The limit is {levelHeight + yPadding}");
+                //Logger.Warning($"There is no horizontal space to zoom out further. lowerLeftCornerView.x = {lowerLeftCornerView.x}. The limit is {-xPadding}. lowerRightCornerView.x = {lowerRightCornerView.x}. The limit is {levelWidth + xPadding}");
+                _desiredZoomLevel = _camera.orthographicSize;
                 return;
             }
 
+            if (lowerLeftCornerView.y <= -yPadding && //Too far to the bottom.
+                upperLeftCornerView.y >= levelWidth + yPadding) // Too far to the top.
+            {
+                //Logger.Warning($"There is no more vertical space to zoom out further. lowerLeftCornerView.y = {lowerLeftCornerView.y}. The limit is {-yPadding}. upperLeftCornerView.y = {upperLeftCornerView.y}. The limit is {levelHeight + yPadding}");
+                _desiredZoomLevel = _camera.orthographicSize;
+                return;
+            }
         }
 
         float smoothTime = 0.2f;
@@ -167,7 +163,7 @@ public class CameraZoomHandler
             if(_camera.orthographicSize > _zoomMin && _desiredZoomLevel != _zoomMin)
             {
                 _desiredZoomLevel = _zoomMin;
-                _zoomSpeed = 1f;
+                _zoomSpeed = GameManager.Instance.Configuration.CameraAutoZoomSpeed;  // the automatic zooming back to the default level should be slower
             }
         }
     }
@@ -205,7 +201,7 @@ public class CameraZoomHandler
             _desiredZoomLevel = _zoomMax;
         }
 
-        _zoomSpeed = GameManager.Instance.Configuration.DefaultZoomSpeed;
+        _zoomSpeed = GameManager.Instance.Configuration.CameraZoomSpeed;
         CameraController.CurrentZoom = ZoomAction.PlayerZoom;
     }
 }
