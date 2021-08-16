@@ -1,12 +1,12 @@
 ﻿using System.Collections.Generic;
 
-public class MazeTileTransformationMapper
+public class MazeTileFullTransformationMapper
 {
     private static List<EditorMazeTile> _checkedNeighbours = new List<EditorMazeTile>();
 
-    public static void GenerateTileTransformationMap()
+    public static void GenerateFullTileTransformationMap()
     {
-        Logger.Log("generate tile transformation map");
+        Logger.Log("generate tile full transformation map");
 
         //go over all tiles and if tile is non-markable (or bridge or spawnpoint), empty transformation trigger list and assign transformation triggers based on adjacent tiles
         for (int i = 0; i < MazeLevelGameplayManager.Instance.EditorLevel.Tiles.Count; i++)

@@ -98,6 +98,7 @@ public class EditorMazeTileBeautificationTriggerer : EditorMazeTileTransformatio
     public override void InstantiateModifierActions()
     {
         Logger.Log("Load actions for triggerer");
-        GameObject.Instantiate(EditorCanvasUI.Instance.GenerateTileTransformationMapPrefab, EditorMazeTileModificationPanel.Instance.TileModifierActionsContainer);
+        GameObject.Instantiate(EditorCanvasUI.Instance.GenerateTransformationMapForTilePrefab, EditorMazeTileModificationPanel.Instance.TileModifierActionsContainer);
+        GameObject.Instantiate(EditorCanvasUI.Instance.GenerateFullTileTransformationMapPrefab, EditorMazeTileModificationPanel.Instance.TileModifierActionsContainer);
     }
 }

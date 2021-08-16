@@ -2,6 +2,7 @@
 {
     AssignMazeLevelEntry,
     AssignTileAreaToEnemySpawnpoint,
-    GenerateTileTransformationMap,
+    GenerateFullTileTransformationMap,
+    GenerateTileTransformationMapForTile,
     CreateNewTileAreaEntry,
 }

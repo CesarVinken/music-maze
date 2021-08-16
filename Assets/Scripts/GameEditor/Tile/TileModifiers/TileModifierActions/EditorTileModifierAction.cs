@@ -10,8 +10,11 @@ public class EditorTileModifierAction : MonoBehaviour
             case TileModifierActionType.AssignMazeLevelEntry:
                 MazeLevelEntryAssigner.AssignMazeLevelEntry();
                 break;
-            case TileModifierActionType.GenerateTileTransformationMap:
-                MazeTileTransformationMapper.GenerateTileTransformationMap();
+            case TileModifierActionType.GenerateFullTileTransformationMap:
+                MazeTileFullTransformationMapper.GenerateFullTileTransformationMap();
+                break;
+            case TileModifierActionType.GenerateTileTransformationMapForTile:
+                MazeTileTransformationMapperForTile.GenerateTileTransformationMapForTile();
                 break;
             case TileModifierActionType.CreateNewTileAreaEntry:
                 NewTileAreaEntryCreator.CreateNewTileAreaEntry();

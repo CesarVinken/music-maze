@@ -21,7 +21,8 @@ public class EditorCanvasUI : MonoBehaviour
     [Space(10)]
     [Header("Tile Modifier Actions")]
     public GameObject AssignMazeLevelEntryPrefab;
-    public GameObject GenerateTileTransformationMapPrefab;
+    public GameObject GenerateFullTileTransformationMapPrefab;
+    public GameObject GenerateTransformationMapForTilePrefab;
     public GameObject HandleTileAreaPrefab;
     public GameObject AssignTileAreasToEnemySpawnpointPrefab;
 
@@ -38,7 +39,8 @@ public class EditorCanvasUI : MonoBehaviour
         Guard.CheckIsNull(OverworldModificationPanel, "OverworldModificationPanel", gameObject);
 
         Guard.CheckIsNull(AssignMazeLevelEntryPrefab, "AssignMazeLevelEntryPrefab");
-        Guard.CheckIsNull(GenerateTileTransformationMapPrefab, "GenerateTileTransformationMapPrefab");
+        Guard.CheckIsNull(GenerateFullTileTransformationMapPrefab, "GenerateFullTileTransformationMapPrefab");
+        Guard.CheckIsNull(GenerateTransformationMapForTilePrefab, "GenerateTransformationMapForTilePrefab");
         Guard.CheckIsNull(HandleTileAreaPrefab, "HandleTileAreaPrefab");
         Guard.CheckIsNull(AssignTileAreasToEnemySpawnpointPrefab, "AssignTileAreasToEnemySpawnpointPrefab");
 
