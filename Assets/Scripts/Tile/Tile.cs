@@ -222,6 +222,18 @@ public abstract class Tile : MonoBehaviour
         return tileGround;
     }
 
+    public T TryGetAttribute<T>() where T : MonoBehaviour, ITileAttribute
+    {
+        T attribute = (T)_tileAttributes.FirstOrDefault(a => a is T);
+
+        if (attribute == null)
+        {
+            return null;
+        }
+
+        return attribute;
+    }
+
     public TileCornerFiller TryGetCornerFiller(TileCorner tileCorner)
     {
         TileCornerFiller cornerFiller = (TileCornerFiller)_tileCornerFillers.FirstOrDefault(background => background is TileCornerFiller && background.TileCorner == tileCorner);
@@ -232,30 +244,6 @@ public abstract class Tile : MonoBehaviour
         }
 
         return cornerFiller;
-    }
-
-    public BridgePiece TryGetBridgePiece()
-    {
-        BridgePiece bridgePiece = (BridgePiece)_tileAttributes.FirstOrDefault(attribute => attribute is BridgePiece);
-
-        if (bridgePiece == null)
-        {
-            return null;
-        }
-
-        return bridgePiece;
-    }
-
-    public PlayerOnly TryGetPlayerOnly()
-    {
-        PlayerOnly playerOnly = (PlayerOnly)_tileAttributes.FirstOrDefault(attribute => attribute is PlayerOnly);
-
-        if (playerOnly == null)
-        {
-            return null;
-        }
-
-        return playerOnly;
     }
 
     public void InitialiseTileBackgrounds()
@@ -341,7 +329,7 @@ public abstract class Tile : MonoBehaviour
 
         if (neighbourTile != null)
         {
-            if (neighbourTile.TryGetBridgePiece() == null)
+            if (neighbourTile.TryGetAttribute<BridgeEdge>() == null)
             {
                 GameObject bridgeEdgeGO = GameObject.Instantiate(GameManager.Instance.GameplayManager.GetTileAttributePrefab<BridgeEdge>(), neighbourTile.transform);
 

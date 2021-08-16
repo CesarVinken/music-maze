@@ -513,8 +513,8 @@ public class PlayerCharacter : Character
             if (targetTile.Walkable)
             {
                 Tile currentTile = GameManager.Instance.CurrentGameLevel.TilesByLocation[CurrentGridLocation];
-                BridgePiece bridgePieceOnCurrentTile = currentTile.TryGetBridgePiece();
-                BridgePiece bridgePieceOnTarget = targetTile.TryGetBridgePiece(); // optimisation: keep bridge locations of the level in a separate list, so we don't have to go over all the tiles in the level
+                BridgePiece bridgePieceOnCurrentTile = currentTile.TryGetAttribute<BridgePiece>();
+                BridgePiece bridgePieceOnTarget = targetTile.TryGetAttribute<BridgePiece>(); // optimisation: keep bridge locations of the level in a separate list, so we don't have to go over all the tiles in the level
 
                 // there are no bridges involved
                 if (bridgePieceOnCurrentTile == null && bridgePieceOnTarget == null)

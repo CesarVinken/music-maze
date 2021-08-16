@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 
 public class MazeTileTransformationMapper
 {
@@ -8,16 +7,16 @@ public class MazeTileTransformationMapper
     public static void GenerateTileTransformationMap()
     {
         Logger.Log("generate tile transformation map");
-        //go over all tiles and if tile is non-markable, empty transformation trigger list and assign transformation triggers based on adjacent tiles
 
+        //go over all tiles and if tile is non-markable (or bridge or spawnpoint), empty transformation trigger list and assign transformation triggers based on adjacent tiles
         for (int i = 0; i < MazeLevelGameplayManager.Instance.EditorLevel.Tiles.Count; i++)
         {
             EditorMazeTile tile = MazeLevelGameplayManager.Instance.EditorLevel.Tiles[i] as EditorMazeTile;
-            if (tile.Markable || tile.GetAttributes().OfType<PlayerSpawnpoint>().Any()) continue;
+            if (tile.Markable || tile.TryGetAttribute<PlayerSpawnpoint>()) continue;
 
             tile.BeautificationTriggerers.Clear();
             _checkedNeighbours.Clear();
-
+            Logger.Warning($"find triggerers for {tile.GridLocation.X}, {tile.GridLocation.Y}");
             tile.BeautificationTriggerers = FindAllMarkableNeighbours(tile, 0);
         }
     }
@@ -43,8 +42,9 @@ public class MazeTileTransformationMapper
             EditorMazeTile neighbourTile = neighbour.Value as EditorMazeTile;
             if (!foundSoFar.Contains(neighbourTile as EditorMazeTile))
             {
-                if (neighbourTile.Markable)
+                if (neighbourTile.Markable || neighbourTile.TryGetAttribute<BridgePiece>() || neighbourTile.TryGetAttribute<PlayerSpawnpoint>())
                 {
+                    Logger.Log($"Add {neighbourTile.GridLocation.X}, {neighbourTile.GridLocation.Y} as triggerer for {tile.GridLocation.X}, {tile.GridLocation.Y}");
                     foundSoFar.Add(neighbourTile);
                 }
                 if (!_checkedNeighbours.Contains(neighbourTile))

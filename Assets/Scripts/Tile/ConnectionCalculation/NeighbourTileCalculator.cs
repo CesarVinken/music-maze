@@ -97,7 +97,7 @@ public class NeighbourTileCalculator
             TilePath tilePath = neighbour.Value.TryGetTilePath();
             if (tilePath == null || tilePath.TilePathType?.GetType() != pathType.GetType())
             {
-                BridgePiece bridgePiece = neighbour.Value.TryGetBridgePiece();
+                BridgePiece bridgePiece = neighbour.Value.TryGetAttribute<BridgePiece>();
                 if (bridgePiece == null)
                 {
                     continue;

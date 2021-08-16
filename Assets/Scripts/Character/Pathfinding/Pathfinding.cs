@@ -78,7 +78,7 @@ public class Pathfinding {
                 // restrictions for Enemies
                 if(_character is EnemyCharacter)
                 {
-                    if (neighbourNode.Tile.TryGetPlayerOnly())
+                    if (neighbourNode.Tile.TryGetAttribute<PlayerOnly>())
                     {
                         closedList.Add(neighbourNode);
                         continue;
@@ -159,8 +159,8 @@ public class Pathfinding {
 
         if (targetTile.Walkable)
         {
-            BridgePiece bridgePieceOnCurrentTile = currentTile.TryGetBridgePiece();
-            BridgePiece bridgePieceOnTarget = targetTile.TryGetBridgePiece(); // optimisation: keep bridge locations of the level in a separate list, so we don't have to go over all the tiles in the level
+            BridgePiece bridgePieceOnCurrentTile = currentTile.TryGetAttribute<BridgePiece>();
+            BridgePiece bridgePieceOnTarget = targetTile.TryGetAttribute<BridgePiece>(); // optimisation: keep bridge locations of the level in a separate list, so we don't have to go over all the tiles in the level
 
             // there are no bridges involved
             if (bridgePieceOnCurrentTile == null && bridgePieceOnTarget == null)

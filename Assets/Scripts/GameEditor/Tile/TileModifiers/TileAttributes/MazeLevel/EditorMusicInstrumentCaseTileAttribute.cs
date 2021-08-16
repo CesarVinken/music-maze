@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
@@ -11,7 +9,7 @@ public class EditorMusicInstrumentCaseTileAttribute : EditorMazeTileAttributeMod
     {
         if (tile.TileMainMaterial.GetType() == typeof(WaterMainMaterial))
         {
-            if(tile.TryGetBridgePiece() == null)
+            if(tile.TryGetAttribute<BridgePiece>() == null)
             {
                 return;
             }

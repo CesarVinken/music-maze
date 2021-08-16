@@ -252,7 +252,7 @@ public class InGameMazeLevel : MazeLevel, IInGameLevel
 
                 if (neighbourTile)
                 {
-                    BridgePiece bridgePiece = neighbourTile.TryGetBridgePiece();
+                    BridgePiece bridgePiece = neighbourTile.TryGetAttribute<BridgePiece>();
                     if (bridgePiece == null)
                     {
                         Logger.Error($"Expected but could not find bridge piece at {neighbourTile.GridLocation.X}, {neighbourTile.GridLocation.Y}.");

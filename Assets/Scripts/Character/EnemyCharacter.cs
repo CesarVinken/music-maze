@@ -296,7 +296,7 @@ public class EnemyCharacter : Character
 
             if (!tile.Walkable) continue;
 
-            if (tile.TryGetPlayerOnly()) continue;
+            if (tile.TryGetAttribute<PlayerOnly>()) continue;
 
             // if no tile areas are assigned to an enemy, pick random from ALL tiles
             if (_tileAreas.Count == 0)

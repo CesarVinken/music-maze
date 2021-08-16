@@ -1,5 +1,4 @@
-﻿using System.Linq;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class EditorMazeTileBeautificationTriggerer : EditorMazeTileTransformationTriggerer, IGroundMaterialModifier, IWaterMaterialModifier
 {
@@ -71,7 +70,7 @@ public class EditorMazeTileBeautificationTriggerer : EditorMazeTileTransformatio
     public override void HandleBeautificationTriggerPlacement(EditorMazeTile tile)
     {
         // Markable tiles are triggerers, so are bridge tiles
-        if (tile.Markable || tile.GetAttributes().OfType<PlayerSpawnpoint>().Any() || tile.TryGetBridgePiece() != null)
+        if (tile.Markable || tile.TryGetAttribute<PlayerSpawnpoint>() || tile.TryGetAttribute<BridgePiece>() != null)
         {
             // if we have a tile selected, add the markable tile as triggerer
             if (SelectedTile != null)
