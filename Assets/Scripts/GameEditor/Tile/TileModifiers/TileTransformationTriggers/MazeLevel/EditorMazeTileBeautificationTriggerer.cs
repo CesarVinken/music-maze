@@ -4,7 +4,7 @@ public class EditorMazeTileBeautificationTriggerer : EditorMazeTileTransformatio
 {
     public override string Name { get => "Beautification Triggerer"; }
 
-    public override Sprite Sprite { get => MazeSpriteManager.Instance.DefaultDoor[0]; }
+    public override Sprite Sprite { get => MazeSpriteManager.Instance.DefaultDoor[0]; } // TODO: Change
 
     public EditorMazeTile SelectedTile;
 
@@ -24,8 +24,6 @@ public class EditorMazeTileBeautificationTriggerer : EditorMazeTileTransformatio
             }
         }
     }
-
-
 
     public void SetSelectedTile(EditorMazeTile tile)
     {

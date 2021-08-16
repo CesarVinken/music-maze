@@ -16,7 +16,6 @@ public class MazeTileTransformationMapper
 
             tile.BeautificationTriggerers.Clear();
             _checkedNeighbours.Clear();
-            Logger.Warning($"find triggerers for {tile.GridLocation.X}, {tile.GridLocation.Y}");
             tile.BeautificationTriggerers = FindAllMarkableNeighbours(tile, 0);
         }
     }
@@ -44,7 +43,6 @@ public class MazeTileTransformationMapper
             {
                 if (neighbourTile.Markable || neighbourTile.TryGetAttribute<BridgePiece>() || neighbourTile.TryGetAttribute<PlayerSpawnpoint>())
                 {
-                    Logger.Log($"Add {neighbourTile.GridLocation.X}, {neighbourTile.GridLocation.Y} as triggerer for {tile.GridLocation.X}, {tile.GridLocation.Y}");
                     foundSoFar.Add(neighbourTile);
                 }
                 if (!_checkedNeighbours.Contains(neighbourTile))

@@ -50,13 +50,13 @@ public abstract class EditorSelectedTileModifierContainer : MonoBehaviour
         {
             _editorTileBackgroundSelector.SetSelectedModifier(modifierIndex);
         }
-        else if (EditorManager.SelectedTileModifierCategory == EditorTileModifierCategory.TransformationTriggerer)
-        {
-            _editorTileTransformationTriggererSelector.SetSelectedModifier(modifierIndex);
-        }
         else if (EditorManager.SelectedTileModifierCategory == EditorTileModifierCategory.Area)
         {
             _editorTileAreaModifierSelector.SetSelectedModifier(modifierIndex);
+        }
+        else if (EditorManager.SelectedTileModifierCategory == EditorTileModifierCategory.TransformationTriggerer)
+        {
+            _editorTileTransformationTriggererSelector.SetSelectedModifier(modifierIndex);
         }
         else
         {
@@ -99,6 +99,11 @@ public abstract class EditorSelectedTileModifierContainer : MonoBehaviour
             Logger.Log("SetCurrentlyAvailableModifiers for areas");
             SetCurrentlyAvailableAreaModifiers();
         }
+        else if (mainTileModifierCategory is EditorMazeTileTileTransformationModifierCategory || mainTileModifierCategory is EditorOverworldTileTileTransformationModifierCategory)
+        {
+            Logger.Log("SetCurrentlyAvailableModifiers for tile transformation");
+            SetCurrentlyAvailableTileTransformationModifiers();
+        }
         else
         {
             Logger.Error($"Unknown modifier category {mainTileModifierCategory}");
@@ -127,16 +132,6 @@ public abstract class EditorSelectedTileModifierContainer : MonoBehaviour
         }
         CurrentlyAvailableTileModifiers.Add(EditorTileModifierCategory.Attribute, currentlyAvailableAttributes);
 
-        List<IEditorTileModifier> currentlyAvailableTransformationTriggers = new List<IEditorTileModifier>();
-        for (int i = 0; i < EditorTileTransformationTriggerers.Count; i++)
-        {
-            if (EditorTileTransformationTriggerers[i] is IWaterMaterialModifier)
-            {
-                currentlyAvailableTransformationTriggers.Add(EditorTileTransformationTriggerers[i]);
-            }
-        }
-        CurrentlyAvailableTileModifiers.Add(EditorTileModifierCategory.TransformationTriggerer, currentlyAvailableTransformationTriggers);
-
         // initial value for water: 
         EditorCanvasUI.Instance.SelectedTileModifierContainer.SetSelectedTileModifierCategory(EditorTileModifierCategory.Background);
         EditorCanvasUI.Instance.SelectedTileModifierContainer.SetSelectedTileModifier(0);
@@ -164,16 +159,6 @@ public abstract class EditorSelectedTileModifierContainer : MonoBehaviour
         }
         CurrentlyAvailableTileModifiers.Add(EditorTileModifierCategory.Attribute, currentlyAvailableAttributes);
 
-        List<IEditorTileModifier> currentlyAvailableTransformationTriggers = new List<IEditorTileModifier>();
-        for (int i = 0; i < EditorTileTransformationTriggerers.Count; i++)
-        {
-            if (EditorTileTransformationTriggerers[i] is IGroundMaterialModifier)
-            {
-                currentlyAvailableTransformationTriggers.Add(EditorTileTransformationTriggerers[i]);
-            }
-        }
-        CurrentlyAvailableTileModifiers.Add(EditorTileModifierCategory.TransformationTriggerer, currentlyAvailableTransformationTriggers);
-
         // initial value for groud:  Background -> path
         EditorCanvasUI.Instance.SelectedTileModifierContainer.SetSelectedTileModifierCategory(EditorTileModifierCategory.Background);
         EditorCanvasUI.Instance.SelectedTileModifierContainer.SetSelectedTileModifier(0);
@@ -183,13 +168,27 @@ public abstract class EditorSelectedTileModifierContainer : MonoBehaviour
     {
         List<IEditorTileModifier> currentlyAvailableAreaModifiers = new List<IEditorTileModifier>();
         for (int i = 0; i < EditorTileAreaModifiers.Count; i++)
-        {       
-            currentlyAvailableAreaModifiers.Add(EditorTileAreaModifiers[i]);       
+        {
+            currentlyAvailableAreaModifiers.Add(EditorTileAreaModifiers[i]);
         }
         CurrentlyAvailableTileModifiers.Add(EditorTileModifierCategory.Area, currentlyAvailableAreaModifiers);
 
         // initial value for area: 
         EditorCanvasUI.Instance.SelectedTileModifierContainer.SetSelectedTileModifierCategory(EditorTileModifierCategory.Area);
+        EditorCanvasUI.Instance.SelectedTileModifierContainer.SetSelectedTileModifier(0);
+    }
+
+    private void SetCurrentlyAvailableTileTransformationModifiers()
+    {
+        List<IEditorTileModifier> currentlyAvailableTileTransformationModifiers = new List<IEditorTileModifier>();
+        for (int i = 0; i < EditorTileTransformationTriggerers.Count; i++)
+        {
+            currentlyAvailableTileTransformationModifiers.Add(EditorTileTransformationTriggerers[i]);
+        }
+        CurrentlyAvailableTileModifiers.Add(EditorTileModifierCategory.TransformationTriggerer, currentlyAvailableTileTransformationModifiers);
+
+        // initial value for area: 
+        EditorCanvasUI.Instance.SelectedTileModifierContainer.SetSelectedTileModifierCategory(EditorTileModifierCategory.TransformationTriggerer);
         EditorCanvasUI.Instance.SelectedTileModifierContainer.SetSelectedTileModifier(0);
     }
 }
