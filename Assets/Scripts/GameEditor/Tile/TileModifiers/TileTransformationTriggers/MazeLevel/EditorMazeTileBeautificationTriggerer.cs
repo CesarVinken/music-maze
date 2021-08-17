@@ -29,7 +29,6 @@ public class EditorMazeTileBeautificationTriggerer : EditorMazeTileTransformatio
     {
         if (SelectedTile != null)
         {
-
             SelectedTile.SetTileOverlayImage(TileOverlayMode.Empty);
             for (int i = 0; i < SelectedTile.BeautificationTriggerers.Count; i++)
             {
@@ -39,11 +38,15 @@ public class EditorMazeTileBeautificationTriggerer : EditorMazeTileTransformatio
             if (SelectedTile == tile)
             {
                 SelectedTile = null;
+
+                EditorTileSelector.Instance.OverlayImageTile = null;
                 return;
             }
         }
 
         tile.SetTileOverlayImage(TileOverlayMode.Green);
+        EditorTileSelector.Instance.OverlayImageTile = tile;
+
 
         SelectedTile = tile;
         for (int i = 0; i < SelectedTile.BeautificationTriggerers.Count; i++)
@@ -63,6 +66,8 @@ public class EditorMazeTileBeautificationTriggerer : EditorMazeTileTransformatio
             }
         }
         SelectedTile = null;
+
+        EditorTileSelector.Instance.OverlayImageTile = null;
     }
 
     public override void HandleBeautificationTriggerPlacement(EditorMazeTile tile)

@@ -4,9 +4,14 @@ public class MazeTileFullTransformationMapper
 {
     private static List<EditorMazeTile> _checkedNeighbours = new List<EditorMazeTile>();
 
+    public EditorMazeTile SelectedTile;
+
     public static void GenerateFullTileTransformationMap()
     {
         Logger.Log("generate tile full transformation map");
+
+        // remove existing tile overlays
+        RemoveCurrentTileOverlay();
 
         //go over all tiles and if tile is non-markable (or bridge or spawnpoint), empty transformation trigger list and assign transformation triggers based on adjacent tiles
         for (int i = 0; i < MazeLevelGameplayManager.Instance.EditorLevel.Tiles.Count; i++)
@@ -70,5 +75,19 @@ public class MazeTileFullTransformationMapper
         }
 
         return foundSoFar;
+    }
+
+    private static void RemoveCurrentTileOverlay()
+    {
+        EditorMazeTile overlayTile = EditorTileSelector.Instance.OverlayImageTile as EditorMazeTile;
+        
+        if (overlayTile != null)
+        {
+            overlayTile.SetTileOverlayImage(TileOverlayMode.Empty);
+            for (int i = 0; i < overlayTile.BeautificationTriggerers.Count; i++)
+            {
+                overlayTile.BeautificationTriggerers[i].SetTileOverlayImage(TileOverlayMode.Empty);
+            }
+        }
     }
 }

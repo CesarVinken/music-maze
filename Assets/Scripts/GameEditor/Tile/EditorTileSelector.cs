@@ -7,6 +7,7 @@ public class EditorTileSelector : MonoBehaviour
     public static EditorTileSelector Instance;
 
     private Tile _currentSelectedTile;
+
     public Tile CurrentlySelectedTile
     {
         get { return _currentSelectedTile; }
@@ -22,6 +23,8 @@ public class EditorTileSelector : MonoBehaviour
             _lineRenderer.SetPosition(4, new Vector3(transform.position.x, transform.position.y, -1));
         }
     }
+
+    public EditorMazeTile OverlayImageTile;
 
     [SerializeField] private LineRenderer _lineRenderer;
 
