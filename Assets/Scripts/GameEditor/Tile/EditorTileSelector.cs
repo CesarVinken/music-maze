@@ -52,6 +52,11 @@ public class EditorTileSelector : MonoBehaviour
         {
             SelectTileWithMouse();
         }
+        if (Input.GetKeyDown(KeyCode.Mouse1))
+        {
+            SelectTileWithMouse();
+            TrySelectForTileOverlay();
+        }
         if (Input.GetKeyDown(KeyCode.W) || Input.GetKeyDown(KeyCode.UpArrow))
         {
             UpdateCurrentSelectedLocation(0, 1);
@@ -133,6 +138,28 @@ public class EditorTileSelector : MonoBehaviour
 
         CurrentlySelectedTile = selectedTile;
         UpdateEditorUIForSelectedLocation();
+    }
+
+    public void TrySelectForTileOverlay()
+    {
+        EditorTileModifierCategory editorTileModifierType = EditorManager.SelectedTileModifierCategory;
+
+        if (editorTileModifierType != EditorTileModifierCategory.TransformationTriggerer) return;
+
+        EditorSelectedTileModifierContainer selectedTileModifierContainer = EditorCanvasUI.Instance.SelectedTileModifierContainer;
+        List<IEditorTileModifier> transformationTriggerers = selectedTileModifierContainer.CurrentlyAvailableTileModifiers[EditorTileModifierCategory.TransformationTriggerer];
+        EditorMazeTileBeautificationTriggerer transformationTriggerer = transformationTriggerers[EditorManager.SelectedTileTransformationTriggererIndex] as EditorMazeTileBeautificationTriggerer;
+        
+        if(transformationTriggerer == null)
+        {
+            Logger.Log("return for transformation triggerer");
+            return;
+        }
+
+        EditorMazeTile selectedTile = CurrentlySelectedTile as EditorMazeTile;
+        if (selectedTile == null) return;
+
+        transformationTriggerer.SetSelectedTile(selectedTile);
     }
 
     private bool IsValidGridLocationToSelect(GridLocation selectedTileLocation)

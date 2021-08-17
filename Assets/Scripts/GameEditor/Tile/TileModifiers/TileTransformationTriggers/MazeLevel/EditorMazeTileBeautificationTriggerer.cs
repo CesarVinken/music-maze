@@ -47,7 +47,6 @@ public class EditorMazeTileBeautificationTriggerer : EditorMazeTileTransformatio
         tile.SetTileOverlayImage(TileOverlayMode.Green);
         EditorTileSelector.Instance.OverlayImageTile = tile;
 
-
         SelectedTile = tile;
         for (int i = 0; i < SelectedTile.BeautificationTriggerers.Count; i++)
         {
