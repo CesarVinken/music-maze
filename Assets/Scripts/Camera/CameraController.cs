@@ -88,6 +88,11 @@ public class CameraController : MonoBehaviour
         }
     }
 
+    public void SetPlayerTransform(PlayerCharacter player)
+    {
+        _player = player.transform;
+    }
+
     public void FocusOnPlayer(PlayerCharacter player)
     {
         _focussedOnPlayer = true;

@@ -25,7 +25,6 @@ public class CameraZoomHandler
         _zoomSpeed = GameManager.Instance.Configuration.CameraZoomSpeed;
 
         _desiredZoomLevel = _camera.orthographicSize;
-        Logger.Warning($"_desiredZoomLevel = {_desiredZoomLevel}");
     }
     public void HandleZoom()
     {

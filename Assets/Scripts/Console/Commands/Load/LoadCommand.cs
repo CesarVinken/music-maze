@@ -52,12 +52,6 @@ public class LoadCommand : CommandProcedure
             mazeLevelData = MazeLevelLoader.LoadMazeLevelData(PersistentGameManager.CurrentSceneName);
             MazeLevelLoader.LoadMazeLevel(mazeLevelData);
             return;
-            //string message = "The command '<color=" + ConsoleConfiguration.HighlightColour + ">load maze</color>' needs an additional argument with the name of the maze level";
-            //Logger.Warning(message);
-
-            //message += "\nThe Currently available levels are: \n";
-            //message = MazeLevelLoader.GetAllMazeLevelNamesForPrint(message);
-            //throw new NotEnoughArgumentsConsoleException(message);
         }
 
         string mazeName = arguments[1];

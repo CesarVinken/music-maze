@@ -14,7 +14,7 @@ public interface ICharacterManager
     void UnfreezeCharacters();
 
     void ExitCharacter(MazePlayerCharacter player);
-    void SpawnPlayerCharacter(CharacterBlueprint character, GridLocation gridLocation, PlayerNumber playerNumber);
+    PlayerCharacter SpawnPlayerCharacter(CharacterBlueprint character, GridLocation gridLocation, PlayerNumber playerNumber);
 
     void PutCharacterOnGrid(GameObject characterGO, Vector3 gridVectorLocation);
 

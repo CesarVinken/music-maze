@@ -73,15 +73,17 @@ public class MazeCharacterManager : MonoBehaviourPunCallbacks, ICharacterManager
         }
     }
 
-    public void SpawnPlayerCharacter(CharacterBlueprint character, GridLocation gridLocation, PlayerNumber playerNumber)
+    public PlayerCharacter SpawnPlayerCharacter(CharacterBlueprint character, GridLocation gridLocation, PlayerNumber playerNumber)
     {
         string prefabName = GetPrefabNameByCharacter(character);
+        Logger.Log($"prefab name is {prefabName}");
+        Logger.Log($"prefab name is {character.CharacterType}");
         Vector2 startPosition = GetCharacterGridPosition(GridLocation.GridToVector(gridLocation)); // start position is grid position plus grid tile offset
 
         GameObject characterGO = null;
 
-        if (character.IsPlayable)
-        {
+        //if (character.IsPlayable)
+        //{
             if (GameRules.GamePlayerType == GamePlayerType.SinglePlayer ||
                 GameRules.GamePlayerType == GamePlayerType.SplitScreenMultiplayer)
             {
@@ -101,7 +103,7 @@ public class MazeCharacterManager : MonoBehaviourPunCallbacks, ICharacterManager
                 playerCharacter, 
                 gridLocation,
                 GameManager.Instance.CurrentGameLevel.PlayerCharacterSpawnpoints[playerCharacter.PlayerNumber]);
-        }
+        //}
         //else
         //{
         //    if (GameRules.GamePlayerType == GamePlayerType.SinglePlayer ||
@@ -132,6 +134,7 @@ public class MazeCharacterManager : MonoBehaviourPunCallbacks, ICharacterManager
             default:
                 break;
         }
+        return playerCharacter;
     }
 
     private void SpawnEnemies()
@@ -268,7 +271,8 @@ public class MazeCharacterManager : MonoBehaviourPunCallbacks, ICharacterManager
 
     public PlayerCharacter GetPlayerCharacter<T>(PlayerNumber playerNumber) where T : PlayerCharacter
     {
-        return _players[playerNumber] as MazePlayerCharacter;
+        if (_players.ContainsKey(playerNumber)) return _players[playerNumber] as MazePlayerCharacter;
+        else return null;
     }
 
     public void AddPlayer(PlayerNumber playerNumber, PlayerCharacter playerCharacter)

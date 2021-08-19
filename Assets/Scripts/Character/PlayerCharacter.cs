@@ -32,6 +32,7 @@ public class PlayerCharacter : Character
 
     public override void Awake()
     {
+        Logger.Log("AWAKE THE PLAYER CHARACTER!");
         Guard.CheckIsNull(_playerCollider, "_playerCollider", gameObject);
         
         SetPlayerNumber();
@@ -63,14 +64,13 @@ public class PlayerCharacter : Character
             return;
 
         if (GameRules.GamePlayerType == GamePlayerType.SinglePlayer ||
-            GameRules.GamePlayerType == GamePlayerType.SplitScreenMultiplayer ||
             (GameRules.GamePlayerType == GamePlayerType.NetworkMultiplayer && PhotonView.IsMine)
             )
         {
             if (PersistentGameManager.CurrentPlatform == Platform.PC)
                 HandleKeyboardInput();
 
-            if (Input.GetMouseButtonUp(0))
+            if (Input.GetMouseButtonUp(0) )
             {
                 _isPressingPointerForSeconds = false;
                 _pointerPresserTimer = 0;
@@ -96,7 +96,6 @@ public class PlayerCharacter : Character
             {
                 if(CameraController.CurrentZoom != ZoomAction.PlayerZoom)
                 {
-                    Logger.Log(PersistentGameManager.CurrentPlatform);
                     StartCoroutine(RunPointerPresserTimer());
                 }
             }
@@ -119,6 +118,16 @@ public class PlayerCharacter : Character
                     CheckPointerInput();
                 }
             }
+
+            if (HasCalculatedTarget)
+            {
+                MoveCharacter();
+            }
+        }
+        else if (GameRules.GamePlayerType == GamePlayerType.SplitScreenMultiplayer)
+        {
+            if (PersistentGameManager.CurrentPlatform == Platform.PC)
+                HandleKeyboardInput();
 
             if (HasCalculatedTarget)
             {
@@ -458,8 +467,8 @@ public class PlayerCharacter : Character
         }
         else
         {
-            if (characterManager.GetPlayerCount() == 0)
-            {
+            if (GameManager.Instance.CharacterManager.GetPlayerCharacter<PlayerCharacter>(PlayerNumber.Player1) == null)
+            {    
                 PlayerNumber = PlayerNumber.Player1;
             }
             else
@@ -473,6 +482,7 @@ public class PlayerCharacter : Character
     // Should be here and not in manager.
     private void SetPlayerName()
     {
+        Logger.Log($"SetPlayerName {_characterType.ToString()}");
         ICharacterManager characterManager = GameManager.Instance.CharacterManager;
         
         if (GameRules.GamePlayerType == GamePlayerType.NetworkMultiplayer)
@@ -486,11 +496,12 @@ public class PlayerCharacter : Character
         else // split screen
         {
             int playerCount = characterManager.GetPlayerCount();
-            if (playerCount == 1)
+            Logger.Log($"playerCount is {playerCount}");
+            if (PlayerNumber == PlayerNumber.Player1)
             {
                 Name = "Player 1";
             }
-            else if (playerCount == 2)
+            else if (PlayerNumber == PlayerNumber.Player2)
             {
                 Name = "Player 2";
             }
@@ -564,7 +575,6 @@ public class PlayerCharacter : Character
 
     private void SetPlayerKeyboardInput()
     {
-        int playerCount = GameManager.Instance.CharacterManager.GetPlayerCount();
         if (PersistentGameManager.CurrentPlatform == Platform.PC)
         {
             if (GameRules.GamePlayerType == GamePlayerType.SinglePlayer)
@@ -578,19 +588,14 @@ public class PlayerCharacter : Character
             else if (GameRules.GamePlayerType == GamePlayerType.SplitScreenMultiplayer)
             {
 
-                if (playerCount == 1)
+                if (PlayerNumber == PlayerNumber.Player1)
                 {
                     KeyboardInput = KeyboardInput.Player1;
                 }
-                else if (playerCount == 2)
+                else if (PlayerNumber == PlayerNumber.Player2)
                 {
                     KeyboardInput = KeyboardInput.Player2;
                 }
-            }
-
-            else
-            {
-                Logger.Warning($"There are {playerCount} players in the level. There can be max 2 players in a level");
             }
         }
     }

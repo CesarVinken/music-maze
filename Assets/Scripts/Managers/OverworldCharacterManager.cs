@@ -80,7 +80,7 @@ public class OverworldCharacterManager : MonoBehaviourPunCallbacks, ICharacterMa
         }
     }
 
-    public void SpawnPlayerCharacter(CharacterBlueprint character, GridLocation gridLocation, PlayerNumber playerNumber)
+    public PlayerCharacter SpawnPlayerCharacter(CharacterBlueprint character, GridLocation gridLocation, PlayerNumber playerNumber)
     {
         string prefabName = GetPrefabNameByCharacter(character);
         Vector2 startPosition = GetCharacterGridPosition(GridLocation.GridToVector(gridLocation)); // start position is grid position plus grid tile offset
@@ -119,6 +119,7 @@ public class OverworldCharacterManager : MonoBehaviourPunCallbacks, ICharacterMa
             default:
                 break;
         }
+        return playerCharacter;
     }
 
     public void UnloadCharacters()
@@ -161,7 +162,8 @@ public class OverworldCharacterManager : MonoBehaviourPunCallbacks, ICharacterMa
 
     public PlayerCharacter GetPlayerCharacter<T>(PlayerNumber playerNumber) where T : PlayerCharacter
     {
-        return _players[playerNumber] as OverworldPlayerCharacter;
+        if (_players.ContainsKey(playerNumber)) return _players[playerNumber] as OverworldPlayerCharacter;
+        else return null;
     }
 
     public void AddPlayer(PlayerNumber playerNumber, PlayerCharacter playerCharacter)
@@ -181,6 +183,7 @@ public class OverworldCharacterManager : MonoBehaviourPunCallbacks, ICharacterMa
         {
             GameObject.Destroy(Player2GO);
         }
+        Logger.Log($"_players.count {_players.Count}");
     }
 
     public int GetPlayerCount()

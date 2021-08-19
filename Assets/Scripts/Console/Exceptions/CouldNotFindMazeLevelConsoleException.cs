@@ -6,3 +6,4 @@
         Console.Instance.PrintToReportText(message);
     }
 }
+
