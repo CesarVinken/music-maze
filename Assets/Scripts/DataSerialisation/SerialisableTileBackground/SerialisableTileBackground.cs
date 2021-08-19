@@ -1,16 +1,19 @@
 ﻿using System;
 using UnityEngine;
 
-[Serializable]
-public class SerialisableTileBackground
+namespace DataSerialisation
 {
-    public int TileBackgroundId;
-    public string BackgroundType;
-    public string SerialisedData;
-
-    public SerialisableTileBackground(string backgroundType, ISerialisableTileBackground iSerialisableTileBackground)
+    [Serializable]
+    public class SerialisableTileBackground
     {
-        BackgroundType = backgroundType;
-        SerialisedData = JsonUtility.ToJson(iSerialisableTileBackground);
+        public int TileBackgroundId;
+        public string BackgroundType;
+        public string SerialisedData;
+
+        public SerialisableTileBackground(string backgroundType, ISerialisableTileBackground iSerialisableTileBackground)
+        {
+            BackgroundType = backgroundType;
+            SerialisedData = JsonUtility.ToJson(iSerialisableTileBackground);
+        }
     }
 }

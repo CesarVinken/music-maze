@@ -1,3 +1,6 @@
-﻿public interface ISerialisableTileAttribute
+﻿namespace DataSerialisation
 {
+    public interface ISerialisableTileAttribute
+    {
+    }
 }

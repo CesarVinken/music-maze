@@ -1,37 +1,40 @@
 ﻿using System;
 using System.Collections.Generic;
 
-// Each maze level gets its own json file describing all the tiles and their attributes
-[Serializable]
-public class MazeLevelData
+namespace DataSerialisation
 {
-    public string Name = "";
-    public List<SerialisableTile> Tiles = new List<SerialisableTile>();
-    public List<SerialisableTileArea> TileAreas = new List<SerialisableTileArea>();
-
-    public MazeLevelData()
+    // Each maze level gets its own json file describing all the tiles and their attributes
+    [Serializable]
+    public class MazeLevelData
     {
+        public string Name = "";
+        public List<SerialisableTile> Tiles = new List<SerialisableTile>();
+        public List<SerialisableTileArea> TileAreas = new List<SerialisableTileArea>();
 
-    }
-
-    public MazeLevelData(EditorMazeLevel level)
-    {
-        for (int i = 0; i < level.Tiles.Count; i++)
+        public MazeLevelData()
         {
-            SerialisableTile tile = new SerialisableTile(level.Tiles[i]);
-            Tiles.Add(tile);
+
         }
 
-        foreach (KeyValuePair<string, TileArea> item in level.TileAreas)
+        public MazeLevelData(EditorMazeLevel level)
         {
-            SerialisableTileArea tileArea = new SerialisableTileArea(item.Value);
-            TileAreas.Add(tileArea);        
-        }
-    }
+            for (int i = 0; i < level.Tiles.Count; i++)
+            {
+                SerialisableTile tile = new SerialisableTile(level.Tiles[i]);
+                Tiles.Add(tile);
+            }
 
-    public MazeLevelData WithName(string mazeLevelName)
-    {
-        Name = mazeLevelName.ToLower().Replace(" ", "-");
-        return this;
+            foreach (KeyValuePair<string, TileArea> item in level.TileAreas)
+            {
+                SerialisableTileArea tileArea = new SerialisableTileArea(item.Value);
+                TileAreas.Add(tileArea);
+            }
+        }
+
+        public MazeLevelData WithName(string mazeLevelName)
+        {
+            Name = mazeLevelName.ToLower().Replace(" ", "-");
+            return this;
+        }
     }
 }

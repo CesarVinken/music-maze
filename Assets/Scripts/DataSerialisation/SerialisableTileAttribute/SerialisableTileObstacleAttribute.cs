@@ -1,14 +1,17 @@
 ﻿using System;
 
-[Serializable]
-public class SerialisableTileObstacleAttribute : ISerialisableTileAttribute
+namespace DataSerialisation
 {
-    public int ConnectionScore;
-    public int SpriteNumber;
-
-    public SerialisableTileObstacleAttribute(TileConnectionScoreInfo obstacleConnectionScoreInfo)
+    [Serializable]
+    public class SerialisableTileObstacleAttribute : ISerialisableTileAttribute
     {
-        ConnectionScore = obstacleConnectionScoreInfo.RawConnectionScore;
-        SpriteNumber = obstacleConnectionScoreInfo.SpriteNumber;
+        public int ConnectionScore;
+        public int SpriteNumber;
+
+        public SerialisableTileObstacleAttribute(TileConnectionScoreInfo obstacleConnectionScoreInfo)
+        {
+            ConnectionScore = obstacleConnectionScoreInfo.RawConnectionScore;
+            SpriteNumber = obstacleConnectionScoreInfo.SpriteNumber;
+        }
     }
 }

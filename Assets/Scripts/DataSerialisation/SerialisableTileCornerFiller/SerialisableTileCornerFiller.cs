@@ -1,12 +1,15 @@
 using System;
 
-[Serializable]
-public class SerialisableTileCornerFiller
+namespace DataSerialisation
 {
-    public string TileCorner;
-
-    public SerialisableTileCornerFiller(string tileCorner)
+    [Serializable]
+    public class SerialisableTileCornerFiller
     {
-        TileCorner = tileCorner;
+        public string TileCorner;
+
+        public SerialisableTileCornerFiller(string tileCorner)
+        {
+            TileCorner = tileCorner;
+        }
     }
 }

@@ -1,11 +1,14 @@
 using System;
 
-[Serializable]
-public class SerialisableBridgeEdgeAttribute : ISerialisableTileAttribute
+namespace DataSerialisation
 {
-    public string BridgeEdgeSide;
-    public SerialisableBridgeEdgeAttribute(Direction bridgeEdgeSide)
+    [Serializable]
+    public class SerialisableBridgeEdgeAttribute : ISerialisableTileAttribute
     {
-        BridgeEdgeSide = bridgeEdgeSide.ToString();
+        public string BridgeEdgeSide;
+        public SerialisableBridgeEdgeAttribute(Direction bridgeEdgeSide)
+        {
+            BridgeEdgeSide = bridgeEdgeSide.ToString();
+        }
     }
 }

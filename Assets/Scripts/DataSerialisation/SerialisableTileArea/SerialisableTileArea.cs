@@ -1,14 +1,17 @@
 using System;
 
-[Serializable]
-public class SerialisableTileArea
+namespace DataSerialisation
 {
-    public string Id;
-    public string Name;
-
-    public SerialisableTileArea(TileArea tileArea)
+    [Serializable]
+    public class SerialisableTileArea
     {
-        Name = tileArea.Name;
-        Id = tileArea.Id;
+        public string Id;
+        public string Name;
+
+        public SerialisableTileArea(TileArea tileArea)
+        {
+            Name = tileArea.Name;
+            Id = tileArea.Id;
+        }
     }
 }

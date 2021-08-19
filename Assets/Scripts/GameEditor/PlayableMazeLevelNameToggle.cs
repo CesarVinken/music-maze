@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using DataSerialisation;
+using UnityEngine;
 using UnityEngine.UI;
 
 public class PlayableMazeLevelNameToggle : MonoBehaviour

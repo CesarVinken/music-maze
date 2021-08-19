@@ -1,9 +1,12 @@
 ﻿using System;
 
-[Serializable]
-public class SerialisableTileBaseWater : ISerialisableTileBackground
+namespace DataSerialisation
 {
-    public SerialisableTileBaseWater()
+    [Serializable]
+    public class SerialisableTileBaseWater : ISerialisableTileBackground
     {
+        public SerialisableTileBaseWater()
+        {
+        }
     }
 }

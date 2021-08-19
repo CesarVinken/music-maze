@@ -1,9 +1,12 @@
 using System;
 
-[Serializable]
-public class SerialisableMusicInstrumentCaseAttribute : ISerialisableTileAttribute
+namespace DataSerialisation
 {
-    public SerialisableMusicInstrumentCaseAttribute()
+    [Serializable]
+    public class SerialisableMusicInstrumentCaseAttribute : ISerialisableTileAttribute
     {
+        public SerialisableMusicInstrumentCaseAttribute()
+        {
+        }
     }
 }

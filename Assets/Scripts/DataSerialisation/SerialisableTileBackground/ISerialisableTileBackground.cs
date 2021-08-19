@@ -1,4 +1,7 @@
-﻿public interface ISerialisableTileBackground
+﻿namespace DataSerialisation
 {
+    public interface ISerialisableTileBackground
+    {
 
+    }
 }

@@ -1,9 +1,12 @@
 ﻿using System;
 
-[Serializable]
-public class SerialisablePlayerSpawnpointAttribute : ISerialisableTileAttribute
+namespace DataSerialisation
 {
-    public SerialisablePlayerSpawnpointAttribute()
+    [Serializable]
+    public class SerialisablePlayerSpawnpointAttribute : ISerialisableTileAttribute
     {
+        public SerialisablePlayerSpawnpointAttribute()
+        {
+        }
     }
 }

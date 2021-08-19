@@ -1,9 +1,12 @@
 ﻿using System;
 
-[Serializable]
-public class SerialisablePlayerOnlyAttribute : ISerialisableTileAttribute
+namespace DataSerialisation
 {
-    public SerialisablePlayerOnlyAttribute()
+    [Serializable]
+    public class SerialisablePlayerOnlyAttribute : ISerialisableTileAttribute
     {
+        public SerialisablePlayerOnlyAttribute()
+        {
+        }
     }
 }

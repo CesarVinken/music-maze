@@ -1,27 +1,30 @@
 ﻿using System.IO;
 using UnityEngine;
 
-public class JsonOverworldFileWriter : IJsonFileWriter
+namespace DataSerialisation
 {
-    private OverworldData _overworldData;
-    private string _path;
-
-    public void SerialiseData<T>(T overworldData)
+    public class JsonOverworldFileWriter : IJsonFileWriter
     {
-        Directory.CreateDirectory(Path.Combine(Application.dataPath, "StreamingAssets", "overworld"));
+        private OverworldData _overworldData;
+        private string _path;
 
-        _overworldData = overworldData as OverworldData;
-        _path = Path.Combine(Application.dataPath, "StreamingAssets", "overworld/", _overworldData.Name + ".json");
+        public void SerialiseData<T>(T overworldData)
+        {
+            Directory.CreateDirectory(Path.Combine(Application.dataPath, "StreamingAssets", "overworld"));
 
-        string jsonDataString = JsonUtility.ToJson(_overworldData, true).ToString();
+            _overworldData = overworldData as OverworldData;
+            _path = Path.Combine(Application.dataPath, "StreamingAssets", "overworld/", _overworldData.Name + ".json");
 
-        File.WriteAllText(_path, jsonDataString);
-    }
+            string jsonDataString = JsonUtility.ToJson(_overworldData, true).ToString();
 
-    public static void DeleteFile(string overworldName)
-    {
-        string path = Path.Combine(Application.dataPath, "StreamingAssets", "overworld", overworldName + ".json");
+            File.WriteAllText(_path, jsonDataString);
+        }
 
-        File.Delete(path);
+        public static void DeleteFile(string overworldName)
+        {
+            string path = Path.Combine(Application.dataPath, "StreamingAssets", "overworld", overworldName + ".json");
+
+            File.Delete(path);
+        }
     }
 }

@@ -1,4 +1,7 @@
-﻿public interface IJsonFileWriter
+﻿namespace DataSerialisation
 {
-    void SerialiseData<T>(T data);
+    public interface IJsonFileWriter
+    {
+        void SerialiseData<T>(T data);
+    }
 }

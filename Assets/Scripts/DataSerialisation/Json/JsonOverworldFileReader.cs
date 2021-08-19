@@ -2,35 +2,38 @@
 using UnityEngine;
 using UnityEngine.Networking;
 
-public class JsonOverworldFileReader : IJsonFileReader
+namespace DataSerialisation
 {
-    public OverworldData ReadData<OverworldData>(string overworldName = "overworld")
+    public class JsonOverworldFileReader : IJsonFileReader
     {
-        string jsonContent;
-        string filePath = "";
-
-        if (Application.platform == RuntimePlatform.Android)
+        public OverworldData ReadData<OverworldData>(string overworldName = "overworld")
         {
-            filePath = Path.Combine(Application.streamingAssetsPath, "overworld", overworldName + ".json");
+            string jsonContent;
+            string filePath = "";
 
-            UnityWebRequest loadingRequest = UnityWebRequest.Get(filePath);
-            loadingRequest.SendWebRequest();
-            while (!loadingRequest.isDone) ;
-            jsonContent = loadingRequest.downloadHandler.text.Trim();
-        }
-        else
-        {
-            filePath = Path.Combine(Application.streamingAssetsPath, "overworld", overworldName + ".json");
-
-            if (!File.Exists(filePath))
+            if (Application.platform == RuntimePlatform.Android)
             {
-                Logger.Warning($"File {overworldName}.json doesn't exist");
-                return default(OverworldData);
-            }
-            jsonContent = File.ReadAllText(filePath);
-        }
-        OverworldData overworldData = JsonUtility.FromJson<OverworldData>(jsonContent);
+                filePath = Path.Combine(Application.streamingAssetsPath, "overworld", overworldName + ".json");
 
-        return overworldData;
+                UnityWebRequest loadingRequest = UnityWebRequest.Get(filePath);
+                loadingRequest.SendWebRequest();
+                while (!loadingRequest.isDone) ;
+                jsonContent = loadingRequest.downloadHandler.text.Trim();
+            }
+            else
+            {
+                filePath = Path.Combine(Application.streamingAssetsPath, "overworld", overworldName + ".json");
+
+                if (!File.Exists(filePath))
+                {
+                    Logger.Warning($"File {overworldName}.json doesn't exist");
+                    return default;
+                }
+                jsonContent = File.ReadAllText(filePath);
+            }
+            OverworldData overworldData = JsonUtility.FromJson<OverworldData>(jsonContent);
+
+            return overworldData;
+        }
     }
 }

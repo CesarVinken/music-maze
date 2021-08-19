@@ -1,14 +1,17 @@
 ﻿using System;
 
-[Serializable]
-public class SerialisableGridLocation
+namespace DataSerialisation
 {
-    public int X;
-    public int Y;
-
-    public SerialisableGridLocation(int x, int y)
+    [Serializable]
+    public class SerialisableGridLocation
     {
-        X = x;
-        Y = y;
+        public int X;
+        public int Y;
+
+        public SerialisableGridLocation(int x, int y)
+        {
+            X = x;
+            Y = y;
+        }
     }
 }

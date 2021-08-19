@@ -1,20 +1,23 @@
 ﻿using System.IO;
 using UnityEngine;
 
-public class JsonOverworldListFileWriter : IJsonFileWriter
+namespace DataSerialisation
 {
-    private OverworldNamesData _overworldNamesData;
-
-    private string _path;
-
-    public void SerialiseData<T>(T levelNamesData)
+    public class JsonOverworldListFileWriter : IJsonFileWriter
     {
-        _overworldNamesData = levelNamesData as OverworldNamesData;
-        _path = Path.Combine(Application.dataPath, "StreamingAssets", "overworld", "overworlds.json");
+        private OverworldNamesData _overworldNamesData;
 
-        string jsonOverworldNamesData = JsonUtility.ToJson(_overworldNamesData, true).ToString();
+        private string _path;
 
-        File.WriteAllText(_path, jsonOverworldNamesData);
-        Logger.Log(Logger.Datawriting, "Wrote overworlds list to file");
+        public void SerialiseData<T>(T levelNamesData)
+        {
+            _overworldNamesData = levelNamesData as OverworldNamesData;
+            _path = Path.Combine(Application.dataPath, "StreamingAssets", "overworld", "overworlds.json");
+
+            string jsonOverworldNamesData = JsonUtility.ToJson(_overworldNamesData, true).ToString();
+
+            File.WriteAllText(_path, jsonOverworldNamesData);
+            Logger.Log(Logger.Datawriting, "Wrote overworlds list to file");
+        }
     }
 }

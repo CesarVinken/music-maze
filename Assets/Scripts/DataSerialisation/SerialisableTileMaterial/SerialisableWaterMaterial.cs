@@ -1,9 +1,12 @@
 ﻿using UnityEngine;
 
-[SerializeField]
-public class SerialisableWaterMaterial : ISerialisableTileMainMaterial
+namespace DataSerialisation
 {
-    public SerialisableWaterMaterial()
+    [SerializeField]
+    public class SerialisableWaterMaterial : ISerialisableTileMainMaterial
     {
+        public SerialisableWaterMaterial()
+        {
+        }
     }
 }

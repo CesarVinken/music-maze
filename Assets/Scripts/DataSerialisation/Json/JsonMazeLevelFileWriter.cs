@@ -1,27 +1,30 @@
 ﻿using System.IO;
 using UnityEngine;
 
-public class JsonMazeLevelFileWriter : IJsonFileWriter
+namespace DataSerialisation
 {
-    private MazeLevelData _levelData;
-    private string _path;
-
-    public void SerialiseData<T>(T levelData)
+    public class JsonMazeLevelFileWriter : IJsonFileWriter
     {
-        Directory.CreateDirectory(Path.Combine(Application.dataPath, "StreamingAssets", "maze"));
-        
-        _levelData = levelData as MazeLevelData;
-        _path = Path.Combine(Application.dataPath, "StreamingAssets", "maze", _levelData.Name + ".json");
+        private MazeLevelData _levelData;
+        private string _path;
 
-        string jsonDataString = JsonUtility.ToJson(_levelData, true).ToString();
+        public void SerialiseData<T>(T levelData)
+        {
+            Directory.CreateDirectory(Path.Combine(Application.dataPath, "StreamingAssets", "maze"));
 
-        File.WriteAllText(_path, jsonDataString);
-    }
+            _levelData = levelData as MazeLevelData;
+            _path = Path.Combine(Application.dataPath, "StreamingAssets", "maze", _levelData.Name + ".json");
 
-    public static void DeleteFile(string mazeLevelName)
-    {
-        string path = Path.Combine(Application.dataPath, "StreamingAssets", "maze", mazeLevelName + ".json");
+            string jsonDataString = JsonUtility.ToJson(_levelData, true).ToString();
 
-        File.Delete(path);
+            File.WriteAllText(_path, jsonDataString);
+        }
+
+        public static void DeleteFile(string mazeLevelName)
+        {
+            string path = Path.Combine(Application.dataPath, "StreamingAssets", "maze", mazeLevelName + ".json");
+
+            File.Delete(path);
+        }
     }
 }

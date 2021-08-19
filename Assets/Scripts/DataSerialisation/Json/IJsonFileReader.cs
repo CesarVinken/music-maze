@@ -1,4 +1,6 @@
-﻿public interface IJsonFileReader
-{
-    T ReadData<T>(string name = "");
+﻿namespace DataSerialisation {
+    public interface IJsonFileReader
+    {
+        T ReadData<T>(string name = "");
+    }
 }

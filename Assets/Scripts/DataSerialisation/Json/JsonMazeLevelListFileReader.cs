@@ -2,33 +2,36 @@
 using UnityEngine;
 using UnityEngine.Networking;
 
-public class JsonMazeLevelListFileReader : IJsonFileReader
+namespace DataSerialisation
 {
-    public MazeLevelNamesData ReadData<MazeLevelNamesData>(string series = "")
+    public class JsonMazeLevelListFileReader : IJsonFileReader
     {
-        string fileContent;
-        string filePath = Path.Combine(Application.streamingAssetsPath, "maze", "levels.json");
+        public MazeLevelNamesData ReadData<MazeLevelNamesData>(string series = "")
+        {
+            string fileContent;
+            string filePath = Path.Combine(Application.streamingAssetsPath, "maze", "levels.json");
 
-        if (Application.platform == RuntimePlatform.Android)
-        {
-            UnityWebRequest loadingRequest = UnityWebRequest.Get(filePath);
-            loadingRequest.SendWebRequest();
-            while (!loadingRequest.isDone) ;
-            fileContent = loadingRequest.downloadHandler.text.Trim();
-        }
-        else
-        {
-            if (!File.Exists(filePath))
+            if (Application.platform == RuntimePlatform.Android)
             {
-                Logger.Warning("File doesn't exist. Creating a new levels.json file.");
-                File.Create(filePath).Dispose();
-
-                return default(MazeLevelNamesData);
+                UnityWebRequest loadingRequest = UnityWebRequest.Get(filePath);
+                loadingRequest.SendWebRequest();
+                while (!loadingRequest.isDone) ;
+                fileContent = loadingRequest.downloadHandler.text.Trim();
             }
-            fileContent = File.ReadAllText(filePath);
-        }
+            else
+            {
+                if (!File.Exists(filePath))
+                {
+                    Logger.Warning("File doesn't exist. Creating a new levels.json file.");
+                    File.Create(filePath).Dispose();
 
-        MazeLevelNamesData jsonFileContent = JsonUtility.FromJson<MazeLevelNamesData>(fileContent);
-        return jsonFileContent;
+                    return default;
+                }
+                fileContent = File.ReadAllText(filePath);
+            }
+
+            MazeLevelNamesData jsonFileContent = JsonUtility.FromJson<MazeLevelNamesData>(fileContent);
+            return jsonFileContent;
+        }
     }
 }

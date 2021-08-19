@@ -1,11 +1,14 @@
 ﻿using System;
 
-[Serializable]
-public class SerialisableTileBaseGround : ISerialisableTileBackground
+namespace DataSerialisation
 {
-    public int TileConnectionScore;
-    public SerialisableTileBaseGround(int pathConnectionScore)
+    [Serializable]
+    public class SerialisableTileBaseGround : ISerialisableTileBackground
     {
-        TileConnectionScore = pathConnectionScore;
+        public int TileConnectionScore;
+        public SerialisableTileBaseGround(int pathConnectionScore)
+        {
+            TileConnectionScore = pathConnectionScore;
+        }
     }
 }

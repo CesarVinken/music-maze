@@ -1,14 +1,17 @@
 ﻿using System;
 
-[Serializable]
-public class SerialisablePlayerExitAttribute : ISerialisableTileAttribute
+namespace DataSerialisation
 {
-    public int ConnectionScore;
-    public int SpriteNumber;
-
-    public SerialisablePlayerExitAttribute(TileConnectionScoreInfo ConnectionScoreInfo)
+    [Serializable]
+    public class SerialisablePlayerExitAttribute : ISerialisableTileAttribute
     {
-        ConnectionScore = ConnectionScoreInfo.RawConnectionScore;
-        SpriteNumber = ConnectionScoreInfo.SpriteNumber;
+        public int ConnectionScore;
+        public int SpriteNumber;
+
+        public SerialisablePlayerExitAttribute(TileConnectionScoreInfo ConnectionScoreInfo)
+        {
+            ConnectionScore = ConnectionScoreInfo.RawConnectionScore;
+            SpriteNumber = ConnectionScoreInfo.SpriteNumber;
+        }
     }
 }

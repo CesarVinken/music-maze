@@ -1,4 +1,7 @@
-﻿public interface ISerialisableTileMainMaterial
+﻿namespace DataSerialisation
 {
+    public interface ISerialisableTileMainMaterial
+    {
 
+    }
 }

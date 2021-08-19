@@ -1,9 +1,12 @@
-﻿public class SerialisableMazeLevelEntryAttribute : ISerialisableTileAttribute
+﻿namespace DataSerialisation
 {
-    public string MazeLevelName;
-
-    public SerialisableMazeLevelEntryAttribute(string mazeLevelName)
+    public class SerialisableMazeLevelEntryAttribute : ISerialisableTileAttribute
     {
-        MazeLevelName = mazeLevelName;
+        public string MazeLevelName;
+
+        public SerialisableMazeLevelEntryAttribute(string mazeLevelName)
+        {
+            MazeLevelName = mazeLevelName;
+        }
     }
 }

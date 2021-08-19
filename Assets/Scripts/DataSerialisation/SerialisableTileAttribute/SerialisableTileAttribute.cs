@@ -1,16 +1,19 @@
 ﻿using System;
 using UnityEngine;
 
-[Serializable]
-public class SerialisableTileAttribute
+namespace DataSerialisation
 {
-    public int TileAttributeId;
-    public string AttributeType;
-    public string SerialisedData;
-
-    public SerialisableTileAttribute(string attributeType, ISerialisableTileAttribute iSerialisableTileAttribute)
+    [Serializable]
+    public class SerialisableTileAttribute
     {
-        AttributeType = attributeType;
-        SerialisedData = JsonUtility.ToJson(iSerialisableTileAttribute);
+        public int TileAttributeId;
+        public string AttributeType;
+        public string SerialisedData;
+
+        public SerialisableTileAttribute(string attributeType, ISerialisableTileAttribute iSerialisableTileAttribute)
+        {
+            AttributeType = attributeType;
+            SerialisedData = JsonUtility.ToJson(iSerialisableTileAttribute);
+        }
     }
 }

@@ -1,9 +1,12 @@
 ﻿using UnityEngine;
 
-[SerializeField]
-public class SerialisableLandMaterial : ISerialisableTileMainMaterial
+namespace DataSerialisation
 {
-    public SerialisableLandMaterial()
+    [SerializeField]
+    public class SerialisableLandMaterial : ISerialisableTileMainMaterial
     {
+        public SerialisableLandMaterial()
+        {
+        }
     }
 }
