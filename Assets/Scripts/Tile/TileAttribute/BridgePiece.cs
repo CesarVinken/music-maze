@@ -80,13 +80,13 @@ public class BridgePiece : MonoBehaviour, ITileAttribute, ITransformable
 
         if(BridgePieceDirection == BridgePieceDirection.Horizontal)
         {
-            Tile.AddBridgeEdge(this, ObjectDirection.Left, Direction.Right);
-            Tile.AddBridgeEdge(this, ObjectDirection.Right, Direction.Left);
+            Tile.AddBridgeEdge(this, Direction.Left, Direction.Right);
+            Tile.AddBridgeEdge(this, Direction.Right, Direction.Left);
         }
         else if(BridgePieceDirection == BridgePieceDirection.Vertical)
         {
-            Tile.AddBridgeEdge(this, ObjectDirection.Down, Direction.Up);
-            Tile.AddBridgeEdge(this, ObjectDirection.Up, Direction.Down);
+            Tile.AddBridgeEdge(this, Direction.Down, Direction.Up);
+            Tile.AddBridgeEdge(this, Direction.Up, Direction.Down);
         }
     }
 
@@ -101,23 +101,23 @@ public class BridgePiece : MonoBehaviour, ITileAttribute, ITransformable
             }
         }
 
-        foreach (KeyValuePair<ObjectDirection, Tile> neighbour in Tile.Neighbours)
+        foreach (KeyValuePair<Direction, Tile> neighbour in Tile.Neighbours)
         {
             if (neighbour.Value == null) continue;
 
             switch (neighbour.Key)
             {
-                case ObjectDirection.Down:
+                case Direction.Down:
                     neighbour.Value?.GetBridgeEdge(Direction.Up)?.Remove();
                     break;
-                case ObjectDirection.Left:
+                case Direction.Left:
                     neighbour.Value?.GetBridgeEdge(Direction.Right)?.Remove();
                     break;
-                case ObjectDirection.Right:
+                case Direction.Right:
                     Logger.Warning($"neighbour.Value?.GetBridgeEdge(Direction.Left) {neighbour.Value?.GetBridgeEdge(Direction.Left)}");
                     neighbour.Value?.GetBridgeEdge(Direction.Left)?.Remove();
                     break;
-                case ObjectDirection.Up:
+                case Direction.Up:
                     neighbour.Value?.GetBridgeEdge(Direction.Down)?.Remove();
                     break;
                 default:

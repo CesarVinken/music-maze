@@ -3,15 +3,16 @@ using Photon.Pun;
 using System.Collections;
 using Character.CharacterType;
 using Console;
+using PlayerCamera;
 
 namespace Character
 {
     public struct TargetLocation
     {
         public GridLocation TargetGridLocation;
-        public ObjectDirection TargetDirection;
+        public Direction TargetDirection;
 
-        public TargetLocation(GridLocation targetGridLocation, ObjectDirection targetDirection)
+        public TargetLocation(GridLocation targetGridLocation, Direction targetDirection)
         {
             TargetGridLocation = targetGridLocation;
             TargetDirection = targetDirection;
@@ -242,32 +243,32 @@ namespace Character
             float angle = Vector2.SignedAngle(Vector2.up, direction) * -1;
 
             new GridLocation(CurrentGridLocation.X, CurrentGridLocation.Y);
-            ObjectDirection moveDirection = ObjectDirection.Right;
+            Direction moveDirection = Direction.Right;
 
             if (angle <= -135)  // go down
             {
                 newLocomotionTarget = new GridLocation(CurrentGridLocation.X, CurrentGridLocation.Y - 1);
-                moveDirection = ObjectDirection.Down;
+                moveDirection = Direction.Down;
             }
             else if (angle <= -45) // go left
             {
                 newLocomotionTarget = new GridLocation(CurrentGridLocation.X - 1, CurrentGridLocation.Y);
-                moveDirection = ObjectDirection.Left;
+                moveDirection = Direction.Left;
             }
             else if (angle <= 45) // go up
             {
                 newLocomotionTarget = new GridLocation(CurrentGridLocation.X, CurrentGridLocation.Y + 1);
-                moveDirection = ObjectDirection.Up;
+                moveDirection = Direction.Up;
             }
             else if (angle <= 135) // go right
             {
                 newLocomotionTarget = new GridLocation(CurrentGridLocation.X + 1, CurrentGridLocation.Y);
-                moveDirection = ObjectDirection.Right;
+                moveDirection = Direction.Right;
             }
             else // go down
             {
                 newLocomotionTarget = new GridLocation(CurrentGridLocation.X, CurrentGridLocation.Y - 1);
-                moveDirection = ObjectDirection.Down;
+                moveDirection = Direction.Down;
             }
 
             SetPointerLocomotionTarget(GridLocation.GridToVector(newLocomotionTarget), moveDirection);
@@ -285,7 +286,7 @@ namespace Character
             }
         }
 
-        private void SetPointerLocomotionTarget(Vector2 target, ObjectDirection moveDirection)
+        private void SetPointerLocomotionTarget(Vector2 target, Direction moveDirection)
         {
             //Logger.Warning($"SetPointerLocomotionTarget to target {target.x}, {target.y} in the direction {moveDirection}");
             GridLocation targetGridLocation = GridLocation.FindClosestGridTile(target);
@@ -314,38 +315,38 @@ namespace Character
             {
                 if (Input.GetKey(GameManager.Instance.KeyboardConfiguration.Player1Up))
                 {
-                    TryStartCharacterMovement(ObjectDirection.Up);
+                    TryStartCharacterMovement(Direction.Up);
                 }
                 else if (Input.GetKey(GameManager.Instance.KeyboardConfiguration.Player1Right))
                 {
-                    TryStartCharacterMovement(ObjectDirection.Right);
+                    TryStartCharacterMovement(Direction.Right);
                 }
                 else if (Input.GetKey(GameManager.Instance.KeyboardConfiguration.Player1Down))
                 {
-                    TryStartCharacterMovement(ObjectDirection.Down);
+                    TryStartCharacterMovement(Direction.Down);
                 }
                 else if (Input.GetKey(GameManager.Instance.KeyboardConfiguration.Player1Left))
                 {
-                    TryStartCharacterMovement(ObjectDirection.Left);
+                    TryStartCharacterMovement(Direction.Left);
                 }
             }
             else if (KeyboardInput == KeyboardInput.Player2)
             {
                 if (Input.GetKey(GameManager.Instance.KeyboardConfiguration.Player2Up))
                 {
-                    TryStartCharacterMovement(ObjectDirection.Up);
+                    TryStartCharacterMovement(Direction.Up);
                 }
                 else if (Input.GetKey(GameManager.Instance.KeyboardConfiguration.Player2Right))
                 {
-                    TryStartCharacterMovement(ObjectDirection.Right);
+                    TryStartCharacterMovement(Direction.Right);
                 }
                 else if (Input.GetKey(GameManager.Instance.KeyboardConfiguration.Player2Down))
                 {
-                    TryStartCharacterMovement(ObjectDirection.Down);
+                    TryStartCharacterMovement(Direction.Down);
                 }
                 else if (Input.GetKey(GameManager.Instance.KeyboardConfiguration.Player2Left))
                 {
-                    TryStartCharacterMovement(ObjectDirection.Left);
+                    TryStartCharacterMovement(Direction.Left);
                 }
             }
             else
@@ -354,7 +355,7 @@ namespace Character
             }
         }
 
-        public void TryStartCharacterMovement(ObjectDirection direction)
+        public void TryStartCharacterMovement(Direction direction)
         {
             // check if character is in tile position, if so, start movement in direction.
             if (HasCalculatedTarget)
@@ -372,16 +373,16 @@ namespace Character
 
             switch (direction)
             {
-                case ObjectDirection.Down:
+                case Direction.Down:
                     TargetGridLocation = new TargetLocation(new GridLocation(currentGridLocation.X, currentGridLocation.Y - 1), direction);
                     break;
-                case ObjectDirection.Left:
+                case Direction.Left:
                     TargetGridLocation = new TargetLocation(new GridLocation(currentGridLocation.X - 1, currentGridLocation.Y), direction);
                     break;
-                case ObjectDirection.Right:
+                case Direction.Right:
                     TargetGridLocation = new TargetLocation(new GridLocation(currentGridLocation.X + 1, currentGridLocation.Y), direction);
                     break;
-                case ObjectDirection.Up:
+                case Direction.Up:
                     TargetGridLocation = new TargetLocation(new GridLocation(currentGridLocation.X, currentGridLocation.Y + 1), direction);
                     break;
                 default:
@@ -522,7 +523,7 @@ namespace Character
         {
             if (GameManager.Instance.CurrentGameLevel.TilesByLocation.TryGetValue(targetLocation.TargetGridLocation, out Tile targetTile))
             {
-                ObjectDirection direction = targetLocation.TargetDirection;
+                Direction direction = targetLocation.TargetDirection;
 
                 if (targetTile.Walkable)
                 {
@@ -542,14 +543,14 @@ namespace Character
 
                         if (bridgePieceOnCurrentTile.BridgePieceDirection == BridgePieceDirection.Horizontal &&
                             bridgePieceOnTarget.BridgePieceDirection == BridgePieceDirection.Horizontal &&
-                            (direction == ObjectDirection.Left || direction == ObjectDirection.Right))
+                            (direction == Direction.Left || direction == Direction.Right))
                         {
                             return true;
                         }
 
                         if (bridgePieceOnCurrentTile.BridgePieceDirection == BridgePieceDirection.Vertical &&
                             bridgePieceOnTarget.BridgePieceDirection == BridgePieceDirection.Vertical &&
-                            (direction == ObjectDirection.Up || direction == ObjectDirection.Down))
+                            (direction == Direction.Up || direction == Direction.Down))
                         {
                             return true;
                         }
@@ -559,14 +560,14 @@ namespace Character
 
                     if ((bridgePieceOnCurrentTile?.BridgePieceDirection == BridgePieceDirection.Horizontal ||
                         bridgePieceOnTarget?.BridgePieceDirection == BridgePieceDirection.Horizontal) &&
-                        (direction == ObjectDirection.Left || direction == ObjectDirection.Right))
+                        (direction == Direction.Left || direction == Direction.Right))
                     {
                         return true;
                     }
 
                     if ((bridgePieceOnCurrentTile?.BridgePieceDirection == BridgePieceDirection.Vertical ||
                         bridgePieceOnTarget?.BridgePieceDirection == BridgePieceDirection.Vertical) &&
-                        (direction == ObjectDirection.Up || direction == ObjectDirection.Down))
+                        (direction == Direction.Up || direction == Direction.Down))
                     {
                         return true;
                     }

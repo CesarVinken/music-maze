@@ -131,7 +131,7 @@ public class EditorOverworldTileBackgroundPlacer : OverworldTileBackgroundPlacer
 
     private void UpdatePathConnectionsOnNeighbours()
     {
-        foreach (KeyValuePair<ObjectDirection, Tile> neighbour in Tile.Neighbours)
+        foreach (KeyValuePair<Direction, Tile> neighbour in Tile.Neighbours)
         {
             if (!neighbour.Value) continue;
             
@@ -189,7 +189,7 @@ public class EditorOverworldTileBackgroundPlacer : OverworldTileBackgroundPlacer
     public void UpdateGroundConnectionsOnNeighbours(IBaseBackgroundType groundType)
     {
         Logger.Log($"UpdateGroundConnectionsOnNeighbours with ground type {groundType}");
-        foreach (KeyValuePair<ObjectDirection, Tile> neighbour in Tile.Neighbours)
+        foreach (KeyValuePair<Direction, Tile> neighbour in Tile.Neighbours)
         {
             EditorOverworldTile neighbourTile = neighbour.Value as EditorOverworldTile;
 

@@ -39,7 +39,7 @@ public class EditorMazeTileAttributePlacer : MazeTileAttributePlacer<EditorMazeT
         Tile.AddAttribute(playerExit);
 
         // after adding obstacle to this tile, update connections of neighbours
-        foreach (KeyValuePair<ObjectDirection, Tile> neighbour in Tile.Neighbours)
+        foreach (KeyValuePair<Direction, Tile> neighbour in Tile.Neighbours)
         {
             if (!neighbour.Value) continue;
 
@@ -78,7 +78,7 @@ public class EditorMazeTileAttributePlacer : MazeTileAttributePlacer<EditorMazeT
         }
 
         // after adding obstacle to this tile, update connections of neighbours
-        foreach (KeyValuePair<ObjectDirection, Tile> neighbour in Tile.Neighbours)
+        foreach (KeyValuePair<Direction, Tile> neighbour in Tile.Neighbours)
         {
             if (!neighbour.Value) continue;
             
@@ -148,7 +148,7 @@ public class EditorMazeTileAttributePlacer : MazeTileAttributePlacer<EditorMazeT
         _tile.AddAttribute(bridgePiece);
 
         //Update path connections of neighbours
-        foreach (KeyValuePair<ObjectDirection, Tile> neighbour in _tile.Neighbours)
+        foreach (KeyValuePair<Direction, Tile> neighbour in _tile.Neighbours)
         {
             if (!neighbour.Value) continue;
 

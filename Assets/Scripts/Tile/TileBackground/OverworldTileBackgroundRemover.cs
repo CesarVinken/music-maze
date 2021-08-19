@@ -30,7 +30,7 @@ public class OverworldTileBackgroundRemover : TileBackgroundRemover
         overworldTilePath.Remove();
 
         //After removing tile, check with neighbour tiles if wall connections should be updated
-        foreach (KeyValuePair<ObjectDirection, Tile> neighbour in _tile.Neighbours)
+        foreach (KeyValuePair<Direction, Tile> neighbour in _tile.Neighbours)
         {
             if (!neighbour.Value) continue;
             

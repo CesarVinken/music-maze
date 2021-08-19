@@ -87,25 +87,25 @@ namespace Character
             GridLocation currentGridLocation = CurrentGridLocation;
 
             Vector3 moveDir;
-            ObjectDirection direction = ObjectDirection.Right;
+            Direction direction = Direction.Right;
             if (nextGridLocation.X > currentGridLocation.X)
             {
-                direction = ObjectDirection.Right;
+                direction = Direction.Right;
                 _animationHandler.SetDirection(direction);
             }
             else if (nextGridLocation.X < currentGridLocation.X)
             {
-                direction = ObjectDirection.Left;
+                direction = Direction.Left;
                 _animationHandler.SetDirection(direction);
             }
             else if (nextGridLocation.Y > currentGridLocation.Y)
             {
-                direction = ObjectDirection.Up;
+                direction = Direction.Up;
                 _animationHandler.SetDirection(direction);
             }
             else if (nextGridLocation.Y < currentGridLocation.Y)
             {
-                direction = ObjectDirection.Down;
+                direction = Direction.Down;
                 _animationHandler.SetDirection(direction);
             }
 
@@ -119,10 +119,10 @@ namespace Character
             float roundingDifference = 0.0001f; // Sometimes the character would overstep the target threshold (eg. 2.5f) by a tiny amount (eg. 0.00001). Then the character would get stuck.
 
             // Character reaches a tile grid location (its middle)
-            if ((direction == ObjectDirection.Right && transform.position.x >= targetVector2Pos.x + GridLocation.OffsetToTileMiddle - roundingDifference) ||
-                (direction == ObjectDirection.Left && transform.position.x <= targetVector2Pos.x + GridLocation.OffsetToTileMiddle + roundingDifference) ||
-                (direction == ObjectDirection.Down && transform.position.y <= targetVector2Pos.y + GridLocation.OffsetToTileMiddle + roundingDifference) ||
-                direction == ObjectDirection.Up && transform.position.y >= targetVector2Pos.y + GridLocation.OffsetToTileMiddle - roundingDifference)
+            if ((direction == Direction.Right && transform.position.x >= targetVector2Pos.x + GridLocation.OffsetToTileMiddle - roundingDifference) ||
+                (direction == Direction.Left && transform.position.x <= targetVector2Pos.x + GridLocation.OffsetToTileMiddle + roundingDifference) ||
+                (direction == Direction.Down && transform.position.y <= targetVector2Pos.y + GridLocation.OffsetToTileMiddle + roundingDifference) ||
+                direction == Direction.Up && transform.position.y >= targetVector2Pos.y + GridLocation.OffsetToTileMiddle - roundingDifference)
             {
                 SetCurrentGridLocation(nextGridLocation);
 

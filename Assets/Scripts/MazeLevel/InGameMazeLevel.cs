@@ -237,16 +237,16 @@ public class InGameMazeLevel : MazeLevel, IInGameLevel
                 switch (edgeSide)
                 {
                     case Direction.Up:
-                        neighbourTile = tile.Neighbours[ObjectDirection.Up] as InGameMazeTile;
+                        neighbourTile = tile.Neighbours[Direction.Up] as InGameMazeTile;
                         break;
                     case Direction.Right:
-                        neighbourTile = tile.Neighbours[ObjectDirection.Right] as InGameMazeTile;
+                        neighbourTile = tile.Neighbours[Direction.Right] as InGameMazeTile;
                         break;
                     case Direction.Down:
-                        neighbourTile = tile.Neighbours[ObjectDirection.Down] as InGameMazeTile;
+                        neighbourTile = tile.Neighbours[Direction.Down] as InGameMazeTile;
                         break;
                     case Direction.Left:
-                        neighbourTile = tile.Neighbours[ObjectDirection.Left] as InGameMazeTile;
+                        neighbourTile = tile.Neighbours[Direction.Left] as InGameMazeTile;
                         break;
                     default:
                         break;

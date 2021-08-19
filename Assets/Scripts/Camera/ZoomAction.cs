@@ -1,6 +1,9 @@
-public enum ZoomAction
+namespace PlayerCamera
 {
-    AutoZoom,
-    NoZoom,
-    PlayerZoom
+    public enum ZoomAction
+    {
+        AutoZoom,
+        NoZoom,
+        PlayerZoom
+    }
 }

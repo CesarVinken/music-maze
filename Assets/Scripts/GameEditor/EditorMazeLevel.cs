@@ -282,16 +282,16 @@ public class EditorMazeLevel : MazeLevel, IEditorLevel
                 switch (edgeSide)
                 {
                     case Direction.Up:
-                        neighbourTile = tile.Neighbours[ObjectDirection.Up] as EditorMazeTile;
+                        neighbourTile = tile.Neighbours[Direction.Up] as EditorMazeTile;
                         break;
                     case Direction.Right:
-                        neighbourTile = tile.Neighbours[ObjectDirection.Right] as EditorMazeTile;
+                        neighbourTile = tile.Neighbours[Direction.Right] as EditorMazeTile;
                         break;
                     case Direction.Down:
-                        neighbourTile = tile.Neighbours[ObjectDirection.Down] as EditorMazeTile;
+                        neighbourTile = tile.Neighbours[Direction.Down] as EditorMazeTile;
                         break;
                     case Direction.Left:
-                        neighbourTile = tile.Neighbours[ObjectDirection.Left] as EditorMazeTile;
+                        neighbourTile = tile.Neighbours[Direction.Left] as EditorMazeTile;
                         break;
                     default:
                         break;

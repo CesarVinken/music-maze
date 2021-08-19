@@ -25,7 +25,7 @@ public class MazeTileTransformationMapperForTile : MonoBehaviour
     {
         List<EditorMazeTile> foundSoFar = new List<EditorMazeTile>();
 
-        foreach (KeyValuePair<ObjectDirection, Tile> neighbour in selectedTile.Neighbours)
+        foreach (KeyValuePair<Direction, Tile> neighbour in selectedTile.Neighbours)
         {
             if (!neighbour.Value) continue; // if there is no neighbour
 

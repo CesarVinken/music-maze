@@ -103,7 +103,7 @@ public class MazeTileAttributeRemover : TileAttributeRemover
         bridgePieceAttribute.Remove();
 
         //Update path connections of neighbours
-        foreach (KeyValuePair<ObjectDirection, Tile> neighbour in _tile.Neighbours)
+        foreach (KeyValuePair<Direction, Tile> neighbour in _tile.Neighbours)
         {
             if (!neighbour.Value) continue;
 
@@ -163,7 +163,7 @@ public class MazeTileAttributeRemover : TileAttributeRemover
 
     private void UpdateNeighboursForRemovedObstacle(ObstacleType obstacleType)
     {
-        foreach (KeyValuePair<ObjectDirection, Tile> neighbour in _tile.Neighbours)
+        foreach (KeyValuePair<Direction, Tile> neighbour in _tile.Neighbours)
         {
             if (!neighbour.Value) continue;
             

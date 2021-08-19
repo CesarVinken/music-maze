@@ -39,7 +39,7 @@ public class MazeTileFullTransformationMapper
 
         List<EditorMazeTile> newNeighbouringTiles = new List<EditorMazeTile>();
 
-        foreach (KeyValuePair<ObjectDirection, Tile> neighbour in tile.Neighbours)
+        foreach (KeyValuePair<Direction, Tile> neighbour in tile.Neighbours)
         {
             if (!neighbour.Value) continue;
 

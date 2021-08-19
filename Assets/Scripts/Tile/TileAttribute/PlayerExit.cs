@@ -97,7 +97,7 @@ public class PlayerExit : TileObstacle, ITileAttribute, ITileConnectable
         tile.SetWalkable(true);
         IsOpen = true;
 
-        foreach (KeyValuePair<ObjectDirection, Tile> item in tile.Neighbours)
+        foreach (KeyValuePair<Direction, Tile> item in tile.Neighbours)
         {
             if (item.Value?.PathNode != null && item.Value.Walkable)
             {
@@ -105,17 +105,17 @@ public class PlayerExit : TileObstacle, ITileAttribute, ITileConnectable
 
                 switch (item.Key)
                 {
-                    case ObjectDirection.Down:
-                        item.Value.PathNodeNeighbours[ObjectDirection.Up] = tile.PathNode;
+                    case Direction.Down:
+                        item.Value.PathNodeNeighbours[Direction.Up] = tile.PathNode;
                         break;
-                    case ObjectDirection.Left:
-                        item.Value.PathNodeNeighbours[ObjectDirection.Right] = tile.PathNode;
+                    case Direction.Left:
+                        item.Value.PathNodeNeighbours[Direction.Right] = tile.PathNode;
                         break;
-                    case ObjectDirection.Right:
-                        item.Value.PathNodeNeighbours[ObjectDirection.Left] = tile.PathNode;
+                    case Direction.Right:
+                        item.Value.PathNodeNeighbours[Direction.Left] = tile.PathNode;
                         break;
-                    case ObjectDirection.Up:
-                        item.Value.PathNodeNeighbours[ObjectDirection.Down] = tile.PathNode;
+                    case Direction.Up:
+                        item.Value.PathNodeNeighbours[Direction.Down] = tile.PathNode;
                         break;
                     default:
                         break;
@@ -144,9 +144,9 @@ public class PlayerExit : TileObstacle, ITileAttribute, ITileConnectable
         gameObject.layer = 8; // set layer to Unwalkable, which is layer 8. Should not be hardcoded
         _tileSpriteContainer.gameObject.layer = 8;
 
-        foreach (KeyValuePair<ObjectDirection, Tile> neighbourTileItem in tile.Neighbours)
+        foreach (KeyValuePair<Direction, Tile> neighbourTileItem in tile.Neighbours)
         {
-            foreach (KeyValuePair<ObjectDirection, PathNode> item in neighbourTileItem.Value.PathNodeNeighbours)
+            foreach (KeyValuePair<Direction, PathNode> item in neighbourTileItem.Value.PathNodeNeighbours)
             {
                 if(item.Value == tile.PathNode)
                 {

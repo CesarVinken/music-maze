@@ -96,23 +96,23 @@ namespace Character
             InLocomotion = value;
         }
 
-        public void SetDirection(ObjectDirection direction)
+        public void SetDirection(Direction direction)
         {
             switch (direction)
             {
-                case ObjectDirection.Down:
+                case Direction.Down:
                     SetHorizontal(0);
                     SetVertical(-1f);
                     break;
-                case ObjectDirection.Left:
+                case Direction.Left:
                     SetHorizontal(-1f);
                     SetVertical(0);
                     break;
-                case ObjectDirection.Right:
+                case Direction.Right:
                     SetHorizontal(1f);
                     SetVertical(0);
                     break;
-                case ObjectDirection.Up:
+                case Direction.Up:
                     SetHorizontal(0);
                     SetVertical(1f);
                     break;

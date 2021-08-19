@@ -1,5 +1,8 @@
-public enum ZoomType
+namespace PlayerCamera
 {
-    ZoomIn,
-    ZoomOut
+    public enum ZoomType
+    {
+        ZoomIn,
+        ZoomOut
+    }
 }

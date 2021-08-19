@@ -518,7 +518,7 @@ public class MazeLevelGameplayManager : MonoBehaviour, IOnEventCallback, IGamepl
 
     private void HandlePlayerTileMarkerEnds(MazeTile tile)
     {
-        foreach (KeyValuePair<ObjectDirection, Tile> item in tile.Neighbours)
+        foreach (KeyValuePair<Direction, Tile> item in tile.Neighbours)
         {
             MazeTile neighbour = item.Value as MazeTile;
 

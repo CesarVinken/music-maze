@@ -28,24 +28,24 @@ public class NeighbourTileCalculator
         bool hasMarkLeft = false;
         bool hasMarkUp = false;
 
-        foreach (KeyValuePair<ObjectDirection, Tile> item in tile.Neighbours)
+        foreach (KeyValuePair<Direction, Tile> item in tile.Neighbours)
         {
             MazeTile neighbour = item.Value as MazeTile;
             if (neighbour == null || neighbour.PlayerMark == null || neighbour.PlayerMark.Owner == PlayerMarkOwner.None) continue;
 
-            if (item.Key == ObjectDirection.Right)
+            if (item.Key == Direction.Right)
             {
                 hasMarkRight = true;
             }
-            else if (item.Key == ObjectDirection.Down)
+            else if (item.Key == Direction.Down)
             {
                 hasMarkDown = true;
             }
-            else if (item.Key == ObjectDirection.Left)
+            else if (item.Key == Direction.Left)
             {
                 hasMarkLeft = true;
             }
-            else if (item.Key == ObjectDirection.Up)
+            else if (item.Key == Direction.Up)
             {
                 hasMarkUp = true;
             }
@@ -67,24 +67,24 @@ public class NeighbourTileCalculator
             return null;
         }
 
-        foreach (KeyValuePair<ObjectDirection, Tile> neighbour in tile.Neighbours)
+        foreach (KeyValuePair<Direction, Tile> neighbour in tile.Neighbours)
         {
             if (!neighbour.Value)
             {
                 // if there is no tile as neighbour, it must mean it as the level edge. This counts as a connection.
-                if (neighbour.Key == ObjectDirection.Right)
+                if (neighbour.Key == Direction.Right)
                 {
                     pathRight.HasConnection = true;
                 }
-                else if (neighbour.Key == ObjectDirection.Down)
+                else if (neighbour.Key == Direction.Down)
                 {
                     pathDown.HasConnection = true;
                 }
-                else if (neighbour.Key == ObjectDirection.Left)
+                else if (neighbour.Key == Direction.Left)
                 {
                     pathLeft.HasConnection = true;
                 }
-                else if (neighbour.Key == ObjectDirection.Up)
+                else if (neighbour.Key == Direction.Up)
                 {
                     pathUp.HasConnection = true;
                 }
@@ -105,12 +105,12 @@ public class NeighbourTileCalculator
 
                 bool hasBridgeConnection = false;
 
-                if ((neighbour.Key == ObjectDirection.Right || neighbour.Key == ObjectDirection.Left) &&
+                if ((neighbour.Key == Direction.Right || neighbour.Key == Direction.Left) &&
                     bridgePiece.BridgePieceDirection == BridgePieceDirection.Horizontal)
                 {
                     hasBridgeConnection = true;
                 }
-                else if ((neighbour.Key == ObjectDirection.Down || neighbour.Key == ObjectDirection.Up) &&
+                else if ((neighbour.Key == Direction.Down || neighbour.Key == Direction.Up) &&
                     bridgePiece.BridgePieceDirection == BridgePieceDirection.Vertical)
                 {
                     hasBridgeConnection = true;
@@ -122,22 +122,22 @@ public class NeighbourTileCalculator
                 }
             }
 
-            if (neighbour.Key == ObjectDirection.Right)
+            if (neighbour.Key == Direction.Right)
             {
                 pathRight.HasConnection = true;
                 pathRight.TileModifier = tilePath;
             }
-            else if (neighbour.Key == ObjectDirection.Down)
+            else if (neighbour.Key == Direction.Down)
             {
                 pathDown.HasConnection = true;
                 pathDown.TileModifier = tilePath;
             }
-            else if (neighbour.Key == ObjectDirection.Left)
+            else if (neighbour.Key == Direction.Left)
             {
                 pathLeft.HasConnection = true;
                 pathLeft.TileModifier = tilePath;
             }
-            else if (neighbour.Key == ObjectDirection.Up)
+            else if (neighbour.Key == Direction.Up)
             {
                 pathUp.HasConnection = true;
                 pathUp.TileModifier = tilePath;
@@ -161,7 +161,7 @@ public class NeighbourTileCalculator
             return null;
         }
 
-        foreach (KeyValuePair<ObjectDirection, Tile> neighbour in tile.Neighbours)
+        foreach (KeyValuePair<Direction, Tile> neighbour in tile.Neighbours)
         {
             if (!neighbour.Value)
             {
@@ -169,19 +169,19 @@ public class NeighbourTileCalculator
                 // But only if the main tile itself is a land tile
                 if(tile.TileMainMaterial.GetType() == typeof(GroundMainMaterial))
                 {
-                    if (neighbour.Key == ObjectDirection.Right)
+                    if (neighbour.Key == Direction.Right)
                     {
                         groundRight.HasConnection = true;
                     }
-                    else if (neighbour.Key == ObjectDirection.Down)
+                    else if (neighbour.Key == Direction.Down)
                     {
                         groundDown.HasConnection = true;
                     }
-                    else if (neighbour.Key == ObjectDirection.Left)
+                    else if (neighbour.Key == Direction.Left)
                     {
                         groundLeft.HasConnection = true;
                     }
-                    else if (neighbour.Key == ObjectDirection.Up)
+                    else if (neighbour.Key == Direction.Up)
                     {
                         groundUp.HasConnection = true;
                     }
@@ -202,22 +202,22 @@ public class NeighbourTileCalculator
                 continue;
             }
 
-            if (neighbour.Key == ObjectDirection.Right)
+            if (neighbour.Key == Direction.Right)
             {
                 groundRight.HasConnection = true;
                 groundRight.TileModifier = tileGround;
             }
-            else if (neighbour.Key == ObjectDirection.Down)
+            else if (neighbour.Key == Direction.Down)
             {
                 groundDown.HasConnection = true;
                 groundDown.TileModifier = tileGround;
             }
-            else if (neighbour.Key == ObjectDirection.Left)
+            else if (neighbour.Key == Direction.Left)
             {
                 groundLeft.HasConnection = true;
                 groundLeft.TileModifier = tileGround;
             }
-            else if (neighbour.Key == ObjectDirection.Up)
+            else if (neighbour.Key == Direction.Up)
             {
                 groundUp.HasConnection = true;
                 groundUp.TileModifier = tileGround;
@@ -241,7 +241,7 @@ public class NeighbourTileCalculator
             return null;
         }
 
-        foreach (KeyValuePair<ObjectDirection, Tile> neighbour in tile.Neighbours)
+        foreach (KeyValuePair<Direction, Tile> neighbour in tile.Neighbours)
         {
             if (!neighbour.Value) continue;
             
@@ -254,22 +254,22 @@ public class NeighbourTileCalculator
                 continue;
             }
 
-            if (neighbour.Key == ObjectDirection.Right)
+            if (neighbour.Key == Direction.Right)
             {
                 obstacleRight.HasConnection = true;
                 obstacleRight.TileModifier = tileObstacle;
             }
-            else if (neighbour.Key == ObjectDirection.Down)
+            else if (neighbour.Key == Direction.Down)
             {
                 obstacleDown.HasConnection = true;
                 obstacleDown.TileModifier = tileObstacle;
             }
-            else if (neighbour.Key == ObjectDirection.Left)
+            else if (neighbour.Key == Direction.Left)
             {
                 obstacleLeft.HasConnection = true;
                 obstacleLeft.TileModifier = tileObstacle;
             }
-            else if (neighbour.Key == ObjectDirection.Up)
+            else if (neighbour.Key == Direction.Up)
             {
                 obstacleUp.HasConnection = true;
                 obstacleUp.TileModifier = tileObstacle;
@@ -287,7 +287,7 @@ public class NeighbourTileCalculator
         TileModifierConnectionInfo<T> connectionLeft = new TileModifierConnectionInfo<T>(Direction.Left);
         TileModifierConnectionInfo<T> connectionUp = new TileModifierConnectionInfo<T>(Direction.Up);
 
-        foreach (KeyValuePair<ObjectDirection, Tile> neighbour in tile.Neighbours)
+        foreach (KeyValuePair<Direction, Tile> neighbour in tile.Neighbours)
         {
             if (!neighbour.Value) continue;
 
@@ -312,22 +312,22 @@ public class NeighbourTileCalculator
                 continue;
             }
 
-            if (neighbour.Key == ObjectDirection.Right)
+            if (neighbour.Key == Direction.Right)
             {
                 connectionRight.HasConnection = true;
                 connectionRight.TileModifier = connectedModifier;
             }
-            else if (neighbour.Key == ObjectDirection.Down)
+            else if (neighbour.Key == Direction.Down)
             {     
                 connectionDown.HasConnection = true;
                 connectionDown.TileModifier = connectedModifier;
             }
-            else if (neighbour.Key == ObjectDirection.Left)
+            else if (neighbour.Key == Direction.Left)
             {
                 connectionLeft.HasConnection = true;
                 connectionLeft.TileModifier = connectedModifier;
             }
-            else if (neighbour.Key == ObjectDirection.Up)
+            else if (neighbour.Key == Direction.Up)
             {
                 connectionUp.HasConnection = true;
                 connectionUp.TileModifier = connectedModifier;

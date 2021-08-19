@@ -67,7 +67,7 @@ public class Pathfinding {
             openList.Remove(currentNode);
             closedList.Add(currentNode);
 
-            foreach (KeyValuePair<ObjectDirection, PathNode> item in GetNeighbourList(currentNode)) {
+            foreach (KeyValuePair<Direction, PathNode> item in GetNeighbourList(currentNode)) {
                 PathNode neighbourNode = item.Value;
                 if (closedList.Contains(neighbourNode)) continue;
 
@@ -110,7 +110,7 @@ public class Pathfinding {
         return new List<PathNode>();
     }
 
-    private Dictionary<ObjectDirection, PathNode> GetNeighbourList(PathNode currentNode) {
+    private Dictionary<Direction, PathNode> GetNeighbourList(PathNode currentNode) {
         return currentNode.Tile.PathNodeNeighbours;
     }
 
@@ -153,7 +153,7 @@ public class Pathfinding {
         return lowestFCostNode;
     }
 
-    public bool ValidateForBridge(PathNode currentNode, PathNode targetNode, ObjectDirection direction)
+    public bool ValidateForBridge(PathNode currentNode, PathNode targetNode, Direction direction)
     {
         Tile targetTile = targetNode.Tile;
         Tile currentTile = currentNode.Tile;
@@ -175,14 +175,14 @@ public class Pathfinding {
 
                 if (bridgePieceOnCurrentTile.BridgePieceDirection == BridgePieceDirection.Horizontal &&
                     bridgePieceOnTarget.BridgePieceDirection == BridgePieceDirection.Horizontal &&
-                    (direction == ObjectDirection.Left || direction == ObjectDirection.Right))
+                    (direction == Direction.Left || direction == Direction.Right))
                 {
                     return true;
                 }
 
                 if (bridgePieceOnCurrentTile.BridgePieceDirection == BridgePieceDirection.Vertical &&
                     bridgePieceOnTarget.BridgePieceDirection == BridgePieceDirection.Vertical &&
-                    (direction == ObjectDirection.Up || direction == ObjectDirection.Down))
+                    (direction == Direction.Up || direction == Direction.Down))
                 {
                     return true;
                 }
@@ -192,14 +192,14 @@ public class Pathfinding {
 
             if ((bridgePieceOnCurrentTile?.BridgePieceDirection == BridgePieceDirection.Horizontal ||
                 bridgePieceOnTarget?.BridgePieceDirection == BridgePieceDirection.Horizontal) &&
-                (direction == ObjectDirection.Left || direction == ObjectDirection.Right))
+                (direction == Direction.Left || direction == Direction.Right))
             {
                 return true;
             }
 
             if ((bridgePieceOnCurrentTile?.BridgePieceDirection == BridgePieceDirection.Vertical ||
                 bridgePieceOnTarget?.BridgePieceDirection == BridgePieceDirection.Vertical) &&
-                (direction == ObjectDirection.Up || direction == ObjectDirection.Down))
+                (direction == Direction.Up || direction == Direction.Down))
             {
                 return true;
             }

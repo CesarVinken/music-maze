@@ -139,7 +139,7 @@ public class EditorMazeTileBackgroundPlacer : MazeTileBackgroundPlacer<EditorMaz
 
     private void UpdatePathConnectionsOnNeighbours()
     {
-        foreach (KeyValuePair<ObjectDirection, Tile> neighbour in Tile.Neighbours)
+        foreach (KeyValuePair<Direction, Tile> neighbour in Tile.Neighbours)
         {
             if (!neighbour.Value) continue;
             
@@ -197,7 +197,7 @@ public class EditorMazeTileBackgroundPlacer : MazeTileBackgroundPlacer<EditorMaz
 
     public void UpdateGroundConnectionsOnNeighbours(IBaseBackgroundType groundType)
     {
-        foreach (KeyValuePair<ObjectDirection, Tile> neighbour in Tile.Neighbours)
+        foreach (KeyValuePair<Direction, Tile> neighbour in Tile.Neighbours)
         {
             EditorMazeTile neighbourTile = neighbour.Value as EditorMazeTile;
 
