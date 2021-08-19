@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using Console;
+using UnityEngine;
 
 public class ConsoleButton : MonoBehaviour
 {

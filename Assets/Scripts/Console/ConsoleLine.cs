@@ -1,11 +1,14 @@
-﻿public class ConsoleLine
+﻿namespace Console
 {
-    public string Text;
-    public bool IsPlayerInput;
-
-    public ConsoleLine(string text, bool isPlayerInput = false)
+    public class ConsoleLine
     {
-        Text = text;
-        IsPlayerInput = isPlayerInput;
+        public string Text;
+        public bool IsPlayerInput;
+
+        public ConsoleLine(string text, bool isPlayerInput = false)
+        {
+            Text = text;
+            IsPlayerInput = isPlayerInput;
+        }
     }
 }

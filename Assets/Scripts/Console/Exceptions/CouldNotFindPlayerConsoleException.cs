@@ -1,9 +1,11 @@
-public class CouldNotFindPlayerConsoleException : System.Exception
+namespace Console
 {
-    public CouldNotFindPlayerConsoleException(string message)
+    public class CouldNotFindPlayerConsoleException : System.Exception
     {
-        Logger.Warning(message);
-        Console.Instance.PrintToReportText(message);
+        public CouldNotFindPlayerConsoleException(string message)
+        {
+            Logger.Warning(message);
+            Console.Instance.PrintToReportText(message);
+        }
     }
 }
-

@@ -1,38 +1,41 @@
 using System.Collections.Generic;
 using System.Linq;
 
-public class OverworldListInfo : IInfoCommand
+namespace Console
 {
-    public string GetInfo(List<string> arguments)
+    public class OverworldListInfo : IInfoCommand
     {
-        try
+        public string GetInfo(List<string> arguments)
         {
-            List<string> overworldNames = GetOverworldNamesData();
-            Logger.Log($"overworldNames has a count of {overworldNames.Count}");
-            string infoMessage = "--\n";
-            infoMessage += $"There are {overworldNames.Count} overworlds in total:\n\n";
-
-            for (int i = 0; i < overworldNames.Count; i++)
+            try
             {
-                infoMessage += $"- {overworldNames[i]}\n";
+                List<string> overworldNames = GetOverworldNamesData();
+                Logger.Log($"overworldNames has a count of {overworldNames.Count}");
+                string infoMessage = "--\n";
+                infoMessage += $"There are {overworldNames.Count} overworlds in total:\n\n";
+
+                for (int i = 0; i < overworldNames.Count; i++)
+                {
+                    infoMessage += $"- {overworldNames[i]}\n";
+                }
+
+                infoMessage += "\n\n";
+
+                return infoMessage;
             }
-
-            infoMessage += "\n\n";
-
-            return infoMessage;
+            catch (System.Exception)
+            {
+                return null;
+            }
         }
-        catch (System.Exception)
+
+        private List<string> GetOverworldNamesData()
         {
-            return null;
+            OverworldNamesData overworldNamesData = OverworldLoader.GetAllOverworldNamesData();
+            Logger.Log($"overworldNamesData has a count of {overworldNamesData.OverworldNames.Count}");
+            List<string> overworldNames = overworldNamesData.OverworldNames.Select(level => level.OverworldName).ToList();
+
+            return overworldNames;
         }
-    }
-
-    private List<string> GetOverworldNamesData()
-    {
-        OverworldNamesData overworldNamesData = OverworldLoader.GetAllOverworldNamesData();
-        Logger.Log($"overworldNamesData has a count of {overworldNamesData.OverworldNames.Count}");
-        List<string> overworldNames = overworldNamesData.OverworldNames.Select(level => level.OverworldName).ToList();
-
-        return overworldNames;
     }
 }

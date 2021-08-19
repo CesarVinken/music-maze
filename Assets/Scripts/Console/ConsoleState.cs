@@ -1,6 +1,9 @@
-﻿public enum ConsoleState
+﻿namespace Console
 {
-    Closed,
-    Small,
-    Large
+    public enum ConsoleState
+    {
+        Closed,
+        Small,
+        Large
+    }
 }

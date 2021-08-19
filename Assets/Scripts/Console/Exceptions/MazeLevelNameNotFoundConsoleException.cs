@@ -1,8 +1,11 @@
-﻿public class MazeLevelNameNotFoundConsoleException : System.Exception
+﻿namespace Console
 {
-    public MazeLevelNameNotFoundConsoleException(string message)
+    public class MazeLevelNameNotFoundConsoleException : System.Exception
     {
-        Logger.Warning(message);
-        Console.Instance.PrintToReportText(message);
+        public MazeLevelNameNotFoundConsoleException(string message)
+        {
+            Logger.Warning(message);
+            Console.Instance.PrintToReportText(message);
+        }
     }
 }

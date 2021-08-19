@@ -1,17 +1,20 @@
 ﻿using System.Collections.Generic;
 
-public class CloseConsoleCommand : CommandProcedure
+namespace Console
 {
-    public override void Run(List<string> arguments)
+    public class CloseConsoleCommand : CommandProcedure
     {
-        ConsoleContainer.Instance.ToggleConsole(ConsoleState.Closed);
+        public override void Run(List<string> arguments)
+        {
+            ConsoleContainer.Instance.ToggleConsole(ConsoleState.Closed);
 
-        Console.Instance.PrintToReportText("Closed the console");
-    }
+            Console.Instance.PrintToReportText("Closed the console");
+        }
 
-    public override void Help()
-    {
-        string printLine = "The close command closes the console.";
-        Console.Instance.PrintToReportText(printLine);
+        public override void Help()
+        {
+            string printLine = "The close command closes the console.";
+            Console.Instance.PrintToReportText(printLine);
+        }
     }
 }

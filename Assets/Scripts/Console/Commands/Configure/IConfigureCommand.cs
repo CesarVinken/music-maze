@@ -1,6 +1,9 @@
 ﻿using System.Collections.Generic;
 
-public interface IConfigureCommand
+namespace Console
 {
-    void Configure(List<string> arguments);
+    public interface IConfigureCommand
+    {
+        void Configure(List<string> arguments);
+    }
 }

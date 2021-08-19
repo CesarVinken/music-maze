@@ -1,8 +1,11 @@
-public class OverworldNameNotFoundConsoleException : System.Exception
+namespace Console
 {
-    public OverworldNameNotFoundConsoleException(string message)
+    public class OverworldNameNotFoundConsoleException : System.Exception
     {
-        Logger.Warning(message);
-        Console.Instance.PrintToReportText(message);
+        public OverworldNameNotFoundConsoleException(string message)
+        {
+            Logger.Warning(message);
+            Console.Instance.PrintToReportText(message);
+        }
     }
 }

@@ -1,9 +1,11 @@
-
-public class BlueprintNotFoundConsoleException : System.Exception
+namespace Console
 {
-    public BlueprintNotFoundConsoleException(string message)
+    public class BlueprintNotFoundConsoleException : System.Exception
     {
-        Logger.Warning(message);
-        Console.Instance.PrintToReportText(message);
+        public BlueprintNotFoundConsoleException(string message)
+        {
+            Logger.Warning(message);
+            Console.Instance.PrintToReportText(message);
+        }
     }
 }

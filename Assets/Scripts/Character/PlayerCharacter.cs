@@ -2,6 +2,7 @@
 using Photon.Pun;
 using System.Collections;
 using Character.CharacterType;
+using Console;
 
 namespace Character
 {
@@ -62,7 +63,7 @@ namespace Character
 
             if (IsFrozen) return;
 
-            if (Console.Instance && Console.Instance.ConsoleState != ConsoleState.Closed)
+            if (Console.Console.Instance && Console.Console.Instance.ConsoleState != ConsoleState.Closed)
                 return;
 
             if (GameRules.GamePlayerType == GamePlayerType.SinglePlayer ||

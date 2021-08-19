@@ -1,9 +1,11 @@
-﻿public class CouldNotFindMazeLevelConsoleException : System.Exception
+﻿namespace Console
 {
-    public CouldNotFindMazeLevelConsoleException(string message)
+    public class CouldNotFindMazeLevelConsoleException : System.Exception
     {
-        Logger.Warning(message);
-        Console.Instance.PrintToReportText(message);
+        public CouldNotFindMazeLevelConsoleException(string message)
+        {
+            Logger.Warning(message);
+            Console.Instance.PrintToReportText(message);
+        }
     }
 }
-

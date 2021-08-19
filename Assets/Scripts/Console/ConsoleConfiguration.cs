@@ -1,6 +1,8 @@
-﻿public static class ConsoleConfiguration
+﻿namespace Console
 {
-    public static string HighlightColour = "#8bedff";
-    public static string ErrorColour = "#b03e27";
-
+    public static class ConsoleConfiguration
+    {
+        public static string HighlightColour = "#8bedff";
+        public static string ErrorColour = "#b03e27";
+    }
 }

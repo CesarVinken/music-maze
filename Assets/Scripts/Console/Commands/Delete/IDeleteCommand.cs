@@ -1,6 +1,9 @@
 using System.Collections.Generic;
 
-public interface IDeleteCommand
+namespace Console
 {
-    string Delete(List<string> arguments);
+    public interface IDeleteCommand
+    {
+        string Delete(List<string> arguments);
+    }
 }

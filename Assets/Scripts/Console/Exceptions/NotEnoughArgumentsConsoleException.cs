@@ -1,8 +1,11 @@
-﻿public class NotEnoughArgumentsConsoleException : System.Exception
+﻿namespace Console
 {
-    public NotEnoughArgumentsConsoleException(string message)
+    public class NotEnoughArgumentsConsoleException : System.Exception
     {
-        Logger.Warning(message);
-        Console.Instance.PrintToReportText(message);
+        public NotEnoughArgumentsConsoleException(string message)
+        {
+            Logger.Warning(message);
+            Console.Instance.PrintToReportText(message);
+        }
     }
 }

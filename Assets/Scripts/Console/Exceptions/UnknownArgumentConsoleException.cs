@@ -1,8 +1,11 @@
-﻿public class UnknownArgumentConsoleException : System.Exception
+﻿namespace Console
 {
-    public UnknownArgumentConsoleException(string message)
+    public class UnknownArgumentConsoleException : System.Exception
     {
-        Logger.Warning(message);
-        Console.Instance.PrintToReportText(message);
+        public UnknownArgumentConsoleException(string message)
+        {
+            Logger.Warning(message);
+            Console.Instance.PrintToReportText(message);
+        }
     }
 }

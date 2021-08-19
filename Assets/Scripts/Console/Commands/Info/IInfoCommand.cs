@@ -1,6 +1,9 @@
 ﻿using System.Collections.Generic;
 
-public interface IInfoCommand
+namespace Console
 {
-    string GetInfo(List<string> arguments);
+    public interface IInfoCommand
+    {
+        string GetInfo(List<string> arguments);
+    }
 }

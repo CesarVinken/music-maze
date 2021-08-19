@@ -1,37 +1,40 @@
 using System.Collections.Generic;
 using System.Linq;
 
-public class MazeLevelListInfo : IInfoCommand
+namespace Console
 {
-    public string GetInfo(List<string> arguments)
+    public class MazeLevelListInfo : IInfoCommand
     {
-        try
+        public string GetInfo(List<string> arguments)
         {
-            List<string> levelNames = GetMazeLevelNamesData();
-
-            string infoMessage = "--\n";
-            infoMessage += $"There are {levelNames.Count} maze levels in total:\n\n";
-
-            for (int i = 0; i < levelNames.Count; i++)
+            try
             {
-                infoMessage += $"- {levelNames[i]}\n";
+                List<string> levelNames = GetMazeLevelNamesData();
+
+                string infoMessage = "--\n";
+                infoMessage += $"There are {levelNames.Count} maze levels in total:\n\n";
+
+                for (int i = 0; i < levelNames.Count; i++)
+                {
+                    infoMessage += $"- {levelNames[i]}\n";
+                }
+
+                infoMessage += "\n\n";
+
+                return infoMessage;
             }
-
-            infoMessage += "\n\n";
-
-            return infoMessage;
+            catch (System.Exception)
+            {
+                return null;
+            }
         }
-        catch (System.Exception)
+
+        private List<string> GetMazeLevelNamesData()
         {
-            return null;
+            MazeLevelNamesData mazeLevelNamesData = MazeLevelLoader.GetAllMazeLevelNamesData();
+            List<string> mazeLevelNames = mazeLevelNamesData.LevelNames.Select(level => level.LevelName).ToList();
+
+            return mazeLevelNames;
         }
-    }
-
-    private List<string> GetMazeLevelNamesData()
-    {
-        MazeLevelNamesData mazeLevelNamesData = MazeLevelLoader.GetAllMazeLevelNamesData();
-        List<string> mazeLevelNames = mazeLevelNamesData.LevelNames.Select(level => level.LevelName).ToList();
-
-        return mazeLevelNames;
     }
 }
