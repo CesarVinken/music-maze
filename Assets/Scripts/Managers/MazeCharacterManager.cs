@@ -5,18 +5,6 @@ using UnityEngine;
 
 public class MazeCharacterManager : MonoBehaviourPunCallbacks, ICharacterManager
 {
-    public struct CharacterBundle
-    {
-        public GameObject CharacterGO;
-        public Character Character;
-
-        public CharacterBundle(Character character, GameObject characterGO)
-        {
-            Character = character;
-            CharacterGO = characterGO;
-        }
-    }
-
     public GameObject EnemyCharacterPrefab;
     public GameObject PlayerCharacterPrefab;
 
@@ -65,19 +53,15 @@ public class MazeCharacterManager : MonoBehaviourPunCallbacks, ICharacterManager
         {
             Debug.Log("Instantiating Player 1");
 
-            CharacterBundle PlayerBundle = SpawnCharacter(new CharacterBlueprint(new Emmon()), level.PlayerCharacterSpawnpoints[PlayerNumber.Player1]);
-            Player1GO = PlayerBundle.CharacterGO;
+            SpawnPlayerCharacter(new CharacterBlueprint(new Emmon()), level.PlayerCharacterSpawnpoints[PlayerNumber.Player1].GridLocation, PlayerNumber.Player1);
             SpawnEnemies();
         }
         else if (GameRules.GamePlayerType == GamePlayerType.SplitScreenMultiplayer)
         {
             Debug.Log("Instantiating Players");
 
-            CharacterBundle Player1Bundle = SpawnCharacter(new CharacterBlueprint(new Emmon()), level.PlayerCharacterSpawnpoints[PlayerNumber.Player1]);
-            Player1GO = Player1Bundle.CharacterGO;
-
-            CharacterBundle Player2Bundle = SpawnCharacter(new CharacterBlueprint(new Fae()), level.PlayerCharacterSpawnpoints[PlayerNumber.Player2]);
-            Player2GO = Player2Bundle.CharacterGO;
+            SpawnPlayerCharacter(new CharacterBlueprint(new Emmon()), level.PlayerCharacterSpawnpoints[PlayerNumber.Player1].GridLocation, PlayerNumber.Player1);
+            SpawnPlayerCharacter(new CharacterBlueprint(new Fae()), level.PlayerCharacterSpawnpoints[PlayerNumber.Player2].GridLocation, PlayerNumber.Player2);
 
             SpawnEnemies();
         }
@@ -85,15 +69,14 @@ public class MazeCharacterManager : MonoBehaviourPunCallbacks, ICharacterManager
         {
             Debug.Log("Instantiating Player 2");
 
-            CharacterBundle PlayerBundle = SpawnCharacter(new CharacterBlueprint(new Fae()), level.PlayerCharacterSpawnpoints[PlayerNumber.Player2]);
-            Player2GO = PlayerBundle.CharacterGO;
+            SpawnPlayerCharacter(new CharacterBlueprint(new Fae()), level.PlayerCharacterSpawnpoints[PlayerNumber.Player2].GridLocation, PlayerNumber.Player2);
         }
     }
 
-    private CharacterBundle SpawnCharacter(CharacterBlueprint character, CharacterSpawnpoint spawnpoint)
+    public void SpawnPlayerCharacter(CharacterBlueprint character, GridLocation gridLocation, PlayerNumber playerNumber)
     {
         string prefabName = GetPrefabNameByCharacter(character);
-        Vector2 startPosition = GetCharacterGridPosition(GridLocation.GridToVector(spawnpoint.GridLocation)); // start position is grid position plus grid tile offset
+        Vector2 startPosition = GetCharacterGridPosition(GridLocation.GridToVector(gridLocation)); // start position is grid position plus grid tile offset
 
         GameObject characterGO = null;
 
@@ -114,31 +97,40 @@ public class MazeCharacterManager : MonoBehaviourPunCallbacks, ICharacterManager
             playerCharacter.CharacterBlueprint = character;
 
             playerCharacter.FreezeCharacter();
-            playerCharacter.SetStartingPoint(playerCharacter, spawnpoint.GridLocation, spawnpoint);
-
-            CharacterBundle characterBundle = new CharacterBundle(playerCharacter, characterGO);
-            return characterBundle;
+            playerCharacter.SetStartingPoint(
+                playerCharacter, 
+                gridLocation,
+                GameManager.Instance.CurrentGameLevel.PlayerCharacterSpawnpoints[playerCharacter.PlayerNumber]);
         }
-        else
+        //else
+        //{
+        //    if (GameRules.GamePlayerType == GamePlayerType.SinglePlayer ||
+        //        GameRules.GamePlayerType == GamePlayerType.SplitScreenMultiplayer)
+        //    {
+        //        characterGO = GameObject.Instantiate(EnemyCharacterPrefab, startPosition, Quaternion.identity);
+        //    }
+        //    else
+        //    {
+        //        characterGO = PhotonNetwork.Instantiate(prefabName, startPosition, Quaternion.identity, 0);
+        //    }
+
+        //    EnemyCharacter enemyCharacter = characterGO.GetComponent<EnemyCharacter>();
+        //    enemyCharacter.SetSpawnpoint(enemyCharacter, spawnpoint as EnemySpawnpoint);
+        //    enemyCharacter.SetTileAreas();
+        //    enemyCharacter.FreezeCharacter();
+        //    enemyCharacter.CharacterBlueprint = character;
+        //}
+
+        switch (playerNumber)
         {
-            if (GameRules.GamePlayerType == GamePlayerType.SinglePlayer ||
-                GameRules.GamePlayerType == GamePlayerType.SplitScreenMultiplayer)
-            {
-                characterGO = GameObject.Instantiate(EnemyCharacterPrefab, startPosition, Quaternion.identity);
-            }
-            else
-            {
-                characterGO = PhotonNetwork.Instantiate(prefabName, startPosition, Quaternion.identity, 0);
-            }
-
-            EnemyCharacter enemyCharacter = characterGO.GetComponent<EnemyCharacter>();
-            enemyCharacter.SetSpawnpoint(enemyCharacter, spawnpoint as EnemySpawnpoint);
-            enemyCharacter.SetTileAreas();
-            enemyCharacter.FreezeCharacter();
-            enemyCharacter.CharacterBlueprint = character;
-
-            CharacterBundle characterBundle = new CharacterBundle(enemyCharacter, characterGO);
-            return characterBundle;
+            case PlayerNumber.Player1:
+                Player1GO = characterGO;
+                break;
+            case PlayerNumber.Player2:
+                Player2GO = characterGO;
+                break;
+            default:
+                break;
         }
     }
 
@@ -150,9 +142,33 @@ public class MazeCharacterManager : MonoBehaviourPunCallbacks, ICharacterManager
 
         for (int i = 0; i < level.EnemyCharacterSpawnpoints.Count; i++)
         {
-            CharacterBundle enemy = SpawnCharacter(level.EnemyCharacterSpawnpoints[i].CharacterBlueprint, level.EnemyCharacterSpawnpoints[i]);
-            enemy.CharacterGO.name = $"The Enemy {i}";
+            SpawnEnemyCharacter(level.EnemyCharacterSpawnpoints[i].CharacterBlueprint, level.EnemyCharacterSpawnpoints[i]);
         }
+    }
+
+    public void SpawnEnemyCharacter(CharacterBlueprint character, CharacterSpawnpoint spawnpoint)
+    {
+        string prefabName = GetPrefabNameByCharacter(character);
+        GameObject characterGO = null;
+        Vector2 startPosition = GetCharacterGridPosition(GridLocation.GridToVector(spawnpoint.GridLocation)); // start position is grid position plus grid tile offset
+
+        if (GameRules.GamePlayerType == GamePlayerType.SinglePlayer ||
+                GameRules.GamePlayerType == GamePlayerType.SplitScreenMultiplayer)
+        {
+            characterGO = GameObject.Instantiate(EnemyCharacterPrefab, startPosition, Quaternion.identity);
+        }
+        else
+        {
+            characterGO = PhotonNetwork.Instantiate(prefabName, startPosition, Quaternion.identity, 0);
+        }
+
+        EnemyCharacter enemyCharacter = characterGO.GetComponent<EnemyCharacter>();
+        enemyCharacter.SetSpawnpoint(enemyCharacter, spawnpoint as EnemySpawnpoint);
+        enemyCharacter.SetTileAreas();
+        enemyCharacter.FreezeCharacter();
+        enemyCharacter.CharacterBlueprint = character;
+
+        characterGO.name = $"The Enemy {character.CharacterType}";
     }
 
     public void ExitCharacter(MazePlayerCharacter player)
@@ -258,6 +274,19 @@ public class MazeCharacterManager : MonoBehaviourPunCallbacks, ICharacterManager
     public void AddPlayer(PlayerNumber playerNumber, PlayerCharacter playerCharacter)
     {
         _players.Add(playerNumber, playerCharacter as MazePlayerCharacter);
+    }
+
+    public void RemovePlayer(PlayerNumber playerNumber)
+    {
+        _players.Remove(playerNumber);
+        if (playerNumber == PlayerNumber.Player1)
+        {
+            GameObject.Destroy(Player1GO);
+        }
+        else
+        {
+            GameObject.Destroy(Player2GO);
+        }
     }
 
     public PlayerNumber GetOurPlayerCharacter()

@@ -14,6 +14,8 @@ public interface ICharacterManager
     void UnfreezeCharacters();
 
     void ExitCharacter(MazePlayerCharacter player);
+    void SpawnPlayerCharacter(CharacterBlueprint character, GridLocation gridLocation, PlayerNumber playerNumber);
+
     void PutCharacterOnGrid(GameObject characterGO, Vector3 gridVectorLocation);
 
     Vector3 GetCharacterGridPosition(Vector3 gridVectorLocation);
@@ -23,6 +25,7 @@ public interface ICharacterManager
     Dictionary<PlayerNumber, string> GetPlayerNames();
     int GetPlayerCount();
     void AddPlayer(PlayerNumber playerNumber, PlayerCharacter playerCharacter);
+    void RemovePlayer(PlayerNumber playerNumber);
     PlayerCharacter GetPlayerCharacter<T>(PlayerNumber playerNumber) where T : PlayerCharacter;
     PlayerNumber GetOurPlayerCharacter();
 }
