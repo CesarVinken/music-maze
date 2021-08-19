@@ -1,18 +1,21 @@
 ﻿using UnityEngine;
 
-namespace CharacterType
+namespace Character
 {
-    public class EvilViolin : ICharacter
+    namespace CharacterType
     {
-        public RuntimeAnimatorController GetAnimationController()
+        public class EvilViolin : ICharacter
         {
-            MazeCharacterManager manager = GameManager.Instance.CharacterManager as MazeCharacterManager;
-            return manager.EnemyController;
-        }
+            public RuntimeAnimatorController GetAnimationController()
+            {
+                MazeCharacterManager manager = GameManager.Instance.CharacterManager as MazeCharacterManager;
+                return manager.EnemyController;
+            }
 
-        public string GetPrefabPath()
-        {
-            return "Prefabs/Character/EnemyCharacter";
+            public string GetPrefabPath()
+            {
+                return "Prefabs/Character/EnemyCharacter";
+            }
         }
     }
 }

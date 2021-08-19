@@ -1,4 +1,5 @@
-﻿using CharacterType;
+﻿using Character;
+using Character.CharacterType;
 using Photon.Pun;
 using System.Collections.Generic;
 using UnityEngine;

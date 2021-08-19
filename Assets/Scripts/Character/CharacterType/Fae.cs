@@ -1,36 +1,39 @@
 ﻿using UnityEngine;
 
-namespace CharacterType
+namespace Character
 {
-    public class Fae : ICharacter
+    namespace CharacterType
     {
-        public RuntimeAnimatorController GetAnimationController()
+        public class Fae : ICharacter
         {
-            return GameManager.Instance.CharacterManager.Bard2Controller;
-        }
-
-        public string GetPrefabPath()
-        {
-            if(GameRules.GamePlayerType == GamePlayerType.NetworkMultiplayer)
+            public RuntimeAnimatorController GetAnimationController()
             {
+                return GameManager.Instance.CharacterManager.Bard2Controller;
+            }
+
+            public string GetPrefabPath()
+            {
+                if (GameRules.GamePlayerType == GamePlayerType.NetworkMultiplayer)
+                {
+                    if (PersistentGameManager.CurrentSceneType == SceneType.Maze)
+                    {
+                        return "Prefabs/Character/MazeNetworkFae";
+                    }
+                    else
+                    {
+                        return "Prefabs/Character/OverworldNetworkFae";
+                    }
+                }
+
+                // GAME TYPE IS NOT NETWORK BUT SINGLEPLAYER OR SPLIT SCREEN
                 if (PersistentGameManager.CurrentSceneType == SceneType.Maze)
                 {
-                    return "Prefabs/Character/MazeNetworkFae";
+                    return "Prefabs/Character/MazePlayerCharacter";
                 }
                 else
                 {
-                    return "Prefabs/Character/OverworldNetworkFae";
+                    return "Prefabs/Character/OverworldPlayerCharacter";
                 }
-            }
-
-            // GAME TYPE IS NOT NETWORK BUT SINGLEPLAYER OR SPLIT SCREEN
-            if (PersistentGameManager.CurrentSceneType == SceneType.Maze)
-            {
-                return "Prefabs/Character/MazePlayerCharacter";
-            }
-            else
-            {
-                return "Prefabs/Character/OverworldPlayerCharacter";
             }
         }
     }

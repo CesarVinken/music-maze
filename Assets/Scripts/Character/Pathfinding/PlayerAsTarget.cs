@@ -1,3 +1,5 @@
+using Character;
+
 public class PlayerAsTarget
 {
     public PlayerCharacter TargettedPlayer { get; private set; }

@@ -1,7 +1,8 @@
-﻿using Photon.Pun;
+﻿using Character;
+using Character.CharacterType;
+using Photon.Pun;
 using System.Collections.Generic;
 using UnityEngine;
-using CharacterType;
 
 public class OverworldCharacterManager : MonoBehaviourPunCallbacks, ICharacterManager
 {
@@ -103,7 +104,7 @@ public class OverworldCharacterManager : MonoBehaviourPunCallbacks, ICharacterMa
 
         playerCharacter.FreezeCharacter();
         playerCharacter.SetStartingPoint(
-            playerCharacter as Character,
+            playerCharacter as Character.Character,
             gridLocation,
             GameManager.Instance.CurrentGameLevel.PlayerCharacterSpawnpoints[playerCharacter.PlayerNumber]
         );

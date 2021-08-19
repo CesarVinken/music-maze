@@ -2,92 +2,95 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class OverworldPlayerCharacter : PlayerCharacter
+namespace Character
 {
-    public MazeLevelEntry OccupiedMazeLevelEntry = null;
-    public List<MapInteractionButton> MapInteractionButtonsForPlayer = new List<MapInteractionButton>();
-
-    public override void Awake()
+    public class OverworldPlayerCharacter : PlayerCharacter
     {
-        base.Awake();
+        public MazeLevelEntry OccupiedMazeLevelEntry = null;
+        public List<MapInteractionButton> MapInteractionButtonsForPlayer = new List<MapInteractionButton>();
 
-        OverworldScoreContainer.Instance.UpdateScoreLabel(PlayerNumber);
-    }
-
-    public override void Start()
-    {
-        base.Start();
-
-        // transform the player's starting tile and surrounding tiles
-        InGameOverworldTile currentTile = GameManager.Instance.CurrentGameLevel.TilesByLocation[StartingPosition] as InGameOverworldTile;
-        SetCurrentGridLocation(currentTile.GridLocation);
-    }
-
-    public override void Update()
-    {
-        if (MazeLevelInvitation.PendingInvitation)
-            return;
-        
-        base.Update();
-
-        if (OccupiedMazeLevelEntry != null && (GameRules.GamePlayerType == GamePlayerType.SinglePlayer || 
-            GameRules.GamePlayerType == GamePlayerType.SplitScreenMultiplayer ||
-            PhotonView.IsMine))
+        public override void Awake()
         {
-            if (Input.GetKeyDown(KeyCode.Return) || Input.GetKeyDown(KeyCode.KeypadEnter) )
+            base.Awake();
+
+            OverworldScoreContainer.Instance.UpdateScoreLabel(PlayerNumber);
+        }
+
+        public override void Start()
+        {
+            base.Start();
+
+            // transform the player's starting tile and surrounding tiles
+            InGameOverworldTile currentTile = GameManager.Instance.CurrentGameLevel.TilesByLocation[StartingPosition] as InGameOverworldTile;
+            SetCurrentGridLocation(currentTile.GridLocation);
+        }
+
+        public override void Update()
+        {
+            if (MazeLevelInvitation.PendingInvitation)
+                return;
+
+            base.Update();
+
+            if (OccupiedMazeLevelEntry != null && (GameRules.GamePlayerType == GamePlayerType.SinglePlayer ||
+                GameRules.GamePlayerType == GamePlayerType.SplitScreenMultiplayer ||
+                PhotonView.IsMine))
             {
-                if(OccupiedMazeLevelEntry.Tile.GridLocation.X == CurrentGridLocation.X && OccupiedMazeLevelEntry.Tile.GridLocation.Y == CurrentGridLocation.Y)
+                if (Input.GetKeyDown(KeyCode.Return) || Input.GetKeyDown(KeyCode.KeypadEnter))
                 {
-                    PerformMazeLevelEntryAction(OccupiedMazeLevelEntry.MazeLevelName);
+                    if (OccupiedMazeLevelEntry.Tile.GridLocation.X == CurrentGridLocation.X && OccupiedMazeLevelEntry.Tile.GridLocation.Y == CurrentGridLocation.Y)
+                    {
+                        PerformMazeLevelEntryAction(OccupiedMazeLevelEntry.MazeLevelName);
+                    }
+                }
+                if (OccupiedMazeLevelEntry.Tile.GridLocation.X == CurrentGridLocation.X && OccupiedMazeLevelEntry.Tile.GridLocation.Y == CurrentGridLocation.Y)
+                {
+                    if (MapInteractionButtonsForPlayer.Count == 0)
+                    {
+                        MainScreenCameraCanvas.Instance.CreateMapInteractionButton(this, new Vector2(OccupiedMazeLevelEntry.Tile.GridLocation.X, OccupiedMazeLevelEntry.Tile.GridLocation.Y), "Enter " + OccupiedMazeLevelEntry.MazeLevelName);
+                    }
                 }
             }
-            if (OccupiedMazeLevelEntry.Tile.GridLocation.X == CurrentGridLocation.X && OccupiedMazeLevelEntry.Tile.GridLocation.Y == CurrentGridLocation.Y)
+        }
+
+        public void PerformMazeLevelEntryAction(string mazeName)
+        {
+            // Player does not meet entry requirements? Return;
+
+            if (GameRules.GamePlayerType == GamePlayerType.SinglePlayer)
             {
-                if(MapInteractionButtonsForPlayer.Count == 0)
-                {
-                    MainScreenCameraCanvas.Instance.CreateMapInteractionButton(this, new Vector2(OccupiedMazeLevelEntry.Tile.GridLocation.X, OccupiedMazeLevelEntry.Tile.GridLocation.Y), "Enter " + OccupiedMazeLevelEntry.MazeLevelName);
-                }
+                PersistentGameManager.SetCurrentSceneName(mazeName);
+                OverworldGameplayManager.Instance.LoadMaze();
             }
-        }
-    }
-
-    public void PerformMazeLevelEntryAction(string mazeName)
-    {
-        // Player does not meet entry requirements? Return;
-
-        if (GameRules.GamePlayerType == GamePlayerType.SinglePlayer)
-        {
-            PersistentGameManager.SetCurrentSceneName(mazeName);
-            OverworldGameplayManager.Instance.LoadMaze();
-        }
-        else if (GameRules.GamePlayerType == GamePlayerType.SplitScreenMultiplayer)
-        {
-            PersistentGameManager.SetCurrentSceneName(mazeName);
-            OverworldGameplayManager.Instance.LoadMaze();
-        }
-        else
-        {
-            PersistentGameManager.SetCurrentSceneName(mazeName);
-
-            PlayerSendsMazeLevelInvitationEvent playerSendsMazeLevelInvitationEvent = new PlayerSendsMazeLevelInvitationEvent();
-            playerSendsMazeLevelInvitationEvent.SendPlayerSendsMazeLevelInvitationEvent(PhotonView.Owner.NickName, mazeName);
-
-            string otherPlayerName = "";
-            if(PlayerNumber == PlayerNumber.Player1)
+            else if (GameRules.GamePlayerType == GamePlayerType.SplitScreenMultiplayer)
             {
-                otherPlayerName = GameManager.Instance.CharacterManager.GetPlayerCharacter<PlayerCharacter>(PlayerNumber.Player2).PhotonView.Owner.NickName;
-            }
-            else if (PlayerNumber == PlayerNumber.Player2)
-            {
-                otherPlayerName = GameManager.Instance.CharacterManager.GetPlayerCharacter<PlayerCharacter>(PlayerNumber.Player1).PhotonView.Owner.NickName;
+                PersistentGameManager.SetCurrentSceneName(mazeName);
+                OverworldGameplayManager.Instance.LoadMaze();
             }
             else
             {
-                Logger.Warning($"Unknown player number {PlayerNumber}");
-            }
+                PersistentGameManager.SetCurrentSceneName(mazeName);
 
-            OverworldMainScreenOverlayCanvas.Instance.ShowPlayerMessagePanel($"We are waiting for {otherPlayerName} to accept our invitation...");
-            MazeLevelInvitation.PendingInvitation = true;
+                PlayerSendsMazeLevelInvitationEvent playerSendsMazeLevelInvitationEvent = new PlayerSendsMazeLevelInvitationEvent();
+                playerSendsMazeLevelInvitationEvent.SendPlayerSendsMazeLevelInvitationEvent(PhotonView.Owner.NickName, mazeName);
+
+                string otherPlayerName = "";
+                if (PlayerNumber == PlayerNumber.Player1)
+                {
+                    otherPlayerName = GameManager.Instance.CharacterManager.GetPlayerCharacter<PlayerCharacter>(PlayerNumber.Player2).PhotonView.Owner.NickName;
+                }
+                else if (PlayerNumber == PlayerNumber.Player2)
+                {
+                    otherPlayerName = GameManager.Instance.CharacterManager.GetPlayerCharacter<PlayerCharacter>(PlayerNumber.Player1).PhotonView.Owner.NickName;
+                }
+                else
+                {
+                    Logger.Warning($"Unknown player number {PlayerNumber}");
+                }
+
+                OverworldMainScreenOverlayCanvas.Instance.ShowPlayerMessagePanel($"We are waiting for {otherPlayerName} to accept our invitation...");
+                MazeLevelInvitation.PendingInvitation = true;
+            }
         }
     }
 }

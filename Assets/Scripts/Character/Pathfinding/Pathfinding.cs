@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using Character;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class Pathfinding {
@@ -10,9 +11,9 @@ public class Pathfinding {
     private List<PathNode> openList;
     private List<PathNode> closedList;
 
-    private Character _character;
+    private Character.Character _character;
 
-    public Pathfinding(Character character) {
+    public Pathfinding(Character.Character character) {
         Instance = this;
         _character = character;
 

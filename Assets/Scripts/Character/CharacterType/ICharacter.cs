@@ -1,7 +1,9 @@
 ﻿using UnityEngine;
-
-public interface ICharacter
+namespace Character
 {
-    RuntimeAnimatorController GetAnimationController();
-    string GetPrefabPath();
+    public interface ICharacter
+    {
+        RuntimeAnimatorController GetAnimationController();
+        string GetPrefabPath();
+    }
 }

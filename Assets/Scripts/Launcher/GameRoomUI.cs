@@ -1,4 +1,5 @@
-﻿using ExitGames.Client.Photon;
+﻿using Character;
+using ExitGames.Client.Photon;
 using Photon.Pun;
 using Photon.Pun.Demo.PunBasics;
 using Photon.Realtime;

@@ -1,36 +1,39 @@
 ﻿using UnityEngine;
 
-namespace CharacterType
+namespace Character
 {
-    public class Emmon : ICharacter
+    namespace CharacterType
     {
-        public RuntimeAnimatorController GetAnimationController()
+        public class Emmon : ICharacter
         {
-            return GameManager.Instance.CharacterManager.Bard1Controller;
-        }
-
-        public string GetPrefabPath()
-        {
-            if (GameRules.GamePlayerType == GamePlayerType.NetworkMultiplayer)
+            public RuntimeAnimatorController GetAnimationController()
             {
+                return GameManager.Instance.CharacterManager.Bard1Controller;
+            }
+
+            public string GetPrefabPath()
+            {
+                if (GameRules.GamePlayerType == GamePlayerType.NetworkMultiplayer)
+                {
+                    if (PersistentGameManager.CurrentSceneType == SceneType.Maze)
+                    {
+                        return "Prefabs/Character/MazeNetworkEmmon";
+                    }
+                    else
+                    {
+                        return "Prefabs/Character/OverworldNetworkEmmon";
+                    }
+                }
+
+                // GAME TYPE IS NOT NETWORK BUT SINGLEPLAYER OR SPLIT SCREEN
                 if (PersistentGameManager.CurrentSceneType == SceneType.Maze)
                 {
-                    return "Prefabs/Character/MazeNetworkEmmon";
+                    return "Prefabs/Character/MazePlayerCharacter";
                 }
                 else
                 {
-                    return "Prefabs/Character/OverworldNetworkEmmon";
+                    return "Prefabs/Character/OverworldPlayerCharacter";
                 }
-            }
-
-            // GAME TYPE IS NOT NETWORK BUT SINGLEPLAYER OR SPLIT SCREEN
-            if (PersistentGameManager.CurrentSceneType == SceneType.Maze)
-            {
-                return "Prefabs/Character/MazePlayerCharacter";
-            }
-            else
-            {
-                return "Prefabs/Character/OverworldPlayerCharacter";
             }
         }
     }

@@ -1,6 +1,6 @@
-﻿using UnityEngine;
+﻿using Character;
+using UnityEngine;
 using UnityEngine.UI;
-
 
 public class MapInteractionButton : MonoBehaviour, IMapInteractionButton
 {

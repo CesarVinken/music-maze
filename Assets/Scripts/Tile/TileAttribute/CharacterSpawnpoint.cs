@@ -1,4 +1,5 @@
-﻿using CharacterType;
+﻿using Character;
+using Character.CharacterType;
 using UnityEngine;
 
 public class CharacterSpawnpoint : MonoBehaviour, ITileAttribute

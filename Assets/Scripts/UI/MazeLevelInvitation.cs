@@ -1,4 +1,5 @@
-﻿using Photon.Pun;
+﻿using Character;
+using Photon.Pun;
 using UnityEngine;
 using UnityEngine.UI;
 

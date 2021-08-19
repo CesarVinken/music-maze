@@ -1,600 +1,603 @@
 ﻿using UnityEngine;
 using Photon.Pun;
 using System.Collections;
-using CharacterType;
+using Character.CharacterType;
 
-public struct TargetLocation
+namespace Character
 {
-    public GridLocation TargetGridLocation;
-    public ObjectDirection TargetDirection;
-
-    public TargetLocation(GridLocation targetGridLocation, ObjectDirection targetDirection)
+    public struct TargetLocation
     {
-        TargetGridLocation = targetGridLocation;
-        TargetDirection = targetDirection;
-    }
-}
+        public GridLocation TargetGridLocation;
+        public ObjectDirection TargetDirection;
 
-public class PlayerCharacter : Character
-{
-    [Space(10)]
-
-    public KeyboardInput KeyboardInput = KeyboardInput.None;
-    public PlayerNumber PlayerNumber = PlayerNumber.Player1;
-    public Tile LastTile;
-    public string Name;
-    protected TargetLocation TargetGridLocation;
-    [SerializeField] protected BoxCollider2D _playerCollider;
-
-    protected bool _isPressingPointerForSeconds = false;
-    protected float _pointerPresserTimer = 1;
-    protected const float _pointerPresserDelay = 0.25f;
-
-    public override void Awake()
-    {
-        Logger.Log("AWAKE THE PLAYER CHARACTER!");
-        Guard.CheckIsNull(_playerCollider, "_playerCollider", gameObject);
-        
-        SetPlayerNumber();
-
-        GameManager.Instance.CharacterManager.AddPlayer(PlayerNumber, this); // do here and not in manager.
-
-        // TODO: character type should not depend on Player Number, but on which character the player chose when starting the game
-        AssignCharacterType(); // relies on player number
-        SetPlayerName(); // relies on player type
-        SetPlayerKeyboardInput();
-
-        base.Awake();
-
-        _pointerPresserTimer = 0;        
-    }
-
-    public virtual void Start()
-    {
-        _pathfinding = new Pathfinding(this);
-    }
-
-    public virtual void Update()
-    {
-        if (EditorManager.InEditor) return;
-
-        if (IsFrozen) return;
-
-        if (Console.Instance && Console.Instance.ConsoleState != ConsoleState.Closed)
-            return;
-
-        if (GameRules.GamePlayerType == GamePlayerType.SinglePlayer ||
-            (GameRules.GamePlayerType == GamePlayerType.NetworkMultiplayer && PhotonView.IsMine)
-            )
+        public TargetLocation(GridLocation targetGridLocation, ObjectDirection targetDirection)
         {
-            if (PersistentGameManager.CurrentPlatform == Platform.PC)
-                HandleKeyboardInput();
+            TargetGridLocation = targetGridLocation;
+            TargetDirection = targetDirection;
+        }
+    }
 
-            if (Input.GetMouseButtonUp(0) )
+    public class PlayerCharacter : Character
+    {
+        [Space(10)]
+
+        public KeyboardInput KeyboardInput = KeyboardInput.None;
+        public PlayerNumber PlayerNumber = PlayerNumber.Player1;
+        public Tile LastTile;
+        public string Name;
+        protected TargetLocation TargetGridLocation;
+        [SerializeField] protected BoxCollider2D _playerCollider;
+
+        protected bool _isPressingPointerForSeconds = false;
+        protected float _pointerPresserTimer = 1;
+        protected const float _pointerPresserDelay = 0.25f;
+
+        public override void Awake()
+        {
+            Logger.Log("AWAKE THE PLAYER CHARACTER!");
+            Guard.CheckIsNull(_playerCollider, "_playerCollider", gameObject);
+
+            SetPlayerNumber();
+
+            GameManager.Instance.CharacterManager.AddPlayer(PlayerNumber, this); // do here and not in manager.
+
+            // TODO: character type should not depend on Player Number, but on which character the player chose when starting the game
+            AssignCharacterType(); // relies on player number
+            SetPlayerName(); // relies on player type
+            SetPlayerKeyboardInput();
+
+            base.Awake();
+
+            _pointerPresserTimer = 0;
+        }
+
+        public virtual void Start()
+        {
+            _pathfinding = new Pathfinding(this);
+        }
+
+        public virtual void Update()
+        {
+            if (EditorManager.InEditor) return;
+
+            if (IsFrozen) return;
+
+            if (Console.Instance && Console.Instance.ConsoleState != ConsoleState.Closed)
+                return;
+
+            if (GameRules.GamePlayerType == GamePlayerType.SinglePlayer ||
+                (GameRules.GamePlayerType == GamePlayerType.NetworkMultiplayer && PhotonView.IsMine)
+                )
             {
-                _isPressingPointerForSeconds = false;
-                _pointerPresserTimer = 0;
+                if (PersistentGameManager.CurrentPlatform == Platform.PC)
+                    HandleKeyboardInput();
 
-                if (!IsPressingMovementKey() && !HasCalculatedTarget)
-                {
-                    _animationHandler.SetIdle();
-                    IsMoving = false;
-                }
-            }
-
-            if (Input.GetMouseButton(0))
-            {
-                if (!HasCalculatedTarget)
-                {
-                    _animationHandler.SetIdle();
-                    IsMoving = false;
-                }
-            }
-
-            if ((PersistentGameManager.CurrentPlatform == Platform.PC && Input.GetMouseButtonDown(0) && _pointerPresserTimer == 0) ||
-            (PersistentGameManager.CurrentPlatform == Platform.Android && Input.touchCount == 1 && Input.GetTouch(0).phase == TouchPhase.Began && _pointerPresserTimer == 0))
-            {
-                if(CameraController.CurrentZoom != ZoomAction.PlayerZoom)
-                {
-                    StartCoroutine(RunPointerPresserTimer());
-                }
-            }
-
-            if (_isPressingPointerForSeconds) //only check for the click/tap after we are pressing for x seconds
-            {
-                if (!Input.GetMouseButton(0))
+                if (Input.GetMouseButtonUp(0))
                 {
                     _isPressingPointerForSeconds = false;
                     _pointerPresserTimer = 0;
 
-                    if (!IsPressingMovementKey())
+                    if (!IsPressingMovementKey() && !HasCalculatedTarget)
                     {
                         _animationHandler.SetIdle();
+                        IsMoving = false;
                     }
-                    IsMoving = false;
                 }
-                else if(CameraController.CurrentZoom != ZoomAction.PlayerZoom)
-                {                
-                    CheckPointerInput();
+
+                if (Input.GetMouseButton(0))
+                {
+                    if (!HasCalculatedTarget)
+                    {
+                        _animationHandler.SetIdle();
+                        IsMoving = false;
+                    }
+                }
+
+                if ((PersistentGameManager.CurrentPlatform == Platform.PC && Input.GetMouseButtonDown(0) && _pointerPresserTimer == 0) ||
+                (PersistentGameManager.CurrentPlatform == Platform.Android && Input.touchCount == 1 && Input.GetTouch(0).phase == TouchPhase.Began && _pointerPresserTimer == 0))
+                {
+                    if (CameraController.CurrentZoom != ZoomAction.PlayerZoom)
+                    {
+                        StartCoroutine(RunPointerPresserTimer());
+                    }
+                }
+
+                if (_isPressingPointerForSeconds) //only check for the click/tap after we are pressing for x seconds
+                {
+                    if (!Input.GetMouseButton(0))
+                    {
+                        _isPressingPointerForSeconds = false;
+                        _pointerPresserTimer = 0;
+
+                        if (!IsPressingMovementKey())
+                        {
+                            _animationHandler.SetIdle();
+                        }
+                        IsMoving = false;
+                    }
+                    else if (CameraController.CurrentZoom != ZoomAction.PlayerZoom)
+                    {
+                        CheckPointerInput();
+                    }
+                }
+
+                if (HasCalculatedTarget)
+                {
+                    MoveCharacter();
+                }
+            }
+            else if (GameRules.GamePlayerType == GamePlayerType.SplitScreenMultiplayer)
+            {
+                if (PersistentGameManager.CurrentPlatform == Platform.PC)
+                    HandleKeyboardInput();
+
+                if (HasCalculatedTarget)
+                {
+                    MoveCharacter();
+                }
+            }
+            else // Case: Clients in multiplayer network game
+            {
+                if (HasCalculatedTarget)
+                {
+                    MoveCharacter();
                 }
             }
 
-            if (HasCalculatedTarget)
+            if (PathToTarget.Count == 0 && IsMoving)
             {
-                MoveCharacter();
-            }
-        }
-        else if (GameRules.GamePlayerType == GamePlayerType.SplitScreenMultiplayer)
-        {
-            if (PersistentGameManager.CurrentPlatform == Platform.PC)
-                HandleKeyboardInput();
-
-            if (HasCalculatedTarget)
-            {
-                MoveCharacter();
-            }
-        }
-        else // Case: Clients in multiplayer network game
-        {
-            if (HasCalculatedTarget)
-            {
-                MoveCharacter();
+                Logger.Log("player reached target");
+                OnTargetReached();
             }
         }
 
-        if (PathToTarget.Count == 0 && IsMoving)
+        public void AssignCharacterType()
         {
-            Logger.Log("player reached target");
-            OnTargetReached();
+            switch (PersistentGameManager.PlayerCharacterNames[PlayerNumber])
+            {
+                case "Emmon":
+                    SetCharacterType(new Emmon());
+                    break;
+                case "Fae":
+                    SetCharacterType(new Fae());
+                    break;
+                default:
+                    break;
+            }
         }
-    }
 
-    public void AssignCharacterType()
-    {
-        switch (PersistentGameManager.PlayerCharacterNames[PlayerNumber])
+        private AnimationEffect GetAnimationEffectForPlayerChaught()
         {
-            case "Emmon":
-                SetCharacterType(new Emmon());
-                break;
-            case "Fae":
-                SetCharacterType(new Fae());
-                break;
-            default:
-                break;
-        }
-    }
-
-    private AnimationEffect GetAnimationEffectForPlayerChaught()
-    {
-        if(_characterType is Emmon)
-        {
+            if (_characterType is Emmon)
+            {
+                return AnimationEffect.EmmonCaught;
+            }
+            else if (_characterType is Fae)
+            {
+                return AnimationEffect.FaeCaught;
+            }
+            Logger.Error($"Could not find animation for characterType {_characterType}");
             return AnimationEffect.EmmonCaught;
         }
-        else if(_characterType is Fae)
+
+        protected IEnumerator RespawnPlayerCharacter(PlayerCharacter character)
         {
-            return AnimationEffect.FaeCaught;
-        }
-        Logger.Error($"Could not find animation for characterType {_characterType}");
-        return AnimationEffect.EmmonCaught;
-    }
+            // play caught animation
+            AnimationEffect animationEffect = GetAnimationEffectForPlayerChaught();
 
-    protected IEnumerator RespawnPlayerCharacter(PlayerCharacter character)
-    {
-        // play caught animation
-        AnimationEffect animationEffect = GetAnimationEffectForPlayerChaught();
+            GameObject emmonCaughtPrefab = MazeLevelGameplayManager.Instance.GetEffectAnimationPrefab(animationEffect);
+            GameObject emmonCaughtPGO = GameObject.Instantiate(emmonCaughtPrefab, SceneObjectManager.Instance.transform);
+            Vector3 emmonCaughtSpawnPosition = character.transform.position;
+            emmonCaughtPGO.transform.position = emmonCaughtSpawnPosition;
 
-        GameObject emmonCaughtPrefab = MazeLevelGameplayManager.Instance.GetEffectAnimationPrefab(animationEffect);
-        GameObject emmonCaughtPGO = GameObject.Instantiate(emmonCaughtPrefab, SceneObjectManager.Instance.transform);
-        Vector3 emmonCaughtSpawnPosition = character.transform.position;
-        emmonCaughtPGO.transform.position = emmonCaughtSpawnPosition;
+            EffectController emmonCaughtPGOEffectController = emmonCaughtPGO.GetComponent<EffectController>();
 
-        EffectController emmonCaughtPGOEffectController = emmonCaughtPGO.GetComponent<EffectController>();
+            emmonCaughtPGOEffectController.PlayEffect(animationEffect);
 
-        emmonCaughtPGOEffectController.PlayEffect(animationEffect);
+            character.FreezeCharacter();
+            CharacterBody.SetActive(false);
+            SetBodyAlpha(0); // make body transparent before respawning
 
-        character.FreezeCharacter();
-        CharacterBody.SetActive(false);
-        SetBodyAlpha(0); // make body transparent before respawning
+            ResetCharacterPosition();
 
-        ResetCharacterPosition();
+            float waitTime = 1.4f;
+            yield return new WaitForSeconds(waitTime);
 
-        float waitTime = 1.4f;
-        yield return new WaitForSeconds(waitTime);
+            _animationHandler.TriggerSpawning();
+            CharacterBody.SetActive(true);
 
-        _animationHandler.TriggerSpawning();
-        CharacterBody.SetActive(true);
+            float spawnAnimationLength = 0.5f;
+            yield return new WaitForSeconds(spawnAnimationLength);
 
-        float spawnAnimationLength = 0.5f;
-        yield return new WaitForSeconds(spawnAnimationLength);
-
-        character.UnfreezeCharacter();
-    }
-
-    private IEnumerator RunPointerPresserTimer()
-    {
-        while (_pointerPresserTimer < _pointerPresserDelay)
-        {
-            yield return null;
-            _pointerPresserTimer += Time.deltaTime;
+            character.UnfreezeCharacter();
         }
 
-        _isPressingPointerForSeconds = true;
-        _pointerPresserTimer = 0;
-    }
-
-    private void CheckPointerInput()
-    {
-        if (HasCalculatedTarget) return;
-        // Logger.Log($"Touch count {Input.touchCount}");
-
-        if(PersistentGameManager.CurrentPlatform == Platform.Android && Input.touchCount != 1) return;
-
-        Vector2 tempFingerPosition = GetPointerPosition();
-        GridLocation closestGridLocation = GridLocation.FindClosestGridTile(tempFingerPosition);
-
-        if (closestGridLocation.X == CurrentGridLocation.X && closestGridLocation.Y == CurrentGridLocation.Y) return;
-
-        GridLocation newLocomotionTarget = CurrentGridLocation;
-        Vector2 direction = tempFingerPosition - (Vector2)transform.position;
-        float angle = Vector2.SignedAngle(Vector2.up, direction) * -1;
-
-        new GridLocation(CurrentGridLocation.X, CurrentGridLocation.Y);
-        ObjectDirection moveDirection = ObjectDirection.Right;
-
-        if (angle <= -135)  // go down
+        private IEnumerator RunPointerPresserTimer()
         {
-            newLocomotionTarget = new GridLocation(CurrentGridLocation.X, CurrentGridLocation.Y - 1);
-            moveDirection = ObjectDirection.Down;
-        }
-        else if (angle <= -45) // go left
-        {
-            newLocomotionTarget = new GridLocation(CurrentGridLocation.X - 1, CurrentGridLocation.Y);
-            moveDirection = ObjectDirection.Left;
-        }
-        else if (angle <= 45) // go up
-        {
-            newLocomotionTarget = new GridLocation(CurrentGridLocation.X, CurrentGridLocation.Y + 1);
-            moveDirection = ObjectDirection.Up;
-        }
-        else if (angle <= 135) // go right
-        {
-            newLocomotionTarget = new GridLocation(CurrentGridLocation.X + 1, CurrentGridLocation.Y);
-            moveDirection = ObjectDirection.Right;
-        }
-        else // go down
-        {
-            newLocomotionTarget = new GridLocation(CurrentGridLocation.X, CurrentGridLocation.Y - 1);
-            moveDirection = ObjectDirection.Down;
-        }
-
-        SetPointerLocomotionTarget(GridLocation.GridToVector(newLocomotionTarget), moveDirection);
-    }
-
-    private Vector2 GetPointerPosition()
-    {
-        if(PersistentGameManager.CurrentPlatform == Platform.Android)
-        {
-            return Camera.main.ScreenToWorldPoint(Input.touches[0].position);
-        }
-        else 
-        {
-            return Camera.main.ScreenToWorldPoint(Input.mousePosition);
-        }
-    }
-
-    private void SetPointerLocomotionTarget(Vector2 target, ObjectDirection moveDirection)
-    {
-        //Logger.Warning($"SetPointerLocomotionTarget to target {target.x}, {target.y} in the direction {moveDirection}");
-        GridLocation targetGridLocation = GridLocation.FindClosestGridTile(target);
-
-        if (!ValidateTarget(new TargetLocation(targetGridLocation, moveDirection))) return;
-
-        Vector2 gridVectorTarget = GridLocation.GridToVector(targetGridLocation);
-
-        if (CurrentGridLocation.X == targetGridLocation.X && CurrentGridLocation.Y == targetGridLocation.Y) return;
-
-        if (!_animationHandler.InLocomotion)
-            _animationHandler.SetLocomotion(true);
-
-        IsCalculatingPath = true;
-
-        PathToTarget = _pathfinding.FindNodePath(CurrentGridLocation, targetGridLocation);
-        PathToTarget.RemoveAt(0);
-
-        IsCalculatingPath = false;
-        SetHasCalculatedTarget(true);
-    }
-
-    private void HandleKeyboardInput()
-    {
-        if (KeyboardInput == KeyboardInput.Player1)
-        {
-            if (Input.GetKey(GameManager.Instance.KeyboardConfiguration.Player1Up))
+            while (_pointerPresserTimer < _pointerPresserDelay)
             {
-                TryStartCharacterMovement(ObjectDirection.Up);
+                yield return null;
+                _pointerPresserTimer += Time.deltaTime;
             }
-            else if (Input.GetKey(GameManager.Instance.KeyboardConfiguration.Player1Right))
+
+            _isPressingPointerForSeconds = true;
+            _pointerPresserTimer = 0;
+        }
+
+        private void CheckPointerInput()
+        {
+            if (HasCalculatedTarget) return;
+            // Logger.Log($"Touch count {Input.touchCount}");
+
+            if (PersistentGameManager.CurrentPlatform == Platform.Android && Input.touchCount != 1) return;
+
+            Vector2 tempFingerPosition = GetPointerPosition();
+            GridLocation closestGridLocation = GridLocation.FindClosestGridTile(tempFingerPosition);
+
+            if (closestGridLocation.X == CurrentGridLocation.X && closestGridLocation.Y == CurrentGridLocation.Y) return;
+
+            GridLocation newLocomotionTarget = CurrentGridLocation;
+            Vector2 direction = tempFingerPosition - (Vector2)transform.position;
+            float angle = Vector2.SignedAngle(Vector2.up, direction) * -1;
+
+            new GridLocation(CurrentGridLocation.X, CurrentGridLocation.Y);
+            ObjectDirection moveDirection = ObjectDirection.Right;
+
+            if (angle <= -135)  // go down
             {
-                TryStartCharacterMovement(ObjectDirection.Right);
+                newLocomotionTarget = new GridLocation(CurrentGridLocation.X, CurrentGridLocation.Y - 1);
+                moveDirection = ObjectDirection.Down;
             }
-            else if (Input.GetKey(GameManager.Instance.KeyboardConfiguration.Player1Down))
+            else if (angle <= -45) // go left
             {
-                TryStartCharacterMovement(ObjectDirection.Down);
+                newLocomotionTarget = new GridLocation(CurrentGridLocation.X - 1, CurrentGridLocation.Y);
+                moveDirection = ObjectDirection.Left;
             }
-            else if (Input.GetKey(GameManager.Instance.KeyboardConfiguration.Player1Left))
+            else if (angle <= 45) // go up
             {
-                TryStartCharacterMovement(ObjectDirection.Left);
+                newLocomotionTarget = new GridLocation(CurrentGridLocation.X, CurrentGridLocation.Y + 1);
+                moveDirection = ObjectDirection.Up;
             }
-        }
-        else if (KeyboardInput == KeyboardInput.Player2)
-        {
-            if (Input.GetKey(GameManager.Instance.KeyboardConfiguration.Player2Up))
+            else if (angle <= 135) // go right
             {
-                TryStartCharacterMovement(ObjectDirection.Up);
+                newLocomotionTarget = new GridLocation(CurrentGridLocation.X + 1, CurrentGridLocation.Y);
+                moveDirection = ObjectDirection.Right;
             }
-            else if (Input.GetKey(GameManager.Instance.KeyboardConfiguration.Player2Right))
+            else // go down
             {
-                TryStartCharacterMovement(ObjectDirection.Right);
+                newLocomotionTarget = new GridLocation(CurrentGridLocation.X, CurrentGridLocation.Y - 1);
+                moveDirection = ObjectDirection.Down;
             }
-            else if (Input.GetKey(GameManager.Instance.KeyboardConfiguration.Player2Down))
+
+            SetPointerLocomotionTarget(GridLocation.GridToVector(newLocomotionTarget), moveDirection);
+        }
+
+        private Vector2 GetPointerPosition()
+        {
+            if (PersistentGameManager.CurrentPlatform == Platform.Android)
             {
-                TryStartCharacterMovement(ObjectDirection.Down);
-            }
-            else if (Input.GetKey(GameManager.Instance.KeyboardConfiguration.Player2Left))
-            {
-                TryStartCharacterMovement(ObjectDirection.Left);
-            }
-        }
-        else
-        {
-
-        }
-    }
-
-    public void TryStartCharacterMovement(ObjectDirection direction)
-    {
-        // check if character is in tile position, if so, start movement in direction.
-        if (HasCalculatedTarget)
-        {
-            // if already in locomotion, it means that we are between tiles and we are moving. Return.
-            return;
-        }
-
-        if (IsCalculatingPath) return;
-
-        GridLocation currentGridLocation = GridLocation.VectorToGrid(transform.position);
-
-        //Order character to go to another tile
-        _animationHandler.SetDirection(direction);
-
-        switch (direction)
-        {
-            case ObjectDirection.Down:
-                TargetGridLocation = new TargetLocation(new GridLocation(currentGridLocation.X, currentGridLocation.Y - 1), direction);
-                break;
-            case ObjectDirection.Left:
-                TargetGridLocation = new TargetLocation(new GridLocation(currentGridLocation.X - 1, currentGridLocation.Y), direction);
-                break;
-            case ObjectDirection.Right:
-                TargetGridLocation = new TargetLocation(new GridLocation(currentGridLocation.X + 1, currentGridLocation.Y), direction);
-                break;
-            case ObjectDirection.Up:
-                TargetGridLocation = new TargetLocation(new GridLocation(currentGridLocation.X, currentGridLocation.Y + 1), direction);
-                break;
-            default:
-                Logger.Warning("Unhandled locomotion direction {0}", direction);
-                return;
-        }
-
-        if (!ValidateTarget(TargetGridLocation))
-        {
-            // This prevents the character from displaying locomotion animation when walking into an unwalkable tile
-            _animationHandler.SetIdle();
-            return;
-        }
-
-        //Logger.Warning("Start path!");
-        IsCalculatingPath = true;
-        //Logger.Log($"TryStartCharacterMovement. {CurrentGridLocation.X},{CurrentGridLocation.Y} to {TargetGridLocation.TargetGridLocation.X}, {TargetGridLocation.TargetGridLocation.Y}");
-        PathToTarget = _pathfinding.FindNodePath(CurrentGridLocation, TargetGridLocation.TargetGridLocation);
-        PathToTarget.RemoveAt(0);
-
-        IsCalculatingPath = false;
-        SetHasCalculatedTarget(true);
-
-        if (!_animationHandler.InLocomotion)
-            _animationHandler.SetLocomotion(true);
-    }
-
-    private bool IsPressingMovementKey()
-    {
-        if (KeyboardInput == KeyboardInput.Player1)
-        {
-            if (Input.GetKey(GameManager.Instance.KeyboardConfiguration.Player1Up)) return true;
-            if (Input.GetKey(GameManager.Instance.KeyboardConfiguration.Player1Right)) return true;
-            if (Input.GetKey(GameManager.Instance.KeyboardConfiguration.Player1Down)) return true;
-            if (Input.GetKey(GameManager.Instance.KeyboardConfiguration.Player1Left)) return true;
-        }
-        if (KeyboardInput == KeyboardInput.Player2)
-        {
-            if (Input.GetKey(GameManager.Instance.KeyboardConfiguration.Player2Up)) return true;
-            if (Input.GetKey(GameManager.Instance.KeyboardConfiguration.Player2Right)) return true;
-            if (Input.GetKey(GameManager.Instance.KeyboardConfiguration.Player2Down)) return true;
-            if (Input.GetKey(GameManager.Instance.KeyboardConfiguration.Player2Left)) return true;
-        }
-
-        return false;
-    }
-
-    public override void OnTargetReached()
-    {
-        //Logger.Warning("Target reached.");
-        SetHasCalculatedTarget(false);
-
-        if (!IsPressingMovementKey() && !_isPressingPointerForSeconds)
-        {
-            _animationHandler.SetIdle();
-        }
-        IsMoving = false;
-    }
-
-    // The player number needs to be set from the player character, and not from the manager.
-    // The reason is that in a network game, the character that is spawned by the other client will not be spawned here through the manager. However, it will go through the player character's Awake/Start function.
-    protected void SetPlayerNumber()
-    {
-        ICharacterManager characterManager = GameManager.Instance.CharacterManager;
-
-        if (GameRules.GamePlayerType == GamePlayerType.NetworkMultiplayer)
-        {
-            if (PhotonNetwork.IsMasterClient)
-            {
-                if (PhotonView.IsMine)
-                    PlayerNumber = PlayerNumber.Player1;
-                else
-                    PlayerNumber = PlayerNumber.Player2;
+                return Camera.main.ScreenToWorldPoint(Input.touches[0].position);
             }
             else
             {
-                if (PhotonView.IsMine)
-                    PlayerNumber = PlayerNumber.Player2;
-                else
-                    PlayerNumber = PlayerNumber.Player1;
+                return Camera.main.ScreenToWorldPoint(Input.mousePosition);
             }
         }
-        else if (GameRules.GamePlayerType == GamePlayerType.SinglePlayer)
+
+        private void SetPointerLocomotionTarget(Vector2 target, ObjectDirection moveDirection)
         {
-            PlayerNumber = PlayerNumber.Player1;
+            //Logger.Warning($"SetPointerLocomotionTarget to target {target.x}, {target.y} in the direction {moveDirection}");
+            GridLocation targetGridLocation = GridLocation.FindClosestGridTile(target);
+
+            if (!ValidateTarget(new TargetLocation(targetGridLocation, moveDirection))) return;
+
+            Vector2 gridVectorTarget = GridLocation.GridToVector(targetGridLocation);
+
+            if (CurrentGridLocation.X == targetGridLocation.X && CurrentGridLocation.Y == targetGridLocation.Y) return;
+
+            if (!_animationHandler.InLocomotion)
+                _animationHandler.SetLocomotion(true);
+
+            IsCalculatingPath = true;
+
+            PathToTarget = _pathfinding.FindNodePath(CurrentGridLocation, targetGridLocation);
+            PathToTarget.RemoveAt(0);
+
+            IsCalculatingPath = false;
+            SetHasCalculatedTarget(true);
         }
-        else
+
+        private void HandleKeyboardInput()
         {
-            if (GameManager.Instance.CharacterManager.GetPlayerCharacter<PlayerCharacter>(PlayerNumber.Player1) == null)
-            {    
+            if (KeyboardInput == KeyboardInput.Player1)
+            {
+                if (Input.GetKey(GameManager.Instance.KeyboardConfiguration.Player1Up))
+                {
+                    TryStartCharacterMovement(ObjectDirection.Up);
+                }
+                else if (Input.GetKey(GameManager.Instance.KeyboardConfiguration.Player1Right))
+                {
+                    TryStartCharacterMovement(ObjectDirection.Right);
+                }
+                else if (Input.GetKey(GameManager.Instance.KeyboardConfiguration.Player1Down))
+                {
+                    TryStartCharacterMovement(ObjectDirection.Down);
+                }
+                else if (Input.GetKey(GameManager.Instance.KeyboardConfiguration.Player1Left))
+                {
+                    TryStartCharacterMovement(ObjectDirection.Left);
+                }
+            }
+            else if (KeyboardInput == KeyboardInput.Player2)
+            {
+                if (Input.GetKey(GameManager.Instance.KeyboardConfiguration.Player2Up))
+                {
+                    TryStartCharacterMovement(ObjectDirection.Up);
+                }
+                else if (Input.GetKey(GameManager.Instance.KeyboardConfiguration.Player2Right))
+                {
+                    TryStartCharacterMovement(ObjectDirection.Right);
+                }
+                else if (Input.GetKey(GameManager.Instance.KeyboardConfiguration.Player2Down))
+                {
+                    TryStartCharacterMovement(ObjectDirection.Down);
+                }
+                else if (Input.GetKey(GameManager.Instance.KeyboardConfiguration.Player2Left))
+                {
+                    TryStartCharacterMovement(ObjectDirection.Left);
+                }
+            }
+            else
+            {
+
+            }
+        }
+
+        public void TryStartCharacterMovement(ObjectDirection direction)
+        {
+            // check if character is in tile position, if so, start movement in direction.
+            if (HasCalculatedTarget)
+            {
+                // if already in locomotion, it means that we are between tiles and we are moving. Return.
+                return;
+            }
+
+            if (IsCalculatingPath) return;
+
+            GridLocation currentGridLocation = GridLocation.VectorToGrid(transform.position);
+
+            //Order character to go to another tile
+            _animationHandler.SetDirection(direction);
+
+            switch (direction)
+            {
+                case ObjectDirection.Down:
+                    TargetGridLocation = new TargetLocation(new GridLocation(currentGridLocation.X, currentGridLocation.Y - 1), direction);
+                    break;
+                case ObjectDirection.Left:
+                    TargetGridLocation = new TargetLocation(new GridLocation(currentGridLocation.X - 1, currentGridLocation.Y), direction);
+                    break;
+                case ObjectDirection.Right:
+                    TargetGridLocation = new TargetLocation(new GridLocation(currentGridLocation.X + 1, currentGridLocation.Y), direction);
+                    break;
+                case ObjectDirection.Up:
+                    TargetGridLocation = new TargetLocation(new GridLocation(currentGridLocation.X, currentGridLocation.Y + 1), direction);
+                    break;
+                default:
+                    Logger.Warning("Unhandled locomotion direction {0}", direction);
+                    return;
+            }
+
+            if (!ValidateTarget(TargetGridLocation))
+            {
+                // This prevents the character from displaying locomotion animation when walking into an unwalkable tile
+                _animationHandler.SetIdle();
+                return;
+            }
+
+            //Logger.Warning("Start path!");
+            IsCalculatingPath = true;
+            //Logger.Log($"TryStartCharacterMovement. {CurrentGridLocation.X},{CurrentGridLocation.Y} to {TargetGridLocation.TargetGridLocation.X}, {TargetGridLocation.TargetGridLocation.Y}");
+            PathToTarget = _pathfinding.FindNodePath(CurrentGridLocation, TargetGridLocation.TargetGridLocation);
+            PathToTarget.RemoveAt(0);
+
+            IsCalculatingPath = false;
+            SetHasCalculatedTarget(true);
+
+            if (!_animationHandler.InLocomotion)
+                _animationHandler.SetLocomotion(true);
+        }
+
+        private bool IsPressingMovementKey()
+        {
+            if (KeyboardInput == KeyboardInput.Player1)
+            {
+                if (Input.GetKey(GameManager.Instance.KeyboardConfiguration.Player1Up)) return true;
+                if (Input.GetKey(GameManager.Instance.KeyboardConfiguration.Player1Right)) return true;
+                if (Input.GetKey(GameManager.Instance.KeyboardConfiguration.Player1Down)) return true;
+                if (Input.GetKey(GameManager.Instance.KeyboardConfiguration.Player1Left)) return true;
+            }
+            if (KeyboardInput == KeyboardInput.Player2)
+            {
+                if (Input.GetKey(GameManager.Instance.KeyboardConfiguration.Player2Up)) return true;
+                if (Input.GetKey(GameManager.Instance.KeyboardConfiguration.Player2Right)) return true;
+                if (Input.GetKey(GameManager.Instance.KeyboardConfiguration.Player2Down)) return true;
+                if (Input.GetKey(GameManager.Instance.KeyboardConfiguration.Player2Left)) return true;
+            }
+
+            return false;
+        }
+
+        public override void OnTargetReached()
+        {
+            //Logger.Warning("Target reached.");
+            SetHasCalculatedTarget(false);
+
+            if (!IsPressingMovementKey() && !_isPressingPointerForSeconds)
+            {
+                _animationHandler.SetIdle();
+            }
+            IsMoving = false;
+        }
+
+        // The player number needs to be set from the player character, and not from the manager.
+        // The reason is that in a network game, the character that is spawned by the other client will not be spawned here through the manager. However, it will go through the player character's Awake/Start function.
+        protected void SetPlayerNumber()
+        {
+            ICharacterManager characterManager = GameManager.Instance.CharacterManager;
+
+            if (GameRules.GamePlayerType == GamePlayerType.NetworkMultiplayer)
+            {
+                if (PhotonNetwork.IsMasterClient)
+                {
+                    if (PhotonView.IsMine)
+                        PlayerNumber = PlayerNumber.Player1;
+                    else
+                        PlayerNumber = PlayerNumber.Player2;
+                }
+                else
+                {
+                    if (PhotonView.IsMine)
+                        PlayerNumber = PlayerNumber.Player2;
+                    else
+                        PlayerNumber = PlayerNumber.Player1;
+                }
+            }
+            else if (GameRules.GamePlayerType == GamePlayerType.SinglePlayer)
+            {
                 PlayerNumber = PlayerNumber.Player1;
             }
             else
             {
-                PlayerNumber = PlayerNumber.Player2;
-            }
-        }
-        Logger.Log(Logger.Initialisation, $"We set the player number to {PlayerNumber}");
-    }
-
-    // Should be here and not in manager.
-    private void SetPlayerName()
-    {
-        Logger.Log($"SetPlayerName {_characterType.ToString()}");
-        ICharacterManager characterManager = GameManager.Instance.CharacterManager;
-        
-        if (GameRules.GamePlayerType == GamePlayerType.NetworkMultiplayer)
-        {
-            Name = PhotonView.Owner == null ? "Player 1" : PhotonView.Owner?.NickName;
-        }
-        else if (GameRules.GamePlayerType == GamePlayerType.SinglePlayer)
-        {
-            Name = _characterType.ToString().Split('.')[1];
-        }
-        else // split screen
-        {
-            int playerCount = characterManager.GetPlayerCount();
-            Logger.Log($"playerCount is {playerCount}");
-            if (PlayerNumber == PlayerNumber.Player1)
-            {
-                Name = "Player 1";
-            }
-            else if (PlayerNumber == PlayerNumber.Player2)
-            {
-                Name = "Player 2";
-            }
-            else
-            {
-                Logger.Error($"Unexpected number of players: {playerCount}");
-            }
-        }
-
-        gameObject.name = Name;
-        Logger.Warning($"Set name of {PlayerNumber} character to {Name}");
-    }
-
-    public bool ValidateTarget(TargetLocation targetLocation)
-    {
-        if (GameManager.Instance.CurrentGameLevel.TilesByLocation.TryGetValue(targetLocation.TargetGridLocation, out Tile targetTile))
-        {
-            ObjectDirection direction = targetLocation.TargetDirection;
-
-            if (targetTile.Walkable)
-            {
-                Tile currentTile = GameManager.Instance.CurrentGameLevel.TilesByLocation[CurrentGridLocation];
-                BridgePiece bridgePieceOnCurrentTile = currentTile.TryGetAttribute<BridgePiece>();
-                BridgePiece bridgePieceOnTarget = targetTile.TryGetAttribute<BridgePiece>(); // optimisation: keep bridge locations of the level in a separate list, so we don't have to go over all the tiles in the level
-
-                // there are no bridges involved
-                if (bridgePieceOnCurrentTile == null && bridgePieceOnTarget == null)
+                if (GameManager.Instance.CharacterManager.GetPlayerCharacter<PlayerCharacter>(PlayerNumber.Player1) == null)
                 {
-                    return true;
+                    PlayerNumber = PlayerNumber.Player1;
                 }
-
-                // Make sure we go in the correct bridge direction
-                if (bridgePieceOnCurrentTile && bridgePieceOnTarget)
+                else
                 {
+                    PlayerNumber = PlayerNumber.Player2;
+                }
+            }
+            Logger.Log(Logger.Initialisation, $"We set the player number to {PlayerNumber}");
+        }
 
-                    if (bridgePieceOnCurrentTile.BridgePieceDirection == BridgePieceDirection.Horizontal &&
-                        bridgePieceOnTarget.BridgePieceDirection == BridgePieceDirection.Horizontal &&
+        // Should be here and not in manager.
+        private void SetPlayerName()
+        {
+            Logger.Log($"SetPlayerName {_characterType.ToString()}");
+            ICharacterManager characterManager = GameManager.Instance.CharacterManager;
+
+            if (GameRules.GamePlayerType == GamePlayerType.NetworkMultiplayer)
+            {
+                Name = PhotonView.Owner == null ? "Player 1" : PhotonView.Owner?.NickName;
+            }
+            else if (GameRules.GamePlayerType == GamePlayerType.SinglePlayer)
+            {
+                Name = _characterType.ToString().Split('.')[1];
+            }
+            else // split screen
+            {
+                int playerCount = characterManager.GetPlayerCount();
+                Logger.Log($"playerCount is {playerCount}");
+                if (PlayerNumber == PlayerNumber.Player1)
+                {
+                    Name = "Player 1";
+                }
+                else if (PlayerNumber == PlayerNumber.Player2)
+                {
+                    Name = "Player 2";
+                }
+                else
+                {
+                    Logger.Error($"Unexpected number of players: {playerCount}");
+                }
+            }
+
+            gameObject.name = Name;
+            Logger.Warning($"Set name of {PlayerNumber} character to {Name}");
+        }
+
+        public bool ValidateTarget(TargetLocation targetLocation)
+        {
+            if (GameManager.Instance.CurrentGameLevel.TilesByLocation.TryGetValue(targetLocation.TargetGridLocation, out Tile targetTile))
+            {
+                ObjectDirection direction = targetLocation.TargetDirection;
+
+                if (targetTile.Walkable)
+                {
+                    Tile currentTile = GameManager.Instance.CurrentGameLevel.TilesByLocation[CurrentGridLocation];
+                    BridgePiece bridgePieceOnCurrentTile = currentTile.TryGetAttribute<BridgePiece>();
+                    BridgePiece bridgePieceOnTarget = targetTile.TryGetAttribute<BridgePiece>(); // optimisation: keep bridge locations of the level in a separate list, so we don't have to go over all the tiles in the level
+
+                    // there are no bridges involved
+                    if (bridgePieceOnCurrentTile == null && bridgePieceOnTarget == null)
+                    {
+                        return true;
+                    }
+
+                    // Make sure we go in the correct bridge direction
+                    if (bridgePieceOnCurrentTile && bridgePieceOnTarget)
+                    {
+
+                        if (bridgePieceOnCurrentTile.BridgePieceDirection == BridgePieceDirection.Horizontal &&
+                            bridgePieceOnTarget.BridgePieceDirection == BridgePieceDirection.Horizontal &&
+                            (direction == ObjectDirection.Left || direction == ObjectDirection.Right))
+                        {
+                            return true;
+                        }
+
+                        if (bridgePieceOnCurrentTile.BridgePieceDirection == BridgePieceDirection.Vertical &&
+                            bridgePieceOnTarget.BridgePieceDirection == BridgePieceDirection.Vertical &&
+                            (direction == ObjectDirection.Up || direction == ObjectDirection.Down))
+                        {
+                            return true;
+                        }
+
+                        return false;
+                    }
+
+                    if ((bridgePieceOnCurrentTile?.BridgePieceDirection == BridgePieceDirection.Horizontal ||
+                        bridgePieceOnTarget?.BridgePieceDirection == BridgePieceDirection.Horizontal) &&
                         (direction == ObjectDirection.Left || direction == ObjectDirection.Right))
                     {
                         return true;
                     }
 
-                    if (bridgePieceOnCurrentTile.BridgePieceDirection == BridgePieceDirection.Vertical &&
-                        bridgePieceOnTarget.BridgePieceDirection == BridgePieceDirection.Vertical &&
+                    if ((bridgePieceOnCurrentTile?.BridgePieceDirection == BridgePieceDirection.Vertical ||
+                        bridgePieceOnTarget?.BridgePieceDirection == BridgePieceDirection.Vertical) &&
                         (direction == ObjectDirection.Up || direction == ObjectDirection.Down))
                     {
                         return true;
                     }
-
                     return false;
                 }
-
-                if ((bridgePieceOnCurrentTile?.BridgePieceDirection == BridgePieceDirection.Horizontal ||
-                    bridgePieceOnTarget?.BridgePieceDirection == BridgePieceDirection.Horizontal) &&
-                    (direction == ObjectDirection.Left || direction == ObjectDirection.Right))
-                {
-                    return true;
-                }
-
-                if ((bridgePieceOnCurrentTile?.BridgePieceDirection == BridgePieceDirection.Vertical ||
-                    bridgePieceOnTarget?.BridgePieceDirection == BridgePieceDirection.Vertical) &&
-                    (direction == ObjectDirection.Up || direction == ObjectDirection.Down))
-                {
-                    return true;
-                }
-                return false;
             }
+            return false;
         }
-        return false;
-    }
 
-    private void SetPlayerKeyboardInput()
-    {
-        if (PersistentGameManager.CurrentPlatform == Platform.PC)
+        private void SetPlayerKeyboardInput()
         {
-            if (GameRules.GamePlayerType == GamePlayerType.SinglePlayer)
+            if (PersistentGameManager.CurrentPlatform == Platform.PC)
             {
-                KeyboardInput = KeyboardInput.Player1;
-            }
-            else if (GameRules.GamePlayerType == GamePlayerType.NetworkMultiplayer)
-            {
-                KeyboardInput = KeyboardInput.Player1;
-            }
-            else if (GameRules.GamePlayerType == GamePlayerType.SplitScreenMultiplayer)
-            {
-
-                if (PlayerNumber == PlayerNumber.Player1)
+                if (GameRules.GamePlayerType == GamePlayerType.SinglePlayer)
                 {
                     KeyboardInput = KeyboardInput.Player1;
                 }
-                else if (PlayerNumber == PlayerNumber.Player2)
+                else if (GameRules.GamePlayerType == GamePlayerType.NetworkMultiplayer)
                 {
-                    KeyboardInput = KeyboardInput.Player2;
+                    KeyboardInput = KeyboardInput.Player1;
+                }
+                else if (GameRules.GamePlayerType == GamePlayerType.SplitScreenMultiplayer)
+                {
+
+                    if (PlayerNumber == PlayerNumber.Player1)
+                    {
+                        KeyboardInput = KeyboardInput.Player1;
+                    }
+                    else if (PlayerNumber == PlayerNumber.Player2)
+                    {
+                        KeyboardInput = KeyboardInput.Player2;
+                    }
                 }
             }
         }

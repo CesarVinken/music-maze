@@ -1,19 +1,22 @@
-﻿using CharacterType;
+﻿using Character.CharacterType;
 
-public class CharacterBlueprint
+namespace Character
 {
-    public ICharacter CharacterType;
-    public bool IsPlayable 
-    { 
-        get
-        {
-            if (CharacterType is Emmon || CharacterType is Fae) return true;
-            return false;
-        }
-    }
-
-    public CharacterBlueprint(ICharacter characterType)
+    public class CharacterBlueprint
     {
-        CharacterType = characterType;
+        public ICharacter CharacterType;
+        public bool IsPlayable
+        {
+            get
+            {
+                if (CharacterType is Emmon || CharacterType is Fae) return true;
+                return false;
+            }
+        }
+
+        public CharacterBlueprint(ICharacter characterType)
+        {
+            CharacterType = characterType;
+        }
     }
 }

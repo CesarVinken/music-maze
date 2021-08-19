@@ -1,3 +1,4 @@
+using Character;
 using System.Collections.Generic;
 
 public class ConfigureScore : IConfigureCommand

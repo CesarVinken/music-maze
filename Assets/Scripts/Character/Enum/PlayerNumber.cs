@@ -1,5 +1,8 @@
-﻿public enum PlayerNumber
+﻿namespace Character
 {
-    Player1,
-    Player2
+    public enum PlayerNumber
+    {
+        Player1,
+        Player2
+    }
 }

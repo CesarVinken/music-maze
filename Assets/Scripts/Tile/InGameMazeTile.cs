@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using Character;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class InGameMazeTile : MazeTile
