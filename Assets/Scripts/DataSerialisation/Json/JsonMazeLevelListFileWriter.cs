@@ -1,21 +1,23 @@
-﻿using DataSerialisation;
-using System.IO;
+﻿using System.IO;
 using UnityEngine;
 
-public class JsonMazeLevelListFileWriter : IJsonFileWriter
+namespace DataSerialisation
 {
-    private MazeLevelNamesData _levelNamesData;
-
-    private string _path;
-
-    public void SerialiseData<T>(T levelNamesData)
+    public class JsonMazeLevelListFileWriter : IJsonFileWriter
     {
-        _levelNamesData = levelNamesData as MazeLevelNamesData;
-        _path = Path.Combine(Application.dataPath, "StreamingAssets", "maze", "levels.json");
+        private MazeLevelNamesData _levelNamesData;
 
-        string jsonLevelNamesData = JsonUtility.ToJson(_levelNamesData, true).ToString();
+        private string _path;
 
-        File.WriteAllText(_path, jsonLevelNamesData);
-        Logger.Log(Logger.Datawriting, "Wrote maze level list to file");
+        public void SerialiseData<T>(T levelNamesData)
+        {
+            _levelNamesData = levelNamesData as MazeLevelNamesData;
+            _path = Path.Combine(Application.dataPath, "StreamingAssets", "maze", "levels.json");
+
+            string jsonLevelNamesData = JsonUtility.ToJson(_levelNamesData, true).ToString();
+
+            File.WriteAllText(_path, jsonLevelNamesData);
+            Logger.Log(Logger.Datawriting, "Wrote maze level list to file");
+        }
     }
 }

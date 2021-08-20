@@ -116,7 +116,7 @@ public class InGameMazeLevel : MazeLevel, IInGameLevel
 
         foreach (SerialisableTileAttribute serialisableTileAttribute in serialisableTile.TileAttributes)
         {
-            Type type = Type.GetType(serialisableTileAttribute.AttributeType);
+            Type type = Type.GetType("DataSerialisation." + serialisableTileAttribute.AttributeType);
 
             if (type.Equals(typeof(SerialisableTileObstacleAttribute)))
             {
@@ -183,7 +183,7 @@ public class InGameMazeLevel : MazeLevel, IInGameLevel
 
         foreach (SerialisableTileBackground serialisableTileBackground in serialisableTile.TileBackgrounds)
         {
-            Type type = Type.GetType(serialisableTileBackground.BackgroundType);
+            Type type = Type.GetType("DataSerialisation." + serialisableTileBackground.BackgroundType);
 
             if (type.Equals(typeof(SerialisableTilePathBackground))) 
             {
