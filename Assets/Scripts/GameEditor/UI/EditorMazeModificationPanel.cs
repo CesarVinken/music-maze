@@ -80,21 +80,24 @@ public class EditorMazeModificationPanel : EditorGridModificationPanel
                 
                 if(edgeObstacle != null)
                 {
-                    tileAttributes.Add(new SerialisableTileAttribute(edgeObstacle.GetType().ToString(), edgeObstacle));
+                    string sanatisedAttributeType = edgeObstacle.GetType().ToString().Split('.')[1];
+                    tileAttributes.Add(new SerialisableTileAttribute(sanatisedAttributeType, edgeObstacle));
                 }
 
                 SerialisableTilePathBackground mazeTilePath = TryAddPathsForNewMaze(gridLocation, tileAttributes);
 
                 if (mazeTilePath != null)
                 {
-                    tileBackgrounds.Add(new SerialisableTileBackground(mazeTilePath.GetType().ToString(), mazeTilePath));
+                    string sanatisedPathBackgroundType = mazeTilePath.GetType().ToString().Split('.')[1];
+                    tileBackgrounds.Add(new SerialisableTileBackground(sanatisedPathBackgroundType, mazeTilePath));
                 }
 
                 SerialisableTileBaseGround baseBackground = TryAddBaseBackgroundForNewMaze(tileBackgrounds, tileAttributes);
 
                 if (baseBackground != null)
                 {
-                    tileBackgrounds.Add(new SerialisableTileBackground(baseBackground.GetType().ToString(), baseBackground));
+                    string sanatisedBackgroundType = baseBackground.GetType().ToString().Split('.')[1];
+                    tileBackgrounds.Add(new SerialisableTileBackground(sanatisedBackgroundType, baseBackground));
                 }
 
                 SerialisableTile tile = new SerialisableTile(tileId, mainMaterial, tileAttributes, tileBackgrounds, tileCornerFillers, gridLocation.X, gridLocation.Y);
@@ -245,7 +248,9 @@ public class EditorMazeModificationPanel : EditorGridModificationPanel
     {
         for (int i = 0; i < tileAttributes.Count; i++)
         {
-            Type type = Type.GetType(tileAttributes[i].AttributeType);
+            //Type type = Type.GetType("DataSerialisation." + tileAttributes[i].AttributeType);
+            Type type = SerialisableTileAttribute.GetType(tileAttributes[i].AttributeType);
+            //Logger.Log(tileAttributes[i].AttributeType);
             if (type.Equals(typeof(SerialisableTileObstacleAttribute)))
             {
                 return null;
@@ -299,7 +304,7 @@ public class EditorMazeModificationPanel : EditorGridModificationPanel
     {
         for (int i = 0; i < tileBackgrounds.Count; i++)
         {
-            Type type = Type.GetType(tileBackgrounds[i].BackgroundType);
+            Type type = SerialisableTileBackground.GetType(tileBackgrounds[i].BackgroundType);
             if (type.Equals(typeof(SerialisableTilePathBackground)))
             {
                 SerialisableTilePathBackground serialisableTilePathBackground = (SerialisableTilePathBackground)JsonUtility.FromJson(tileBackgrounds[i].SerialisedData, type);

@@ -15,5 +15,11 @@ namespace DataSerialisation
             AttributeType = attributeType;
             SerialisedData = JsonUtility.ToJson(iSerialisableTileAttribute);
         }
+
+        public static Type GetType(string typeString)
+        {
+            Logger.Log("get type " + typeString);
+            return Type.GetType("DataSerialisation." + typeString);
+        }
     }
 }

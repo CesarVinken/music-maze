@@ -2,16 +2,13 @@
 using DataSerialisation;
 using System;
 using System.Collections.Generic;
+using UI;
 using UnityEngine;
 
 public class EditorOverworld : Overworld, IEditorLevel
 {
-    //private new List<EditorOverworldTile> _tiles = new List<EditorOverworldTile>();
-    //public new List<EditorOverworldTile> Tiles { get => _tiles; set => _tiles = value; }
-
     public List<string> MazeLevelNames = new List<string>();
     
-
     public EditorOverworld()
     {
     }
@@ -88,7 +85,7 @@ public class EditorOverworld : Overworld, IEditorLevel
 
         foreach (SerialisableTileBackground serialisableTileBackground in serialisableTile.TileBackgrounds)
         {
-            Type type = Type.GetType(serialisableTileBackground.BackgroundType);
+            Type type = Type.GetType("DataSerialisation." + serialisableTileBackground.BackgroundType);
 
             if (type.Equals(typeof(SerialisableTilePathBackground)))
             {
@@ -118,7 +115,7 @@ public class EditorOverworld : Overworld, IEditorLevel
 
         foreach (SerialisableTileAttribute serialisableTileAttribute in serialisableTile.TileAttributes)
         {
-            Type type = Type.GetType(serialisableTileAttribute.AttributeType);
+            Type type = Type.GetType("DataSerialisation." + serialisableTileAttribute.AttributeType);
 
             //if (tileAttributeId == SerialisableTileAttribute.ObstacleAttributeCode)
             //{

@@ -148,7 +148,8 @@ public class EditorOverworldModificationPanel : EditorGridModificationPanel
 
                 if (baseBackground != null)
                 {
-                    tileBackgrounds.Add(new SerialisableTileBackground(baseBackground.GetType().ToString(), baseBackground));
+                    string sanatisedBackgroundType = baseBackground.GetType().ToString().Split('.')[1];
+                    tileBackgrounds.Add(new SerialisableTileBackground(sanatisedBackgroundType, baseBackground));
                 }
 
                 SerialisableTile tile = new SerialisableTile(tileId, mainMaterial, tileAttributes, tileBackgrounds, tileCornerFillers, gridLocation.X, gridLocation.Y);
@@ -166,7 +167,8 @@ public class EditorOverworldModificationPanel : EditorGridModificationPanel
     {
         for (int i = 0; i < tileBackgrounds.Count; i++)
         {
-            Type type = Type.GetType(tileBackgrounds[i].BackgroundType);
+            Type type = SerialisableTileBackground.GetType(tileBackgrounds[i].BackgroundType);
+
             if (type.Equals(typeof(SerialisableTilePathBackground)))
             {
                 SerialisableTilePathBackground serialisableTilePathBackground = (SerialisableTilePathBackground)JsonUtility.FromJson(tileBackgrounds[i].SerialisedData, type);

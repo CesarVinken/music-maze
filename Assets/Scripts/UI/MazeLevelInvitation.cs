@@ -1,53 +1,55 @@
 ﻿using Character;
-using Photon.Pun;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class MazeLevelInvitation : MonoBehaviour
+namespace UI
 {
-    public static MazeLevelInvitation Instance;
-
-    [SerializeField] private Text _infoText;
-    private string _mazeLevelName = "";
-
-    public static bool PendingInvitation = false;
-
-    public void Awake()
+    public class MazeLevelInvitation : MonoBehaviour
     {
-        Instance = this;
-    }
+        public static MazeLevelInvitation Instance;
 
-    public void Show(string playerName, string mazeName)
-    {
-        gameObject.SetActive(true);
+        [SerializeField] private Text _infoText;
+        private string _mazeLevelName = "";
 
-        _mazeLevelName = mazeName;
-        SetInfoText(playerName);
-    }
+        public static bool PendingInvitation = false;
 
-    private void SetInfoText(string playerName)
-    {
-        _infoText.text = $"{playerName} wants to enter the maze {_mazeLevelName}. Do you accept this invitation?";
-    }
+        public void Awake()
+        {
+            Instance = this;
+        }
 
-    public void Accept()
-    {
-        gameObject.SetActive(false);
+        public void Show(string playerName, string mazeName)
+        {
+            gameObject.SetActive(true);
 
-        LoadNextMazeLevelEvent loadNextMazeLevelEvent = new LoadNextMazeLevelEvent();
-        loadNextMazeLevelEvent.SendLoadNextMazeLevelEvent(_mazeLevelName);
-    }
+            _mazeLevelName = mazeName;
+            SetInfoText(playerName);
+        }
 
-    public void Reject()
-    {
-        PlayerNumber ourPlayerCharacterNumber = GameManager.Instance.CharacterManager.GetOurPlayerCharacter();
-        PlayerCharacter ourPlayerCharacter = GameManager.Instance.CharacterManager.GetPlayerCharacter<PlayerCharacter>(ourPlayerCharacterNumber);
+        private void SetInfoText(string playerName)
+        {
+            _infoText.text = $"{playerName} wants to enter the maze {_mazeLevelName}. Do you accept this invitation?";
+        }
 
-        PlayerRejectsMazeLevelInvitationEvent playerRejectsMazeLevelInvitationEvent = new PlayerRejectsMazeLevelInvitationEvent();
-        playerRejectsMazeLevelInvitationEvent.SendPlayerRejectsMazeLevelInvitationEvent(ourPlayerCharacter.PhotonView.name, _mazeLevelName);
+        public void Accept()
+        {
+            gameObject.SetActive(false);
 
-        PendingInvitation = false;
+            LoadNextMazeLevelEvent loadNextMazeLevelEvent = new LoadNextMazeLevelEvent();
+            loadNextMazeLevelEvent.SendLoadNextMazeLevelEvent(_mazeLevelName);
+        }
 
-        gameObject.SetActive(false);
+        public void Reject()
+        {
+            PlayerNumber ourPlayerCharacterNumber = GameManager.Instance.CharacterManager.GetOurPlayerCharacter();
+            PlayerCharacter ourPlayerCharacter = GameManager.Instance.CharacterManager.GetPlayerCharacter<PlayerCharacter>(ourPlayerCharacterNumber);
+
+            PlayerRejectsMazeLevelInvitationEvent playerRejectsMazeLevelInvitationEvent = new PlayerRejectsMazeLevelInvitationEvent();
+            playerRejectsMazeLevelInvitationEvent.SendPlayerRejectsMazeLevelInvitationEvent(ourPlayerCharacter.PhotonView.name, _mazeLevelName);
+
+            PendingInvitation = false;
+
+            gameObject.SetActive(false);
+        }
     }
 }

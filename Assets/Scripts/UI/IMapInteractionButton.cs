@@ -1,9 +1,12 @@
 ﻿using Character;
 using UnityEngine;
 
-public interface IMapInteractionButton
+namespace UI
 {
-    void ShowMapInteractionButton(OverworldPlayerCharacter triggerPlayer, Vector2 pos, string mapText);
-    void ExecuteMapInteraction();
-    void DestroyMapInteractionButton();
+    public interface IMapInteractionButton
+    {
+        void ShowMapInteractionButton(OverworldPlayerCharacter triggerPlayer, Vector2 pos, string mapText);
+        void ExecuteMapInteraction();
+        void DestroyMapInteractionButton();
+    }
 }

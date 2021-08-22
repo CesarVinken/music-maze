@@ -1,62 +1,65 @@
 ﻿using Character;
 using UnityEngine;
 
-public class OverworldMainScreenOverlayCanvas : MonoBehaviour
+namespace UI
 {
-    public static OverworldMainScreenOverlayCanvas Instance;
-
-    [SerializeField] private GameObject _mazeLevelInvitationPanelPrefab;
-    [SerializeField] private GameObject _mazeLevelInvitationRejectionPanelPrefab;
-    [SerializeField] private GameObject _playerMessagePrefab;
-
-    public void Awake()
+    public class OverworldMainScreenOverlayCanvas : MonoBehaviour
     {
-        Guard.CheckIsNull(_mazeLevelInvitationPanelPrefab, "MazeLevelInvitationPanelPrefab", gameObject);
-        Guard.CheckIsNull(_mazeLevelInvitationRejectionPanelPrefab, "_mazeLevelInvitationRejectionPanelPrefab", gameObject);
-        Guard.CheckIsNull(_playerMessagePrefab, "_playerMessagePrefab", gameObject);
+        public static OverworldMainScreenOverlayCanvas Instance;
 
-        Instance = this;
-    }
+        [SerializeField] private GameObject _mazeLevelInvitationPanelPrefab;
+        [SerializeField] private GameObject _mazeLevelInvitationRejectionPanelPrefab;
+        [SerializeField] private GameObject _playerMessagePrefab;
 
-    public void ShowMazeInvitation(string playerName, string mazeName)
-    {
-        if (MazeLevelInvitation.Instance == null)
+        public void Awake()
         {
-            GameObject mazeInvitationGO = Instantiate(_mazeLevelInvitationPanelPrefab, transform);
-            mazeInvitationGO.SetActive(true);
-            MazeLevelInvitation mazeInvitation = mazeInvitationGO.GetComponent<MazeLevelInvitation>();
-            mazeInvitation.Show(playerName, mazeName);
-        }
-        else
-        {
-            MazeLevelInvitation.Instance.Show(playerName, mazeName);
-        }
-    }
+            Guard.CheckIsNull(_mazeLevelInvitationPanelPrefab, "MazeLevelInvitationPanelPrefab", gameObject);
+            Guard.CheckIsNull(_mazeLevelInvitationRejectionPanelPrefab, "_mazeLevelInvitationRejectionPanelPrefab", gameObject);
+            Guard.CheckIsNull(_playerMessagePrefab, "_playerMessagePrefab", gameObject);
 
-    public void ShowMazeInvitationRejection(string rejectorName, string mazeName)
-    {
-        if (MazeLevelInvitationRejection.Instance == null)
-        {
-            GameObject mazeInvitationRejectionGO = Instantiate(_mazeLevelInvitationRejectionPanelPrefab, transform);
-            mazeInvitationRejectionGO.SetActive(true);
-            MazeLevelInvitationRejection mazeInvitationRejection = mazeInvitationRejectionGO.GetComponent<MazeLevelInvitationRejection>();
-            mazeInvitationRejection.Show(rejectorName, mazeName);
+            Instance = this;
         }
-        else
+
+        public void ShowMazeInvitation(string playerName, string mazeName)
         {
-            MazeLevelInvitationRejection.Instance.Show(rejectorName, mazeName);
+            if (MazeLevelInvitation.Instance == null)
+            {
+                GameObject mazeInvitationGO = Instantiate(_mazeLevelInvitationPanelPrefab, transform);
+                mazeInvitationGO.SetActive(true);
+                MazeLevelInvitation mazeInvitation = mazeInvitationGO.GetComponent<MazeLevelInvitation>();
+                mazeInvitation.Show(playerName, mazeName);
+            }
+            else
+            {
+                MazeLevelInvitation.Instance.Show(playerName, mazeName);
+            }
         }
-    }
 
-    public void ShowPlayerMessagePanel(string message, PlayerNumber playerNumber = PlayerNumber.Player1)
-    {
-        GameObject playerMessagePanelGO = Instantiate(_playerMessagePrefab, transform);
-        PlayerMessagePanel playerMessagePanel = playerMessagePanelGO.GetComponent<PlayerMessagePanel>();
-        playerMessagePanel.ShowMessage(message, playerNumber);
-    }
+        public void ShowMazeInvitationRejection(string rejectorName, string mazeName)
+        {
+            if (MazeLevelInvitationRejection.Instance == null)
+            {
+                GameObject mazeInvitationRejectionGO = Instantiate(_mazeLevelInvitationRejectionPanelPrefab, transform);
+                mazeInvitationRejectionGO.SetActive(true);
+                MazeLevelInvitationRejection mazeInvitationRejection = mazeInvitationRejectionGO.GetComponent<MazeLevelInvitationRejection>();
+                mazeInvitationRejection.Show(rejectorName, mazeName);
+            }
+            else
+            {
+                MazeLevelInvitationRejection.Instance.Show(rejectorName, mazeName);
+            }
+        }
 
-    public void ClosePlayerMessagePanel()
-    {
-        PlayerMessagePanel.Instance.CloseMessagePanel();
+        public void ShowPlayerMessagePanel(string message, PlayerNumber playerNumber = PlayerNumber.Player1)
+        {
+            GameObject playerMessagePanelGO = Instantiate(_playerMessagePrefab, transform);
+            PlayerMessagePanel playerMessagePanel = playerMessagePanelGO.GetComponent<PlayerMessagePanel>();
+            playerMessagePanel.ShowMessage(message, playerNumber);
+        }
+
+        public void ClosePlayerMessagePanel()
+        {
+            PlayerMessagePanel.Instance.CloseMessagePanel();
+        }
     }
 }

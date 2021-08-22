@@ -84,8 +84,8 @@ public class InGameOverworld : Overworld, IInGameLevel
 
         foreach (SerialisableTileAttribute serialisableTileAttribute in serialisableTile.TileAttributes)
         {
+            Logger.Log(serialisableTileAttribute.AttributeType);
             Type type = Type.GetType("DataSerialisation." + serialisableTileAttribute.AttributeType);
-
             if (type.Equals(typeof(SerialisableMazeLevelEntryAttribute)))
             {
                 SerialisableMazeLevelEntryAttribute serialisableMazeLevelEntryAttribute = (SerialisableMazeLevelEntryAttribute)JsonUtility.FromJson(serialisableTileAttribute.SerialisedData, type);
@@ -109,6 +109,7 @@ public class InGameOverworld : Overworld, IInGameLevel
 
         foreach (SerialisableTileBackground serialisableTileBackground in serialisableTile.TileBackgrounds)
         {
+            Logger.Log(serialisableTileBackground.BackgroundType);
             Type type = Type.GetType("DataSerialisation." + serialisableTileBackground.BackgroundType);
             
             if (type.Equals(typeof(SerialisableTilePathBackground)))

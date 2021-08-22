@@ -1,40 +1,43 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 
-public class MazeLevelInvitationRejection : MonoBehaviour
+namespace UI
 {
-    public static MazeLevelInvitationRejection Instance;
-
-    [SerializeField] private Text _infoText;
-    private string _mazeLevelName = "";
-
-    public void Awake()
+    public class MazeLevelInvitationRejection : MonoBehaviour
     {
-        Instance = this;
-    }
+        public static MazeLevelInvitationRejection Instance;
 
-    public void Show(string playerName, string mazeName)
-    {
-        gameObject.SetActive(true);
+        [SerializeField] private Text _infoText;
+        private string _mazeLevelName = "";
 
-        _mazeLevelName = mazeName;
-        SetInfoText(playerName);
-    }
-
-    private void SetInfoText(string playerName)
-    {
-        if(PlayerMessagePanel.Instance != null)
+        public void Awake()
         {
-            PlayerMessagePanel.Instance.CloseMessagePanel();
+            Instance = this;
         }
 
-        _infoText.text = $"{playerName} rejected your invitation to go to {_mazeLevelName}.";
-    }
+        public void Show(string playerName, string mazeName)
+        {
+            gameObject.SetActive(true);
 
-    public void Close()
-    {
-        gameObject.SetActive(false);
+            _mazeLevelName = mazeName;
+            SetInfoText(playerName);
+        }
 
-        MazeLevelInvitation.PendingInvitation = false;
+        private void SetInfoText(string playerName)
+        {
+            if (PlayerMessagePanel.Instance != null)
+            {
+                PlayerMessagePanel.Instance.CloseMessagePanel();
+            }
+
+            _infoText.text = $"{playerName} rejected your invitation to go to {_mazeLevelName}.";
+        }
+
+        public void Close()
+        {
+            gameObject.SetActive(false);
+
+            MazeLevelInvitation.PendingInvitation = false;
+        }
     }
 }

@@ -1,67 +1,133 @@
+using Character;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class MazeLevelMainScreenOverlayCanvas : MonoBehaviour
+namespace UI
 {
-    public static MazeLevelMainScreenOverlayCanvas Instance;
-
-    [SerializeField] private GameObject _exitsAreOpenMessagePrefab;
-
-    public void Awake()
+    public class MazeLevelMainScreenOverlayCanvas : MonoBehaviour
     {
-        Guard.CheckIsNull(_exitsAreOpenMessagePrefab, "_exitsAreOpenMessagePrefab", gameObject);
+        public static MazeLevelMainScreenOverlayCanvas Instance;
 
-        Instance = this;
-    }
+        [SerializeField] private GameObject _exitsAreOpenMessagePrefab;
+        [SerializeField] private GameObject _countdownTimerPrefab;
 
-    public void Start()
-    {
-        MazeLevelGameplayManager.Instance.AllPathsAreMarkedEvent += OnAllPathsAreMarked;
-    }
-
-    public void OnAllPathsAreMarked()
-    {
-        if(GameRules.GamePlayerType == GamePlayerType.SinglePlayer || GameRules.GamePlayerType == GamePlayerType.NetworkMultiplayer)
+        public void Awake()
         {
-            Vector3 spawnPosition = new Vector3(Screen.width / 2, Screen.height / 2);
-            IEnumerator spawnExitsAreOpenMessageRoutine = SpawnExitsAreOpenMessage(spawnPosition);
-            StartCoroutine(spawnExitsAreOpenMessageRoutine);
+            Guard.CheckIsNull(_exitsAreOpenMessagePrefab, "_exitsAreOpenMessagePrefab", gameObject);
+            Guard.CheckIsNull(_countdownTimerPrefab, "_countdownTimerPrefab", gameObject);
+
+            Instance = this;
         }
-        else // split screen requires two texts
+
+        public void Start()
         {
-            Vector3 spawnPosition1 = new Vector3(Screen.width / 4, Screen.height / 2);
-            Vector3 spawnPosition2 = new Vector3(Screen.width - Screen.width / 4, Screen.height / 2);
-
-            IEnumerator spawnExitsAreOpenMessage1Routine = SpawnExitsAreOpenMessage(spawnPosition1);
-            IEnumerator spawnExitsAreOpenMessage2Routine = SpawnExitsAreOpenMessage(spawnPosition2);
-
-            StartCoroutine(spawnExitsAreOpenMessage1Routine);
-            StartCoroutine(spawnExitsAreOpenMessage2Routine);
+            MazeLevelGameplayManager.Instance.AllPathsAreMarkedEvent += OnAllPathsAreMarked;
         }
-    }
 
-    public IEnumerator SpawnExitsAreOpenMessage(Vector3 spawnPosition)
-    {
-        GameObject exitsAreOpenMessageGO = Instantiate(_exitsAreOpenMessagePrefab, transform);
-        exitsAreOpenMessageGO.transform.position = spawnPosition;
-
-        Text exitsAreOpenMessageText = exitsAreOpenMessageGO.GetComponent<Text>();
-        float alphaAmount = 1;
-        float fullAlphaTime = 1.5f;
-        float fadeSpeed = .9f;
-
-        yield return new WaitForSeconds(fullAlphaTime);
-
-        while (alphaAmount > 0)
+        public void OnAllPathsAreMarked()
         {
-            alphaAmount = alphaAmount - (fadeSpeed * Time.deltaTime);
-            Color textColor = new Color(exitsAreOpenMessageText.color.r, exitsAreOpenMessageText.color.g, exitsAreOpenMessageText.color.b, alphaAmount);
-            exitsAreOpenMessageText.color = textColor;
+            if (GameRules.GamePlayerType == GamePlayerType.SinglePlayer || GameRules.GamePlayerType == GamePlayerType.NetworkMultiplayer)
+            {
+                Vector3 spawnPosition = ScreenCalculator.GetScreenMiddle();
+
+                IEnumerator spawnExitsAreOpenMessageRoutine = SpawnExitsAreOpenMessage(spawnPosition);
+                StartCoroutine(spawnExitsAreOpenMessageRoutine);
+            }
+            else // split screen requires two texts
+            {
+                Vector3 spawnPosition1 = ScreenCalculator.GetSplitScreenScreen1Middle();
+                Vector3 spawnPosition2 = ScreenCalculator.GetSplitScreenScreen2Middle();
+
+                IEnumerator spawnExitsAreOpenMessage1Routine = SpawnExitsAreOpenMessage(spawnPosition1);
+                IEnumerator spawnExitsAreOpenMessage2Routine = SpawnExitsAreOpenMessage(spawnPosition2);
+
+                StartCoroutine(spawnExitsAreOpenMessage1Routine);
+                StartCoroutine(spawnExitsAreOpenMessage2Routine);
+            }
+        }
+
+        // Countdown is only triggered in the maze levels, not in the overworld
+        public void SpawnCountdownTimer()
+        {
+            GameObject countdownTimerGO = Instantiate(_countdownTimerPrefab, transform);
+
+            CountdownTimerUI countdownTimer = countdownTimerGO.GetComponent<CountdownTimerUI>();
+            countdownTimer.SetText("Waiting..");
+
+
+            if (GameRules.GamePlayerType == GamePlayerType.SinglePlayer || GameRules.GamePlayerType == GamePlayerType.NetworkMultiplayer)
+            {
+                Vector3 spawnPosition = ScreenCalculator.GetScreenMiddle();
+                countdownTimerGO.transform.position = spawnPosition;
+                
+                IEnumerator countdownTimerRoutine = CountDownRoutine(countdownTimer, 1);
+                StartCoroutine(countdownTimerRoutine);
+            }
+            else // split screen requires two texts
+            {
+                GameObject countdownTimer2GO = Instantiate(_countdownTimerPrefab, transform);
+
+                CountdownTimerUI countdownTimer2 = countdownTimer2GO.GetComponent<CountdownTimerUI>();
+                countdownTimer2.SetText("Waiting..");
+
+                Vector3 spawnPosition1 = ScreenCalculator.GetSplitScreenScreen1Middle();
+                Vector3 spawnPosition2 = ScreenCalculator.GetSplitScreenScreen2Middle();
+                countdownTimerGO.transform.position = spawnPosition1;
+                countdownTimer2GO.transform.position = spawnPosition2;
+
+                IEnumerator countdownTimerRoutine1 = CountDownRoutine(countdownTimer, 1);
+                IEnumerator countdownTimerRoutine2 = CountDownRoutine(countdownTimer2, 2);
+
+                StartCoroutine(countdownTimerRoutine1);
+                StartCoroutine(countdownTimerRoutine2);
+            }
+        }
+
+        public IEnumerator CountDownRoutine(CountdownTimerUI countdownTimerUI, int screenNo)
+        {
+            int expectedNoOfPlayers = GameRules.GamePlayerType == GamePlayerType.SinglePlayer ? 1 : 2;
+
+            while (MainScreenOverlayCanvas.Instance.BlackOutSquares[screenNo - 1].BlackStatus != BlackStatus.Clear ||
+                GameManager.Instance.CharacterManager.GetPlayers<MazePlayerCharacter>().Count < expectedNoOfPlayers)
+            {
+                yield return new WaitForSeconds(0.4f);
+            }
+            countdownTimerUI.SetText("3");
+            yield return new WaitForSeconds(1);
+            countdownTimerUI.SetText("2");
+            yield return new WaitForSeconds(1);
+            countdownTimerUI.SetText("1");
+            yield return new WaitForSeconds(1);
+
+            // unfreeze enemies and player characters
+            GameManager.Instance.CharacterManager.UnfreezeCharacters();
+            
+            Destroy(countdownTimerUI.gameObject);
+        }
+
+        public IEnumerator SpawnExitsAreOpenMessage(Vector3 spawnPosition)
+        {
+            GameObject exitsAreOpenMessageGO = Instantiate(_exitsAreOpenMessagePrefab, transform);
+            exitsAreOpenMessageGO.transform.position = spawnPosition;
+
+            Text exitsAreOpenMessageText = exitsAreOpenMessageGO.GetComponent<Text>();
+            float alphaAmount = 1;
+            float fullAlphaTime = 1.5f;
+            float fadeSpeed = .9f;
+
+            yield return new WaitForSeconds(fullAlphaTime);
+
+            while (alphaAmount > 0)
+            {
+                alphaAmount = alphaAmount - fadeSpeed * Time.deltaTime;
+                Color textColor = new Color(exitsAreOpenMessageText.color.r, exitsAreOpenMessageText.color.g, exitsAreOpenMessageText.color.b, alphaAmount);
+                exitsAreOpenMessageText.color = textColor;
+                yield return null;
+            }
+
+            Destroy(exitsAreOpenMessageGO);
             yield return null;
         }
-
-        Destroy(exitsAreOpenMessageGO); 
-        yield return null;
     }
 }

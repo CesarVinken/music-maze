@@ -1,10 +1,13 @@
 ﻿using Console;
 using UnityEngine;
 
-public class ConsoleButton : MonoBehaviour
+namespace UI
 {
-    public void OpenConsole()
+    public class ConsoleButton : MonoBehaviour
     {
-        ConsoleContainer.Instance.ToggleConsole(ConsoleState.Large);
+        public void OpenConsole()
+        {
+            ConsoleContainer.Instance.ToggleConsole(ConsoleState.Large);
+        }
     }
 }

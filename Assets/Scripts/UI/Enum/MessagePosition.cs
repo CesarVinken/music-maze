@@ -1,8 +1,9 @@
-using UnityEngine;
-
-public enum MessagePosition
+namespace UI
 {
-    Middle,
-    PlayerLeft,
-    PlayerRight
+    public enum MessagePosition
+    {
+        Middle,
+        PlayerLeft,
+        PlayerRight
+    }
 }

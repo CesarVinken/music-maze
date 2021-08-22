@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using UI;
+using UnityEngine;
 
 public class EditorOverworldTileAttributePlacer : OverworldTileAttributePlacer<EditorOverworldTile>
 {

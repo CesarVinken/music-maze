@@ -36,7 +36,6 @@ namespace Character
 
         public override void Awake()
         {
-            Logger.Log("AWAKE THE PLAYER CHARACTER!");
             Guard.CheckIsNull(_playerCollider, "_playerCollider", gameObject);
 
             SetPlayerNumber();
@@ -486,7 +485,6 @@ namespace Character
         // Should be here and not in manager.
         private void SetPlayerName()
         {
-            Logger.Log($"SetPlayerName {_characterType.ToString()}");
             ICharacterManager characterManager = GameManager.Instance.CharacterManager;
 
             if (GameRules.GamePlayerType == GamePlayerType.NetworkMultiplayer)

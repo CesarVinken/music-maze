@@ -7,6 +7,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using UI;
 using UnityEngine;
 
 public class MazeLevelGameplayManager : MonoBehaviour, IOnEventCallback, IGameplayManager
@@ -137,6 +138,8 @@ public class MazeLevelGameplayManager : MonoBehaviour, IOnEventCallback, IGamepl
     public void Start()
     {
         AllPathsAreMarkedEvent += OnAllPathsAreMarked;
+
+        MazeLevelMainScreenOverlayCanvas.Instance.SpawnCountdownTimer();
     }
 
     private void OnEnable()
@@ -156,7 +159,7 @@ public class MazeLevelGameplayManager : MonoBehaviour, IOnEventCallback, IGamepl
         InitialiseTileAttributes();
 
         Logger.Log("Start scan...");
-        IEnumerator coroutine = ScanCoroutine();
+        IEnumerator coroutine = SetupCoroutine();
 
         StartCoroutine(coroutine);
     }
@@ -174,7 +177,7 @@ public class MazeLevelGameplayManager : MonoBehaviour, IOnEventCallback, IGamepl
         CameraManager.Instance.SetPanLimits();
     }
 
-    public IEnumerator ScanCoroutine()
+    public IEnumerator SetupCoroutine()
     {
         yield return new WaitForSeconds(.2f); // This waiting time should be dealt with more efficiently. Currently it is there to make sure that the characters are spawned in 
 
@@ -184,7 +187,7 @@ public class MazeLevelGameplayManager : MonoBehaviour, IOnEventCallback, IGamepl
         CameraManager.Instance.SetPanLimits();
         CameraManager.Instance.FocusCamerasOnPlayer();
 
-        GameManager.Instance.CharacterManager.UnfreezeCharacters();
+        //GameManager.Instance.CharacterManager.UnfreezeCharacters();
 
         HandleSpawnpointMarkability();
     }

@@ -128,7 +128,7 @@ public class EditorMazeLevel : MazeLevel, IEditorLevel
 
         foreach (SerialisableTileAttribute serialisableTileAttribute in serialisableTile.TileAttributes)
         {
-            Type type = Type.GetType(serialisableTileAttribute.AttributeType);
+            Type type = Type.GetType("DataSerialisation." + serialisableTileAttribute.AttributeType);
 
             if (type.Equals(typeof(SerialisableTileObstacleAttribute)))
             {
@@ -194,7 +194,7 @@ public class EditorMazeLevel : MazeLevel, IEditorLevel
 
         foreach (SerialisableTileBackground serialisableTileBackground in serialisableTile.TileBackgrounds)
         {
-            Type type = Type.GetType(serialisableTileBackground.BackgroundType);
+            Type type = Type.GetType("DataSerialisation." + serialisableTileBackground.BackgroundType);
 
             if (type.Equals(typeof(SerialisableTilePathBackground)))
             {

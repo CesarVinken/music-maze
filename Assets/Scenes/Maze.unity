@@ -1794,6 +1794,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _exitsAreOpenMessagePrefab: {fileID: 1630679862561145300, guid: fe8a55bdadff99b4c8a96f9303e3f8dd,
     type: 3}
+  _countdownTimerPrefab: {fileID: 2181028332064964080, guid: 4a911da8e6b7ffc4fad1142559512c6e,
+    type: 3}
 --- !u!1 &835873984
 GameObject:
   m_ObjectHideFlags: 0

@@ -63,7 +63,7 @@ namespace DataSerialisation
             foreach (ITileAttribute tileAttribute in tile.GetAttributes())
             {
                 ISerialisableTileAttribute iSerialisableTileAttribute = CreateSerialisableTileAttribute(tile, tileAttribute);
-                string attributeType = iSerialisableTileAttribute.GetType().ToString();
+                string attributeType = iSerialisableTileAttribute.GetType().ToString().Split('.')[1];
 
                 SerialisableTileAttribute serialisableTileAttribute = new SerialisableTileAttribute(
                     attributeType,
@@ -83,9 +83,10 @@ namespace DataSerialisation
             foreach (ITileBackground tileBackground in tile.GetBackgrounds())
             {
                 ISerialisableTileBackground iSerialisableTileBackground = CreateSerialisableTileBackground(tileBackground);
+                string sanatisedBackgroundType = iSerialisableTileBackground.GetType().ToString().Split('.')[1];
 
                 SerialisableTileBackground serialisableTileBackground = new SerialisableTileBackground(
-                    iSerialisableTileBackground.GetType().ToString(), iSerialisableTileBackground
+                    sanatisedBackgroundType, iSerialisableTileBackground
                     );
                 tilebackgrounds.Add(serialisableTileBackground);
             }

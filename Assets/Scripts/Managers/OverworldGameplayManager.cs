@@ -4,6 +4,7 @@ using Photon.Pun;
 using Photon.Realtime;
 using System;
 using System.Collections;
+using UI;
 using UnityEngine;
 
 public class OverworldGameplayManager : MonoBehaviour, IOnEventCallback, IGameplayManager
@@ -15,6 +16,7 @@ public class OverworldGameplayManager : MonoBehaviour, IOnEventCallback, IGamepl
 
     public GameObject EditorTilePrefab;
     public GameObject InGameTilePrefab;
+
     [SerializeField] private GameObject _tileBaseGroundPrefab;
     [SerializeField] private GameObject _tileBaseWaterPrefab;
     [SerializeField] private GameObject _tilePathPrefab;
@@ -79,7 +81,6 @@ public class OverworldGameplayManager : MonoBehaviour, IOnEventCallback, IGamepl
 
             EditorOverworld = null;
         }
-
     }
 
     public void SetupOverworld(OverworldData overworldData)

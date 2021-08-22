@@ -15,5 +15,11 @@ namespace DataSerialisation
             BackgroundType = backgroundType;
             SerialisedData = JsonUtility.ToJson(iSerialisableTileBackground);
         }
+
+        public static Type GetType(string typeString)
+        {
+            Logger.Log("get type " + typeString);
+            return Type.GetType("DataSerialisation." + typeString);
+        }
     }
 }
