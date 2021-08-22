@@ -68,13 +68,15 @@ namespace DataSerialisation
 
         public static bool LevelNameExists(string levelName, List<MazeLevelNameData> levelNamesData = null)
         {
+            string dashedMazeName = levelName.ToLower().Replace(" ", "-");
+
             if (levelNamesData == null)
             {
                 MazeLevelNamesData existingData = new JsonMazeLevelListFileReader().ReadData<MazeLevelNamesData>();
                 levelNamesData = existingData.LevelNames;
             }
 
-            MazeLevelNameData levelNameData = levelNamesData.FirstOrDefault(l => l.LevelName == levelName);
+            MazeLevelNameData levelNameData = levelNamesData.FirstOrDefault(l => l.LevelName == dashedMazeName);
 
             if (levelNameData == null)
             {

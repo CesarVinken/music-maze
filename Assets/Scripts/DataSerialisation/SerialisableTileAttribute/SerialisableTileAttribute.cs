@@ -18,7 +18,6 @@ namespace DataSerialisation
 
         public static Type GetType(string typeString)
         {
-            Logger.Log("get type " + typeString);
             return Type.GetType("DataSerialisation." + typeString);
         }
     }

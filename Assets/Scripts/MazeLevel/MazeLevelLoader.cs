@@ -38,13 +38,13 @@ public static class MazeLevelLoader
 
     public static bool MazeLevelExists(string mazeLevelName)
     {
-        string sanatisedMazeName = mazeLevelName.ToLower().Replace(" ", " ");
+        string dashedMazeName = mazeLevelName.ToLower().Replace(" ", "-");
 
-        string filePath = Path.Combine(Path.Combine(Application.streamingAssetsPath, "maze"), sanatisedMazeName + ".json");
+        string filePath = Path.Combine(Path.Combine(Application.streamingAssetsPath, "maze"), dashedMazeName + ".json");
 
         if (!File.Exists(filePath))
         {
-            Logger.Warning(Logger.Datawriting, $"Looked for the maze level '{sanatisedMazeName}' but could not find it");
+            Logger.Warning(Logger.Datawriting, $"Looked for the maze level '{mazeLevelName}' but could not find it");
             Logger.Log($"The available levels are: {GetAllMazeLevelNamesForPrint()}");
             return false;
         }

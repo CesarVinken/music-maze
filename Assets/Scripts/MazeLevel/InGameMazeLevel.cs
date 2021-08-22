@@ -116,7 +116,6 @@ public class InGameMazeLevel : MazeLevel, IInGameLevel
 
         foreach (SerialisableTileAttribute serialisableTileAttribute in serialisableTile.TileAttributes)
         {
-            Logger.Log(serialisableTileAttribute.AttributeType);
             Type type = Type.GetType("DataSerialisation." + serialisableTileAttribute.AttributeType);
 
             if (type.Equals(typeof(SerialisableTileObstacleAttribute)))
