@@ -97,12 +97,12 @@ public class GameListUI : MonoBehaviourPunCallbacks
         Logger.Log("UpdateRoomListView");
         foreach (RoomInfo info in _cachedRoomList.Values)
         {
-            Logger.Log($"Id of this room: {info.Id}. Name of this room: {info.CustomProperties["Name"]}");
             string roomName = info.CustomProperties["Name"].ToString();
+            string version = info.CustomProperties["Version"].ToString();
             GameObject entry = Instantiate(_roomListEntryPrefab);
             entry.transform.SetParent(_roomListContent.transform);
             entry.transform.localScale = Vector3.one;
-            entry.GetComponent<RoomListEntry>().Initialize(info.Id, roomName, (byte)info.PlayerCount, info.MaxPlayers, _launcher);
+            entry.GetComponent<RoomListEntry>().Initialize(info.Id, roomName, (byte)info.PlayerCount, info.MaxPlayers, version, _launcher);
 
             _roomListEntries.Add(info.Id, entry);
         }

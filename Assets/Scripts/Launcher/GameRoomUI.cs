@@ -62,6 +62,7 @@ public class GameRoomUI : MonoBehaviourPunCallbacks, IOnEventCallback
             _launchGameButtonGO.SetActive(true);
 
             _updateRoomNameButton.gameObject.SetActive(false);
+            Logger.Warning("Do we have it here?" + PhotonNetwork.CurrentRoom.CustomProperties);
             _roomNameInputField.text = PhotonNetwork.CurrentRoom.CustomProperties["Name"].ToString();
             _roomNameInputField.interactable = true;
 
@@ -265,8 +266,11 @@ public class GameRoomUI : MonoBehaviourPunCallbacks, IOnEventCallback
     public void UpdateRoomName()
     {
         string newRoomName = _roomNameInputField.text;
-
-        PhotonNetwork.CurrentRoom.SetCustomProperties(new Hashtable { { "Name", newRoomName } });
+        Logger.Warning($"send version {PersistentGameManager.VersionNumber}");
+        PhotonNetwork.CurrentRoom.SetCustomProperties(new Hashtable { 
+            { "Name", newRoomName },
+            { "Version", PersistentGameManager.VersionNumber }
+        });
 
         _launcher.SetRoomName(newRoomName);
 

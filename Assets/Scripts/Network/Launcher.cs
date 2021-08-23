@@ -1,7 +1,6 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 using Photon.Realtime;
-using UnityEngine.EventSystems;
 using System.Collections;
 
 namespace Photon.Pun.Demo.PunBasics
@@ -14,7 +13,6 @@ namespace Photon.Pun.Demo.PunBasics
         [SerializeField]
         private byte maxPlayersPerRoom = 2;
 
-        string gameVersion = "1";
         private readonly string _connectionStatusMessage = "    Connection Status: ";
 
         [Space(10)]
@@ -24,6 +22,7 @@ namespace Photon.Pun.Demo.PunBasics
         [SerializeField] private Text _playerStatus = null;
         [SerializeField] private Text _connectionStatus = null;
         [SerializeField] private Text _errorText = null;
+        [SerializeField] private Text _versionNumberText = null;
 
         [Space(5)]
 
@@ -45,6 +44,7 @@ namespace Photon.Pun.Demo.PunBasics
         {
             Guard.CheckIsNull(_playerStatus, "_playerStatus", gameObject);
             Guard.CheckIsNull(_errorText, "_errorText", gameObject);
+            Guard.CheckIsNull(_versionNumberText, "_versionNumberText", gameObject);
 
             Guard.CheckIsNull(_welcomeUI, "_welcomeUI", gameObject);
 
@@ -62,6 +62,8 @@ namespace Photon.Pun.Demo.PunBasics
             {
                 _splitScreenButtonGO.SetActive(true);
             }
+
+            SetGameVersion();
         }
 
         void Start()
@@ -116,14 +118,14 @@ namespace Photon.Pun.Demo.PunBasics
         public void HostGame()
         {
             SetRoomName($"{PlayerName}'s game");
-            //roomName = (roomName.Equals(string.Empty)) ? "Room " + Random.Range(1000, 10000) : roomName;
 
             RoomOptions options = new RoomOptions { MaxPlayers = 2, PlayerTtl = 10000, EmptyRoomTtl = 0 };
             ExitGames.Client.Photon.Hashtable customProperties = new ExitGames.Client.Photon.Hashtable();
             customProperties.Add("Name", RoomName);
+            customProperties.Add("Version", PersistentGameManager.VersionNumber);
 
             options.CustomRoomProperties = customProperties;
-            options.CustomRoomPropertiesForLobby = new string[] { "Name" };
+            options.CustomRoomPropertiesForLobby = new string[] { "Name", "Version" };
 
             PhotonNetwork.CreateRoom(RoomName, options, null);
 
@@ -260,6 +262,11 @@ namespace Photon.Pun.Demo.PunBasics
             _launchGameUI.TurnOff();
             _gameListUI.TurnOn();
             _welcomeUI.TurnOff();
+        }
+
+        public void SetGameVersion()
+        {
+            _versionNumberText.text = $"Version {PersistentGameManager.VersionNumber}";
         }
     }
 }
