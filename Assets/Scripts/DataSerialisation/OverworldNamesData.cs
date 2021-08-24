@@ -27,7 +27,7 @@ namespace DataSerialisation
 
         public OverworldNamesData AddOverworldName(string overworldName)
         {
-            if (OverworldNameExists(overworldName))
+            if (OverworldNameExists(overworldName, OverworldNames))
             {
                 Logger.Log($"An overworld with the name {overworldName} was already registered. Not adding it to the overworld name list");
                 return this;
@@ -52,7 +52,7 @@ namespace DataSerialisation
                 return "Could not find overworld names data.\n\n";
             }
 
-            if (!OverworldNameExists(overworldName))
+            if (!OverworldNameExists(overworldName, OverworldNames))
             {
                 return $"Could not find an overworld with the name '<color={ConsoleConfiguration.HighlightColour}>{overworldName}</color> in the list. Could not delete '<color={ConsoleConfiguration.HighlightColour}>{overworldName}</color> from overworlds.json.\n\n";
             }
@@ -66,9 +66,17 @@ namespace DataSerialisation
             return $"Removed overworld name '<color={ConsoleConfiguration.HighlightColour}>{overworldName}</color> from list of overworld.\n\n";
         }
 
-        public bool OverworldNameExists(string overworldName)
+        public static bool OverworldNameExists(string overworldName, List<OverworldNameData> overworldNames = null)
         {
-            OverworldNameData overworldNameData = OverworldNames.FirstOrDefault(l => l.OverworldName == overworldName);
+            string dashedOverworldName = overworldName.ToLower().Replace(" ", "-");
+
+            if (overworldNames == null)
+            {
+                OverworldNamesData existingData = new JsonOverworldListFileReader().ReadData<OverworldNamesData>();
+                overworldNames = existingData.OverworldNames;
+            }
+            
+            OverworldNameData overworldNameData = overworldNames.FirstOrDefault(l => l.OverworldName == dashedOverworldName);
 
             if (overworldNameData == null)
             {

@@ -10,11 +10,11 @@ namespace UI
         public static PlayerMessagePanel Instance;
 
         public static Dictionary<MessagePosition, Vector2> MessageSpawnPosition = new Dictionary<MessagePosition, Vector2>()
-    {
-        { MessagePosition.Middle, new Vector2(0, 0) },
-        { MessagePosition.PlayerLeft, new Vector2(0, 0) },
-        { MessagePosition.PlayerRight, new Vector2(0, 0) }
-    };
+        {
+            { MessagePosition.Middle, new Vector2(0, 0) },
+            { MessagePosition.PlayerLeft, new Vector2(0, 0) },
+            { MessagePosition.PlayerRight, new Vector2(0, 0) }
+        };
 
         [SerializeField] private Text _messageText;
 

@@ -7,12 +7,16 @@ using UnityEngine.UI;
 
 public class EditorOverworldModificationPanel : EditorGridModificationPanel
 {
+    public static EditorOverworldModificationPanel Instance;
+
     [SerializeField] private InputField _overworldNameInputField;
 
     private string _overworldName = "";
 
     public new void Awake()
     {
+        Instance = this;
+
         base.Awake();
 
         Guard.CheckIsNull(_overworldNameInputField, "_overworldNameInputField", gameObject);
@@ -50,26 +54,27 @@ public class EditorOverworldModificationPanel : EditorGridModificationPanel
             return;
         }
 
-        SaveOverworldData();
-        AddOverworldToOverworldList();
-
-        Logger.Log(Logger.Datawriting, "Overworld {0} Saved.", _overworldName);
+        if (OverworldNamesData.OverworldNameExists(_overworldName))
+        {
+            // show warning panel for player. "Are you sure you want to save?"
+            GameObject twoOptionsPanelGO = GameObject.Instantiate(EditorCanvasUI.Instance.EditorTwoOptionsPanelPrefab, EditorCanvasUI.Instance.transform);
+            EditorTwoOptionPanel twoOptionsPanel = twoOptionsPanelGO.GetComponent<EditorTwoOptionPanel>();
+            twoOptionsPanel.Initialize(
+                $"Are you sure you want to overwrite the overworld {_overworldName}?",
+                EditorUIAction.Close,
+                "Cancel",
+                EditorUIAction.SaveOverworld,
+                "Save"
+            );
+        }
+        else
+        {
+            OverworldSaver overworldSaver = new OverworldSaver();
+            overworldSaver.Save(_overworldName);
+        }
     }
 
-    private void SaveOverworldData()
-    {
-        OverworldData overworldData = new OverworldData(OverworldGameplayManager.Instance.EditorOverworld).WithName(_overworldName);
-        JsonOverworldFileWriter fileWriter = new JsonOverworldFileWriter();
-        fileWriter.SerialiseData(overworldData);
-    }
-
-    private void AddOverworldToOverworldList()
-    {
-        OverworldNamesData overworldNameData = new OverworldNamesData(_overworldName).AddOverworldName(_overworldName);
-
-        JsonOverworldListFileWriter fileWriter = new JsonOverworldListFileWriter();
-        fileWriter.SerialiseData(overworldNameData);
-    }
+   
 
     public void LoadOverworld()
     {
@@ -194,4 +199,8 @@ public class EditorOverworldModificationPanel : EditorGridModificationPanel
         return new SerialisableTileBaseGround(16);
     }
 
+    public string GetOverworldName()
+    {
+        return _overworldName;
+    }
 }

@@ -7,12 +7,16 @@ using UnityEngine.UI;
 
 public class EditorMazeModificationPanel : EditorGridModificationPanel
 {
+    public static EditorMazeModificationPanel Instance;
+
     [SerializeField] private InputField _mazeNameInputField;
 
     private string _mazeName = "";
 
     public new void Awake()
     {
+        Instance = this;
+
         base.Awake();
 
         Guard.CheckIsNull(_mazeNameInputField, "MazeNameInputField", gameObject);
@@ -131,19 +135,24 @@ public class EditorMazeModificationPanel : EditorGridModificationPanel
             return;
         }
 
-        CheckForTilesWithoutTransformationTriggerers();
-
-        SaveMazeLevelData();
-        AddMazeToMazeList();
-
-        Logger.Log(Logger.Datawriting, "Level {0} Saved.", _mazeName);
-    }
-
-    private void SaveMazeLevelData()
-    {
-        MazeLevelData mazeLevelData = new MazeLevelData(MazeLevelGameplayManager.Instance.EditorLevel).WithName(_mazeName);
-        JsonMazeLevelFileWriter fileWriter = new JsonMazeLevelFileWriter();
-        fileWriter.SerialiseData(mazeLevelData);
+        if (MazeLevelNamesData.LevelNameExists(_mazeName))
+        {
+            // show warning panel for player. "Are you sure you want to save?"
+            GameObject twoOptionsPanelGO = GameObject.Instantiate(EditorCanvasUI.Instance.EditorTwoOptionsPanelPrefab, EditorCanvasUI.Instance.transform);
+            EditorTwoOptionPanel twoOptionsPanel = twoOptionsPanelGO.GetComponent<EditorTwoOptionPanel>();
+            twoOptionsPanel.Initialize(
+                $"Are you sure you want to overwrite the maze level {_mazeName}?", 
+                EditorUIAction.Close, 
+                "Cancel", 
+                EditorUIAction.SaveMaze, 
+                "Save"
+            );
+        }
+        else
+        {
+            MazeLevelSaver mazeLevelSaver = new MazeLevelSaver();
+            mazeLevelSaver.Save(_mazeName);
+        }
     }
 
     public void LoadMaze()
@@ -172,14 +181,7 @@ public class EditorMazeModificationPanel : EditorGridModificationPanel
         EditorMazeTileModificationPanel.Instance?.DestroyModifierActions();
     }
 
-    private void AddMazeToMazeList()
-    {
-        MazeLevelNamesData levelNamesData = new MazeLevelNamesData(_mazeName).AddLevelName(_mazeName);
-
-        JsonMazeLevelListFileWriter fileWriter = new JsonMazeLevelListFileWriter();
-        fileWriter.SerialiseData(levelNamesData);
-    }
-
+    
     public void TogglePlayableMazesPanel()
     {
         if (EditorCanvasUI.Instance.PlayableLevelsPanelGO.activeSelf)
@@ -330,17 +332,8 @@ public class EditorMazeModificationPanel : EditorGridModificationPanel
         return new SerialisableTileBaseGround(16);
     }
 
-    private void CheckForTilesWithoutTransformationTriggerers()
+    public string GetMazeLevelName()
     {
-        for (int i = 0; i < MazeLevelGameplayManager.Instance.EditorLevel.Tiles.Count; i++)
-        {
-            EditorMazeTile tile = MazeLevelGameplayManager.Instance.EditorLevel.Tiles[i] as EditorMazeTile;
-
-            if(!tile.Markable && tile.BeautificationTriggerers.Count == 0)
-            {
-                tile.SetTileOverlayImage(TileOverlayMode.Yellow);
-                Logger.Warning($"No transformation triggerer was set up for the tile at {tile.GridLocation.X},{tile.GridLocation.Y}");
-            }
-        }
+        return _mazeName;
     }
 }

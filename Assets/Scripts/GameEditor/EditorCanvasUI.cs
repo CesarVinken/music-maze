@@ -9,6 +9,7 @@ public class EditorCanvasUI : MonoBehaviour
     public GameObject PlayableLevelsPanelGO;
 
     [SerializeField] private GameObject _gameEditorWorldPrefab;
+    public GameObject EditorTwoOptionsPanelPrefab;
 
     public Sprite DefaultIcon;
     public Sprite[] TileMainModifierCategoryIcons;
