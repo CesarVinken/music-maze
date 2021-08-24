@@ -232,13 +232,41 @@ public class OverworldGameplayManager : MonoBehaviour, IOnEventCallback, IGamepl
             MazeLevelInvitation.PendingInvitation = true;
 
             OverworldMainScreenOverlayCanvas.Instance.ShowMazeInvitation(invitorName, mazeName);
-        } else if(eventCode == EventCode.PlayerRejectsMazeLevelInvitationEventCode)
+
+            // check if the player has the level. If not, reject the invitation and inform the player
+            if (!MazeLevelNamesData.LevelNameExists(mazeName))
+            {
+                OverworldMainScreenOverlayCanvas.Instance.ShowPlayerWarning($"We rejected the invitation to play the maze level '{mazeName}' because it was not found!");
+                if(MazeLevelInvitation.Instance != null)
+                {
+                    MazeLevelInvitation.Instance.Reject(ReasonForRejection.LevelNotFound);
+                }
+                else
+                {
+                    Logger.Error("This means that we rejected the invitation before even loading it. Revise code.");
+                }
+                return;
+            }
+
+        }
+        else if(eventCode == EventCode.PlayerRejectsMazeLevelInvitationEventCode)
         {
             object[] data = (object[])photonEvent.CustomData;
             string rejectorName = (string)data[0];
             string mazeName = (string)data[1];
-            Logger.Log($"received event that {rejectorName} rejected the invitation");
-            OverworldMainScreenOverlayCanvas.Instance.ShowMazeInvitationRejection(rejectorName, mazeName);
+            if(!Enum.TryParse((string)data[2], out ReasonForRejection reason))
+            {
+                reason = ReasonForRejection.PlayerRejected;
+            }
+
+            Logger.Log($"received event that {rejectorName} rejected the invitation with the reason {reason}");
+            OverworldMainScreenOverlayCanvas.Instance.ShowMazeInvitationRejection(rejectorName, mazeName, reason);
         }
     }
+}
+
+public enum ReasonForRejection
+{
+    LevelNotFound,
+    PlayerRejected
 }

@@ -39,13 +39,13 @@ namespace UI
             loadNextMazeLevelEvent.SendLoadNextMazeLevelEvent(_mazeLevelName);
         }
 
-        public void Reject()
+        public void Reject(ReasonForRejection reason = ReasonForRejection.PlayerRejected)
         {
             PlayerNumber ourPlayerCharacterNumber = GameManager.Instance.CharacterManager.GetOurPlayerCharacter();
             PlayerCharacter ourPlayerCharacter = GameManager.Instance.CharacterManager.GetPlayerCharacter<PlayerCharacter>(ourPlayerCharacterNumber);
 
             PlayerRejectsMazeLevelInvitationEvent playerRejectsMazeLevelInvitationEvent = new PlayerRejectsMazeLevelInvitationEvent();
-            playerRejectsMazeLevelInvitationEvent.SendPlayerRejectsMazeLevelInvitationEvent(ourPlayerCharacter.PhotonView.name, _mazeLevelName);
+            playerRejectsMazeLevelInvitationEvent.SendPlayerRejectsMazeLevelInvitationEvent(ourPlayerCharacter.PhotonView.name, _mazeLevelName, reason);
 
             PendingInvitation = false;
 

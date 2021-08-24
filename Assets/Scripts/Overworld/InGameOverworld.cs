@@ -109,7 +109,6 @@ public class InGameOverworld : Overworld, IInGameLevel
 
         foreach (SerialisableTileBackground serialisableTileBackground in serialisableTile.TileBackgrounds)
         {
-            Logger.Log(serialisableTileBackground.BackgroundType);
             Type type = Type.GetType("DataSerialisation." + serialisableTileBackground.BackgroundType);
             
             if (type.Equals(typeof(SerialisableTilePathBackground)))

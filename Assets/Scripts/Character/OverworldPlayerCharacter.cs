@@ -1,4 +1,5 @@
-﻿using Photon.Pun;
+﻿using DataSerialisation;
+using Photon.Pun;
 using System.Collections.Generic;
 using UI;
 using UnityEngine;
@@ -56,6 +57,15 @@ namespace Character
 
         public void PerformMazeLevelEntryAction(string mazeName)
         {
+            Logger.Log($"Go to maze {mazeName}");
+
+            // Check levels list to see if we have the level. If the level is not found, inform and return. 
+            if (!MazeLevelNamesData.LevelNameExists(mazeName))
+            {
+                OverworldMainScreenOverlayCanvas.Instance.ShowPlayerWarning($"Maze level '{mazeName}' was not found!");
+                return;
+            }
+
             // Player does not meet entry requirements? Return;
 
             if (GameRules.GamePlayerType == GamePlayerType.SinglePlayer)

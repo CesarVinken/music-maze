@@ -6,11 +6,12 @@ public class PlayerRejectsMazeLevelInvitationEvent
 {
     public byte Code = EventCode.PlayerRejectsMazeLevelInvitationEventCode;
 
-    public void SendPlayerRejectsMazeLevelInvitationEvent(string rejector, string mazeName)
+    public void SendPlayerRejectsMazeLevelInvitationEvent(string rejector, string mazeName, ReasonForRejection reason)
     {
         object[] content = new object[] {
             rejector,
-            mazeName
+            mazeName,
+            reason.ToString()
         };
         RaiseEventOptions raiseEventOptions = new RaiseEventOptions { Receivers = ReceiverGroup.Others };
         PhotonNetwork.RaiseEvent(Code, content, raiseEventOptions, SendOptions.SendReliable);

@@ -15,22 +15,33 @@ namespace UI
             Instance = this;
         }
 
-        public void Show(string playerName, string mazeName)
+        public void Show(string playerName, string mazeName, ReasonForRejection reason)
         {
             gameObject.SetActive(true);
 
             _mazeLevelName = mazeName;
-            SetInfoText(playerName);
+            SetInfoText(playerName, reason);
         }
 
-        private void SetInfoText(string playerName)
+        private void SetInfoText(string playerName, ReasonForRejection reason)
         {
             if (PlayerMessagePanel.Instance != null)
             {
                 PlayerMessagePanel.Instance.CloseMessagePanel();
             }
 
-            _infoText.text = $"{playerName} rejected your invitation to go to {_mazeLevelName}.";
+            switch (reason)
+            {
+                case ReasonForRejection.LevelNotFound:
+                    _infoText.text = $"{playerName} rejected your invitation because they do not have access to the level {_mazeLevelName}.";
+                    break;
+                case ReasonForRejection.PlayerRejected:
+                    _infoText.text = $"{playerName} rejected your invitation to go to {_mazeLevelName}.";
+                    break;
+                default:
+                    Logger.Error($"Unknown reason ${reason}");
+                    break;
+            }
         }
 
         public void Close()

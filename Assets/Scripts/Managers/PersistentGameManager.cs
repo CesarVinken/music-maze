@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 public static class PersistentGameManager
 {
-    public const string VersionNumber = "0.0.5.3";
+    public const string VersionNumber = "0.0.5.4";
 
     public static Platform CurrentPlatform;
     public static SceneType CurrentSceneType;

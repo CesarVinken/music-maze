@@ -168,7 +168,7 @@ public class GameManager : MonoBehaviourPunCallbacks
 
                     if (startUpMazeLevelData == null)
                     {
-                        Logger.Error($"Could not find the level {mazeName} for startup. Will load defult level instead.");
+                        Logger.Error($"Could not find the level {mazeName} for startup. Will load default level instead.");
                         mazeName = "default";
                         startUpMazeLevelData = MazeLevelLoader.LoadMazeLevelData(mazeName);
                     }
