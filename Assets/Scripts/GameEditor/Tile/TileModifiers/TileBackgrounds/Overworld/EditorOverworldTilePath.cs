@@ -24,7 +24,7 @@ public class EditorOverworldTilePath : EditorOverworldTileBackgroundModifier, IG
         if (overworldTilePath == null)
         {
             OverworldTileAttributeRemover tileAttributeRemover = new OverworldTileAttributeRemover(tile);
-            tileAttributeRemover.RemoveTileObstacle();
+            tileAttributeRemover.Remove<TileObstacle>();
 
             tileBackgroundPlacer.PlacePath(new OverworldDefaultPathType());
             return;

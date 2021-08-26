@@ -18,18 +18,18 @@ public class EditorPlayerOnlyTileAttribute : EditorMazeTileAttributeModifier, IG
         ITileAttribute playerOnlyAttribute = (PlayerOnly)tile.GetAttributes().FirstOrDefault(attribute => attribute is PlayerOnly);
         if (playerOnlyAttribute == null)
         {
-            tileAttributeRemover.RemoveTileObstacle();
-            tileAttributeRemover.RemovePlayerExit();
-            tileAttributeRemover.RemoveEnemySpawnpoint();
-            tileAttributeRemover.RemoveMusicInstrumentCase();
-            tileAttributeRemover.RemovePlayerSpawnpoint();
+            tileAttributeRemover.Remove<TileObstacle>();
+            tileAttributeRemover.Remove<PlayerExit>();
+            tileAttributeRemover.Remove<EnemySpawnpoint>();
+            tileAttributeRemover.Remove<MusicInstrumentCase>();
+            tileAttributeRemover.Remove<PlayerSpawnpoint>();
 
             Logger.Warning($"Now place player only attribute at {tile.GridLocation.X}, {tile.GridLocation.Y}");
             tileAttributePlacer.PlacePlayerOnlyAttribute(PlayerOnlyType.Bush);
             return;
         }
 
-        tileAttributeRemover.RemovePlayerOnlyAttribute();
+        tileAttributeRemover.Remove<PlayerOnly>();
     }
 
     public override Sprite GetSprite()

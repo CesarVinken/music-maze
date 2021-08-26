@@ -18,18 +18,18 @@ public class EditorPlayerExitTileAttribute : EditorMazeTileAttributeModifier, IG
         ITileAttribute playerExit = (PlayerExit)tile.GetAttributes().FirstOrDefault(attribute => attribute is PlayerExit);
         if (playerExit == null)
         {
-            tileAttributeRemover.RemoveEnemySpawnpoint();
-            tileAttributeRemover.RemovePlayerOnlyAttribute();
-            tileAttributeRemover.RemovePlayerSpawnpoint();
-            tileAttributeRemover.RemoveMusicInstrumentCase();
-            tileAttributeRemover.RemoveTileObstacle();
+            tileAttributeRemover.Remove<EnemySpawnpoint>();
+            tileAttributeRemover.Remove<PlayerOnly>();
+            tileAttributeRemover.Remove<PlayerSpawnpoint>();
+            tileAttributeRemover.Remove<MusicInstrumentCase>();
+            tileAttributeRemover.Remove<TileObstacle>();
 
             Logger.Warning(Logger.Editor, $"Now place player exit at {tile.GridLocation.X}, {tile.GridLocation.Y}");
             tileAttributePlacer.PlacePlayerExit(ObstacleType.Bush); 
             return;
         }
 
-        tileAttributeRemover.RemovePlayerExit();
+        tileAttributeRemover.Remove<PlayerExit>();
     }
 
     public override Sprite GetSprite()

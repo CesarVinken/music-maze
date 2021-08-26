@@ -18,15 +18,15 @@ public class EditorOverworldMazeLevelEntryTileAttribute : EditorOverworldTileAtt
         ITileAttribute MazeLevelEntry = (MazeLevelEntry)tile.GetAttributes().FirstOrDefault(attribute => attribute is MazeLevelEntry);
         if (MazeLevelEntry == null)
         {
-            tileAttributeRemover.RemovePlayerSpawnpoint();
-            tileAttributeRemover.RemoveTileObstacle();
+            tileAttributeRemover.Remove<PlayerSpawnpoint>();
+            tileAttributeRemover.Remove<TileObstacle>();
 
             Logger.Log(Logger.Editor, $"Now place maze entry at {tile.GridLocation.X}, {tile.GridLocation.Y}");
             tileAttributePlacer.PlaceMazeLevelEntry();
             return;
         }
 
-        tileAttributeRemover.RemoveMazeLevelEntry();
+        tileAttributeRemover.Remove<MazeLevelEntry>();
     }
 
     public override Sprite GetSprite()

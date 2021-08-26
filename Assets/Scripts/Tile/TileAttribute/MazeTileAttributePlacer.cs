@@ -104,9 +104,16 @@ public class MazeTileAttributePlacer<T> : TileAttributePlacer<T> where T : MazeT
         }
     }
 
-    public void PlaceMusicInstrumentCase()
+    public virtual void PlaceMusicInstrumentCase()
     {
         MusicInstrumentCase musicInstrumentCase = (MusicInstrumentCase)InstantiateTileAttributeGO<MusicInstrumentCase>();
+
+        Tile.AddAttribute(musicInstrumentCase);
+    }
+
+    public virtual void PlaceSheetmusic()
+    {
+        Sheetmusic musicInstrumentCase = (Sheetmusic)InstantiateTileAttributeGO<Sheetmusic>();
 
         Tile.AddAttribute(musicInstrumentCase);
     }

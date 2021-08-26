@@ -21,11 +21,11 @@ public class EditorEnemySpawnpointTileAttribute : EditorMazeTileAttributeModifie
         ITileAttribute enemySpawnpoint = (EnemySpawnpoint)tile.GetAttributes().FirstOrDefault(attribute => attribute is EnemySpawnpoint);
         if (enemySpawnpoint == null)
         {
-            tileAttributeRemover.RemovePlayerExit();
-            tileAttributeRemover.RemovePlayerOnlyAttribute();
-            tileAttributeRemover.RemovePlayerSpawnpoint();
-            tileAttributeRemover.RemoveTileObstacle();
-            tileAttributeRemover.RemoveMusicInstrumentCase();
+            tileAttributeRemover.Remove<PlayerExit>();
+            tileAttributeRemover.Remove<PlayerOnly>();
+            tileAttributeRemover.Remove<PlayerSpawnpoint>();
+            tileAttributeRemover.Remove<TileObstacle>();
+            tileAttributeRemover.Remove<MusicInstrumentCase>();
 
             tileAttributePlacer.PlaceEnemySpawnpoint();
 
@@ -33,7 +33,7 @@ public class EditorEnemySpawnpointTileAttribute : EditorMazeTileAttributeModifie
             return;
         }
 
-        tileAttributeRemover.RemoveEnemySpawnpoint();
+        tileAttributeRemover.Remove<EnemySpawnpoint>();
         TileAreaToEnemySpawnpointAssigner.Instance?.CheckForEnemySpawnpointOnTile();
     }
 

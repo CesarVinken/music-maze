@@ -1,9 +1,9 @@
 using System.Linq;
 using UnityEngine;
 
-public class EditorMusicInstrumentCaseTileAttribute : EditorMazeTileAttributeModifier, IGroundMaterialModifier
+public class EditorSheetmusicTileAttribute : EditorMazeTileAttributeModifier, IGroundMaterialModifier
 {
-    public override string Name { get => "Music Instrument Case"; }
+    public override string Name { get => "Sheet music"; }
 
     public override void PlaceAttribute(EditorMazeTile tile)
     {
@@ -18,8 +18,8 @@ public class EditorMusicInstrumentCaseTileAttribute : EditorMazeTileAttributeMod
         EditorMazeTileAttributePlacer tileAttributePlacer = new EditorMazeTileAttributePlacer(tile);
         MazeTileAttributeRemover tileAttributeRemover = new MazeTileAttributeRemover(tile);
 
-        ITileAttribute musicInstrumentCase = (MusicInstrumentCase)tile.GetAttributes().FirstOrDefault(attribute => attribute is MusicInstrumentCase);
-        if (musicInstrumentCase == null)
+        ITileAttribute sheetMusic = (Sheetmusic)tile.GetAttributes().FirstOrDefault(attribute => attribute is Sheetmusic);
+        if (sheetMusic == null)
         {
             tileAttributeRemover.Remove<EnemySpawnpoint>();
             tileAttributeRemover.Remove<PlayerExit>();
@@ -27,16 +27,16 @@ public class EditorMusicInstrumentCaseTileAttribute : EditorMazeTileAttributeMod
             tileAttributeRemover.Remove<PlayerSpawnpoint>();
             tileAttributeRemover.Remove<TileObstacle>();
 
-            Logger.Warning(Logger.Editor, $"Now place music instrument case at {tile.GridLocation.X}, {tile.GridLocation.Y}");
-            tileAttributePlacer.PlaceMusicInstrumentCase();
+            Logger.Warning(Logger.Editor, $"Now place sheetmusic at {tile.GridLocation.X}, {tile.GridLocation.Y}");
+            tileAttributePlacer.PlaceSheetmusic();
             return;
         }
 
-        tileAttributeRemover.Remove<MusicInstrumentCase>();
+        tileAttributeRemover.Remove<Sheetmusic>();
     }
 
     public override Sprite GetSprite()
     {
-        return EditorCanvasUI.Instance.TileAttributeIcons[7];
+        return EditorCanvasUI.Instance.TileAttributeIcons[8];
     }
 }

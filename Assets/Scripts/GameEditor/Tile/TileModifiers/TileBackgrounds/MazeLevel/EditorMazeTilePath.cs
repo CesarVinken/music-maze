@@ -19,7 +19,7 @@ public class EditorMazeTilePath : EditorMazeTileBackgroundModifier, IGroundMater
         if (mazeTilePath == null)
         {
             MazeTileAttributeRemover tileAttributeRemover = new MazeTileAttributeRemover(tile);
-            tileAttributeRemover.RemoveTileObstacle();
+            tileAttributeRemover.Remove<TileObstacle>();
 
             tileBackgroundPlacer.PlacePath(new MazeLevelDefaultPathType());
             return;

@@ -12,7 +12,45 @@ public class OverworldTileAttributeRemover : TileAttributeRemover
         _tile = tile;
     }
 
-    public override void RemoveTileObstacle(TileObstacle tileObstacle = null)
+    public void Remove(ITileAttribute attribute)
+    {
+        switch (attribute.GetType())
+        {
+            case Type t when t == typeof(TileObstacle):
+                RemoveTileObstacle(attribute as TileObstacle);
+                break;
+            case Type t when t == typeof(PlayerSpawnpoint):
+                RemovePlayerSpawnpoint(attribute as PlayerSpawnpoint);
+                break;
+            case Type t when t == typeof(MazeLevelEntry):
+                RemoveMazeLevelEntry(attribute as MazeLevelEntry);
+                break;
+            default:
+                Logger.Error($"Does not know how to remove attribute with type {attribute.GetType()}");
+                break;
+        }
+    }
+
+    public void Remove<T>() where T : ITileAttribute
+    {
+        switch (typeof(T))
+        {
+            case Type tileObstacle when tileObstacle == typeof(TileObstacle):
+                RemoveTileObstacle();
+                break;
+            case Type playerSpawnpoint when playerSpawnpoint == typeof(PlayerSpawnpoint):
+                RemovePlayerSpawnpoint();
+                break;
+            case Type bridgeEdgePrefab when bridgeEdgePrefab == typeof(MazeLevelEntry):
+                RemoveMazeLevelEntry();
+                break;
+            default:
+                Logger.Error($"Could not find a prefab for the tile attribute type of {typeof(T)}");
+                break;
+        }
+    }
+
+    protected override void RemoveTileObstacle(TileObstacle tileObstacle = null)
     {
         _tile.SetWalkable(true);
 
@@ -37,7 +75,7 @@ public class OverworldTileAttributeRemover : TileAttributeRemover
         UpdateNeighboursForRemovedObstacle(obstacleType);
     }
 
-    public override void RemovePlayerSpawnpoint(PlayerSpawnpoint playerSpawnpoint = null)
+    protected override void RemovePlayerSpawnpoint(PlayerSpawnpoint playerSpawnpoint = null)
     {
         if(playerSpawnpoint == null)
             playerSpawnpoint = (PlayerSpawnpoint)_tile.GetAttributes().FirstOrDefault(attribute => attribute is PlayerSpawnpoint);
@@ -48,7 +86,7 @@ public class OverworldTileAttributeRemover : TileAttributeRemover
         playerSpawnpoint.Remove();
     }
 
-    public void RemoveMazeLevelEntry(MazeLevelEntry mazeLevelEntry = null)
+    protected void RemoveMazeLevelEntry(MazeLevelEntry mazeLevelEntry = null)
     {
         if(mazeLevelEntry == null)
             mazeLevelEntry = (MazeLevelEntry)_tile.GetAttributes().FirstOrDefault(attribute => attribute is MazeLevelEntry);
@@ -65,25 +103,6 @@ public class OverworldTileAttributeRemover : TileAttributeRemover
         }
 
         ScreenSpaceOverworldEditorElements.Instance.TrySolveEditorIssue(EditorIssueType.MazeLevelMissing, _tile.GridLocation);
-    }
-
-    public void Remove(ITileAttribute attribute)
-    {
-        switch (attribute.GetType())
-        {
-            case Type t when t == typeof(TileObstacle):
-                RemoveTileObstacle(attribute as TileObstacle);
-                break;
-            case Type t when t == typeof(PlayerSpawnpoint):
-                RemovePlayerSpawnpoint(attribute as PlayerSpawnpoint);
-                break;
-            case Type t when t == typeof(MazeLevelEntry):
-                RemoveMazeLevelEntry(attribute as MazeLevelEntry);
-                break;
-            default:
-                Logger.Error($"Does not know how to remove attribute with type {attribute.GetType()}");
-                break;
-        }
     }
 
     private void UpdateNeighboursForRemovedObstacle(ObstacleType obstacleType)

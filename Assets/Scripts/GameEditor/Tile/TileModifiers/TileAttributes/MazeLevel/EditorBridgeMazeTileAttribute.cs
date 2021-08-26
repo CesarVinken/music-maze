@@ -25,12 +25,12 @@ public class EditorBridgeMazeTileAttribute : EditorMazeTileAttributeModifier, IW
         }
         else if(bridgePiece.BridgePieceDirection == BridgePieceDirection.Horizontal)
         {
-            tileAttributeRemover.RemoveBridgePiece();
+            tileAttributeRemover.Remove<BridgePiece>();
             tileAttributePlacer.PlaceBridgePiece(BridgePieceDirection.Vertical);
         }
         else
         {
-            tileAttributeRemover.RemoveBridgePiece();
+            tileAttributeRemover.Remove<BridgePiece>();
         }
     }
 

@@ -18,11 +18,11 @@ public class EditorObstacleTileAttribute : EditorMazeTileAttributeModifier, IGro
         ITileAttribute tileObstacle = (TileObstacle)tile.GetAttributes().FirstOrDefault(attribute => (attribute is TileObstacle && !(attribute is PlayerExit)));
         if (tileObstacle == null)
         {
-            tileAttributeRemover.RemoveEnemySpawnpoint();
-            tileAttributeRemover.RemovePlayerExit();
-            tileAttributeRemover.RemovePlayerOnlyAttribute();
-            tileAttributeRemover.RemovePlayerSpawnpoint();
-            tileAttributeRemover.RemoveMusicInstrumentCase();
+            tileAttributeRemover.Remove<EnemySpawnpoint>();
+            tileAttributeRemover.Remove<PlayerExit>();
+            tileAttributeRemover.Remove<PlayerOnly>();
+            tileAttributeRemover.Remove<PlayerSpawnpoint>();
+            tileAttributeRemover.Remove<MusicInstrumentCase>();
 
             MazeTileBackgroundRemover tileBackgroundRemover = new MazeTileBackgroundRemover(tile);
             tileBackgroundRemover.RemovePath();
@@ -32,7 +32,7 @@ public class EditorObstacleTileAttribute : EditorMazeTileAttributeModifier, IGro
         }
 
         // Tile is already blocked
-        tileAttributeRemover.RemoveTileObstacle();
+        tileAttributeRemover.Remove<TileObstacle>();
     }
 
     public override void PlaceAttributeVariation(EditorMazeTile tile)

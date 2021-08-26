@@ -7,6 +7,7 @@ public static class SpriteSortingOrderRegister
 
     public const int EffectController = 20;
     public const int MusicInstrumentCase = 10;
+    public const int Sheetmusic = 10;
 
     public const int BridgeEdge = 0;
 

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class EditorMazeTileAttributePlacer : MazeTileAttributePlacer<EditorMazeTile>
@@ -18,7 +19,7 @@ public class EditorMazeTileAttributePlacer : MazeTileAttributePlacer<EditorMazeT
         return tileAttributeGO.GetComponent<U>();
     }
 
-    public void PlacePlayerExit(ObstacleType obstacleType)
+     public void PlacePlayerExit(ObstacleType obstacleType)
     {
         if (_tile.TileMainMaterial.GetType() != typeof(GroundMainMaterial))
         {
@@ -164,13 +165,20 @@ public class EditorMazeTileAttributePlacer : MazeTileAttributePlacer<EditorMazeT
         }
     }
 
-    public void PlaceMusicInstrumentCase()
+    public override void PlaceMusicInstrumentCase()
     {
         MusicInstrumentCase musicInstrumentCase = (MusicInstrumentCase)InstantiateTileAttributeGO<MusicInstrumentCase>();
-        //musicInstrumentCase.SetSprite();
         musicInstrumentCase.SetTile(_tile);
 
         _tile.AddAttribute(musicInstrumentCase);
 
+    }
+
+    public void PlaceSheetmusic()
+    {
+        Sheetmusic sheetmusic = (Sheetmusic)InstantiateTileAttributeGO<Sheetmusic>();
+        sheetmusic.SetTile(_tile);
+
+        _tile.AddAttribute(sheetmusic);
     }
 }

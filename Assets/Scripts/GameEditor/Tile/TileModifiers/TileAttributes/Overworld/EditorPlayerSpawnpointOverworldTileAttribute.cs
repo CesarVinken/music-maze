@@ -24,7 +24,7 @@ public class EditorPlayerSpawnpointOverworldTileAttribute : EditorOverworldTileA
             return;
         }
 
-        tileAttributeRemover.RemovePlayerSpawnpoint();
+        tileAttributeRemover.Remove<PlayerSpawnpoint>();
     }
 
     public override Sprite GetSprite()

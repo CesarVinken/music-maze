@@ -11,7 +11,75 @@ public class MazeTileAttributeRemover : TileAttributeRemover
         _tile = tile;
     }
 
-    public void RemovePlayerExit(PlayerExit playerExit = null)
+    public void Remove(ITileAttribute attribute)
+    {
+        switch (attribute.GetType())
+        {
+            case Type t when t == typeof(PlayerExit):
+                RemovePlayerExit(attribute as PlayerExit);
+                break;
+            case Type t when t == typeof(TileObstacle):
+                RemoveTileObstacle(attribute as TileObstacle);
+                break;
+            case Type t when t == typeof(PlayerSpawnpoint):
+                RemovePlayerSpawnpoint(attribute as PlayerSpawnpoint);
+                break;
+            case Type t when t == typeof(EnemySpawnpoint):
+                RemoveEnemySpawnpoint(attribute as EnemySpawnpoint);
+                break;
+            case Type t when t == typeof(PlayerOnly):
+                RemovePlayerOnlyAttribute(attribute as PlayerOnly);
+                break;
+            case Type t when t == typeof(BridgePiece):
+                RemoveBridgePiece(attribute as BridgePiece);
+                break;
+            case Type t when t == typeof(MusicInstrumentCase):
+                RemoveMusicInstrumentCase(attribute as MusicInstrumentCase);
+                break;
+            case Type t when t == typeof(Sheetmusic):
+                RemoveSheetmusic(attribute as Sheetmusic);
+                break;
+            default:
+                Logger.Error($"Does not know how to remove attribute with type {attribute.GetType()}");
+                break;
+        }
+    }
+
+    public void Remove<T>() where T : ITileAttribute
+    {
+        switch (typeof(T))
+        {
+            case Type playerExit when playerExit == typeof(PlayerExit):
+                RemovePlayerExit();
+                break;
+            case Type tileObstacle when tileObstacle == typeof(TileObstacle):
+                RemoveTileObstacle();
+                break;
+            case Type playerOnly when playerOnly == typeof(PlayerOnly):
+                RemovePlayerOnlyAttribute();
+                break;
+            case Type playerSpawnpoint when playerSpawnpoint == typeof(PlayerSpawnpoint):
+                RemovePlayerSpawnpoint();
+                break;
+            case Type enemySpawnpoint when enemySpawnpoint == typeof(EnemySpawnpoint):
+                RemoveEnemySpawnpoint();
+                break;
+            case Type bridgePiecePrefab when bridgePiecePrefab == typeof(BridgePiece):
+                RemoveBridgePiece();
+                break;
+            case Type musicInstrumentCase when musicInstrumentCase == typeof(MusicInstrumentCase):
+                RemoveMusicInstrumentCase();
+                break;
+            case Type sheetmusic when sheetmusic == typeof(Sheetmusic):
+                RemoveSheetmusic();
+                break;
+            default:
+                Logger.Error($"Could not find a prefab for the tile attribute type of {typeof(T)}");
+                break;
+        }
+    }
+
+    private void RemovePlayerExit(PlayerExit playerExit = null)
     {
         if(playerExit == null)
             playerExit = (PlayerExit)_tile.GetAttributes().FirstOrDefault(attribute => attribute is PlayerExit);
@@ -28,7 +96,7 @@ public class MazeTileAttributeRemover : TileAttributeRemover
         UpdateNeighboursForRemovedObstacle(obstacleType);
     }
 
-    public override void RemoveTileObstacle(TileObstacle tileObstacle = null)
+    protected override void RemoveTileObstacle(TileObstacle tileObstacle = null)
     {
         if(!tileObstacle)
             tileObstacle = (TileObstacle)_tile.GetAttributes().FirstOrDefault(attribute => attribute is TileObstacle);
@@ -56,7 +124,7 @@ public class MazeTileAttributeRemover : TileAttributeRemover
         UpdateNeighboursForRemovedObstacle(obstacleType);
     }
 
-    public override void RemovePlayerSpawnpoint(PlayerSpawnpoint playerSpawnpoint = null)
+    protected override void RemovePlayerSpawnpoint(PlayerSpawnpoint playerSpawnpoint = null)
     {
         if(playerSpawnpoint == null)
             playerSpawnpoint = (PlayerSpawnpoint)_tile.GetAttributes().FirstOrDefault(attribute => attribute is PlayerSpawnpoint);
@@ -67,7 +135,7 @@ public class MazeTileAttributeRemover : TileAttributeRemover
         playerSpawnpoint.Remove();
     }
 
-    public void RemoveEnemySpawnpoint(EnemySpawnpoint enemySpawnpoint = null)
+    protected void RemoveEnemySpawnpoint(EnemySpawnpoint enemySpawnpoint = null)
     {
         if(enemySpawnpoint == null)
             enemySpawnpoint = (EnemySpawnpoint)_tile.GetAttributes().FirstOrDefault(attribute => attribute is EnemySpawnpoint);
@@ -79,7 +147,7 @@ public class MazeTileAttributeRemover : TileAttributeRemover
         enemySpawnpoint.Remove();
     }
 
-    public void RemovePlayerOnlyAttribute(PlayerOnly playerOnlyAttribute = null)
+    protected void RemovePlayerOnlyAttribute(PlayerOnly playerOnlyAttribute = null)
     {
         if(playerOnlyAttribute == null)
             playerOnlyAttribute = (PlayerOnly)_tile.GetAttributes().FirstOrDefault(attribute => attribute is PlayerOnly);
@@ -90,7 +158,7 @@ public class MazeTileAttributeRemover : TileAttributeRemover
         playerOnlyAttribute.Remove();
     }
 
-    public void RemoveBridgePiece(BridgePiece bridgePieceAttribute = null)
+    protected void RemoveBridgePiece(BridgePiece bridgePieceAttribute = null)
     {
         if (bridgePieceAttribute == null)
             bridgePieceAttribute = (BridgePiece)_tile.GetAttributes().FirstOrDefault(attribute => attribute is BridgePiece);
@@ -119,7 +187,7 @@ public class MazeTileAttributeRemover : TileAttributeRemover
         }
     }
 
-    public void RemoveMusicInstrumentCase(MusicInstrumentCase musicInstrumentCase = null)
+    protected void RemoveMusicInstrumentCase(MusicInstrumentCase musicInstrumentCase = null)
     {
         if (musicInstrumentCase == null)
             musicInstrumentCase = (MusicInstrumentCase)_tile.GetAttributes().FirstOrDefault(attribute => attribute is MusicInstrumentCase);
@@ -130,35 +198,15 @@ public class MazeTileAttributeRemover : TileAttributeRemover
         musicInstrumentCase.Remove();
     }
 
-    public void Remove(ITileAttribute attribute)
+    protected void RemoveSheetmusic(Sheetmusic sheetmusic = null)
     {
-        switch (attribute.GetType())
-        {
-            case Type t when t == typeof(PlayerExit):
-                RemovePlayerExit(attribute as PlayerExit);
-                break;
-            case Type t when t == typeof(TileObstacle):
-                RemoveTileObstacle(attribute as TileObstacle);
-                break;
-            case Type t when t == typeof(PlayerSpawnpoint):
-                RemovePlayerSpawnpoint(attribute as PlayerSpawnpoint);
-                break;
-            case Type t when t == typeof(EnemySpawnpoint):
-                RemoveEnemySpawnpoint(attribute as EnemySpawnpoint);
-                break;
-            case Type t when t == typeof(PlayerOnly):
-                RemovePlayerOnlyAttribute(attribute as PlayerOnly);
-                break;
-            case Type t when t == typeof(BridgePiece):
-                RemoveBridgePiece(attribute as BridgePiece);
-                break;
-            case Type t when t == typeof(MusicInstrumentCase):
-                RemoveMusicInstrumentCase(attribute as MusicInstrumentCase);
-                break;
-            default:
-                Logger.Error($"Does not know how to remove attribute with type {attribute.GetType()}");
-                break;
-        }
+        if (sheetmusic == null)
+            sheetmusic = (Sheetmusic)_tile.GetAttributes().FirstOrDefault(attribute => attribute is Sheetmusic);
+
+        if (sheetmusic == null) return;
+
+        _tile.RemoveAttribute(sheetmusic);
+        sheetmusic.Remove();
     }
 
     private void UpdateNeighboursForRemovedObstacle(ObstacleType obstacleType)
