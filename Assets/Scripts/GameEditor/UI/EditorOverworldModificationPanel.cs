@@ -74,8 +74,6 @@ public class EditorOverworldModificationPanel : EditorGridModificationPanel
         }
     }
 
-   
-
     public void LoadOverworld()
     {
         Logger.Log("Load overworld (in editor)");
@@ -87,13 +85,30 @@ public class EditorOverworldModificationPanel : EditorGridModificationPanel
 
         bool overworldNameExists = OverworldLoader.OverworldExists(_overworldName);
 
+        if (!overworldNameExists)
+        {
+            Logger.Warning($"Could not find the overworld {_overworldName}");
+            return;
+        }
+
+        if(GameManager.Instance.CurrentEditorLevel.UnsavedChanges)
+        {
+            // Ask player to confirm, so no unsaved changes are lost
+            GameObject twoOptionsPanelGO = GameObject.Instantiate(EditorCanvasUI.Instance.EditorTwoOptionsPanelPrefab, EditorCanvasUI.Instance.transform);
+            EditorTwoOptionPanel twoOptionsPanel = twoOptionsPanelGO.GetComponent<EditorTwoOptionPanel>();
+            twoOptionsPanel.Initialize(
+                $"There are unsaved changes. Do you want to proceed?",
+                EditorUIAction.Close,
+                "Cancel",
+                EditorUIAction.LoadOverworld,
+                $"Load {_overworldName}"
+            );
+        }
+
         OverworldGameplayManager.Instance.UnloadOverworld();
 
-        if (overworldNameExists)
-        {
-            OverworldData overworldData = OverworldLoader.LoadOverworldData(_overworldName);
-            OverworldLoader.LoadOverworldForEditor(overworldData);
-        }
+        OverworldData overworldData = OverworldLoader.LoadOverworldData(_overworldName);
+        OverworldLoader.LoadOverworldForEditor(overworldData);
 
         EditorSelectedOverworldTileModifierContainer selectedTileModifierContainer = EditorCanvasUI.Instance.SelectedTileModifierContainer as EditorSelectedOverworldTileModifierContainer;
         selectedTileModifierContainer?.SetInitialModifierValues();

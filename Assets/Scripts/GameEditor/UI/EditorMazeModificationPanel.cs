@@ -166,21 +166,39 @@ public class EditorMazeModificationPanel : EditorGridModificationPanel
 
         bool mazeLevelNameExists = MazeLevelLoader.MazeLevelExists(_mazeName);
 
-        if (mazeLevelNameExists)
+        if (!mazeLevelNameExists)
+        {
+            Logger.Warning($"Could not find the maze level {_mazeName}");
+            return;
+        }
+
+        if (GameManager.Instance.CurrentEditorLevel.UnsavedChanges)
+        {
+            // Ask player to confirm, so no unsaved changes are lost
+            GameObject twoOptionsPanelGO = GameObject.Instantiate(EditorCanvasUI.Instance.EditorTwoOptionsPanelPrefab, EditorCanvasUI.Instance.transform);
+            EditorTwoOptionPanel twoOptionsPanel = twoOptionsPanelGO.GetComponent<EditorTwoOptionPanel>();
+            twoOptionsPanel.Initialize(
+                $"There are unsaved changes. Do you want to proceed?",
+                EditorUIAction.Close,
+                "Cancel",
+                EditorUIAction.LoadMaze,
+                $"Load {_mazeName}"
+            );
+        }
+        else
         {
             MazeLevelGameplayManager.Instance.UnloadLevel();
 
             MazeLevelData mazeLevelData = MazeLevelLoader.LoadMazeLevelData(_mazeName);
-            MazeLevelLoader.LoadMazeLevelForEditor(mazeLevelData); 
+            MazeLevelLoader.LoadMazeLevelForEditor(mazeLevelData);
+
+            EditorSelectedMazeTileModifierContainer selectedTileModifierContainer = EditorCanvasUI.Instance.SelectedTileModifierContainer as EditorSelectedMazeTileModifierContainer;
+            selectedTileModifierContainer?.SetInitialModifierValues();
+
+            EditorMazeTileModificationPanel.Instance?.Reset();
+            EditorMazeTileModificationPanel.Instance?.DestroyModifierActions();
         }
-
-        EditorSelectedMazeTileModifierContainer selectedTileModifierContainer = EditorCanvasUI.Instance.SelectedTileModifierContainer as EditorSelectedMazeTileModifierContainer;
-        selectedTileModifierContainer?.SetInitialModifierValues();
-
-        EditorMazeTileModificationPanel.Instance?.Reset();
-        EditorMazeTileModificationPanel.Instance?.DestroyModifierActions();
     }
-
     
     public void TogglePlayableMazesPanel()
     {

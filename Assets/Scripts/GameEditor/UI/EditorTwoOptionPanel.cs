@@ -1,4 +1,5 @@
 
+using DataSerialisation;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -38,26 +39,75 @@ public class EditorTwoOptionPanel : MonoBehaviour
     {
         switch (actionToExecute)
         {
+            case EditorUIAction.LoadMaze:
+                ExecuteLoadMaze();
+                break;
+            case EditorUIAction.LoadOverworld:
+                ExecuteLoadOverworld();
+                break;
             case EditorUIAction.SaveMaze:
-                string mazeLevelName = EditorMazeModificationPanel.Instance.GetMazeLevelName();
-                MazeLevelSaver mazeLevelSaver = new MazeLevelSaver();
-                mazeLevelSaver.Save(mazeLevelName);
-
-                Destroy(gameObject);
+                ExecuteSaveMaze();
                 break;
             case EditorUIAction.SaveOverworld:
-                string overworldName = EditorOverworldModificationPanel.Instance.GetOverworldName();
-
-                OverworldSaver overworldSaver = new OverworldSaver();
-                overworldSaver.Save(overworldName); 
-                Destroy(gameObject);
+                ExecuteSaveOverworld();
                 break;
             case EditorUIAction.Close:
-                Destroy(gameObject);
                 break;
             default:
                 Logger.Error($"The action {actionToExecute} was not yet implemented");
                 break;
         }
+    }
+
+    private void ExecuteLoadMaze()
+    {
+        MazeLevelGameplayManager.Instance.UnloadLevel();
+
+        string mazeLevelName = EditorMazeModificationPanel.Instance.GetMazeLevelName();
+        MazeLevelData mazeLevelData = MazeLevelLoader.LoadMazeLevelData(mazeLevelName);
+        MazeLevelLoader.LoadMazeLevelForEditor(mazeLevelData);
+
+        EditorSelectedMazeTileModifierContainer selectedMazeTileModifierContainer = EditorCanvasUI.Instance.SelectedTileModifierContainer as EditorSelectedMazeTileModifierContainer;
+        selectedMazeTileModifierContainer?.SetInitialModifierValues();
+
+        EditorMazeTileModificationPanel.Instance?.Reset();
+        EditorMazeTileModificationPanel.Instance?.DestroyModifierActions();
+
+        Destroy(gameObject);
+    }
+
+    private void ExecuteLoadOverworld()
+    {
+        OverworldGameplayManager.Instance.UnloadOverworld();
+
+        string overworldName = EditorOverworldModificationPanel.Instance.GetOverworldName();
+        OverworldData overworldData = OverworldLoader.LoadOverworldData(overworldName);
+        OverworldLoader.LoadOverworldForEditor(overworldData);
+
+        EditorSelectedOverworldTileModifierContainer selectedTileModifierContainer = EditorCanvasUI.Instance.SelectedTileModifierContainer as EditorSelectedOverworldTileModifierContainer;
+        selectedTileModifierContainer?.SetInitialModifierValues();
+
+        EditorOverworldTileModificationPanel.Instance?.Reset();
+        EditorOverworldTileModificationPanel.Instance?.DestroyModifierActions();
+
+        Destroy(gameObject);
+    }
+
+    private void ExecuteSaveMaze()
+    {
+        string mazeLevelNameToSave = EditorMazeModificationPanel.Instance.GetMazeLevelName();
+        MazeLevelSaver mazeLevelSaver = new MazeLevelSaver();
+        mazeLevelSaver.Save(mazeLevelNameToSave);
+
+        Destroy(gameObject);
+    }
+
+    private void ExecuteSaveOverworld()
+    {
+        string overworldName = EditorOverworldModificationPanel.Instance.GetOverworldName();
+
+        OverworldSaver overworldSaver = new OverworldSaver();
+        overworldSaver.Save(overworldName);
+        Destroy(gameObject);
     }
 }

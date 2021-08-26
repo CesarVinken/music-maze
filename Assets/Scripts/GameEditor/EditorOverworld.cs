@@ -8,7 +8,9 @@ using UnityEngine;
 public class EditorOverworld : Overworld, IEditorLevel
 {
     public List<string> MazeLevelNames = new List<string>();
-    
+
+    public bool UnsavedChanges { get; set; }
+
     public EditorOverworld()
     {
     }
@@ -34,6 +36,8 @@ public class EditorOverworld : Overworld, IEditorLevel
 
         BuildTiles(overworldData);
         MazeLevelNames = MazeLevelLoader.GetAllPlayableLevelNames();
+
+        UnsavedChanges = false;
     }
 
     public static EditorOverworld Create(OverworldData overworldData)

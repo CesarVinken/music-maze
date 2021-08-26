@@ -6,6 +6,8 @@ using UnityEngine;
 
 public class EditorMazeLevel : MazeLevel, IEditorLevel
 {
+    public bool UnsavedChanges { get; set; }
+
     public EditorMazeLevel()
     {
 
@@ -31,6 +33,8 @@ public class EditorMazeLevel : MazeLevel, IEditorLevel
 
         InitialiseEditorTileAreas(mazeLevelData);
         BuildTiles(mazeLevelData);
+
+        UnsavedChanges = false;
     }
 
     public static EditorMazeLevel Create(MazeLevelData mazeLevelData)

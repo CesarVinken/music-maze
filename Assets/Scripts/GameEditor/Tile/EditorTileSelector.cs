@@ -76,6 +76,9 @@ public class EditorTileSelector : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Return))
         {
             Logger.Log("Do something to tile {0}, {1}", CurrentlySelectedTile.GridLocation.X, CurrentlySelectedTile.GridLocation.Y);
+
+            SelectModificationPanel();
+
             if (Input.GetKey(KeyCode.LeftShift) || Input.GetKey(KeyCode.RightShift))
             {
                 PlaceTileModifierVariation();
@@ -175,17 +178,6 @@ public class EditorTileSelector : MonoBehaviour
 
     private void PlaceTileModifier()
     {
-        if (EditorCanvasUI.Instance.SelectedTileModifierContainer == null)
-        {
-            if(PersistentGameManager.CurrentSceneType == SceneType.Maze)
-            {
-                EditorModificationPanelContainer.Instance.SelectMazeTileModificationPanel();
-            } else
-            {
-                EditorModificationPanelContainer.Instance.SelectOverworldTileModificationPanel();
-            }
-        }
-
         EditorTileModifierCategory editorTileModifierType = EditorManager.SelectedTileModifierCategory;
         EditorSelectedTileModifierContainer selectedTileModifierContainer = EditorCanvasUI.Instance.SelectedTileModifierContainer;
 
@@ -219,9 +211,11 @@ public class EditorTileSelector : MonoBehaviour
         {
             Logger.Error($"EditorMazeTileModifierType {editorTileModifierType} not yet implemented");
         }
+
+        GameManager.Instance.CurrentEditorLevel.UnsavedChanges = true;
     }
 
-    private void PlaceTileModifierVariation()
+    private void SelectModificationPanel()
     {
         if (EditorCanvasUI.Instance.SelectedTileModifierContainer == null)
         {
@@ -234,6 +228,10 @@ public class EditorTileSelector : MonoBehaviour
                 EditorModificationPanelContainer.Instance.SelectOverworldTileModificationPanel();
             }
         }
+    }
+
+    private void PlaceTileModifierVariation()
+    {
 
         EditorTileModifierCategory editorMazeTileModifierCategory = EditorManager.SelectedTileModifierCategory;
         GameManager.Instance.CurrentEditorLevel.TilesByLocation.TryGetValue(CurrentlySelectedTile.GridLocation, out Tile tile);
@@ -251,6 +249,8 @@ public class EditorTileSelector : MonoBehaviour
             EditorTileBackgroundModifier background = backgrounds[EditorManager.SelectedTileBackgroundModifierIndex] as EditorTileBackgroundModifier;
             PlaceMazeTileBackgroundVariation(tile, background);
         }
+
+        GameManager.Instance.CurrentEditorLevel.UnsavedChanges = true;
     }
 
     private void PlaceTileAttribute(Tile tile, EditorTileAttributeModifier attribute)
