@@ -169,8 +169,6 @@ public abstract class Tile : MonoBehaviour
         _tileAttributes.Remove(tileAttribute);
     }
 
-    public abstract TileObstacle TryGetTileObstacle();
-
     public void AddCornerFiller(TileCornerFiller cornerFiller)
     {
         _tileCornerFillers.Add(cornerFiller);

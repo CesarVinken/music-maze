@@ -111,7 +111,7 @@ public class OverworldTileAttributeRemover : TileAttributeRemover
         {
             if (!neighbour.Value) continue;
             
-            TileObstacle tileObstacleOnNeighbour = neighbour.Value.TryGetTileObstacle();
+            TileObstacle tileObstacleOnNeighbour = neighbour.Value.TryGetAttribute<TileObstacle>();
 
             if (tileObstacleOnNeighbour == null) continue;
             Logger.Log($"We will look for connections for neighbour {neighbour.Value.GridLocation.X},{neighbour.Value.GridLocation.Y}, which is {neighbour.Key} of {_tile.GridLocation.X},{_tile.GridLocation.Y}");

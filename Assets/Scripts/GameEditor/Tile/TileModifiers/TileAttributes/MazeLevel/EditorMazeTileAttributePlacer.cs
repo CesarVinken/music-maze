@@ -44,7 +44,7 @@ public class EditorMazeTileAttributePlacer : MazeTileAttributePlacer<EditorMazeT
         {
             if (!neighbour.Value) continue;
 
-            TileObstacle tileObstacleOnNeighbour = neighbour.Value.TryGetTileObstacle();
+            TileObstacle tileObstacleOnNeighbour = neighbour.Value.TryGetAttribute<TileObstacle>();
 
             if (tileObstacleOnNeighbour == null) continue;
             Logger.Log($"We will look for connections for neighbour {neighbour.Value.GridLocation.X},{neighbour.Value.GridLocation.Y}, which is {neighbour.Key} of {Tile.GridLocation.X},{Tile.GridLocation.Y}");
@@ -83,7 +83,7 @@ public class EditorMazeTileAttributePlacer : MazeTileAttributePlacer<EditorMazeT
         {
             if (!neighbour.Value) continue;
             
-            TileObstacle tileObstacleOnNeighbour = neighbour.Value.TryGetTileObstacle();
+            TileObstacle tileObstacleOnNeighbour = neighbour.Value.TryGetAttribute<TileObstacle>();
 
             if (tileObstacleOnNeighbour == null) continue;
 
@@ -174,7 +174,7 @@ public class EditorMazeTileAttributePlacer : MazeTileAttributePlacer<EditorMazeT
 
     }
 
-    public void PlaceSheetmusic()
+    public override void PlaceSheetmusic()
     {
         Sheetmusic sheetmusic = (Sheetmusic)InstantiateTileAttributeGO<Sheetmusic>();
         sheetmusic.SetTile(_tile);

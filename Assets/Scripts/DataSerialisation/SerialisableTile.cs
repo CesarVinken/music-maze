@@ -239,6 +239,11 @@ namespace DataSerialisation
                 SerialisableMusicInstrumentCaseAttribute serialisableMusicInstrumentCaseAttribute = new SerialisableMusicInstrumentCaseAttribute();
                 return serialisableMusicInstrumentCaseAttribute;
             }
+            else if (tileAttribute.GetType() == typeof(Sheetmusic))
+            {
+                SerialisableSheetmusicAttribute serialisableSheetmusicAttribute = new SerialisableSheetmusicAttribute();
+                return serialisableSheetmusicAttribute;
+            }
             else
             {
                 Logger.Error($"Could not serialise the tile attribute {tileAttribute.GetType()}");

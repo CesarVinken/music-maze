@@ -10,7 +10,7 @@ public class InGameMazeTile : MazeTile
     {
         if (!Walkable) return;
 
-        MusicInstrumentCase musicInstrumentCase = TryGetMusicInstrumentCase();
+        MusicInstrumentCase musicInstrumentCase = TryGetAttribute<MusicInstrumentCase>();
         MazePlayerCharacter player = collision.gameObject.GetComponent<MazePlayerCharacter>();
 
         if (player != null)

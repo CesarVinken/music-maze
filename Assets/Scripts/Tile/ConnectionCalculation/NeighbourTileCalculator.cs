@@ -247,7 +247,7 @@ public class NeighbourTileCalculator
             
             Logger.Warning($"Neighbour at {neighbour.Value.GridLocation.X},{neighbour.Value.GridLocation.Y} is {neighbour.Key} of {tile.GridLocation.X},{tile.GridLocation.Y}");
             
-            TileObstacle tileObstacle = neighbour.Value.TryGetTileObstacle();
+            TileObstacle tileObstacle = neighbour.Value.TryGetAttribute<TileObstacle>();
 
             if (tileObstacle == null || tileObstacle.ObstacleType != obstacleType)
             {

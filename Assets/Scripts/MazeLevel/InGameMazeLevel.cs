@@ -170,6 +170,10 @@ public class InGameMazeLevel : MazeLevel, IInGameLevel
             {
                 tileAttributePlacer.PlaceMusicInstrumentCase();
             }
+            else if (type.Equals(typeof(SerialisableSheetmusicAttribute)))
+            {
+                tileAttributePlacer.PlaceSheetmusic();
+            }
             else
             {
                 Logger.Error($"Unknown tile attribute of type {type}");

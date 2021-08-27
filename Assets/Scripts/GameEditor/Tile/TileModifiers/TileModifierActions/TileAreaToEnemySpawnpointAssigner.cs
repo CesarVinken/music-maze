@@ -51,7 +51,7 @@ public class TileAreaToEnemySpawnpointAssigner : MonoBehaviour
     public void CheckForEnemySpawnpointOnTile()
     {
         MazeTile selectedTile = EditorTileSelector.Instance.CurrentlySelectedTile as MazeTile;
-        EnemySpawnpoint enemySpawnpoint = selectedTile?.TryGetEnemySpawnpoint();
+        EnemySpawnpoint enemySpawnpoint = selectedTile?.TryGetAttribute<EnemySpawnpoint>();
 
         if(enemySpawnpoint == null)
         {
@@ -76,7 +76,7 @@ public class TileAreaToEnemySpawnpointAssigner : MonoBehaviour
     private void RedrawDropdownOptions()
     {
         MazeTile selectedTile = EditorTileSelector.Instance.CurrentlySelectedTile as MazeTile;
-        EnemySpawnpoint enemySpawnpoint = selectedTile?.TryGetEnemySpawnpoint();
+        EnemySpawnpoint enemySpawnpoint = selectedTile?.TryGetAttribute<EnemySpawnpoint>();
 
         for (int i = 1; i < _tileAreaNamesDropdown.options.Count; i++)
         {
@@ -107,7 +107,7 @@ public class TileAreaToEnemySpawnpointAssigner : MonoBehaviour
         }
 
         MazeTile selectedTile = EditorTileSelector.Instance.CurrentlySelectedTile as MazeTile;
-        EnemySpawnpoint enemySpawnpoint = selectedTile?.TryGetEnemySpawnpoint();
+        EnemySpawnpoint enemySpawnpoint = selectedTile?.TryGetAttribute<EnemySpawnpoint>();
 
         if(enemySpawnpoint == null)
         {

@@ -35,34 +35,6 @@ public class MazeTile : Tile, IMazeLevel
         }
     }
 
-    public override TileObstacle TryGetTileObstacle()
-    {
-        for (int i = 0; i < _tileAttributes.Count; i++)
-        {
-            Logger.Log($"found attribute for {GridLocation.X}, {GridLocation.Y} is {_tileAttributes[i].GetType()}");
-        }
-        TileObstacle tileObstacle = (TileObstacle)_tileAttributes.FirstOrDefault(attribute => attribute is TileObstacle);
-
-        if (tileObstacle == null)
-        {
-            Logger.Log($"did not find a tile obstacle on {GridLocation.X},{GridLocation.Y}");
-            return null;
-        }
-        Logger.Log($"found tileObstacle {tileObstacle.ObstacleType} on {GridLocation.X},{GridLocation.Y}");
-        return tileObstacle;
-    }
-
-    public EnemySpawnpoint TryGetEnemySpawnpoint()
-    {
-        EnemySpawnpoint enemySpawnpoint = (EnemySpawnpoint)_tileAttributes.FirstOrDefault(attribute => attribute is EnemySpawnpoint);
-        return enemySpawnpoint;
-    }
-
-    public MusicInstrumentCase TryGetMusicInstrumentCase()
-    {
-        MusicInstrumentCase musicInstrumentCase = (MusicInstrumentCase)_tileAttributes.FirstOrDefault(attribute => attribute is MusicInstrumentCase);
-        return musicInstrumentCase;
-    }
 
     public void TryMakeMarkable(bool isMarkable)
     {

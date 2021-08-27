@@ -185,6 +185,10 @@ public class EditorMazeLevel : MazeLevel, IEditorLevel
             {
                 tileAttributePlacer.PlaceMusicInstrumentCase();
             }
+            else if (type.Equals(typeof(SerialisableSheetmusicAttribute)))
+            {
+                tileAttributePlacer.PlaceSheetmusic();
+            }
             else
             {
                 Logger.Error($"Unknown tile attribute with type {type}");
