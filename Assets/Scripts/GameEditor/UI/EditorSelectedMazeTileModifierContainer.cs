@@ -25,6 +25,7 @@ public class EditorSelectedMazeTileModifierContainer : EditorSelectedTileModifie
         EditorTileAttributes.Add(new EditorEnemySpawnpointTileAttribute());
         EditorTileAttributes.Add(new EditorBridgeMazeTileAttribute());
         EditorTileAttributes.Add(new EditorMusicInstrumentCaseTileAttribute());
+        EditorTileAttributes.Add(new EditorSheetmusicTileAttribute());
 
         EditorManager.SelectedTileAttributeModifierIndex = 0;
 

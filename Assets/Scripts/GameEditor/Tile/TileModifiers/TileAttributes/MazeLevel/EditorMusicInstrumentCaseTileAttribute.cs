@@ -26,6 +26,7 @@ public class EditorMusicInstrumentCaseTileAttribute : EditorMazeTileAttributeMod
             tileAttributeRemover.Remove<PlayerOnly>();
             tileAttributeRemover.Remove<PlayerSpawnpoint>();
             tileAttributeRemover.Remove<TileObstacle>();
+            tileAttributeRemover.Remove<Sheetmusic>();
 
             Logger.Warning(Logger.Editor, $"Now place music instrument case at {tile.GridLocation.X}, {tile.GridLocation.Y}");
             tileAttributePlacer.PlaceMusicInstrumentCase();

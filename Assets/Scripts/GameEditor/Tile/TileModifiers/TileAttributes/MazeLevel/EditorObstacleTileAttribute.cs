@@ -23,6 +23,7 @@ public class EditorObstacleTileAttribute : EditorMazeTileAttributeModifier, IGro
             tileAttributeRemover.Remove<PlayerOnly>();
             tileAttributeRemover.Remove<PlayerSpawnpoint>();
             tileAttributeRemover.Remove<MusicInstrumentCase>();
+            tileAttributeRemover.Remove<Sheetmusic>();
 
             MazeTileBackgroundRemover tileBackgroundRemover = new MazeTileBackgroundRemover(tile);
             tileBackgroundRemover.RemovePath();

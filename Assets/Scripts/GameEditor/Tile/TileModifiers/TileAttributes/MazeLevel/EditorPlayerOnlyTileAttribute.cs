@@ -23,6 +23,7 @@ public class EditorPlayerOnlyTileAttribute : EditorMazeTileAttributeModifier, IG
             tileAttributeRemover.Remove<EnemySpawnpoint>();
             tileAttributeRemover.Remove<MusicInstrumentCase>();
             tileAttributeRemover.Remove<PlayerSpawnpoint>();
+            tileAttributeRemover.Remove<Sheetmusic>();
 
             Logger.Warning($"Now place player only attribute at {tile.GridLocation.X}, {tile.GridLocation.Y}");
             tileAttributePlacer.PlacePlayerOnlyAttribute(PlayerOnlyType.Bush);

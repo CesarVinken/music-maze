@@ -23,6 +23,7 @@ public class EditorPlayerExitTileAttribute : EditorMazeTileAttributeModifier, IG
             tileAttributeRemover.Remove<PlayerSpawnpoint>();
             tileAttributeRemover.Remove<MusicInstrumentCase>();
             tileAttributeRemover.Remove<TileObstacle>();
+            tileAttributeRemover.Remove<Sheetmusic>();
 
             Logger.Warning(Logger.Editor, $"Now place player exit at {tile.GridLocation.X}, {tile.GridLocation.Y}");
             tileAttributePlacer.PlacePlayerExit(ObstacleType.Bush); 

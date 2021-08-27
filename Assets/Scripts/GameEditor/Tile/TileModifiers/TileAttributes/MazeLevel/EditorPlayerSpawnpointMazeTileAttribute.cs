@@ -22,6 +22,7 @@ public class EditorPlayerSpawnpointMazeTileAttribute : EditorMazeTileAttributeMo
             tileAttributeRemover.Remove<PlayerExit>();
             tileAttributeRemover.Remove<PlayerOnly>();
             tileAttributeRemover.Remove<TileObstacle>();
+            tileAttributeRemover.Remove<Sheetmusic>();
 
             tileAttributePlacer.PlacePlayerSpawnpoint();
             return;

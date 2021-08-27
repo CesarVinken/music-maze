@@ -26,6 +26,7 @@ public class EditorSheetmusicTileAttribute : EditorMazeTileAttributeModifier, IG
             tileAttributeRemover.Remove<PlayerOnly>();
             tileAttributeRemover.Remove<PlayerSpawnpoint>();
             tileAttributeRemover.Remove<TileObstacle>();
+            tileAttributeRemover.Remove<MusicInstrumentCase>();
 
             Logger.Warning(Logger.Editor, $"Now place sheetmusic at {tile.GridLocation.X}, {tile.GridLocation.Y}");
             tileAttributePlacer.PlaceSheetmusic();
