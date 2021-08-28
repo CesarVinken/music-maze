@@ -13,7 +13,6 @@ namespace Character
         public string Id;
         private MazeCharacterManager _characterManager;
         private bool _isInitialised = false;
-        private bool _isIdling = false;
 
         private ICharacter _enemyType = null;
         private ChasingState _chasingState = ChasingState.Loitering;
@@ -23,6 +22,7 @@ namespace Character
         private PlayerAsTarget _playerAsTarget = null;
 
         const float STARTLED_FULL_STRENGTH_LIFETIME = 5f;
+        const float READING_FULL_STRENGTH_LIFETIME = 5f;
         const float BLINKING_SPEED = 0.4f;
         const float BLINKING_LIFETIME = 5f;
 
@@ -74,7 +74,8 @@ namespace Character
             if (IsCalculatingPath) return;
 
             if (!HasCalculatedTarget &&
-                !_isIdling &&
+                (ChasingState == ChasingState.Active ||
+                ChasingState == ChasingState.Startled) &&
                 (GameRules.GamePlayerType == GamePlayerType.SinglePlayer ||
                 GameRules.GamePlayerType == GamePlayerType.SplitScreenMultiplayer ||
                 PhotonView.IsMine))
@@ -82,7 +83,9 @@ namespace Character
                 SetNextTarget();
             }
 
-            if (HasCalculatedTarget)
+            if (HasCalculatedTarget && (
+                ChasingState == ChasingState.Active ||
+                ChasingState == ChasingState.Startled))
             {
                 MoveCharacter();
             }
@@ -229,6 +232,48 @@ namespace Character
             SetChasingState(ChasingState.Active); //TODO: if in the meantime the level finishes, interrupt coroutine and set player to loitering
         }
 
+        public void ReadSheetmusic()
+        {
+            StartCoroutine(ReadSheetmusicCoroutine());
+        }
+
+        private IEnumerator ReadSheetmusicCoroutine()
+        {
+            Logger.Warning("TODO: Read sheet music");
+            SetChasingState(ChasingState.Reading);
+            _animationHandler.SetLocomotion(false);
+
+            // TODO: Should display READING animation effect, not the STARTLED animation
+            GameObject startledSpinnerPrefab = MazeLevelGameplayManager.Instance.GetEffectAnimationPrefab(AnimationEffect.StartledSpinner);
+            GameObject startledSpinningEffectGO = GameObject.Instantiate(startledSpinnerPrefab, transform);
+            Vector3 spawnPosition = new Vector3(startledSpinningEffectGO.transform.parent.position.x - 0.5f, startledSpinningEffectGO.transform.parent.position.y + 0.16f, startledSpinningEffectGO.transform.parent.position.z);
+            startledSpinningEffectGO.transform.position = spawnPosition;
+
+            EffectController startledSpinningEffectController = startledSpinningEffectGO.GetComponent<EffectController>();
+            startledSpinningEffectController.PlayEffectLoop(AnimationEffect.StartledSpinner);
+            SpriteRenderer spriteRenderer = startledSpinningEffectController.SpriteRenderer;
+
+            yield return new WaitForSeconds(READING_FULL_STRENGTH_LIFETIME);
+
+            float blinkingTimer = 0;
+            float alphaValue = 0;
+
+            while (blinkingTimer <= BLINKING_LIFETIME)
+            {
+                alphaValue = spriteRenderer.color.a == 0 ? 1 : 0;
+                Color changedAlphaColour = new Color(spriteRenderer.color.r, spriteRenderer.color.g, spriteRenderer.color.b, alphaValue);
+                spriteRenderer.color = changedAlphaColour;
+
+                yield return new WaitForSeconds(BLINKING_SPEED);
+                blinkingTimer++;
+            }
+
+            Destroy(startledSpinningEffectController);
+            Destroy(startledSpinningEffectGO);
+            SetChasingState(ChasingState.Active); //TODO: if in the meantime the level finishes, interrupt coroutine and set player to loitering
+            _animationHandler.SetLocomotion(true);
+        }
+
         private void TargetPlayer(List<PlayerNumber> reachablePlayers)
         {
             //Randomly pick one of the players
@@ -238,7 +283,7 @@ namespace Character
 
             IsCalculatingPath = true;
             GridLocation playerGridLocation = randomPlayer.CurrentGridLocation;
-            Logger.Log($"Set target for enemy {gameObject.name} to Player {randomPlayer.PlayerNumber} at ({playerGridLocation.X}, {playerGridLocation.Y} )");
+            //Logger.Log($"Set target for enemy {gameObject.name} to Player {randomPlayer.PlayerNumber} at ({playerGridLocation.X}, {playerGridLocation.Y} )");
             PathToTarget = _pathfinding.FindNodePath(CurrentGridLocation, playerGridLocation);
 
             IsCalculatingPath = false;
@@ -267,7 +312,7 @@ namespace Character
             IsCalculatingPath = true;
             GridLocation randomGridLocation = GetRandomTileTarget().GridLocation;
 
-            Logger.Log($"current location of {gameObject.name} is ({CurrentGridLocation.X}, {CurrentGridLocation.Y} ). Set random target ({randomGridLocation.X}, {randomGridLocation.Y} )  ");
+            //Logger.Log($"current location of {gameObject.name} is ({CurrentGridLocation.X}, {CurrentGridLocation.Y} ). Set random target ({randomGridLocation.X}, {randomGridLocation.Y} )  ");
 
             PathToTarget = _pathfinding.FindNodePath(CurrentGridLocation, randomGridLocation);
 
@@ -335,12 +380,14 @@ namespace Character
 
         private IEnumerator SpendIdleTimeCoroutine()
         {
-            _isIdling = true;
-            _animationHandler.SetLocomotion(false);
+            SetChasingState(ChasingState.Loitering);
+            //_isIdling = true;
+            //_animationHandler.SetLocomotion(false);
 
             yield return new WaitForSeconds(4f);
 
-            _isIdling = false;
+            SetChasingState(ChasingState.Active);
+            //_isIdling = false;
             SetNextTarget();
         }
 

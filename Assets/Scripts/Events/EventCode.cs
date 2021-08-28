@@ -12,4 +12,6 @@ public static class EventCode
     public const byte UpdateRoomNameEventCode = 10;
     public const byte UpdateGameModeEventCode = 11;
     public const byte PlayerPicksPlayableCharacterEventCode = 12;
+    public const byte PlayerCollidesWithSheetmusicEventCode = 13;
+    public const byte EnemyCollidesWithSheetmusicEventCode = 14;
 }

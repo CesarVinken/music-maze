@@ -294,12 +294,40 @@ public class MazeLevelGameplayManager : MonoBehaviour, IOnEventCallback, IGamepl
         if (GameRules.GamePlayerType == GamePlayerType.SinglePlayer ||
        GameRules.GamePlayerType == GamePlayerType.SplitScreenMultiplayer)
         {
-            musicInstrumentCase.EnemyCollisinOnTile(enemy);
+            musicInstrumentCase.EnemyCollisionOnTile(enemy);
         }
         else // network multiplayer
         {
             EnemyCollidesWithMusicInstrumentCaseEvent enemyCollidesWithMusicInstrumentCaseEvent = new EnemyCollidesWithMusicInstrumentCaseEvent();
             enemyCollidesWithMusicInstrumentCaseEvent.SendEnemyCollidesWithMusicInstrumentCaseEvent(tile.GridLocation, enemy);
+        }
+    }
+
+    public void PlayerCollisionWithSheetmusic(InGameMazeTile tile, MazePlayerCharacter player, Sheetmusic sheetmusic)
+    {
+        if (GameRules.GamePlayerType == GamePlayerType.SinglePlayer ||
+            GameRules.GamePlayerType == GamePlayerType.SplitScreenMultiplayer)
+        {
+            sheetmusic.PlayerCollisionOnTile(player);
+        }
+        else // network multiplayer
+        {
+            PlayerCollidesWithSheetmusicEvent playerCollidesWithSheetmusicEvent = new PlayerCollidesWithSheetmusicEvent();
+            playerCollidesWithSheetmusicEvent.SendPlayerCollidesWithSheetmusicEvent(tile.GridLocation, player);
+        }
+    }
+
+    public void EnemyCollisionWithSheetmusic(InGameMazeTile tile, EnemyCharacter enemy, Sheetmusic sheetmusic)
+    {
+        if (GameRules.GamePlayerType == GamePlayerType.SinglePlayer ||
+            GameRules.GamePlayerType == GamePlayerType.SplitScreenMultiplayer)
+        {
+            sheetmusic.EnemyCollisionOnTile(enemy);
+        }
+        else // network multiplayer
+        {
+            EnemyCollidesWithSheetmusicEvent enemyCollidesWithSheetmusicEvent = new EnemyCollidesWithSheetmusicEvent();
+            enemyCollidesWithSheetmusicEvent.SendEnemyCollidesWithSheetmusicEvent(tile.GridLocation, enemy);
         }
     }
 
@@ -459,7 +487,7 @@ public class MazeLevelGameplayManager : MonoBehaviour, IOnEventCallback, IGamepl
             {
                 Logger.Error("Could not find enemy character");
             }
-            musicInstrumentCase.EnemyCollisinOnTile(enemyCharacter);
+            musicInstrumentCase.EnemyCollisionOnTile(enemyCharacter);
         }
     }
 

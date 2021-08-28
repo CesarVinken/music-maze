@@ -50,7 +50,7 @@ public class MusicInstrumentCase : MonoBehaviour, ITileAttribute
         }
     }
 
-    public void EnemyCollisinOnTile(EnemyCharacter enemy)
+    public void EnemyCollisionOnTile(EnemyCharacter enemy)
     {
         if (_isOpen && enemy != null)
         {

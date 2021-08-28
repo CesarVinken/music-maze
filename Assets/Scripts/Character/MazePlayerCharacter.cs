@@ -15,6 +15,7 @@ namespace Character
 
         public int TimesCaughtByEnemy = 0;
         public int TimesMadeEnemyListenToMusicInstrument = 0;
+        public int TimesMadeEnemyReadSheetmusic = 0;
 
         public override void Awake()
         {
@@ -106,6 +107,11 @@ namespace Character
         public void MadeEnemyListenToMusicInstrument()
         {
             TimesMadeEnemyListenToMusicInstrument++;
+        }
+
+        public void MadeEnemyReadSheetmusic()
+        {
+            TimesMadeEnemyReadSheetmusic++;
         }
     }
 }

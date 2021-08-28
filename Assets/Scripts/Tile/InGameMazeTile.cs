@@ -11,6 +11,8 @@ public class InGameMazeTile : MazeTile
         if (!Walkable) return;
 
         MusicInstrumentCase musicInstrumentCase = TryGetAttribute<MusicInstrumentCase>();
+        Sheetmusic sheetmusic = TryGetAttribute<Sheetmusic>();
+
         MazePlayerCharacter player = collision.gameObject.GetComponent<MazePlayerCharacter>();
 
         if (player != null)
@@ -23,9 +25,13 @@ public class InGameMazeTile : MazeTile
                 MazeLevelGameplayManager.Instance.SetTileMarker(this, player);
             }
 
-            if (musicInstrumentCase != null)
+            if (musicInstrumentCase != null) // TODO : instead of music instrument case, sheetmusic etc., create common interface that is a "score attribute"
             {
                 MazeLevelGameplayManager.Instance.PlayerCollisionWithMusicInstrumentCase(this, player, musicInstrumentCase);
+            }
+            else if (sheetmusic != null)
+            {
+                MazeLevelGameplayManager.Instance.PlayerCollisionWithSheetmusic(this, player, sheetmusic);
             }
         }
         else
@@ -37,6 +43,14 @@ public class InGameMazeTile : MazeTile
                 if (GameRules.GamePlayerType == GamePlayerType.NetworkMultiplayer && !enemy.PhotonView.IsMine) return;
 
                 MazeLevelGameplayManager.Instance.EnemyCollisionWithMusicInstrumentCase(this, enemy, musicInstrumentCase);
+            }
+            else if (sheetmusic != null)
+            {
+                EnemyCharacter enemy = collision.gameObject.GetComponent<EnemyCharacter>();
+
+                if (GameRules.GamePlayerType == GamePlayerType.NetworkMultiplayer && !enemy.PhotonView.IsMine) return;
+
+                MazeLevelGameplayManager.Instance.EnemyCollisionWithSheetmusic(this, enemy, sheetmusic);
             }
         }
     }

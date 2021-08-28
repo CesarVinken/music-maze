@@ -7,8 +7,10 @@ public class Sheetmusic : MonoBehaviour, ITileAttribute
     public Tile Tile;
     public string ParentId;
 
-    [SerializeField] protected SpriteRenderer _spriteRenderer;
+    [SerializeField] protected SpriteRenderer _sheetmusicSpriteRenderer;
+    [SerializeField] protected SpriteRenderer _playerColourRenderer;
     [SerializeField] private Sprite[] _sheetmusicSprites;
+    [SerializeField] private Sprite _playerColourIndicatorSprite;
 
     private bool _isSetUp = false;
     private MazePlayerCharacter _sheetmusicFinder;
@@ -17,7 +19,7 @@ public class Sheetmusic : MonoBehaviour, ITileAttribute
     public int SortingOrderBase { get => _sortingOrderBase; set => _sortingOrderBase = value; }
 
     // in seconds
-    const float OPEN_CASE_FULL_STRENGTH_LIFETIME = 6f;
+    const float READING_FULL_STRENGTH_LIFETIME = 6f;
     const float BLINKING_SPEED = 0.4f;
     const float BLINKING_LIFETIME = 4f;
 
@@ -25,19 +27,25 @@ public class Sheetmusic : MonoBehaviour, ITileAttribute
     {
         if(_sheetmusicSprites.Length == 0)
         {
-            Logger.Error("Could not find MusicInstrumentCaseSprites");
+            Logger.Error("Could not find SheetmusicSprites");
         }
 
-        Guard.CheckIsNull(_sheetmusicSprites, "_musicInstrumentCaseSprite", gameObject);
+        Guard.CheckIsNull(_playerColourIndicatorSprite, "_playerColourIndicatorSprite", gameObject);
+
+        Guard.CheckIsNull(_sheetmusicSpriteRenderer, "_sheetmusicSpriteRenderer", gameObject);
+        Guard.CheckIsNull(_playerColourRenderer, "_playerColourRenderer", gameObject);
 
         _isSetUp = false;
 
-        _spriteRenderer.sprite = _sheetmusicSprites[0];
-        _spriteRenderer.sortingOrder = SpriteSortingOrderRegister.Sheetmusic;
+        _playerColourRenderer.sprite = null;
+
+        _sheetmusicSpriteRenderer.sprite = _sheetmusicSprites[0];
+        _sheetmusicSpriteRenderer.sortingOrder = SpriteSortingOrderRegister.Sheetmusic;
     }
 
     public void PlayerCollisionOnTile(MazePlayerCharacter player)
     {
+        Logger.Log("Collision enter");
         if (player != null)
         {
             if (_isSetUp) return;
@@ -49,70 +57,87 @@ public class Sheetmusic : MonoBehaviour, ITileAttribute
         }
     }
 
-    public void EnemyCollisinOnTile(EnemyCharacter enemy)
+    public void EnemyCollisionOnTile(EnemyCharacter enemy)
     {
         if (_isSetUp && enemy != null)
         {
-            // an already XXXX enemy should not be affected
-            //if(enemy.ChasingState == ChasingState.Startled)
-            //{
-            //    return;
-            //}
-            //if(GameRules.GamePlayerType != GamePlayerType.NetworkMultiplayer || enemy.PhotonView?.IsMine == true)
-            //{
-            //    Logger.Log($"enemy {enemy.CharacterBlueprint.CharacterType} entered tile {Tile.GridLocation.X}, {Tile.GridLocation.Y} with an OPENED music instrument case");
-            //}
+            // an already startled enemy should not be affected by sheetmusic
+            if (enemy.ChasingState == ChasingState.Startled)
+            {
+                return;
+            }
+            if (GameRules.GamePlayerType != GamePlayerType.NetworkMultiplayer || enemy.PhotonView?.IsMine == true)
+            {
+                Logger.Log($"enemy {enemy.CharacterBlueprint.CharacterType} entered tile {Tile.GridLocation.X}, {Tile.GridLocation.Y} with an OPENED music instrument case");
+            }
 
-            // TODO: enemy.readSheetmusic
-            // TODO: _caseOpener.MadeEnemyReadSheetmusic();
+            ReadSheetmusic(enemy);
         }
     }
 
-    //private IEnumerator OpenedCaseCoroutine()
-    //{
-    //    _spriteRenderer.sprite = _sheetmusicSprites[1];
-    //    _isSetUp = true;
+    private IEnumerator ReadSheetmusicCoroutine()
+    {
+        _isSetUp = false; // Sheetmusic should trigger only once, so once an enemy is reading, it should not longer be triggered for another enemy.
 
-    //    GameObject notesPlayMusicPrefab = MazeLevelGameplayManager.Instance.GetEffectAnimationPrefab(AnimationEffect.NotesPlayMusic);
-    //    GameObject notesPlayMusicGO = GameObject.Instantiate(notesPlayMusicPrefab, SceneObjectManager.Instance.transform);
-    //    Vector3 tileVectorPosition = GridLocation.GridToVector(Tile.GridLocation);
-    //    Vector3 notesSpawnPosition = new Vector3(tileVectorPosition.x + 0.22f, tileVectorPosition.y + 0.2f, tileVectorPosition.z);
-    //    notesPlayMusicGO.transform.position = notesSpawnPosition;
+        //_sheetmusicSpriteRenderer.sprite = _sheetmusicSprites[1];
+        //_playerColourRenderer.sprite = _playerColourIndicatorSprite;
+        //_playerColourRenderer.color = PlayerColour.GetColor(_sheetmusicFinder.GetCharacterType());
 
-    //    EffectController notesPlayMusicEffectController = notesPlayMusicGO.GetComponent<EffectController>();
+        //_isSetUp = true;
 
-    //    yield return new WaitForSeconds(OPEN_CASE_FULL_STRENGTH_LIFETIME);
+        //    GameObject notesPlayMusicPrefab = MazeLevelGameplayManager.Instance.GetEffectAnimationPrefab(AnimationEffect.NotesPlayMusic);
+        //    GameObject notesPlayMusicGO = GameObject.Instantiate(notesPlayMusicPrefab, SceneObjectManager.Instance.transform);
+        //    Vector3 tileVectorPosition = GridLocation.GridToVector(Tile.GridLocation);
+        //    Vector3 notesSpawnPosition = new Vector3(tileVectorPosition.x + 0.22f, tileVectorPosition.y + 0.2f, tileVectorPosition.z);
+        //    notesPlayMusicGO.transform.position = notesSpawnPosition;
 
-    //    float blinkingTimer = 0;
-    //    float alphaValue = 0;
+        //    EffectController notesPlayMusicEffectController = notesPlayMusicGO.GetComponent<EffectController>();
 
-    //    while (blinkingTimer <= BLINKING_LIFETIME)
-    //    {
-    //        alphaValue = _spriteRenderer.color.a == 0 ? 1 : 0;
-    //        Color changedAlphaColour = new Color(_spriteRenderer.color.r, _spriteRenderer.color.g, _spriteRenderer.color.b, alphaValue);
-    //        _spriteRenderer.color = changedAlphaColour;
-    //        notesPlayMusicEffectController.SpriteRenderer.color = changedAlphaColour;
+        yield return new WaitForSeconds(READING_FULL_STRENGTH_LIFETIME);
 
-    //        yield return new WaitForSeconds(BLINKING_SPEED);
-    //        blinkingTimer++;
-    //    }
+        float blinkingTimer = 0;
+        float alphaValue = 0;
 
-    //    GameObject smokeExplosionPrefab = MazeLevelGameplayManager.Instance.GetEffectAnimationPrefab(AnimationEffect.SmokeExplosion);
-    //    GameObject smokeExplosionGO = GameObject.Instantiate(smokeExplosionPrefab, SceneObjectManager.Instance.transform);
-    //    Vector3 smokeSpawnPosition = GridLocation.GridToVector(Tile.GridLocation);
-    //    smokeExplosionGO.transform.position = smokeSpawnPosition;
+        while (blinkingTimer <= BLINKING_LIFETIME)
+        {
+            alphaValue = _sheetmusicSpriteRenderer.color.a == 0 ? 1 : 0;
+            Color changedAlphaColour = new Color(_sheetmusicSpriteRenderer.color.r, _sheetmusicSpriteRenderer.color.g, _sheetmusicSpriteRenderer.color.b, alphaValue);
+            _sheetmusicSpriteRenderer.color = changedAlphaColour;
+            _playerColourRenderer.color = changedAlphaColour;
+            //notesPlayMusicEffectController.SpriteRenderer.color = changedAlphaColour;
 
-    //    EffectController smokeExplosionEffectController = smokeExplosionGO.GetComponent<EffectController>();
-    //    smokeExplosionEffectController.PlayEffect(AnimationEffect.SmokeExplosion);
+            yield return new WaitForSeconds(BLINKING_SPEED);
+            blinkingTimer++;
+        }
 
-    //    Destroy(gameObject);
-    //    Destroy(notesPlayMusicGO);
-    //}
+        GameObject smokeExplosionPrefab = MazeLevelGameplayManager.Instance.GetEffectAnimationPrefab(AnimationEffect.SmokeExplosion);
+        GameObject smokeExplosionGO = GameObject.Instantiate(smokeExplosionPrefab, SceneObjectManager.Instance.transform);
+        Vector3 smokeSpawnPosition = GridLocation.GridToVector(Tile.GridLocation);
+        smokeExplosionGO.transform.position = smokeSpawnPosition;
+
+        EffectController smokeExplosionEffectController = smokeExplosionGO.GetComponent<EffectController>();
+        smokeExplosionEffectController.PlayEffect(AnimationEffect.SmokeExplosion);
+
+        Destroy(gameObject);
+    }
 
     private void SetupSheetmusic(MazePlayerCharacter player)
     {
         _sheetmusicFinder = player;
-        //StartCoroutine(OpenedCaseCoroutine());
+
+        _sheetmusicSpriteRenderer.sprite = _sheetmusicSprites[1];
+        _playerColourRenderer.sprite = _playerColourIndicatorSprite;
+        _playerColourRenderer.color = PlayerColour.GetColor(_sheetmusicFinder.GetCharacterType());
+
+        _isSetUp = true;
+    }
+
+    private void ReadSheetmusic(EnemyCharacter enemy)
+    {
+        enemy.ReadSheetmusic();
+        _sheetmusicFinder.MadeEnemyReadSheetmusic();
+
+        StartCoroutine(ReadSheetmusicCoroutine());
     }
 
     public void Remove()
