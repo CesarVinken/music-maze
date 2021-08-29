@@ -7,15 +7,17 @@ public struct PlayerMazeScore
     public int TileMarkScore;
     public int PlayerCaughtScore;
     public int EnemiesStartledScore;
+    public int EnemiesPausedScore;
     public int FinishFirstBonusScore;
 
     public int MazeScore;
 
-    public PlayerMazeScore(int tileMarkScore = 0, int playerCaughtScore = 0, int enemiesStartledScore = 0, int finishFirstBonusScore = 0)
+    public PlayerMazeScore(int tileMarkScore = 0, int playerCaughtScore = 0, int enemiesStartledScore = 0, int enemiesPausedScore = 0, int finishFirstBonusScore = 0)
     {
         TileMarkScore = tileMarkScore;
         PlayerCaughtScore = playerCaughtScore;
         EnemiesStartledScore = enemiesStartledScore;
+        EnemiesPausedScore = enemiesPausedScore;
         FinishFirstBonusScore = finishFirstBonusScore;
 
         MazeScore = 0;
@@ -23,7 +25,7 @@ public struct PlayerMazeScore
 
     public int CountMazeTotal()
     {
-        MazeScore = TileMarkScore + PlayerCaughtScore + EnemiesStartledScore + FinishFirstBonusScore;
+        MazeScore = TileMarkScore + PlayerCaughtScore + EnemiesStartledScore + EnemiesPausedScore + FinishFirstBonusScore;
         return MazeScore;
     }
 }
@@ -32,6 +34,7 @@ public class MazeScoreCalculator
 {
     public const int MarkedTileValue = 10;
     public const int EnemyMadeListenToMusicValue = 50;
+    public const int EnemyMadeReadSheetmusicValue = 50;
     public const int PlayerCaughtPenaltyValue = 20;
 
     public Dictionary<PlayerNumber, PlayerMazeScore> PlayerMazeScores = new Dictionary<PlayerNumber, PlayerMazeScore>();
@@ -132,9 +135,12 @@ public class MazeScoreCalculator
             Dictionary<PlayerNumber, MazePlayerCharacter> players = characterManager.GetPlayers<MazePlayerCharacter>();
             int playerCaughtScore = players[item.Key].TimesCaughtByEnemy * -PlayerCaughtPenaltyValue;
             int EnemyStartledScore = players[item.Key].TimesMadeEnemyListenToMusicInstrument * EnemyMadeListenToMusicValue; // there can later be multiple ways to startle an enemy
+            int EnemiesPausedScore = players[item.Key].TimesMadeEnemyReadSheetmusic * EnemyMadeReadSheetmusicValue; // There can later be multiple ways to make an enemy pause
+
             PlayerMazeScore p = item.Value;
             p.PlayerCaughtScore = playerCaughtScore;
             p.EnemiesStartledScore = EnemyStartledScore;
+            p.EnemiesPausedScore = EnemiesPausedScore;
             tempPlayerScores.Add(item.Key, p);
         }
         PlayerMazeScores = tempPlayerScores;
