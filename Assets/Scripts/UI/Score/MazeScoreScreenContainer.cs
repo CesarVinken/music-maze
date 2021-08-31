@@ -91,11 +91,11 @@ namespace UI
                 {
                     if (_toNextLevelButton.activeSelf)
                     {
-                        ToNextLevel();
+                        ToNextLevel(); // if we play random maze
                     }
                     else if (_toOverworldButton.activeSelf)
                     {
-                        ToOverworld();
+                        ToOverworld(); // if we play campaign
                     }
                 }
             }

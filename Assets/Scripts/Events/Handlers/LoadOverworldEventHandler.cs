@@ -1,7 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-
 namespace Gameplay
 {
     public class LoadOverworldEventHandler : IGameplayEventHandler
@@ -20,7 +16,7 @@ namespace Gameplay
             PersistentGameManager.SetLastMazeLevelName(PersistentGameManager.CurrentSceneName);
             PersistentGameManager.SetCurrentSceneName(PersistentGameManager.OverworldName);
 
-            _mazeLevelGameplayManager.StartOverworldCoroutine("Overworld");
+            _mazeLevelGameplayManager.StartNextSceneRoutine("Overworld");
         }
     }
 }

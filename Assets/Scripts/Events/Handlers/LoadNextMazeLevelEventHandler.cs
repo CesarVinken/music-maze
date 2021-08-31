@@ -1,30 +1,21 @@
-using DataSerialisation;
-
 namespace Gameplay
 {
     public class LoadNextMazeLevelEventHandler : IGameplayEventHandler
     {
-        private MazeLevelGameplayManager _mazeLevelGameplayManager;
+        private IGameplayManager _gameplayManager;
 
-        public LoadNextMazeLevelEventHandler(MazeLevelGameplayManager mazeLevelGameplayManager)
+        public LoadNextMazeLevelEventHandler(IGameplayManager gameplayManager)
         {
-            _mazeLevelGameplayManager = mazeLevelGameplayManager;
+            _gameplayManager = gameplayManager;
         }
 
         public void Handle(object[] data)
         {
             string pickedLevel = (string)data[0];
 
-            MazeLevelData mazeLevelData = MazeLevelLoader.LoadMazeLevelData(pickedLevel);
-
-            if (mazeLevelData == null)
-            {
-                Logger.Error($"Could not load maze level data for the randomly picked maze level {pickedLevel}");
-            }
-
             PersistentGameManager.SetCurrentSceneName(pickedLevel);
 
-            _mazeLevelGameplayManager.StartOverworldCoroutine("Overworld");
+            _gameplayManager.StartNextSceneRoutine("Maze");
         }
     }
 }

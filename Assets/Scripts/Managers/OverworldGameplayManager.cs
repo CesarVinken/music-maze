@@ -1,5 +1,6 @@
 ﻿using DataSerialisation;
 using ExitGames.Client.Photon;
+using Gameplay;
 using Photon.Pun;
 using Photon.Realtime;
 using System;
@@ -185,7 +186,7 @@ public class OverworldGameplayManager : MonoBehaviour, IOnEventCallback, IGamepl
         if (GameRules.GamePlayerType == GamePlayerType.SinglePlayer ||
             GameRules.GamePlayerType == GamePlayerType.SplitScreenMultiplayer)
         {
-            IEnumerator loadLevelCoroutine = LoadLevelCoroutine("Maze");
+            IEnumerator loadLevelCoroutine = LoadSceneCoroutine("Maze");
             StartCoroutine(loadLevelCoroutine);
         }
         else
@@ -195,7 +196,7 @@ public class OverworldGameplayManager : MonoBehaviour, IOnEventCallback, IGamepl
         }
     }
 
-    private IEnumerator LoadLevelCoroutine(string levelName)
+    private IEnumerator LoadSceneCoroutine(string sceneName)
     {
         MainScreenOverlayCanvas.Instance.BlackOutSquaresToBlack();
 
@@ -204,7 +205,7 @@ public class OverworldGameplayManager : MonoBehaviour, IOnEventCallback, IGamepl
             yield return null;
         }
 
-        PhotonNetwork.LoadLevel(levelName);
+        PhotonNetwork.LoadLevel(sceneName);
     }
 
     public void OnEvent(EventData photonEvent)
@@ -213,60 +214,29 @@ public class OverworldGameplayManager : MonoBehaviour, IOnEventCallback, IGamepl
         if (eventCode == EventCode.LoadNextMazeLevelEventCode)
         {
             object[] data = (object[])photonEvent.CustomData;
-            string mazeName = (string)data[0];
 
-            PersistentGameManager.SetCurrentSceneName(mazeName);
-            Logger.Log("received event to load maze");
-
-            IEnumerator loadLevelCoroutine = LoadLevelCoroutine("Maze");
-            StartCoroutine(loadLevelCoroutine);
-
+            LoadNextMazeLevelEventHandler loadNextSceneEventHandler = new LoadNextMazeLevelEventHandler(this);
+            loadNextSceneEventHandler.Handle(data);
         } else if(eventCode == EventCode.PlayerSendsMazeLevelInvitationEventCode)
         {
             object[] data = (object[])photonEvent.CustomData;
-            string invitorName = (string)data[0];
-            string mazeName = (string)data[1];
 
-            Logger.Log($"received event for invitation from {invitorName}");
-
-            MazeLevelInvitation.PendingInvitation = true;
-
-            OverworldMainScreenOverlayCanvas.Instance.ShowMazeInvitation(invitorName, mazeName);
-
-            // check if the player has the level. If not, reject the invitation and inform the player
-            if (!MazeLevelNamesData.LevelNameExists(mazeName))
-            {
-                OverworldMainScreenOverlayCanvas.Instance.ShowPlayerWarning($"We rejected the invitation to play the maze level '{mazeName}' because it was not found!");
-                if(MazeLevelInvitation.Instance != null)
-                {
-                    MazeLevelInvitation.Instance.Reject(ReasonForRejection.LevelNotFound);
-                }
-                else
-                {
-                    Logger.Error("This means that we rejected the invitation before even loading it. Revise code.");
-                }
-                return;
-            }
-
+            PlayerSendsMazeLevelInvitationEventHandler playerSendsMazeLevelInvitationEventHandler = new PlayerSendsMazeLevelInvitationEventHandler(this);
+            playerSendsMazeLevelInvitationEventHandler.Handle(data);
         }
         else if(eventCode == EventCode.PlayerRejectsMazeLevelInvitationEventCode)
         {
             object[] data = (object[])photonEvent.CustomData;
-            string rejectorName = (string)data[0];
-            string mazeName = (string)data[1];
-            if(!Enum.TryParse((string)data[2], out ReasonForRejection reason))
-            {
-                reason = ReasonForRejection.PlayerRejected;
-            }
 
-            Logger.Log($"received event that {rejectorName} rejected the invitation with the reason {reason}");
-            OverworldMainScreenOverlayCanvas.Instance.ShowMazeInvitationRejection(rejectorName, mazeName, reason);
+            PlayerRejectsMazeLevelInvitationEventHandler playerRejectsMazeLevelInvitationEventHandler = new PlayerRejectsMazeLevelInvitationEventHandler(this);
+            playerRejectsMazeLevelInvitationEventHandler.Handle(data);
         }
     }
-}
 
-public enum ReasonForRejection
-{
-    LevelNotFound,
-    PlayerRejected
+
+    public void StartNextSceneRoutine(string levelName)
+    {
+        IEnumerator loadLevelCoroutine = LoadSceneCoroutine(levelName);
+        StartCoroutine(loadLevelCoroutine);
+    }
 }

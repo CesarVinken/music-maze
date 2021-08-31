@@ -372,10 +372,10 @@ public class MazeLevelGameplayManager : MonoBehaviour, IOnEventCallback, IGamepl
         }
     }
 
-    public void StartOverworldCoroutine(string overworldName)
+    public void StartNextSceneRoutine(string overworldName)
     {
-        IEnumerator loadLevelCoroutine = LoadOverworldCoroutine(overworldName);
-        StartCoroutine(loadLevelCoroutine);
+        IEnumerator loadOverworldCoroutine = LoadOverworldCoroutine(overworldName);
+        StartCoroutine(loadOverworldCoroutine);
     }
 
     private IEnumerator LoadOverworldCoroutine(string overworldName)
@@ -420,8 +420,8 @@ public class MazeLevelGameplayManager : MonoBehaviour, IOnEventCallback, IGamepl
         else if(eventCode == EventCode.LoadNextMazeLevelEventCode)
         {
             object[] data = (object[])photonEvent.CustomData;
-            LoadNextMazeLevelEventHandler loadNextMazeLevelEventHandler = new LoadNextMazeLevelEventHandler(this);
-            loadNextMazeLevelEventHandler.Handle(data);
+            LoadNextMazeLevelEventHandler loadNextSceneEventHandler = new LoadNextMazeLevelEventHandler(this);
+            loadNextSceneEventHandler.Handle(data);
         } 
         else if (eventCode == EventCode.LoadOverworldEventCode)
         {
