@@ -193,7 +193,7 @@ public class GameRoomUI : MonoBehaviourPunCallbacks, IOnEventCallback
             _launcher.SetRoomName(newRoomName);
             _roomNameInputField.text = newRoomName;
         }
-        else if(eventCode == EventCode.PlayerPicksPlayableCharacterEventCode)
+        else if (eventCode == EventCode.PlayerPicksPlayableCharacterEventCode)
         {
             Logger.Log("received an update picked character event");
             object[] data = (object[])photonEvent.CustomData;
@@ -206,7 +206,7 @@ public class GameRoomUI : MonoBehaviourPunCallbacks, IOnEventCallback
                 _player1Entry.PickCharacter(newCharacterName);
                 UpdateCharacterNameForHashtable(1);
             }
-            else if(playerNumber == "2")
+            else if (playerNumber == "2")
             {
                 _player2Entry.PickCharacter(newCharacterName);
                 UpdateCharacterNameForHashtable(2);

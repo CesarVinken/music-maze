@@ -1,0 +1,41 @@
+using Character;
+using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
+using UnityEngine;
+
+namespace Gameplay
+{
+    public class EnemyCollidesWithMusicInstrumentCaseEventHandler : IGameplayEventHandler
+    {
+        private MazeLevelGameplayManager _mazeLevelGameplayManager;
+
+        public EnemyCollidesWithMusicInstrumentCaseEventHandler(MazeLevelGameplayManager mazeLevelGameplayManager)
+        {
+            _mazeLevelGameplayManager = mazeLevelGameplayManager;
+        }
+
+        public void Handle(object[] data)
+        {
+            GridLocation tileLocation = new GridLocation((int)data[0], (int)data[1]);
+            int enemyId = (int)data[2];
+
+            InGameMazeTile tile = _mazeLevelGameplayManager.Level.TilesByLocation[tileLocation] as InGameMazeTile;
+
+            MusicInstrumentCase musicInstrumentCase = (MusicInstrumentCase)tile.GetAttributes().FirstOrDefault(attribute => attribute is MusicInstrumentCase);
+            if (musicInstrumentCase == null)
+            {
+                Logger.Error("Could not find musicInstrumentCase");
+            }
+
+            MazeCharacterManager characterManager = GameManager.Instance.CharacterManager as MazeCharacterManager;
+
+            EnemyCharacter enemyCharacter = characterManager.Enemies.FirstOrDefault(enemy => enemy.PhotonView.ViewID == enemyId);
+            if (enemyCharacter == null)
+            {
+                Logger.Error("Could not find enemy character");
+            }
+            musicInstrumentCase.EnemyCollisionOnTile(enemyCharacter);
+        }
+    }
+}

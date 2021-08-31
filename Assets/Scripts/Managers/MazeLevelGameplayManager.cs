@@ -1,6 +1,7 @@
 ﻿using Character;
 using DataSerialisation;
 using ExitGames.Client.Photon;
+using Gameplay;
 using Photon.Pun;
 using Photon.Realtime;
 using System;
@@ -371,6 +372,12 @@ public class MazeLevelGameplayManager : MonoBehaviour, IOnEventCallback, IGamepl
         }
     }
 
+    public void StartOverworldCoroutine(string overworldName)
+    {
+        IEnumerator loadLevelCoroutine = LoadOverworldCoroutine(overworldName);
+        StartCoroutine(loadLevelCoroutine);
+    }
+
     private IEnumerator LoadOverworldCoroutine(string overworldName)
     {
         MainScreenOverlayCanvas.Instance.BlackOutSquaresToBlack();
@@ -407,87 +414,44 @@ public class MazeLevelGameplayManager : MonoBehaviour, IOnEventCallback, IGamepl
         if (eventCode == EventCode.PlayerMarksTileEventCode)
         {
             object[] data = (object[])photonEvent.CustomData;
-            GridLocation tileLocation = new GridLocation((int)data[0], (int)data[1]);
-            PlayerNumber playerNumber = (PlayerNumber)data[2];
-
-            InGameMazeTile tile = Level.TilesByLocation[tileLocation] as InGameMazeTile;
-
-            MazeTilePath mazeTilePath = (MazeTilePath)tile.GetBackgrounds().FirstOrDefault(background => background is MazeTilePath);
-            if (mazeTilePath == null) return;
-
-            PlayerMark playerMark = new PlayerMark(mazeTilePath.ConnectionScore);
-
-            HandlePlayerMarkerSprite(tile, playerNumber, playerMark);
-            HandlePlayerTileMarkerEnds(tile);
-            HandleNumberOfUnmarkedTiles();
-
-            tile.ResetPlayerMarkEndsRenderer();
-
-            tile.TriggerTransformations();
-        } else if(eventCode == EventCode.LoadNextMazeLevelEventCode)
+            PlayerMarksTileEventHandler playerMarksTileEventHandler = new PlayerMarksTileEventHandler(this);
+            playerMarksTileEventHandler.Handle(data);            
+        } 
+        else if(eventCode == EventCode.LoadNextMazeLevelEventCode)
         {
             object[] data = (object[])photonEvent.CustomData;
-            string pickedLevel = (string)data[0];
-   
-            MazeLevelData mazeLevelData = MazeLevelLoader.LoadMazeLevelData(pickedLevel);
-
-            if (mazeLevelData == null)
-            {
-                Logger.Error($"Could not load maze level data for the randomly picked maze level {pickedLevel}");
-            }
-
-            PersistentGameManager.SetCurrentSceneName(pickedLevel);
-
-            IEnumerator loadLevelCoroutine = LoadOverworldCoroutine("Overworld");
-            StartCoroutine(loadLevelCoroutine);
-        } else if (eventCode == EventCode.LoadOverworldEventCode)
+            LoadNextMazeLevelEventHandler loadNextMazeLevelEventHandler = new LoadNextMazeLevelEventHandler(this);
+            loadNextMazeLevelEventHandler.Handle(data);
+        } 
+        else if (eventCode == EventCode.LoadOverworldEventCode)
         {
             object[] data = (object[])photonEvent.CustomData;
-            string overworldName = (string)data[0];
-
-            PersistentGameManager.SetLastMazeLevelName(PersistentGameManager.CurrentSceneName);
-            PersistentGameManager.SetCurrentSceneName(PersistentGameManager.OverworldName);
-
-            IEnumerator loadLevelCoroutine = LoadOverworldCoroutine("Overworld");
-            StartCoroutine(loadLevelCoroutine);
-        } else if (eventCode == EventCode.PlayerCollidesWithMusicInstrumentCaseEventCode)
+            LoadOverworldEventHandler loadOverworldEventHandler = new LoadOverworldEventHandler(this);
+            loadOverworldEventHandler.Handle(data);
+        } 
+        else if (eventCode == EventCode.PlayerCollidesWithMusicInstrumentCaseEventCode)
         {
             object[] data = (object[])photonEvent.CustomData;
-            GridLocation tileLocation = new GridLocation((int)data[0], (int)data[1]);
-            PlayerNumber playerNumber = (PlayerNumber)data[2];
-
-            InGameMazeTile tile = Level.TilesByLocation[tileLocation] as InGameMazeTile;
-
-            MusicInstrumentCase musicInstrumentCase = (MusicInstrumentCase)tile.GetAttributes().FirstOrDefault(attribute => attribute is MusicInstrumentCase);
-            if (musicInstrumentCase == null)
-            {
-                Logger.Error("Could not find musicInstrumentCase");
-            }
-
-            MazePlayerCharacter player = GameManager.Instance.CharacterManager.GetPlayers<MazePlayerCharacter>()[playerNumber];
-            musicInstrumentCase.PlayerCollisionOnTile(player);
-        } else if (eventCode == EventCode.EnemyCollidesWithMusicInstrumentCaseEventCode)
+            PlayerCollidesWithMusicInstrumentCaseEventHandler playerCollidesWithMusicInstrumentCaseEventHandler = new PlayerCollidesWithMusicInstrumentCaseEventHandler(this);
+            playerCollidesWithMusicInstrumentCaseEventHandler.Handle(data);
+        } 
+        else if (eventCode == EventCode.EnemyCollidesWithMusicInstrumentCaseEventCode)
         {
             object[] data = (object[])photonEvent.CustomData;
-            GridLocation tileLocation = new GridLocation((int)data[0], (int)data[1]);
-            int enemyId = (int)data[2];
-
-            InGameMazeTile tile = Level.TilesByLocation[tileLocation] as InGameMazeTile;
-
-            MusicInstrumentCase musicInstrumentCase = (MusicInstrumentCase)tile.GetAttributes().FirstOrDefault(attribute => attribute is MusicInstrumentCase);
-            if (musicInstrumentCase == null)
-            {
-                Logger.Error("Could not find musicInstrumentCase");
-            }
-
-            MazeCharacterManager characterManager = GameManager.Instance.CharacterManager as MazeCharacterManager;
-
-            EnemyCharacter enemyCharacter = characterManager.Enemies.FirstOrDefault(enemy => enemy.PhotonView.ViewID == enemyId);
-            if(enemyCharacter == null)
-            {
-                Logger.Error("Could not find enemy character");
-            }
-            musicInstrumentCase.EnemyCollisionOnTile(enemyCharacter);
+            EnemyCollidesWithMusicInstrumentCaseEventHandler enemyCollidesWithMusicInstrumentCaseEventHandler = new EnemyCollidesWithMusicInstrumentCaseEventHandler(this);
+            enemyCollidesWithMusicInstrumentCaseEventHandler.Handle(data);
+        }
+        else if (eventCode == EventCode.PlayerCollidesWithSheetmusicEventCode)
+        {
+            object[] data = (object[])photonEvent.CustomData;
+            PlayerCollidesWithSheetmusicEventHandler playerCollidesWithSheetmusicEventHandler = new PlayerCollidesWithSheetmusicEventHandler(this);
+            playerCollidesWithSheetmusicEventHandler.Handle(data);
+        } 
+        else if (eventCode == EventCode.EnemyCollidesWithSheetmusicEventCode)
+        {
+            object[] data = (object[])photonEvent.CustomData;
+            EnemyCollidesWithSheetmusicEventHandler enemyCollidesWithSheetmusicEventHandler = new EnemyCollidesWithSheetmusicEventHandler(this);
+            enemyCollidesWithSheetmusicEventHandler.Handle(data);    
         }
     }
 
@@ -522,7 +486,7 @@ public class MazeLevelGameplayManager : MonoBehaviour, IOnEventCallback, IGamepl
         return Level.Tiles;
     }
 
-    private void HandlePlayerMarkerSprite(MazeTile tile, PlayerNumber playerNumber, PlayerMark playerMark)
+    public void HandlePlayerMarkerSprite(MazeTile tile, PlayerNumber playerNumber, PlayerMark playerMark)
     {
         if (playerNumber == PlayerNumber.Player1)
         {
@@ -538,7 +502,7 @@ public class MazeLevelGameplayManager : MonoBehaviour, IOnEventCallback, IGamepl
         }
     }
 
-    private void HandleNumberOfUnmarkedTiles()
+    public void HandleNumberOfUnmarkedTiles()
     {
         NumberOfUnmarkedTiles--;
 //        Logger.Log(Logger.Level,"{0} unmarked tiles left", NumberOfUnmarkedTiles);
@@ -550,7 +514,7 @@ public class MazeLevelGameplayManager : MonoBehaviour, IOnEventCallback, IGamepl
         }
     }
 
-    private void HandlePlayerTileMarkerEnds(MazeTile tile)
+    public void HandlePlayerTileMarkerEnds(MazeTile tile)
     {
         foreach (KeyValuePair<Direction, Tile> item in tile.Neighbours)
         {
@@ -568,7 +532,7 @@ public class MazeLevelGameplayManager : MonoBehaviour, IOnEventCallback, IGamepl
         }
     }
 
-    private void HandleSpawnpointMarkability()
+    public void HandleSpawnpointMarkability()
     {
         if(GameManager.Instance.CharacterManager.GetPlayerCount() < 2)
         {
