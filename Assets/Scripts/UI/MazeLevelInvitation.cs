@@ -39,7 +39,12 @@ namespace UI
             loadNextMazeLevelEvent.SendLoadNextMazeLevelEvent(_mazeLevelName);
         }
 
-        public void Reject(ReasonForRejection reason = ReasonForRejection.PlayerRejected)
+        public void Reject()// TODO make generic with TWO Option panel prefab in MainScreenOverlayCanvas
+        {
+            Reject(ReasonForRejection.PlayerRejected);
+        }
+
+        public void Reject(ReasonForRejection reason)
         {
             PlayerNumber ourPlayerCharacterNumber = GameManager.Instance.CharacterManager.GetOurPlayerCharacter();
             PlayerCharacter ourPlayerCharacter = GameManager.Instance.CharacterManager.GetPlayerCharacter<PlayerCharacter>(ourPlayerCharacterNumber);

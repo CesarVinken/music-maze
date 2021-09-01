@@ -38,6 +38,7 @@ public class Sheetmusic : MonoBehaviour, ITileAttribute
         _isSetUp = false;
 
         _playerColourRenderer.sprite = null;
+        _playerColourRenderer.gameObject.SetActive(false);
 
         _sheetmusicSpriteRenderer.sprite = _sheetmusicSprites[0];
         _sheetmusicSpriteRenderer.sortingOrder = SpriteSortingOrderRegister.Sheetmusic;
@@ -128,6 +129,7 @@ public class Sheetmusic : MonoBehaviour, ITileAttribute
         _sheetmusicSpriteRenderer.sprite = _sheetmusicSprites[1];
         _playerColourRenderer.sprite = _playerColourIndicatorSprite;
         _playerColourRenderer.color = PlayerColour.GetColor(_sheetmusicFinder.GetCharacterType());
+        _playerColourRenderer.gameObject.SetActive(true);
 
         _isSetUp = true;
     }

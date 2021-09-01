@@ -2,8 +2,10 @@
 using Console;
 using DataSerialisation;
 using Photon.Pun;
+using Photon.Realtime;
 using System;
 using System.Collections.Generic;
+using UI;
 using UnityEngine;
 
 public enum SceneLoadOrigin
@@ -219,4 +221,20 @@ public class GameManager : MonoBehaviourPunCallbacks
         Logger.Time.enableLogs = false;
         Logger.UI.enableLogs = false;
     }
+
+    public override void OnPlayerLeftRoom(Player otherPlayer)
+    {
+        Logger.Warning($"{otherPlayer.NickName} left the game");
+        MainScreenOverlayCanvas.Instance.ShowPlayerOneOptionMessagePanel($"{otherPlayer.NickName} left the game",
+        "To Main Menu",
+        GameUIAction.ToMainMenu);
+    }
+    
+}
+
+public enum GameUIAction
+{
+    ExitGame,
+    ToMainMenu,
+    ClosePanel
 }

@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System.Linq;
+using UnityEngine;
 using UnityEngine.UI;
 
 namespace UI
@@ -25,9 +26,14 @@ namespace UI
 
         private void SetInfoText(string playerName, ReasonForRejection reason)
         {
-            if (PlayerMessagePanel.Instance != null)
+            PlayerZeroOptionMessagePanel pendingInvitationPanel = MainScreenOverlayCanvas.Instance.OpenMessagePanels.OfType<PlayerZeroOptionMessagePanel>().FirstOrDefault();
+            if (pendingInvitationPanel != null)
             {
-                PlayerMessagePanel.Instance.CloseMessagePanel();
+                pendingInvitationPanel.Close();
+            }
+            else
+            {
+                Logger.Warning("BOBBA NO PENDING INVITE");
             }
 
             switch (reason)

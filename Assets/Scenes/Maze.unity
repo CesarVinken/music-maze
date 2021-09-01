@@ -1932,6 +1932,10 @@ MonoBehaviour:
     type: 3}
   _gameEditorUIPrefab: {fileID: 7666147024566430390, guid: 6a1f682b6471c0b4682b9fd9b24c0e41,
     type: 3}
+  _playerZeroOptionMessagePrefab: {fileID: 658330486536227245, guid: db45c67ab7d6beb4292bdadc677aaae8,
+    type: 3}
+  _playerOneOptionMessagePrefab: {fileID: 5222908463777228736, guid: 3d521374ecabdf747aefce2c0fd9dd62,
+    type: 3}
   BlackOutSquares: []
 --- !u!114 &800624754
 MonoBehaviour:

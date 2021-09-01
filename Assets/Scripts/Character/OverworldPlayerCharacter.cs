@@ -62,7 +62,7 @@ namespace Character
             // Check levels list to see if we have the level. If the level is not found, inform and return. 
             if (!MazeLevelNamesData.LevelNameExists(mazeName))
             {
-                OverworldMainScreenOverlayCanvas.Instance.ShowPlayerWarning($"Maze level '{mazeName}' was not found!");
+                MainScreenOverlayCanvas.Instance.ShowPlayerOneOptionMessagePanel($"Maze level '{mazeName}' was not found!", "Close", GameUIAction.ClosePanel);
                 return;
             }
 
@@ -99,7 +99,7 @@ namespace Character
                     Logger.Warning($"Unknown player number {PlayerNumber}");
                 }
 
-                OverworldMainScreenOverlayCanvas.Instance.ShowPlayerMessagePanel($"We are waiting for {otherPlayerName} to accept our invitation...");
+                MainScreenOverlayCanvas.Instance.ShowPlayerZeroOptionMessagePanel($"We are waiting for {otherPlayerName} to accept our invitation...");
                 MazeLevelInvitation.PendingInvitation = true;
             }
         }

@@ -181,8 +181,8 @@ public class GameRoomUI : MonoBehaviourPunCallbacks, IOnEventCallback
             // Show message to inform the client what happened
             string message = "The host has left the game. Return to menu.";
             GameObject gameAbandonedMessageGO = GameObject.Instantiate(_playerMessagePrefab, _UIControlsGO.transform);
-            PlayerMessagePanel playerMessagePanel = gameAbandonedMessageGO.GetComponent<PlayerMessagePanel>();
-            playerMessagePanel.ShowMessage(message, PlayerNumber.Player1);
+            PlayerOneOptionMessagePanel playerMessagePanel = gameAbandonedMessageGO.GetComponent<PlayerOneOptionMessagePanel>();
+            playerMessagePanel.Initialise(message, "To Main Menu", GameUIAction.ToMainMenu, PlayerNumber.Player1);
         }
         else if (eventCode == EventCode.UpdateRoomNameEventCode)
         {

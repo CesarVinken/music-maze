@@ -5,10 +5,8 @@ using UnityEngine.UI;
 
 namespace UI
 {
-    public class PlayerMessagePanel : MonoBehaviour
+    public class PlayerZeroOptionMessagePanel : MonoBehaviour, IMessagePanel
     {
-        public static PlayerMessagePanel Instance;
-
         public static Dictionary<MessagePosition, Vector2> MessageSpawnPosition = new Dictionary<MessagePosition, Vector2>()
         {
             { MessagePosition.Middle, new Vector2(0, 0) },
@@ -18,10 +16,8 @@ namespace UI
 
         [SerializeField] private Text _messageText;
 
-        public void ShowMessage(string message, PlayerNumber playerNumber)
+        public void Initialise(string message, PlayerNumber playerNumber)
         {
-            Instance = this;
-
             if (GameRules.GamePlayerType == GamePlayerType.SplitScreenMultiplayer)
             {
                 RectTransform rt = gameObject.GetComponent<RectTransform>();
@@ -38,14 +34,15 @@ namespace UI
                     rt.localPosition = new Vector3(fullCanvasWidth - fullCanvasWidth / 4 * 3, rt.localPosition.y, rt.localPosition.z);
                 }
             }
-
             _messageText.text = message;
             gameObject.SetActive(true);
+
+            MainScreenOverlayCanvas.Instance.OpenMessagePanels.Add(this);
         }
 
-        public void CloseMessagePanel()
+        public void Close()
         {
-            Instance = null;
+            MainScreenOverlayCanvas.Instance.OpenMessagePanels.Remove(this);
             Destroy(gameObject);
         }
     }

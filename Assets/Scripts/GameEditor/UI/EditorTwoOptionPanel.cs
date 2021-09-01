@@ -29,11 +29,11 @@ public class EditorTwoOptionPanel : MonoBehaviour
     }
 
 
-    public void ShowMessage(string message)
-    {
-        _messageText.text = message;
-        gameObject.SetActive(true);
-    }
+    //public void ShowMessage(string message)
+    //{
+    //    _messageText.text = message;
+    //    gameObject.SetActive(true);
+    //}
 
     public void ExecuteAction(EditorUIAction actionToExecute)
     {

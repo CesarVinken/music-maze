@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using Character;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -14,7 +15,11 @@ namespace UI
         [SerializeField] private GameObject _blackOutSquarePrefab;
         [SerializeField] private GameObject _gameEditorUIPrefab;
 
+        [SerializeField] private GameObject _playerZeroOptionMessagePrefab;
+        [SerializeField] private GameObject _playerOneOptionMessagePrefab;
+
         public List<BlackOutSquare> BlackOutSquares;
+        public List<IMessagePanel> OpenMessagePanels = new List<IMessagePanel>();
 
         public void Awake()
         {
@@ -25,6 +30,9 @@ namespace UI
 
             Guard.CheckIsNull(_blackOutSquarePrefab, "BlackOutSquarePrefab", gameObject);
             Guard.CheckIsNull(_gameEditorUIPrefab, "GameEditorUIPrefab", gameObject);
+
+            Guard.CheckIsNull(_playerZeroOptionMessagePrefab, "_playerZeroOptionMessagePrefab", gameObject);
+            Guard.CheckIsNull(_playerOneOptionMessagePrefab, "_playerOneOptionMessagePrefab", gameObject);
 
             SetupBlackOutSquares();
 
@@ -104,5 +112,31 @@ namespace UI
                 BlackOutSquares[i].ResetToDefault();
             }
         }
+
+        public void ShowPlayerZeroOptionMessagePanel(string message, PlayerNumber playerNumber = PlayerNumber.Player1)
+        {
+            GameObject playerMessagePanelGO = Instantiate(_playerZeroOptionMessagePrefab, transform);
+            PlayerZeroOptionMessagePanel playerMessagePanel = playerMessagePanelGO.GetComponent<PlayerZeroOptionMessagePanel>();
+            playerMessagePanel.Initialise(message, playerNumber);
+        }
+
+        public void ShowPlayerOneOptionMessagePanel(string message, string buttonAText, GameUIAction gameUIAction, PlayerNumber playerNumber = PlayerNumber.Player1)
+        {
+            GameObject playerMessagePanelGO = Instantiate(_playerOneOptionMessagePrefab, transform);
+            PlayerOneOptionMessagePanel playerMessagePanel = playerMessagePanelGO.GetComponent<PlayerOneOptionMessagePanel>();
+            playerMessagePanel.Initialise(message, buttonAText, gameUIAction, playerNumber);
+        }
+
+        //public void ClosePlayerMessagePanel()
+        //{
+        //    PlayerMessagePanel.Instance.CloseMessagePanel();
+        //}
+
+        //public void ShowPlayerWarning(string message)
+        //{
+        //    GameObject playerMessagePanelGO = Instantiate(_playerOneOptionMessagePrefab, transform);
+        //    PlayerMessagePanel playerMessagePanel = playerMessagePanelGO.GetComponent<PlayerMessagePanel>();
+        //    playerMessagePanel.Initialise(message, GameUIAction.ClosePanel, PlayerNumber.Player1);
+        //}
     }
 }

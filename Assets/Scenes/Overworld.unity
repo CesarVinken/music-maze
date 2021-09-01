@@ -1007,6 +1007,10 @@ MonoBehaviour:
     type: 3}
   _gameEditorUIPrefab: {fileID: 7666147024566430390, guid: 6a1f682b6471c0b4682b9fd9b24c0e41,
     type: 3}
+  _playerZeroOptionMessagePrefab: {fileID: 658330486536227245, guid: db45c67ab7d6beb4292bdadc677aaae8,
+    type: 3}
+  _playerOneOptionMessagePrefab: {fileID: 5222908463777228736, guid: 3d521374ecabdf747aefce2c0fd9dd62,
+    type: 3}
   BlackOutSquares: []
 --- !u!114 &1385362379
 MonoBehaviour:
@@ -1023,10 +1027,6 @@ MonoBehaviour:
   _mazeLevelInvitationPanelPrefab: {fileID: 8532729250783619614, guid: 82a692a28faa05c4db8e1c6fe5626128,
     type: 3}
   _mazeLevelInvitationRejectionPanelPrefab: {fileID: 6894142256031083610, guid: 6ea0c33b49141ce498f15285cec395ab,
-    type: 3}
-  _playerMessage1Prefab: {fileID: 658330486536227245, guid: db45c67ab7d6beb4292bdadc677aaae8,
-    type: 3}
-  _playerMessage2Prefab: {fileID: 5222908463777228736, guid: 3d521374ecabdf747aefce2c0fd9dd62,
     type: 3}
 --- !u!1001 &1553234224
 PrefabInstance:

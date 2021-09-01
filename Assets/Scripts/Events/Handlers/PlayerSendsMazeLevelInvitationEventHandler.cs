@@ -27,7 +27,10 @@ namespace Gameplay
             // check if the player has the level. If not, reject the invitation and inform the player
             if (!MazeLevelNamesData.LevelNameExists(mazeName))
             {
-                OverworldMainScreenOverlayCanvas.Instance.ShowPlayerWarning($"We rejected the invitation to play the maze level '{mazeName}' because it was not found!");
+                MainScreenOverlayCanvas.Instance.ShowPlayerOneOptionMessagePanel(
+                    $"We rejected the invitation to play the maze level '{mazeName}' because it was not found!",
+                    "Close",
+                    GameUIAction.ClosePanel);
                 if (MazeLevelInvitation.Instance != null)
                 {
                     MazeLevelInvitation.Instance.Reject(ReasonForRejection.LevelNotFound);
