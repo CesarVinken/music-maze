@@ -1,25 +1,19 @@
-﻿using Character;
-using System.Collections.Generic;
+using Character;
 using UnityEngine;
 using UnityEngine.UI;
 
 namespace UI
 {
-    public class PlayerOneOptionMessagePanel : PlayerMessagePanel
+    public class PlayerTwoOptionsMessagePanel : PlayerMessagePanel
     {
         [SerializeField] private Button _optionAButton;
+        [SerializeField] private Button _optionBButton;
+
         [SerializeField] private Text _optionAButtonText;
+        [SerializeField] private Text _optionBButtonText;
         [SerializeField] private Text _messageText;
 
-        public static Dictionary<MessagePosition, Vector2> MessageSpawnPosition = new Dictionary<MessagePosition, Vector2>()
-        {
-            { MessagePosition.Middle, new Vector2(0, 0) },
-            { MessagePosition.PlayerLeft, new Vector2(0, 0) },
-            { MessagePosition.PlayerRight, new Vector2(0, 0) }
-        };
-
-
-        public void Initialise(string message, string buttonText, GameUIAction gameUIAction, PlayerNumber playerNumber)
+        public void Initialise(string message, string optionAButtonText, GameUIAction optionAUIAction, string optionBButtonText, GameUIAction optionBUIAction, PlayerNumber playerNumber)
         {
             if (GameRules.GamePlayerType == GamePlayerType.SplitScreenMultiplayer)
             {
@@ -40,9 +34,15 @@ namespace UI
 
             _optionAButton.onClick.AddListener(() =>
             {
-                ExecuteAction(gameUIAction);
+                ExecuteAction(optionAUIAction);
             });
-            _optionAButtonText.text = buttonText;
+            _optionAButtonText.text = optionAButtonText;
+
+            _optionBButton.onClick.AddListener(() =>
+            {
+                ExecuteAction(optionBUIAction);
+            });
+            _optionBButtonText.text = optionBButtonText;
 
             _messageText.text = message;
             gameObject.SetActive(true);

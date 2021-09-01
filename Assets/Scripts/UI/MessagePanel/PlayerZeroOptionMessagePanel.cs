@@ -1,11 +1,12 @@
 ﻿using Character;
+using Gameplay;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
 namespace UI
 {
-    public class PlayerZeroOptionMessagePanel : MonoBehaviour, IMessagePanel
+    public class PlayerZeroOptionMessagePanel : PlayerMessagePanel
     {
         public static Dictionary<MessagePosition, Vector2> MessageSpawnPosition = new Dictionary<MessagePosition, Vector2>()
         {

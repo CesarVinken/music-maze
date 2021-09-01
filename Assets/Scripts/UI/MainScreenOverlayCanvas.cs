@@ -1,4 +1,5 @@
 ﻿using Character;
+using Gameplay;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -19,7 +20,7 @@ namespace UI
         [SerializeField] private GameObject _playerOneOptionMessagePrefab;
 
         public List<BlackOutSquare> BlackOutSquares;
-        public List<IMessagePanel> OpenMessagePanels = new List<IMessagePanel>();
+        public List<PlayerMessagePanel> OpenMessagePanels = new List<PlayerMessagePanel>();
 
         public void Awake()
         {
