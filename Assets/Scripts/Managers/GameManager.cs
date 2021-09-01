@@ -230,11 +230,8 @@ public class GameManager : MonoBehaviourPunCallbacks
         GameUIAction.ToMainMenu);
     }
     
-}
-
-public enum GameUIAction
-{
-    ExitGame,
-    ToMainMenu,
-    ClosePanel
+    public void ToMainMenu()
+    {
+        PhotonNetwork.LoadLevel("Launcher");
+    }
 }

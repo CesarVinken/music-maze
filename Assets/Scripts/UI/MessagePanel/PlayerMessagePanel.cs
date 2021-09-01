@@ -1,4 +1,3 @@
-using UI;
 using UnityEngine;
 
 namespace UI
@@ -14,7 +13,7 @@ namespace UI
                     Application.Quit();
                     break;
                 case GameUIAction.ToMainMenu:
-                    Application.Quit();// TODO go to main
+                    GameManager.Instance.ToMainMenu();
                     break;
                 case GameUIAction.ClosePanel:
                     ExecuteClosePanel();
