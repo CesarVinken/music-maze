@@ -232,6 +232,19 @@ public abstract class Tile : MonoBehaviour
         return attribute;
     }
 
+    //  Retrieves any MusicInstrumentCase, Sheetmusic, etc..
+    public IScoreAttribute TryGetScoreAttribute()
+    {
+        IScoreAttribute attribute = (IScoreAttribute)_tileAttributes.FirstOrDefault(a => a is IScoreAttribute);
+
+        if (attribute == null)
+        {
+            return null;
+        }
+
+        return attribute;
+    }
+
     public TileCornerFiller TryGetCornerFiller(TileCorner tileCorner)
     {
         TileCornerFiller cornerFiller = (TileCornerFiller)_tileCornerFillers.FirstOrDefault(background => background is TileCornerFiller && background.TileCorner == tileCorner);

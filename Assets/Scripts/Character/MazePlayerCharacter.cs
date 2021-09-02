@@ -59,7 +59,7 @@ namespace Character
 
                 Tile currentTile = GameManager.Instance.CurrentGameLevel.TilesByLocation[CurrentGridLocation];
 
-                if (currentTile.TryGetAttribute<MusicInstrumentCase>() || currentTile.TryGetAttribute<Sheetmusic>())
+                if (currentTile.TryGetScoreAttribute() != null)
                 {
                     return;
                 }

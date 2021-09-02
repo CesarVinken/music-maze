@@ -2,7 +2,7 @@ using Character;
 using System.Collections;
 using UnityEngine;
 
-public class Sheetmusic : MonoBehaviour, ITileAttribute
+public class Sheetmusic : MonoBehaviour, ITileAttribute, IScoreAttribute
 {
     public Tile Tile;
     public string ParentId;
