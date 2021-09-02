@@ -11,9 +11,9 @@ namespace Character
             switch (character.GetType())
             {
                 case Type t when t == typeof(Emmon):
-                    return new Color(175, 58, 66);
+                    return new Color(175f / 255f, 58f / 255f, 66f / 255f);
                 case Type t when t == typeof(Fae):
-                    return new Color(87, 107, 153);
+                    return new Color(87f / 255f, 107f / 255f, 153f / 255f);
                 default:
                     return new Color(0, 0, 0);
             }

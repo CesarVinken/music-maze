@@ -127,8 +127,10 @@ public class Sheetmusic : MonoBehaviour, ITileAttribute, IScoreAttribute
         _sheetmusicFinder = player;
 
         _sheetmusicSpriteRenderer.sprite = _sheetmusicSprites[1];
+
+        Color playerColor = PlayerColour.GetColor(_sheetmusicFinder.GetCharacterType());
         _playerColourRenderer.sprite = _playerColourIndicatorSprite;
-        _playerColourRenderer.color = PlayerColour.GetColor(_sheetmusicFinder.GetCharacterType());
+        _playerColourRenderer.color = new Color(playerColor.r, playerColor.g, playerColor.b, _playerColourRenderer.color.a);
         _playerColourRenderer.gameObject.SetActive(true);
 
         _isSetUp = true;
