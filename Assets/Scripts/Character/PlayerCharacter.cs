@@ -493,7 +493,7 @@ namespace Character
             }
             else if (GameRules.GamePlayerType == GamePlayerType.SinglePlayer)
             {
-                Name = _characterType.ToString().Split('.')[1];
+                Name = _characterType.ToString().Split('.')[2];
             }
             else // split screen
             {

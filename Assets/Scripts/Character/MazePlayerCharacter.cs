@@ -52,10 +52,18 @@ namespace Character
             EnemyCharacter enemy = collision.gameObject.GetComponent<EnemyCharacter>();
             if (enemy != null)
             {
-                if (enemy.ChasingState != ChasingState.Startled)
+                if (enemy.ChasingState == ChasingState.Startled)
                 {
-                    PlayerCaughtEvent?.Invoke();
+                    return;
                 }
+
+                Tile currentTile = GameManager.Instance.CurrentGameLevel.TilesByLocation[CurrentGridLocation];
+
+                if (currentTile.TryGetAttribute<MusicInstrumentCase>() || currentTile.TryGetAttribute<Sheetmusic>())
+                {
+                    return;
+                }
+                PlayerCaughtEvent?.Invoke();
             }
         }
 
