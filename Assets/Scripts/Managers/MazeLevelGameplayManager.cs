@@ -143,7 +143,10 @@ public class MazeLevelGameplayManager : MonoBehaviour, IOnEventCallback, IGamepl
     {
         AllPathsAreMarkedEvent += OnAllPathsAreMarked;
 
-        MazeLevelMainScreenOverlayCanvas.Instance.SpawnCountdownTimer();
+        if (!EditorManager.InEditor)
+        {
+            MazeLevelMainScreenOverlayCanvas.Instance.SpawnCountdownTimer();
+        }
     }
 
     private void OnEnable()

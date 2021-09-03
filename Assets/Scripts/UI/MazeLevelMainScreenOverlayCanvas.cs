@@ -1,5 +1,6 @@
 using Character;
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -11,6 +12,9 @@ namespace UI
 
         [SerializeField] private GameObject _exitsAreOpenMessagePrefab;
         [SerializeField] private GameObject _countdownTimerPrefab;
+
+        private List<GameObject> _onScreenLabelGOs = new List<GameObject>();
+
 
         public void Awake()
         {
@@ -51,6 +55,7 @@ namespace UI
         public void SpawnCountdownTimer()
         {
             GameObject countdownTimerGO = Instantiate(_countdownTimerPrefab, transform);
+            _onScreenLabelGOs.Add(countdownTimerGO);
 
             CountdownTimerUI countdownTimer = countdownTimerGO.GetComponent<CountdownTimerUI>();
             countdownTimer.SetText("Waiting..");
@@ -86,6 +91,7 @@ namespace UI
 
         public IEnumerator CountDownRoutine(CountdownTimerUI countdownTimerUI, int screenNo)
         {
+            countdownTimerUI.gameObject.SetActive(true);
             int expectedNoOfPlayers = GameRules.GamePlayerType == GamePlayerType.SinglePlayer ? 1 : 2;
 
             while (MainScreenOverlayCanvas.Instance.BlackOutSquares[screenNo - 1].BlackStatus != BlackStatus.Clear ||
@@ -102,7 +108,8 @@ namespace UI
 
             // unfreeze enemies and player characters
             GameManager.Instance.CharacterManager.UnfreezeCharacters();
-            
+
+            _onScreenLabelGOs.Remove(countdownTimerUI.gameObject);
             Destroy(countdownTimerUI.gameObject);
         }
 
@@ -110,6 +117,7 @@ namespace UI
         {
             GameObject exitsAreOpenMessageGO = Instantiate(_exitsAreOpenMessagePrefab, transform);
             exitsAreOpenMessageGO.transform.position = spawnPosition;
+            _onScreenLabelGOs.Add(exitsAreOpenMessageGO);
 
             Text exitsAreOpenMessageText = exitsAreOpenMessageGO.GetComponent<Text>();
             float alphaAmount = 1;
@@ -126,8 +134,20 @@ namespace UI
                 yield return null;
             }
 
+            _onScreenLabelGOs.Remove(exitsAreOpenMessageGO);
             Destroy(exitsAreOpenMessageGO);
             yield return null;
+        }
+
+        public void ClearLabelsOnScreen()
+        {
+            StopAllCoroutines();
+            for (int i = _onScreenLabelGOs.Count - 1; i >= 0; i--)
+            {
+                GameObject countdownTimerGO = _onScreenLabelGOs[i];
+                _onScreenLabelGOs.Remove(_onScreenLabelGOs[i]);
+                Destroy(countdownTimerGO);
+            }
         }
     }
 }

@@ -1,4 +1,6 @@
 ﻿
+using UI;
+
 public static class EditorManager
 {
     private static bool _inEditor = false;
@@ -42,6 +44,7 @@ public static class EditorManager
                 EditorCanvasUI.Instance.OverworldModificationPanel.GenerateTiles();
                 break;
             case SceneType.Maze:
+                MazeLevelMainScreenOverlayCanvas.Instance.ClearLabelsOnScreen();
                 EditorCanvasUI.Instance.MazeModificationPanel.GenerateTiles();
                 break;
             default:
