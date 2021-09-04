@@ -117,21 +117,10 @@ public class EditorMazeModificationPanel : EditorGridModificationPanel
 
     public void SaveMaze()
     {
-        if (string.IsNullOrWhiteSpace(_mazeName))
-        {
-            Logger.Warning(Logger.Datawriting, "In order to save the maze level, please fill in a maze name");
-            return;
-        }
+        bool proceedSaving = ValidateMazeLevelForSaving();
 
-        if (MazeLevelGameplayManager.Instance.EditorLevel == null)
+        if (!proceedSaving)
         {
-            Logger.Warning(Logger.Datawriting, "Please first generate a level before saving.");
-            return;
-        }
-
-        if (_mazeName == "levels")
-        {
-            Logger.Warning(Logger.Datawriting, "A maze level cannot have the name 'levels', as this is already the name of the file that lists all the maze levels");
             return;
         }
 
@@ -210,6 +199,78 @@ public class EditorMazeModificationPanel : EditorGridModificationPanel
         {
             EditorCanvasUI.Instance.PlayableLevelsPanelGO.SetActive(true);
         }
+    }
+
+    private bool ValidateMazeLevelForSaving()
+    {
+        if (string.IsNullOrWhiteSpace(_mazeName))
+        {
+            Logger.Warning(Logger.Datawriting, "In order to save the maze level, please fill in a maze name");
+            return false;
+        }
+
+        if (MazeLevelGameplayManager.Instance.EditorLevel == null)
+        {
+            Logger.Warning(Logger.Datawriting, "Please first generate a level before saving.");
+            return false;
+        }
+
+        if (_mazeName == "levels")
+        {
+            Logger.Warning(Logger.Datawriting, "A maze level cannot have the name 'levels', as this is already the name of the file that lists all the maze levels");
+            return false;
+        }
+
+        List<Tile> tiles = MazeLevelGameplayManager.Instance.EditorLevel.Tiles;
+        GridLocation levelBounds = MazeLevelGameplayManager.Instance.EditorLevel.LevelBounds;
+
+        List<string> foundIssues = new List<string>();
+
+        int numberOfPlayerSpawnpoints = 0;
+        for (int i = 0; i < tiles.Count; i++)
+        {
+            Tile tile = tiles[i];
+            // we need to check if there are two player spawnpoints in the level
+            if(tile.TryGetAttribute<PlayerSpawnpoint>())
+            {
+                numberOfPlayerSpawnpoints++;
+            }
+
+            // check if the level does not have a walkable tile at the edge
+            if ((tile.GridLocation.X == 0 ||
+                tile.GridLocation.X == levelBounds.X ||
+                tile.GridLocation.Y == 0 ||
+                tile.GridLocation.Y == levelBounds.Y) &&
+                tile.Walkable)
+            {
+                foundIssues.Add($"The edge tile at {tile.GridLocation.X}, {tile.GridLocation.Y} should not be walkable.");
+            }
+        }
+
+        if (numberOfPlayerSpawnpoints != 2)
+        {
+            foundIssues.Add($"A maze level requires two player spawnpoints. But in this level we counted a number of {numberOfPlayerSpawnpoints} spawnpoints.");
+        }
+
+        if(foundIssues.Count == 0)
+        {
+            Logger.Log("...........................................................................................................");
+            Logger.Log("While saving NO ISSUES were found!");
+            Logger.Log("...........................................................................................................");
+        }
+        else
+        {
+            Logger.Log("...........................................................................................................");
+            Logger.Log("While saving the following issues were found:");
+            Logger.Log("...........................................................................................................");
+            for (int j = 0; j < foundIssues.Count; j++)
+            {
+                Logger.Warning(foundIssues[j]);
+            }
+            Logger.Log("...........................................................................................................");
+        }
+
+        return true;
     }
 
     private SerialisableTileObstacleAttribute TryAddEdgeObstacle(GridLocation gridLocation)

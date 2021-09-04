@@ -57,6 +57,19 @@ public class MazeTile : Tile, IMazeLevel
         Markable = isMarkable;
     }
 
+    public void TryMakeWalkable(bool makeWalkable)
+    {
+        if (!makeWalkable)
+        {
+            if (TryGetAttribute<BridgePiece>())
+            {
+                return;
+            }
+
+        }
+        Walkable = makeWalkable;
+    }
+
     public void ResetPlayerMarkEndsRenderer()
     {
         PlayerMarkEndsRenderer.sprite = null;

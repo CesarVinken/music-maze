@@ -73,7 +73,7 @@ public class EditorMazeTileBackgroundPlacer : MazeTileBackgroundPlacer<EditorMaz
 
         Tile.AddBackground(mazeTileBaseWater);
         Tile.TryMakeMarkable(false);
-        Tile.SetWalkable(false);
+        Tile.TryMakeWalkable(false);
 
         // Update Connections for neighbouring tiles
         UpdatePathConnectionsOnNeighbours();
@@ -96,6 +96,7 @@ public class EditorMazeTileBackgroundPlacer : MazeTileBackgroundPlacer<EditorMaz
 
         Tile.AddBackground(mazeTileBaseWater);
         Tile.TryMakeMarkable(false);
+        Tile.TryMakeWalkable(false);
     }
 
     public ITileBackground PlaceCoveringBaseGround()
