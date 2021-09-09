@@ -19,7 +19,7 @@ public class EditorMazeTileAttributePlacer : MazeTileAttributePlacer<EditorMazeT
         return tileAttributeGO.GetComponent<U>();
     }
 
-     public void PlacePlayerExit(ObstacleType obstacleType)
+    public void PlacePlayerExit(ObstacleType obstacleType)
     {
         if (_tile.TileMainMaterial.GetType() != typeof(GroundMainMaterial))
         {
@@ -163,6 +163,14 @@ public class EditorMazeTileAttributePlacer : MazeTileAttributePlacer<EditorMazeT
             //update connection score on neighbour
             mazeTilePathOnNeighbour.WithConnectionScoreInfo(mazeTilePathConnectionScoreOnNeighbourInfo);
         }
+    }
+
+    public void PlaceFerryRoute()
+    {
+        FerryRoute ferryRoute = (FerryRoute)InstantiateTileAttributeGO<FerryRoute>();
+        ferryRoute.SetTile(_tile);
+
+        _tile.AddAttribute(ferryRoute);
     }
 
     public override void PlaceMusicInstrumentCase()

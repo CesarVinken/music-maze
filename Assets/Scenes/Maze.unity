@@ -1937,6 +1937,7 @@ MonoBehaviour:
   _playerOneOptionMessagePrefab: {fileID: 5222908463777228736, guid: 3d521374ecabdf747aefce2c0fd9dd62,
     type: 3}
   BlackOutSquares: []
+  OpenMessagePanels: []
 --- !u!114 &800624754
 MonoBehaviour:
   m_ObjectHideFlags: 0

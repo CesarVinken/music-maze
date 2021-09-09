@@ -39,6 +39,9 @@ public class MazeTileAttributeRemover : TileAttributeRemover
             case Type t when t == typeof(Sheetmusic):
                 RemoveSheetmusic(attribute as Sheetmusic);
                 break;
+            case Type t when t == typeof(FerryRoute):
+                RemoveFerryRoute(attribute as FerryRoute);
+                break;
             default:
                 Logger.Error($"Does not know how to remove attribute with type {attribute.GetType()}");
                 break;
@@ -72,6 +75,9 @@ public class MazeTileAttributeRemover : TileAttributeRemover
                 break;
             case Type sheetmusic when sheetmusic == typeof(Sheetmusic):
                 RemoveSheetmusic();
+                break;
+            case Type ferryRoute when ferryRoute == typeof(FerryRoute):
+                RemoveFerryRoute();
                 break;
             default:
                 Logger.Error($"Could not find a prefab for the tile attribute type of {typeof(T)}");
@@ -207,6 +213,17 @@ public class MazeTileAttributeRemover : TileAttributeRemover
 
         _tile.RemoveAttribute(sheetmusic);
         sheetmusic.Remove();
+    }
+
+    protected void RemoveFerryRoute(FerryRoute ferryRoute = null)
+    {
+        if (ferryRoute == null)
+            ferryRoute = (FerryRoute)_tile.GetAttributes().FirstOrDefault(attribute => attribute is FerryRoute);
+
+        if (ferryRoute == null) return;
+
+        _tile.RemoveAttribute(ferryRoute);
+        ferryRoute.Remove();
     }
 
     private void UpdateNeighboursForRemovedObstacle(ObstacleType obstacleType)

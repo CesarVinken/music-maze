@@ -33,15 +33,17 @@ public class MazeLevelGameplayManager : MonoBehaviour, IOnEventCallback, IGamepl
     [SerializeField] private GameObject _tileBaseGroundPrefab;
     [SerializeField] private GameObject _tileBaseWaterPrefab;
     [SerializeField] private GameObject _tilePathPrefab;
-    [SerializeField] private GameObject _tileObstaclePrefab;
+
+    [SerializeField] private GameObject _bridgePiecePrefab;
+    [SerializeField] private GameObject _bridgeEdgePrefab;
+    [SerializeField] private GameObject _enemySpawnpointPrefab;
+    [SerializeField] private GameObject _ferryRoutePrefab;
+    [SerializeField] private GameObject _musicInstrumentCasePrefab;
     [SerializeField] private GameObject _playerExitPrefab;
     [SerializeField] private GameObject _playerOnlyPrefab;
     [SerializeField] private GameObject _playerSpawnpointPrefab;
-    [SerializeField] private GameObject _enemySpawnpointPrefab;
-    [SerializeField] private GameObject _bridgePiecePrefab;
-    [SerializeField] private GameObject _bridgeEdgePrefab;
-    [SerializeField] private GameObject _musicInstrumentCasePrefab;
     [SerializeField] private GameObject _sheetmusicPrefab;
+    [SerializeField] private GameObject _tileObstaclePrefab;
 
     [SerializeField] private GameObject _cornerFillerPrefab;
 
@@ -83,6 +85,8 @@ public class MazeLevelGameplayManager : MonoBehaviour, IOnEventCallback, IGamepl
                 return _playerSpawnpointPrefab;
             case Type enemySpawnpoint when enemySpawnpoint == typeof(EnemySpawnpoint):
                 return _enemySpawnpointPrefab;
+            case Type ferryRoutePrefab when ferryRoutePrefab == typeof(FerryRoute):
+                return _ferryRoutePrefab;
             case Type bridgePiecePrefab when bridgePiecePrefab == typeof(BridgePiece):
                 return _bridgePiecePrefab;
             case Type bridgeEdgePrefab when bridgeEdgePrefab == typeof(BridgeEdge):
@@ -133,6 +137,7 @@ public class MazeLevelGameplayManager : MonoBehaviour, IOnEventCallback, IGamepl
         Guard.CheckIsNull(_cornerFillerPrefab, "CornerFillerPrefab", gameObject);
         Guard.CheckIsNull(_bridgePiecePrefab, "BridgePiecePrefab", gameObject);
         Guard.CheckIsNull(_musicInstrumentCasePrefab, "MusicInstrumentCasePrefab", gameObject);
+        Guard.CheckIsNull(_ferryRoutePrefab, "FerryRoutePrefab", gameObject);
         Guard.CheckIsNull(_bridgeEdgePrefab, "BridgeEdgePrefab", gameObject);
 
         Instance = this;
