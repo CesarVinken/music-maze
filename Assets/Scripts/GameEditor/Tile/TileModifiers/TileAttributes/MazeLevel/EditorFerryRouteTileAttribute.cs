@@ -37,6 +37,6 @@ public class EditorFerryRouteTileAttribute : EditorMazeTileAttributeModifier, IW
     public override void InstantiateModifierActions()
     {
         Logger.Log("Load actions for ferry route");
-        //GameObject.Instantiate(EditorCanvasUI.Instance.AssignTileAreasToEnemySpawnpointPrefab, EditorMazeTileModificationPanel.Instance.TileModifierActionsContainer);
+        GameObject.Instantiate(EditorCanvasUI.Instance.ToggleFerryRouteDrawingModePrefab, EditorMazeTileModificationPanel.Instance.TileModifierActionsContainer);
     }
 }

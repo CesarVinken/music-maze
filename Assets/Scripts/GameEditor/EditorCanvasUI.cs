@@ -26,6 +26,7 @@ public class EditorCanvasUI : MonoBehaviour
     public GameObject GenerateTransformationMapForTilePrefab;
     public GameObject HandleTileAreaPrefab;
     public GameObject AssignTileAreasToEnemySpawnpointPrefab;
+    public GameObject ToggleFerryRouteDrawingModePrefab;
 
     public void Awake()
     {
@@ -44,6 +45,7 @@ public class EditorCanvasUI : MonoBehaviour
         Guard.CheckIsNull(GenerateTransformationMapForTilePrefab, "GenerateTransformationMapForTilePrefab");
         Guard.CheckIsNull(HandleTileAreaPrefab, "HandleTileAreaPrefab");
         Guard.CheckIsNull(AssignTileAreasToEnemySpawnpointPrefab, "AssignTileAreasToEnemySpawnpointPrefab");
+        Guard.CheckIsNull(ToggleFerryRouteDrawingModePrefab, "ToggleFerryRouteDrawingModePrefab");
 
         GameObject.DontDestroyOnLoad(gameObject);
 

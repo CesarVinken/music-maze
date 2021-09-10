@@ -25,8 +25,7 @@ public class EditorTileTransformationTriggererSelector : EditorTileModifierSelec
             EditorManager.SelectedTileTransformationTriggererIndex = 0;
             return;
         }
-        Logger.Log(currentlyAvailableTileTransformationTriggerers.Count);
-        Logger.Log(modifierIndex);
+
         EditorTileTransformationModifier transformationTrigger = currentlyAvailableTileTransformationTriggerers[modifierIndex] as EditorTileTransformationModifier;
         Logger.Log(transformationTrigger == null);
         _editorSelectedModifierContainer.SelectedModifierLabel.text = GetSelectedModifierLabel(transformationTrigger.Name);

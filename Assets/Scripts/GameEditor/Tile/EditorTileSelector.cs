@@ -119,6 +119,10 @@ public class EditorTileSelector : MonoBehaviour
         {
             TileAreaToEnemySpawnpointAssigner.Instance?.CheckForEnemySpawnpointOnTile();
         }
+        else if(EditorManager.SelectedTileModifier != null && EditorManager.SelectedTileModifier is EditorFerryRouteTileAttribute)
+        {
+            FerryRouteDrawingModeAccessor.Instance?.CheckForFerryRouteOnTile();
+        }
     }
 
     private void SelectTileWithMouse()

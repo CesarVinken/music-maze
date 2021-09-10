@@ -7,6 +7,9 @@ public class EditorTileModifierAction : MonoBehaviour
     {
         switch (_tileModifierActionType)
         {
+            case TileModifierActionType.ToggleFerryRouteDrawingMode:
+                FerryRouteDrawingModeAccessor.ToggleFerryRouteDrawingMode();
+                break;
             case TileModifierActionType.AssignMazeLevelEntry:
                 MazeLevelEntryAssigner.AssignMazeLevelEntry();
                 break;
