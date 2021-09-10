@@ -169,8 +169,11 @@ public class EditorMazeTileAttributePlacer : MazeTileAttributePlacer<EditorMazeT
     {
         FerryRoute ferryRoute = (FerryRoute)InstantiateTileAttributeGO<FerryRoute>();
         ferryRoute.SetTile(_tile);
+        ferryRoute.AddFerryRoutePoint(_tile);
 
         _tile.AddAttribute(ferryRoute);
+
+        FerryRouteDrawingModeAccessor.Instance?.CheckForFerryRouteOnTile();
     }
 
     public override void PlaceMusicInstrumentCase()
@@ -179,7 +182,6 @@ public class EditorMazeTileAttributePlacer : MazeTileAttributePlacer<EditorMazeT
         musicInstrumentCase.SetTile(_tile);
 
         _tile.AddAttribute(musicInstrumentCase);
-
     }
 
     public override void PlaceSheetmusic()
