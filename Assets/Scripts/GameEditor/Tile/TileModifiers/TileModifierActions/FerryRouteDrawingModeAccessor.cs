@@ -1,4 +1,3 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -8,13 +7,16 @@ public class FerryRouteDrawingModeAccessor : MonoBehaviour
     public static FerryRouteDrawingModeAccessor Instance;
 
     private static bool _inDrawingMode = false;
+    public static bool InDrawingMode { get => _inDrawingMode; private set => _inDrawingMode = value; }
 
     [SerializeField] private Button _ferryRouteDrawingButton;
     [SerializeField] private Text _buttonText;
 
-    private FerryRoute _ferryRoute;
+    private FerryRoute _ferryRouteOnTile;
+    public static FerryRoute SelectedFerryRoute;
 
     private List<EditorMazeTile> _colouredTiles = new List<EditorMazeTile>();
+
 
     void Awake()
     {
@@ -40,17 +42,27 @@ public class FerryRouteDrawingModeAccessor : MonoBehaviour
         Logger.Log("Access Ferry Route Drawing Mode");
         _inDrawingMode = true;
         _buttonText.text = "Close Ferry Route Drawing Mode";
+        SelectedFerryRoute = _ferryRouteOnTile;
 
-        if (_ferryRoute == null) return;
+        ResetColouredTiles();
+        ColourAddableTiles();
+    }
 
+    public void ResetColouredTiles()
+    {
         // Make sure old coloured tiles are reset
         for (int i = 0; i < _colouredTiles.Count; i++)
         {
             _colouredTiles[i].SetTileOverlayImage(TileOverlayMode.Empty);
         }
+    }
+
+    public void ColourAddableTiles()
+    {
+        if (SelectedFerryRoute == null) return;
 
         //show green tiles around the addable water tiles around the last tile of the route
-        List<FerryRoutePoint> ferryRoutePoints = _ferryRoute.GetFerryRoutePoints();
+        List<FerryRoutePoint> ferryRoutePoints = SelectedFerryRoute.GetFerryRoutePoints();
         EditorMazeTile lastTile = ferryRoutePoints[ferryRoutePoints.Count - 1].Tile as EditorMazeTile;
 
         lastTile.SetTileOverlayImage(TileOverlayMode.Blue);
@@ -60,7 +72,7 @@ public class FerryRouteDrawingModeAccessor : MonoBehaviour
         {
             EditorMazeTile neighbourTile = neighbour.Value as EditorMazeTile;
 
-            if(neighbourTile == null)
+            if (neighbourTile == null)
             {
                 continue;
             }
@@ -70,15 +82,24 @@ public class FerryRouteDrawingModeAccessor : MonoBehaviour
                 continue;
             }
 
+            bool tileIsAlreadyInList = false;
             for (int j = 0; j < ferryRoutePoints.Count; j++)
             {
-                if (ferryRoutePoints[j].Tile.TileId == neighbourTile.TileId)
+                Logger.Log($"{ferryRoutePoints[j].Tile.TileId} and {neighbourTile.TileId}. Are they equal? {ferryRoutePoints[j].Tile.TileId.Equals(neighbourTile.TileId)}");
+                if (ferryRoutePoints[j].Tile.TileId.Equals(neighbourTile.TileId))
                 {
-                    continue;
+                    Logger.Log(neighbourTile.TileOverlayMode);
+                    tileIsAlreadyInList = true;
+                    break;
                 }
             }
 
-            if(neighbourTile.TryGetAttribute<BridgePiece>() || neighbourTile.TryGetAttribute<FerryRoute>())
+            if (tileIsAlreadyInList)
+            {
+                continue;
+            }
+
+            if (neighbourTile.TryGetAttribute<BridgePiece>() || neighbourTile.TryGetAttribute<FerryRoute>())
             {
                 continue;
             }
@@ -93,7 +114,8 @@ public class FerryRouteDrawingModeAccessor : MonoBehaviour
         Logger.Log("Close Ferry Route Drawing Mode");
         _inDrawingMode = false;
         _buttonText.text = "Edit Ferry Route";
-
+        SelectedFerryRoute = null;
+        
         for (int i = 0; i < _colouredTiles.Count; i++)
         {
             _colouredTiles[i].SetTileOverlayImage(TileOverlayMode.Empty);
@@ -111,7 +133,7 @@ public class FerryRouteDrawingModeAccessor : MonoBehaviour
         }
         else
         {
-            _ferryRoute = ferryRoute;
+            _ferryRouteOnTile = ferryRoute;
             _ferryRouteDrawingButton.gameObject.SetActive(true);
         }
     }

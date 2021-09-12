@@ -105,4 +105,5 @@ public class EditorMazeTileBeautificationTriggerer : EditorMazeTileTransformatio
         GameObject.Instantiate(EditorCanvasUI.Instance.GenerateTransformationMapForTilePrefab, EditorMazeTileModificationPanel.Instance.TileModifierActionsContainer);
         GameObject.Instantiate(EditorCanvasUI.Instance.GenerateFullTileTransformationMapPrefab, EditorMazeTileModificationPanel.Instance.TileModifierActionsContainer);
     }
+
 }

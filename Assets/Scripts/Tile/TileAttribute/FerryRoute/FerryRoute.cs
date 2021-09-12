@@ -1,4 +1,3 @@
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -33,6 +32,7 @@ public class FerryRoute : MonoBehaviour, ITileAttribute
     public void AddFerryRoutePoint(Tile tile)
     {
         _ferryRoutePoints.Add(new FerryRoutePoint(tile));
+        Logger.Log($"Number of points : {_ferryRoutePoints.Count}");
     }
 
     public void RemoveFerryRoutePoint(Tile tile)
@@ -47,15 +47,5 @@ public class FerryRoute : MonoBehaviour, ITileAttribute
     public List<FerryRoutePoint> GetFerryRoutePoints()
     {
         return _ferryRoutePoints;
-    }
-}
-
-public class FerryRoutePoint
-{
-    public Tile Tile;
-
-    public FerryRoutePoint(Tile tile)
-    {
-        Tile = tile;
     }
 }

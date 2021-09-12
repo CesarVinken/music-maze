@@ -151,22 +151,64 @@ public class EditorTileSelector : MonoBehaviour
     {
         EditorTileModifierCategory editorTileModifierType = EditorManager.SelectedTileModifierCategory;
 
-        if (editorTileModifierType != EditorTileModifierCategory.TransformationTriggerer) return;
-
-        EditorSelectedTileModifierContainer selectedTileModifierContainer = EditorCanvasUI.Instance.SelectedTileModifierContainer;
-        List<IEditorTileModifier> transformationTriggerers = selectedTileModifierContainer.CurrentlyAvailableTileModifiers[EditorTileModifierCategory.TransformationTriggerer];
-        EditorMazeTileBeautificationTriggerer transformationTriggerer = transformationTriggerers[EditorManager.SelectedTileTransformationTriggererIndex] as EditorMazeTileBeautificationTriggerer;
-        
-        if(transformationTriggerer == null)
+        if (editorTileModifierType == EditorTileModifierCategory.TransformationTriggerer)
         {
-            Logger.Log("return for transformation triggerer");
-            return;
+            EditorSelectedTileModifierContainer selectedTileModifierContainer = EditorCanvasUI.Instance.SelectedTileModifierContainer;
+            List<IEditorTileModifier> transformationTriggerers = selectedTileModifierContainer.CurrentlyAvailableTileModifiers[EditorTileModifierCategory.TransformationTriggerer];
+            EditorMazeTileBeautificationTriggerer transformationTriggerer = transformationTriggerers[EditorManager.SelectedTileTransformationTriggererIndex] as EditorMazeTileBeautificationTriggerer;
+
+            if (transformationTriggerer == null)
+            {
+                return;
+            }
+
+            EditorMazeTile selectedTile = CurrentlySelectedTile as EditorMazeTile;
+            if (selectedTile == null) return;
+
+            transformationTriggerer.SetSelectedTile(selectedTile);
+        }
+        else if (editorTileModifierType == EditorTileModifierCategory.Attribute)
+        {
+            EditorSelectedTileModifierContainer selectedTileModifierContainer = EditorCanvasUI.Instance.SelectedTileModifierContainer;
+            List<IEditorTileModifier> attributes = selectedTileModifierContainer.CurrentlyAvailableTileModifiers[EditorTileModifierCategory.Attribute];
+            EditorTileAttributeModifier selectedAttribute = attributes[EditorManager.SelectedTileAttributeModifierIndex] as EditorTileAttributeModifier;
+
+            if (selectedAttribute is EditorFerryRouteTileAttribute)
+            {
+                EditorFerryRouteTileAttribute ferryRouteÁttribute = selectedAttribute as EditorFerryRouteTileAttribute;
+
+                if (ferryRouteÁttribute == null)
+                {
+                    Logger.Log("return for ferryRoute attribute");
+                    return;
+                }
+
+                // Only draw overlay if we are in drawing mode
+                if (!FerryRouteDrawingModeAccessor.InDrawingMode)
+                {
+                    Logger.Log("return for not in drawing mode");
+                    return;
+                }
+
+                FerryRoute selectedFerryRoute = FerryRouteDrawingModeAccessor.SelectedFerryRoute;
+
+                if (selectedFerryRoute == null)
+                {
+                    Logger.Log("return for no ferryRoute selected");
+                    return;
+                }
+
+                EditorMazeTile editorMazeTile = _currentSelectedTile as EditorMazeTile;
+                if(editorMazeTile.TileOverlayMode != TileOverlayMode.Green) {
+                    return;
+                }
+                selectedFerryRoute.AddFerryRoutePoint(_currentSelectedTile);
+                FerryRouteDrawingModeAccessor.Instance.ResetColouredTiles();
+                FerryRouteDrawingModeAccessor.Instance.ColourAddableTiles();
+            }
         }
 
-        EditorMazeTile selectedTile = CurrentlySelectedTile as EditorMazeTile;
-        if (selectedTile == null) return;
 
-        transformationTriggerer.SetSelectedTile(selectedTile);
     }
 
     private bool IsValidGridLocationToSelect(GridLocation selectedTileLocation)

@@ -6,8 +6,11 @@ public class EditorMazeTile : MazeTile
     [Header("Editor")]
 
     [SerializeField] private SpriteRenderer _overlaySpriteRenderer;
+    private TileOverlayMode _tileOverlayMode = TileOverlayMode.Empty;
+    public TileOverlayMode TileOverlayMode { get => _tileOverlayMode; private set => _tileOverlayMode = value; }
 
     public List<EditorMazeTile> BeautificationTriggerers = new List<EditorMazeTile>(); // used in the editor for non-markable tiles and lists their triggerer.
+
 
     public void RemoveTileAsBeautificationTrigger()
     {
@@ -46,5 +49,7 @@ public class EditorMazeTile : MazeTile
                 Logger.Error($"Tile overlay mode {tileOverlayMode} was not yet implemented");
                 break;
         }
+
+        _tileOverlayMode = tileOverlayMode;
     }
 }
