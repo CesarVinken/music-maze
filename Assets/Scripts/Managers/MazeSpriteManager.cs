@@ -17,6 +17,7 @@ public class MazeSpriteManager : SpriteManager
     public Sprite[] DefaultMazeTileWaterColourful;
     public Sprite[] WoodenBridge;
     public Sprite[] WoodenBridgeColourful;
+    public Sprite[] DockingPointSprites;
 
     [Space(10)]
     [Header("Player graphics")]

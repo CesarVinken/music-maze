@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
@@ -175,9 +176,9 @@ public class EditorTileSelector : MonoBehaviour
 
             if (selectedAttribute is EditorFerryRouteTileAttribute)
             {
-                EditorFerryRouteTileAttribute ferryRouteÁttribute = selectedAttribute as EditorFerryRouteTileAttribute;
+                EditorFerryRouteTileAttribute ferryRouteAttribute = selectedAttribute as EditorFerryRouteTileAttribute;
 
-                if (ferryRouteÁttribute == null)
+                if (ferryRouteAttribute == null)
                 {
                     Logger.Log("return for ferryRoute attribute");
                     return;
@@ -200,6 +201,12 @@ public class EditorTileSelector : MonoBehaviour
 
                 EditorMazeTile editorMazeTile = _currentSelectedTile as EditorMazeTile;
                 if(editorMazeTile.TileOverlayMode != TileOverlayMode.Green) {
+                    List<FerryRoutePoint> currentFerryRoutePoints = selectedFerryRoute.GetFerryRoutePoints();
+                    FerryRoutePoint alreadyExistingPoint = currentFerryRoutePoints.FirstOrDefault(p => p.Tile.TileId.Equals(_currentSelectedTile.TileId));
+                    if (alreadyExistingPoint != null)
+                    {
+                        selectedFerryRoute.RemoveFerryRoutePoints(alreadyExistingPoint);
+                    }
                     return;
                 }
                 selectedFerryRoute.AddFerryRoutePoint(_currentSelectedTile);
@@ -207,8 +214,6 @@ public class EditorTileSelector : MonoBehaviour
                 FerryRouteDrawingModeAccessor.Instance.ColourAddableTiles();
             }
         }
-
-
     }
 
     private bool IsValidGridLocationToSelect(GridLocation selectedTileLocation)

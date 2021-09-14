@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 
 public class EditorMazeTileAttributePlacer : MazeTileAttributePlacer<EditorMazeTile>
@@ -170,6 +169,7 @@ public class EditorMazeTileAttributePlacer : MazeTileAttributePlacer<EditorMazeT
         FerryRoute ferryRoute = (FerryRoute)InstantiateTileAttributeGO<FerryRoute>();
         ferryRoute.SetTile(_tile);
         ferryRoute.AddFerryRoutePoint(_tile);
+        ferryRoute.AddRouteLineRenderer();
 
         _tile.AddAttribute(ferryRoute);
 
