@@ -15,14 +15,12 @@ public class FerryRouteDrawingModeAccessor : MonoBehaviour
     private FerryRoute _ferryRouteOnTile;
     public static FerryRoute SelectedFerryRoute;
 
-    private List<EditorMazeTile> _colouredTiles = new List<EditorMazeTile>();
-
-
     void Awake()
     {
         Instance = this;
 
         _inDrawingMode = false;
+        CheckForFerryRouteOnTile();
     }
 
     public static void ToggleFerryRouteDrawingMode()
@@ -48,13 +46,9 @@ public class FerryRouteDrawingModeAccessor : MonoBehaviour
         ColourAddableTiles();
     }
 
-    public void ResetColouredTiles()
+    private void ResetColouredTiles()
     {
-        // Make sure old coloured tiles are reset
-        for (int i = 0; i < _colouredTiles.Count; i++)
-        {
-            _colouredTiles[i].SetTileOverlayImage(TileOverlayMode.Empty);
-        }
+        EditorTileSelector.Instance.ResetColouredTiles();
     }
 
     public void ColourAddableTiles()
@@ -66,7 +60,7 @@ public class FerryRouteDrawingModeAccessor : MonoBehaviour
         EditorMazeTile lastTile = ferryRoutePoints[ferryRoutePoints.Count - 1].Tile as EditorMazeTile;
 
         lastTile.SetTileOverlayImage(TileOverlayMode.Blue);
-        _colouredTiles.Add(lastTile);
+        EditorTileSelector.Instance.AddColouredTile(lastTile);
 
         foreach (KeyValuePair<Direction, Tile> neighbour in lastTile.Neighbours)
         {
@@ -85,10 +79,8 @@ public class FerryRouteDrawingModeAccessor : MonoBehaviour
             bool tileIsAlreadyInList = false;
             for (int j = 0; j < ferryRoutePoints.Count; j++)
             {
-                Logger.Log($"{ferryRoutePoints[j].Tile.TileId} and {neighbourTile.TileId}. Are they equal? {ferryRoutePoints[j].Tile.TileId.Equals(neighbourTile.TileId)}");
                 if (ferryRoutePoints[j].Tile.TileId.Equals(neighbourTile.TileId))
                 {
-                    Logger.Log(neighbourTile.TileOverlayMode);
                     tileIsAlreadyInList = true;
                     break;
                 }
@@ -105,7 +97,7 @@ public class FerryRouteDrawingModeAccessor : MonoBehaviour
             }
 
             neighbourTile.SetTileOverlayImage(TileOverlayMode.Green);
-            _colouredTiles.Add(neighbourTile);
+            EditorTileSelector.Instance.AddColouredTile(neighbourTile);
         }
     }
 
@@ -115,11 +107,9 @@ public class FerryRouteDrawingModeAccessor : MonoBehaviour
         _inDrawingMode = false;
         _buttonText.text = "Edit Ferry Route";
         SelectedFerryRoute = null;
-        
-        for (int i = 0; i < _colouredTiles.Count; i++)
-        {
-            _colouredTiles[i].SetTileOverlayImage(TileOverlayMode.Empty);
-        }
+
+        EditorTileSelector.Instance.ResetColouredTiles();
+        CheckForFerryRouteOnTile();
     }
 
     public void CheckForFerryRouteOnTile()

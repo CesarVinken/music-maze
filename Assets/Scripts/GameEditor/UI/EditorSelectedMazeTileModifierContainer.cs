@@ -73,6 +73,8 @@ public class EditorSelectedMazeTileModifierContainer : EditorSelectedTileModifie
 
     public override void SelectPreviousTileModifier()
     {
+        EditorTileSelector.Instance.ResetColouredTiles();
+
         if (EditorManager.SelectedTileModifierCategory == EditorTileModifierCategory.Background)
         {
             _editorTileBackgroundSelector.SwitchSelectedModifier(-1);
@@ -98,6 +100,8 @@ public class EditorSelectedMazeTileModifierContainer : EditorSelectedTileModifie
 
     public override void SelectNextTileModifier()
     {
+        EditorTileSelector.Instance.ResetColouredTiles();
+
         if (EditorManager.SelectedTileModifierCategory == EditorTileModifierCategory.Background)
         {
             _editorTileBackgroundSelector.SwitchSelectedModifier(1);

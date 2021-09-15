@@ -8,6 +8,7 @@ public class EditorTileSelector : MonoBehaviour
     public static EditorTileSelector Instance;
 
     private Tile _currentSelectedTile;
+    private List<Tile> _colouredOverlayTiles = new List<Tile>();
 
     public Tile CurrentlySelectedTile
     {
@@ -209,8 +210,9 @@ public class EditorTileSelector : MonoBehaviour
                     }
                     return;
                 }
+                Logger.Log("we right clicked");
                 selectedFerryRoute.AddFerryRoutePoint(_currentSelectedTile);
-                FerryRouteDrawingModeAccessor.Instance.ResetColouredTiles();
+                ResetColouredTiles();
                 FerryRouteDrawingModeAccessor.Instance.ColourAddableTiles();
             }
         }
@@ -359,5 +361,21 @@ public class EditorTileSelector : MonoBehaviour
             if (transformationTriggerer == null) Logger.Error($"Could not find the transformationTriggerer type {transformationTriggerer.GetType()}");
             transformationTriggerer.RemoveAllTriggerersFromTile();
         }
+    }
+
+    public void ResetColouredTiles()
+    {
+        for (int i = 0; i < _colouredOverlayTiles.Count; i++)
+        {
+            IEditorTile editorMazeTile = _colouredOverlayTiles[i] as IEditorTile;
+            editorMazeTile.SetTileOverlayImage(TileOverlayMode.Empty);
+        }
+
+        _colouredOverlayTiles.Clear();
+    }
+
+    public void AddColouredTile(Tile tile)
+    {
+        _colouredOverlayTiles.Add(tile);
     }
 }

@@ -1,4 +1,5 @@
 
+using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
@@ -14,12 +15,37 @@ public class EditorFerryRouteTileAttribute : EditorMazeTileAttributeModifier, IW
             return;
         }
 
+        if (FerryRouteDrawingModeAccessor.InDrawingMode)
+        {
+            return;
+        }
+
         EditorMazeTileAttributePlacer tileAttributePlacer = new EditorMazeTileAttributePlacer(tile);
         MazeTileAttributeRemover tileAttributeRemover = new MazeTileAttributeRemover(tile);
 
-        ITileAttribute ferryRoute = (FerryRoute)tile.GetAttributes().FirstOrDefault(attribute => attribute is FerryRoute);
-        if (ferryRoute == null)
+        ITileAttribute ferryRouteOnTile = (FerryRoute)tile.GetAttributes().FirstOrDefault(attribute => attribute is FerryRoute);
+        if (ferryRouteOnTile == null)
         {
+            // make sure this tile is not already part of another FerryRoute's route
+            EditorMazeLevel editorMazeLevel = GameManager.Instance.CurrentEditorLevel as EditorMazeLevel;
+            if (editorMazeLevel == null)
+            {
+                Logger.Error("Could not find an instance of the editor maze level");
+            }
+
+            for (int i = 0; i < editorMazeLevel.FerryRoutes.Count; i++)
+            {
+                FerryRoute existingFerryRoute = editorMazeLevel.FerryRoutes[i];
+                List<FerryRoutePoint> ferryRoutePoints = existingFerryRoute.GetFerryRoutePoints();
+                for (int j = 0; j < ferryRoutePoints.Count; j++)
+                {
+                    if (ferryRoutePoints[j].Tile.TileId.Equals(tile.TileId))
+                    {
+                        return; // return because we found that this tile is already a point on a ferry route
+                    }
+                }
+            }
+
             tileAttributeRemover.Remove<BridgePiece>();
 
             tileAttributePlacer.PlaceFerryRoute();

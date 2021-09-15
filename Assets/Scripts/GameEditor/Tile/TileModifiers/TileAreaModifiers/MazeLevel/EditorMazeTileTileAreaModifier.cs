@@ -34,13 +34,11 @@ public class EditorMazeTileTileAreaModifier : EditorTileAreaModifier
 
         if(tile.GetTileArea(selectedTileArea) == null)
         {
-            Logger.Log("set selected tile. Overlay mode blue");
             tile.SetTileOverlayImage(TileOverlayMode.Blue);
             tile.AddTileArea(selectedTileArea);
         }
         else
         {
-            Logger.Log("unset selected tile. Overlay mode Empty");
             tile.SetTileOverlayImage(TileOverlayMode.Empty);
             tile.RemoveTileArea(selectedTileArea);
         }

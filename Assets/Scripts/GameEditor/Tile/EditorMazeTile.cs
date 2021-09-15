@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 
-public class EditorMazeTile : MazeTile
+public class EditorMazeTile : MazeTile, IEditorTile
 {
     [Header("Editor")]
 

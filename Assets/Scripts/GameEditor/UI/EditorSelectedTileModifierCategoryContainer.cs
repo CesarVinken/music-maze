@@ -36,6 +36,8 @@ public class EditorSelectedTileModifierCategoryContainer : MonoBehaviour
             return;
         }
 
+        EditorTileSelector.Instance.ResetColouredTiles();
+
         EditorTileModifierCategory currentCategory = EditorManager.SelectedTileModifierCategory;
         EditorSelectedTileModifierContainer selectedTileModifierContainer = EditorCanvasUI.Instance.SelectedTileModifierContainer;
 
@@ -72,6 +74,8 @@ public class EditorSelectedTileModifierCategoryContainer : MonoBehaviour
         {
             return;
         }
+
+        EditorTileSelector.Instance.ResetColouredTiles();
 
         EditorTileModifierCategory currentCategory = EditorManager.SelectedTileModifierCategory;
         EditorSelectedTileModifierContainer selectedTileModifierContainer = EditorCanvasUI.Instance.SelectedTileModifierContainer;

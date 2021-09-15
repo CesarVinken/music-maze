@@ -15,7 +15,7 @@ public class EditorFerryRouteLineRenderer : MonoBehaviour
     }
 
     public void UpdateLineRenderer(List<FerryRoutePoint> ferryRoutePoints)
-    {
+    { 
         if (ferryRoutePoints.Count < 2)
         {
             _lineRenderer.positionCount = 0;

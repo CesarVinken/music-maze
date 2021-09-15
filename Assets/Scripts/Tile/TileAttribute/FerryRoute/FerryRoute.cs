@@ -20,6 +20,12 @@ public class FerryRoute : MonoBehaviour, ITileAttribute
 
     public void Remove()
     {
+        EditorMazeLevel editorMazeLevel = GameManager.Instance.CurrentEditorLevel as EditorMazeLevel;
+        if (editorMazeLevel != null)
+        {
+            editorMazeLevel.FerryRoutes.Remove(this);
+        }
+
         Destroy(this);
         Destroy(gameObject);
     }
@@ -27,6 +33,12 @@ public class FerryRoute : MonoBehaviour, ITileAttribute
     public void SetTile(Tile tile)
     {
         if (string.IsNullOrEmpty(tile.TileId)) Logger.Error("This tile does not have an Id");
+
+        EditorMazeLevel editorMazeLevel = GameManager.Instance.CurrentEditorLevel as EditorMazeLevel;
+        if (editorMazeLevel != null)
+        {
+            editorMazeLevel.FerryRoutes.Add(this);
+        }
 
         Tile = tile;
         ParentId = tile.TileId;
@@ -67,7 +79,7 @@ public class FerryRoute : MonoBehaviour, ITileAttribute
             return;
         }
 
-        FerryRouteDrawingModeAccessor.Instance?.ResetColouredTiles();
+        EditorTileSelector.Instance?.ResetColouredTiles();
 
         for (int i = _ferryRoutePoints.Count - 1; i >= 0; i--)
         {

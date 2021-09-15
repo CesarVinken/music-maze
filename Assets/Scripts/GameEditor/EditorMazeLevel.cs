@@ -8,6 +8,8 @@ public class EditorMazeLevel : MazeLevel, IEditorLevel
 {
     public bool UnsavedChanges { get; set; }
 
+    public List<FerryRoute> FerryRoutes = new List<FerryRoute>();
+
     public EditorMazeLevel()
     {
 
@@ -34,6 +36,7 @@ public class EditorMazeLevel : MazeLevel, IEditorLevel
         InitialiseEditorTileAreas(mazeLevelData);
         BuildTiles(mazeLevelData);
 
+        FerryRoutes.Clear();
         UnsavedChanges = false;
     }
 

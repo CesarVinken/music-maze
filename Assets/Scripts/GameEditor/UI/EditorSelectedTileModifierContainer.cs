@@ -76,6 +76,7 @@ public abstract class EditorSelectedTileModifierContainer : MonoBehaviour
     public void SetCurrentlyAvailableModifierCategories(EditorTileMainModifierCategory mainTileModifierCategory)
     {
         CurrentlyAvailableTileModifiers.Clear();
+        EditorTileSelector.Instance.ResetColouredTiles();
 
         if (EditorModificationPanelContainer.Instance.SelectedPanel is IEditorTileModificationPanel)
         {
