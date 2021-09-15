@@ -244,6 +244,12 @@ namespace DataSerialisation
                 SerialisableSheetmusicAttribute serialisableSheetmusicAttribute = new SerialisableSheetmusicAttribute();
                 return serialisableSheetmusicAttribute;
             }
+            else if (tileAttribute.GetType() == typeof(FerryRoute))
+            {
+                FerryRoute ferryRoute = tileAttribute as FerryRoute;
+                SerialisableFerryRouteAttribute serialisableFerryRouteAttribute = new SerialisableFerryRouteAttribute(ferryRoute.GetFerryRoutePoints());
+                return serialisableFerryRouteAttribute;
+            }
             else
             {
                 Logger.Error($"Could not serialise the tile attribute {tileAttribute.GetType()}");

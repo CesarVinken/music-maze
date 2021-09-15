@@ -2,6 +2,7 @@
 using DataSerialisation;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class EditorMazeLevel : MazeLevel, IEditorLevel
@@ -69,40 +70,44 @@ public class EditorMazeLevel : MazeLevel, IEditorLevel
             tile.SetGridLocation(serialisableTile.GridLocation.X, serialisableTile.GridLocation.Y);
             tile.SetId(serialisableTile.Id);
             
-
             tileGO.name = "Tile" + tile.GridLocation.X + ", " + tile.GridLocation.Y;
             tileGO.transform.position = GridLocation.GridToVector(tile.GridLocation);
 
             Tiles.Add(tile);
+            TilesByLocation.Add(tile.GridLocation, tile);
+
+            GridLocation furthestBounds = LevelBounds;
+            if (tile.GridLocation.X > furthestBounds.X) _levelBounds.X = tile.GridLocation.X;
+            if (tile.GridLocation.Y > furthestBounds.Y) _levelBounds.Y = tile.GridLocation.Y;
+        }
+
+        for (int j = 0; j < Tiles.Count; j++)
+        {
+            SerialisableTile serialisableTile = mazeLevelData.Tiles[j];
+            EditorMazeTile tile = Tiles[j] as EditorMazeTile;
 
             AddTileAttributes(serialisableTile, tile);
             AddBackgroundSprites(serialisableTile, tile);
             AddCornerFillers(serialisableTile, tile);
             AddTileAreas(serialisableTile, tile);
 
-            TilesByLocation.Add(tile.GridLocation, tile);
-
             ITileMainMaterial mainMaterial = AddMainMaterial(serialisableTile);
             tile.SetMainMaterial(mainMaterial);
 
-            GridLocation furthestBounds = LevelBounds;
-            if (tile.GridLocation.X > furthestBounds.X) _levelBounds.X = tile.GridLocation.X;
-            if (tile.GridLocation.Y > furthestBounds.Y) _levelBounds.Y = tile.GridLocation.Y;
-
             if (serialisableTile.TilesToTransform != null)
             {
-                for (int j = 0; j < serialisableTile.TilesToTransform.Count; j++)
+                for (int k = 0; k < serialisableTile.TilesToTransform.Count; k++)
                 {
-                    if (TileTransformationTriggererByGridLocation.ContainsKey(serialisableTile.TilesToTransform[j]))
+                    if (TileTransformationTriggererByGridLocation.ContainsKey(serialisableTile.TilesToTransform[k]))
                     {
-                        List<EditorMazeTile> transformationTriggerers = TileTransformationTriggererByGridLocation[serialisableTile.TilesToTransform[j]];
+                        List<EditorMazeTile> transformationTriggerers = TileTransformationTriggererByGridLocation[serialisableTile.TilesToTransform[k]];
                         transformationTriggerers.Add(tile);
                     }
                     else
                     {
                         List<EditorMazeTile> transformationTriggerers = new List<EditorMazeTile>();
                         transformationTriggerers.Add(tile);
-                        TileTransformationTriggererByGridLocation.Add(serialisableTile.TilesToTransform[j], transformationTriggerers);
+                        TileTransformationTriggererByGridLocation.Add(serialisableTile.TilesToTransform[k], transformationTriggerers);
                     }
                 }
             }
@@ -110,9 +115,9 @@ public class EditorMazeLevel : MazeLevel, IEditorLevel
 
         foreach (KeyValuePair<SerialisableGridLocation, List<EditorMazeTile>> item in TileTransformationTriggererByGridLocation)
         {
-            for (int i = 0; i < Tiles.Count; i++)
+            for (int l = 0; l < Tiles.Count; l++)
             {
-                EditorMazeTile tile = Tiles[i] as EditorMazeTile;
+                EditorMazeTile tile = Tiles[l] as EditorMazeTile;
                 if(item.Key.X == tile.GridLocation.X && item.Key.Y == tile.GridLocation.Y)
                 {
                     tile.BeautificationTriggerers = item.Value;
@@ -120,9 +125,9 @@ public class EditorMazeLevel : MazeLevel, IEditorLevel
             }
         }
 
-        for (int k = 0; k < Tiles.Count; k++)
+        for (int m = 0; m < Tiles.Count; m++)
         {
-            EditorMazeTile tile = Tiles[k] as EditorMazeTile;
+            EditorMazeTile tile = Tiles[m] as EditorMazeTile;
             tile.AddNeighbours(this);
         }
 
@@ -191,6 +196,21 @@ public class EditorMazeLevel : MazeLevel, IEditorLevel
             else if (type.Equals(typeof(SerialisableSheetmusicAttribute)))
             {
                 tileAttributePlacer.PlaceSheetmusic();
+            }
+            else if (type.Equals(typeof(SerialisableFerryRouteAttribute)))
+            {
+                SerialisableFerryRouteAttribute serialisableFerryRouteAttribute = (SerialisableFerryRouteAttribute)JsonUtility.FromJson(serialisableTileAttribute.SerialisedData, type);
+                List<Tile> ferryRoutePointTiles = new List<Tile>();
+
+                for (int i = 0; i < serialisableFerryRouteAttribute.FerryRoutePoints.Count; i++)
+                {
+                    SerialisableGridLocation serialisablePointLocation = serialisableFerryRouteAttribute.FerryRoutePoints[i];
+                    Logger.Log($"We'll look for {serialisablePointLocation.X}, {serialisablePointLocation.Y}");
+                    Logger.Log($"_tilesByLocation.count {_tilesByLocation.Count}");
+                    Tile pointTile = _tilesByLocation[new GridLocation(serialisablePointLocation.X, serialisablePointLocation.Y)];
+                    ferryRoutePointTiles.Add(pointTile);
+                }
+                tileAttributePlacer.PlaceFerryRoute(ferryRoutePointTiles);
             }
             else
             {
