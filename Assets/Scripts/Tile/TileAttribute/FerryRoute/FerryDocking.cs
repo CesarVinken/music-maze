@@ -10,10 +10,12 @@ public class FerryDocking : MonoBehaviour
     private Direction _dockingDirection;
     private FerryDockingType _dockingType;
 
-    public void Initialise(FerryRoute ferryRoute, FerryDockingType dockingType)
+    public void Initialise(FerryRoute ferryRoute, FerryDockingType dockingType, int dockingDirection)
     {
         _ferryRoute = ferryRoute;
         _dockingType = dockingType;
+        _dockingDirection = DockingDirectionFromInt(dockingDirection);
+        UpdateDockingSprite();
     }
 
     public void SetActive(bool value)
@@ -21,11 +23,12 @@ public class FerryDocking : MonoBehaviour
         gameObject.SetActive(value);
     }
 
-    private Direction FindDockingDirection()
+    public void UpdateDockingDirection()
     {
         List<FerryRoutePoint> ferryRoutePoints = _ferryRoute.GetFerryRoutePoints();
         Tile neighbourTile;
         Tile dockingTile = ferryRoutePoints[0].Tile;
+        Direction foundDirection = Direction.Right;
 
         if (_dockingType == FerryDockingType.DockingStart)
         {
@@ -34,31 +37,35 @@ public class FerryDocking : MonoBehaviour
             {
                 if (neighbourTile != null && neighbourTile.Walkable && neighbourTile.TileMainMaterial is GroundMainMaterial)
                 {
-                    return Direction.Right;
+                    foundDirection = Direction.Right;
+                    return;
                 }
             }
             if (dockingTile.Neighbours.TryGetValue(Direction.Down, out neighbourTile))
             {
                 if (neighbourTile != null && neighbourTile.Walkable && neighbourTile.TileMainMaterial is GroundMainMaterial)
                 {
-                    return Direction.Down;
+                    foundDirection = Direction.Down;
+                    return;
                 }
             }
             if (dockingTile.Neighbours.TryGetValue(Direction.Left, out neighbourTile))
             {
                 if (neighbourTile != null && neighbourTile.Walkable && neighbourTile.TileMainMaterial is GroundMainMaterial)
                 {
-                    return Direction.Left;
+                    foundDirection = Direction.Left;
+                    return;
                 }
             }
             if (dockingTile.Neighbours.TryGetValue(Direction.Up, out neighbourTile))
             {
                 if (neighbourTile != null && neighbourTile.Walkable && neighbourTile.TileMainMaterial is GroundMainMaterial)
                 {
-                    return Direction.Up;
+                    foundDirection = Direction.Up;
+                    return;
                 }
             }
-            return Direction.Right;
+            return;
         }
 
         // It is the second docking point
@@ -78,7 +85,8 @@ public class FerryDocking : MonoBehaviour
                     if (neighbourTile != null && neighbourTile.Walkable && neighbourTile.TileMainMaterial is GroundMainMaterial)
                     {
                         Logger.Warning($"Return {neighboursOfNeighbour.Key}");
-                        return neighboursOfNeighbour.Key;
+                        foundDirection = neighboursOfNeighbour.Key;
+                        return;
                     }
                 }
 
@@ -88,20 +96,16 @@ public class FerryDocking : MonoBehaviour
                     if (dockingTileNeighbour.Value.Walkable && dockingTileNeighbour.Value.TileMainMaterial is GroundMainMaterial)
                     {
                         Logger.Warning($"Return {dockingTileNeighbour.Key}");
-                        return dockingTileNeighbour.Key;
+                        foundDirection = dockingTileNeighbour.Key;
+                        return;
                     }
                 }
             }
         }
-        Logger.Warning($"Return BLURGGH");
-
-        return Direction.Right;
     }
 
     public void UpdateDockingSprite()
     {
-        _dockingDirection = FindDockingDirection();
-
         switch (_dockingDirection)
         {
             case Direction.Right:
@@ -123,6 +127,23 @@ public class FerryDocking : MonoBehaviour
         _spriteRenderer.sprite = MazeSpriteManager.Instance.FerryRouteSprites[_currentSpriteNumber];
     }
 
+    private Direction DockingDirectionFromInt(int dockingDirection)
+    {
+        switch (dockingDirection)
+        {
+            case 0:
+                return Direction.Right;
+            case 1:
+                return Direction.Down;
+            case 2:
+                return Direction.Left;
+            case 3:
+                return Direction.Up;
+            default:
+                return Direction.Right;
+        }
+    }
+
     public void TryTurn()
     {
         Logger.Log("Try turning");
@@ -135,7 +156,11 @@ public class FerryDocking : MonoBehaviour
         }
 
         _spriteRenderer.sprite = MazeSpriteManager.Instance.FerryRouteSprites[_currentSpriteNumber];
+    }
 
+    public Direction GetDockingDirection()
+    {
+        return _dockingDirection;
     }
 
     private void IncreaseSpriteNumber()

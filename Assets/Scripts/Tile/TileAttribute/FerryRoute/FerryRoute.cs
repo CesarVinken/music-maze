@@ -40,9 +40,12 @@ public class FerryRoute : MonoBehaviour, ITileAttribute
 
         Tile = tile;
         ParentId = tile.TileId;
+    }
 
-        _ferryDockingBegin.Initialise(this, FerryDockingType.DockingStart);
-        _ferryDockingEnd.Initialise(this, FerryDockingType.DockingEnd);
+    public void Initialise(int dockingStartDirection, int dockingEndDirection)
+    {
+        _ferryDockingBegin.Initialise(this, FerryDockingType.DockingStart, dockingStartDirection);
+        _ferryDockingEnd.Initialise(this, FerryDockingType.DockingEnd, dockingEndDirection);
     }
 
     public void AddRouteLineRenderer()
@@ -103,11 +106,13 @@ public class FerryRoute : MonoBehaviour, ITileAttribute
     {
         if(_ferryRoutePoints.Count < 2)
         {
+            _ferryDockingBegin.UpdateDockingDirection();
             _ferryDockingBegin.UpdateDockingSprite();
             _ferryDockingEnd.SetActive(false);
         }
         else
         {
+            _ferryDockingEnd.UpdateDockingDirection();
             _ferryDockingEnd.UpdateDockingSprite();
             _ferryDockingEnd.gameObject.transform.position = _ferryRoutePoints[_ferryRoutePoints.Count - 1].Tile.transform.position;
             _ferryDockingEnd.SetActive(true);
@@ -126,4 +131,17 @@ public class FerryRoute : MonoBehaviour, ITileAttribute
         }
     }
 
+    public FerryDocking GetFerryDocking(FerryDockingType ferryDockingType)
+    {
+        switch (ferryDockingType)
+        {
+            case FerryDockingType.DockingStart:
+                return _ferryDockingBegin;
+            case FerryDockingType.DockingEnd:
+                return _ferryDockingEnd;
+            default:
+                Logger.Error($"Requested unknown ferryDockingType '{ferryDockingType}'");
+                return _ferryDockingBegin;
+        }
+    }
 }

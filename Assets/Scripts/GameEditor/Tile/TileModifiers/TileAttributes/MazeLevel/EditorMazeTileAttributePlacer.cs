@@ -164,10 +164,11 @@ public class EditorMazeTileAttributePlacer : MazeTileAttributePlacer<EditorMazeT
         }
     }
 
-    public void PlaceFerryRoute(List<Tile> ferryRoutePointTiles = null)
+    public void PlaceFerryRoute(List<Tile> ferryRoutePointTiles = null, int dockingStartDirection = -1, int dockingEndDirection = -1)
     {
         FerryRoute ferryRoute = (FerryRoute)InstantiateTileAttributeGO<FerryRoute>();
         ferryRoute.SetTile(_tile);
+        ferryRoute.Initialise(dockingStartDirection, dockingEndDirection);
 
         ferryRoute.AddRouteLineRenderer();
 

@@ -7,10 +7,18 @@ namespace DataSerialisation
     public class SerialisableFerryRouteAttribute : ISerialisableTileAttribute
     {
         public List<SerialisableGridLocation> FerryRoutePoints;
+        public int DockingStartDirection = -1;
+        public int DockingEndDirection = -1;
 
-        public SerialisableFerryRouteAttribute(List<FerryRoutePoint> ferryRoutePoints)
+        public SerialisableFerryRouteAttribute(List<FerryRoutePoint> ferryRoutePoints, FerryDocking ferryDockingStart, FerryDocking ferryDockingEnd)
         {
             FerryRoutePoints = SerialiseFerryRoutePoints(ferryRoutePoints);
+            
+            DockingStartDirection = GetNumberFromDirection(ferryDockingStart.GetDockingDirection());
+            if(FerryRoutePoints.Count > 1)
+            {
+                DockingEndDirection = GetNumberFromDirection(ferryDockingEnd.GetDockingDirection());
+            }
         }
 
         private List<SerialisableGridLocation> SerialiseFerryRoutePoints(List<FerryRoutePoint> ferryRoutePoints)
@@ -24,6 +32,23 @@ namespace DataSerialisation
             }
 
             return ferryRoutePointGridLocations;
+        }
+
+        private int GetNumberFromDirection(Direction ferryDockingDirection)
+        {
+            switch (ferryDockingDirection)
+            {
+                case Direction.Right:
+                    return 0;
+                case Direction.Down:
+                    return 1;
+                case Direction.Left:
+                    return 2;
+                case Direction.Up:
+                    return 3;
+                default:
+                    return 0;
+            }
         }
     }
 }
