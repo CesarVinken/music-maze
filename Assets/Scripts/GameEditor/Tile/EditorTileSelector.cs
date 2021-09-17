@@ -206,7 +206,19 @@ public class EditorTileSelector : MonoBehaviour
                     FerryRoutePoint alreadyExistingPoint = currentFerryRoutePoints.FirstOrDefault(p => p.Tile.TileId.Equals(_currentSelectedTile.TileId));
                     if (alreadyExistingPoint != null)
                     {
-                        selectedFerryRoute.RemoveFerryRoutePoints(alreadyExistingPoint);
+                        if (currentFerryRoutePoints.Count < 2 && alreadyExistingPoint.Tile.TileId.Equals(currentFerryRoutePoints[0].Tile.TileId))
+                        {
+                            selectedFerryRoute.TryTurnDocking(FerryDockingType.DockingStart);
+                        }
+                        else if (alreadyExistingPoint.Tile.TileId.Equals(currentFerryRoutePoints[currentFerryRoutePoints.Count - 1].Tile.TileId))
+                        {
+                            selectedFerryRoute.TryTurnDocking(FerryDockingType.DockingEnd);
+                        }
+                        else
+                        {
+                            selectedFerryRoute.RemoveFerryRoutePoints(alreadyExistingPoint);
+                        }
+
                     }
                     return;
                 }

@@ -10,10 +10,8 @@ public class FerryRoute : MonoBehaviour, ITileAttribute
     private int _sortingOrderBase;
     public int SortingOrderBase { get => _sortingOrderBase; set => _sortingOrderBase = value; }
 
-    [SerializeField] private GameObject _dockingBeginGO;
-    [SerializeField] private GameObject _dockingEndGO;
-    [SerializeField] private SpriteRenderer _dockingBeginSpriteRenderer;
-    [SerializeField] private SpriteRenderer _dockingEndSpriteRenderer;
+    [SerializeField] private FerryDocking _ferryDockingBegin;
+    [SerializeField] private FerryDocking _ferryDockingEnd;
 
     private List<FerryRoutePoint> _ferryRoutePoints = new List<FerryRoutePoint>();
     private EditorFerryRouteLineRenderer _editorFerryRouteLineRenderer;
@@ -42,6 +40,9 @@ public class FerryRoute : MonoBehaviour, ITileAttribute
 
         Tile = tile;
         ParentId = tile.TileId;
+
+        _ferryDockingBegin.Initialise(this, FerryDockingType.DockingStart);
+        _ferryDockingEnd.Initialise(this, FerryDockingType.DockingEnd);
     }
 
     public void AddRouteLineRenderer()
@@ -56,7 +57,7 @@ public class FerryRoute : MonoBehaviour, ITileAttribute
         _ferryRoutePoints.Add(new FerryRoutePoint(tile));
         _editorFerryRouteLineRenderer?.UpdateLineRenderer(_ferryRoutePoints);
 
-        UpdateDockingEnd();
+        UpdateDocking();
     }
 
     public void RemoveFerryRoutePoint(Tile tile)
@@ -68,7 +69,7 @@ public class FerryRoute : MonoBehaviour, ITileAttribute
         _ferryRoutePoints.Remove(ferryRoutePoint);
         _editorFerryRouteLineRenderer?.UpdateLineRenderer(_ferryRoutePoints);
 
-        UpdateDockingEnd();
+        UpdateDocking();
     }
 
     // remove all tiles from the route up to the given tile
@@ -98,18 +99,31 @@ public class FerryRoute : MonoBehaviour, ITileAttribute
         return _ferryRoutePoints;
     }
 
-    public void UpdateDockingEnd()
+    public void UpdateDocking()
     {
         if(_ferryRoutePoints.Count < 2)
         {
-            _dockingEndGO.SetActive(false);
-            return;
+            _ferryDockingBegin.UpdateDockingSprite();
+            _ferryDockingEnd.SetActive(false);
         }
-        
-        _dockingEndGO.transform.position = _ferryRoutePoints[_ferryRoutePoints.Count - 1].Tile.transform.position;
-        _dockingEndGO.SetActive(true);
-        
-        // TODO: ADD DOCKING SPRITES IN 4 DIRECTIONS
-        //_dockingEndSpriteRenderer.sprite = MazeSpriteManager.Instance.DockingPointSprites[0];
+        else
+        {
+            _ferryDockingEnd.UpdateDockingSprite();
+            _ferryDockingEnd.gameObject.transform.position = _ferryRoutePoints[_ferryRoutePoints.Count - 1].Tile.transform.position;
+            _ferryDockingEnd.SetActive(true);
+        }      
     }
+
+    public void TryTurnDocking(FerryDockingType ferryDockingType)
+    {
+        if (ferryDockingType == FerryDockingType.DockingStart)
+        {
+            _ferryDockingBegin.TryTurn();
+        }
+        else
+        {
+            _ferryDockingEnd.TryTurn();
+        }
+    }
+
 }
