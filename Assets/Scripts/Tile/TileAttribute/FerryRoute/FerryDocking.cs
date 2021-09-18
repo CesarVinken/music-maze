@@ -16,6 +16,15 @@ public class FerryDocking : MonoBehaviour
         _dockingType = dockingType;
         _dockingDirection = DockingDirectionFromInt(dockingDirection);
         UpdateDockingSprite();
+
+        if(dockingType == FerryDockingType.DockingEnd)
+        {
+            List<FerryRoutePoint> ferryRoutePoints = _ferryRoute.GetFerryRoutePoints();
+            Logger.Log(ferryRoutePoints.Count);
+            transform.position = ferryRoutePoints[ferryRoutePoints.Count - 1].Tile.transform.position;
+        }
+
+        SetActive(true);
     }
 
     public void SetActive(bool value)
@@ -72,7 +81,6 @@ public class FerryDocking : MonoBehaviour
         dockingTile = ferryRoutePoints[ferryRoutePoints.Count - 1].Tile;
         Tile previousPointTile = ferryRoutePoints[ferryRoutePoints.Count - 2].Tile;
 
-        Logger.Log($"previousPointTile at {previousPointTile.GridLocation.X}, {previousPointTile.GridLocation.Y}");
         foreach (KeyValuePair<Direction, Tile> neighboursOfNeighbour in previousPointTile.Neighbours)
         {
             string tileIdOfPossibleDockingTile = neighboursOfNeighbour.Value.TileId;
@@ -84,7 +92,6 @@ public class FerryDocking : MonoBehaviour
                 {
                     if (neighbourTile != null && neighbourTile.Walkable && neighbourTile.TileMainMaterial is GroundMainMaterial)
                     {
-                        Logger.Warning($"Return {neighboursOfNeighbour.Key}");
                         foundDirection = neighboursOfNeighbour.Key;
                         return;
                     }
@@ -95,7 +102,6 @@ public class FerryDocking : MonoBehaviour
                 {
                     if (dockingTileNeighbour.Value.Walkable && dockingTileNeighbour.Value.TileMainMaterial is GroundMainMaterial)
                     {
-                        Logger.Warning($"Return {dockingTileNeighbour.Key}");
                         foundDirection = dockingTileNeighbour.Key;
                         return;
                     }

@@ -44,6 +44,7 @@ public class FerryRoute : MonoBehaviour, ITileAttribute
 
     public void Initialise(int dockingStartDirection, int dockingEndDirection)
     {
+        Logger.Log(_ferryRoutePoints.Count);
         _ferryDockingBegin.Initialise(this, FerryDockingType.DockingStart, dockingStartDirection);
         _ferryDockingEnd.Initialise(this, FerryDockingType.DockingEnd, dockingEndDirection);
     }
@@ -55,7 +56,12 @@ public class FerryRoute : MonoBehaviour, ITileAttribute
         _editorFerryRouteLineRenderer.Initialise(this);
     }
 
-    public void AddFerryRoutePoint(Tile tile)
+    public void AddFerryRoutePointInGame(Tile tile)
+    {
+        _ferryRoutePoints.Add(new FerryRoutePoint(tile));
+    }
+
+    public void AddFerryRoutePointInEditor(Tile tile)
     {
         _ferryRoutePoints.Add(new FerryRoutePoint(tile));
         _editorFerryRouteLineRenderer?.UpdateLineRenderer(_ferryRoutePoints);

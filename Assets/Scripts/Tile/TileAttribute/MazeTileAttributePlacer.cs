@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 
+
 public class MazeTileAttributePlacer<T> : TileAttributePlacer<T> where T : MazeTile
 {
     public override T Tile { get; set; }
@@ -116,5 +117,10 @@ public class MazeTileAttributePlacer<T> : TileAttributePlacer<T> where T : MazeT
         Sheetmusic musicInstrumentCase = (Sheetmusic)InstantiateTileAttributeGO<Sheetmusic>();
 
         Tile.AddAttribute(musicInstrumentCase);
+    }
+
+    public virtual void PlaceFerryRoute(List<Tile> ferryRoutePointTiles, int dockingStartDirection, int dockingEndDirection)
+    {
+
     }
 }

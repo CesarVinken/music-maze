@@ -223,7 +223,7 @@ public class EditorTileSelector : MonoBehaviour
                     return;
                 }
 
-                selectedFerryRoute.AddFerryRoutePoint(_currentSelectedTile);
+                selectedFerryRoute.AddFerryRoutePointInEditor(_currentSelectedTile);
                 ResetColouredTiles();
                 FerryRouteDrawingModeAccessor.Instance.ColourAddableTiles();
             }

@@ -1,4 +1,6 @@
-﻿public class InGameMazeTileAttributePlacer : MazeTileAttributePlacer<InGameMazeTile>
+﻿using System.Collections.Generic;
+
+public class InGameMazeTileAttributePlacer : MazeTileAttributePlacer<InGameMazeTile>
 {
     private InGameMazeTile _tile;
 
@@ -17,5 +19,32 @@
         Tile.SetWalkable(true);
 
         Tile.AddAttribute(playerSpawnpoint);
+    }
+
+    public override void PlaceFerryRoute(List<Tile> ferryRoutePointTiles, int dockingStartDirection, int dockingEndDirection)
+    {
+        Logger.Log("Place ferry route");
+        FerryRoute ferryRoute = (FerryRoute)InstantiateTileAttributeGO<FerryRoute>();
+        ferryRoute.SetTile(_tile);
+
+        //ferryRoute.AddRouteLineRenderer();
+        Logger.Log(ferryRoutePointTiles.Count);
+
+        if (ferryRoutePointTiles == null)
+        {
+            ferryRoute.AddFerryRoutePointInGame(_tile);
+        }
+        else
+        {
+            for (int i = 0; i < ferryRoutePointTiles.Count; i++)
+            {
+                ferryRoute.AddFerryRoutePointInGame(ferryRoutePointTiles[i]);
+            }
+        }
+
+        ferryRoute.Initialise(dockingStartDirection, dockingEndDirection);
+        Tile.AddAttribute(ferryRoute);
+
+        //FerryRouteDrawingModeAccessor.Instance?.CheckForFerryRouteOnTile();
     }
 }

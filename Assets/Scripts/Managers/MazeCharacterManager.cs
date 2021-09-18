@@ -59,7 +59,7 @@ public class MazeCharacterManager : MonoBehaviourPunCallbacks, ICharacterManager
         }
         else if (GameRules.GamePlayerType == GamePlayerType.SplitScreenMultiplayer)
         {
-            Debug.Log("Instantiating Players");
+            Logger.Log(Logger.Initialisation, "Instantiating Players");
 
             SpawnPlayerCharacter(new CharacterBlueprint(new Emmon()), level.PlayerCharacterSpawnpoints[PlayerNumber.Player1].GridLocation, PlayerNumber.Player1);
             SpawnPlayerCharacter(new CharacterBlueprint(new Fae()), level.PlayerCharacterSpawnpoints[PlayerNumber.Player2].GridLocation, PlayerNumber.Player2);
@@ -68,7 +68,7 @@ public class MazeCharacterManager : MonoBehaviourPunCallbacks, ICharacterManager
         }
         else
         {
-            Debug.Log("Instantiating Player 2");
+            Logger.Log(Logger.Initialisation, "Instantiating Player 2");
 
             SpawnPlayerCharacter(new CharacterBlueprint(new Fae()), level.PlayerCharacterSpawnpoints[PlayerNumber.Player2].GridLocation, PlayerNumber.Player2);
         }
@@ -77,52 +77,30 @@ public class MazeCharacterManager : MonoBehaviourPunCallbacks, ICharacterManager
     public PlayerCharacter SpawnPlayerCharacter(CharacterBlueprint character, GridLocation gridLocation, PlayerNumber playerNumber)
     {
         string prefabName = GetPrefabNameByCharacter(character);
-        Logger.Log($"prefab name is {prefabName}");
-        Logger.Log($"prefab name is {character.CharacterType}");
         Vector2 startPosition = GetCharacterGridPosition(GridLocation.GridToVector(gridLocation)); // start position is grid position plus grid tile offset
 
         GameObject characterGO = null;
 
-        //if (character.IsPlayable)
-        //{
-            if (GameRules.GamePlayerType == GamePlayerType.SinglePlayer ||
-                GameRules.GamePlayerType == GamePlayerType.SplitScreenMultiplayer)
-            {
-                // todo: get prefab by string, like in network game case
-                characterGO = GameObject.Instantiate(PlayerCharacterPrefab, startPosition, Quaternion.identity);
-            }
-            else
-            {
-                characterGO = PhotonNetwork.Instantiate(prefabName, startPosition, Quaternion.identity, 0);
-            }
+        if (GameRules.GamePlayerType == GamePlayerType.SinglePlayer ||
+            GameRules.GamePlayerType == GamePlayerType.SplitScreenMultiplayer)
+        {
+            // todo: get prefab by string, like in network game case
+            characterGO = GameObject.Instantiate(PlayerCharacterPrefab, startPosition, Quaternion.identity);
+        }
+        else
+        {
+            characterGO = PhotonNetwork.Instantiate(prefabName, startPosition, Quaternion.identity, 0);
+        }
 
-            PlayerCharacter playerCharacter = characterGO.GetComponent<PlayerCharacter>();
-            playerCharacter.CharacterBlueprint = character;
+        PlayerCharacter playerCharacter = characterGO.GetComponent<PlayerCharacter>();
+        playerCharacter.CharacterBlueprint = character;
 
-            playerCharacter.FreezeCharacter();
-            playerCharacter.SetStartingPoint(
-                playerCharacter, 
-                gridLocation,
-                GameManager.Instance.CurrentGameLevel.PlayerCharacterSpawnpoints[playerCharacter.PlayerNumber]);
-        //}
-        //else
-        //{
-        //    if (GameRules.GamePlayerType == GamePlayerType.SinglePlayer ||
-        //        GameRules.GamePlayerType == GamePlayerType.SplitScreenMultiplayer)
-        //    {
-        //        characterGO = GameObject.Instantiate(EnemyCharacterPrefab, startPosition, Quaternion.identity);
-        //    }
-        //    else
-        //    {
-        //        characterGO = PhotonNetwork.Instantiate(prefabName, startPosition, Quaternion.identity, 0);
-        //    }
-
-        //    EnemyCharacter enemyCharacter = characterGO.GetComponent<EnemyCharacter>();
-        //    enemyCharacter.SetSpawnpoint(enemyCharacter, spawnpoint as EnemySpawnpoint);
-        //    enemyCharacter.SetTileAreas();
-        //    enemyCharacter.FreezeCharacter();
-        //    enemyCharacter.CharacterBlueprint = character;
-        //}
+        playerCharacter.FreezeCharacter();
+        playerCharacter.SetStartingPoint(
+            playerCharacter, 
+            gridLocation,
+            GameManager.Instance.CurrentGameLevel.PlayerCharacterSpawnpoints[playerCharacter.PlayerNumber]
+        );
 
         switch (playerNumber)
         {

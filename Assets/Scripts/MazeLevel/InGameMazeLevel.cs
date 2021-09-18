@@ -58,7 +58,6 @@ public class InGameMazeLevel : MazeLevel, IInGameLevel
             GameObject tileGO = GameObject.Instantiate(MazeLevelGameplayManager.Instance.InGameTilePrefab, _mazeContainer.transform);
 
             InGameMazeTile tile = tileGO.GetComponent<InGameMazeTile>();
-
             tile.SetGridLocation(serialisableTile.GridLocation.X, serialisableTile.GridLocation.Y);
             tile.SetId(serialisableTile.Id);
 
@@ -66,12 +65,6 @@ public class InGameMazeLevel : MazeLevel, IInGameLevel
             tileGO.transform.position = GridLocation.GridToVector(tile.GridLocation);
 
             Tiles.Add(tile);
-
-            AddBackgroundSprites(serialisableTile, tile);
-            AddTileAttributes(serialisableTile, tile);
-            AddCornerFillers(serialisableTile, tile);
-            AddTileAreas(serialisableTile, tile);
-
             TilesByLocation.Add(tile.GridLocation, tile);
 
             GridLocation furthestBounds = LevelBounds;
@@ -81,16 +74,27 @@ public class InGameMazeLevel : MazeLevel, IInGameLevel
             TileTransformationGridLocationByTile.Add(tile, serialisableTile.TilesToTransform);
         }
 
+        for (int j = 0; j < Tiles.Count; j++)
+        {
+            SerialisableTile serialisableTile = mazeLevelData.Tiles[j];
+            InGameMazeTile tile = Tiles[j] as InGameMazeTile;
+
+            AddBackgroundSprites(serialisableTile, tile);
+            AddTileAttributes(serialisableTile, tile);
+            AddCornerFillers(serialisableTile, tile);
+            AddTileAreas(serialisableTile, tile);
+        }
+
         foreach (KeyValuePair<InGameMazeTile, List<SerialisableGridLocation>> item in TileTransformationGridLocationByTile)
         {
             List<InGameMazeTile> tilesToTransform = new List<InGameMazeTile>();
             
-            for (int i = 0; i < item.Value.Count; i++)
+            for (int k = 0; k < item.Value.Count; k++)
             {
-                for (int j = 0; j < Tiles.Count; j++)
+                for (int l = 0; l < Tiles.Count; l++)
                 {
-                    InGameMazeTile tile = Tiles[j] as InGameMazeTile;
-                    if (item.Value[i].X == tile.GridLocation.X && item.Value[i].Y == tile.GridLocation.Y)
+                    InGameMazeTile tile = Tiles[l] as InGameMazeTile;
+                    if (item.Value[k].X == tile.GridLocation.X && item.Value[k].Y == tile.GridLocation.Y)
                     {
                         tilesToTransform.Add(tile);
                         break;
@@ -101,9 +105,9 @@ public class InGameMazeLevel : MazeLevel, IInGameLevel
             item.Key.AddTilesToTransform(tilesToTransform);
         }
 
-        for (int k = 0; k < Tiles.Count; k++)
+        for (int m = 0; m < Tiles.Count; m++)
         {
-            InGameMazeTile tile = Tiles[k] as InGameMazeTile;
+            InGameMazeTile tile = Tiles[m] as InGameMazeTile;
             tile.AddNeighbours(this);
         }
 
@@ -173,6 +177,24 @@ public class InGameMazeLevel : MazeLevel, IInGameLevel
             else if (type.Equals(typeof(SerialisableSheetmusicAttribute)))
             {
                 tileAttributePlacer.PlaceSheetmusic();
+            }
+            else if (type.Equals(typeof(SerialisableFerryRouteAttribute)))
+            {
+                SerialisableFerryRouteAttribute serialisableFerryRouteAttribute = (SerialisableFerryRouteAttribute)JsonUtility.FromJson(serialisableTileAttribute.SerialisedData, type);
+                List<Tile> ferryRoutePointTiles = new List<Tile>();
+
+                for (int i = 0; i < serialisableFerryRouteAttribute.FerryRoutePoints.Count; i++)
+                {
+                    GridLocation tileLocation = new GridLocation(serialisableFerryRouteAttribute.FerryRoutePoints[i].X, serialisableFerryRouteAttribute.FerryRoutePoints[i].Y);
+                    if(_tilesByLocation.TryGetValue(tileLocation, out Tile ferryRoutePointTile))
+                    {
+                        ferryRoutePointTiles.Add(ferryRoutePointTile);
+                    }
+                }
+
+                int dockingStartDirection = serialisableFerryRouteAttribute.DockingStartDirection;
+                int dockingEndDirection = serialisableFerryRouteAttribute.DockingEndDirection;
+                tileAttributePlacer.PlaceFerryRoute(ferryRoutePointTiles, dockingStartDirection, dockingEndDirection);
             }
             else
             {

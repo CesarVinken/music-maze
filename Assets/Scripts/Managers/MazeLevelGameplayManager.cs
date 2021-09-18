@@ -75,26 +75,26 @@ public class MazeLevelGameplayManager : MonoBehaviour, IOnEventCallback, IGamepl
     {
         switch (typeof(T))
         {
-            case Type playerExit when playerExit == typeof(PlayerExit):
-                return _playerExitPrefab;
-            case Type tileObstacle when tileObstacle == typeof(TileObstacle):
-                return _tileObstaclePrefab;
-            case Type playerOnly when playerOnly == typeof(PlayerOnly):
-                return _playerOnlyPrefab;
-            case Type playerSpawnpoint when playerSpawnpoint == typeof(PlayerSpawnpoint):
-                return _playerSpawnpointPrefab;
-            case Type enemySpawnpoint when enemySpawnpoint == typeof(EnemySpawnpoint):
-                return _enemySpawnpointPrefab;
-            case Type ferryRoutePrefab when ferryRoutePrefab == typeof(FerryRoute):
-                return _ferryRoutePrefab;
             case Type bridgePiecePrefab when bridgePiecePrefab == typeof(BridgePiece):
                 return _bridgePiecePrefab;
             case Type bridgeEdgePrefab when bridgeEdgePrefab == typeof(BridgeEdge):
                 return _bridgeEdgePrefab;
+            case Type enemySpawnpoint when enemySpawnpoint == typeof(EnemySpawnpoint):
+                return _enemySpawnpointPrefab;
+            case Type ferryRoutePrefab when ferryRoutePrefab == typeof(FerryRoute):
+                return _ferryRoutePrefab;
             case Type musicInstrumentCasePrefab when musicInstrumentCasePrefab == typeof(MusicInstrumentCase):
                 return _musicInstrumentCasePrefab;
+            case Type playerExit when playerExit == typeof(PlayerExit):
+                return _playerExitPrefab;
+            case Type playerOnly when playerOnly == typeof(PlayerOnly):
+                return _playerOnlyPrefab;
+            case Type playerSpawnpoint when playerSpawnpoint == typeof(PlayerSpawnpoint):
+                return _playerSpawnpointPrefab;
             case Type sheetmusicPrefab when sheetmusicPrefab == typeof(Sheetmusic):
                 return _sheetmusicPrefab;
+            case Type tileObstacle when tileObstacle == typeof(TileObstacle):
+                return _tileObstaclePrefab;
             default:
                 Logger.Error($"Could not find a prefab for the tile attribute type of {typeof(T)}");
                 return null ;
