@@ -10,6 +10,7 @@ public class FerryRoute : MonoBehaviour, ITileAttribute
     private int _sortingOrderBase;
     public int SortingOrderBase { get => _sortingOrderBase; set => _sortingOrderBase = value; }
 
+    [SerializeField] private Ferry _ferry;
     [SerializeField] private FerryDocking _ferryDockingBegin;
     [SerializeField] private FerryDocking _ferryDockingEnd;
 
@@ -47,6 +48,16 @@ public class FerryRoute : MonoBehaviour, ITileAttribute
         Logger.Log(_ferryRoutePoints.Count);
         _ferryDockingBegin.Initialise(this, FerryDockingType.DockingStart, dockingStartDirection);
         _ferryDockingEnd.Initialise(this, FerryDockingType.DockingEnd, dockingEndDirection);
+
+        Direction dockingDirectionBegin = _ferryDockingBegin.GetDockingDirection();
+        if (dockingDirectionBegin == Direction.Right || dockingDirectionBegin == Direction.Left)
+        {
+            _ferry.SetDirection(FerryDirection.Horizontal);
+        }
+        else
+        {
+            _ferry.SetDirection(FerryDirection.Vertical);
+        }
     }
 
     public void AddRouteLineRenderer()
