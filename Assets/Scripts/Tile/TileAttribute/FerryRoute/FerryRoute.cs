@@ -60,7 +60,7 @@ public class FerryRoute : MonoBehaviour, ITileAttribute
 
         if (!EditorManager.InEditor)
         {
-            _ferry.Initialise();
+            _ferry.Initialise(this);
         }
     }
 
@@ -80,7 +80,6 @@ public class FerryRoute : MonoBehaviour, ITileAttribute
     {
         _ferryRoutePoints.Add(new FerryRoutePoint(tile));
         _editorFerryRouteLineRenderer?.UpdateLineRenderer(_ferryRoutePoints);
-
         UpdateDocking();
     }
 
@@ -130,6 +129,16 @@ public class FerryRoute : MonoBehaviour, ITileAttribute
             _ferryDockingBegin.UpdateDockingDirection();
             _ferryDockingBegin.UpdateDockingSprite();
             _ferryDockingEnd.SetActive(false);
+
+            Direction ferryDockingBeginDirection = _ferryDockingBegin.GetDockingDirection();
+            if (ferryDockingBeginDirection == Direction.Right || ferryDockingBeginDirection == Direction.Left)
+            {
+                _ferry.SetDirection(FerryDirection.Horizontal);
+            }
+            else
+            {
+                _ferry.SetDirection(FerryDirection.Vertical);
+            }
         }
         else
         {

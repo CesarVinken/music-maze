@@ -36,7 +36,7 @@ public class FerryDocking : MonoBehaviour
         List<FerryRoutePoint> ferryRoutePoints = _ferryRoute.GetFerryRoutePoints();
         Tile neighbourTile;
         Tile dockingTile = ferryRoutePoints[0].Tile;
-        Direction foundDirection = Direction.Right;
+        _dockingDirection = Direction.Right;
 
         if (_dockingType == FerryDockingType.DockingStart)
         {
@@ -45,7 +45,7 @@ public class FerryDocking : MonoBehaviour
             {
                 if (neighbourTile != null && neighbourTile.Walkable && neighbourTile.TileMainMaterial is GroundMainMaterial)
                 {
-                    foundDirection = Direction.Right;
+                    _dockingDirection = Direction.Right;
                     return;
                 }
             }
@@ -53,7 +53,7 @@ public class FerryDocking : MonoBehaviour
             {
                 if (neighbourTile != null && neighbourTile.Walkable && neighbourTile.TileMainMaterial is GroundMainMaterial)
                 {
-                    foundDirection = Direction.Down;
+                    _dockingDirection = Direction.Down;
                     return;
                 }
             }
@@ -61,7 +61,7 @@ public class FerryDocking : MonoBehaviour
             {
                 if (neighbourTile != null && neighbourTile.Walkable && neighbourTile.TileMainMaterial is GroundMainMaterial)
                 {
-                    foundDirection = Direction.Left;
+                    _dockingDirection = Direction.Left;
                     return;
                 }
             }
@@ -69,7 +69,7 @@ public class FerryDocking : MonoBehaviour
             {
                 if (neighbourTile != null && neighbourTile.Walkable && neighbourTile.TileMainMaterial is GroundMainMaterial)
                 {
-                    foundDirection = Direction.Up;
+                    _dockingDirection = Direction.Up;
                     return;
                 }
             }
@@ -91,7 +91,7 @@ public class FerryDocking : MonoBehaviour
                 {
                     if (neighbourTile != null && neighbourTile.Walkable && neighbourTile.TileMainMaterial is GroundMainMaterial)
                     {
-                        foundDirection = neighboursOfNeighbour.Key;
+                        _dockingDirection = neighboursOfNeighbour.Key;
                         return;
                     }
                 }
@@ -101,7 +101,7 @@ public class FerryDocking : MonoBehaviour
                 {
                     if (dockingTileNeighbour.Value.Walkable && dockingTileNeighbour.Value.TileMainMaterial is GroundMainMaterial)
                     {
-                        foundDirection = dockingTileNeighbour.Key;
+                        _dockingDirection = dockingTileNeighbour.Key;
                         return;
                     }
                 }
