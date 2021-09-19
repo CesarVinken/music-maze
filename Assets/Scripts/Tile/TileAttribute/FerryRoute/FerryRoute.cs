@@ -45,7 +45,6 @@ public class FerryRoute : MonoBehaviour, ITileAttribute
 
     public void Initialise(int dockingStartDirection, int dockingEndDirection)
     {
-        Logger.Log(_ferryRoutePoints.Count);
         _ferryDockingBegin.Initialise(this, FerryDockingType.DockingStart, dockingStartDirection);
         _ferryDockingEnd.Initialise(this, FerryDockingType.DockingEnd, dockingEndDirection);
 
@@ -57,6 +56,11 @@ public class FerryRoute : MonoBehaviour, ITileAttribute
         else
         {
             _ferry.SetDirection(FerryDirection.Vertical);
+        }
+
+        if (!EditorManager.InEditor)
+        {
+            _ferry.Initialise();
         }
     }
 

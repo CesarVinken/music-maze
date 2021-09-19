@@ -17,10 +17,9 @@ public class FerryDocking : MonoBehaviour
         _dockingDirection = DockingDirectionFromInt(dockingDirection);
         UpdateDockingSprite();
 
-        if(dockingType == FerryDockingType.DockingEnd)
+        if (dockingType == FerryDockingType.DockingEnd && !EditorManager.InEditor)
         {
             List<FerryRoutePoint> ferryRoutePoints = _ferryRoute.GetFerryRoutePoints();
-            Logger.Log(ferryRoutePoints.Count);
             transform.position = ferryRoutePoints[ferryRoutePoints.Count - 1].Tile.transform.position;
         }
 

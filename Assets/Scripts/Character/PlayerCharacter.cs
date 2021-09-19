@@ -4,6 +4,7 @@ using System.Collections;
 using Character.CharacterType;
 using Console;
 using PlayerCamera;
+using System.Linq;
 
 namespace Character
 {

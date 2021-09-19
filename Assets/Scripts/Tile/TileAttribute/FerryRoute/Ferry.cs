@@ -3,9 +3,19 @@ using UnityEngine;
 
 public class Ferry : MonoBehaviour
 {
+    public static List<Ferry> Ferries = new List<Ferry>();
+        
     [SerializeField] private SpriteRenderer _spriteRenderer;
 
     public FerryDirection FerryDirection;
+    public MazeTile CurrentLocationTile = null;
+
+    public void Initialise()
+    {
+        GridLocation location = GridLocation.FindClosestGridTile(transform.position);
+        SetNewCurrentLocation(location);
+        Ferries.Add(this);
+    }
 
     public void SetDirection(FerryDirection ferryDirection)
     {
@@ -23,5 +33,16 @@ public class Ferry : MonoBehaviour
                 Logger.Error($"Unknown ferry direction {ferryDirection}");
                 break;
         }
+    }
+
+    public void SetNewCurrentLocation(GridLocation newCurrentLocation)
+    {
+        if (CurrentLocationTile != null)
+        {
+            CurrentLocationTile.SetWalkable(false);
+        }
+
+        CurrentLocationTile = GameManager.Instance.CurrentGameLevel.TilesByLocation[newCurrentLocation] as MazeTile;
+        CurrentLocationTile.SetWalkable(true);
     }
 }
