@@ -303,6 +303,9 @@ namespace Character
             IsCalculatingPath = true;
 
             PathToTarget = _pathfinding.FindNodePath(CurrentGridLocation, targetGridLocation);
+
+            Logger.Log($"PathToTarget {PathToTarget.Count}");
+
             PathToTarget.RemoveAt(0);
 
             IsCalculatingPath = false;
@@ -399,7 +402,7 @@ namespace Character
 
             //Logger.Warning("Start path!");
             IsCalculatingPath = true;
-            //Logger.Log($"TryStartCharacterMovement. {CurrentGridLocation.X},{CurrentGridLocation.Y} to {TargetGridLocation.TargetGridLocation.X}, {TargetGridLocation.TargetGridLocation.Y}");
+            Logger.Log($"TryStartCharacterMovement. {CurrentGridLocation.X},{CurrentGridLocation.Y} to {TargetGridLocation.TargetGridLocation.X}, {TargetGridLocation.TargetGridLocation.Y}");
             PathToTarget = _pathfinding.FindNodePath(CurrentGridLocation, TargetGridLocation.TargetGridLocation);
             PathToTarget.RemoveAt(0);
 
@@ -518,63 +521,68 @@ namespace Character
             Logger.Warning($"Set name of {PlayerNumber} character to {Name}");
         }
 
-        public bool ValidateTarget(TargetLocation targetLocation)
+        public virtual bool ValidateTarget(TargetLocation targetLocation)
         {
-            if (GameManager.Instance.CurrentGameLevel.TilesByLocation.TryGetValue(targetLocation.TargetGridLocation, out Tile targetTile))
-            {
-                Direction direction = targetLocation.TargetDirection;
-
-                if (targetTile.Walkable)
-                {
-                    Tile currentTile = GameManager.Instance.CurrentGameLevel.TilesByLocation[CurrentGridLocation];
-                    BridgePiece bridgePieceOnCurrentTile = currentTile.TryGetAttribute<BridgePiece>();
-                    BridgePiece bridgePieceOnTarget = targetTile.TryGetAttribute<BridgePiece>(); // optimisation: keep bridge locations of the level in a separate list, so we don't have to go over all the tiles in the level
-
-                    // there are no bridges involved
-                    if (bridgePieceOnCurrentTile == null && bridgePieceOnTarget == null)
-                    {
-                        return true;
-                    }
-
-                    // Make sure we go in the correct bridge direction
-                    if (bridgePieceOnCurrentTile && bridgePieceOnTarget)
-                    {
-
-                        if (bridgePieceOnCurrentTile.BridgePieceDirection == BridgePieceDirection.Horizontal &&
-                            bridgePieceOnTarget.BridgePieceDirection == BridgePieceDirection.Horizontal &&
-                            (direction == Direction.Left || direction == Direction.Right))
-                        {
-                            return true;
-                        }
-
-                        if (bridgePieceOnCurrentTile.BridgePieceDirection == BridgePieceDirection.Vertical &&
-                            bridgePieceOnTarget.BridgePieceDirection == BridgePieceDirection.Vertical &&
-                            (direction == Direction.Up || direction == Direction.Down))
-                        {
-                            return true;
-                        }
-
-                        return false;
-                    }
-
-                    if ((bridgePieceOnCurrentTile?.BridgePieceDirection == BridgePieceDirection.Horizontal ||
-                        bridgePieceOnTarget?.BridgePieceDirection == BridgePieceDirection.Horizontal) &&
-                        (direction == Direction.Left || direction == Direction.Right))
-                    {
-                        return true;
-                    }
-
-                    if ((bridgePieceOnCurrentTile?.BridgePieceDirection == BridgePieceDirection.Vertical ||
-                        bridgePieceOnTarget?.BridgePieceDirection == BridgePieceDirection.Vertical) &&
-                        (direction == Direction.Up || direction == Direction.Down))
-                    {
-                        return true;
-                    }
-                    return false;
-                }
-            }
-            return false;
+            return true;
         }
+
+        //public bool ValidateTarget(TargetLocation targetLocation)
+        //{
+        //    if (GameManager.Instance.CurrentGameLevel.TilesByLocation.TryGetValue(targetLocation.TargetGridLocation, out Tile targetTile))
+        //    {
+        //        Direction direction = targetLocation.TargetDirection;
+
+        //        if (targetTile.Walkable)
+        //        {
+        //            Tile currentTile = GameManager.Instance.CurrentGameLevel.TilesByLocation[CurrentGridLocation];
+        //            BridgePiece bridgePieceOnCurrentTile = currentTile.TryGetAttribute<BridgePiece>();
+        //            BridgePiece bridgePieceOnTarget = targetTile.TryGetAttribute<BridgePiece>(); // optimisation: keep bridge locations of the level in a separate list, so we don't have to go over all the tiles in the level
+
+        //            // there are no bridges involved
+        //            if (bridgePieceOnCurrentTile == null && bridgePieceOnTarget == null)
+        //            {
+        //                return true;
+        //            }
+
+        //            // Make sure we go in the correct bridge direction
+        //            if (bridgePieceOnCurrentTile && bridgePieceOnTarget)
+        //            {
+
+        //                if (bridgePieceOnCurrentTile.BridgePieceDirection == BridgePieceDirection.Horizontal &&
+        //                    bridgePieceOnTarget.BridgePieceDirection == BridgePieceDirection.Horizontal &&
+        //                    (direction == Direction.Left || direction == Direction.Right))
+        //                {
+        //                    return true;
+        //                }
+
+        //                if (bridgePieceOnCurrentTile.BridgePieceDirection == BridgePieceDirection.Vertical &&
+        //                    bridgePieceOnTarget.BridgePieceDirection == BridgePieceDirection.Vertical &&
+        //                    (direction == Direction.Up || direction == Direction.Down))
+        //                {
+        //                    return true;
+        //                }
+
+        //                return false;
+        //            }
+
+        //            if ((bridgePieceOnCurrentTile?.BridgePieceDirection == BridgePieceDirection.Horizontal ||
+        //                bridgePieceOnTarget?.BridgePieceDirection == BridgePieceDirection.Horizontal) &&
+        //                (direction == Direction.Left || direction == Direction.Right))
+        //            {
+        //                return true;
+        //            }
+
+        //            if ((bridgePieceOnCurrentTile?.BridgePieceDirection == BridgePieceDirection.Vertical ||
+        //                bridgePieceOnTarget?.BridgePieceDirection == BridgePieceDirection.Vertical) &&
+        //                (direction == Direction.Up || direction == Direction.Down))
+        //            {
+        //                return true;
+        //            }
+        //            return false;
+        //        }
+        //    }
+        //    return false;
+        //}
 
         private void SetPlayerKeyboardInput()
         {

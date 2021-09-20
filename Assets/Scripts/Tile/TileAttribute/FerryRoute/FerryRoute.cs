@@ -33,11 +33,15 @@ public class FerryRoute : MonoBehaviour, ITileAttribute
     {
         if (string.IsNullOrEmpty(tile.TileId)) Logger.Error("This tile does not have an Id");
 
-        EditorMazeLevel editorMazeLevel = GameManager.Instance.CurrentEditorLevel as EditorMazeLevel;
-        if (editorMazeLevel != null)
+        if (EditorManager.InEditor)
         {
-            editorMazeLevel.FerryRoutes.Add(this);
+            GameManager.Instance.CurrentEditorLevel.FerryRoutes.Add(this);
         }
+        else 
+        {
+            GameManager.Instance.CurrentGameLevel.FerryRoutes.Add(this);
+        }
+
 
         Tile = tile;
         ParentId = tile.TileId;

@@ -20,6 +20,8 @@ public class MazeLevel : IGameScene<Tile>
 
     public List<PlayerExit> MazeExits = new List<PlayerExit>();
 
+    public List<FerryRoute> FerryRoutes { get => _ferryRoutes; set => _ferryRoutes = value; }
+    private List<FerryRoute> _ferryRoutes = new List<FerryRoute>();
 
     private Dictionary<PlayerNumber, CharacterSpawnpoint> _playerCharacterSpawnpoints = new Dictionary<PlayerNumber, CharacterSpawnpoint>();
     public Dictionary<PlayerNumber, CharacterSpawnpoint> PlayerCharacterSpawnpoints { get => _playerCharacterSpawnpoints; set => _playerCharacterSpawnpoints = value;}

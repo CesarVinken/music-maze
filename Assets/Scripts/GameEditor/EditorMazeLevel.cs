@@ -9,8 +9,6 @@ public class EditorMazeLevel : MazeLevel, IEditorLevel
 {
     public bool UnsavedChanges { get; set; }
 
-    public List<FerryRoute> FerryRoutes = new List<FerryRoute>();
-
     public EditorMazeLevel()
     {
 

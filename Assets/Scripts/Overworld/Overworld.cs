@@ -5,13 +5,14 @@ using UnityEngine;
 public class Overworld : IGameScene<Tile>
 {
     public string Name { get; set; }
-    protected  List<Tile> _tiles = new List<Tile>(); 
+    protected List<Tile> _tiles = new List<Tile>(); 
     public List<Tile> Tiles { get => _tiles; set => _tiles = value; }
 
     protected Dictionary<string, TileArea> _tileAreas = new Dictionary<string, TileArea>();
     public Dictionary<string, TileArea> TileAreas { get => _tileAreas; set => _tileAreas = value; }
 
     public List<MazeLevelEntry> MazeEntries = new List<MazeLevelEntry>();
+    public List<FerryRoute> FerryRoutes { get; set; }
 
     protected GridLocation _levelBounds = new GridLocation(0, 0);
     public GridLocation LevelBounds { get => _levelBounds; set => _levelBounds = value; }

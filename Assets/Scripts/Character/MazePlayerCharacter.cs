@@ -9,6 +9,7 @@ namespace Character
     {
         public bool HasReachedExit = false;
         public bool FinishedFirstBonus = false;
+        public bool IsControllingFerry = false;
 
         public event Action PlayerExitsEvent;
         public event Action PlayerCaughtEvent;
@@ -70,6 +71,150 @@ namespace Character
         public void Exit()
         {
             PlayerExitsEvent?.Invoke();
+        }
+
+        public void ToggleFerryControl(Ferry ferry)
+        {
+            IsControllingFerry = IsControllingFerry ? false : true;
+
+            if (IsControllingFerry)
+            {
+                ferry.SetControllingPlayerCharacter(this);
+            }
+            else
+            {
+                ferry.SetControllingPlayerCharacter(null);
+            }
+            _animationHandler.IsControllingFerry = IsControllingFerry;
+        }
+
+        public override bool ValidateTarget(TargetLocation targetLocation)
+        {
+            if (!GameManager.Instance.CurrentGameLevel.TilesByLocation.TryGetValue(targetLocation.TargetGridLocation, out Tile targetTile))
+            {
+                return false;
+            }
+
+            Direction direction = targetLocation.TargetDirection;
+
+            if (targetTile.Walkable)
+            {
+                Tile currentTile = GameManager.Instance.CurrentGameLevel.TilesByLocation[CurrentGridLocation];
+
+                if (IsControllingFerry)
+                {
+                    //move if the targetted tile is a ferry route point
+                    return true;
+                }
+                else
+                {
+
+                    bool validatedForLand = ValidateInLandMode(direction, currentTile, targetTile);
+
+                    return validatedForLand;
+                }
+                //if (IsControllingFerry)
+                //{
+                //    //move if the targetted tile is a ferry route point
+                //}
+                //else
+                //{
+                    //BridgePiece bridgePieceOnCurrentTile = currentTile.TryGetAttribute<BridgePiece>();
+                    //BridgePiece bridgePieceOnTarget = targetTile.TryGetAttribute<BridgePiece>(); // optimisation: keep bridge locations of the level in a separate list, so we don't have to go over all the tiles in the level
+
+                    //// there are no bridges involved
+                    //if (bridgePieceOnCurrentTile == null && bridgePieceOnTarget == null)
+                    //{
+                    //    return true;
+                    //}
+
+                    //// Make sure we go in the correct bridge direction
+                    //if (bridgePieceOnCurrentTile && bridgePieceOnTarget)
+                    //{
+
+                    //    if (bridgePieceOnCurrentTile.BridgePieceDirection == BridgePieceDirection.Horizontal &&
+                    //        bridgePieceOnTarget.BridgePieceDirection == BridgePieceDirection.Horizontal &&
+                    //        (direction == Direction.Left || direction == Direction.Right))
+                    //    {
+                    //        return true;
+                    //    }
+
+                    //    if (bridgePieceOnCurrentTile.BridgePieceDirection == BridgePieceDirection.Vertical &&
+                    //        bridgePieceOnTarget.BridgePieceDirection == BridgePieceDirection.Vertical &&
+                    //        (direction == Direction.Up || direction == Direction.Down))
+                    //    {
+                    //        return true;
+                    //    }
+
+                    //    return false;
+                    //}
+
+                    //if ((bridgePieceOnCurrentTile?.BridgePieceDirection == BridgePieceDirection.Horizontal ||
+                    //    bridgePieceOnTarget?.BridgePieceDirection == BridgePieceDirection.Horizontal) &&
+                    //    (direction == Direction.Left || direction == Direction.Right))
+                    //{
+                    //    return true;
+                    //}
+
+                    //if ((bridgePieceOnCurrentTile?.BridgePieceDirection == BridgePieceDirection.Vertical ||
+                    //    bridgePieceOnTarget?.BridgePieceDirection == BridgePieceDirection.Vertical) &&
+                    //    (direction == Direction.Up || direction == Direction.Down))
+                    //{
+                    //    return true;
+                    //}
+                    //return false;
+                //}
+               
+            }
+            return false;
+        }
+
+        private bool ValidateInLandMode(Direction direction, Tile currentTile, Tile targetTile)
+        {
+            BridgePiece bridgePieceOnCurrentTile = currentTile.TryGetAttribute<BridgePiece>();
+            BridgePiece bridgePieceOnTarget = targetTile.TryGetAttribute<BridgePiece>(); // optimisation: keep bridge locations of the level in a separate list, so we don't have to go over all the tiles in the level
+
+            // there are no bridges involved
+            if (bridgePieceOnCurrentTile == null && bridgePieceOnTarget == null)
+            {
+                return true;
+            }
+
+            // Make sure we go in the correct bridge direction
+            if (bridgePieceOnCurrentTile && bridgePieceOnTarget)
+            {
+
+                if (bridgePieceOnCurrentTile.BridgePieceDirection == BridgePieceDirection.Horizontal &&
+                    bridgePieceOnTarget.BridgePieceDirection == BridgePieceDirection.Horizontal &&
+                    (direction == Direction.Left || direction == Direction.Right))
+                {
+                    return true;
+                }
+
+                if (bridgePieceOnCurrentTile.BridgePieceDirection == BridgePieceDirection.Vertical &&
+                    bridgePieceOnTarget.BridgePieceDirection == BridgePieceDirection.Vertical &&
+                    (direction == Direction.Up || direction == Direction.Down))
+                {
+                    return true;
+                }
+
+                return false;
+            }
+
+            if ((bridgePieceOnCurrentTile?.BridgePieceDirection == BridgePieceDirection.Horizontal ||
+                bridgePieceOnTarget?.BridgePieceDirection == BridgePieceDirection.Horizontal) &&
+                (direction == Direction.Left || direction == Direction.Right))
+            {
+                return true;
+            }
+
+            if ((bridgePieceOnCurrentTile?.BridgePieceDirection == BridgePieceDirection.Vertical ||
+                bridgePieceOnTarget?.BridgePieceDirection == BridgePieceDirection.Vertical) &&
+                (direction == Direction.Up || direction == Direction.Down))
+            {
+                return true;
+            }
+            return false;
         }
 
         private void OnPlayerExit()

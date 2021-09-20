@@ -1,3 +1,4 @@
+using Character;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -6,15 +7,38 @@ public class Ferry : MonoBehaviour
     public static List<Ferry> Ferries = new List<Ferry>();
         
     [SerializeField] private SpriteRenderer _spriteRenderer;
+    private MazePlayerCharacter controllingPlayerCharacter = null;
+    private FerryRoute _ferryRoute;
 
     public FerryDirection FerryDirection;
     public MazeTile CurrentLocationTile = null;
 
-    public void Initialise()
+    public void Initialise(FerryRoute ferryRoute)
     {
+        _ferryRoute = ferryRoute;
+
         GridLocation location = GridLocation.FindClosestGridTile(transform.position);
         SetNewCurrentLocation(location);
         Ferries.Add(this);
+    }
+
+    public void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.Return))
+        {
+            Dictionary <PlayerNumber, MazePlayerCharacter> playerCharacters = GameManager.Instance.CharacterManager.GetPlayers<MazePlayerCharacter>();
+
+            foreach (KeyValuePair<PlayerNumber, MazePlayerCharacter> item in playerCharacters)
+            {
+                MazePlayerCharacter playerCharacter = item.Value;
+                if (playerCharacter.CurrentGridLocation.X == CurrentLocationTile?.GridLocation.X &&
+                    playerCharacter.CurrentGridLocation.Y == CurrentLocationTile?.GridLocation.Y)
+                {
+                    Logger.Log($"playerCharacter {playerCharacter.Name} is on the Ferry and wants to activate it");
+                    playerCharacter.ToggleFerryControl(this);
+                }
+            }
+        }
     }
 
     public void SetDirection(FerryDirection ferryDirection)
@@ -44,5 +68,37 @@ public class Ferry : MonoBehaviour
 
         CurrentLocationTile = GameManager.Instance.CurrentGameLevel.TilesByLocation[newCurrentLocation] as MazeTile;
         CurrentLocationTile.SetWalkable(true);
+    }
+
+    public void SetControllingPlayerCharacter(MazePlayerCharacter playerCharacter)
+    {
+        controllingPlayerCharacter = playerCharacter;
+        Logger.Log($"The player controlling the ferry is now {controllingPlayerCharacter?.Name}");
+
+        if(playerCharacter == null) // If there is no longer a controlling character, make the ferry route points inaccible again
+        {
+            MakeFerryRouteAccessibleForPlayer(false);
+        }
+        else
+        {
+            MakeFerryRouteAccessibleForPlayer(true);
+        }
+    }
+
+    public void MakeFerryRouteAccessibleForPlayer(bool makeAccessible)
+    {
+        List<FerryRoutePoint> ferryRoutePoints = _ferryRoute.GetFerryRoutePoints();
+
+        for (int i = 0; i < ferryRoutePoints.Count; i++)
+        {
+            Tile tile = ferryRoutePoints[i].Tile;
+            //The current tile of the ferry should always be accessible
+            if (tile.TileId.Equals(CurrentLocationTile.TileId))
+            {
+                ferryRoutePoints[i].Tile.SetWalkable(true);
+                continue;
+            }
+            tile.SetWalkable(makeAccessible);
+        }
     }
 }

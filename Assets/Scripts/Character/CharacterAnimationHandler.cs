@@ -22,6 +22,18 @@ namespace Character
             }
         }
 
+        private bool _isControllingFerry = false;
+        public bool IsControllingFerry
+        {
+            get { return _isControllingFerry; }
+            set
+            {
+                ////Logger.Log(Logger.Locomotion, "Set _isControllingFerry for animation to {0}", value);
+                _isControllingFerry = value;
+                _animator.SetBool("ControllingFerry", _isControllingFerry); // TODO? Use hashtable instead of string name for animations (= more efficient?)
+            }
+        }
+
         [SerializeField] private PhotonAnimatorView _photonAnimatorView;
 
         private float timeInIdle = 0f;
@@ -44,14 +56,6 @@ namespace Character
         public void SetAnimationControllerForCharacterType(ICharacter characterType)
         {
             _animator.runtimeAnimatorController = characterType.GetAnimationController();
-
-            //if (GameRules.GamePlayerType == GamePlayerType.NetworkMultiPlayer)
-            //{
-            //    // valid for both player and enemy animators
-            //    _photonAnimatorView.SetParameterSynchronized("Locomotion", PhotonAnimatorView.ParameterType.Bool, PhotonAnimatorView.SynchronizeType.Discrete);
-            //    _photonAnimatorView.SetParameterSynchronized("Horizontal", PhotonAnimatorView.ParameterType.Float, PhotonAnimatorView.SynchronizeType.Discrete);
-            //    _photonAnimatorView.SetParameterSynchronized("Vertical", PhotonAnimatorView.ParameterType.Float, PhotonAnimatorView.SynchronizeType.Discrete);
-            //}
         }
 
         public void SetHorizontal(float speed)

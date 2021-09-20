@@ -278,13 +278,11 @@ public abstract class Tile : MonoBehaviour
         //Add RIGHT
         if (GridLocation.X < level.LevelBounds.X)
         {
-            Tile tile = level.TilesByLocation[new GridLocation(GridLocation.X + 1, GridLocation.Y)];
-            Neighbours.Add(Direction.Right, tile);
-            if (Walkable && tile.Walkable)
-            {
-                PathNodeNeighbours.Add(Direction.Right, tile.PathNode);
-            }
-        } 
+            //TODO:: Find an efficient way if a tile is a point on a ferryRoute
+            Tile neighbourTile = level.TilesByLocation[new GridLocation(GridLocation.X + 1, GridLocation.Y)];
+            Neighbours.Add(Direction.Right, neighbourTile);
+            TryAddTileNode(Direction.Right, neighbourTile);
+        }
         else
         {
             Neighbours.Add(Direction.Right, null);
@@ -293,12 +291,9 @@ public abstract class Tile : MonoBehaviour
         //Add DOWN
         if (GridLocation.Y > 0)
         {
-            Tile tile = level.TilesByLocation[new GridLocation(GridLocation.X, GridLocation.Y - 1)];
-            Neighbours.Add(Direction.Down, tile);
-            if (Walkable && tile.Walkable)
-            {
-                PathNodeNeighbours.Add(Direction.Down, tile.PathNode);
-            }
+            Tile neighbourTile = level.TilesByLocation[new GridLocation(GridLocation.X, GridLocation.Y - 1)];
+            Neighbours.Add(Direction.Down, neighbourTile);
+            TryAddTileNode(Direction.Down, neighbourTile);
         }
         else
         {
@@ -307,12 +302,9 @@ public abstract class Tile : MonoBehaviour
         //Add LEFT
         if (GridLocation.X > 0)
         {
-            Tile tile = level.TilesByLocation[new GridLocation(GridLocation.X - 1, GridLocation.Y)];
-            Neighbours.Add(Direction.Left, tile);
-            if (Walkable && tile.Walkable)
-            {
-                PathNodeNeighbours.Add(Direction.Left, tile.PathNode);
-            }
+            Tile neighbourTile = level.TilesByLocation[new GridLocation(GridLocation.X - 1, GridLocation.Y)];
+            Neighbours.Add(Direction.Left, neighbourTile);
+            TryAddTileNode(Direction.Left, neighbourTile);
         }
         else
         {
@@ -321,17 +313,69 @@ public abstract class Tile : MonoBehaviour
         //Add UP
         if (GridLocation.Y < level.LevelBounds.Y)
         {
-            Tile tile = level.TilesByLocation[new GridLocation(GridLocation.X, GridLocation.Y + 1)];
-            Neighbours.Add(Direction.Up, tile);
-            if (Walkable && tile.Walkable)
-            {
-                PathNodeNeighbours.Add(Direction.Up, tile.PathNode);
-            }
+            Tile neighbourTile = level.TilesByLocation[new GridLocation(GridLocation.X, GridLocation.Y + 1)];
+            Neighbours.Add(Direction.Up, neighbourTile);
+            TryAddTileNode(Direction.Up, neighbourTile);
         }
         else
         {
             Neighbours.Add(Direction.Up, null);
         }
+    }
+
+    private void TryAddTileNode(Direction direction, Tile neighbourTile)
+    {
+        if (Walkable && neighbourTile.Walkable)
+        {
+            PathNodeNeighbours.Add(direction, neighbourTile.PathNode);
+            return;
+        }
+
+        // Water tiles on ferry routes are possibly walkable
+        List<FerryRoute> ferryRoutes = GameManager.Instance.CurrentGameLevel.FerryRoutes;
+
+        for (int i = 0; i < ferryRoutes.Count; i++)
+        {
+            List<FerryRoutePoint> ferryRoutePoints = ferryRoutes[i].GetFerryRoutePoints();
+            FerryRoutePoint ferryRoutePointThisTile = null;
+            FerryRoutePoint ferryRoutePointNeighbourTile = null;
+            bool thisTileIsDockingPlace = false;
+            bool neighbourTileIsDockingPlace = false;
+
+            for (int j = 0; j < ferryRoutePoints.Count; j++)
+            {
+                GridLocation ferryRoutePointLocation = ferryRoutePoints[j].Tile.GridLocation;
+                if(ferryRoutePointLocation.X == GridLocation.X && ferryRoutePointLocation.Y == GridLocation.Y)
+                {
+                    ferryRoutePointThisTile = ferryRoutePoints[j];
+                    if(j == 0 || j == ferryRoutePoints.Count - 1)
+                    {
+                        thisTileIsDockingPlace = true;
+                    }
+                }
+                if (ferryRoutePointLocation.X == neighbourTile.GridLocation.X && ferryRoutePointLocation.Y == neighbourTile.GridLocation.Y)
+                {
+                    ferryRoutePointNeighbourTile = ferryRoutePoints[j];
+                    if(j == 0 || j == ferryRoutePoints.Count - 1)
+                    {
+                        neighbourTileIsDockingPlace = true;
+                    }
+                }
+            }
+
+            if(ferryRoutePointThisTile != null && ferryRoutePointNeighbourTile != null)
+            {
+                // We add a pathnode because we established that WE are a ferryRoutePoint, and the neighbour is a ferryRoutePoint on the same route as well!
+                PathNodeNeighbours.Add(direction, neighbourTile.PathNode);
+            }
+            else if ((neighbourTileIsDockingPlace && ferryRoutePointThisTile == null && Walkable) ||
+                thisTileIsDockingPlace && ferryRoutePointNeighbourTile == null && neighbourTile.Walkable)
+            {
+                // We add a pathnoed because we establised that the we are at the intersection between a docking place and the next (walkable) tile
+                PathNodeNeighbours.Add(direction, neighbourTile.PathNode);
+            }
+        }
+
     }
 
     public void AddBridgeEdge(BridgePiece bridgePieceConnection, Direction neighbourSide, Direction edgeSide)

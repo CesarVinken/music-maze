@@ -55,6 +55,66 @@ namespace Character
             }
         }
 
+        public override bool ValidateTarget(TargetLocation targetLocation)
+        {
+            if (GameManager.Instance.CurrentGameLevel.TilesByLocation.TryGetValue(targetLocation.TargetGridLocation, out Tile targetTile))
+            {
+                return false;
+            }
+            
+            Direction direction = targetLocation.TargetDirection;
+
+            if (targetTile.Walkable)
+            {
+                Tile currentTile = GameManager.Instance.CurrentGameLevel.TilesByLocation[CurrentGridLocation];
+                BridgePiece bridgePieceOnCurrentTile = currentTile.TryGetAttribute<BridgePiece>();
+                BridgePiece bridgePieceOnTarget = targetTile.TryGetAttribute<BridgePiece>(); // optimisation: keep bridge locations of the level in a separate list, so we don't have to go over all the tiles in the level
+
+                // there are no bridges involved
+                if (bridgePieceOnCurrentTile == null && bridgePieceOnTarget == null)
+                {
+                    return true;
+                }
+
+                // Make sure we go in the correct bridge direction
+                if (bridgePieceOnCurrentTile && bridgePieceOnTarget)
+                {
+
+                    if (bridgePieceOnCurrentTile.BridgePieceDirection == BridgePieceDirection.Horizontal &&
+                        bridgePieceOnTarget.BridgePieceDirection == BridgePieceDirection.Horizontal &&
+                        (direction == Direction.Left || direction == Direction.Right))
+                    {
+                        return true;
+                    }
+
+                    if (bridgePieceOnCurrentTile.BridgePieceDirection == BridgePieceDirection.Vertical &&
+                        bridgePieceOnTarget.BridgePieceDirection == BridgePieceDirection.Vertical &&
+                        (direction == Direction.Up || direction == Direction.Down))
+                    {
+                        return true;
+                    }
+
+                    return false;
+                }
+
+                if ((bridgePieceOnCurrentTile?.BridgePieceDirection == BridgePieceDirection.Horizontal ||
+                    bridgePieceOnTarget?.BridgePieceDirection == BridgePieceDirection.Horizontal) &&
+                    (direction == Direction.Left || direction == Direction.Right))
+                {
+                    return true;
+                }
+
+                if ((bridgePieceOnCurrentTile?.BridgePieceDirection == BridgePieceDirection.Vertical ||
+                    bridgePieceOnTarget?.BridgePieceDirection == BridgePieceDirection.Vertical) &&
+                    (direction == Direction.Up || direction == Direction.Down))
+                {
+                    return true;
+                }
+                return false;
+            }
+            return false;
+        }
+
         public void PerformMazeLevelEntryAction(string mazeName)
         {
             Logger.Log($"Go to maze {mazeName}");
