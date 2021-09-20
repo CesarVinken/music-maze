@@ -74,16 +74,16 @@ public class Pathfinding {
 
                 if (!neighbourNode.Tile.Walkable) {
                     // A not-walkable node should still be considered in case we are on a ferry and we can walk up and down sea tiles (which are not walkable)
-                    if(_character is MazePlayerCharacter)
+                    if(_character is PlayerCharacter)
                     {
-                        MazePlayerCharacter mazePlayerCharacter = _character as MazePlayerCharacter;
+                        PlayerCharacter playerCharacter = _character as PlayerCharacter;
 
-                        if(mazePlayerCharacter.ControllingFerry == null)
+                        if(playerCharacter.ControllingFerry == null)
                         {
                             closedList.Add(neighbourNode);
                             continue;
                         }
-                        List<FerryRoutePoint> ferryRoutePoints = mazePlayerCharacter.ControllingFerry.FerryRoute.GetFerryRoutePoints();
+                        List<FerryRoutePoint> ferryRoutePoints = playerCharacter.ControllingFerry.FerryRoute.GetFerryRoutePoints();
                         if (!ferryRoutePoints.Any(point => point.Tile.TileId.Equals(neighbourNode.Tile.TileId)))
                         {
                             closedList.Add(neighbourNode);

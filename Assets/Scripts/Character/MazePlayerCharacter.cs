@@ -12,8 +12,6 @@ namespace Character
         public bool HasReachedExit = false;
         public bool FinishedFirstBonus = false;
 
-        public Ferry ControllingFerry = null;
-
         public event Action PlayerExitsEvent;
         public event Action PlayerCaughtEvent;
 
@@ -106,8 +104,6 @@ namespace Character
 
                 if (ControllingFerry != null)
                 {
-                    Logger.Log("Validate4");
-                    Logger.Log($"targetTile.TileMainMaterial {targetTile.TileMainMaterial == null}");
                     //move if the targetted tile is a ferry route point
                     if (targetTile.TileMainMaterial.GetType() == typeof(GroundMainMaterial))
                     {
@@ -125,11 +121,9 @@ namespace Character
             }
             else if (ControllingFerry)
             {
-                Logger.Log("We are controlling the ferry so lets try!");
                 List<FerryRoutePoint> ferryRoutePoints = ControllingFerry.FerryRoute.GetFerryRoutePoints();
                 if(ferryRoutePoints.Any(point => point.Tile.TileId.Equals(targetTile.TileId)))
                 {
-                    Logger.Log("Hubbelelem");
                     return true;
                 }
             }

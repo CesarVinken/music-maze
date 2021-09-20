@@ -35,6 +35,8 @@ namespace Character
         protected float _pointerPresserTimer = 1;
         protected const float _pointerPresserDelay = 0.25f;
 
+        public Ferry ControllingFerry = null;
+
         public override void Awake()
         {
             Guard.CheckIsNull(_playerCollider, "_playerCollider", gameObject);
@@ -371,8 +373,14 @@ namespace Character
 
             GridLocation currentGridLocation = GridLocation.VectorToGrid(transform.position);
 
-            //Order character to go to another tile
-            _animationHandler.SetDirection(direction);
+            if(ControllingFerry != null)
+            {
+                _animationHandler.SetDirectionOnFerry(ControllingFerry, direction);
+            }
+            else
+            {
+                _animationHandler.SetDirection(direction);
+            }
 
             switch (direction)
             {
@@ -399,7 +407,6 @@ namespace Character
                 _animationHandler.SetIdle();
                 return;
             }
-
             //Logger.Warning("Start path!");
             IsCalculatingPath = true;
             Logger.Log($"TryStartCharacterMovement. {CurrentGridLocation.X},{CurrentGridLocation.Y} to {TargetGridLocation.TargetGridLocation.X}, {TargetGridLocation.TargetGridLocation.Y}");

@@ -16,4 +16,24 @@ public static class DirectionHelper
                 return Direction.Right;
         }
     }
+
+    public static bool IsAlligningWithFerry(FerryDirection ferryDirection, Direction direction)
+    {
+        if (ferryDirection == FerryDirection.Horizontal)
+        {
+            if (direction == Direction.Left || direction == Direction.Right)
+            {
+                return true;
+            }
+            return false;
+        }
+        else
+        {
+            if (direction == Direction.Up || direction == Direction.Down)
+            {
+                return true;
+            }
+            return false;
+        }
+    }
 }

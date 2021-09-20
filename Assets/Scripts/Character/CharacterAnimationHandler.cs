@@ -100,6 +100,16 @@ namespace Character
             InLocomotion = value;
         }
 
+        public void SetDirectionOnFerry(Ferry ferry, Direction direction)
+        {
+            // If we are controlling the ferry, we do not want to turn in a different direction than the direction of the ferry
+            if (!DirectionHelper.IsAlligningWithFerry(ferry.FerryDirection, direction))
+            {
+                return;
+            }
+            SetDirection(direction);
+        }
+
         public void SetDirection(Direction direction)
         {
             switch (direction)
