@@ -1,5 +1,6 @@
 ﻿using Character;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class Pathfinding {
@@ -72,8 +73,28 @@ public class Pathfinding {
                 if (closedList.Contains(neighbourNode)) continue;
 
                 if (!neighbourNode.Tile.Walkable) {
-                    closedList.Add(neighbourNode);
-                    continue;
+                    // A not-walkable node should still be considered in case we are on a ferry and we can walk up and down sea tiles (which are not walkable)
+                    if(_character is MazePlayerCharacter)
+                    {
+                        MazePlayerCharacter mazePlayerCharacter = _character as MazePlayerCharacter;
+
+                        if(mazePlayerCharacter.ControllingFerry == null)
+                        {
+                            closedList.Add(neighbourNode);
+                            continue;
+                        }
+                        List<FerryRoutePoint> ferryRoutePoints = mazePlayerCharacter.ControllingFerry.FerryRoute.GetFerryRoutePoints();
+                        if (!ferryRoutePoints.Any(point => point.Tile.TileId.Equals(neighbourNode.Tile.TileId)))
+                        {
+                            closedList.Add(neighbourNode);
+                            continue; // even though we are on a ferry, the examined tile is not an adjacent tile that is part of the ferry route
+                        }
+                    }
+                    else
+                    {
+                        closedList.Add(neighbourNode);
+                        continue;
+                    }
                 }
 
                 // restrictions for Enemies

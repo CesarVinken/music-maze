@@ -125,7 +125,7 @@ namespace Character
                 direction == Direction.Up && transform.position.y >= targetVector2Pos.y + GridLocation.OffsetToTileMiddle - roundingDifference)
             {
                 SetCurrentGridLocation(nextGridLocation);
-
+                
                 PathToTarget.RemoveAt(0);
                 if (PathToTarget.Count == 0)
                 {

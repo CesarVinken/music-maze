@@ -8,14 +8,14 @@ public class Ferry : MonoBehaviour
         
     [SerializeField] private SpriteRenderer _spriteRenderer;
     public MazePlayerCharacter ControllingPlayerCharacter { get; private set; }
-    private FerryRoute _ferryRoute;
+    public FerryRoute FerryRoute { get; private set; }
 
     public FerryDirection FerryDirection;
     public MazeTile CurrentLocationTile = null;
 
     public void Initialise(FerryRoute ferryRoute)
     {
-        _ferryRoute = ferryRoute;
+        FerryRoute = ferryRoute;
 
         GridLocation location = GridLocation.FindClosestGridTile(transform.position);
         SetNewCurrentLocation(location);
@@ -37,6 +37,17 @@ public class Ferry : MonoBehaviour
                     Logger.Log($"playerCharacter {playerCharacter.Name} is on the Ferry and wants to activate it");
                     playerCharacter.ToggleFerryControl(this);
                 }
+            }
+        }
+
+        if(ControllingPlayerCharacter != null)
+        {
+            transform.position = new Vector2(ControllingPlayerCharacter.transform.position.x - 0.5f, ControllingPlayerCharacter.transform.position.y - 0.5f);
+            if(CurrentLocationTile.GridLocation.X != ControllingPlayerCharacter.CurrentGridLocation.X ||
+                CurrentLocationTile.GridLocation.Y != ControllingPlayerCharacter.CurrentGridLocation.Y)
+            {
+                SetNewCurrentLocation(ControllingPlayerCharacter.CurrentGridLocation);
+                Logger.Log($"Current location of FERRY is now {CurrentLocationTile.GridLocation.X}, {CurrentLocationTile.GridLocation.Y}");
             }
         }
     }
@@ -88,7 +99,7 @@ public class Ferry : MonoBehaviour
 
     public void MakeFerryRouteAccessibleForPlayer(bool makeAccessible)
     {
-        List<FerryRoutePoint> ferryRoutePoints = _ferryRoute.GetFerryRoutePoints();
+        List<FerryRoutePoint> ferryRoutePoints = FerryRoute.GetFerryRoutePoints();
 
         for (int i = 0; i < ferryRoutePoints.Count; i++)
         {

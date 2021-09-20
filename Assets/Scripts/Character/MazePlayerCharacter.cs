@@ -1,6 +1,8 @@
 ﻿using Photon.Pun;
 using System;
 using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 namespace Character
@@ -98,9 +100,9 @@ namespace Character
 
             Direction direction = targetLocation.TargetDirection;
 
+            Tile currentTile = GameManager.Instance.CurrentGameLevel.TilesByLocation[CurrentGridLocation];
             if (targetTile.Walkable)
             {
-                Tile currentTile = GameManager.Instance.CurrentGameLevel.TilesByLocation[CurrentGridLocation];
 
                 if (ControllingFerry != null)
                 {
@@ -120,6 +122,16 @@ namespace Character
 
                     return validatedForLand;
                 }      
+            }
+            else if (ControllingFerry)
+            {
+                Logger.Log("We are controlling the ferry so lets try!");
+                List<FerryRoutePoint> ferryRoutePoints = ControllingFerry.FerryRoute.GetFerryRoutePoints();
+                if(ferryRoutePoints.Any(point => point.Tile.TileId.Equals(targetTile.TileId)))
+                {
+                    Logger.Log("Hubbelelem");
+                    return true;
+                }
             }
             return false;
         }
