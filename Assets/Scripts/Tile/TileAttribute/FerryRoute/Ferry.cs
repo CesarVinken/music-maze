@@ -7,7 +7,7 @@ public class Ferry : MonoBehaviour
     public static List<Ferry> Ferries = new List<Ferry>();
         
     [SerializeField] private SpriteRenderer _spriteRenderer;
-    private MazePlayerCharacter controllingPlayerCharacter = null;
+    public MazePlayerCharacter ControllingPlayerCharacter { get; private set; }
     private FerryRoute _ferryRoute;
 
     public FerryDirection FerryDirection;
@@ -72,15 +72,16 @@ public class Ferry : MonoBehaviour
 
     public void SetControllingPlayerCharacter(MazePlayerCharacter playerCharacter)
     {
-        controllingPlayerCharacter = playerCharacter;
-        Logger.Log($"The player controlling the ferry is now {controllingPlayerCharacter?.Name}");
+        ControllingPlayerCharacter = playerCharacter;
 
         if(playerCharacter == null) // If there is no longer a controlling character, make the ferry route points inaccible again
         {
+            Logger.Log($"None is controlling the ferry now");
             MakeFerryRouteAccessibleForPlayer(false);
         }
         else
         {
+            Logger.Log($"The player controlling the ferry is now {ControllingPlayerCharacter?.Name}");
             MakeFerryRouteAccessibleForPlayer(true);
         }
     }

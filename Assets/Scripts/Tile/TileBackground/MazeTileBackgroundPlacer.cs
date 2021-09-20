@@ -27,6 +27,11 @@ public class MazeTileBackgroundPlacer<T> : TileBackgroundPlacer<T> where T : Maz
         mazeTileBaseGround.WithConnectionScoreInfo(connectionScoreInfo);
         mazeTileBaseGround.SetTile(Tile);
 
+        if(connectionScoreInfo.RawConnectionScore == 16)
+        {
+            Tile.SetMainMaterial(new GroundMainMaterial());
+        }
+        
         Tile.AddBackground(mazeTileBaseGround);
     }
 

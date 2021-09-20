@@ -9,7 +9,8 @@ namespace Character
     {
         public bool HasReachedExit = false;
         public bool FinishedFirstBonus = false;
-        public bool IsControllingFerry = false;
+
+        public Ferry ControllingFerry = null;
 
         public event Action PlayerExitsEvent;
         public event Action PlayerCaughtEvent;
@@ -75,9 +76,9 @@ namespace Character
 
         public void ToggleFerryControl(Ferry ferry)
         {
-            IsControllingFerry = IsControllingFerry ? false : true;
+            ControllingFerry = ControllingFerry ? null : ferry;
 
-            if (IsControllingFerry)
+            if (ControllingFerry)
             {
                 ferry.SetControllingPlayerCharacter(this);
             }
@@ -85,7 +86,7 @@ namespace Character
             {
                 ferry.SetControllingPlayerCharacter(null);
             }
-            _animationHandler.IsControllingFerry = IsControllingFerry;
+            _animationHandler.IsControllingFerry = ControllingFerry;
         }
 
         public override bool ValidateTarget(TargetLocation targetLocation)
@@ -101,9 +102,15 @@ namespace Character
             {
                 Tile currentTile = GameManager.Instance.CurrentGameLevel.TilesByLocation[CurrentGridLocation];
 
-                if (IsControllingFerry)
+                if (ControllingFerry != null)
                 {
+                    Logger.Log("Validate4");
+                    Logger.Log($"targetTile.TileMainMaterial {targetTile.TileMainMaterial == null}");
                     //move if the targetted tile is a ferry route point
+                    if (targetTile.TileMainMaterial.GetType() == typeof(GroundMainMaterial))
+                    {
+                        ToggleFerryControl(ControllingFerry);
+                    }
                     return true;
                 }
                 else
@@ -112,59 +119,7 @@ namespace Character
                     bool validatedForLand = ValidateInLandMode(direction, currentTile, targetTile);
 
                     return validatedForLand;
-                }
-                //if (IsControllingFerry)
-                //{
-                //    //move if the targetted tile is a ferry route point
-                //}
-                //else
-                //{
-                    //BridgePiece bridgePieceOnCurrentTile = currentTile.TryGetAttribute<BridgePiece>();
-                    //BridgePiece bridgePieceOnTarget = targetTile.TryGetAttribute<BridgePiece>(); // optimisation: keep bridge locations of the level in a separate list, so we don't have to go over all the tiles in the level
-
-                    //// there are no bridges involved
-                    //if (bridgePieceOnCurrentTile == null && bridgePieceOnTarget == null)
-                    //{
-                    //    return true;
-                    //}
-
-                    //// Make sure we go in the correct bridge direction
-                    //if (bridgePieceOnCurrentTile && bridgePieceOnTarget)
-                    //{
-
-                    //    if (bridgePieceOnCurrentTile.BridgePieceDirection == BridgePieceDirection.Horizontal &&
-                    //        bridgePieceOnTarget.BridgePieceDirection == BridgePieceDirection.Horizontal &&
-                    //        (direction == Direction.Left || direction == Direction.Right))
-                    //    {
-                    //        return true;
-                    //    }
-
-                    //    if (bridgePieceOnCurrentTile.BridgePieceDirection == BridgePieceDirection.Vertical &&
-                    //        bridgePieceOnTarget.BridgePieceDirection == BridgePieceDirection.Vertical &&
-                    //        (direction == Direction.Up || direction == Direction.Down))
-                    //    {
-                    //        return true;
-                    //    }
-
-                    //    return false;
-                    //}
-
-                    //if ((bridgePieceOnCurrentTile?.BridgePieceDirection == BridgePieceDirection.Horizontal ||
-                    //    bridgePieceOnTarget?.BridgePieceDirection == BridgePieceDirection.Horizontal) &&
-                    //    (direction == Direction.Left || direction == Direction.Right))
-                    //{
-                    //    return true;
-                    //}
-
-                    //if ((bridgePieceOnCurrentTile?.BridgePieceDirection == BridgePieceDirection.Vertical ||
-                    //    bridgePieceOnTarget?.BridgePieceDirection == BridgePieceDirection.Vertical) &&
-                    //    (direction == Direction.Up || direction == Direction.Down))
-                    //{
-                    //    return true;
-                    //}
-                    //return false;
-                //}
-               
+                }      
             }
             return false;
         }
