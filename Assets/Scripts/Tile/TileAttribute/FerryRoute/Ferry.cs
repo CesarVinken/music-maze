@@ -1,5 +1,6 @@
 using Character;
 using System.Collections.Generic;
+using UI;
 using UnityEngine;
 
 public class Ferry : MonoBehaviour
@@ -51,6 +52,44 @@ public class Ferry : MonoBehaviour
                 {
                     Logger.Log($"playerCharacter {playerCharacter.Name} is on the Ferry and wants to activate it");
                     playerCharacter.ToggleFerryControl(this);
+                }
+            }
+        }
+
+        if (Input.GetMouseButtonDown(0))
+        {
+            // if the ferry is not in a docking place, do not listen to the Mouse click
+            if (CurrentLocationTile?.TileId != _dockingStartTile.TileId &&
+                CurrentLocationTile?.TileId != _dockingEndTile.TileId)
+            {
+                return;
+            }
+
+            Vector2 worldPoint = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+            RaycastHit2D hit = Physics2D.Raycast(worldPoint, Vector2.zero);
+            
+            if (hit.collider != null)
+            {
+                Logger.Log(hit.transform.name);
+                MazePlayerCharacter playerCharacter = hit.transform.gameObject.GetComponent<MazePlayerCharacter>();
+                
+                if (playerCharacter == null)
+                {
+                    return;
+                }
+
+                if (playerCharacter.CurrentGridLocation.X == CurrentLocationTile?.GridLocation.X &&
+                    playerCharacter.CurrentGridLocation.Y == CurrentLocationTile?.GridLocation.Y)
+                {
+                    Logger.Log($"playerCharacter {playerCharacter.Name} is on the Ferry and wants to activate it");
+                    Sprite buttonSprite = EditorCanvasUI.Instance.TileAttributeIcons[9]; // Temporary
+
+                    MainScreenCameraCanvas.Instance.CreateMapInteractionButton(
+                            playerCharacter,
+                            new Vector2(CurrentLocationTile.GridLocation.X, CurrentLocationTile.GridLocation.Y - 1),
+                            MapInteractionAction.PerformControlFerryAction,
+                            "",
+                            buttonSprite);
                 }
             }
         }

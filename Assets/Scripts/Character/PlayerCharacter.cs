@@ -4,7 +4,8 @@ using System.Collections;
 using Character.CharacterType;
 using Console;
 using PlayerCamera;
-using System.Linq;
+using System.Collections.Generic;
+using UI;
 
 namespace Character
 {
@@ -36,6 +37,7 @@ namespace Character
         protected const float _pointerPresserDelay = 0.25f;
 
         public Ferry ControllingFerry = null;
+        public List<MapInteractionButton> MapInteractionButtonsForPlayer = new List<MapInteractionButton>();
 
         public override void Awake()
         {
@@ -306,8 +308,6 @@ namespace Character
 
             PathToTarget = _pathfinding.FindNodePath(CurrentGridLocation, targetGridLocation);
 
-            Logger.Log($"PathToTarget {PathToTarget.Count}");
-
             PathToTarget.RemoveAt(0);
 
             IsCalculatingPath = false;
@@ -407,9 +407,9 @@ namespace Character
                 _animationHandler.SetIdle();
                 return;
             }
-            //Logger.Warning("Start path!");
+
             IsCalculatingPath = true;
-            Logger.Log($"TryStartCharacterMovement. {CurrentGridLocation.X},{CurrentGridLocation.Y} to {TargetGridLocation.TargetGridLocation.X}, {TargetGridLocation.TargetGridLocation.Y}");
+            //Logger.Log($"TryStartCharacterMovement. {CurrentGridLocation.X},{CurrentGridLocation.Y} to {TargetGridLocation.TargetGridLocation.X}, {TargetGridLocation.TargetGridLocation.Y}");
             PathToTarget = _pathfinding.FindNodePath(CurrentGridLocation, TargetGridLocation.TargetGridLocation);
             PathToTarget.RemoveAt(0);
 

@@ -1,6 +1,5 @@
 ﻿using DataSerialisation;
 using Photon.Pun;
-using System.Collections.Generic;
 using UI;
 using UnityEngine;
 
@@ -9,7 +8,6 @@ namespace Character
     public class OverworldPlayerCharacter : PlayerCharacter
     {
         public MazeLevelEntry OccupiedMazeLevelEntry = null;
-        public List<MapInteractionButton> MapInteractionButtonsForPlayer = new List<MapInteractionButton>();
 
         public override void Awake()
         {
@@ -49,7 +47,12 @@ namespace Character
                 {
                     if (MapInteractionButtonsForPlayer.Count == 0)
                     {
-                        MainScreenCameraCanvas.Instance.CreateMapInteractionButton(this, new Vector2(OccupiedMazeLevelEntry.Tile.GridLocation.X, OccupiedMazeLevelEntry.Tile.GridLocation.Y), "Enter " + OccupiedMazeLevelEntry.MazeLevelName);
+                        MainScreenCameraCanvas.Instance.CreateMapInteractionButton(
+                            this,
+                            new Vector2(OccupiedMazeLevelEntry.Tile.GridLocation.X, OccupiedMazeLevelEntry.Tile.GridLocation.Y),
+                            MapInteractionAction.PerformMazeLevelEntryAction,
+                            "Enter " + OccupiedMazeLevelEntry.MazeLevelName,
+                            null);
                     }
                 }
             }

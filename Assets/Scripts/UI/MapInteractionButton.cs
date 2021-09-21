@@ -6,14 +6,17 @@ namespace UI
 {
     public class MapInteractionButton : MonoBehaviour, IMapInteractionButton
     {
+        [SerializeField] private Image _image;
         [SerializeField] private Text _mapTextLabel;
-        private Vector2 _buttonWorldBasePosition;
-        [SerializeField] public OverworldPlayerCharacter TriggerPlayer;
-        private Camera _cameraToUse = null;
+        [SerializeField] private Button _mapInteractionButton;
 
+        private Vector2 _buttonWorldBasePosition;
+        [SerializeField] public PlayerCharacter TriggerPlayer;
+        private Camera _cameraToUse = null;
 
         private void Awake()
         {
+            Guard.CheckIsNull(_image, "image", gameObject);
             Guard.CheckIsNull(_mapTextLabel, "MapTextLabel", gameObject);
         }
 
@@ -31,7 +34,12 @@ namespace UI
             _mapTextLabel.text = mapText;
         }
 
-        public void ShowMapInteractionButton(OverworldPlayerCharacter player, Vector2 pos, string mapText)
+        private void SetMapInteractionButtonSprite(Sprite sprite)
+        {
+            _image.sprite = sprite;
+        }
+
+        public void ShowMapInteractionButton(PlayerCharacter player, Vector2 pos, MapInteractionAction mapInteractionAction, string mapText, Sprite sprite = null)
         {
             _buttonWorldBasePosition = pos;
             TriggerPlayer = player;
@@ -48,7 +56,13 @@ namespace UI
 
             Vector2 positionAdjustedForScreenPoint = _cameraToUse.WorldToScreenPoint(new Vector2(_buttonWorldBasePosition.x + 0.5f, _buttonWorldBasePosition.y + 1));
 
+            _mapInteractionButton.onClick.AddListener(() =>
+            {
+                ExecuteMapInteraction(mapInteractionAction);
+            });
+
             SetMapInteractionButtonLabel(mapText);
+            SetMapInteractionButtonSprite(sprite);
             transform.position = new Vector2(positionAdjustedForScreenPoint.x, positionAdjustedForScreenPoint.y);
             gameObject.SetActive(true);
         }
@@ -58,15 +72,40 @@ namespace UI
             Destroy(gameObject);
         }
 
-        public void ExecuteMapInteraction()
+        public void ExecuteMapInteraction(MapInteractionAction actionToExecute)
         {
-            string mazeName = TriggerPlayer.OccupiedMazeLevelEntry.MazeLevelName;
-            TriggerPlayer.PerformMazeLevelEntryAction(mazeName);
+            switch (actionToExecute)
+            {
+                case MapInteractionAction.PerformMazeLevelEntryAction:
+                    PerformMazeLevelEntryAction();
+                    break;
+                case MapInteractionAction.PerformControlFerryAction:
+                    PerformControlFerryAction();
+                    break;
+                default:
+                    break;
+            }
+
         }
 
         public bool IsActive()
         {
             return gameObject.activeSelf;
+        }
+
+        private void PerformControlFerryAction()
+        {
+            Logger.Log("PerformControlFerryAction");
+        }
+
+        private void PerformMazeLevelEntryAction()
+        {
+            OverworldPlayerCharacter triggeringPlayerCharacter = TriggerPlayer as OverworldPlayerCharacter;
+
+            if (triggeringPlayerCharacter == null) return;
+
+            string mazeName = triggeringPlayerCharacter.OccupiedMazeLevelEntry.MazeLevelName;
+            triggeringPlayerCharacter.PerformMazeLevelEntryAction(mazeName);
         }
     }
 }

@@ -5,8 +5,8 @@ namespace UI
 {
     public interface IMapInteractionButton
     {
-        void ShowMapInteractionButton(OverworldPlayerCharacter triggerPlayer, Vector2 pos, string mapText);
-        void ExecuteMapInteraction();
+        void ShowMapInteractionButton(PlayerCharacter triggerPlayer, Vector2 pos, MapInteractionAction mapInteractionAction, string mapText, Sprite sprite = null);
+        void ExecuteMapInteraction(MapInteractionAction actionToExecute);
         void DestroyMapInteractionButton();
     }
 }

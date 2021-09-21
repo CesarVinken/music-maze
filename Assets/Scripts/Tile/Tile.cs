@@ -334,7 +334,7 @@ public abstract class Tile : MonoBehaviour
         // Water tiles on ferry routes are possibly walkable
         List<FerryRoute> ferryRoutes = GameManager.Instance.CurrentGameLevel.FerryRoutes;
 
-        for (int i = 0; i < ferryRoutes.Count; i++)
+        for (int i = 0; i < ferryRoutes?.Count; i++)
         {
             List<FerryRoutePoint> ferryRoutePoints = ferryRoutes[i].GetFerryRoutePoints();
             FerryRoutePoint ferryRoutePointThisTile = null;

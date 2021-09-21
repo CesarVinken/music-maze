@@ -19,14 +19,14 @@ namespace UI
         }
 
         // Make generic so different types of button interactions can be used, not just Maze Entry
-        public void CreateMapInteractionButton(OverworldPlayerCharacter player, Vector2 pos, string mapText)
+        public void CreateMapInteractionButton(PlayerCharacter player, Vector2 pos, MapInteractionAction mapInteractionAction, string mapText, Sprite sprite)
         {
             Logger.Log($"Create map interaction for player {player.PlayerNumber}");
 
             GameObject mapInteractionButtonGO = Instantiate(MapInteractionButtonPrefab, transform);
             MapInteractionButton mapInteractionButton = mapInteractionButtonGO.GetComponent<MapInteractionButton>();
 
-            mapInteractionButton.ShowMapInteractionButton(player, pos, mapText);
+            mapInteractionButton.ShowMapInteractionButton(player, pos, mapInteractionAction, mapText, sprite);
 
             MapInteractionButtons.Add(mapInteractionButton);
             player.MapInteractionButtonsForPlayer.Add(mapInteractionButton);
