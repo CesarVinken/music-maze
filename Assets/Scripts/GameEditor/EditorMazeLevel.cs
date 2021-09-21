@@ -77,6 +77,15 @@ public class EditorMazeLevel : MazeLevel, IEditorLevel
             GridLocation furthestBounds = LevelBounds;
             if (tile.GridLocation.X > furthestBounds.X) _levelBounds.X = tile.GridLocation.X;
             if (tile.GridLocation.Y > furthestBounds.Y) _levelBounds.Y = tile.GridLocation.Y;
+
+            ITileMainMaterial mainMaterial = AddMainMaterial(serialisableTile);
+            tile.SetMainMaterial(mainMaterial);
+        }
+
+        for (int m = 0; m < Tiles.Count; m++)
+        {
+            EditorMazeTile tile = Tiles[m] as EditorMazeTile;
+            tile.AddNeighbours(this);
         }
 
         for (int j = 0; j < Tiles.Count; j++)
@@ -89,8 +98,6 @@ public class EditorMazeLevel : MazeLevel, IEditorLevel
             AddCornerFillers(serialisableTile, tile);
             AddTileAreas(serialisableTile, tile);
 
-            ITileMainMaterial mainMaterial = AddMainMaterial(serialisableTile);
-            tile.SetMainMaterial(mainMaterial);
 
             if (serialisableTile.TilesToTransform != null)
             {
@@ -123,11 +130,11 @@ public class EditorMazeLevel : MazeLevel, IEditorLevel
             }
         }
 
-        for (int m = 0; m < Tiles.Count; m++)
-        {
-            EditorMazeTile tile = Tiles[m] as EditorMazeTile;
-            tile.AddNeighbours(this);
-        }
+        //for (int m = 0; m < Tiles.Count; m++)
+        //{
+        //    EditorMazeTile tile = Tiles[m] as EditorMazeTile;
+        //    tile.AddNeighbours(this);
+        //}
 
         ConnectBridgeEdgesToTheirBridgePieces();
     }

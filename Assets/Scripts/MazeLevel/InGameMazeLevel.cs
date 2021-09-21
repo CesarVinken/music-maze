@@ -74,6 +74,12 @@ public class InGameMazeLevel : MazeLevel, IInGameLevel
             TileTransformationGridLocationByTile.Add(tile, serialisableTile.TilesToTransform);
         }
 
+        for (int m = 0; m < Tiles.Count; m++)
+        {
+            InGameMazeTile tile = Tiles[m] as InGameMazeTile;
+            tile.AddNeighbours(this);
+        }
+
         for (int j = 0; j < Tiles.Count; j++)
         {
             SerialisableTile serialisableTile = mazeLevelData.Tiles[j];
@@ -103,12 +109,6 @@ public class InGameMazeLevel : MazeLevel, IInGameLevel
             }
 
             item.Key.AddTilesToTransform(tilesToTransform);
-        }
-
-        for (int m = 0; m < Tiles.Count; m++)
-        {
-            InGameMazeTile tile = Tiles[m] as InGameMazeTile;
-            tile.AddNeighbours(this);
         }
 
         ConnectBridgeEdgesToTheirBridgePieces();

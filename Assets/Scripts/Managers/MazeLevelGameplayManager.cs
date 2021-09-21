@@ -221,6 +221,7 @@ public class MazeLevelGameplayManager : MonoBehaviour, IOnEventCallback, IGamepl
         Logger.Log(Logger.Initialisation, "Unload level {0}", Level);
         Level.Tiles.Clear();
         Level.TilesByLocation.Clear();
+        Level.FerryRoutes.Clear();
         CameraManager.Instance.ResetCameras();
         Level = null;
 

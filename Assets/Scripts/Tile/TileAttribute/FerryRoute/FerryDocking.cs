@@ -4,6 +4,7 @@ using UnityEngine;
 public class FerryDocking : MonoBehaviour
 {
     [SerializeField] private SpriteRenderer _spriteRenderer;
+    public Tile DockingTile;
 
     private FerryRoute _ferryRoute;
     private int _currentSpriteNumber = 0;
@@ -17,10 +18,18 @@ public class FerryDocking : MonoBehaviour
         _dockingDirection = DockingDirectionFromInt(dockingDirection);
         UpdateDockingSprite();
 
-        if (dockingType == FerryDockingType.DockingEnd && !EditorManager.InEditor)
+        if (!EditorManager.InEditor)
         {
             List<FerryRoutePoint> ferryRoutePoints = _ferryRoute.GetFerryRoutePoints();
-            transform.position = ferryRoutePoints[ferryRoutePoints.Count - 1].Tile.transform.position;
+            if (dockingType == FerryDockingType.DockingEnd)
+            {
+                transform.position = ferryRoutePoints[ferryRoutePoints.Count - 1].Tile.transform.position;
+                DockingTile = ferryRoutePoints[ferryRoutePoints.Count - 1].Tile;
+            }
+            else
+            {
+                DockingTile = ferryRoutePoints[0].Tile;
+            }
         }
 
         SetActive(true);
@@ -33,7 +42,7 @@ public class FerryDocking : MonoBehaviour
 
     public void UpdateDockingDirection()
     {
-        List<FerryRoutePoint> ferryRoutePoints = _ferryRoute.GetFerryRoutePoints();
+        List <FerryRoutePoint> ferryRoutePoints = _ferryRoute.GetFerryRoutePoints();
         Tile neighbourTile;
         Tile dockingTile = ferryRoutePoints[0].Tile;
         _dockingDirection = Direction.Right;
@@ -41,6 +50,7 @@ public class FerryDocking : MonoBehaviour
         if (_dockingType == FerryDockingType.DockingStart)
         {
             dockingTile = ferryRoutePoints[0].Tile;
+
             if (dockingTile.Neighbours.TryGetValue(Direction.Right, out neighbourTile))
             {
                 if (neighbourTile != null && neighbourTile.Walkable && neighbourTile.TileMainMaterial is GroundMainMaterial)
@@ -151,7 +161,6 @@ public class FerryDocking : MonoBehaviour
 
     public void TryTurn()
     {
-        Logger.Log("Try turning");
         bool hasTurned = false;
 
         while (!hasTurned)

@@ -126,6 +126,7 @@ public class FerryRoute : MonoBehaviour, ITileAttribute
         return _ferryRoutePoints;
     }
 
+    // called in editor
     public void UpdateDocking()
     {
         if(_ferryRoutePoints.Count < 2)

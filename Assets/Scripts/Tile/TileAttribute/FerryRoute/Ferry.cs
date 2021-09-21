@@ -13,6 +13,9 @@ public class Ferry : MonoBehaviour
     public FerryDirection FerryDirection;
     public MazeTile CurrentLocationTile = null;
 
+    private Tile _dockingStartTile;
+    private Tile _dockingEndTile;
+
     public void Initialise(FerryRoute ferryRoute)
     {
         FerryRoute = ferryRoute;
@@ -20,12 +23,24 @@ public class Ferry : MonoBehaviour
         GridLocation location = GridLocation.FindClosestGridTile(transform.position);
         SetNewCurrentLocation(location);
         Ferries.Add(this);
+
+        _dockingStartTile = ferryRoute.GetFerryDocking(FerryDockingType.DockingStart).DockingTile;
+        _dockingEndTile = ferryRoute.GetFerryDocking(FerryDockingType.DockingEnd)?.DockingTile;
     }
 
     public void Update()
     {
+        if (EditorManager.InEditor) return;
+
         if (Input.GetKeyDown(KeyCode.Return))
         {
+            // if the ferry is not in a docking place, do not listen to the Return key
+            if(CurrentLocationTile?.TileId != _dockingStartTile.TileId &&
+                CurrentLocationTile?.TileId != _dockingEndTile.TileId)
+            {
+                return;
+            }
+
             Dictionary <PlayerNumber, MazePlayerCharacter> playerCharacters = GameManager.Instance.CharacterManager.GetPlayers<MazePlayerCharacter>();
 
             foreach (KeyValuePair<PlayerNumber, MazePlayerCharacter> item in playerCharacters)

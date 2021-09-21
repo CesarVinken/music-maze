@@ -275,6 +275,7 @@ public abstract class Tile : MonoBehaviour
 
     public void AddNeighbours<T>(T level) where T : IGameScene<Tile>
     {
+        Logger.Log("add neighbours");
         //Add RIGHT
         if (GridLocation.X < level.LevelBounds.X)
         {
@@ -371,6 +372,7 @@ public abstract class Tile : MonoBehaviour
             else if ((neighbourTileIsDockingPlace && ferryRoutePointThisTile == null && Walkable) ||
                 thisTileIsDockingPlace && ferryRoutePointNeighbourTile == null && neighbourTile.Walkable)
             {
+                Logger.Log($"We want to add direction {direction} for the tile at {GridLocation.X}, {GridLocation.Y}");
                 // We add a pathnoed because we establised that the we are at the intersection between a docking place and the next (walkable) tile
                 PathNodeNeighbours.Add(direction, neighbourTile.PathNode);
             }
