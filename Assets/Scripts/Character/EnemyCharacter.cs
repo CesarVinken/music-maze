@@ -141,9 +141,11 @@ namespace Character
                 // A player is not reachable if it is on the same tile as the enemy (for example, after a player was just caught)
                 if (CurrentGridLocation.X == currentPlayerLocation.X && CurrentGridLocation.Y == currentPlayerLocation.Y) continue;
 
-
                 if (_accessibleTiles.Contains(currentPlayerLocationTile))
                 {
+                    // PROBLEM::: That a tile is accessible, does not mean that it is reachable by the enemy at that moment.
+                    // For example, a walkable tile BEHIND a PlayerOnly tile is still counted as accessible
+                    // A temporary solution is to assign enemies to Areas, so that they will not look in accessible tiles that are not reachable
                     reachablePlayers.Add(item.Key);
                 }
 
@@ -153,7 +155,7 @@ namespace Character
                     _playerAsTarget = null;
                 }
             }
-            //Logger.Log($"Number of reachable players is: {reachablePlayers.Count}");
+
             if (ChasingState == ChasingState.Startled ||
                 reachablePlayers.Count == 0)
             {
@@ -168,10 +170,9 @@ namespace Character
                 int targetPlayerAgainChance = 75; // if we just chased a player, 75% chance to go chase a player again!
                 if (randomOutOfHundred <= targetPlayerAgainChance)
                 {
-                    // If we get herem we established earlier that the targetPlayer is still reachable. In that case, only offer that player as follow up target
+                    // If we get here we established earlier that the targetPlayer is still reachable. In that case, only offer that player as follow up target
                     List<PlayerNumber> currentlyTargettedPlayer = new List<PlayerNumber> { _playerAsTarget.TargettedPlayer.PlayerNumber };
                     TargetPlayer(currentlyTargettedPlayer);
-                    //Logger.Warning("Target player AGAIN");
                 }
                 else
                 {
@@ -185,7 +186,6 @@ namespace Character
                 if (randomOutOfHundred <= targetPlayerChance)
                 {
                     TargetPlayer(reachablePlayers);
-                    //Logger.Warning("Target player FOR THE FIRST TIME!");
                 }
                 else
                 {
@@ -276,6 +276,7 @@ namespace Character
 
         private void TargetPlayer(List<PlayerNumber> reachablePlayers)
         {
+            Logger.Log(Logger.Pathfinding, "Target player");
             //Randomly pick one of the players
             int randomNumber = UnityEngine.Random.Range(0, reachablePlayers.Count);
 
@@ -283,13 +284,14 @@ namespace Character
 
             IsCalculatingPath = true;
             GridLocation playerGridLocation = randomPlayer.CurrentGridLocation;
-            //Logger.Log($"Set target for enemy {gameObject.name} to Player {randomPlayer.PlayerNumber} at ({playerGridLocation.X}, {playerGridLocation.Y} )");
+            Logger.Log(Logger.Pathfinding, $"Set target for enemy {gameObject.name} to Player {randomPlayer.PlayerNumber} at ({playerGridLocation.X}, {playerGridLocation.Y} )");
             PathToTarget = _pathfinding.FindNodePath(CurrentGridLocation, playerGridLocation);
 
             IsCalculatingPath = false;
 
-            if (PathToTarget.Count == 0) // Player cannot be reached. For example, the player is on a playerOnly location.
+            if (PathToTarget.Count == 0) // Player cannot be reached. For example, the player is on a playerOnly location, or another not-reachable location.
             {
+                Logger.Log(Logger.Pathfinding, "Player cannot be reached");
                 StartCoroutine(SpendIdleTimeCoroutine());
             }
             else
@@ -303,22 +305,24 @@ namespace Character
 
             _playerAsTarget = new PlayerAsTarget(randomPlayer, playerGridLocation);
 
-            Logger.Log(Logger.Pathfinding, $"The enemy {gameObject.name} is now going to the location of player {randomPlayer.gameObject.name} at {randomPlayer.CurrentGridLocation.X},{randomPlayer.CurrentGridLocation.Y}");
+            Logger.Log(Logger.Pathfinding, $"The enemy {gameObject.name} is now going to the location of player {randomPlayer.gameObject.name} at {randomPlayer.CurrentGridLocation.X},{randomPlayer.CurrentGridLocation.Y}. The length of the path is {PathToTarget.Count}");
         }
 
         private void SetRandomTarget()
         {
+            Logger.Log(Logger.Pathfinding, "set random target");
             _playerAsTarget = null;
             IsCalculatingPath = true;
             GridLocation randomGridLocation = GetRandomTileTarget().GridLocation;
 
-            //Logger.Log($"current location of {gameObject.name} is ({CurrentGridLocation.X}, {CurrentGridLocation.Y} ). Set random target ({randomGridLocation.X}, {randomGridLocation.Y} )  ");
+            Logger.Log(Logger.Pathfinding, $"current location of {gameObject.name} is ({CurrentGridLocation.X}, {CurrentGridLocation.Y} ). Set random target ({randomGridLocation.X}, {randomGridLocation.Y} )  ");
 
             PathToTarget = _pathfinding.FindNodePath(CurrentGridLocation, randomGridLocation);
 
             IsCalculatingPath = false;
             if (PathToTarget.Count == 0)
             {
+                Logger.Log(Logger.Pathfinding, "The random location could not be reached.");
                 StartCoroutine(SpendIdleTimeCoroutine());
             }
             else
@@ -381,13 +385,11 @@ namespace Character
         private IEnumerator SpendIdleTimeCoroutine()
         {
             SetChasingState(ChasingState.Loitering);
-            //_isIdling = true;
-            //_animationHandler.SetLocomotion(false);
+            _animationHandler.SetLocomotion(false); 
 
             yield return new WaitForSeconds(4f);
 
             SetChasingState(ChasingState.Active);
-            //_isIdling = false;
             SetNextTarget();
         }
 
@@ -395,7 +397,7 @@ namespace Character
         {
             Vector3 roundedVectorPosition = new Vector3((float)Math.Round(transform.position.x - GridLocation.OffsetToTileMiddle), (float)Math.Round(transform.position.y - GridLocation.OffsetToTileMiddle));
             transform.position = new Vector3(roundedVectorPosition.x + GridLocation.OffsetToTileMiddle, roundedVectorPosition.y + GridLocation.OffsetToTileMiddle, 0);
-            //Logger.Log($"{gameObject.name} reached target. Current grid location is {CurrentGridLocation.X}, {CurrentGridLocation.Y}. Rounded position is {roundedVectorPosition.x}, {roundedVectorPosition.y}");
+            Logger.Log(Logger.Pathfinding, $"{gameObject.name} reached target. Current grid location is {CurrentGridLocation.X}, {CurrentGridLocation.Y}. Rounded position is {roundedVectorPosition.x}, {roundedVectorPosition.y}");
 
             SetHasCalculatedTarget(false);
         }

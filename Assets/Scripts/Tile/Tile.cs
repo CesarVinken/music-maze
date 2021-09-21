@@ -275,7 +275,6 @@ public abstract class Tile : MonoBehaviour
 
     public void AddNeighbours<T>(T level) where T : IGameScene<Tile>
     {
-        Logger.Log("add neighbours");
         //Add RIGHT
         if (GridLocation.X < level.LevelBounds.X)
         {
