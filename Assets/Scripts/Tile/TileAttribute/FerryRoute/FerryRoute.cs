@@ -121,6 +121,11 @@ public class FerryRoute : MonoBehaviour, ITileAttribute
         }
     }
 
+    public Ferry GetFerry()
+    {
+        return _ferry;
+    }
+
     public List<FerryRoutePoint> GetFerryRoutePoints()
     {
         return _ferryRoutePoints;

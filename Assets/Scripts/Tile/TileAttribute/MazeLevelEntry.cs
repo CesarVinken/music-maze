@@ -67,7 +67,7 @@ public class MazeLevelEntry : MonoBehaviour, ITileAttribute
         {
             _occupyingPlayers.Remove(player);
             player.OccupiedMazeLevelEntry = null;
-            MainScreenCameraCanvas.Instance.DestroyMapMapInteractionButton(player);
+            MainScreenCameraCanvas.Instance.DestroyMapInteractionButtonsForPlayer(player);
         }
     }
 

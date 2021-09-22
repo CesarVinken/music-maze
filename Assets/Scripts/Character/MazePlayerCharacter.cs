@@ -74,21 +74,6 @@ namespace Character
             PlayerExitsEvent?.Invoke();
         }
 
-        public void ToggleFerryControl(Ferry ferry)
-        {
-            ControllingFerry = ControllingFerry ? null : ferry;
-
-            if (ControllingFerry)
-            {
-                ferry.SetControllingPlayerCharacter(this);
-            }
-            else
-            {
-                ferry.SetControllingPlayerCharacter(null);
-            }
-            _animationHandler.IsControllingFerry = ControllingFerry;
-        }
-
         public override bool ValidateTarget(TargetLocation targetLocation)
         {
             if (!GameManager.Instance.CurrentGameLevel.TilesByLocation.TryGetValue(targetLocation.TargetGridLocation, out Tile targetTile))

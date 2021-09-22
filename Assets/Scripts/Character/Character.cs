@@ -11,7 +11,7 @@ namespace Character
         public CharacterSpawnpoint Spawnpoint;
         public GridLocation StartingPosition;
 
-        public GridLocation CurrentGridLocation { get; private set; }
+        public GridLocation CurrentGridLocation { get; protected set; }
 
         public GameObject CharacterBody;
         protected ICharacter _characterType;
@@ -147,7 +147,7 @@ namespace Character
             SetCurrentGridLocation(StartingPosition);
         }
 
-        public void SetCurrentGridLocation(GridLocation newGridLocation)
+        public virtual void SetCurrentGridLocation(GridLocation newGridLocation)
         {
             CurrentGridLocation = newGridLocation;
         }

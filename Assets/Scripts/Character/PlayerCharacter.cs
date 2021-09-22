@@ -6,6 +6,7 @@ using Console;
 using PlayerCamera;
 using System.Collections.Generic;
 using UI;
+using System;
 
 namespace Character
 {
@@ -36,6 +37,8 @@ namespace Character
         protected float _pointerPresserTimer = 1;
         protected const float _pointerPresserDelay = 0.25f;
 
+        public static event Action<PlayerCharacter> NewPlayerGridLocationEvent;
+
         public Ferry ControllingFerry = null;
         public List<MapInteractionButton> MapInteractionButtonsForPlayer = new List<MapInteractionButton>();
 
@@ -55,6 +58,8 @@ namespace Character
             base.Awake();
 
             _pointerPresserTimer = 0;
+
+            //NewPlayerGridLocationEvent = MethodForTesting;
         }
 
         public virtual void Start()
@@ -171,6 +176,18 @@ namespace Character
                     break;
             }
         }
+
+        public override void SetCurrentGridLocation(GridLocation newGridLocation)
+        {
+            CurrentGridLocation = newGridLocation;
+            NewPlayerGridLocationEvent.Invoke(this);
+            //NewPlayerGridLocationEvent(new object(), );
+        }
+
+        //public void MethodForTesting(System.Object sender, EventArgs e)
+        //{
+        //    Logger.Warning("HUB");
+        //}
 
         private AnimationEffect GetAnimationEffectForPlayerChaught()
         {
@@ -532,6 +549,22 @@ namespace Character
         {
             return true;
         }
+
+        public void ToggleFerryControl(Ferry ferry)
+        {
+            ControllingFerry = ControllingFerry ? null : ferry;
+
+            if (ControllingFerry)
+            {
+                ferry.SetControllingPlayerCharacter(this);
+            }
+            else
+            {
+                ferry.SetControllingPlayerCharacter(null);
+            }
+            _animationHandler.IsControllingFerry = ControllingFerry;
+        }
+
 
         private void SetPlayerKeyboardInput()
         {

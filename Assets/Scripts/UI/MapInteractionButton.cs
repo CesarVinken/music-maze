@@ -1,4 +1,5 @@
 ﻿using Character;
+using System;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -6,6 +7,7 @@ namespace UI
 {
     public class MapInteractionButton : MonoBehaviour, IMapInteractionButton
     {
+        public string Id { get; private set; }
         [SerializeField] private Image _image;
         [SerializeField] private Text _mapTextLabel;
         [SerializeField] private Button _mapInteractionButton;
@@ -39,8 +41,9 @@ namespace UI
             _image.sprite = sprite;
         }
 
-        public void ShowMapInteractionButton(PlayerCharacter player, Vector2 pos, MapInteractionAction mapInteractionAction, string mapText, Sprite sprite = null)
+        public void Initialise(PlayerCharacter player, Vector2 pos, MapInteractionAction mapInteractionAction, string mapText, Sprite sprite = null)
         {
+            Id = Guid.NewGuid().ToString();
             _buttonWorldBasePosition = pos;
             TriggerPlayer = player;
 
@@ -67,9 +70,14 @@ namespace UI
             gameObject.SetActive(true);
         }
 
-        public void DestroyMapInteractionButton()
+        public void DestroyMapInteractionButtonGO()
         {
             Destroy(gameObject);
+        }
+
+        public void Destroy()
+        {
+            MainScreenCameraCanvas.Instance.DestroyMapInteractionButton(Id);
         }
 
         public void ExecuteMapInteraction(MapInteractionAction actionToExecute)
@@ -95,7 +103,23 @@ namespace UI
 
         private void PerformControlFerryAction()
         {
-            Logger.Log("PerformControlFerryAction");
+            Ferry ferryOnTile = null;
+
+            for (int i = 0; i < GameManager.Instance.CurrentGameLevel.FerryRoutes.Count; i++)
+            {
+                Ferry ferry = GameManager.Instance.CurrentGameLevel.FerryRoutes[i].GetFerry();
+                if(ferry.CurrentLocationTile.GridLocation.X == TriggerPlayer.CurrentGridLocation.X &&
+                    ferry.CurrentLocationTile.GridLocation.Y == TriggerPlayer.CurrentGridLocation.Y)
+                {
+                    ferryOnTile = ferry;
+                    break;
+                }
+            }
+
+            if (ferryOnTile == null) return;
+
+            TriggerPlayer.ToggleFerryControl(ferryOnTile);
+            Destroy();
         }
 
         private void PerformMazeLevelEntryAction()

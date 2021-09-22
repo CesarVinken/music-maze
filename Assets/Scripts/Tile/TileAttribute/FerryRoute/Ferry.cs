@@ -1,5 +1,6 @@
 using Character;
 using System.Collections.Generic;
+using System.Linq;
 using UI;
 using UnityEngine;
 
@@ -8,7 +9,7 @@ public class Ferry : MonoBehaviour
     public static List<Ferry> Ferries = new List<Ferry>();
         
     [SerializeField] private SpriteRenderer _spriteRenderer;
-    public MazePlayerCharacter ControllingPlayerCharacter { get; private set; }
+    public PlayerCharacter ControllingPlayerCharacter { get; private set; }
     public FerryRoute FerryRoute { get; private set; }
 
     public FerryDirection FerryDirection;
@@ -16,6 +17,9 @@ public class Ferry : MonoBehaviour
 
     private Tile _dockingStartTile;
     private Tile _dockingEndTile;
+
+    private GameObject _controlFerryButtonGO = null;
+    private List<PlayerCharacter> _playersOnFerry = new List<PlayerCharacter>();
 
     public void Initialise(FerryRoute ferryRoute)
     {
@@ -27,6 +31,8 @@ public class Ferry : MonoBehaviour
 
         _dockingStartTile = ferryRoute.GetFerryDocking(FerryDockingType.DockingStart).DockingTile;
         _dockingEndTile = ferryRoute.GetFerryDocking(FerryDockingType.DockingEnd)?.DockingTile;
+
+        PlayerCharacter.NewPlayerGridLocationEvent += OnPlayerOnNewGridLocation;
     }
 
     public void Update()
@@ -35,75 +41,78 @@ public class Ferry : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.Return))
         {
-            // if the ferry is not in a docking place, do not listen to the Return key
-            if(CurrentLocationTile?.TileId != _dockingStartTile.TileId &&
-                CurrentLocationTile?.TileId != _dockingEndTile.TileId)
-            {
-                return;
-            }
-
-            Dictionary <PlayerNumber, MazePlayerCharacter> playerCharacters = GameManager.Instance.CharacterManager.GetPlayers<MazePlayerCharacter>();
-
-            foreach (KeyValuePair<PlayerNumber, MazePlayerCharacter> item in playerCharacters)
-            {
-                MazePlayerCharacter playerCharacter = item.Value;
-                if (playerCharacter.CurrentGridLocation.X == CurrentLocationTile?.GridLocation.X &&
-                    playerCharacter.CurrentGridLocation.Y == CurrentLocationTile?.GridLocation.Y)
-                {
-                    Logger.Log($"playerCharacter {playerCharacter.Name} is on the Ferry and wants to activate it");
-                    playerCharacter.ToggleFerryControl(this);
-                }
-            }
+            HandleFerryControlByKeyboard();
         }
 
         if (Input.GetMouseButtonDown(0))
         {
-            // if the ferry is not in a docking place, do not listen to the Mouse click
-            if (CurrentLocationTile?.TileId != _dockingStartTile.TileId &&
-                CurrentLocationTile?.TileId != _dockingEndTile.TileId)
-            {
-                return;
-            }
-
-            Vector2 worldPoint = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-            RaycastHit2D hit = Physics2D.Raycast(worldPoint, Vector2.zero);
-            
-            if (hit.collider != null)
-            {
-                Logger.Log(hit.transform.name);
-                MazePlayerCharacter playerCharacter = hit.transform.gameObject.GetComponent<MazePlayerCharacter>();
-                
-                if (playerCharacter == null)
-                {
-                    return;
-                }
-
-                if (playerCharacter.CurrentGridLocation.X == CurrentLocationTile?.GridLocation.X &&
-                    playerCharacter.CurrentGridLocation.Y == CurrentLocationTile?.GridLocation.Y)
-                {
-                    Logger.Log($"playerCharacter {playerCharacter.Name} is on the Ferry and wants to activate it");
-                    Sprite buttonSprite = EditorCanvasUI.Instance.TileAttributeIcons[9]; // Temporary
-
-                    MainScreenCameraCanvas.Instance.CreateMapInteractionButton(
-                            playerCharacter,
-                            new Vector2(CurrentLocationTile.GridLocation.X, CurrentLocationTile.GridLocation.Y - 1),
-                            MapInteractionAction.PerformControlFerryAction,
-                            "",
-                            buttonSprite);
-                }
-            }
+            HandleControlFerryButton();         
         }
 
-        if(ControllingPlayerCharacter != null)
+        HandleMoveFerryWithPlayer();
+    }
+
+    // Listen for event that is triggered by player, each time they have a new CurrentPosition
+    public void OnPlayerOnNewGridLocation(PlayerCharacter playerCharacter)
+    {
+        if(_playersOnFerry.Count > 0)
         {
-            transform.position = new Vector2(ControllingPlayerCharacter.transform.position.x - 0.5f, ControllingPlayerCharacter.transform.position.y - 0.5f);
-            if(CurrentLocationTile.GridLocation.X != ControllingPlayerCharacter.CurrentGridLocation.X ||
-                CurrentLocationTile.GridLocation.Y != ControllingPlayerCharacter.CurrentGridLocation.Y)
+            if (!PlayerIsOnFerry(playerCharacter))
             {
-                SetNewCurrentLocation(ControllingPlayerCharacter.CurrentGridLocation);
-                Logger.Log($"Current location of FERRY is now {CurrentLocationTile.GridLocation.X}, {CurrentLocationTile.GridLocation.Y}");
+                // The player WAS on the ferry but leaves
+                if (_playersOnFerry.Contains(playerCharacter))
+                {
+                    _playersOnFerry.Remove(playerCharacter);
+
+                    // Destroy the map interaction button if it was existing
+                    if (_controlFerryButtonGO)
+                    {
+                        MapInteractionButton mapInteractionButton = _controlFerryButtonGO.GetComponent<MapInteractionButton>();
+                        if (mapInteractionButton == null) return;
+
+                        MainScreenCameraCanvas.Instance.DestroyMapInteractionButton(mapInteractionButton.Id);
+                    }
+                    Logger.Log($"Removed player {playerCharacter.Name} from ferry");
+                }
             }
         }
+        // The player is on the ferry, but not controlling
+        if (PlayerIsOnFerry(playerCharacter) &&
+            ControllingPlayerCharacter == null
+            ) 
+        {
+
+            if (!_playersOnFerry.Contains(playerCharacter))
+            {
+                Logger.Log($" added player {playerCharacter.Name} to ferry list");
+                _playersOnFerry.Add(playerCharacter);
+            }
+        }
+
+        if (_controlFerryButtonGO == null) return;
+
+        return;
+    }
+
+    private bool PlayerIsOnFerry(PlayerCharacter playerCharacter)
+    {
+        if (playerCharacter.CurrentGridLocation.X == CurrentLocationTile.GridLocation.X &&
+            playerCharacter.CurrentGridLocation.Y == CurrentLocationTile.GridLocation.Y) return true;
+
+        return false;
+    }
+
+    private List<PlayerCharacter> GetPlayerCharacters()
+    {
+        if(PersistentGameManager.CurrentSceneType == SceneType.Maze)
+        {
+            return GameManager.Instance.CharacterManager.GetPlayers<MazePlayerCharacter>().Select(p => p.Value as PlayerCharacter).ToList();
+        }
+        else
+        {
+            return GameManager.Instance.CharacterManager.GetPlayers<OverworldPlayerCharacter>().Select(p => p.Value as PlayerCharacter).ToList();
+        }
+
     }
 
     public void SetDirection(FerryDirection ferryDirection)
@@ -135,13 +144,13 @@ public class Ferry : MonoBehaviour
         CurrentLocationTile.SetWalkable(true);
     }
 
-    public void SetControllingPlayerCharacter(MazePlayerCharacter playerCharacter)
+    public void SetControllingPlayerCharacter(PlayerCharacter playerCharacter)
     {
         ControllingPlayerCharacter = playerCharacter;
 
         if(playerCharacter == null) // If there is no longer a controlling character, make the ferry route points inaccible again
         {
-            Logger.Log($"None is controlling the ferry now");
+            Logger.Log($"No one is controlling the ferry now");
             MakeFerryRouteAccessibleForPlayer(false);
         }
         else
@@ -165,6 +174,81 @@ public class Ferry : MonoBehaviour
                 continue;
             }
             tile.SetWalkable(makeAccessible);
+        }
+    }
+
+    private void HandleFerryControlByKeyboard()
+    {
+        // if the ferry is not in a docking place, do not listen to the Return key
+        if (CurrentLocationTile?.TileId != _dockingStartTile.TileId &&
+            CurrentLocationTile?.TileId != _dockingEndTile.TileId)
+        {
+            return;
+        }
+
+        List<PlayerCharacter> playerCharacters = GetPlayerCharacters();
+
+        for (int i = 0; i < playerCharacters.Count; i++)
+        {
+            PlayerCharacter playerCharacter = playerCharacters[i];
+            if (playerCharacter.CurrentGridLocation.X == CurrentLocationTile?.GridLocation.X &&
+                playerCharacter.CurrentGridLocation.Y == CurrentLocationTile?.GridLocation.Y)
+            {
+                playerCharacter.ToggleFerryControl(this);
+            }
+        }
+    }
+
+    private void HandleMoveFerryWithPlayer()
+    {
+        if (ControllingPlayerCharacter != null)
+        {
+            transform.position = new Vector2(ControllingPlayerCharacter.transform.position.x - 0.5f, ControllingPlayerCharacter.transform.position.y - 0.5f);
+            if (CurrentLocationTile.GridLocation.X != ControllingPlayerCharacter.CurrentGridLocation.X ||
+                CurrentLocationTile.GridLocation.Y != ControllingPlayerCharacter.CurrentGridLocation.Y)
+            {
+                SetNewCurrentLocation(ControllingPlayerCharacter.CurrentGridLocation);
+            }
+        }
+    }
+
+    private void HandleControlFerryButton()
+    {
+        // if the ferry is not in a docking place, do not listen to the Mouse click
+        if (CurrentLocationTile?.TileId != _dockingStartTile.TileId &&
+            CurrentLocationTile?.TileId != _dockingEndTile.TileId)
+        {
+            return;
+        }
+
+        Vector2 worldPoint = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+        GridLocation clickedGridLocation = GridLocation.FindClosestGridTile(worldPoint);
+
+        // check if we clicked on the ferry tile
+        if (clickedGridLocation.X != CurrentLocationTile.GridLocation.X || clickedGridLocation.Y != CurrentLocationTile.GridLocation.Y) return;
+
+        // try to get the player on the ferry tile
+        PlayerCharacter playerCharacter = GetPlayerCharacters().FirstOrDefault(
+            p => p.CurrentGridLocation.X == CurrentLocationTile.GridLocation.X && p.CurrentGridLocation.Y == CurrentLocationTile.GridLocation.Y
+            );
+
+        // TODO: Make sure the clicked player is OUR player, not the other player
+
+        if (playerCharacter == null) return;
+
+        if (playerCharacter.CurrentGridLocation.X == CurrentLocationTile?.GridLocation.X &&
+            playerCharacter.CurrentGridLocation.Y == CurrentLocationTile?.GridLocation.Y)
+        {
+            if (_controlFerryButtonGO != null) return;
+
+            Sprite buttonSprite = EditorCanvasUI.Instance.TileAttributeIcons[9]; // Temporary
+
+            _controlFerryButtonGO = MainScreenCameraCanvas.Instance.CreateMapInteractionButton(
+                    playerCharacter,
+                    new Vector2(CurrentLocationTile.GridLocation.X, CurrentLocationTile.GridLocation.Y - 1),
+                    MapInteractionAction.PerformControlFerryAction,
+                    "",
+                    buttonSprite);
         }
     }
 }

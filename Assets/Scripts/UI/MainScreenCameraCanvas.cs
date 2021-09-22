@@ -18,31 +18,50 @@ namespace UI
             Instance = this;
         }
 
-        // Make generic so different types of button interactions can be used, not just Maze Entry
-        public void CreateMapInteractionButton(PlayerCharacter player, Vector2 pos, MapInteractionAction mapInteractionAction, string mapText, Sprite sprite)
+        public GameObject CreateMapInteractionButton(PlayerCharacter player, Vector2 pos, MapInteractionAction mapInteractionAction, string mapText, Sprite sprite)
         {
             Logger.Log($"Create map interaction for player {player.PlayerNumber}");
 
             GameObject mapInteractionButtonGO = Instantiate(MapInteractionButtonPrefab, transform);
             MapInteractionButton mapInteractionButton = mapInteractionButtonGO.GetComponent<MapInteractionButton>();
 
-            mapInteractionButton.ShowMapInteractionButton(player, pos, mapInteractionAction, mapText, sprite);
+            mapInteractionButton.Initialise(player, pos, mapInteractionAction, mapText, sprite);
 
             MapInteractionButtons.Add(mapInteractionButton);
             player.MapInteractionButtonsForPlayer.Add(mapInteractionButton);
+
+            return mapInteractionButtonGO;
         }
 
-        public void DestroyMapMapInteractionButton(OverworldPlayerCharacter player)
+        public void DestroyMapInteractionButtonsForPlayer(OverworldPlayerCharacter player)
         {
-            Logger.Log($"Destroy map interaction label for player {player.PlayerNumber}");
+            Logger.Log($"Destroy map interaction button for player {player.PlayerNumber}");
             for (int i = 0; i < MapInteractionButtons.Count; i++)
             {
                 if (MapInteractionButtons[i].TriggerPlayer.PlayerNumber == player.PlayerNumber)
                 {
                     MapInteractionButton mapInteractionButton = MapInteractionButtons[i];
-                    player.MapInteractionButtonsForPlayer.Remove(MapInteractionButtons[i]);
+                    player.MapInteractionButtonsForPlayer.Remove(mapInteractionButton);
+                    MapInteractionButtons.Remove(mapInteractionButton);
+                    mapInteractionButton.DestroyMapInteractionButtonGO();
+                    break;
+                }
+            }
+        }
+
+        public void DestroyMapInteractionButton(string id)
+        {
+            Logger.Log($"Destroy map interaction with id {id}");
+            Logger.Log($"MapInteractionButtons COUNT {MapInteractionButtons.Count}");
+            for (int i = 0; i < MapInteractionButtons.Count; i++)
+            {
+                if (MapInteractionButtons[i].Id.Equals(id))
+                {
+                    MapInteractionButton mapInteractionButton = MapInteractionButtons[i];
+                    mapInteractionButton.TriggerPlayer.MapInteractionButtonsForPlayer.Remove(mapInteractionButton);
                     MapInteractionButtons.Remove(MapInteractionButtons[i]);
-                    mapInteractionButton.DestroyMapInteractionButton();
+                    mapInteractionButton.DestroyMapInteractionButtonGO();
+                    Logger.Log("DESTRUCTION COMPLETE");
                     break;
                 }
             }

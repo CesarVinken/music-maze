@@ -560,7 +560,7 @@ public class MazeLevelGameplayManager : MonoBehaviour, IOnEventCallback, IGamepl
     // end game happens when all paths have been marked
     public void TriggerEndGame()
     {
-        AllPathsAreMarkedEvent.Invoke();
+        AllPathsAreMarkedEvent?.Invoke();
     }
 
     public void CompleteMazeLevel()
