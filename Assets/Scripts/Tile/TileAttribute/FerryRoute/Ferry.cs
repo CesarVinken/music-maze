@@ -49,6 +49,10 @@ public class Ferry : MonoBehaviour
         {
             HandleControlFerryButton();         
         }
+        else if(Input.GetMouseButtonDown(1))
+        {
+            TryDestroyControlFerryButton();
+        }
 
         HandleMoveFerryWithPlayer();
     }
@@ -237,7 +241,11 @@ public class Ferry : MonoBehaviour
         GridLocation clickedGridLocation = GridLocation.FindClosestGridTile(worldPoint);
 
         // check if we clicked on the ferry tile
-        if (clickedGridLocation.X != CurrentLocationTile.GridLocation.X || clickedGridLocation.Y != CurrentLocationTile.GridLocation.Y) return;
+        if (clickedGridLocation.X != CurrentLocationTile.GridLocation.X || clickedGridLocation.Y != CurrentLocationTile.GridLocation.Y)
+        {
+            TryDestroyControlFerryButton();
+            return;
+        }
 
         // try to get the player on the ferry tile
         PlayerCharacter playerCharacter = GetPlayerCharacters().FirstOrDefault(
