@@ -60,16 +60,16 @@ namespace Character
 
         public override bool ValidateTarget(TargetLocation targetLocation)
         {
-            if (GameManager.Instance.CurrentGameLevel.TilesByLocation.TryGetValue(targetLocation.TargetGridLocation, out Tile targetTile))
+            if (!GameManager.Instance.CurrentGameLevel.TilesByLocation.TryGetValue(targetLocation.TargetGridLocation, out Tile targetTile))
             {
                 return false;
             }
-            
+
             Direction direction = targetLocation.TargetDirection;
 
+            Tile currentTile = GameManager.Instance.CurrentGameLevel.TilesByLocation[CurrentGridLocation];
             if (targetTile.Walkable)
             {
-                Tile currentTile = GameManager.Instance.CurrentGameLevel.TilesByLocation[CurrentGridLocation];
                 BridgePiece bridgePieceOnCurrentTile = currentTile.TryGetAttribute<BridgePiece>();
                 BridgePiece bridgePieceOnTarget = targetTile.TryGetAttribute<BridgePiece>(); // optimisation: keep bridge locations of the level in a separate list, so we don't have to go over all the tiles in the level
 
@@ -115,6 +115,7 @@ namespace Character
                 }
                 return false;
             }
+            Logger.Log("habbo3");
             return false;
         }
 

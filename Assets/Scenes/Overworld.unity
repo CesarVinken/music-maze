@@ -572,6 +572,9 @@ MonoBehaviour:
   MapInteractionButtonPrefab: {fileID: 7676977662519392252, guid: a6bcba76dafd95c4d8b7745ca9695ec8,
     type: 3}
   MapInteractionButtons: []
+  FerryBoardingIcons:
+  - {fileID: 1199046252321181973, guid: d38e57e83dbc7cf42a97a9adb6c54d6a, type: 3}
+  - {fileID: -2355340968213881203, guid: d38e57e83dbc7cf42a97a9adb6c54d6a, type: 3}
 --- !u!114 &736344382
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1012,6 +1015,7 @@ MonoBehaviour:
   _playerOneOptionMessagePrefab: {fileID: 5222908463777228736, guid: 3d521374ecabdf747aefce2c0fd9dd62,
     type: 3}
   BlackOutSquares: []
+  OpenMessagePanels: []
 --- !u!114 &1385362379
 MonoBehaviour:
   m_ObjectHideFlags: 0

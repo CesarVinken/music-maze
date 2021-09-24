@@ -49,7 +49,6 @@ public class InGameOverworld : Overworld, IInGameLevel
             GameObject tileGO = GameObject.Instantiate(OverworldGameplayManager.Instance.InGameTilePrefab, _overworldContainer.transform);
 
             InGameOverworldTile tile = tileGO.GetComponent<InGameOverworldTile>();
-
             tile.SetGridLocation(serialisableTile.GridLocation.X, serialisableTile.GridLocation.Y);
             tile.SetId(serialisableTile.Id);
 
@@ -57,11 +56,6 @@ public class InGameOverworld : Overworld, IInGameLevel
             tileGO.transform.position = GridLocation.GridToVector(tile.GridLocation);
 
             Tiles.Add(tile);
-
-            AddBackgroundSprites(serialisableTile, tile);
-            AddTileAttributes(serialisableTile, tile);
-            AddCornerFillers(serialisableTile, tile);
-
             TilesByLocation.Add(tile.GridLocation, tile);
 
             GridLocation furthestBounds = LevelBounds;
@@ -71,10 +65,20 @@ public class InGameOverworld : Overworld, IInGameLevel
             TileTransformationGridLocationByTile.Add(tile, serialisableTile.TilesToTransform);
         }
 
+        for (int j = 0; j < Tiles.Count; j++)
+        {
+            InGameOverworldTile tile = Tiles[j] as InGameOverworldTile;
+            tile.AddNeighbours(this);
+        }
+
         for (int k = 0; k < Tiles.Count; k++)
         {
+            SerialisableTile serialisableTile = overworldData.Tiles[k];
             InGameOverworldTile tile = Tiles[k] as InGameOverworldTile;
-            tile.AddNeighbours(this);
+
+            AddBackgroundSprites(serialisableTile, tile);
+            AddTileAttributes(serialisableTile, tile);
+            AddCornerFillers(serialisableTile, tile);
         }
     }
 

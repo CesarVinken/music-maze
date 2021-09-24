@@ -72,7 +72,6 @@ namespace Character
             if (EditorManager.InEditor) return;
 
             if (IsFrozen) return;
-
             if (Console.Console.Instance && Console.Console.Instance.ConsoleState != ConsoleState.Closed)
                 return;
 
@@ -180,14 +179,8 @@ namespace Character
         public override void SetCurrentGridLocation(GridLocation newGridLocation)
         {
             CurrentGridLocation = newGridLocation;
-            NewPlayerGridLocationEvent.Invoke(this);
-            //NewPlayerGridLocationEvent(new object(), );
+            NewPlayerGridLocationEvent?.Invoke(this);
         }
-
-        //public void MethodForTesting(System.Object sender, EventArgs e)
-        //{
-        //    Logger.Warning("HUB");
-        //}
 
         private AnimationEffect GetAnimationEffectForPlayerChaught()
         {

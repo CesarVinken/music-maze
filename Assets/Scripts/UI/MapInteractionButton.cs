@@ -38,6 +38,14 @@ namespace UI
 
         private void SetMapInteractionButtonSprite(Sprite sprite)
         {
+            if(sprite == null)
+            {
+                _image.enabled = false;
+            }
+            else
+            {
+                _image.enabled = true;
+            }
             _image.sprite = sprite;
         }
 

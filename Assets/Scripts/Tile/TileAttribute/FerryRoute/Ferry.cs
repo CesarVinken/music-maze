@@ -40,9 +40,16 @@ public class Ferry : MonoBehaviour
     {
         if (EditorManager.InEditor) return;
 
-        if (Input.GetKeyDown(KeyCode.Return))
+        if (Input.GetKeyDown(GameManager.Instance.KeyboardConfiguration.Player1Action))
         {
-            HandleFerryControlByKeyboard();
+            HandleFerryControlByKeyboard(PlayerNumber.Player1);
+        }
+        else if(GameRules.GamePlayerType == GamePlayerType.SplitScreenMultiplayer)
+        {
+            if (Input.GetKeyDown(GameManager.Instance.KeyboardConfiguration.Player2Action))
+            {
+                HandleFerryControlByKeyboard(PlayerNumber.Player2);
+            }
         }
 
         if (Input.GetMouseButtonDown(0))
@@ -105,7 +112,7 @@ public class Ferry : MonoBehaviour
 
     private List<PlayerCharacter> GetPlayerCharacters()
     {
-        if(PersistentGameManager.CurrentSceneType == SceneType.Maze)
+        if (PersistentGameManager.CurrentSceneType == SceneType.Maze)
         {
             return GameManager.Instance.CharacterManager.GetPlayers<MazePlayerCharacter>().Select(p => p.Value as PlayerCharacter).ToList();
         }
@@ -113,7 +120,18 @@ public class Ferry : MonoBehaviour
         {
             return GameManager.Instance.CharacterManager.GetPlayers<OverworldPlayerCharacter>().Select(p => p.Value as PlayerCharacter).ToList();
         }
+    }
 
+    private PlayerCharacter GetPlayerCharacter(PlayerNumber playerNumber)
+    {
+        if (PersistentGameManager.CurrentSceneType == SceneType.Maze)
+        {
+            return GameManager.Instance.CharacterManager.GetPlayers<MazePlayerCharacter>()[playerNumber];
+        }
+        else
+        {
+            return GameManager.Instance.CharacterManager.GetPlayers<OverworldPlayerCharacter>()[playerNumber];
+        }
     }
 
     public void SetDirection(FerryDirection ferryDirection)
@@ -188,7 +206,7 @@ public class Ferry : MonoBehaviour
         }
     }
 
-    private void HandleFerryControlByKeyboard()
+    private void HandleFerryControlByKeyboard(PlayerNumber triggerPlayerNumber)
     {
         // if the ferry is not in a docking place, do not listen to the Return key
         if (CurrentLocationTile?.TileId != _dockingStartTile.TileId &&
@@ -197,16 +215,11 @@ public class Ferry : MonoBehaviour
             return;
         }
 
-        List<PlayerCharacter> playerCharacters = GetPlayerCharacters();
-
-        for (int i = 0; i < playerCharacters.Count; i++)
+        PlayerCharacter triggeringPlayer = GetPlayerCharacter(triggerPlayerNumber);
+        if (triggeringPlayer.CurrentGridLocation.X == CurrentLocationTile?.GridLocation.X &&
+            triggeringPlayer.CurrentGridLocation.Y == CurrentLocationTile?.GridLocation.Y)
         {
-            PlayerCharacter playerCharacter = playerCharacters[i];
-            if (playerCharacter.CurrentGridLocation.X == CurrentLocationTile?.GridLocation.X &&
-                playerCharacter.CurrentGridLocation.Y == CurrentLocationTile?.GridLocation.Y)
-            {
-                playerCharacter.ToggleFerryControl(this);
-            }
+            triggeringPlayer.ToggleFerryControl(this);
         }
     }
 
