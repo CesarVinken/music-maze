@@ -552,10 +552,14 @@ namespace Character
 
         public void ToggleFerryControl(Ferry ferry)
         {
+            ferry.TryDestroyControlFerryButton();
+
             ControllingFerry = ControllingFerry ? null : ferry;
 
             if (ControllingFerry)
             {
+                if (IsMoving) return; // we should never be able to set a controlling player when we are already moving. For example would happen if a player clicks immediately after leaving the ferry.
+
                 ferry.SetControllingPlayerCharacter(this);
             }
             else

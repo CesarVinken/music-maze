@@ -19,6 +19,7 @@ public class Ferry : MonoBehaviour
     private Tile _dockingEndTile;
 
     private GameObject _controlFerryButtonGO = null;
+    private string _controlFerryButtonId;
     private List<PlayerCharacter> _playersOnFerry = new List<PlayerCharacter>();
 
     public void Initialise(FerryRoute ferryRoute)
@@ -67,10 +68,7 @@ public class Ferry : MonoBehaviour
                     // Destroy the map interaction button if it was existing
                     if (_controlFerryButtonGO)
                     {
-                        MapInteractionButton mapInteractionButton = _controlFerryButtonGO.GetComponent<MapInteractionButton>();
-                        if (mapInteractionButton == null) return;
-
-                        MainScreenCameraCanvas.Instance.DestroyMapInteractionButton(mapInteractionButton.Id);
+                        MainScreenCameraCanvas.Instance.DestroyMapInteractionButton(_controlFerryButtonId);
                     }
                     Logger.Log($"Removed player {playerCharacter.Name} from ferry");
                 }
@@ -81,7 +79,6 @@ public class Ferry : MonoBehaviour
             ControllingPlayerCharacter == null
             ) 
         {
-
             if (!_playersOnFerry.Contains(playerCharacter))
             {
                 Logger.Log($" added player {playerCharacter.Name} to ferry list");
@@ -146,6 +143,8 @@ public class Ferry : MonoBehaviour
 
     public void SetControllingPlayerCharacter(PlayerCharacter playerCharacter)
     {
+        //Logger.Log($"Is moving? {playerCharacter?.IsMoving}");
+
         ControllingPlayerCharacter = playerCharacter;
 
         if(playerCharacter == null) // If there is no longer a controlling character, make the ferry route points inaccible again
@@ -157,6 +156,14 @@ public class Ferry : MonoBehaviour
         {
             Logger.Log($"The player controlling the ferry is now {ControllingPlayerCharacter?.Name}");
             MakeFerryRouteAccessibleForPlayer(true);
+        }
+    }
+
+    public void TryDestroyControlFerryButton()
+    {
+        if (_controlFerryButtonGO)
+        {
+            MainScreenCameraCanvas.Instance.DestroyMapInteractionButton(_controlFerryButtonId);
         }
     }
 
@@ -207,6 +214,11 @@ public class Ferry : MonoBehaviour
             if (CurrentLocationTile.GridLocation.X != ControllingPlayerCharacter.CurrentGridLocation.X ||
                 CurrentLocationTile.GridLocation.Y != ControllingPlayerCharacter.CurrentGridLocation.Y)
             {
+                //if(_controlFerryButtonGO != null)
+                //{
+                //    MainScreenCameraCanvas.Instance.DestroyMapInteractionButton(_controlFerryButtonId);
+                //}
+
                 SetNewCurrentLocation(ControllingPlayerCharacter.CurrentGridLocation);
             }
         }
@@ -240,8 +252,9 @@ public class Ferry : MonoBehaviour
             playerCharacter.CurrentGridLocation.Y == CurrentLocationTile?.GridLocation.Y)
         {
             if (_controlFerryButtonGO != null) return;
+            if (playerCharacter.IsMoving) return;
 
-            Sprite buttonSprite = EditorCanvasUI.Instance.TileAttributeIcons[9]; // Temporary
+            Sprite buttonSprite = GetFerryButtonSprite();
 
             _controlFerryButtonGO = MainScreenCameraCanvas.Instance.CreateMapInteractionButton(
                     playerCharacter,
@@ -249,6 +262,21 @@ public class Ferry : MonoBehaviour
                     MapInteractionAction.PerformControlFerryAction,
                     "",
                     buttonSprite);
+
+            MapInteractionButton mapInteractionButton = _controlFerryButtonGO.GetComponent<MapInteractionButton>();
+            if (mapInteractionButton == null) return;
+
+            _controlFerryButtonId = mapInteractionButton.Id;
         }
+    }
+
+    private Sprite GetFerryButtonSprite()
+    {
+        if (ControllingPlayerCharacter)
+        {
+            return MainScreenCameraCanvas.Instance.FerryBoardingIcons[1];
+        }
+
+        return MainScreenCameraCanvas.Instance.FerryBoardingIcons[0];
     }
 }

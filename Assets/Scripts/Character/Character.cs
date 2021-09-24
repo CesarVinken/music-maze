@@ -33,7 +33,8 @@ namespace Character
         [SerializeField] private float _speed;
         [SerializeField] protected bool IsFrozen = false;
         [SerializeField] protected bool HasCalculatedTarget = false;
-        [SerializeField] protected bool IsMoving = false;
+        
+        public bool IsMoving { get; protected set; }
 
         [Space(10)]
         [Header("Pathfinding")]

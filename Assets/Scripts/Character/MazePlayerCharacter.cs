@@ -86,9 +86,9 @@ namespace Character
             Tile currentTile = GameManager.Instance.CurrentGameLevel.TilesByLocation[CurrentGridLocation];
             if (targetTile.Walkable)
             {
-
                 if (ControllingFerry != null)
                 {
+                    ControllingFerry.TryDestroyControlFerryButton();
                     //move if the targetted tile is a ferry route point
                     if (targetTile.TileMainMaterial.GetType() == typeof(GroundMainMaterial))
                     {
@@ -98,7 +98,6 @@ namespace Character
                 }
                 else
                 {
-
                     bool validatedForLand = ValidateInLandMode(direction, currentTile, targetTile);
 
                     return validatedForLand;
@@ -109,6 +108,7 @@ namespace Character
                 List<FerryRoutePoint> ferryRoutePoints = ControllingFerry.FerryRoute.GetFerryRoutePoints();
                 if(ferryRoutePoints.Any(point => point.Tile.TileId.Equals(targetTile.TileId)))
                 {
+                    ControllingFerry.TryDestroyControlFerryButton();
                     return true;
                 }
             }
