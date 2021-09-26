@@ -184,4 +184,18 @@ public class FerryRoute : MonoBehaviour, ITileAttribute
                 return _ferryDockingBegin;
         }
     }
+
+    public FerryRoutePoint GetFerryRoutePointByLocation(GridLocation gridLocation)
+    {
+        List<FerryRoutePoint> ferryRoutePoints = GetFerryRoutePoints();
+        for (int i = 0; i < ferryRoutePoints.Count; i++)
+        {
+            if (ferryRoutePoints[i].Tile.GridLocation.X == gridLocation.X &&
+                ferryRoutePoints[i].Tile.GridLocation.Y == gridLocation.Y)
+            {
+                return ferryRoutePoints[i];
+            }
+        }
+        return null;
+    }
 }

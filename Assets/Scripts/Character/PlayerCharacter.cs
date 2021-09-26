@@ -427,7 +427,9 @@ namespace Character
             SetHasCalculatedTarget(true);
 
             if (!_animationHandler.InLocomotion)
+            {
                 _animationHandler.SetLocomotion(true);
+            }
         }
 
         private bool IsPressingMovementKey()

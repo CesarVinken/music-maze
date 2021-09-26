@@ -82,7 +82,6 @@ namespace Character
             }
 
             Direction direction = targetLocation.TargetDirection;
-
             Tile currentTile = GameManager.Instance.CurrentGameLevel.TilesByLocation[CurrentGridLocation];
             if (targetTile.Walkable)
             {
@@ -98,9 +97,18 @@ namespace Character
                 }
                 else
                 {
-                    bool validatedForLand = ValidateInLandMode(direction, currentTile, targetTile);
 
-                    return validatedForLand;
+                    if (!ValidateForBridges(direction, currentTile, targetTile))
+                    {
+                        return false;
+                    }
+
+                    if (!ValidateForFerryRoutes(direction, currentTile, targetTile))
+                    {
+                        return false;
+                    }
+
+                    return true;
                 }      
             }
             else if (ControllingFerry)
@@ -115,7 +123,7 @@ namespace Character
             return false;
         }
 
-        private bool ValidateInLandMode(Direction direction, Tile currentTile, Tile targetTile)
+        private bool ValidateForBridges(Direction direction, Tile currentTile, Tile targetTile)
         {
             BridgePiece bridgePieceOnCurrentTile = currentTile.TryGetAttribute<BridgePiece>();
             BridgePiece bridgePieceOnTarget = targetTile.TryGetAttribute<BridgePiece>(); // optimisation: keep bridge locations of the level in a separate list, so we don't have to go over all the tiles in the level
@@ -129,7 +137,6 @@ namespace Character
             // Make sure we go in the correct bridge direction
             if (bridgePieceOnCurrentTile && bridgePieceOnTarget)
             {
-
                 if (bridgePieceOnCurrentTile.BridgePieceDirection == BridgePieceDirection.Horizontal &&
                     bridgePieceOnTarget.BridgePieceDirection == BridgePieceDirection.Horizontal &&
                     (direction == Direction.Left || direction == Direction.Right))
@@ -161,6 +168,23 @@ namespace Character
                 return true;
             }
             return false;
+        }
+
+        private bool ValidateForFerryRoutes(Direction direction, Tile currentTile, Tile targetTile)
+        {
+            for (int i = 0; i < Ferry.Ferries.Count; i++)
+            {
+                GridLocation ferryGridLocation = Ferry.Ferries[i].CurrentLocationTile.GridLocation;
+                if (ferryGridLocation.X == CurrentGridLocation.X && ferryGridLocation.Y == CurrentGridLocation.Y)
+                {
+                    if (targetTile.TileMainMaterial.GetType() == typeof(WaterMainMaterial))
+                    {
+                        return false;
+                    }
+                }
+
+            }
+            return true;
         }
 
         private void OnPlayerExit()
