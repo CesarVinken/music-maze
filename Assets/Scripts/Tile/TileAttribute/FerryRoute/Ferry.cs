@@ -26,6 +26,7 @@ public class Ferry : MonoBehaviour
 
     public void Initialise(FerryRoute ferryRoute)
     {
+        Logger.Log("Initialise Ferry");
         FerryRoute = ferryRoute;
 
         GridLocation location = GridLocation.FindClosestGridTile(transform.position);
@@ -181,18 +182,6 @@ public class Ferry : MonoBehaviour
         }
     }
 
-    private PlayerCharacter GetPlayerCharacter(PlayerNumber playerNumber)
-    {
-        if (PersistentGameManager.CurrentSceneType == SceneType.Maze)
-        {
-            return GameManager.Instance.CharacterManager.GetPlayers<MazePlayerCharacter>()[playerNumber];
-        }
-        else
-        {
-            return GameManager.Instance.CharacterManager.GetPlayers<OverworldPlayerCharacter>()[playerNumber];
-        }
-    }
-
     public void SetDirection(FerryDirection ferryDirection)
     {
         FerryDirection = ferryDirection;
@@ -277,7 +266,7 @@ public class Ferry : MonoBehaviour
             return;
         }
 
-        PlayerCharacter triggeringPlayer = GetPlayerCharacter(triggerPlayerNumber);
+        PlayerCharacter triggeringPlayer = CharacterHelper.GetUnbiasedPlayerCharacter(triggerPlayerNumber);
 
         // Return if the other player is already controlling the ferry
         if(ControllingPlayerCharacter != null && ControllingPlayerCharacter != triggeringPlayer)

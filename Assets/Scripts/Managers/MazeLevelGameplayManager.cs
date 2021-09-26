@@ -455,12 +455,18 @@ public class MazeLevelGameplayManager : MonoBehaviour, IOnEventCallback, IGamepl
             object[] data = (object[])photonEvent.CustomData;
             PlayerCollidesWithSheetmusicEventHandler playerCollidesWithSheetmusicEventHandler = new PlayerCollidesWithSheetmusicEventHandler(this);
             playerCollidesWithSheetmusicEventHandler.Handle(data);
-        } 
+        }
         else if (eventCode == EventCode.EnemyCollidesWithSheetmusicEventCode)
         {
             object[] data = (object[])photonEvent.CustomData;
             EnemyCollidesWithSheetmusicEventHandler enemyCollidesWithSheetmusicEventHandler = new EnemyCollidesWithSheetmusicEventHandler(this);
-            enemyCollidesWithSheetmusicEventHandler.Handle(data);    
+            enemyCollidesWithSheetmusicEventHandler.Handle(data);
+        }
+        else if (eventCode == EventCode.PlayerControlsFerryEventCode)
+        {
+            object[] data = (object[])photonEvent.CustomData;
+            PlayerControlsFerryEventHandler playerControlsFerryEventHandler = new PlayerControlsFerryEventHandler(this);
+            playerControlsFerryEventHandler.Handle(data);
         }
     }
 

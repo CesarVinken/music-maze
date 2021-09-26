@@ -14,4 +14,5 @@ public static class EventCode
     public const byte PlayerPicksPlayableCharacterEventCode = 12;
     public const byte PlayerCollidesWithSheetmusicEventCode = 13;
     public const byte EnemyCollidesWithSheetmusicEventCode = 14;
+    public const byte PlayerControlsFerryEventCode = 15;
 }

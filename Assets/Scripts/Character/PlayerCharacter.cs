@@ -58,8 +58,6 @@ namespace Character
             base.Awake();
 
             _pointerPresserTimer = 0;
-
-            //NewPlayerGridLocationEvent = MethodForTesting;
         }
 
         public virtual void Start()
@@ -550,7 +548,7 @@ namespace Character
             ferry.TryDestroyControlFerryButton();
 
             ControllingFerry = ControllingFerry ? null : ferry;
-
+            
             if (ControllingFerry)
             {
                 if (IsMoving) return; // we should never be able to set a controlling player when we are already moving. For example would happen if a player clicks immediately after leaving the ferry.
@@ -562,8 +560,26 @@ namespace Character
                 ferry.SetControllingPlayerCharacter(null);
             }
             _animationHandler.IsControllingFerry = ControllingFerry;
+
+            // Send update to other players to update ferry & player status
+            if (GameRules.GamePlayerType == GamePlayerType.NetworkMultiplayer)
+            {
+                PlayerControlsFerryEvent playerControlsFerryEvent = new PlayerControlsFerryEvent();
+                playerControlsFerryEvent.SendPlayerControlsFerryEvent(CurrentGridLocation, this, ControllingFerry);
+            }
         }
 
+        // The non-triggering client receives event. Does not need any checks, just update the player character status that was determined by the other player
+        public void ToggleFerryControlOnOthers(Ferry ferry, bool isControlling)
+        {
+            ferry.TryDestroyControlFerryButton();
+            ControllingFerry = ferry ? ferry : null;
+
+            ferry.SetControllingPlayerCharacter(this);
+
+            _animationHandler.IsControllingFerry = isControlling;
+            Logger.Log($"{Name} is now controlling the ferry. Set animation for isControlling to {isControlling == true}");
+        }
 
         private void SetPlayerKeyboardInput()
         {
