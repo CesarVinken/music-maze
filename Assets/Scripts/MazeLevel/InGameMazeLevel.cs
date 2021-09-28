@@ -194,7 +194,7 @@ public class InGameMazeLevel : MazeLevel, IInGameLevel
 
                 int dockingStartDirection = serialisableFerryRouteAttribute.DockingStartDirection;
                 int dockingEndDirection = serialisableFerryRouteAttribute.DockingEndDirection;
-                tileAttributePlacer.PlaceFerryRoute(ferryRoutePointTiles, dockingStartDirection, dockingEndDirection);
+                tileAttributePlacer.PlaceFerryRoute(serialisableFerryRouteAttribute.FerryRouteId, ferryRoutePointTiles, dockingStartDirection, dockingEndDirection);
             }
             else
             {

@@ -14,18 +14,28 @@ namespace Gameplay
 
         public void Handle(object[] data)
         {
-            GridLocation tileLocation = new GridLocation((int)data[0], (int)data[1]);
-            PlayerNumber playerNumber = (PlayerNumber)data[2];
+            string ferryRouteId = (string)data[0];
+            GridLocation playerTileLocation = new GridLocation((int)data[1], (int)data[2]);
+            PlayerNumber playerNumber = (PlayerNumber)data[3];
 
-            bool isControlling = (int)data[3] == 1 ? true : false;
+            bool isControlling = (int)data[4] == 1 ? true : false;
 
             PlayerCharacter playerCharacter = CharacterHelper.GetUnbiasedPlayerCharacter(playerNumber);
-            Ferry ferry = Ferry.Ferries.FirstOrDefault(f => f.CurrentLocationTile.GridLocation.X == tileLocation.X && f.CurrentLocationTile.GridLocation.Y == tileLocation.Y);
-
-            if(ferry == null)
+            Ferry ferry = Ferry.Ferries.FirstOrDefault(f => f.FerryRoute.Id.Equals(ferryRouteId));
+            if (ferry != null && !isControlling)
             {
-                Logger.Error($"Expected but could not find a ferry on the tie {tileLocation.X}, {tileLocation.Y}");
+                Logger.Log($"player {playerCharacter.Name} stopped controlling while on tile {playerTileLocation.X} {playerTileLocation.Y}");
+                ferry.SetNewCurrentLocation(ferry.FerryRoute.GetFerryRoutePointByLocation(playerTileLocation));
             }
+            //if(ferry == null)
+            //{
+
+            //    for (int i = 0; i < Ferry.Ferries.Count; i++)
+            //    {
+            //        Logger.Log($"Found location of ferry: {Ferry.Ferries[i].CurrentLocationTile.GridLocation.X}, {Ferry.Ferries[i].CurrentLocationTile.GridLocation.Y}. ControllingPlayerCharacter? {Ferry.Ferries[i].ControllingPlayerCharacter != null}");
+            //    }
+            //    //Logger.Error($"Expected but could not find a ferry on the tile {tileLocation.X}, {tileLocation.Y}");
+            //}
 
             playerCharacter.ToggleFerryControlOnOthers(ferry, isControlling);
         }

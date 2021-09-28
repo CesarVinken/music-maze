@@ -97,7 +97,6 @@ namespace Character
                 }
                 else
                 {
-
                     if (!ValidateForBridges(direction, currentTile, targetTile))
                     {
                         return false;
@@ -105,8 +104,11 @@ namespace Character
 
                     if (!ValidateForFerryRoutes(direction, currentTile, targetTile))
                     {
+                        //Logger.Log("ValidateForFerryRoutes false");
+
                         return false;
                     }
+                    //Logger.Log($"ValidateForFerryRoutes to {targetTile.GridLocation.X}, {targetTile.GridLocation.Y} true");
 
                     return true;
                 }      
@@ -170,21 +172,23 @@ namespace Character
             return false;
         }
 
+        // If we are on a ferry but not controlling, we should not be able to walk around, except for when we move off or on the ferry
         private bool ValidateForFerryRoutes(Direction direction, Tile currentTile, Tile targetTile)
         {
+            if(targetTile.TileMainMaterial.GetType() == typeof(GroundMainMaterial))
+            {
+                return true;
+            }
+
             for (int i = 0; i < Ferry.Ferries.Count; i++)
             {
                 GridLocation ferryGridLocation = Ferry.Ferries[i].CurrentLocationTile.GridLocation;
-                if (ferryGridLocation.X == CurrentGridLocation.X && ferryGridLocation.Y == CurrentGridLocation.Y)
+                if (!Ferry.Ferries[i].IsMoving && ferryGridLocation.X == targetTile.GridLocation.X && ferryGridLocation.Y == targetTile.GridLocation.Y)
                 {
-                    if (targetTile.TileMainMaterial.GetType() == typeof(WaterMainMaterial))
-                    {
-                        return false;
-                    }
+                    return true;
                 }
-
             }
-            return true;
+            return false;
         }
 
         private void OnPlayerExit()

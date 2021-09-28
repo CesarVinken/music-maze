@@ -16,6 +16,6 @@ public class PlayerCollidesWithSheetmusicEvent
         };
         RaiseEventOptions raiseEventOptions = new RaiseEventOptions { Receivers = ReceiverGroup.All };
         PhotonNetwork.RaiseEvent(Code, content, raiseEventOptions, SendOptions.SendReliable);
-        Logger.Log("sent PlayerCollidesWithSheetmusicEvent");
+        Logger.Log(Logger.Event, "sent PlayerCollidesWithSheetmusicEvent");
     }
 }

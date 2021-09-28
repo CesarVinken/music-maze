@@ -7,6 +7,7 @@ public static class Logger
     public static LogCategory Datawriting = new LogCategory("Datawriting");
     public static LogCategory Datareading = new LogCategory("Datareading");
     public static LogCategory Editor = new LogCategory("Editor");
+    public static LogCategory Event = new LogCategory("Event");
     public static LogCategory General = new LogCategory("General");
     public static LogCategory Initialisation = new LogCategory("Initialisation");
     public static LogCategory Level = new LogCategory("Level");

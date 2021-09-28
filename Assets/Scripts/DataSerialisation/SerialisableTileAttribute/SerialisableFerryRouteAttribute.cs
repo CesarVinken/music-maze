@@ -6,12 +6,14 @@ namespace DataSerialisation
     [Serializable]
     public class SerialisableFerryRouteAttribute : ISerialisableTileAttribute
     {
+        public string FerryRouteId;
         public List<SerialisableGridLocation> FerryRoutePoints;
         public int DockingStartDirection = -1;
         public int DockingEndDirection = -1;
 
-        public SerialisableFerryRouteAttribute(List<FerryRoutePoint> ferryRoutePoints, FerryDocking ferryDockingStart, FerryDocking ferryDockingEnd)
+        public SerialisableFerryRouteAttribute(string ferryRouteId, List<FerryRoutePoint> ferryRoutePoints, FerryDocking ferryDockingStart, FerryDocking ferryDockingEnd)
         {
+            FerryRouteId = ferryRouteId;
             FerryRoutePoints = SerialiseFerryRoutePoints(ferryRoutePoints);
             
             DockingStartDirection = GetNumberFromDirection(ferryDockingStart.GetDockingDirection());

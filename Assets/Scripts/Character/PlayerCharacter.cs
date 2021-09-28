@@ -177,6 +177,7 @@ namespace Character
         public override void SetCurrentGridLocation(GridLocation newGridLocation)
         {
             CurrentGridLocation = newGridLocation;
+            //Logger.Log($"{Name} is now on location {CurrentGridLocation.X}, {CurrentGridLocation.Y}");
             NewPlayerGridLocationEvent?.Invoke(this);
         }
 
@@ -565,7 +566,7 @@ namespace Character
             if (GameRules.GamePlayerType == GamePlayerType.NetworkMultiplayer)
             {
                 PlayerControlsFerryEvent playerControlsFerryEvent = new PlayerControlsFerryEvent();
-                playerControlsFerryEvent.SendPlayerControlsFerryEvent(CurrentGridLocation, this, ControllingFerry);
+                playerControlsFerryEvent.SendPlayerControlsFerryEvent(ferry.FerryRoute.Id, this, ControllingFerry);
             }
         }
 
@@ -575,10 +576,18 @@ namespace Character
             ferry.TryDestroyControlFerryButton();
             ControllingFerry = ferry ? ferry : null;
 
-            ferry.SetControllingPlayerCharacter(this);
+            if (isControlling)
+            {
+                ferry.SetControllingPlayerCharacter(this);
+                Logger.Log($"{Name} is now controlling the ferry. Set animation for isControlling to true");
+            }
+            else
+            {
+                ferry.SetControllingPlayerCharacter(null);
+                Logger.Log($"NO one is now controlling the ferry. Set animation for isControlling to false");
+            }
 
             _animationHandler.IsControllingFerry = isControlling;
-            Logger.Log($"{Name} is now controlling the ferry. Set animation for isControlling to {isControlling == true}");
         }
 
         private void SetPlayerKeyboardInput()

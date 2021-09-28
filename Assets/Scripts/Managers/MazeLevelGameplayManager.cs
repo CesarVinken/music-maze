@@ -468,6 +468,12 @@ public class MazeLevelGameplayManager : MonoBehaviour, IOnEventCallback, IGamepl
             PlayerControlsFerryEventHandler playerControlsFerryEventHandler = new PlayerControlsFerryEventHandler(this);
             playerControlsFerryEventHandler.Handle(data);
         }
+        else if (eventCode == EventCode.PlayerFerryBoardingEventCode)
+        {
+            object[] data = (object[])photonEvent.CustomData;
+            PlayerFerryBoardingEventHandler playerFerryBoardingEventHandler = new PlayerFerryBoardingEventHandler(this);
+            playerFerryBoardingEventHandler.Handle(data);
+        }
     }
 
     public void ValidateSpawnpoints()

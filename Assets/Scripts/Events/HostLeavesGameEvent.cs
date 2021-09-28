@@ -11,6 +11,6 @@ public class HostLeavesGameEvent
         object[] content = new object[] {};
         RaiseEventOptions raiseEventOptions = new RaiseEventOptions { Receivers = ReceiverGroup.Others };
         PhotonNetwork.RaiseEvent(Code, content, raiseEventOptions, SendOptions.SendReliable);
-        Logger.Log("sent HostLeavesGameEvent");
+        Logger.Log(Logger.Event, "sent HostLeavesGameEvent");
     }
 }

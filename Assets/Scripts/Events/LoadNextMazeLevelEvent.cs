@@ -13,6 +13,6 @@ public class LoadNextMazeLevelEvent
         };
         RaiseEventOptions raiseEventOptions = new RaiseEventOptions { Receivers = ReceiverGroup.All };
         PhotonNetwork.RaiseEvent(Code, content, raiseEventOptions, SendOptions.SendReliable);
-        Logger.Log("SendLoadNextMazeLevelEvent");
+        Logger.Log(Logger.Event, "SendLoadNextMazeLevelEvent");
     }
 }

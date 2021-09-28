@@ -16,6 +16,6 @@ public class EnemyCollidesWithMusicInstrumentCaseEvent
         };
         RaiseEventOptions raiseEventOptions = new RaiseEventOptions { Receivers = ReceiverGroup.All };
         PhotonNetwork.RaiseEvent(Code, content, raiseEventOptions, SendOptions.SendReliable);
-        Logger.Log("sent EnemyCollidesWithMusicInstrumentCaseEvent");
+        Logger.Log(Logger.Event, "sent EnemyCollidesWithMusicInstrumentCaseEvent");
     }
 }

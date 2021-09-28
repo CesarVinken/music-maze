@@ -6,6 +6,7 @@ public class FerryRoute : MonoBehaviour, ITileAttribute
 {
     public Tile Tile;
     public string ParentId;
+    public string Id;
 
     private int _sortingOrderBase;
     public int SortingOrderBase { get => _sortingOrderBase; set => _sortingOrderBase = value; }
@@ -47,8 +48,9 @@ public class FerryRoute : MonoBehaviour, ITileAttribute
         ParentId = tile.TileId;
     }
 
-    public void Initialise(int dockingStartDirection, int dockingEndDirection)
+    public void Initialise(string id, int dockingStartDirection, int dockingEndDirection)
     {
+        Id = id;
         _ferryDockingBegin.Initialise(this, FerryDockingType.DockingStart, dockingStartDirection);
         _ferryDockingEnd.Initialise(this, FerryDockingType.DockingEnd, dockingEndDirection);
 

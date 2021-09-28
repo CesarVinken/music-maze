@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class EditorMazeTileAttributePlacer : MazeTileAttributePlacer<EditorMazeTile>
@@ -164,11 +165,16 @@ public class EditorMazeTileAttributePlacer : MazeTileAttributePlacer<EditorMazeT
         }
     }
 
-    public override void PlaceFerryRoute(List<Tile> ferryRoutePointTiles = null, int dockingStartDirection = -1, int dockingEndDirection = -1)
+    public override void PlaceFerryRoute(string ferryRouteId = "", List<Tile> ferryRoutePointTiles = null, int dockingStartDirection = -1, int dockingEndDirection = -1)
     {
+        if (string.IsNullOrEmpty(ferryRouteId))
+        {
+            ferryRouteId = Guid.NewGuid().ToString();
+        }
+
         FerryRoute ferryRoute = (FerryRoute)InstantiateTileAttributeGO<FerryRoute>();
         ferryRoute.SetTile(_tile);
-        ferryRoute.Initialise(dockingStartDirection, dockingEndDirection);
+        ferryRoute.Initialise(ferryRouteId, dockingStartDirection, dockingEndDirection);
 
         ferryRoute.AddRouteLineRenderer();
 

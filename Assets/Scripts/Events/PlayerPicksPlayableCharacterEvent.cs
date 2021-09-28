@@ -14,6 +14,6 @@ public class PlayerPicksPlayableCharacterEvent
         };
         RaiseEventOptions raiseEventOptions = new RaiseEventOptions { Receivers = ReceiverGroup.Others };
         PhotonNetwork.RaiseEvent(Code, content, raiseEventOptions, SendOptions.SendReliable);
-        Logger.Log("SendPlayerPicksPlayableCharacterEvent");
+        Logger.Log(Logger.Event, "Sent SendPlayerPicksPlayableCharacterEvent");
     }
 }

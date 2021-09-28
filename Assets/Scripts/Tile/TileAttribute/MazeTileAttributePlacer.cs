@@ -119,7 +119,7 @@ public class MazeTileAttributePlacer<T> : TileAttributePlacer<T> where T : MazeT
         Tile.AddAttribute(musicInstrumentCase);
     }
 
-    public virtual void PlaceFerryRoute(List<Tile> ferryRoutePointTiles, int dockingStartDirection, int dockingEndDirection)
+    public virtual void PlaceFerryRoute(string id, List<Tile> ferryRoutePointTiles, int dockingStartDirection, int dockingEndDirection)
     {
 
     }

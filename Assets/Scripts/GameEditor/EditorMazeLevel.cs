@@ -206,6 +206,7 @@ public class EditorMazeLevel : MazeLevel, IEditorLevel
             {
                 SerialisableFerryRouteAttribute serialisableFerryRouteAttribute = (SerialisableFerryRouteAttribute)JsonUtility.FromJson(serialisableTileAttribute.SerialisedData, type);
                 List<Tile> ferryRoutePointTiles = new List<Tile>();
+                string id = serialisableFerryRouteAttribute.FerryRouteId;
                 int DockingStartDirection = serialisableFerryRouteAttribute.DockingStartDirection;
                 int DockingEndDirection = serialisableFerryRouteAttribute.DockingEndDirection;
 
@@ -215,7 +216,7 @@ public class EditorMazeLevel : MazeLevel, IEditorLevel
                     Tile pointTile = _tilesByLocation[new GridLocation(serialisablePointLocation.X, serialisablePointLocation.Y)];
                     ferryRoutePointTiles.Add(pointTile);
                 }
-                tileAttributePlacer.PlaceFerryRoute(ferryRoutePointTiles, DockingStartDirection, DockingEndDirection);
+                tileAttributePlacer.PlaceFerryRoute(id, ferryRoutePointTiles, DockingStartDirection, DockingEndDirection);
             }
             else
             {
