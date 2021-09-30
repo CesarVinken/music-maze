@@ -25,6 +25,7 @@ public class Ferry : MonoBehaviour
     private GameObject _controlFerryButtonGO = null;
     private string _controlFerryButtonId;
     private List<PlayerCharacter> _playersOnFerry = new List<PlayerCharacter>();
+    private List<FerryDirectionIndicator> _ferryDirectionIndicators = new List<FerryDirectionIndicator>();
 
     public void Initialise(FerryRoute ferryRoute)
     {
@@ -102,7 +103,7 @@ public class Ferry : MonoBehaviour
             {
                 if(_playersOnFerry.Contains(playerCharacter))
                 {
-                    FerryRoutePoint ferryRoutePointForPlayerLocation = GetFerryRoutePointForPlayerLocation(newPlayerGridLocation);
+                    FerryRoutePoint ferryRoutePointForPlayerLocation = FerryRoute.GetFerryRoutePointForPlayerLocation(newPlayerGridLocation, CurrentFerryRoutePoint);
                     if(ferryRoutePointForPlayerLocation == null) // if the player's location is not aligning any ferry route point, it means the player is off the route
                     {
                         RemovePlayerOnFerry(playerCharacter);
@@ -141,48 +142,7 @@ public class Ferry : MonoBehaviour
         return;
     }
 
-    private FerryRoutePoint GetFerryRoutePointForPlayerLocation (GridLocation playerCharacterLocation)
-    {
-        FerryRoutePoint oldFerryRoutePoint = CurrentFerryRoutePoint;
-        List<FerryRoutePoint> ferryRoutePoints = FerryRoute.GetFerryRoutePoints();
-        int indexOldFerryRoutePoint = ferryRoutePoints.IndexOf(oldFerryRoutePoint);
-        if (indexOldFerryRoutePoint == 0) // we're at the beginning
-        {
-            FerryRoutePoint nextPointOnRoute = ferryRoutePoints[indexOldFerryRoutePoint + 1];
-            if (nextPointOnRoute.Tile.GridLocation.X == playerCharacterLocation.X &&
-                nextPointOnRoute.Tile.GridLocation.Y == playerCharacterLocation.Y)
-            {
-                // We moved to the next point on the route
-                return nextPointOnRoute;
-            }
-        }
-        else if (indexOldFerryRoutePoint == ferryRoutePoints.Count - 1) // we're at the end
-        {
-            FerryRoutePoint previousPointOnRoute = ferryRoutePoints[indexOldFerryRoutePoint - 1];
-            if (previousPointOnRoute.Tile.GridLocation.X == playerCharacterLocation.X &&
-                previousPointOnRoute.Tile.GridLocation.Y == playerCharacterLocation.Y)
-            {
-                // We moved to the previous point on the route
-                return previousPointOnRoute;
-            }
-        }
-        else // we're in the middle
-        {
-            if (ferryRoutePoints[indexOldFerryRoutePoint + 1].Tile.GridLocation.X == playerCharacterLocation.X &&
-                ferryRoutePoints[indexOldFerryRoutePoint + 1].Tile.GridLocation.Y == playerCharacterLocation.Y)
-            {
-                // We moved to the next point on the route
-                return ferryRoutePoints[indexOldFerryRoutePoint + 1];
-            }
-            else if (ferryRoutePoints[indexOldFerryRoutePoint - 1].Tile.GridLocation.X == playerCharacterLocation.X &&
-                ferryRoutePoints[indexOldFerryRoutePoint - 1].Tile.GridLocation.Y == playerCharacterLocation.Y)
-            {
-                // We moved to the previous point on the route
-                return ferryRoutePoints[indexOldFerryRoutePoint - 1];
-            }
-        }
-        return null;
-    }
+    
 
     private bool PlayerIsOnFerryLocation(PlayerCharacter playerCharacter)
     {
@@ -246,6 +206,8 @@ public class Ferry : MonoBehaviour
                 }
             }
         }
+
+        UpdateDirectionIndicators();
     }
 
     public void SetControllingPlayerCharacter(PlayerCharacter playerCharacter)
@@ -271,6 +233,8 @@ public class Ferry : MonoBehaviour
             Logger.Log($"The player controlling the ferry is now {ControllingPlayerCharacter?.Name}");
             MakeFerryRouteAccessibleForPlayer(true);
         }
+
+        UpdateDirectionIndicators();
     }
 
     public void TryDestroyControlFerryButton()
@@ -377,7 +341,7 @@ public class Ferry : MonoBehaviour
                 GridLocation currentGridLocation = GridLocation.FindClosestGridTile(new Vector2(usedposX, usedposY));
                 if (currentGridLocation.X == CurrentLocationTile.GridLocation.X && currentGridLocation.Y == CurrentLocationTile.GridLocation.Y) return;
                 //Logger.Log($"Search for ferry route point on grid location {currentGridLocation.X}, {currentGridLocation.Y} because the roundedPos is {usedposX} {usedposY}. (old) current location of ferry is {CurrentLocationTile.GridLocation.X}, {CurrentLocationTile.GridLocation.Y}");
-                FerryRoutePoint ferryRoutePointForPlayerLocation = GetFerryRoutePointForPlayerLocation(currentGridLocation);
+                FerryRoutePoint ferryRoutePointForPlayerLocation = FerryRoute.GetFerryRoutePointForPlayerLocation(currentGridLocation, CurrentFerryRoutePoint);
 
                 if (ferryRoutePointForPlayerLocation == null)
                 {
@@ -394,8 +358,8 @@ public class Ferry : MonoBehaviour
     private void HandleControlFerryButton()
     {
         // if the ferry is not in a docking place, do not listen to the Mouse click
-        if (CurrentLocationTile?.TileId != _dockingStartTile.TileId &&
-            CurrentLocationTile?.TileId != _dockingEndTile.TileId)
+        if (CurrentLocationTile?.TileId != _dockingStartTile?.TileId &&
+            CurrentLocationTile?.TileId != _dockingEndTile?.TileId)
         {
             return;
         }
@@ -434,7 +398,7 @@ public class Ferry : MonoBehaviour
         {
             if (_controlFerryButtonGO != null) return;
             if (playerCharacter.IsMoving) return;
-            if (ControllingPlayerCharacter && !ControllingPlayerCharacter.PhotonView.IsMine) return;
+            if (ControllingPlayerCharacter && GameRules.GamePlayerType == GamePlayerType.NetworkMultiplayer && !ControllingPlayerCharacter.PhotonView.IsMine) return;
 
             Sprite buttonSprite = GetFerryButtonSprite();
 
@@ -460,6 +424,65 @@ public class Ferry : MonoBehaviour
         }
 
         return MainScreenCameraCanvas.Instance.FerryBoardingIcons[0];
+    }
+
+    private void UpdateDirectionIndicators()
+    {
+        if(ControllingPlayerCharacter == null)
+        {
+            for (int i = 0; i < _ferryDirectionIndicators.Count; i++)
+            {
+                FerryDirectionIndicatorPool.Instance.ReturnToPool(_ferryDirectionIndicators[i]);
+            }
+            _ferryDirectionIndicators.Clear();
+            return;
+        }
+
+        if (GameRules.GamePlayerType == GamePlayerType.NetworkMultiplayer && !ControllingPlayerCharacter.PhotonView.IsMine) return;
+
+        // check what directions are needed
+        FerryRoutePoint nextFerryRoutePoint = FerryRoute.GetNextFerryRoutePoint(CurrentFerryRoutePoint);
+        FerryRoutePoint previousFerryRoutePoint = FerryRoute.GetPreviousFerryRoutePoint(CurrentFerryRoutePoint);
+
+        List<Direction> neededDirections = new List<Direction>();
+
+        if (nextFerryRoutePoint != null)
+        {
+            neededDirections.Add(DirectionHelper.GetDirectionFromGridLocation(CurrentFerryRoutePoint.Tile.GridLocation, nextFerryRoutePoint.Tile.GridLocation));
+        }
+        if (previousFerryRoutePoint != null)
+        {
+            neededDirections.Add(DirectionHelper.GetDirectionFromGridLocation(CurrentFerryRoutePoint.Tile.GridLocation, previousFerryRoutePoint.Tile.GridLocation));
+        }
+
+        // remove directions that we do not want
+        for (int i = _ferryDirectionIndicators.Count - 1; i >= 0; i--)
+        {
+            // remove any curreny ferry direction indicators that are not Needed Directions
+            if (!neededDirections.Contains(_ferryDirectionIndicators[i].Direction))
+            {
+                FerryDirectionIndicatorPool.Instance.ReturnToPool(_ferryDirectionIndicators[i]);
+                _ferryDirectionIndicators.Remove(_ferryDirectionIndicators[i]);
+            }
+        }
+
+        // Add any Needed Directions to the ferry direction indicators that we do not yet have
+        for (int j = 0; j < neededDirections.Count; j++)
+        {
+            Logger.Warning($"Needed direction: {neededDirections[j]}");
+            if(!_ferryDirectionIndicators.Any(indicator => indicator.Direction == neededDirections[j]))
+            {
+                FerryDirectionIndicator ferryDirectionIndicator = FerryDirectionIndicatorPool.Instance.Get();
+                //TODO: pass on correct player for camera
+                ferryDirectionIndicator.Initialise(ControllingPlayerCharacter, neededDirections[j], CurrentFerryRoutePoint.Tile, this);
+
+                ferryDirectionIndicator.transform.SetParent(MainScreenCameraCanvas.Instance.transform);
+                ferryDirectionIndicator.gameObject.SetActive(true);
+
+                _ferryDirectionIndicators.Add(ferryDirectionIndicator);
+            }
+        }
+
     }
 
     public void AddPlayerOnFerry(PlayerCharacter playerCharacter)

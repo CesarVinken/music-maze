@@ -70,8 +70,8 @@ public class MazeTileBaseWater : TileWater, ITileBackground, ITransformable
         transformedSpriteContainer.transform.SetParent(transform);
         transformedSpriteContainer.SetSprite(colourfulSprite);
         transformedSpriteContainer.SetSortingOrder(_sortingOrder);
-        transformedSpriteContainer.gameObject.SetActive(true);
         transformedSpriteContainer.transform.position = transform.position;
+        transformedSpriteContainer.gameObject.SetActive(true);
 
         _tileSpriteContainer.SetSortingOrder(_sortingOrder - 1);
 

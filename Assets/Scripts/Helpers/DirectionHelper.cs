@@ -36,4 +36,22 @@ public static class DirectionHelper
             return false;
         }
     }
+
+    public static Direction GetDirectionFromGridLocation(GridLocation thisLocation, GridLocation thatLocation)
+    {
+        try
+        {
+            if (thatLocation.X > thisLocation.X) return Direction.Right;
+            if (thatLocation.X < thisLocation.X) return Direction.Left;
+            if (thatLocation.Y < thisLocation.Y) return Direction.Down;
+            if (thatLocation.Y > thisLocation.Y) return Direction.Up;
+
+            throw new System.Exception();
+        }
+        catch (System.Exception)
+        {
+            Logger.Error($"thisLocation at {thisLocation.X} {thisLocation.Y} is not position in any expected direction to thatLocation at {thatLocation.X} {thatLocation.Y}");
+            throw;
+        }
+    }
 }

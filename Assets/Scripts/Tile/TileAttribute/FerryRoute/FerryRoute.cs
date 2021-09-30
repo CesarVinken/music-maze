@@ -133,6 +133,71 @@ public class FerryRoute : MonoBehaviour, ITileAttribute
         return _ferryRoutePoints;
     }
 
+    public FerryRoutePoint GetNextFerryRoutePoint(FerryRoutePoint currentFerryRoutePoint)
+    {
+        int indexCurrentFerryRoutePoint = _ferryRoutePoints.IndexOf(currentFerryRoutePoint);
+
+        if(indexCurrentFerryRoutePoint == -1 || indexCurrentFerryRoutePoint == _ferryRoutePoints.Count - 1)
+        {
+            return null;
+        }
+        return _ferryRoutePoints[indexCurrentFerryRoutePoint + 1];
+    }
+
+    public FerryRoutePoint GetPreviousFerryRoutePoint(FerryRoutePoint currentFerryRoutePoint)
+    {
+        int indexCurrentFerryRoutePoint = _ferryRoutePoints.IndexOf(currentFerryRoutePoint);
+
+        if (indexCurrentFerryRoutePoint == -1 || indexCurrentFerryRoutePoint == 0)
+        {
+            return null;
+        }
+        return _ferryRoutePoints[indexCurrentFerryRoutePoint - 1];
+    }
+
+    public FerryRoutePoint GetFerryRoutePointForPlayerLocation(GridLocation playerCharacterLocation, FerryRoutePoint currentFerryRoutePoint)
+    {
+        FerryRoutePoint oldFerryRoutePoint = currentFerryRoutePoint;
+        List<FerryRoutePoint> ferryRoutePoints = _ferryRoutePoints;
+        int indexOldFerryRoutePoint = ferryRoutePoints.IndexOf(oldFerryRoutePoint);
+        if (indexOldFerryRoutePoint == 0) // we're at the beginning
+        {
+            FerryRoutePoint nextPointOnRoute = ferryRoutePoints[indexOldFerryRoutePoint + 1];
+            if (nextPointOnRoute.Tile.GridLocation.X == playerCharacterLocation.X &&
+                nextPointOnRoute.Tile.GridLocation.Y == playerCharacterLocation.Y)
+            {
+                // We moved to the next point on the route
+                return nextPointOnRoute;
+            }
+        }
+        else if (indexOldFerryRoutePoint == ferryRoutePoints.Count - 1) // we're at the end
+        {
+            FerryRoutePoint previousPointOnRoute = ferryRoutePoints[indexOldFerryRoutePoint - 1];
+            if (previousPointOnRoute.Tile.GridLocation.X == playerCharacterLocation.X &&
+                previousPointOnRoute.Tile.GridLocation.Y == playerCharacterLocation.Y)
+            {
+                // We moved to the previous point on the route
+                return previousPointOnRoute;
+            }
+        }
+        else // we're in the middle
+        {
+            if (ferryRoutePoints[indexOldFerryRoutePoint + 1].Tile.GridLocation.X == playerCharacterLocation.X &&
+                ferryRoutePoints[indexOldFerryRoutePoint + 1].Tile.GridLocation.Y == playerCharacterLocation.Y)
+            {
+                // We moved to the next point on the route
+                return ferryRoutePoints[indexOldFerryRoutePoint + 1];
+            }
+            else if (ferryRoutePoints[indexOldFerryRoutePoint - 1].Tile.GridLocation.X == playerCharacterLocation.X &&
+                ferryRoutePoints[indexOldFerryRoutePoint - 1].Tile.GridLocation.Y == playerCharacterLocation.Y)
+            {
+                // We moved to the previous point on the route
+                return ferryRoutePoints[indexOldFerryRoutePoint - 1];
+            }
+        }
+        return null;
+    }
+
     // called in editor
     public void UpdateDocking()
     {

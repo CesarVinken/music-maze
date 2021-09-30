@@ -4807,6 +4807,30 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 182527607, guid: f5dd3dc015884b245a265e281dfb9ea7, type: 3}
+      propertyPath: FerryDirectionIndicatorSprites.Array.size
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 182527607, guid: f5dd3dc015884b245a265e281dfb9ea7, type: 3}
+      propertyPath: FerryDirectionIndicatorSprites.Array.data[0]
+      value: 
+      objectReference: {fileID: 5533097921172839153, guid: 10a0e94c6f5f2484bb02ed9edeb46e36,
+        type: 3}
+    - target: {fileID: 182527607, guid: f5dd3dc015884b245a265e281dfb9ea7, type: 3}
+      propertyPath: FerryDirectionIndicatorSprites.Array.data[1]
+      value: 
+      objectReference: {fileID: 6777957887145233244, guid: 10a0e94c6f5f2484bb02ed9edeb46e36,
+        type: 3}
+    - target: {fileID: 182527607, guid: f5dd3dc015884b245a265e281dfb9ea7, type: 3}
+      propertyPath: FerryDirectionIndicatorSprites.Array.data[2]
+      value: 
+      objectReference: {fileID: -7932351176138480108, guid: 10a0e94c6f5f2484bb02ed9edeb46e36,
+        type: 3}
+    - target: {fileID: 182527607, guid: f5dd3dc015884b245a265e281dfb9ea7, type: 3}
+      propertyPath: FerryDirectionIndicatorSprites.Array.data[3]
+      value: 
+      objectReference: {fileID: -4968923929154753791, guid: 10a0e94c6f5f2484bb02ed9edeb46e36,
+        type: 3}
     - target: {fileID: 9155724151073738240, guid: f5dd3dc015884b245a265e281dfb9ea7,
         type: 3}
       propertyPath: m_RootOrder
@@ -4872,27 +4896,5 @@ PrefabInstance:
       propertyPath: GridGO
       value: 
       objectReference: {fileID: 578353244}
-    - target: {fileID: 9155724151073738243, guid: f5dd3dc015884b245a265e281dfb9ea7,
-        type: 3}
-      propertyPath: AstarGO
-      value: 
-      objectReference: {fileID: 0}
-    - target: {fileID: 9155724151073738243, guid: f5dd3dc015884b245a265e281dfb9ea7,
-        type: 3}
-      propertyPath: _thisSceneType
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 9155724151073738243, guid: f5dd3dc015884b245a265e281dfb9ea7,
-        type: 3}
-      propertyPath: _cameraContainerPrefab
-      value: 
-      objectReference: {fileID: 4619881912487036909, guid: 0ab0ca3397fa36d489deeda8439c2e89,
-        type: 3}
-    - target: {fileID: 9155724151073738243, guid: f5dd3dc015884b245a265e281dfb9ea7,
-        type: 3}
-      propertyPath: _overworldManagerPrefab
-      value: 
-      objectReference: {fileID: 2376507798816923314, guid: a2a28d36cffc35e4885ed9e1a92fb98c,
-        type: 3}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: f5dd3dc015884b245a265e281dfb9ea7, type: 3}

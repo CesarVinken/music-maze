@@ -165,17 +165,17 @@ public class PlayerExit : TileObstacle, ITileAttribute, ITileConnectable
         transformedPrimarySpriteContainer.transform.SetParent(transform);
         transformedPrimarySpriteContainer.SetSprite(colourfulSprite);
         transformedPrimarySpriteContainer.SetSortingOrder(_sortingOrder);
-        transformedPrimarySpriteContainer.gameObject.SetActive(true);
-        transformedPrimarySpriteContainer.gameObject.layer = _tileSpriteContainer.gameObject.layer;
         transformedPrimarySpriteContainer.transform.position = transform.position;
+        transformedPrimarySpriteContainer.gameObject.layer = _tileSpriteContainer.gameObject.layer;
+        transformedPrimarySpriteContainer.gameObject.SetActive(true);
 
         TileSpriteContainer transformedSecondarySpriteContainer = TileSpriteContainerPool.Instance.Get();
         transformedSecondarySpriteContainer.transform.SetParent(transform);
         transformedSecondarySpriteContainer.SetSprite(secondaryColourfulSprite);
         transformedSecondarySpriteContainer.SetSortingOrder(_secondarySpriteSortingOrder);
-        transformedSecondarySpriteContainer.gameObject.SetActive(true);
-        transformedSecondarySpriteContainer.gameObject.layer = _secondaryTileSpriteContainer.gameObject.layer;
         transformedSecondarySpriteContainer.transform.position = transform.position;
+        transformedSecondarySpriteContainer.gameObject.layer = _secondaryTileSpriteContainer.gameObject.layer;
+        transformedSecondarySpriteContainer.gameObject.SetActive(true);
 
         _tileSpriteContainer.SetSortingOrder(_sortingOrder - 1);
         _secondaryTileSpriteContainer.SetSortingOrder(_secondarySpriteSortingOrder - 1);
