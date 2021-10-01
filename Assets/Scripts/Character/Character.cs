@@ -32,8 +32,8 @@ namespace Character
         [SerializeField] private float _baseSpeed = 8f;
         [SerializeField] private float _speed;
         [SerializeField] protected bool IsFrozen = false;
-        [SerializeField] protected bool HasCalculatedTarget = false;
-        
+        public bool HasCalculatedTarget { get; protected set; }
+
         public bool IsMoving { get; protected set; }
 
         [Space(10)]

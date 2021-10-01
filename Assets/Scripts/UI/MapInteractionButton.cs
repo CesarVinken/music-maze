@@ -126,7 +126,7 @@ namespace UI
 
             if (ferryOnTile == null) return;
 
-            TriggerPlayer.ToggleFerryControl(ferryOnTile);
+            TriggerPlayer.ToggleFerryControl(ferryOnTile, true);
             Destroy();
         }
 

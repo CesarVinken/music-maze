@@ -4,11 +4,16 @@ using UnityEngine.UI;
 
 public class FerryDirectionIndicator : MonoBehaviour
 {
-    public Image ImageRenderer;
+    [SerializeField] private Image _imageRenderer;
     public Direction Direction;
     private Ferry _ferryParent;
     private Vector2 _baseVectorWorldPositionOffset;
     private Camera _cameraToUse = null;
+
+    public virtual void Awake()
+    {
+        Guard.CheckIsNull(_imageRenderer, "_imageRenderer", gameObject);
+    }
 
     public void Initialise(PlayerCharacter player, Direction direction, Tile tile, Ferry ferryParent)
     {
@@ -29,19 +34,19 @@ public class FerryDirectionIndicator : MonoBehaviour
         {
             case Direction.Right:
                 _baseVectorWorldPositionOffset = new Vector2(1.3f, 0.5f);
-                ImageRenderer.sprite = FerryDirectionIndicatorPool.Instance.FerryDirectionIndicatorSprites[0];
+                _imageRenderer.sprite = FerryDirectionIndicatorPool.Instance.FerryDirectionIndicatorSprites[0];
                 break;
             case Direction.Up:
                 _baseVectorWorldPositionOffset = new Vector2(0.5f, 1.3f);
-                ImageRenderer.sprite = FerryDirectionIndicatorPool.Instance.FerryDirectionIndicatorSprites[3];
+                _imageRenderer.sprite = FerryDirectionIndicatorPool.Instance.FerryDirectionIndicatorSprites[3];
                 break;
             case Direction.Down:
                 _baseVectorWorldPositionOffset = new Vector2(0.5f, -0.3f);
-                ImageRenderer.sprite = FerryDirectionIndicatorPool.Instance.FerryDirectionIndicatorSprites[1];
+                _imageRenderer.sprite = FerryDirectionIndicatorPool.Instance.FerryDirectionIndicatorSprites[1];
                 break;
             case Direction.Left:
                 _baseVectorWorldPositionOffset = new Vector2(-0.3f, 0.5f);
-                ImageRenderer.sprite = FerryDirectionIndicatorPool.Instance.FerryDirectionIndicatorSprites[2];
+                _imageRenderer.sprite = FerryDirectionIndicatorPool.Instance.FerryDirectionIndicatorSprites[2];
                 break;
             default:
                 break;
@@ -71,7 +76,7 @@ public class FerryDirectionIndicator : MonoBehaviour
 
     public void SetRendererAlpha(float alphaValue)
     {
-        Color color = ImageRenderer.color;
-        ImageRenderer.color = new Color(color.r, color.g, color.b, alphaValue);
+        Color color = _imageRenderer.color;
+        _imageRenderer.color = new Color(color.r, color.g, color.b, alphaValue);
     }
 }

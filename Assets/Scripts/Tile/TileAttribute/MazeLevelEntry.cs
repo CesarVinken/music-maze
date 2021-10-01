@@ -26,6 +26,7 @@ public class MazeLevelEntry : MonoBehaviour, ITileAttribute
 
     public void Update()
     {
+        if (GameRules.GamePlayerType == GamePlayerType.SplitScreenMultiplayer) return;
         if (_occupyingPlayers.Count == 0) return;
 
         if (Input.GetMouseButtonDown(0))
@@ -39,9 +40,8 @@ public class MazeLevelEntry : MonoBehaviour, ITileAttribute
                 return;
             }
 
-
             //SINGLEPLAYER
-            if (GameRules.GamePlayerType == GamePlayerType.SinglePlayer &&
+            if (GameRules.GamePlayerType != GamePlayerType.SinglePlayer &&
                 _occupyingPlayers[0].CurrentGridLocation.X == Tile.GridLocation.X &&
                 _occupyingPlayers[0].CurrentGridLocation.Y == Tile.GridLocation.Y)
             {

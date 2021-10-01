@@ -91,7 +91,7 @@ namespace Character
                     //move if the targetted tile is a ferry route point
                     if (targetTile.TileMainMaterial.GetType() == typeof(GroundMainMaterial))
                     {
-                        ToggleFerryControl(ControllingFerry);
+                        ToggleFerryControl(ControllingFerry, false);
                     }
                     return true;
                 }

@@ -544,7 +544,7 @@ namespace Character
             return true;
         }
 
-        public void ToggleFerryControl(Ferry ferry)
+        public void ToggleFerryControl(Ferry ferry, bool playerIsStatic)
         {
             ferry.TryDestroyControlFerryButton();
 
@@ -558,8 +558,9 @@ namespace Character
             }
             else
             {
-                ferry.SetControllingPlayerCharacter(null);
+                ferry.UnsetControllingPlayerCharacter(this, playerIsStatic);
             }
+
             _animationHandler.IsControllingFerry = ControllingFerry;
 
             // Send update to other players to update ferry & player status
@@ -574,7 +575,7 @@ namespace Character
         public void ToggleFerryControlOnOthers(Ferry ferry, bool isControlling)
         {
             ferry.TryDestroyControlFerryButton();
-            ControllingFerry = ferry ? ferry : null;
+            ControllingFerry = ferry;
 
             if (isControlling)
             {
@@ -583,7 +584,7 @@ namespace Character
             }
             else
             {
-                ferry.SetControllingPlayerCharacter(null);
+                ferry.UnsetControllingPlayerCharacter(this);
                 Logger.Log($"NO one is now controlling the ferry. Set animation for isControlling to false");
             }
 

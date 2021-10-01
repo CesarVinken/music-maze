@@ -26,6 +26,7 @@ public class Ferry : MonoBehaviour
     private string _controlFerryButtonId;
     private List<PlayerCharacter> _playersOnFerry = new List<PlayerCharacter>();
     private List<FerryDirectionIndicator> _ferryDirectionIndicators = new List<FerryDirectionIndicator>();
+    private List<ObjectSelectionIndicator> _ferrySelectionIndicators = new List<ObjectSelectionIndicator>();
 
     public void Initialise(FerryRoute ferryRoute)
     {
@@ -107,6 +108,7 @@ public class Ferry : MonoBehaviour
                     if(ferryRoutePointForPlayerLocation == null) // if the player's location is not aligning any ferry route point, it means the player is off the route
                     {
                         RemovePlayerOnFerry(playerCharacter);
+                        ToggleFerrySelectionIndicator(false, playerCharacter);
 
                         if (GameRules.GamePlayerType == GamePlayerType.NetworkMultiplayer)
                         {
@@ -129,6 +131,11 @@ public class Ferry : MonoBehaviour
             {
                 AddPlayerOnFerry(playerCharacter);
 
+                if(ControllingPlayerCharacter == null)
+                {
+                    ToggleFerrySelectionIndicator(true, playerCharacter);
+                }
+
                 if(GameRules.GamePlayerType == GamePlayerType.NetworkMultiplayer)
                 {
                     PlayerFerryBoardingEvent playerFerryBoardingEvent = new PlayerFerryBoardingEvent();
@@ -140,9 +147,90 @@ public class Ferry : MonoBehaviour
         if (_controlFerryButtonGO == null) return;
 
         return;
-    }
+    }  
 
-    
+    private void ToggleFerrySelectionIndicator(bool showIndidator, PlayerCharacter playerCharacter)
+    {
+        //Logger.Log($"Player {playerCharacter.Name} Toggled FerrySelectionIndicator to {showIndidator}. Before the action count is     {_ferrySelectionIndicators.Count}");
+        if (!showIndidator)
+        {
+            if(GameRules.GamePlayerType == GamePlayerType.SplitScreenMultiplayer)
+            {
+                if (ControllingPlayerCharacter != null)
+                {
+                    //Logger.Warning($"The scenario of Turning off the indicator and there IS a controlling playerCharacter");
+                    for (int i = 0; i < _ferrySelectionIndicators.Count; i++)
+                    {
+                        ObjectSelectionIndicatorPool.Instance.ReturnToPool(_ferrySelectionIndicators[i]);
+                    }
+                    _ferrySelectionIndicators.Clear();
+                }
+                else
+                {
+                    //Logger.Warning($"The scenario of Turning off the indicator and there is NOT a ferry controlling playerCharacter");
+
+                    for (int i = _ferrySelectionIndicators.Count - 1; i >= 0; i--)
+                    {
+                        if (_ferrySelectionIndicators[i].PlayerCharacter == playerCharacter)
+                        {
+                            ObjectSelectionIndicatorPool.Instance.ReturnToPool(_ferrySelectionIndicators[i]);
+                            _ferrySelectionIndicators.Remove(_ferrySelectionIndicators[i]);
+                        }
+                    }
+                    for (int j = 0; j < _playersOnFerry.Count; j++)
+                    {
+                        if (playerCharacter != _playersOnFerry[j])
+                        {
+                            ObjectSelectionIndicator ferrySelectionIndicator = _ferrySelectionIndicators.FirstOrDefault(f => f.PlayerCharacter == _playersOnFerry[j]);
+                            if (!ferrySelectionIndicator)
+                            {
+                                //Logger.Log($"Turn one on for {playerCharacter.Name}, because there wasn't one yet");
+                                ToggleFerrySelectionIndicator(true, _playersOnFerry[j]);
+                            }
+                        }
+                    }
+                }
+            }
+            else
+            {
+                //Logger.Log($"We want to remove something. Is there a controller? {ControllingPlayerCharacter != null}. The triggerer was {playerCharacter.Name}");
+                if (ControllingPlayerCharacter)
+                {
+                    for (int i = 0; i < _ferrySelectionIndicators.Count; i++)
+                    {
+                        ObjectSelectionIndicatorPool.Instance.ReturnToPool(_ferrySelectionIndicators[i]);
+                    }
+                    _ferrySelectionIndicators.Clear();
+                }
+                else
+                {
+                    ObjectSelectionIndicator ferrySelectionIndicator = _ferrySelectionIndicators.FirstOrDefault(f => f.PlayerCharacter == playerCharacter);
+                    if (ferrySelectionIndicator)
+                    {
+                        _ferrySelectionIndicators.Remove(ferrySelectionIndicator);
+                        ObjectSelectionIndicatorPool.Instance.ReturnToPool(ferrySelectionIndicator);
+                    }
+                }
+
+            }
+        }
+        else
+        {
+            if(GameRules.GamePlayerType == GamePlayerType.NetworkMultiplayer)
+            {
+                if (!playerCharacter.PhotonView.IsMine) return;
+            }
+
+            ObjectSelectionIndicator ferrySelectionIndicator = ObjectSelectionIndicatorPool.Instance.Get();
+            Direction direction = Direction.Right;
+
+            ferrySelectionIndicator.Initialise(playerCharacter, direction, transform, ObjectSelectionIndicatorType.Ferry);
+            ferrySelectionIndicator.transform.SetParent(MainScreenCameraCanvas.Instance.transform);
+            ferrySelectionIndicator.gameObject.SetActive(true);
+            _ferrySelectionIndicators.Add(ferrySelectionIndicator);
+        }
+        //Logger.Log($"Count is now  {_ferrySelectionIndicators.Count}");
+    }
 
     private bool PlayerIsOnFerryLocation(PlayerCharacter playerCharacter)
     {
@@ -210,29 +298,68 @@ public class Ferry : MonoBehaviour
         UpdateDirectionIndicators();
     }
 
+    public void UnsetControllingPlayerCharacter(PlayerCharacter playerCharacter, bool playerIsStatic = false)
+    {
+        //Logger.Log($"Unsetting player status SetHasCalculatedTarget? {playerCharacter.HasCalculatedTarget}.  {playerCharacter?.IsMoving}");
+        PlayerCharacter oldControllingPlayer = ControllingPlayerCharacter;
+        ControllingPlayerCharacter = null;
+        if (GameRules.GamePlayerType == GamePlayerType.NetworkMultiplayer && oldControllingPlayer != null && !oldControllingPlayer.PhotonView.IsMine)
+        {
+            // TODO: Find better method to have the ferry at the correct location when the client player moves off and leaves the ferry hanging somewhere halfway a tile.
+            // For now: force move the ferry to the tile middle
+            GridLocation endGridLocation = GridLocation.FindClosestGridTile(new Vector2(oldControllingPlayer.transform.position.x, oldControllingPlayer.transform.position.y));
+            transform.position = new Vector2(endGridLocation.X, endGridLocation.Y);
+        }
+        Logger.Log($"No one is controlling the ferry now. Unsetter: {playerCharacter.Name}. Number of players on ferry: {_playersOnFerry.Count}, {playerIsStatic}");
+        MakeFerryRouteAccessibleForPlayer(false);
+
+        if (playerIsStatic) // if the player is static, then the unsetting happened because of a clicking/keyboard action, and not because a player character walked off
+        {
+            for (int i = 0; i < _playersOnFerry.Count; i++)
+            {
+                ToggleFerrySelectionIndicator(true, _playersOnFerry[i]);
+            }
+        }
+        else if(GameRules.GamePlayerType == GamePlayerType.NetworkMultiplayer && !playerCharacter.PhotonView.IsMine) // happens if we got this order through an external event
+        {
+            for (int i = 0; i < _playersOnFerry.Count; i++)
+            {
+                if (!_playersOnFerry[i].PhotonView.IsMine) continue;
+
+                ToggleFerrySelectionIndicator(true, _playersOnFerry[i]);
+            }
+        }
+
+        IsMoving = false;
+
+        UpdateDirectionIndicators();
+    }
+
     public void SetControllingPlayerCharacter(PlayerCharacter playerCharacter)
     {
-        PlayerCharacter oldControllingPlayer = ControllingPlayerCharacter;
         ControllingPlayerCharacter = playerCharacter;
 
-        if(playerCharacter == null) // If there is no longer a controlling character, make the ferry route points inaccible again
-        {
-            if(GameRules.GamePlayerType == GamePlayerType.NetworkMultiplayer && oldControllingPlayer != null && !oldControllingPlayer.PhotonView.IsMine)
-            {
-                // TODO: Find better method to have the ferry at the correct location when the client player moves off and leaves the ferry hanging somewhere halfway a tile.
-                // For now: force move the ferry to the tile middle
-                GridLocation endGridLocation = GridLocation.FindClosestGridTile(new Vector2(oldControllingPlayer.transform.position.x, oldControllingPlayer.transform.position.y));
-                transform.position =  new Vector2(endGridLocation.X, endGridLocation.Y);
-            }
-            Logger.Log($"No one is controlling the ferry now");
-            MakeFerryRouteAccessibleForPlayer(false);
-            IsMoving = false;
-        }
-        else
-        {
+        //if(playerCharacter == null) // If there is no longer a controlling character, make the ferry route points inaccessible again
+        //{
+        //    if(GameRules.GamePlayerType == GamePlayerType.NetworkMultiplayer && oldControllingPlayer != null && !oldControllingPlayer.PhotonView.IsMine)
+        //    {
+        //        // TODO: Find better method to have the ferry at the correct location when the client player moves off and leaves the ferry hanging somewhere halfway a tile.
+        //        // For now: force move the ferry to the tile middle
+        //        GridLocation endGridLocation = GridLocation.FindClosestGridTile(new Vector2(oldControllingPlayer.transform.position.x, oldControllingPlayer.transform.position.y));
+        //        transform.position =  new Vector2(endGridLocation.X, endGridLocation.Y);
+        //    }
+        //    Logger.Log($"No one is controlling the ferry now");
+        //    MakeFerryRouteAccessibleForPlayer(false);
+        //    Logger.Log($"Player status SetHasCalculatedTarget? {oldControllingPlayer?.IsCalculatingPath}");
+        //    ToggleFerrySelectionIndicator(true, playerCharacter);
+        //    IsMoving = false;
+        //}
+        //else
+        //{
             Logger.Log($"The player controlling the ferry is now {ControllingPlayerCharacter?.Name}");
             MakeFerryRouteAccessibleForPlayer(true);
-        }
+            ToggleFerrySelectionIndicator(false, playerCharacter);
+        //}
 
         UpdateDirectionIndicators();
     }
@@ -283,7 +410,7 @@ public class Ferry : MonoBehaviour
         if (triggeringPlayer.CurrentGridLocation.X == CurrentLocationTile?.GridLocation.X &&
             triggeringPlayer.CurrentGridLocation.Y == CurrentLocationTile?.GridLocation.Y)
         {
-            triggeringPlayer.ToggleFerryControl(this);
+            triggeringPlayer.ToggleFerryControl(this, true);
         }
     }
 
@@ -468,13 +595,10 @@ public class Ferry : MonoBehaviour
         // Add any Needed Directions to the ferry direction indicators that we do not yet have
         for (int j = 0; j < neededDirections.Count; j++)
         {
-            Logger.Warning($"Needed direction: {neededDirections[j]}");
             if(!_ferryDirectionIndicators.Any(indicator => indicator.Direction == neededDirections[j]))
             {
                 FerryDirectionIndicator ferryDirectionIndicator = FerryDirectionIndicatorPool.Instance.Get();
-                //TODO: pass on correct player for camera
                 ferryDirectionIndicator.Initialise(ControllingPlayerCharacter, neededDirections[j], CurrentFerryRoutePoint.Tile, this);
-
                 ferryDirectionIndicator.transform.SetParent(MainScreenCameraCanvas.Instance.transform);
                 ferryDirectionIndicator.gameObject.SetActive(true);
 
@@ -491,12 +615,32 @@ public class Ferry : MonoBehaviour
 
     public void RemovePlayerOnFerry(PlayerCharacter playerCharacter)
     {
-        if (GameRules.GamePlayerType == GamePlayerType.NetworkMultiplayer && playerCharacter.PhotonView.IsMine)
+        if (GameRules.GamePlayerType == GamePlayerType.NetworkMultiplayer)
         {
-            TryDestroyControlFerryButton();
+            if (playerCharacter.PhotonView.IsMine)
+            {
+                TryDestroyControlFerryButton();
+            }
+            for (int i = 0; i < _playersOnFerry.Count; i++)
+            {
+                if (_playersOnFerry[i] == playerCharacter)
+                {
+                    ToggleFerrySelectionIndicator(false, playerCharacter);
+                }
+                else
+                {
+                    Logger.Log($"Activate selection indicator for player {_playersOnFerry[i].Name}");
+                    ToggleFerrySelectionIndicator(true, _playersOnFerry[i]);
+                }
+            }
+        }
+
+        if(GameRules.GamePlayerType == GamePlayerType.SinglePlayer)
+        {
+            ToggleFerrySelectionIndicator(false, playerCharacter);
         }
         //Logger.Warning($"PlayerLocation {playerCharacter.Name} is {playerCharacter.CurrentGridLocation.X}, {playerCharacter.CurrentGridLocation.Y}. ferry location is {CurrentLocationTile.GridLocation.X}, {CurrentLocationTile.GridLocation.Y} ");
-        
+
         _playersOnFerry.Remove(playerCharacter);
         Logger.Warning($"Removed player {playerCharacter.Name} from ferry");
     }
