@@ -24,28 +24,41 @@ public class MazeLevelEntry : MonoBehaviour, ITileAttribute
         _spriteRenderer.sortingOrder = (int)(_sortingOrderBase - transform.position.y) * 10;
     }
 
-    public void OnMouseDown()
+    public void Update()
     {
         if (_occupyingPlayers.Count == 0) return;
 
-        //SINGLEPLAYER
-        if (GameRules.GamePlayerType == GamePlayerType.SinglePlayer &&
-            _occupyingPlayers[0].CurrentGridLocation.X == Tile.GridLocation.X &&
-            _occupyingPlayers[0].CurrentGridLocation.Y == Tile.GridLocation.Y)
+        if (Input.GetMouseButtonDown(0))
         {
-            _occupyingPlayers[0].PerformMazeLevelEntryAction(MazeLevelName);
-            return;
-        }
-        // MULTIPLAYER
-        for (int i = 0; i < _occupyingPlayers.Count; i++)
-        {
-            if(!MazeLevelInvitation.PendingInvitation &&
-                _occupyingPlayers[i].PhotonView.IsMine && 
-                _occupyingPlayers[i].CurrentGridLocation.X == Tile.GridLocation.X && 
-                _occupyingPlayers[i].CurrentGridLocation.Y == Tile.GridLocation.Y)
+            Vector2 worldPoint = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+            GridLocation clickedGridLocation = GridLocation.FindClosestGridTile(worldPoint);
+
+            // check if we clicked on the entry tile
+            if (clickedGridLocation.X != Tile.GridLocation.X || clickedGridLocation.Y != Tile.GridLocation.Y)
             {
-                _occupyingPlayers[i].PerformMazeLevelEntryAction(MazeLevelName);
-                break;
+                return;
+            }
+
+
+            //SINGLEPLAYER
+            if (GameRules.GamePlayerType == GamePlayerType.SinglePlayer &&
+                _occupyingPlayers[0].CurrentGridLocation.X == Tile.GridLocation.X &&
+                _occupyingPlayers[0].CurrentGridLocation.Y == Tile.GridLocation.Y)
+            {
+                _occupyingPlayers[0].PerformMazeLevelEntryAction(MazeLevelName);
+                return;
+            }
+            // MULTIPLAYER
+            for (int i = 0; i < _occupyingPlayers.Count; i++)
+            {
+                if (!MazeLevelInvitation.PendingInvitation &&
+                    _occupyingPlayers[i].PhotonView.IsMine &&
+                    _occupyingPlayers[i].CurrentGridLocation.X == Tile.GridLocation.X &&
+                    _occupyingPlayers[i].CurrentGridLocation.Y == Tile.GridLocation.Y)
+                {
+                    _occupyingPlayers[i].PerformMazeLevelEntryAction(MazeLevelName);
+                    break;
+                }
             }
         }
     }

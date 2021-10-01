@@ -337,7 +337,6 @@ public class Ferry : MonoBehaviour
                     usedposY = transform.position.y;
                 }
 
-
                 GridLocation currentGridLocation = GridLocation.FindClosestGridTile(new Vector2(usedposX, usedposY));
                 if (currentGridLocation.X == CurrentLocationTile.GridLocation.X && currentGridLocation.Y == CurrentLocationTile.GridLocation.Y) return;
                 //Logger.Log($"Search for ferry route point on grid location {currentGridLocation.X}, {currentGridLocation.Y} because the roundedPos is {usedposX} {usedposY}. (old) current location of ferry is {CurrentLocationTile.GridLocation.X}, {CurrentLocationTile.GridLocation.Y}");
@@ -482,7 +481,6 @@ public class Ferry : MonoBehaviour
                 _ferryDirectionIndicators.Add(ferryDirectionIndicator);
             }
         }
-
     }
 
     public void AddPlayerOnFerry(PlayerCharacter playerCharacter)
