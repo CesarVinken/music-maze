@@ -41,7 +41,7 @@ public class MazeLevelEntry : MonoBehaviour, ITileAttribute
             }
 
             //SINGLEPLAYER
-            if (GameRules.GamePlayerType != GamePlayerType.SinglePlayer &&
+            if (GameRules.GamePlayerType == GamePlayerType.SinglePlayer &&
                 _occupyingPlayers[0].CurrentGridLocation.X == Tile.GridLocation.X &&
                 _occupyingPlayers[0].CurrentGridLocation.Y == Tile.GridLocation.Y)
             {

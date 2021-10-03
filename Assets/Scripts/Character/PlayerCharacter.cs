@@ -418,7 +418,7 @@ namespace Character
             }
 
             IsCalculatingPath = true;
-            //Logger.Log($"TryStartCharacterMovement. {CurrentGridLocation.X},{CurrentGridLocation.Y} to {TargetGridLocation.TargetGridLocation.X}, {TargetGridLocation.TargetGridLocation.Y}");
+
             PathToTarget = _pathfinding.FindNodePath(CurrentGridLocation, TargetGridLocation.TargetGridLocation);
             PathToTarget.RemoveAt(0);
 
@@ -520,7 +520,7 @@ namespace Character
             else // split screen
             {
                 int playerCount = characterManager.GetPlayerCount();
-                Logger.Log($"playerCount is {playerCount}");
+
                 if (PlayerNumber == PlayerNumber.Player1)
                 {
                     Name = "Player 1";
