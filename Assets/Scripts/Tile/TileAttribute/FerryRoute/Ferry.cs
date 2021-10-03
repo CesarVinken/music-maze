@@ -222,10 +222,11 @@ public class Ferry : MonoBehaviour
             }
 
             ObjectSelectionIndicator ferrySelectionIndicator = ObjectSelectionIndicatorPool.Instance.Get();
-            Direction direction = Direction.Right;
+            Direction direction = FerryDirection == FerryDirection.Horizontal ? Direction.Right : Direction.Down;
 
             ferrySelectionIndicator.Initialise(playerCharacter, direction, transform, ObjectSelectionIndicatorType.Ferry);
-            ferrySelectionIndicator.transform.SetParent(MainScreenCameraCanvas.Instance.transform);
+            ferrySelectionIndicator.transform.SetParent(transform);
+            ferrySelectionIndicator.transform.position = transform.position;
             ferrySelectionIndicator.gameObject.SetActive(true);
             _ferrySelectionIndicators.Add(ferrySelectionIndicator);
         }

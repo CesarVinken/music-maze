@@ -8,11 +8,11 @@ public class ObjectSelectionIndicatorPool : MonoBehaviour
 
     public ObjectSelectionIndicator ObjectSelectionIndicatorPrefab;
 
-    public Sprite FerrySelectionIndicatorSprite;
+    public Sprite[] FerrySelectionIndicatorSprites;
 
     public virtual void Awake()
     {
-        Guard.CheckIsNull(FerrySelectionIndicatorSprite, "FerrySelectionIndicatorSprite", gameObject);
+        Guard.CheckIsNull(FerrySelectionIndicatorSprites, "FerrySelectionIndicatorSprites", gameObject);
 
         Instance = this;
     }

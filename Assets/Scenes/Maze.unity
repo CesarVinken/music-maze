@@ -4284,8 +4284,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ObjectSelectionIndicatorPrefab: {fileID: 5522977124890787318, guid: 442c2661e8643014fb89c17e7bb80de3,
     type: 3}
-  FerrySelectionIndicatorSprite: {fileID: 436563815456543028, guid: 8599a25d1b58ef042899fe94a6b6d0b5,
-    type: 3}
+  FerrySelectionIndicatorSprites:
+  - {fileID: 7497284331568750441, guid: 6b3d689289ca0084c897d1290bbacde9, type: 3}
+  - {fileID: -679062292490440415, guid: 6b3d689289ca0084c897d1290bbacde9, type: 3}
 --- !u!1 &1982415471
 GameObject:
   m_ObjectHideFlags: 0

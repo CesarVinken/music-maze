@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 public class ObjectSelectionIndicator : MonoBehaviour
 {
-    [SerializeField] private Image _imageRenderer;
+    [SerializeField] private SpriteRenderer _spriteRenderer;
     private Direction _direction;
     private Camera _cameraToUse = null;
     private Transform _relatedWorldSpaceObject; //eg., the Ferry object that we should follow for the indicator, notwithstanding any camera movements
@@ -15,12 +15,7 @@ public class ObjectSelectionIndicator : MonoBehaviour
 
     public virtual void Awake()
     {
-        Guard.CheckIsNull(_imageRenderer, "_imageRenderer", gameObject);
-    }
-
-    public void Update()
-    {
-        UpdatePosition();
+        Guard.CheckIsNull(_spriteRenderer, "_imageRenderer", gameObject);
     }
 
     public void Initialise(PlayerCharacter player, Direction direction, Transform relatedWorldSpaceObject, ObjectSelectionIndicatorType objectSelectionIndicatorType)
@@ -40,8 +35,8 @@ public class ObjectSelectionIndicator : MonoBehaviour
             _cameraToUse = CameraManager.Instance.CameraControllers[0].GetCamera();
         }
 
-        _imageRenderer.sprite = GetSprite();
-        UpdatePosition();
+        _spriteRenderer.sortingOrder = GetSortingLayerOrder();
+        _spriteRenderer.sprite = GetSprite();
     }
 
     public void Unset()
@@ -54,20 +49,25 @@ public class ObjectSelectionIndicator : MonoBehaviour
         switch (_objectSelectionIndicatorType)
         {
             case ObjectSelectionIndicatorType.Ferry:
-                return ObjectSelectionIndicatorPool.Instance.FerrySelectionIndicatorSprite;
+                if(_direction == Direction.Left || _direction == Direction.Right)
+                {
+                    return ObjectSelectionIndicatorPool.Instance.FerrySelectionIndicatorSprites[0];
+                }
+                return ObjectSelectionIndicatorPool.Instance.FerrySelectionIndicatorSprites[1];
             default:
                 Logger.Error($"Unknown ObjectSelectionIndicatorType {_objectSelectionIndicatorType}");
                 return null;
         }
     }
 
-    private void UpdatePosition()
+    private int GetSortingLayerOrder()
     {
-        if (_relatedWorldSpaceObject != null)
+        switch (_objectSelectionIndicatorType)
         {
-            Vector2 positionAdjustedForScreenPoint = _cameraToUse.WorldToScreenPoint(new Vector2(_relatedWorldSpaceObject.position.x + _baseVectorWorldPositionOffset.x, _relatedWorldSpaceObject.position.y + +_baseVectorWorldPositionOffset.y));
-            transform.position = new Vector2(positionAdjustedForScreenPoint.x, positionAdjustedForScreenPoint.y);
+            case ObjectSelectionIndicatorType.Ferry:
+                return SpriteSortingOrderRegister.ObjectSelectionIndicator;
+            default:
+                return 0;
         }
     }
-
 }
