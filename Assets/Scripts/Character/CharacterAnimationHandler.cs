@@ -103,7 +103,7 @@ namespace Character
         public void SetDirectionOnFerry(Ferry ferry, Direction direction)
         {
             // If we are controlling the ferry, we do not want to turn in a different direction than the direction of the ferry
-            if (!DirectionHelper.IsAlligningWithFerry(ferry.FerryDirection, direction))
+            if (!DirectionHelper.IsAlligningWithFerry(ferry.FerryRoute.FerryRouteDirection, direction))
             {
                 return;
             }

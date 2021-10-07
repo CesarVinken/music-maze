@@ -15,6 +15,8 @@ public class FerryRoute : MonoBehaviour, ITileAttribute
     [SerializeField] private FerryDocking _ferryDockingBegin;
     [SerializeField] private FerryDocking _ferryDockingEnd;
 
+    public FerryRouteDirection FerryRouteDirection;
+
     private List<FerryRoutePoint> _ferryRoutePoints = new List<FerryRoutePoint>();
     private EditorFerryRouteLineRenderer _editorFerryRouteLineRenderer;
 
@@ -48,21 +50,27 @@ public class FerryRoute : MonoBehaviour, ITileAttribute
         ParentId = tile.TileId;
     }
 
-    public void Initialise(string id, int dockingStartDirection, int dockingEndDirection)
+    public void SetDirection(int ferryRouteDirection)
     {
-        Id = id;
-        _ferryDockingBegin.Initialise(this, FerryDockingType.DockingStart, dockingStartDirection);
-        _ferryDockingEnd.Initialise(this, FerryDockingType.DockingEnd, dockingEndDirection);
-
-        Direction dockingDirectionBegin = _ferryDockingBegin.GetDockingDirection();
-        if (dockingDirectionBegin == Direction.Right || dockingDirectionBegin == Direction.Left)
+        if(ferryRouteDirection == 0 || ferryRouteDirection == 2)
         {
-            _ferry.SetDirection(FerryDirection.Horizontal);
+            FerryRouteDirection = FerryRouteDirection.Horizontal;
         }
         else
         {
-            _ferry.SetDirection(FerryDirection.Vertical);
+            FerryRouteDirection = FerryRouteDirection.Vertical;
         }
+    }
+
+    public void Initialise(string id, int startDirection)
+    {
+        Id = id;
+        SetDirection(startDirection);
+
+        _ferryDockingBegin.Initialise(this, FerryDockingType.DockingStart, startDirection);
+        _ferryDockingEnd.Initialise(this, FerryDockingType.DockingEnd, startDirection);
+
+        _ferry.SetDirection(FerryRouteDirection);
 
         if (!EditorManager.InEditor)
         {
@@ -201,21 +209,38 @@ public class FerryRoute : MonoBehaviour, ITileAttribute
     // called in editor
     public void UpdateDocking()
     {
-        if(_ferryRoutePoints.Count < 2)
+        if (_ferryRoutePoints.Count < 2)
         {
             _ferryDockingBegin.UpdateDockingDirection();
             _ferryDockingBegin.UpdateDockingSprite();
             _ferryDockingEnd.SetActive(false);
 
-            Direction ferryDockingBeginDirection = _ferryDockingBegin.GetDockingDirection();
-            if (ferryDockingBeginDirection == Direction.Right || ferryDockingBeginDirection == Direction.Left)
+            FerryRouteDirection = FerryRouteDirection.Horizontal;
+            _ferry.SetDirection(FerryRouteDirection);
+
+        }
+        else if (_ferryRoutePoints.Count == 2) // Two points is the minimum to have a direction. If there is a change in ferry route direction, it happens at two points
+        {
+            _ferryDockingBegin.UpdateDockingDirection();
+            _ferryDockingBegin.UpdateDockingSprite();
+
+            _ferryDockingEnd.UpdateDockingDirection();
+            _ferryDockingEnd.UpdateDockingSprite();
+            _ferryDockingEnd.gameObject.transform.position = _ferryRoutePoints[_ferryRoutePoints.Count - 1].Tile.transform.position;
+            _ferryDockingEnd.SetActive(true);
+
+
+            Direction dockingEndDirection = _ferryDockingEnd.GetDockingDirection();
+            Logger.Log($"dockingEndDirection is {dockingEndDirection}");
+            if (dockingEndDirection == Direction.Right || dockingEndDirection == Direction.Left)
             {
-                _ferry.SetDirection(FerryDirection.Horizontal);
+                FerryRouteDirection = FerryRouteDirection.Horizontal;
             }
             else
             {
-                _ferry.SetDirection(FerryDirection.Vertical);
+                FerryRouteDirection = FerryRouteDirection.Vertical;
             }
+            _ferry.SetDirection(FerryRouteDirection);
         }
         else
         {
@@ -223,7 +248,7 @@ public class FerryRoute : MonoBehaviour, ITileAttribute
             _ferryDockingEnd.UpdateDockingSprite();
             _ferryDockingEnd.gameObject.transform.position = _ferryRoutePoints[_ferryRoutePoints.Count - 1].Tile.transform.position;
             _ferryDockingEnd.SetActive(true);
-        }      
+        }    
     }
 
     public void TryTurnDocking(FerryDockingType ferryDockingType)

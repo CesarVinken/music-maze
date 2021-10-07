@@ -16,7 +16,7 @@ public class Ferry : MonoBehaviour
     public List<PlayerCharacter> PlayersOnFerry { get => _playersOnFerry; set => _playersOnFerry = value; }
     public bool IsMoving { get; private set; }
 
-    public FerryDirection FerryDirection;
+    //public FerryRouteDirection FerryDirection;
     public MazeTile CurrentLocationTile = null;
 
     private Tile _dockingStartTile;
@@ -222,7 +222,7 @@ public class Ferry : MonoBehaviour
             }
 
             ObjectSelectionIndicator ferrySelectionIndicator = ObjectSelectionIndicatorPool.Instance.Get();
-            Direction direction = FerryDirection == FerryDirection.Horizontal ? Direction.Right : Direction.Down;
+            Direction direction = FerryRoute.FerryRouteDirection == FerryRouteDirection.Horizontal ? Direction.Right : Direction.Down;
 
             ferrySelectionIndicator.Initialise(playerCharacter, direction, transform, ObjectSelectionIndicatorType.Ferry);
             ferrySelectionIndicator.transform.SetParent(transform);
@@ -252,17 +252,15 @@ public class Ferry : MonoBehaviour
         }
     }
 
-    public void SetDirection(FerryDirection ferryDirection)
+    public void SetDirection(FerryRouteDirection ferryDirection)
     {
-        FerryDirection = ferryDirection;
-
-        switch (FerryDirection)
+        switch (ferryDirection)
         {
-            case FerryDirection.Horizontal:
-                _spriteRenderer.sprite = MazeSpriteManager.Instance.FerryRouteSprites[4];
+            case FerryRouteDirection.Horizontal:
+                _spriteRenderer.sprite = MazeSpriteManager.Instance.FerryRouteSprites[6];
                 break;
-            case FerryDirection.Vertical:
-                _spriteRenderer.sprite = MazeSpriteManager.Instance.FerryRouteSprites[5];
+            case FerryRouteDirection.Vertical:
+                _spriteRenderer.sprite = MazeSpriteManager.Instance.FerryRouteSprites[7];
                 break;
             default:
                 Logger.Error($"Unknown ferry direction {ferryDirection}");
@@ -434,14 +432,13 @@ public class Ferry : MonoBehaviour
             return;
         }
 
-
         bool oldIsMoving = IsMoving;
 
         float controllingCharacterOldX = transform.position.x + 0.5f;
         float controllingCharacterOldY = transform.position.y + 0.5f;
         float movingDistance = Vector2.Distance(new Vector2(controllingCharacterOldX, controllingCharacterOldY), ControllingPlayerCharacter.transform.position);
         IsMoving = movingDistance > 0.0001f ? true : false;
-        Logger.Log($"ferry is moving? {IsMoving}. Distance {movingDistance}");
+
         if(GameRules.GamePlayerType == GamePlayerType.NetworkMultiplayer)
         {
                 float usedposX = (float)Math.Ceiling(transform.position.x);

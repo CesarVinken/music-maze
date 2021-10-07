@@ -165,7 +165,7 @@ public class EditorMazeTileAttributePlacer : MazeTileAttributePlacer<EditorMazeT
         }
     }
 
-    public override void PlaceFerryRoute(string ferryRouteId = "", List<Tile> ferryRoutePointTiles = null, int dockingStartDirection = -1, int dockingEndDirection = -1)
+    public override void PlaceFerryRoute(string ferryRouteId = "", List<Tile> ferryRoutePointTiles = null, int dockingStartDirection = -1)
     {
         if (string.IsNullOrEmpty(ferryRouteId))
         {
@@ -174,7 +174,7 @@ public class EditorMazeTileAttributePlacer : MazeTileAttributePlacer<EditorMazeT
 
         FerryRoute ferryRoute = (FerryRoute)InstantiateTileAttributeGO<FerryRoute>();
         ferryRoute.SetTile(_tile);
-        ferryRoute.Initialise(ferryRouteId, dockingStartDirection, dockingEndDirection);
+        ferryRoute.Initialise(ferryRouteId, dockingStartDirection);
 
         ferryRoute.AddRouteLineRenderer();
 

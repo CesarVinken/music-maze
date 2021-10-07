@@ -21,7 +21,7 @@ public class InGameMazeTileAttributePlacer : MazeTileAttributePlacer<InGameMazeT
         Tile.AddAttribute(playerSpawnpoint);
     }
 
-    public override void PlaceFerryRoute(string ferryRouteId, List<Tile> ferryRoutePointTiles, int dockingStartDirection, int dockingEndDirection)
+    public override void PlaceFerryRoute(string ferryRouteId, List<Tile> ferryRoutePointTiles, int ferryRouteDirection)
     {
         FerryRoute ferryRoute = (FerryRoute)InstantiateTileAttributeGO<FerryRoute>();
         ferryRoute.SetTile(_tile);
@@ -38,7 +38,7 @@ public class InGameMazeTileAttributePlacer : MazeTileAttributePlacer<InGameMazeT
             }
         }
 
-        ferryRoute.Initialise(ferryRouteId, dockingStartDirection, dockingEndDirection);
+        ferryRoute.Initialise(ferryRouteId, ferryRouteDirection);
         Tile.AddAttribute(ferryRoute);
     }
 }

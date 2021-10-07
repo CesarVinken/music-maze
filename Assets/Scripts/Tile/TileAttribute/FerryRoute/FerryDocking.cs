@@ -15,7 +15,7 @@ public class FerryDocking : MonoBehaviour
     {
         _ferryRoute = ferryRoute;
         _dockingType = dockingType;
-        _dockingDirection = DockingDirectionFromInt(dockingDirection);
+        _dockingDirection = dockingType == FerryDockingType.DockingStart ? DirectionHelper.DirectionByInt(dockingDirection) : DirectionHelper.OppositeDirection(DirectionHelper.DirectionByInt(dockingDirection)); ;
         UpdateDockingSprite();
 
         if (!EditorManager.InEditor)
@@ -43,79 +43,57 @@ public class FerryDocking : MonoBehaviour
     public void UpdateDockingDirection()
     {
         List <FerryRoutePoint> ferryRoutePoints = _ferryRoute.GetFerryRoutePoints();
-        Tile neighbourTile;
-        Tile dockingTile = ferryRoutePoints[0].Tile;
-        _dockingDirection = Direction.Right;
-
+        Logger.Log($"update docking direction for docking type {_dockingType}");
         if (_dockingType == FerryDockingType.DockingStart)
         {
-            dockingTile = ferryRoutePoints[0].Tile;
+            if(ferryRoutePoints.Count < 2)
+            {
+                _dockingDirection = Direction.Right;
+                return;
+            }
+
+            _dockingDirection = Direction.Right;
+            Tile dockingTile = ferryRoutePoints[0].Tile;
+            Tile neighbourTile;
 
             if (dockingTile.Neighbours.TryGetValue(Direction.Right, out neighbourTile))
             {
-                if (neighbourTile != null && neighbourTile.Walkable && neighbourTile.TileMainMaterial is GroundMainMaterial)
-                {
-                    _dockingDirection = Direction.Right;
-                    return;
-                }
-            }
-            if (dockingTile.Neighbours.TryGetValue(Direction.Down, out neighbourTile))
-            {
-                if (neighbourTile != null && neighbourTile.Walkable && neighbourTile.TileMainMaterial is GroundMainMaterial)
-                {
-                    _dockingDirection = Direction.Down;
-                    return;
-                }
-            }
-            if (dockingTile.Neighbours.TryGetValue(Direction.Left, out neighbourTile))
-            {
-                if (neighbourTile != null && neighbourTile.Walkable && neighbourTile.TileMainMaterial is GroundMainMaterial)
+                if (neighbourTile.TileId.Equals(ferryRoutePoints[1].Tile.TileId))
                 {
                     _dockingDirection = Direction.Left;
                     return;
                 }
             }
-            if (dockingTile.Neighbours.TryGetValue(Direction.Up, out neighbourTile))
+            if (dockingTile.Neighbours.TryGetValue(Direction.Down, out neighbourTile))
             {
-                if (neighbourTile != null && neighbourTile.Walkable && neighbourTile.TileMainMaterial is GroundMainMaterial)
+                if (neighbourTile.TileId.Equals(ferryRoutePoints[1].Tile.TileId))
                 {
                     _dockingDirection = Direction.Up;
                     return;
                 }
             }
-            return;
-        }
-
-        // It is the second docking point
-        dockingTile = ferryRoutePoints[ferryRoutePoints.Count - 1].Tile;
-        Tile previousPointTile = ferryRoutePoints[ferryRoutePoints.Count - 2].Tile;
-
-        foreach (KeyValuePair<Direction, Tile> neighboursOfNeighbour in previousPointTile.Neighbours)
-        {
-            string tileIdOfPossibleDockingTile = neighboursOfNeighbour.Value.TileId;
-
-            if (tileIdOfPossibleDockingTile.Equals(dockingTile.TileId))
+            if (dockingTile.Neighbours.TryGetValue(Direction.Left, out neighbourTile))
             {
-                // We found that the tile opposite to the last way point. Try if it is walkable
-                if (dockingTile.Neighbours.TryGetValue(neighboursOfNeighbour.Key, out neighbourTile))
+                if (neighbourTile.TileId.Equals(ferryRoutePoints[1].Tile.TileId))
                 {
-                    if (neighbourTile != null && neighbourTile.Walkable && neighbourTile.TileMainMaterial is GroundMainMaterial)
-                    {
-                        _dockingDirection = neighboursOfNeighbour.Key;
-                        return;
-                    }
-                }
-
-                // If the desired docking direction is not walkable try to find another neighbour land tile that is walkable
-                foreach (KeyValuePair<Direction, Tile> dockingTileNeighbour in dockingTile.Neighbours)
-                {
-                    if (dockingTileNeighbour.Value.Walkable && dockingTileNeighbour.Value.TileMainMaterial is GroundMainMaterial)
-                    {
-                        _dockingDirection = dockingTileNeighbour.Key;
-                        return;
-                    }
+                    _dockingDirection = Direction.Right;
+                    return;
                 }
             }
+            if (dockingTile.Neighbours.TryGetValue(Direction.Up, out neighbourTile))
+            {
+                if (neighbourTile.TileId.Equals(ferryRoutePoints[1].Tile.TileId))
+                {
+                    _dockingDirection = Direction.Down;
+                    return;
+                }
+            }
+            return;
+        }
+        else
+        {
+            FerryDocking ferryDockingStart = _ferryRoute.GetFerryDocking(FerryDockingType.DockingStart);
+            _dockingDirection = DirectionHelper.OppositeDirection(ferryDockingStart.GetDockingDirection());
         }
     }
 
@@ -140,23 +118,6 @@ public class FerryDocking : MonoBehaviour
         }
 
         _spriteRenderer.sprite = MazeSpriteManager.Instance.FerryRouteSprites[_currentSpriteNumber];
-    }
-
-    private Direction DockingDirectionFromInt(int dockingDirection)
-    {
-        switch (dockingDirection)
-        {
-            case 0:
-                return Direction.Right;
-            case 1:
-                return Direction.Down;
-            case 2:
-                return Direction.Left;
-            case 3:
-                return Direction.Up;
-            default:
-                return Direction.Right;
-        }
     }
 
     public void TryTurn()

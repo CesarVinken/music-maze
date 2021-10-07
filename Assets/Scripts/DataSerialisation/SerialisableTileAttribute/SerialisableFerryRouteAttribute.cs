@@ -9,18 +9,13 @@ namespace DataSerialisation
         public string FerryRouteId;
         public List<SerialisableGridLocation> FerryRoutePoints;
         public int DockingStartDirection = -1;
-        public int DockingEndDirection = -1;
 
-        public SerialisableFerryRouteAttribute(string ferryRouteId, List<FerryRoutePoint> ferryRoutePoints, FerryDocking ferryDockingStart, FerryDocking ferryDockingEnd)
+        public SerialisableFerryRouteAttribute(string ferryRouteId, List<FerryRoutePoint> ferryRoutePoints, FerryDocking ferryDockingStart)
         {
             FerryRouteId = ferryRouteId;
             FerryRoutePoints = SerialiseFerryRoutePoints(ferryRoutePoints);
             
             DockingStartDirection = GetNumberFromDirection(ferryDockingStart.GetDockingDirection());
-            if(FerryRoutePoints.Count > 1)
-            {
-                DockingEndDirection = GetNumberFromDirection(ferryDockingEnd.GetDockingDirection());
-            }
         }
 
         private List<SerialisableGridLocation> SerialiseFerryRoutePoints(List<FerryRoutePoint> ferryRoutePoints)

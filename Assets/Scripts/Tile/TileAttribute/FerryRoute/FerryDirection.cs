@@ -1,4 +1,4 @@
-public enum FerryDirection
+public enum FerryRouteDirection
 {
     Horizontal,
     Vertical

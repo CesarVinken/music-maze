@@ -55,6 +55,8 @@ public class FerryRouteDrawingModeAccessor : MonoBehaviour
     {
         if (SelectedFerryRoute == null) return;
 
+        Logger.Log($"What is the direction of the ferry route? {SelectedFerryRoute.FerryRouteDirection}");
+
         //show green tiles around the addable water tiles around the last tile of the route
         List<FerryRoutePoint> ferryRoutePoints = SelectedFerryRoute.GetFerryRoutePoints();
         EditorMazeTile lastTile = ferryRoutePoints[ferryRoutePoints.Count - 1].Tile as EditorMazeTile;
@@ -67,6 +69,20 @@ public class FerryRouteDrawingModeAccessor : MonoBehaviour
             EditorMazeTile neighbourTile = neighbour.Value as EditorMazeTile;
 
             if (neighbourTile == null)
+            {
+                continue;
+            }
+
+            if (SelectedFerryRoute.FerryRouteDirection == FerryRouteDirection.Vertical &&
+                ferryRoutePoints.Count > 1 &&
+                (neighbour.Key == Direction.Right || neighbour.Key == Direction.Left))
+            {
+                continue;
+            }
+
+            if (SelectedFerryRoute.FerryRouteDirection == FerryRouteDirection.Horizontal &&
+               ferryRoutePoints.Count > 1 &&
+               (neighbour.Key == Direction.Up || neighbour.Key == Direction.Down))
             {
                 continue;
             }

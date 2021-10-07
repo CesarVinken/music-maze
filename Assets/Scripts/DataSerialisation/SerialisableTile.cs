@@ -247,7 +247,7 @@ namespace DataSerialisation
             else if (tileAttribute.GetType() == typeof(FerryRoute))
             {
                 FerryRoute ferryRoute = tileAttribute as FerryRoute;
-                SerialisableFerryRouteAttribute serialisableFerryRouteAttribute = new SerialisableFerryRouteAttribute(ferryRoute.Id, ferryRoute.GetFerryRoutePoints(), ferryRoute.GetFerryDocking(FerryDockingType.DockingStart), ferryRoute.GetFerryDocking(FerryDockingType.DockingEnd));
+                SerialisableFerryRouteAttribute serialisableFerryRouteAttribute = new SerialisableFerryRouteAttribute(ferryRoute.Id, ferryRoute.GetFerryRoutePoints(), ferryRoute.GetFerryDocking(FerryDockingType.DockingStart));
                 return serialisableFerryRouteAttribute;
             }
             else
