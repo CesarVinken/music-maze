@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using UnityEngine;
 
 public class InGameMazeTileAttributePlacer : MazeTileAttributePlacer<InGameMazeTile>
 {
@@ -33,12 +34,23 @@ public class InGameMazeTileAttributePlacer : MazeTileAttributePlacer<InGameMazeT
         else
         {
             for (int i = 0; i < ferryRoutePointTiles.Count; i++)
-            {
+            {             
                 ferryRoute.AddFerryRoutePointInGame(ferryRoutePointTiles[i]);
             }
         }
 
         ferryRoute.Initialise(ferryRouteId, ferryRouteDirection);
         Tile.AddAttribute(ferryRoute);
+
+        for (int j = 0; j < ferryRoutePointTiles.Count; j++)
+        {
+            GameObject ferryRoutePointGO = GameObject.Instantiate(ferryRoute.FerryRoutePointSpritePrefab);
+            ferryRoutePointGO.transform.SetParent(ferryRoutePointTiles[j].transform);
+            ferryRoutePointGO.transform.position = ferryRoutePointGO.transform.parent.transform.position;
+
+            FerryRoutePointSprite ferryRoutePointSprite = ferryRoutePointGO.GetComponent<FerryRoutePointSprite>();
+            ferryRoutePointSprite.SetTile(ferryRoutePointTiles[j]);
+            ferryRoutePointSprite.SetDirection(ferryRoute.FerryRouteDirection);
+        }
     }
 }

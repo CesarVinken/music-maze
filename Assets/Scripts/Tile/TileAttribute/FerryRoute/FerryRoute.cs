@@ -16,6 +16,7 @@ public class FerryRoute : MonoBehaviour, ITileAttribute
     [SerializeField] private FerryDocking _ferryDockingEnd;
 
     public FerryRouteDirection FerryRouteDirection;
+    public GameObject FerryRoutePointSpritePrefab;
 
     private List<FerryRoutePoint> _ferryRoutePoints = new List<FerryRoutePoint>();
     private EditorFerryRouteLineRenderer _editorFerryRouteLineRenderer;
