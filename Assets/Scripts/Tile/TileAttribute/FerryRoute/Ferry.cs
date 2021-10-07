@@ -397,6 +397,11 @@ public class Ferry : MonoBehaviour
             return;
         }
 
+        if (triggeringPlayer.IsMoving)
+        {
+            return;
+        }
+
         if (triggeringPlayer.CurrentGridLocation.X == CurrentLocationTile?.GridLocation.X &&
             triggeringPlayer.CurrentGridLocation.Y == CurrentLocationTile?.GridLocation.Y)
         {
