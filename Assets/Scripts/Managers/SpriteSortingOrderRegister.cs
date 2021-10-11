@@ -9,6 +9,13 @@ public static class SpriteSortingOrderRegister
     public const int MusicInstrumentCase = 10;
     public const int Sheetmusic = 10;
 
+    public const int FerryHorizontal = 10;
+    public const int FerryRoutePointVertical = 10;
+
+    public const int FerryVertical = 0;
+    public const int FerryRoutePointHorizontal = 0;
+
+
     public const int BridgeEdge = 0;
 
     public const int BaseGroundSortingOrder = -20;

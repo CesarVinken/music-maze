@@ -42,15 +42,18 @@ public class InGameMazeTileAttributePlacer : MazeTileAttributePlacer<InGameMazeT
         ferryRoute.Initialise(ferryRouteId, ferryRouteDirection);
         Tile.AddAttribute(ferryRoute);
 
-        for (int j = 0; j < ferryRoutePointTiles.Count; j++)
+        if(ferryRoutePointTiles.Count > 2)
         {
-            GameObject ferryRoutePointGO = GameObject.Instantiate(ferryRoute.FerryRoutePointSpritePrefab);
-            ferryRoutePointGO.transform.SetParent(ferryRoutePointTiles[j].transform);
-            ferryRoutePointGO.transform.position = ferryRoutePointGO.transform.parent.transform.position;
+            for (int j = 1; j < ferryRoutePointTiles.Count - 1; j++)
+            {
+                GameObject ferryRoutePointGO = GameObject.Instantiate(ferryRoute.FerryRoutePointSpritePrefab);
+                ferryRoutePointGO.transform.SetParent(ferryRoutePointTiles[j].transform);
+                ferryRoutePointGO.transform.position = ferryRoutePointGO.transform.parent.transform.position;
 
-            FerryRoutePointSprite ferryRoutePointSprite = ferryRoutePointGO.GetComponent<FerryRoutePointSprite>();
-            ferryRoutePointSprite.SetTile(ferryRoutePointTiles[j]);
-            ferryRoutePointSprite.SetDirection(ferryRoute.FerryRouteDirection);
+                FerryRoutePointSprite ferryRoutePointSprite = ferryRoutePointGO.GetComponent<FerryRoutePointSprite>();
+                ferryRoutePointSprite.SetTile(ferryRoutePointTiles[j]);
+                ferryRoutePointSprite.SetDirection(ferryRoute.FerryRouteDirection);
+            }
         }
     }
 }

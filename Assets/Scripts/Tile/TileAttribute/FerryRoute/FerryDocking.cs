@@ -102,15 +102,19 @@ public class FerryDocking : MonoBehaviour
         switch (_dockingDirection)
         {
             case Direction.Right:
+                SetLayerOrder(SpriteSortingOrderRegister.FerryRoutePointHorizontal);
                 _currentSpriteNumber = 0;
                 break;
             case Direction.Down:
+                SetLayerOrder(SpriteSortingOrderRegister.FerryRoutePointVertical);
                 _currentSpriteNumber = 1; 
                 break;
             case Direction.Left:
+                SetLayerOrder(SpriteSortingOrderRegister.FerryRoutePointHorizontal);
                 _currentSpriteNumber = 2;
                 break;
             case Direction.Up:
+                SetLayerOrder(SpriteSortingOrderRegister.FerryRoutePointVertical);
                 _currentSpriteNumber = 3;
                 break;
             default:
@@ -147,5 +151,10 @@ public class FerryDocking : MonoBehaviour
             _currentSpriteNumber = 0;
         }
 
+    }
+
+    private void SetLayerOrder(int sortingOrder)
+    {
+        _spriteRenderer.sortingOrder = sortingOrder;
     }
 }

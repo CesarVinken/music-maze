@@ -257,9 +257,11 @@ public class Ferry : MonoBehaviour
         switch (ferryDirection)
         {
             case FerryRouteDirection.Horizontal:
+                _spriteRenderer.sortingOrder = SpriteSortingOrderRegister.FerryHorizontal;
                 _spriteRenderer.sprite = MazeSpriteManager.Instance.FerryRouteSprites[6];
                 break;
             case FerryRouteDirection.Vertical:
+                _spriteRenderer.sortingOrder = SpriteSortingOrderRegister.FerryVertical;
                 _spriteRenderer.sprite = MazeSpriteManager.Instance.FerryRouteSprites[7];
                 break;
             default:
