@@ -16,9 +16,13 @@ namespace Character
             get { return _inLocomotion; }
             set
             {
-                Logger.Log(Logger.Locomotion, "Set InLocomotion for animation to {0}", value);
                 _inLocomotion = value;
                 _animator.SetBool("Locomotion", _inLocomotion); // TODO? Use hashtable instead of string name for animations (= more efficient?)
+
+                if (_isControllingFerry)
+                {
+                    _animator.speed = _inLocomotion ? 1 : 0; // if we are controlling the ferry but stop moving, we show the paused ferry move animation
+                }
             }
         }
 
@@ -28,10 +32,18 @@ namespace Character
             get { return _isControllingFerry; }
             set
             {
-                ////Logger.Log(Logger.Locomotion, "Set _isControllingFerry for animation to {0}", value);
                 _isControllingFerry = value;
                 _animator.SetBool("ControllingFerry", _isControllingFerry); // TODO? Use hashtable instead of string name for animations (= more efficient?)
+                if(!_isControllingFerry)
+                {
+                    _animator.speed = 1;
+                }
             }
+        }
+
+        public void SetAnimationSpeed (float speed)
+        {
+            _animator.speed = speed;
         }
 
         [SerializeField] private PhotonAnimatorView _photonAnimatorView;
