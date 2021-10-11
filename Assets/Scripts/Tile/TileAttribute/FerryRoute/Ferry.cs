@@ -272,7 +272,7 @@ public class Ferry : MonoBehaviour
 
     public void SetNewCurrentLocation(FerryRoutePoint nextFerryRoutePoint)
     {
-        Logger.Warning($"Update current ferry route point to {nextFerryRoutePoint.Tile.GridLocation.X} {nextFerryRoutePoint.Tile.GridLocation.Y}");
+        //Logger.Warning($"Update current ferry route point to {nextFerryRoutePoint.Tile.GridLocation.X} {nextFerryRoutePoint.Tile.GridLocation.Y}");
         CurrentFerryRoutePoint = nextFerryRoutePoint;
 
         if (CurrentLocationTile != null)
@@ -472,12 +472,9 @@ public class Ferry : MonoBehaviour
                         SetNewCurrentLocation(ferryRoutePointForPlayerLocation);
                     }
                 }
-            //}
             if (IsMoving && movingDistance > 0.004f)
             {
                 transform.position = new Vector2(ControllingPlayerCharacter.transform.position.x - 0.5f, ControllingPlayerCharacter.transform.position.y - 0.5f);
-                Logger.Log($"move ferry transform to {transform.position.x} {transform.position.y}");
-
             }
             else
             {

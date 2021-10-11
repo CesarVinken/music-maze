@@ -18,7 +18,6 @@ namespace Character
             {
                 _inLocomotion = value;
                 _animator.SetBool("Locomotion", _inLocomotion); // TODO? Use hashtable instead of string name for animations (= more efficient?)
-
                 if (_isControllingFerry)
                 {
                     _animator.speed = _inLocomotion ? 1 : 0; // if we are controlling the ferry but stop moving, we show the paused ferry move animation
@@ -41,11 +40,6 @@ namespace Character
             }
         }
 
-        public void SetAnimationSpeed (float speed)
-        {
-            _animator.speed = speed;
-        }
-
         [SerializeField] private PhotonAnimatorView _photonAnimatorView;
 
         private float timeInIdle = 0f;
@@ -63,6 +57,27 @@ namespace Character
 
             if (_animator == null)
                 _photonAnimatorView = GetComponent<PhotonAnimatorView>();
+        }
+
+        public void Update()
+        {
+            // The client does not keep track of the bools on the script. So when the other player initiates an animatin, we can only get the status from the animator itself. We need this to make sure the ferry animation stops and continues correctly
+            // We are calling GetBool 2 times every update. Maybe to inefficient
+            if (GameRules.GamePlayerType == GamePlayerType.NetworkMultiplayer && !_character.PhotonView.IsMine)
+            {
+                bool isControllingFerryOnAnimator = _animator.GetBool("ControllingFerry");
+                if (isControllingFerryOnAnimator)
+                {
+                    if (_animator.GetBool("Locomotion"))
+                    {
+                        _animator.speed = 1;
+                    }
+                    else
+                    {
+                        _animator.speed = 0;
+                    }
+                }
+            }
         }
 
         public void SetAnimationControllerForCharacterType(ICharacter characterType)
@@ -178,6 +193,11 @@ namespace Character
                     yield return null;
                 }
             }   
+        }
+
+        public void SetAnimationSpeed(float speed)
+        {
+            _animator.speed = speed;
         }
     }
 }

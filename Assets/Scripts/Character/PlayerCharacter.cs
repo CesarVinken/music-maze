@@ -306,12 +306,12 @@ namespace Character
 
             if (!ValidateTarget(new TargetLocation(targetGridLocation, moveDirection))) return;
 
-            Vector2 gridVectorTarget = GridLocation.GridToVector(targetGridLocation);
-
             if (CurrentGridLocation.X == targetGridLocation.X && CurrentGridLocation.Y == targetGridLocation.Y) return;
 
             if (!_animationHandler.InLocomotion)
+            {
                 _animationHandler.SetLocomotion(true);
+            }
 
             IsCalculatingPath = true;
 
@@ -589,6 +589,10 @@ namespace Character
             }
 
             _animationHandler.IsControllingFerry = isControlling;
+            if (!isControlling)
+            {
+                _animationHandler.SetAnimationSpeed(1);
+            }
         }
 
         private void SetPlayerKeyboardInput()
