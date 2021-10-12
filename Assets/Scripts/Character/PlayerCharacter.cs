@@ -549,19 +549,20 @@ namespace Character
             ferry.TryDestroyControlFerryButton();
 
             ControllingFerry = ControllingFerry ? null : ferry;
-            
+
+            _animationHandler.IsControllingFerry = ControllingFerry;
+
             if (ControllingFerry)
             {
                 if (IsMoving) return; // we should never be able to set a controlling player when we are already moving. For example would happen if a player clicks immediately after leaving the ferry.
 
                 ferry.SetControllingPlayerCharacter(this);
+                _animationHandler.SetLocomotion(false);
             }
             else
             {
                 ferry.UnsetControllingPlayerCharacter(this, playerIsStatic);
             }
-
-            _animationHandler.IsControllingFerry = ControllingFerry;
 
             // Send update to other players to update ferry & player status
             if (GameRules.GamePlayerType == GamePlayerType.NetworkMultiplayer)
