@@ -32,9 +32,11 @@ namespace Character
 
             base.Update();
 
-            if (OccupiedMazeLevelEntry != null && (GameRules.GamePlayerType == GamePlayerType.SinglePlayer ||
-                GameRules.GamePlayerType == GamePlayerType.SplitScreenMultiplayer ||
-                PhotonView.IsMine))
+            if (OccupiedMazeLevelEntry == null) return;
+            if (GameRules.GamePlayerType == GamePlayerType.NetworkMultiplayer && !PhotonView.IsMine) return;
+
+            if ((GameRules.GamePlayerType == GamePlayerType.SinglePlayer ||
+                (GameRules.GamePlayerType == GamePlayerType.NetworkMultiplayer && PhotonView.IsMine)))
             {
                 if (Input.GetKeyDown(KeyCode.Return) || Input.GetKeyDown(KeyCode.KeypadEnter))
                 {
@@ -43,17 +45,29 @@ namespace Character
                         PerformMazeLevelEntryAction(OccupiedMazeLevelEntry.MazeLevelName);
                     }
                 }
-                if (OccupiedMazeLevelEntry.Tile.GridLocation.X == CurrentGridLocation.X && OccupiedMazeLevelEntry.Tile.GridLocation.Y == CurrentGridLocation.Y)
+            }
+            else if(GameRules.GamePlayerType == GamePlayerType.SplitScreenMultiplayer)
+            {
+                if (PlayerNumber == PlayerNumber.Player1 && Input.GetKeyDown(GameManager.Instance.KeyboardConfiguration.Player1Action) ||
+                    PlayerNumber == PlayerNumber.Player2 && Input.GetKeyDown(GameManager.Instance.KeyboardConfiguration.Player2Action))
                 {
-                    if (MapInteractionButtonsForPlayer.Count == 0)
+                    if (OccupiedMazeLevelEntry.Tile.GridLocation.X == CurrentGridLocation.X && OccupiedMazeLevelEntry.Tile.GridLocation.Y == CurrentGridLocation.Y)
                     {
-                        MainScreenCameraCanvas.Instance.CreateMapInteractionButton(
-                            this,
-                            new Vector2(OccupiedMazeLevelEntry.Tile.GridLocation.X, OccupiedMazeLevelEntry.Tile.GridLocation.Y),
-                            MapInteractionAction.PerformMazeLevelEntryAction,
-                            "Enter " + OccupiedMazeLevelEntry.MazeLevelName,
-                            null);
+                        PerformMazeLevelEntryAction(OccupiedMazeLevelEntry.MazeLevelName);
                     }
+                }
+            }
+
+            if (OccupiedMazeLevelEntry.Tile.GridLocation.X == CurrentGridLocation.X && OccupiedMazeLevelEntry.Tile.GridLocation.Y == CurrentGridLocation.Y)
+            {
+                if (MapInteractionButtonsForPlayer.Count == 0)
+                {
+                    MainScreenCameraCanvas.Instance.CreateMapInteractionButton(
+                        this,
+                        new Vector2(OccupiedMazeLevelEntry.Tile.GridLocation.X, OccupiedMazeLevelEntry.Tile.GridLocation.Y),
+                        MapInteractionAction.PerformMazeLevelEntryAction,
+                        "Enter " + OccupiedMazeLevelEntry.MazeLevelName,
+                        null);
                 }
             }
         }
