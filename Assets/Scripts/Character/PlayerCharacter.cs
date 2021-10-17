@@ -77,6 +77,11 @@ namespace Character
                 (GameRules.GamePlayerType == GamePlayerType.NetworkMultiplayer && PhotonView.IsMine)
                 )
             {
+                if (HasCalculatedTarget)
+                {
+                    MoveCharacter();
+                }
+
                 if (PersistentGameManager.CurrentPlatform == Platform.PC)
                     HandleKeyboardInput();
 
@@ -128,21 +133,16 @@ namespace Character
                         CheckPointerInput();
                     }
                 }
-
-                if (HasCalculatedTarget)
-                {
-                    MoveCharacter();
-                }
             }
             else if (GameRules.GamePlayerType == GamePlayerType.SplitScreenMultiplayer)
             {
-                if (PersistentGameManager.CurrentPlatform == Platform.PC)
-                    HandleKeyboardInput();
-
                 if (HasCalculatedTarget)
                 {
                     MoveCharacter();
                 }
+                
+                if (PersistentGameManager.CurrentPlatform == Platform.PC)
+                    HandleKeyboardInput();
             }
             else // Case: Clients in multiplayer network game
             {
@@ -453,7 +453,7 @@ namespace Character
 
         public override void OnTargetReached()
         {
-            //Logger.Warning("Target reached.");
+            //Logger.Warning($"Target reached. Are we pressing movement key? {IsPressingMovementKey()}");
             SetHasCalculatedTarget(false);
 
             if (!IsPressingMovementKey() && !_isPressingPointerForSeconds)
