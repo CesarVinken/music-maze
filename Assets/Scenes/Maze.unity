@@ -190,6 +190,16 @@ PrefabInstance:
       propertyPath: m_Name
       value: MazeNetworkFae
       objectReference: {fileID: 0}
+    - target: {fileID: 3504911122768316393, guid: 106902cf47bbd934e8165bbe0234baad,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3504911122768317446, guid: 106902cf47bbd934e8165bbe0234baad,
+        type: 3}
+      propertyPath: sceneViewId
+      value: 2
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 106902cf47bbd934e8165bbe0234baad, type: 3}
 --- !u!1 &40619304

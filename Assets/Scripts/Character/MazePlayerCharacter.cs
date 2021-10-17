@@ -99,12 +99,13 @@ namespace Character
                 {
                     if (!ValidateForBridges(direction, currentTile, targetTile))
                     {
+                        Logger.Log("ValidateForBridges false"); 
                         return false;
                     }
 
                     if (!ValidateForFerryRoutes(direction, currentTile, targetTile))
                     {
-                        //Logger.Log("ValidateForFerryRoutes false");
+                        Logger.Log("ValidateForFerryRoutes false");
 
                         return false;
                     }
@@ -175,7 +176,12 @@ namespace Character
         // If we are on a ferry but not controlling, we should not be able to walk around, except for when we move off or on the ferry
         private bool ValidateForFerryRoutes(Direction direction, Tile currentTile, Tile targetTile)
         {
-            if(targetTile.TileMainMaterial.GetType() == typeof(GroundMainMaterial))
+            if(targetTile.TileMainMaterial == null || targetTile.TileMainMaterial.GetType() != typeof(WaterMainMaterial))
+            {
+                return true;
+            }
+
+            if(targetTile.TryGetAttribute<BridgePiece>())
             {
                 return true;
             }
