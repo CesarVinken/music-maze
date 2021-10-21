@@ -28,13 +28,6 @@ public class EditorTwoOptionPanel : MonoBehaviour
         });
     }
 
-
-    //public void ShowMessage(string message)
-    //{
-    //    _messageText.text = message;
-    //    gameObject.SetActive(true);
-    //}
-
     public void ExecuteAction(EditorUIAction actionToExecute)
     {
         switch (actionToExecute)
@@ -52,6 +45,7 @@ public class EditorTwoOptionPanel : MonoBehaviour
                 ExecuteSaveOverworld();
                 break;
             case EditorUIAction.Close:
+                Destroy(gameObject);
                 break;
             default:
                 Logger.Error($"The action {actionToExecute} was not yet implemented");

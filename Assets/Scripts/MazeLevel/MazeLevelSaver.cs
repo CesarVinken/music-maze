@@ -13,6 +13,8 @@ public class MazeLevelSaver
         SaveMazeLevelData();
         AddMazeToMazeList();
 
+        GameManager.Instance.CurrentEditorLevel.UnsavedChanges = false;
+
         Logger.Log(Logger.Datawriting, "Level {0} Saved.", _mazeName);
     }
 

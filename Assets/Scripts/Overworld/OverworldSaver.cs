@@ -1,5 +1,4 @@
 using DataSerialisation;
-using UnityEngine;
 
 public class OverworldSaver
 {
@@ -11,6 +10,8 @@ public class OverworldSaver
 
         SaveOverworldData();
         AddOverworldToOverworldList();
+
+        GameManager.Instance.CurrentEditorLevel.UnsavedChanges = false;
 
         Logger.Log(Logger.Datawriting, "Overworld {0} Saved.", _overworldName);
     }
