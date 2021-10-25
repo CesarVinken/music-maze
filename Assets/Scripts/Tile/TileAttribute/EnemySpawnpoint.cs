@@ -16,7 +16,14 @@ public class EnemySpawnpoint : CharacterSpawnpoint
         base.Awake();
         Guard.CheckIsNull(_enemySpawnpointSprite, "_enemySpawnpointSprite", gameObject);
 
-        _spriteRenderer.sprite = _enemySpawnpointSprite;
+        if (EditorManager.InEditor)
+        {
+            _spriteRenderer.sprite = _enemySpawnpointSprite;
+        }
+        else
+        {
+            _spriteRenderer.sprite = null;
+        }
     }
 
     public override void RegisterSpawnpoint()
