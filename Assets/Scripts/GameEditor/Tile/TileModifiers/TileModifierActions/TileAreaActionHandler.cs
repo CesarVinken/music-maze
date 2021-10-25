@@ -84,8 +84,7 @@ public class TileAreaActionHandler : MonoBehaviour
                     tile.SetTileOverlayImage(TileOverlayMode.Blue);
                 }
             }
-        }
-        
+        }   
     }
 
     public void DeselectTileAreaEntry(EditorTileAreaEntry tileAreaEntry)

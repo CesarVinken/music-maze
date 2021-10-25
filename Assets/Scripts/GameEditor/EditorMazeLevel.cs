@@ -17,7 +17,8 @@ public class EditorMazeLevel : MazeLevel, IEditorLevel
     public EditorMazeLevel(MazeLevelData mazeLevelData)
     {
         GameManager.Instance.CurrentEditorLevel = this;
-        
+        FerryRoutes.Clear();
+
         Name = mazeLevelData.Name;
 
         if (TilesContainer.Instance != null)
@@ -35,7 +36,6 @@ public class EditorMazeLevel : MazeLevel, IEditorLevel
         InitialiseEditorTileAreas(mazeLevelData);
         BuildTiles(mazeLevelData);
 
-        FerryRoutes.Clear();
         UnsavedChanges = false;
     }
 

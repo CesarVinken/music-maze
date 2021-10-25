@@ -15,15 +15,18 @@ public class EffectController : MonoBehaviour
     {
         Guard.CheckIsNull(_animator, "_animator", gameObject);
         Guard.CheckIsNull(SpriteRenderer, "SpriteRenderer", gameObject);
-        _spriteRenderer.sortingOrder = SpriteSortingOrderRegister.EffectController;
+        SetSortingOrder(SpriteSortingOrderRegister.EffectController);
     }
 
     public void PlayEffectLoop(AnimationEffect animationEffect)
     {
         switch (animationEffect)
         {
+            case AnimationEffect.ExclamationMark:
+                _animator.SetInteger("AnimationId", 2);
+                break;
             case AnimationEffect.StartledSpinner:
-                // TODO: Once we have more than 1 animation effect, create a system to pick the correct animation.
+                _animator.SetInteger("AnimationId", 1);
                 break;
             default:
                 Logger.Error($"Nothing implemented for the animation effect {animationEffect}");
@@ -61,5 +64,10 @@ public class EffectController : MonoBehaviour
     {
         yield return new WaitForSeconds(time);
         Destroy(gameObject);
+    }
+
+    public void SetSortingOrder(int sortingOrder)
+    {
+        _spriteRenderer.sortingOrder = sortingOrder;
     }
 }

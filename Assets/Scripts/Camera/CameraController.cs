@@ -21,7 +21,6 @@ namespace PlayerCamera
 
         private CameraZoomHandler _cameraZoomHander;
         private Vector3 _velocity = Vector3.zero;
-        private GridLocation _levelBounds;
 
         private float _panLimitRight;
         private float _panLimitBottom;
@@ -35,7 +34,6 @@ namespace PlayerCamera
 
         public void Start()
         {
-            _levelBounds = GameManager.Instance.CurrentEditorLevel == null ? GameManager.Instance.CurrentGameLevel.LevelBounds : GameManager.Instance.CurrentEditorLevel.LevelBounds;
             _cameraZoomHander = new CameraZoomHandler(_camera, this);
         }
 
@@ -67,8 +65,8 @@ namespace PlayerCamera
             float halfScreenHeight = (leftBottomCameraPos.y - rightTopCameraPos.y) / 2;
             float xPadding = 3f;
             float yPadding = 3f;
-            float levelWidth = _levelBounds.X;
-            float levelHeight = _levelBounds.Y;
+            float levelWidth = CameraManager.Instance.LevelBounds.X;
+            float levelHeight = CameraManager.Instance.LevelBounds.Y;
 
             _panLimitRight = levelWidth - halfScreenWidth + xPadding + 1;
             _panLimitBottom = halfScreenHeight - yPadding;

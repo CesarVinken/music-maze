@@ -12,6 +12,7 @@ public class CameraManager : MonoBehaviour
 
     public float ScreenWidth = Screen.width;
     public float ScreenHeight = Screen.height;
+    public GridLocation LevelBounds;
 
     public List<CameraController> CameraControllers = new List<CameraController>();
 
@@ -36,21 +37,17 @@ public class CameraManager : MonoBehaviour
         }
     }
 
-    public void Start()
-    {
-        for (int i = 0; i < CameraControllers.Count; i++)
-        {
-            //CameraControllers[i].SetZoomLevel(GameManager.Instance.Configuration.CameraZoomLevel);
-            //CameraControllers[i].DisableCamera();
-        }
-    }
-
     public void ResetCameras()
     {
         for (int i = 0; i < CameraControllers.Count; i++)
         {
             CameraControllers[i].ResetCamera();
         }
+    }
+
+    public void SetLevelBounds()
+    {
+        LevelBounds = GameManager.Instance.CurrentEditorLevel == null ? GameManager.Instance.CurrentGameLevel.LevelBounds : GameManager.Instance.CurrentEditorLevel.LevelBounds;
     }
 
     public void SetPanLimits()

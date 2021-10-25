@@ -26,13 +26,21 @@ public class MazeLevelGameplayManager : MonoBehaviour, IOnEventCallback, IGamepl
     public GameObject EditorTilePrefab;
     public GameObject InGameTilePrefab;
 
+    [Space(10)]
+    [Header("Effect prefabs")]
     [SerializeField] private GameObject _loopedAnimationEffectPrefab;
     [SerializeField] private GameObject _oneTimeAnimationEffectPrefab;
     [SerializeField] private GameObject _notesPlayMusicEffectPrefab;
 
+    [Space(10)]
+    [Header("Tile base prefabs")]
+
     [SerializeField] private GameObject _tileBaseGroundPrefab;
     [SerializeField] private GameObject _tileBaseWaterPrefab;
     [SerializeField] private GameObject _tilePathPrefab;
+
+    [Space(10)]
+    [Header("Tile attribute prefabs")]
 
     [SerializeField] private GameObject _bridgePiecePrefab;
     [SerializeField] private GameObject _bridgeEdgePrefab;
@@ -45,6 +53,8 @@ public class MazeLevelGameplayManager : MonoBehaviour, IOnEventCallback, IGamepl
     [SerializeField] private GameObject _sheetmusicPrefab;
     [SerializeField] private GameObject _tileObstaclePrefab;
 
+    [Space(10)]
+
     [SerializeField] private GameObject _cornerFillerPrefab;
 
     public int NumberOfUnmarkedTiles = -1;
@@ -55,6 +65,8 @@ public class MazeLevelGameplayManager : MonoBehaviour, IOnEventCallback, IGamepl
         {
             case AnimationEffect.EmmonCaught:
                 return _oneTimeAnimationEffectPrefab;
+            case AnimationEffect.ExclamationMark:
+                return _loopedAnimationEffectPrefab;
             case AnimationEffect.ExitOpenExplosion:
                 return _oneTimeAnimationEffectPrefab;
             case AnimationEffect.FaeCaught:
@@ -180,12 +192,12 @@ public class MazeLevelGameplayManager : MonoBehaviour, IOnEventCallback, IGamepl
     {
         EditorLevel = EditorMazeLevel.Create(mazeLevelData);
 
-
         InitialiseEditorTileBackgrounds();
         InitialiseEditorTileAttributes();
 
         MainScreenOverlayCanvas.Instance.ResetBlackOutSquares();
         CameraManager.Instance.ResetCameras();
+        CameraManager.Instance.SetLevelBounds();
         CameraManager.Instance.SetPanLimits();
     }
 
@@ -196,6 +208,7 @@ public class MazeLevelGameplayManager : MonoBehaviour, IOnEventCallback, IGamepl
         MainScreenOverlayCanvas.Instance.BlackOutSquaresToClear();
         GameManager.Instance.CharacterManager.SpawnCharacters();
 
+        CameraManager.Instance.SetLevelBounds();
         CameraManager.Instance.SetPanLimits();
         CameraManager.Instance.FocusCamerasOnPlayer();
 

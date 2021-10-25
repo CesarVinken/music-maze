@@ -106,6 +106,7 @@ public class OverworldGameplayManager : MonoBehaviour, IOnEventCallback, IGamepl
         MainScreenOverlayCanvas.Instance.ResetBlackOutSquares();
 
         CameraManager.Instance.ResetCameras();
+        CameraManager.Instance.SetLevelBounds();
         CameraManager.Instance.SetPanLimits();
     }
 
@@ -114,6 +115,7 @@ public class OverworldGameplayManager : MonoBehaviour, IOnEventCallback, IGamepl
         GameManager.Instance.CharacterManager.SpawnCharacters(); //Q? Can we move this up here?
         yield return new WaitForSeconds(.2f); // This waiting time should be dealt with more efficiently. Currently it is there to make sure that the characters are spawned in
         MainScreenOverlayCanvas.Instance.BlackOutSquaresToClear();
+        CameraManager.Instance.SetLevelBounds();
         CameraManager.Instance.SetPanLimits();
         CameraManager.Instance.FocusCamerasOnPlayer();
 

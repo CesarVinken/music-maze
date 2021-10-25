@@ -243,15 +243,15 @@ namespace Character
             SetChasingState(ChasingState.Reading);
             _animationHandler.SetLocomotion(false);
 
-            // TODO: Should display READING animation effect, not the STARTLED animation
-            GameObject startledSpinnerPrefab = MazeLevelGameplayManager.Instance.GetEffectAnimationPrefab(AnimationEffect.StartledSpinner);
-            GameObject startledSpinningEffectGO = GameObject.Instantiate(startledSpinnerPrefab, transform);
-            Vector3 spawnPosition = new Vector3(startledSpinningEffectGO.transform.parent.position.x - 0.5f, startledSpinningEffectGO.transform.parent.position.y + 0.16f, startledSpinningEffectGO.transform.parent.position.z);
-            startledSpinningEffectGO.transform.position = spawnPosition;
+            GameObject exclamationMarkPrefab = MazeLevelGameplayManager.Instance.GetEffectAnimationPrefab(AnimationEffect.ExclamationMark);
+            GameObject exclamationMarkEffectGO = GameObject.Instantiate(exclamationMarkPrefab, transform);
+            Vector3 spawnPosition = new Vector3(exclamationMarkEffectGO.transform.parent.position.x, exclamationMarkEffectGO.transform.parent.position.y + 0.7f, exclamationMarkEffectGO.transform.parent.position.z);
+            exclamationMarkEffectGO.transform.position = spawnPosition;
 
-            EffectController startledSpinningEffectController = startledSpinningEffectGO.GetComponent<EffectController>();
-            startledSpinningEffectController.PlayEffectLoop(AnimationEffect.StartledSpinner);
-            SpriteRenderer spriteRenderer = startledSpinningEffectController.SpriteRenderer;
+            EffectController exclamationMarkEffectController = exclamationMarkEffectGO.GetComponent<EffectController>();
+            exclamationMarkEffectController.PlayEffectLoop(AnimationEffect.ExclamationMark);
+            exclamationMarkEffectController.SetSortingOrder(_bodyRenderer.sortingOrder + 5);
+            SpriteRenderer spriteRenderer = exclamationMarkEffectController.SpriteRenderer;
 
             yield return new WaitForSeconds(READING_FULL_STRENGTH_LIFETIME);
 
@@ -268,8 +268,8 @@ namespace Character
                 blinkingTimer++;
             }
 
-            Destroy(startledSpinningEffectController);
-            Destroy(startledSpinningEffectGO);
+            Destroy(exclamationMarkEffectController);
+            Destroy(exclamationMarkEffectGO);
             SetChasingState(ChasingState.Active); //TODO: if in the meantime the level finishes, interrupt coroutine and set player to loitering
             _animationHandler.SetLocomotion(true);
         }
