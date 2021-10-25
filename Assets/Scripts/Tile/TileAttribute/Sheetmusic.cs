@@ -124,7 +124,7 @@ public class Sheetmusic : MonoBehaviour, ITileAttribute, IScoreAttribute
 
     private void ReadSheetmusic(EnemyCharacter enemy)
     {
-        enemy.ReadSheetmusic();
+        enemy.ReadSheetmusic(this, _sheetmusicFinder);
         _sheetmusicFinder.MadeEnemyReadSheetmusic();
 
         StartCoroutine(ReadSheetmusicCoroutine());

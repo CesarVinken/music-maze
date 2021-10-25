@@ -232,14 +232,13 @@ namespace Character
             SetChasingState(ChasingState.Active); //TODO: if in the meantime the level finishes, interrupt coroutine and set player to loitering
         }
 
-        public void ReadSheetmusic()
+        public void ReadSheetmusic(Sheetmusic sheetmusic, MazePlayerCharacter triggeringPlayer)
         {
-            StartCoroutine(ReadSheetmusicCoroutine());
+            StartCoroutine(ReadSheetmusicCoroutine(triggeringPlayer));
         }
 
-        private IEnumerator ReadSheetmusicCoroutine()
+        private IEnumerator ReadSheetmusicCoroutine(MazePlayerCharacter triggeringPlayer)
         {
-            Logger.Warning("TODO: Read sheet music");
             SetChasingState(ChasingState.Reading);
             _animationHandler.SetLocomotion(false);
 
@@ -252,6 +251,7 @@ namespace Character
             exclamationMarkEffectController.PlayEffectLoop(AnimationEffect.ExclamationMark);
             exclamationMarkEffectController.SetSortingOrder(_bodyRenderer.sortingOrder + 5);
             SpriteRenderer spriteRenderer = exclamationMarkEffectController.SpriteRenderer;
+            spriteRenderer.color = PlayerColour.GetColor(triggeringPlayer.GetCharacterType());
 
             yield return new WaitForSeconds(READING_FULL_STRENGTH_LIFETIME);
 
