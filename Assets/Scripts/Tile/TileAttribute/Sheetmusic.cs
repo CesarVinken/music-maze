@@ -80,20 +80,6 @@ public class Sheetmusic : MonoBehaviour, ITileAttribute, IScoreAttribute
     {
         _isSetUp = false; // Sheetmusic should trigger only once, so once an enemy is reading, it should not longer be triggered for another enemy.
 
-        //_sheetmusicSpriteRenderer.sprite = _sheetmusicSprites[1];
-        //_playerColourRenderer.sprite = _playerColourIndicatorSprite;
-        //_playerColourRenderer.color = PlayerColour.GetColor(_sheetmusicFinder.GetCharacterType());
-
-        //_isSetUp = true;
-
-        //    GameObject notesPlayMusicPrefab = MazeLevelGameplayManager.Instance.GetEffectAnimationPrefab(AnimationEffect.NotesPlayMusic);
-        //    GameObject notesPlayMusicGO = GameObject.Instantiate(notesPlayMusicPrefab, SceneObjectManager.Instance.transform);
-        //    Vector3 tileVectorPosition = GridLocation.GridToVector(Tile.GridLocation);
-        //    Vector3 notesSpawnPosition = new Vector3(tileVectorPosition.x + 0.22f, tileVectorPosition.y + 0.2f, tileVectorPosition.z);
-        //    notesPlayMusicGO.transform.position = notesSpawnPosition;
-
-        //    EffectController notesPlayMusicEffectController = notesPlayMusicGO.GetComponent<EffectController>();
-
         yield return new WaitForSeconds(READING_FULL_STRENGTH_LIFETIME);
 
         float blinkingTimer = 0;
@@ -105,7 +91,6 @@ public class Sheetmusic : MonoBehaviour, ITileAttribute, IScoreAttribute
             Color changedAlphaColour = new Color(_sheetmusicSpriteRenderer.color.r, _sheetmusicSpriteRenderer.color.g, _sheetmusicSpriteRenderer.color.b, alphaValue);
             _sheetmusicSpriteRenderer.color = changedAlphaColour;
             _playerColourRenderer.color = changedAlphaColour;
-            //notesPlayMusicEffectController.SpriteRenderer.color = changedAlphaColour;
 
             yield return new WaitForSeconds(BLINKING_SPEED);
             blinkingTimer++;
@@ -130,7 +115,8 @@ public class Sheetmusic : MonoBehaviour, ITileAttribute, IScoreAttribute
 
         Color playerColor = PlayerColour.GetColor(_sheetmusicFinder.GetCharacterType());
         _playerColourRenderer.sprite = _playerColourIndicatorSprite;
-        _playerColourRenderer.color = new Color(playerColor.r, playerColor.g, playerColor.b, _playerColourRenderer.color.a);
+        _playerColourRenderer.color = new Color(playerColor.r, playerColor.g, playerColor.b, 1);
+        _playerColourRenderer.sortingOrder = _sheetmusicSpriteRenderer.sortingOrder + 1;
         _playerColourRenderer.gameObject.SetActive(true);
 
         _isSetUp = true;
