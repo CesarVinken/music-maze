@@ -21,6 +21,6 @@ public class PlayerControlsFerryEvent
 
         RaiseEventOptions raiseEventOptions = new RaiseEventOptions { Receivers = ReceiverGroup.Others };
         PhotonNetwork.RaiseEvent(Code, content, raiseEventOptions, SendOptions.SendReliable);
-        Logger.Log(Logger.Event, $"sent PlayerControlsFerryEvent. Player is located at {playerCharacter.CurrentGridLocation.X} {playerCharacter.CurrentGridLocation.Y}");
+        Logger.Log(Logger.Event, $"sent PlayerControlsFerryEvent. Player is located at {playerCharacter.CurrentGridLocation.X} {playerCharacter.CurrentGridLocation.Y}. Is controlling? {isControlling}");
     }
 }

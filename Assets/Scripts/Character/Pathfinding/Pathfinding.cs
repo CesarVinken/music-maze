@@ -78,12 +78,12 @@ public class Pathfinding {
                     {
                         PlayerCharacter playerCharacter = _character as PlayerCharacter;
 
-                        if(playerCharacter.ControllingFerry == null)
+                        if(playerCharacter.BoardedFerry?.ControllingPlayerCharacter != playerCharacter)
                         {
                             closedList.Add(neighbourNode);
                             continue;
                         }
-                        List<FerryRoutePoint> ferryRoutePoints = playerCharacter.ControllingFerry.FerryRoute.GetFerryRoutePoints();
+                        List<FerryRoutePoint> ferryRoutePoints = playerCharacter.BoardedFerry.FerryRoute.GetFerryRoutePoints();
                         if (!ferryRoutePoints.Any(point => point.Tile.TileId.Equals(neighbourNode.Tile.TileId)))
                         {
                             closedList.Add(neighbourNode);

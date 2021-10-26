@@ -74,24 +74,18 @@ namespace Character
             PlayerExitsEvent?.Invoke();
         }
 
-        public override bool ValidateTarget(TargetLocation targetLocation)
+        public override bool ValidateTarget(Direction direction, Tile targetTile)
         {
-            if (!GameManager.Instance.CurrentGameLevel.TilesByLocation.TryGetValue(targetLocation.TargetGridLocation, out Tile targetTile))
-            {
-                return false;
-            }
-
-            Direction direction = targetLocation.TargetDirection;
             Tile currentTile = GameManager.Instance.CurrentGameLevel.TilesByLocation[CurrentGridLocation];
             if (targetTile.Walkable)
             {
-                if (ControllingFerry != null)
+                if (BoardedFerry != null && BoardedFerry.ControllingPlayerCharacter != null && BoardedFerry.ControllingPlayerCharacter == this)
                 {
-                    ControllingFerry.TryDestroyControlFerryButton();
-                    //move if the targetted tile is a ferry route point
+                    BoardedFerry.TryDestroyControlFerryButton();
+                    //We are controlling a ferry, but now walking onto a Ground tile. Leave the ferry
                     if (targetTile.TileMainMaterial.GetType() == typeof(GroundMainMaterial))
                     {
-                        ToggleFerryControl(ControllingFerry, false);
+                        ToggleFerryControl(BoardedFerry, false);
                     }
                     return true;
                 }
@@ -103,26 +97,53 @@ namespace Character
                         return false;
                     }
 
-                    if (!ValidateForFerryRoutes(direction, currentTile, targetTile))
+                    // we are on the ferry and someone else is controlling
+                    if(GameRules.GamePlayerType == GamePlayerType.NetworkMultiplayer &&
+                        BoardedFerry != null && (BoardedFerry.ControllingPlayerCharacter == null || BoardedFerry.ControllingPlayerCharacter != this))
+                    {                 
+                        if (BoardedFerry.TimeSinceLastTileChange < Ferry.MovementOffFerryThresholdTime) return false;
+                    }
+                    //we are on a ferry but not the controlling player. 
+                    if (BoardedFerry != null && BoardedFerry?.ControllingPlayerCharacter != this &&
+                        !ValidateForFerryRoutes(direction, currentTile, targetTile))
                     {
                         Logger.Log("ValidateForFerryRoutes false");
-
                         return false;
                     }
-                    //Logger.Log($"ValidateForFerryRoutes to {targetTile.GridLocation.X}, {targetTile.GridLocation.Y} true");
 
+                    for (int i = 0; i < Ferry.Ferries.Count; i++)
+                    {
+                        if (Ferry.Ferries[i].ControllingPlayerCharacter == null) continue;
+
+                        for (int j = 0; j < Ferry.Ferries[i].PlayersOnFerry.Count; j++)
+                        {
+                            PlayerCharacter playerOnFerry = Ferry.Ferries[i].PlayersOnFerry[j];
+                            // We are a player on a ferry trying to move, but we are not in control.
+                            // Issues might occur if the ferry route is only 2 tiles, when the player thinks their current location is still the tile where they boarded the ferry
+                            if (playerOnFerry == this)
+                            {
+                                if (Ferry.Ferries[i].IsMoving)
+                                {
+                                    playerOnFerry.SetCurrentGridLocation(Ferry.Ferries[i].CurrentLocationTile.GridLocation);
+                                    return false;
+                                }
+                            }
+                        }
+                    }
                     return true;
                 }      
             }
-            else if (ControllingFerry)
+            else if (BoardedFerry?.ControllingPlayerCharacter != null && BoardedFerry?.ControllingPlayerCharacter == this)
             {
-                List<FerryRoutePoint> ferryRoutePoints = ControllingFerry.FerryRoute.GetFerryRoutePoints();
+                //move if the targetted tile is a ferry route point
+                List<FerryRoutePoint> ferryRoutePoints = BoardedFerry.FerryRoute.GetFerryRoutePoints();
                 if(ferryRoutePoints.Any(point => point.Tile.TileId.Equals(targetTile.TileId)))
                 {
-                    ControllingFerry.TryDestroyControlFerryButton();
+                    BoardedFerry.TryDestroyControlFerryButton();
                     return true;
                 }
             }
+
             return false;
         }
 
@@ -189,11 +210,13 @@ namespace Character
             for (int i = 0; i < Ferry.Ferries.Count; i++)
             {
                 GridLocation ferryGridLocation = Ferry.Ferries[i].CurrentLocationTile.GridLocation;
+
                 if (!Ferry.Ferries[i].IsMoving && ferryGridLocation.X == targetTile.GridLocation.X && ferryGridLocation.Y == targetTile.GridLocation.Y)
                 {
                     return true;
                 }
             }
+
             return false;
         }
 

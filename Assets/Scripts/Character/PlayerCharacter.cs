@@ -39,7 +39,7 @@ namespace Character
 
         public static event Action<PlayerCharacter> NewPlayerGridLocationEvent;
 
-        public Ferry ControllingFerry = null;
+        public Ferry BoardedFerry = null;
         public List<MapInteractionButton> MapInteractionButtonsForPlayer = new List<MapInteractionButton>();
 
         public override void Awake()
@@ -304,7 +304,13 @@ namespace Character
             //Logger.Warning($"SetPointerLocomotionTarget to target {target.x}, {target.y} in the direction {moveDirection}");
             GridLocation targetGridLocation = GridLocation.FindClosestGridTile(target);
 
-            if (!ValidateTarget(new TargetLocation(targetGridLocation, moveDirection))) return;
+            if (!GameManager.Instance.CurrentGameLevel.TilesByLocation.TryGetValue(TargetGridLocation.TargetGridLocation, out Tile targetTile))
+            {
+                //_animationHandler.SetIdle();
+                return;
+            }
+
+            if (!ValidateTarget(moveDirection, targetTile)) return;
 
             if (CurrentGridLocation.X == targetGridLocation.X && CurrentGridLocation.Y == targetGridLocation.Y) return;
 
@@ -382,9 +388,9 @@ namespace Character
 
             GridLocation currentGridLocation = GridLocation.VectorToGrid(transform.position);
 
-            if(ControllingFerry != null)
+            if(BoardedFerry?.ControllingPlayerCharacter == this)
             {
-                _animationHandler.SetDirectionOnFerry(ControllingFerry, direction);
+                _animationHandler.SetDirectionOnFerry(BoardedFerry, direction);
             }
             else
             {
@@ -410,7 +416,13 @@ namespace Character
                     return;
             }
 
-            if (!ValidateTarget(TargetGridLocation))
+            if (!GameManager.Instance.CurrentGameLevel.TilesByLocation.TryGetValue(TargetGridLocation.TargetGridLocation, out Tile targetTile))
+            {
+                _animationHandler.SetIdle();
+                return;
+            }
+
+            if (!ValidateTarget(direction, targetTile))
             {
                 // This prevents the character from displaying locomotion animation when walking into an unwalkable tile
                 _animationHandler.SetIdle();
@@ -428,7 +440,7 @@ namespace Character
             if (!_animationHandler.InLocomotion)
             {
                 _animationHandler.SetLocomotion(true);
-            }
+            } 
         }
 
         private bool IsPressingMovementKey()
@@ -539,7 +551,7 @@ namespace Character
             Logger.Warning($"Set name of {PlayerNumber} character to {Name}");
         }
 
-        public virtual bool ValidateTarget(TargetLocation targetLocation)
+        public virtual bool ValidateTarget(Direction targetDirection, Tile targetLocation)
         {
             return true;
         }
@@ -548,27 +560,32 @@ namespace Character
         {
             ferry.TryDestroyControlFerryButton();
 
-            ControllingFerry = ControllingFerry ? null : ferry;
+            //BoardedFerry = BoardedFerry ? null : ferry;
 
-            _animationHandler.IsControllingFerry = ControllingFerry;
-
-            if (ControllingFerry)
+            if (ferry.ControllingPlayerCharacter != this)
             {
+                //_animationHandler.IsControllingFerry = true;
+
                 if (IsMoving) return; // we should never be able to set a controlling player when we are already moving. For example would happen if a player clicks immediately after leaving the ferry.
+              
+                _animationHandler.IsControllingFerry = true;
 
                 ferry.SetControllingPlayerCharacter(this);
                 _animationHandler.SetLocomotion(false);
             }
             else
             {
+                _animationHandler.IsControllingFerry = false;
                 ferry.UnsetControllingPlayerCharacter(this, playerIsStatic);
             }
 
             // Send update to other players to update ferry & player status
             if (GameRules.GamePlayerType == GamePlayerType.NetworkMultiplayer)
             {
+                bool isControlling = BoardedFerry?.ControllingPlayerCharacter == this ? true : false;
+
                 PlayerControlsFerryEvent playerControlsFerryEvent = new PlayerControlsFerryEvent();
-                playerControlsFerryEvent.SendPlayerControlsFerryEvent(ferry.FerryRoute.Id, this, ControllingFerry);
+                playerControlsFerryEvent.SendPlayerControlsFerryEvent(ferry.FerryRoute.Id, this, isControlling);
             }
         }
 
@@ -576,7 +593,7 @@ namespace Character
         public void ToggleFerryControlOnOthers(Ferry ferry, bool isControlling)
         {
             ferry.TryDestroyControlFerryButton();
-            ControllingFerry = ferry;
+            //BoardedFerry = ferry;
 
             if (isControlling)
             {

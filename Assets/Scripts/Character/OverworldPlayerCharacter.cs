@@ -72,15 +72,8 @@ namespace Character
             }
         }
 
-        public override bool ValidateTarget(TargetLocation targetLocation)
+        public override bool ValidateTarget(Direction direction, Tile targetTile)
         {
-            if (!GameManager.Instance.CurrentGameLevel.TilesByLocation.TryGetValue(targetLocation.TargetGridLocation, out Tile targetTile))
-            {
-                return false;
-            }
-
-            Direction direction = targetLocation.TargetDirection;
-
             Tile currentTile = GameManager.Instance.CurrentGameLevel.TilesByLocation[CurrentGridLocation];
             if (targetTile.Walkable)
             {
@@ -129,7 +122,6 @@ namespace Character
                 }
                 return false;
             }
-            Logger.Log("habbo3");
             return false;
         }
 
