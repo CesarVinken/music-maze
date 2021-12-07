@@ -300,20 +300,16 @@ namespace Character
 
         private void SetPointerLocomotionTarget(Vector2 target, Direction moveDirection)
         {
-            //Logger.Warning($"SetPointerLocomotionTarget to target {target.x}, {target.y} in the direction {moveDirection}");
             GridLocation targetGridLocation = GridLocation.FindClosestGridTile(target);
 
-            if (!GameManager.Instance.CurrentGameLevel.TilesByLocation.TryGetValue(TargetGridLocation.TargetGridLocation, out Tile targetTile))
+            if (!GameManager.Instance.CurrentGameLevel.TilesByLocation.TryGetValue(targetGridLocation, out Tile targetTile))
             {
-                //_animationHandler.SetIdle();
                 return;
             }
 
             if (!ValidateTarget(moveDirection, targetTile)) return;
 
             if (CurrentGridLocation.X == targetGridLocation.X && CurrentGridLocation.Y == targetGridLocation.Y) return;
-
-
 
             IsCalculatingPath = true;
 

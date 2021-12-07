@@ -75,6 +75,7 @@ namespace Character
         public override bool ValidateTarget(Direction direction, Tile targetTile)
         {
             Tile currentTile = GameManager.Instance.CurrentGameLevel.TilesByLocation[CurrentGridLocation];
+
             if (targetTile.Walkable)
             {
                 BridgePiece bridgePieceOnCurrentTile = currentTile.TryGetAttribute<BridgePiece>();
