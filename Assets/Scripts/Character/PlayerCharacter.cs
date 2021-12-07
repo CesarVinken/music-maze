@@ -242,7 +242,6 @@ namespace Character
         private void CheckPointerInput()
         {
             if (HasCalculatedTarget) return;
-            // Logger.Log($"Touch count {Input.touchCount}");
 
             if (PersistentGameManager.CurrentPlatform == Platform.Android && Input.touchCount != 1) return;
 
@@ -314,19 +313,25 @@ namespace Character
 
             if (CurrentGridLocation.X == targetGridLocation.X && CurrentGridLocation.Y == targetGridLocation.Y) return;
 
-            if (!_animationHandler.InLocomotion)
-            {
-                _animationHandler.SetLocomotion(true);
-            }
+
 
             IsCalculatingPath = true;
 
             PathToTarget = _pathfinding.FindNodePath(CurrentGridLocation, targetGridLocation);
 
-            PathToTarget.RemoveAt(0);
+            if(PathToTarget.Count > 0)
+            {
+                PathToTarget.RemoveAt(0);
 
+                if (!_animationHandler.InLocomotion)
+                {
+                    _animationHandler.SetLocomotion(true);
+                }
+
+                SetHasCalculatedTarget(true);
+            }
+               
             IsCalculatingPath = false;
-            SetHasCalculatedTarget(true);
         }
 
         private void HandleKeyboardInput()
