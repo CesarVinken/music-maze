@@ -74,8 +74,13 @@ public class EditorOverworldModificationPanel : EditorGridModificationPanel
         }
     }
 
-    public void LoadOverworld()
+    public void LoadOverworld(string overworldName = "")
     {
+        if (string.IsNullOrWhiteSpace(overworldName))
+        {
+            overworldName = _overworldName;
+        }
+
         Logger.Log("Load overworld (in editor)");
         if (string.IsNullOrWhiteSpace(_overworldName))
         {

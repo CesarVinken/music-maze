@@ -28,6 +28,13 @@ public class PlayableMazeLevelNameToggle : MonoBehaviour
         Logger.Log($"Toggled playability of the maze level {_levelNameData.LevelName} to {isPlayable}");
     }
 
+    public void LoadMazeLevel()
+    {
+        EditorMazeModificationPanel.Instance.LoadMaze(_levelNameData.LevelName);
+
+        PlayableLevelsPanel.Instance.ClosePanel();
+    }
+
     public void DeleteMazeLevel()
     {
         Logger.Log($"Delete {_levelNameData.LevelName}");

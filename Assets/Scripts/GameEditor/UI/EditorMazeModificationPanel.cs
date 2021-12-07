@@ -144,20 +144,25 @@ public class EditorMazeModificationPanel : EditorGridModificationPanel
         }
     }
 
-    public void LoadMaze()
+    public void LoadMaze(string mazeName = "")
     {
+        if (string.IsNullOrWhiteSpace(mazeName))
+        {
+            mazeName = _mazeName;
+        }
+
         Logger.Log("Load maze (in editor)");
-        if (string.IsNullOrWhiteSpace(_mazeName))
+        if (string.IsNullOrWhiteSpace(mazeName))
         {
             Logger.Warning(Logger.Datawriting, "In order to save the maze level, please fill in a maze name");
             return;
         }
 
-        bool mazeLevelNameExists = MazeLevelLoader.MazeLevelExists(_mazeName);
+        bool mazeLevelNameExists = MazeLevelLoader.MazeLevelExists(mazeName);
 
         if (!mazeLevelNameExists)
         {
-            Logger.Warning($"Could not find the maze level {_mazeName}");
+            Logger.Warning($"Could not find the maze level {mazeName}");
             return;
         }
 
@@ -171,14 +176,14 @@ public class EditorMazeModificationPanel : EditorGridModificationPanel
                 EditorUIAction.Close,
                 "Cancel",
                 EditorUIAction.LoadMaze,
-                $"Load {_mazeName}"
+                $"Load {mazeName}"
             );
         }
         else
         {
             MazeLevelGameplayManager.Instance.UnloadLevel();
 
-            MazeLevelData mazeLevelData = MazeLevelLoader.LoadMazeLevelData(_mazeName);
+            MazeLevelData mazeLevelData = MazeLevelLoader.LoadMazeLevelData(mazeName);
             MazeLevelLoader.LoadMazeLevelForEditor(mazeLevelData);
 
             EditorSelectedMazeTileModifierContainer selectedTileModifierContainer = EditorCanvasUI.Instance.SelectedTileModifierContainer as EditorSelectedMazeTileModifierContainer;
@@ -188,7 +193,7 @@ public class EditorMazeModificationPanel : EditorGridModificationPanel
             EditorMazeTileModificationPanel.Instance?.DestroyModifierActions();
         }
     }
-    
+
     public void TogglePlayableMazesPanel()
     {
         if (EditorCanvasUI.Instance.PlayableLevelsPanelGO.activeSelf)
