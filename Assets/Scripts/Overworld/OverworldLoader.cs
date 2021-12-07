@@ -37,7 +37,7 @@ public class OverworldLoader : MonoBehaviour
 
     public static bool OverworldExists(string overworldName)
     {
-        string sanatisedOverworldName = overworldName.ToLower().Replace(" ", " ");
+        string sanatisedOverworldName = overworldName.Trim().ToLower().Replace(" ", " ");
 
         string filePath = Path.Combine(Application.streamingAssetsPath, "overworld", sanatisedOverworldName + ".json");
 

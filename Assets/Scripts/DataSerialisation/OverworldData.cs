@@ -31,7 +31,7 @@ namespace DataSerialisation
 
         public OverworldData WithName(string overworldName)
         {
-            Name = overworldName.ToLower().Replace(" ", "-");
+            Name = overworldName.Trim();
             return this;
         }
     }

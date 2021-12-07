@@ -33,7 +33,7 @@ namespace DataSerialisation
 
         public MazeLevelData WithName(string mazeLevelName)
         {
-            Name = mazeLevelName.ToLower().Replace(" ", "-");
+            Name = mazeLevelName.Trim();
             return this;
         }
     }

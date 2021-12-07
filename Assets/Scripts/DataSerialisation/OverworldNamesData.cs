@@ -68,7 +68,7 @@ namespace DataSerialisation
 
         public static bool OverworldNameExists(string overworldName, List<OverworldNameData> overworldNames = null)
         {
-            string dashedOverworldName = overworldName.ToLower().Replace(" ", "-");
+            string dashedOverworldName = overworldName.Trim().ToLower().Replace(" ", "-");
 
             if (overworldNames == null)
             {

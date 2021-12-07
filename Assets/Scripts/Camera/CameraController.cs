@@ -5,7 +5,8 @@ namespace PlayerCamera
 {
     public class CameraController : MonoBehaviour
     {
-        private float _panSpeed = 550f;
+        private float _panSpeed = 2000f;
+        //private float _panSpeed = 550f;
 
         private bool _focussedOnPlayer = false;
 

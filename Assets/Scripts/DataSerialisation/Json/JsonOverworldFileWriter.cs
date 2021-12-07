@@ -13,7 +13,7 @@ namespace DataSerialisation
             Directory.CreateDirectory(Path.Combine(Application.dataPath, "StreamingAssets", "overworld"));
 
             _overworldData = overworldData as OverworldData;
-            _path = Path.Combine(Application.dataPath, "StreamingAssets", "overworld/", _overworldData.Name + ".json");
+            _path = Path.Combine(Application.dataPath, "StreamingAssets", "overworld/", _overworldData.Name.Trim().ToLower() + ".json");
 
             string jsonDataString = JsonUtility.ToJson(_overworldData, true).ToString();
 

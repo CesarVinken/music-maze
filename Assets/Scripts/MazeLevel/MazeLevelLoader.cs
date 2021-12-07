@@ -38,7 +38,7 @@ public static class MazeLevelLoader
 
     public static bool MazeLevelExists(string mazeLevelName)
     {
-        string dashedMazeName = mazeLevelName.ToLower().Replace(" ", "-");
+        string dashedMazeName = mazeLevelName.Trim().ToLower().Replace(" ", "-");
 
         string filePath = Path.Combine(Path.Combine(Application.streamingAssetsPath, "maze"), dashedMazeName + ".json");
 

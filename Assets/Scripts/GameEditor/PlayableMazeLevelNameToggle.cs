@@ -39,16 +39,14 @@ public class PlayableMazeLevelNameToggle : MonoBehaviour
     {
         Logger.Log($"Delete {_levelNameData.LevelName}");
 
-        string sanatisedLevelName = _levelNameData.LevelName.ToLower().Replace(" ", "-");
+        string sanatisedLevelName = _levelNameData.LevelName.Trim().ToLower().Replace(" ", "-");
 
         bool levelExists = MazeLevelLoader.MazeLevelExists(sanatisedLevelName);
 
-        if (!levelExists)
+        if (levelExists)
         {
-            return;
+            JsonMazeLevelFileWriter.DeleteFile(sanatisedLevelName);
         }
-
-        JsonMazeLevelFileWriter.DeleteFile(sanatisedLevelName);
 
         MazeLevelNamesData levelNamesData = new MazeLevelNamesData(sanatisedLevelName);
         levelNamesData.DeleteLevelName(sanatisedLevelName);

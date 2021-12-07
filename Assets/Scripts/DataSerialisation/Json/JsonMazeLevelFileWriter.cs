@@ -13,7 +13,7 @@ namespace DataSerialisation
             Directory.CreateDirectory(Path.Combine(Application.dataPath, "StreamingAssets", "maze"));
 
             _levelData = levelData as MazeLevelData;
-            _path = Path.Combine(Application.dataPath, "StreamingAssets", "maze", _levelData.Name + ".json");
+            _path = Path.Combine(Application.dataPath, "StreamingAssets", "maze", _levelData.Name.Trim().ToLower().Replace(" ", "-") + ".json");
 
             string jsonDataString = JsonUtility.ToJson(_levelData, true).ToString();
 
